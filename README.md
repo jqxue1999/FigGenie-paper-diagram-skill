@@ -99,17 +99,19 @@ Chinese text and formulas are supported too. The systems, components and numbers
 - **Every figure is checked.** A linter measures every box in a headless browser, and the agent looks at the render
   before handing anything over.
 
-### Learned from 12,577 top-venue figures
+### Learned from 16,105 top-venue figures
 
-We collected the figures of every OSDI, NSDI, SOSP and ASPLOS paper from 2023 to 2026, rated 2,041 of them by hand,
-and measured what separates the good ones from the rest.
+We collected the figures of every OSDI, NSDI, SOSP and ASPLOS paper from 2023 to 2026 and the Figure 1 of 3,528
+ICLR, ICML, NeurIPS, CVPR, ACL and AAAI papers from the same years (listed by the
+[Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery)), rated them by hand, and measured what separates
+the good ones from the rest.
 
-| Corpus          | Size                                                                                                     |
-| --------------- | -------------------------------------------------------------------------------------------------------- |
-| Papers          | 1,113 from OSDI, NSDI, SOSP and ASPLOS, 2023 to 2026                                                     |
-| Figures indexed | 12,577                                                                                                   |
-| Rated by hand   | 2,041                                                                                                    |
-| Distilled into  | 20 layout templates, 5 mechanism families, 21 palettes, 485 annotated exemplars and 2,853 reusable parts |
+| Corpus          | Systems venues | AI venues |
+| --------------- | -------------- | --------- |
+| Papers          | 1,113 from OSDI, NSDI, SOSP and ASPLOS, 2023 to 2026 | 3,528 from ICLR, ICML, NeurIPS, CVPR, ACL and AAAI, 2023 to 2026 |
+| Figures indexed | 12,577 | 3,528 Figure 1s |
+| Rated by hand   | 2,041 | 1,158 |
+| Distilled into  | 20 layout templates, 5 mechanism families, 21 palettes, 485 annotated exemplars and 2,853 reusable parts | 8 figure kinds, 9 sub-fields, 5 palettes, 3,210 exemplars and 998 reusable parts |
 
 <p align="center">
   <img src="docs/corpus-collage.png" width="100%" alt="A collage of 16 architecture and mechanism figures from ASPLOS and SOSP papers">
@@ -168,9 +170,9 @@ PowerPoint export (native equations there also need Office's `mathml2omml.xsl`).
 
 | Feature          | What you get                                                                                                                                                                 |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Figure kinds** | Architecture figures in 20 layout templates. Mechanism figures in five families: comparison, evolution, logic, walkthrough and anatomy, with worked examples in real values. |
+| **Figure kinds** | Architecture figures in 20 layout templates. Mechanism figures in five families: comparison, evolution, logic, walkthrough and anatomy, with worked examples in real values. The Figure 1 / overview of AI papers in 8 kinds, drawn the way its sub-field draws them, from exemplars you pick first. |
 | **Outputs**      | An SVG with fonts embedded and every element named, a PDF cut to the figure's size for LaTeX, a PNG preview and a caption draft. An editable PowerPoint deck on request.     |
-| **Content**      | Vector TeX formulas, Chinese and other CJK labels, icons from a 2,853-part library, and bitmaps such as screenshots or photos.                                               |
+| **Content**      | Vector TeX formulas, Chinese and other CJK labels, icons from a 3,851-part library, and bitmaps such as screenshots or photos.                                               |
 | **Workflow**     | A brief before drawing, a lint and visual self-check after every edit, changes in plain words, and critiques or redraws of existing figures.                                 |
 
 **Editable in PowerPoint.** On request, the finished figure becomes a deck with one native shape per primitive, at the
@@ -188,14 +190,15 @@ same coordinates as the SVG.
 
 ## Roadmap
 
-- [ ] Figures in the style of top AI venues (NeurIPS, ICML, ICLR, CVPR, ACL)
+- [x] Figures in the style of top AI venues (NeurIPS, ICML, ICLR, CVPR, ACL, AAAI)
 - [ ] An interactive editor
 - [ ] Support for more editors (draw.io, OmniGraffle and others)
 
 ## Acknowledgements
 
 FigGenie learned from the figures of the authors whose papers make up the corpus; the figures remain theirs. The
-collage above is credited figure by figure in [CREDITS.md](CREDITS.md). Fonts: TeX Gyre, Latin Modern, Source Sans,
+collage above is credited figure by figure in [CREDITS.md](CREDITS.md). The AI-venue papers were found through the
+[Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) by qwdwqfwq, which indexes their Figure 1s with titles, authors and links. Fonts: TeX Gyre, Latin Modern, Source Sans,
 Inter, Roboto, Arimo, Tinos, Carlito and DejaVu. Formulas: MathJax. Rendering: Playwright and Chromium.
 
 **Removal requests.** If you are an author of a figure used in this repository and want it removed, email

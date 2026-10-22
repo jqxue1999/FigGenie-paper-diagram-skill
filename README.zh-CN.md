@@ -94,16 +94,16 @@
 - **按论文的实际尺寸作图**：以 pt 为单位，按 240 pt 的单栏宽度来画，放进论文里文字依然清晰，而不只是在屏幕上好看。
 - **绘图检查**：lint 会在无头浏览器里逐个测量图中的元素，agent 还会看一遍渲染结果，确认没问题才交付。
 
-### 从 12,577 张顶会插图中提炼
+### 从 16,105 张顶会插图中提炼
 
-我们收集了 OSDI、NSDI、SOSP、ASPLOS 2023–2026 年所有论文的插图，并进行了人工评分，再统计好图究竟好在哪里。
+我们收集了 OSDI、NSDI、SOSP、ASPLOS 2023–2026 年所有论文的插图，以及 ICLR、ICML、NeurIPS、CVPR、ACL、AAAI 同期 3,528 篇论文的 Figure 1（论文列表来自 [Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery)），并进行了人工评分，再统计好图究竟好在哪里。
 
-| 语料库  | 规模                                                 |
-| ---- | -------------------------------------------------- |
-| 论文   | OSDI、NSDI、SOSP、ASPLOS 2023–2026 年，共 1,113 篇        |
-| 收录插图 | 12,577 张                                           |
-| 人工评分 | 2,041 张                                            |
-| 提炼出  | 20 种布局模板、5 类机制图、21 套配色方案、485 张带标注的范例图、2,853 个可复用元件 |
+| 语料库  | 系统会议 | AI 会议 |
+| ---- | ---- | ---- |
+| 论文   | OSDI、NSDI、SOSP、ASPLOS 2023–2026 年，共 1,113 篇 | ICLR、ICML、NeurIPS、CVPR、ACL、AAAI 2023–2026 年，共 3,528 篇 |
+| 收录插图 | 12,577 张 | 3,528 张 Figure 1 |
+| 人工评分 | 2,041 张 | 1,158 张 |
+| 提炼出  | 20 种布局模板、5 类机制图、21 套配色方案、485 张带标注的范例图、2,853 个可复用元件 | 8 类图、9 个子领域、5 套配色方案、3,210 张范例图、998 个可复用元件 |
 
 <p align="center">
   <img src="docs/corpus-collage.png" width="100%" alt="16 张来自 ASPLOS 和 SOSP 论文的架构图和机制图拼图">
@@ -159,9 +159,9 @@ playwright install chromium
 
 | 功能     | 内容                                                                       |
 | ------ | ------------------------------------------------------------------------ |
-| **类型** | 架构图有 20 种布局模板；机制图分为 5 类：方案对比、演变过程、逻辑流程、步骤讲解、结构剖析，还可以配上带真实数值的算例。          |
+| **类型** | 架构图有 20 种布局模板；机制图分为 5 类：方案对比、演变过程、逻辑流程、步骤讲解、结构剖析，还可以配上带真实数值的算例。AI 顶会的 Figure 1 / 总览图有 8 类，按 9 个子领域的习惯来画，动笔前先让你从范例里挑几张。          |
 | **输出** | 内嵌字体、元素均已命名的 SVG；按图的大小裁切、可直接插入 LaTeX 的 PDF；PNG 预览图和图注草稿。需要时还能导出可编辑的 PPT。 |
-| **内容** | 矢量 TeX 公式、中文等 CJK 文字、内含 2,853 个元件的图标库，也可以嵌入截图、照片等位图。                     |
+| **内容** | 矢量 TeX 公式、中文等 CJK 文字、内含 3,851 个元件的图标库，也可以嵌入截图、照片等位图。                     |
 | **流程** | 动笔前先出一份绘图大纲请你确认；每次修改后都会跑 lint、检查渲染结果；修改意见用自然语言说就行；也可以点评或重画已有的图。          |
 
 **在 PPT 里直接编辑**：需要时可以把画好的图导出成 PPT，每个图元都是原生形状，位置与 SVG 完全一致。
@@ -178,13 +178,13 @@ playwright install chromium
 
 ## 路线图
 
-- [ ] 绘制 AI 顶会风格的图（NeurIPS、ICML、ICLR、CVPR、ACL）
+- [x] 绘制 AI 顶会风格的图（NeurIPS、ICML、ICLR、CVPR、ACL、AAAI）
 - [ ] 交互式的编辑器
 - [ ] 支持更多编辑器（Draw.io, OmniGraffle 等）
 
 ## 致谢
 
-感谢语料库中各篇论文的作者：FigGenie 的画法都是从他们的插图里学来的，这些图的版权仍归原作者所有。上面那张拼图的出处已在 [CREDITS.md](CREDITS.md) 中逐张注明。本项目用到的字体有 TeX Gyre、Latin Modern、Source Sans、Inter、Roboto、Arimo、Tinos、Carlito 和 DejaVu，公式由 MathJax 排版，渲染使用 Playwright 和 Chromium。
+感谢语料库中各篇论文的作者：FigGenie 的画法都是从他们的插图里学来的，这些图的版权仍归原作者所有。上面那张拼图的出处已在 [CREDITS.md](CREDITS.md) 中逐张注明。AI 顶会的论文是通过 qwdwqfwq 的 [Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) 找到的，它整理了这些论文的 Figure 1 以及标题、作者和链接。本项目用到的字体有 TeX Gyre、Latin Modern、Source Sans、Inter、Roboto、Arimo、Tinos、Carlito 和 DejaVu，公式由 MathJax 排版，渲染使用 Playwright 和 Chromium。
 
 **删除请求**：如果本仓库用到了你的图而你希望撤下，请发邮件到 ahawkinthesky@outlook.com，或在 https://github.com/Sleepy-Avacado/FigGenie-paper-diagram-skill/issues 提 issue，我们会将其移除。
 
