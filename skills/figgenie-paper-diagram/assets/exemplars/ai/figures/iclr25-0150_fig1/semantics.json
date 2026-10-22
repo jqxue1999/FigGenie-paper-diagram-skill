@@ -1,0 +1,543 @@
+{
+ "paper_id": "iclr25-0150",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Ships and Sahara (Safety Head ImPortant Score, Safety Attention Head AttRibution Algorithm)",
+  "one_liner": "Analyses which attention heads carry an LLM's safety behaviour with a head-importance score (Ships) and an attribution algorithm (Sahara), using head ablation.",
+  "domain": [
+   "LLM safety",
+   "mechanistic interpretability",
+   "attention heads"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a sketched attention block zoomed into one head's masked and ablated attention, over a before and after strip of an LLM mascot's replies",
+  "argues": "Ablating one safety attention head by making its attention weights constant removes the model's refusals: it then answers harmful as well as benign queries.",
+  "subject": "one safety head in multi-head attention, its masked versus ablated attention, and a llama's replies before and after ablation",
+  "elements": [
+   {
+    "name": "Input Sequence",
+    "type": "data",
+    "role": "tokens entering the attention block",
+    "drawn_as": "sketch box with blue hatched fill and a blue up arrow",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Head Attention",
+    "type": "module",
+    "role": "the attention block whose heads are opened up",
+    "drawn_as": "rounded sketch box with pale-yellow hatch and gold outline, a curly bracket on its right",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Output (top left)",
+    "type": "data",
+    "role": "output of the multi-head attention block",
+    "drawn_as": "dotted gold outline box above a gold up arrow",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "h1, h2, ..., hn",
+    "type": "module",
+    "role": "the individual attention heads",
+    "drawn_as": "column of pale-green rounded squares with dotted connectors and subscripted labels",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "Safety Head",
+    "type": "module",
+    "role": "the one head whose ablation weakens safety",
+    "drawn_as": "peach square with gold outline inside the head column, label in gold",
+    "container": "upper band",
+    "is_contribution": true
+   },
+   {
+    "name": "Masked Attention",
+    "type": "data",
+    "role": "the safety head's attention weights under the causal mask",
+    "drawn_as": "lower-triangular grid of squares in several blues, two blue arrows from the Safety Head to its corners",
+    "container": "upper band",
+    "is_contribution": null
+   },
+   {
+    "name": "Attention Ablation",
+    "type": "operation",
+    "role": "replaces the head's attention by undifferentiated (constant) weights",
+    "drawn_as": "large purple outline block arrow with a purple label, four small converging arrows above it",
+    "container": "upper band",
+    "is_contribution": true
+   },
+   {
+    "name": "Ablated Attention",
+    "type": "data",
+    "role": "the attention matrix after ablation, every entry constant",
+    "drawn_as": "faded lavender-grey lower-triangular grid with the letter C in cells and a small Constant note with an arrow",
+    "container": "upper band",
+    "is_contribution": true
+   },
+   {
+    "name": "Attention Weight x Value",
+    "type": "operation",
+    "role": "weights multiply the value vectors, with the safety head's weight column peach",
+    "drawn_as": "very pale green column with a peach cell, a blue X sign, a pale blue column of Value boxes, closed by a black bracket",
+    "container": "upper band",
+    "is_contribution": null
+   },
+   {
+    "name": "Attention Output (right)",
+    "type": "data",
+    "role": "result of weight times value, fed to the feed-forward block",
+    "drawn_as": "small box with gold sketch outline under FFN",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "FFN, Output Sequence",
+    "type": "module",
+    "role": "feed-forward block and the block's output tokens",
+    "drawn_as": "stacked sketch boxes with gold up arrows, FFN large and hatched, Output Sequence at the top",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "Safety Head (brace label)",
+    "type": "label",
+    "role": "carries the head from the mechanism above to the behaviour below",
+    "drawn_as": "long gold curly brace across the full width, gold label and a lone peach square at its centre, dotted line down to the scissors",
+    "container": "lower band",
+    "is_contribution": true
+   },
+   {
+    "name": "Ablation (scissors)",
+    "type": "icon",
+    "role": "marks the cut that separates behaviour before and after ablation",
+    "drawn_as": "cartoon scissors with a caption, at the bottom of the centre column",
+    "container": "lower band",
+    "is_contribution": true
+   },
+   {
+    "name": "Harmful Queries, Benign Queries (2 + 2 boxes)",
+    "type": "label",
+    "role": "the two query types, once before and once after ablation",
+    "drawn_as": "hatched sketch boxes: purple for harmful, green for benign",
+    "container": "lower band",
+    "is_contribution": false
+   },
+   {
+    "name": "Llama avatars (3)",
+    "type": "icon",
+    "role": "stand for the LLM in three states: refusing, helpful, dazed after ablation",
+    "drawn_as": "cartoon llama heads with shouting, smiling and dizzy faces",
+    "container": "lower band",
+    "is_contribution": null
+   },
+   {
+    "name": "I cannot fulfill your request! / Sure! I can help you! (3 bubbles)",
+    "type": "sample",
+    "role": "the replies: refusal to harmful before ablation, help to benign before, help to both after",
+    "drawn_as": "cloud-shaped hatched bubbles with red, green and yellow outlines",
+    "container": "lower band",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Sequence",
+    "to": "Multi-Head Attention",
+    "what": "tokens enter the attention block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-Head Attention",
+    "to": "Attention Output (top left)",
+    "what": "block output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-Head Attention",
+    "to": "h1, h2, ..., hn",
+    "what": "the block is opened into its heads",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Safety Head",
+    "to": "Masked Attention",
+    "what": "the head's attention matrix",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Masked Attention",
+    "to": "Ablated Attention",
+    "what": "Attention Ablation turns the weights into a constant",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Ablated Attention",
+    "to": "Attention Weight x Value",
+    "what": "constant weights feed the weighted sum",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attention Weight x Value",
+    "to": "Attention Output (right)",
+    "what": "weighted values",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Attention Output (right)",
+    "to": "FFN, Output Sequence",
+    "what": "to the feed-forward block and out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "upper band",
+    "to": "Safety Head (brace label)",
+    "what": "the whole mechanism is tied to the safety head named below",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Safety Head (brace label)",
+    "to": "Ablation (scissors)",
+    "what": "the head is cut",
+    "kind": "control",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Harmful Queries, Benign Queries (before)",
+    "to": "llama and reply bubbles",
+    "what": "the model refuses harmful and helps benign queries",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Harmful Queries, Benign Queries (after)",
+    "to": "dizzy llama and bubble",
+    "what": "after ablation both get the helpful reply",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "h1 ... hn",
+    "kind": "identity",
+    "at": "column of attention heads",
+    "what": "indices of the n heads"
+   },
+   {
+    "marker": "C",
+    "kind": "identity",
+    "at": "cells of the Ablated Attention matrix",
+    "what": "a constant weight in place of the learned one"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "masked attention weights",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "lower-triangular grid of squares in graded blues"
+   },
+   {
+    "what": "ablated attention weights",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "same triangle faded to lavender-grey with C letters on the diagonal and first column"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon llama head shouting, smiling and dizzy",
+    "stands_for": "the LLM before ablation (refusing, helpful) and after ablation (dazed, helpful to all)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "scissors",
+    "stands_for": "ablating the safety head",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "four arrowheads converging on a point",
+    "stands_for": "attention weights collapsing to their mean",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a harmful and a benign query with the model's canned replies before and after ablation",
+    "form": "labelled query boxes, llama avatars and cloud speech bubbles; query text itself is not shown",
+    "real_values": false
+   },
+   {
+    "what": "causal attention weights of one head and the same matrix with constant entries",
+    "form": "triangular heat-map grids",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention-map",
+    "drawn_as": "lower-triangular (causal) grid of squares in blue shades, then a faded copy filled with the constant C",
+    "parts": [
+     "triangular grid",
+     "blue shades",
+     "C cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "Multi-Head Attention box opened into a column of heads, then weight times value, then an FFN box, as stacked sketch boxes with up arrows",
+    "parts": [
+     "Multi-Head Attention",
+     "heads",
+     "FFN"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon llama head, one per behaviour state",
+    "parts": [
+     "llama avatar"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "cloud-shaped hatched speech bubbles next to the avatar, outline colour set by the reply, query shown as a labelled box rather than a bubble",
+    "parts": [
+     "query box",
+     "avatar",
+     "cloud bubble"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Input Sequence at left, then heads, masked matrix, Attention Ablation arrow and ablated matrix rightwards to FFN; the brace then leads down to the before and after llamas."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two stacked bands tied by one long gold curly brace. The upper band is a left-to-right mechanism strip: a sketched attention block, its head column, the masked matrix, a big ablation arrow, the faded ablated matrix and the weight times value, FFN and output stack at the right. The lower band shows behaviour: before-ablation harmful and benign query rows with llamas and bubbles on the left, a Safety Head and scissors column in the centre, the after-ablation rows on the right.",
+  "panel_count": 1,
+  "lanes": "lower band: two aligned query rows (harmful, benign) in each of the before and after groups",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 1.92,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d79b00",
+    "used_for": "gold outlines of Multi-Head Attention, FFN, output boxes, the long brace and the Safety Head labels"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "peach fill of the Safety Head squares"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale-yellow hatch inside the attention and FFN boxes"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "green outlines of the heads, the Benign Queries boxes and the green reply bubble"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "fill of the head squares and the attention-weight column"
+   },
+   {
+    "hex": "#9673a6",
+    "used_for": "purple outlines of Harmful Queries boxes, the Attention Ablation arrow and Ablated Attention title"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "lavender hatch inside purple boxes"
+   },
+   {
+    "hex": "#7ba7ea",
+    "used_for": "mid-blue cells of the masked attention matrix and blue arrows"
+   },
+   {
+    "hex": "#9ac2f9",
+    "used_for": "lighter blue cells of the masked attention matrix"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "pale blue cells and the Value boxes"
+   },
+   {
+    "hex": "#b1ddf0",
+    "used_for": "blue hatch inside the Input Sequence box"
+   },
+   {
+    "hex": "#d9ddea",
+    "used_for": "faded lavender-grey cells of the Ablated Attention matrix"
+   },
+   {
+    "hex": "#ededee",
+    "used_for": "near-white grey cells of the masked matrix"
+   }
+  ],
+  "ground": "white",
+  "fill": "hatch",
+  "stroke": "hand-drawn wobbly outlines 0.25 to 1 pt with dense thin hatch strokes; dotted gold outline on the top-left Attention Output; dotted connectors between heads",
+  "font": "Comic Sans MS, 5 to 6 pt, almost all bold; no serif",
+  "corners": "mixed",
+  "arrows": "hand-drawn thick up arrows with doubled shafts, one large outline block arrow, thin blue arrows from the head to the matrix, dotted connectors",
+  "rendering": "hand-sketched",
+  "effects": "none; low-opacity tints and pale text mark the ablated parts",
+  "model_depiction": "mascot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "peach and gold = the safety head and the blocks around it; purple = harmful queries and the ablation step; green = benign queries and ordinary heads; blue = attention matrix, value vectors and input; red, green, yellow bubble outlines = refusal, help, help after ablation",
+  "line_style_means": "dotted = intermediate output or ellipsis between heads; faded tints and pale text = ablated or disabled state",
+  "shape_means": "lower-triangular grid = causal attention; coloured squares in a column = heads or weights; cloud = speech bubble; peach square = the safety head",
+  "marker_means": "C = constant weight; X = multiplication; h1 to hn = head indices",
+  "emphasis": "the peach safety head is the only peach square and is repeated in the head column, the weight column and the centre of the lower band, tied to the strip above by a long brace; the faded ablated copy sits next to the vivid original",
+  "reusable_patterns": [
+   "long curly brace from a zoomed mechanism down to the behaviour it changes",
+   "faded low-opacity copy of the ablated structure beside the vivid intact one",
+   "scissors icon on a dotted line between the before group and the after group",
+   "mascot whose face and reply bubble change before and after the intervention",
+   "hand-drawn hatch style to make a mechanism sketch feel informal"
+  ],
+  "weaknesses": [
+   "the faded Attention Weight and Value labels are barely legible",
+   "text is 5 to 6 pt, small for print"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "scissors clip-art icon",
+   "converging arrows glyph"
+  ],
+  "generated": [
+   "three cartoon llama stickers (shouting, smiling, dizzy), possibly from a sticker pack"
+  ],
+  "drawn": [
+   "sketched boxes and brace",
+   "attention-matrix grids",
+   "cloud speech bubbles",
+   "arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "multi-head attention box with a column of heads",
+   "highlighted safety head",
+   "masked and ablated attention grids",
+   "scissors icon",
+   "llama avatars with cloud bubbles",
+   "harmful and benign query boxes",
+   "long brace linking two bands"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "LLM safety",
+   "attention heads",
+   "ablation",
+   "harmful queries",
+   "refusal",
+   "mechanistic interpretability",
+   "safety head",
+   "undifferentiated attention"
+  ],
+  "tags": [
+   "mascot-character",
+   "attention-mask-grid",
+   "illustration-style",
+   "zoom-callout",
+   "module-state-coding",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Use a long brace to carry the one highlighted component from its zoomed-in mechanism down to its behavioural effect, and show the intervention with a faded copy of the ablated structure above and a mascot that reacts differently before and after below.",
+  "suits": "Interpretability or ablation papers that must link one internal component to an observable change in model behaviour, in an informal sketch look."
+ },
+ "tags": [
+  "hand-sketched",
+  "hatch-fill",
+  "comic-font",
+  "mascot-reactions",
+  "faded-ablated-state",
+  "upper-mechanism-lower-behaviour"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Ablation of the safety attention head through undifferentiated attention causes the attention weight to degenerate to the mean",
+   "the safety capability is weakened, and it responds to both harmful and benign queries"
+  ]
+ },
+ "summary": "The paper studies which attention heads carry an LLM's safety behaviour, scoring heads with Ships and attributing them with Sahara. Figure 1 shows what ablating one safety head does. The upper band is a hand-sketched attention block: Multi-Head Attention opens into heads h1 to hn with one peach Safety Head, whose causal Masked Attention grid is turned by an Attention Ablation arrow into a faded Ablated Attention grid of constant C weights, which then multiplies the Value vectors on the way to FFN. A long gold brace leads to the lower band, where a cartoon llama refuses harmful queries and helps benign ones before the scissors cut the head, and answers both with Sure! I can help you! after it.",
+ "summary_zh": "论文研究哪些注意力头负责 LLM 安全。图 1 用手绘风格：上方展开多头注意力中的安全头，其注意力经消融变成常数；下方用羊驼对比消融前后，先拒绝有害请求，消融后有害与良性请求都回答。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper mentions this figure, so roles come from the caption, the abstract and the drawn labels only. The upper and lower halves have no frame, letter or title (the caption calls them Upper and Bottom), so they are recorded as bands, not panels. Llama stickers are listed as generated although they may come from a sticker set; the matrices are illustrative, not measured weights.",
+ "venue": "ICLR25"
+}

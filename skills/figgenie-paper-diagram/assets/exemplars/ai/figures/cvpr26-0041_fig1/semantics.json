@@ -1,0 +1,538 @@
+{
+ "paper_id": "cvpr26-0041",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SAGE (Smart Any-horizon aGEnt)",
+  "one_liner": "A video-reasoning agent whose orchestrator answers short videos in one turn and long videos through multi-turn tool calls, trained with synthetic data and RL.",
+  "domain": [
+   "long video reasoning",
+   "tool-calling agents",
+   "reinforcement learning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "side-by-side-contrast"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "two worked questions (long video, short video), each setting a human's jumping timeline against SAGE's colour-coded tool-call chain",
+  "argues": "SAGE reasons like a human: iteratively with tool calls on a long video, and in a single pass on a short one.",
+  "subject": "A question about the Ferrari livery in a two-hour video and one about a short clip, each answered by a human and by SAGE.",
+  "elements": [
+   {
+    "name": "(a) Multi-Turn Reasoning for long videos",
+    "type": "container",
+    "role": "title bar of the long-video panel",
+    "drawn_as": "dark teal bar, bold white (a) and title with an italic tail",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Single-Turn Reasoning for short videos",
+    "type": "container",
+    "role": "title bar of the short-video panel",
+    "drawn_as": "dark grey bar, same type treatment",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Intent",
+    "type": "text-block",
+    "role": "the user's question: the Ferrari livery this year (a), any celebs except Will Smith (b)",
+    "drawn_as": "outlined box with a dark tab label",
+    "container": "each panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Video Context",
+    "type": "text-block",
+    "role": "what the video is: 2025 F1 livery reveal (a), a short Formula-1 grand prix clip (b)",
+    "drawn_as": "outlined box with a dark tab label",
+    "container": "each panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Humans",
+    "type": "container",
+    "role": "lane that shows how a person would search the video",
+    "drawn_as": "red-framed region with a red tab",
+    "container": "each panel",
+    "is_contribution": false
+   },
+   {
+    "name": "timeline 0:00:00 to 02:03:58",
+    "type": "other",
+    "role": "the video's length with the positions a human visits",
+    "drawn_as": "black bar with end stops, three small coloured squares, dark timestamp tags",
+    "container": "Humans (a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Action-1 / Action-2 / Action-3",
+    "type": "operation",
+    "role": "the human's three jumps: forward to 01:46:39, back to 01:30:07, forward to 01:36:58",
+    "drawn_as": "orange, blue and red thin arrows with coloured labels",
+    "container": "Humans (a)",
+    "is_contribution": false
+   },
+   {
+    "name": "[knowledge] Ferrari finished 2nd in 2024, let's look near the end, found McLaren",
+    "type": "text-block",
+    "role": "the human's thought note for each jump (3 notes, the last two end in RedBull and Ferrari)",
+    "drawn_as": "plain text beside the thumbnail, found entity coloured, bold and underlined in the turn colour",
+    "container": "Humans (a)",
+    "is_contribution": false
+   },
+   {
+    "name": "*watch the complete video to find there’s only Will Smith!",
+    "type": "text-block",
+    "role": "the human's single action on the short clip",
+    "drawn_as": "plain text with the last words in bold, under a film strip and a 'Single Action' arrow",
+    "container": "Humans (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "SAGE (ours)",
+    "type": "container",
+    "role": "lane that shows what the system does for the same question",
+    "drawn_as": "dark-teal-framed region with a dark tab, '(ours)' in small bold",
+    "container": "each panel",
+    "is_contribution": true
+   },
+   {
+    "name": "web-search #1",
+    "type": "operation",
+    "role": "first tool call of the long-video run; uses outside knowledge",
+    "drawn_as": "rounded orange block, white bold text",
+    "container": "SAGE (ours) (a)",
+    "is_contribution": true
+   },
+   {
+    "name": "extract-video-parts #1 / #2 / #3",
+    "type": "operation",
+    "role": "cuts out the part of the video to look at in turns 1, 2, 3 (3 blocks)",
+    "drawn_as": "rounded blocks coloured orange, blue, red by turn",
+    "container": "SAGE (ours) (a)",
+    "is_contribution": true
+   },
+   {
+    "name": "analyze #1 / #2 / #3",
+    "type": "operation",
+    "role": "examines the extracted part in turns 1, 2, 3 (3 blocks)",
+    "drawn_as": "rounded blocks coloured orange, blue, red by turn",
+    "container": "SAGE (ours) (a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Answer Prediction",
+    "type": "operation",
+    "role": "final answer step; at the end of the chain in (a), directly after the frames in (b)",
+    "drawn_as": "rounded dark-teal block, white bold text, 2 blocks",
+    "container": "SAGE (ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "Single Action",
+    "type": "label",
+    "role": "names the one action of the human on the short clip",
+    "drawn_as": "grey caption under a thin arrow below the film strip",
+    "container": "Humans (b)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "0:00:00 start frame",
+    "to": "01:46:39 frame",
+    "what": "human jumps near the end using prior knowledge of the standings",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "01:46:39 frame",
+    "to": "01:30:07 frame",
+    "what": "human rolls back after finding McLaren",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "01:30:07 frame",
+    "to": "01:36:58 frame",
+    "what": "human goes forward a bit and finds Ferrari",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "sampled video frames",
+    "to": "web-search #1",
+    "what": "the sampled frames start the first call",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "web-search #1",
+    "to": "extract-video-parts #1",
+    "what": "knowledge from the search picks the part to extract",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "extract-video-parts #1",
+    "to": "analyze #1",
+    "what": "extracted part to analysis",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "analyze #1",
+    "to": "extract-video-parts #2",
+    "what": "result leads to the next part, turn 2",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "extract-video-parts #2",
+    "to": "analyze #2",
+    "what": "extracted part to analysis; the chain turns down at the right edge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "analyze #2",
+    "to": "extract-video-parts #3",
+    "what": "result leads to the next part, turn 3; the chain now runs right to left",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "extract-video-parts #3",
+    "to": "analyze #3",
+    "what": "extracted part to analysis",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "analyze #3",
+    "to": "Answer Prediction",
+    "what": "final analysis yields the answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action-1/2/3 and their thumbnails",
+    "to": "tool calls #1/#2/#3 and their thumbnails",
+    "what": "each human jump matches one SAGE turn, same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "sampled video frames (mosaic)",
+    "to": "Answer Prediction",
+    "what": "single-turn case: the answer follows one pass over the frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Intent and Video Context",
+    "to": "Humans and SAGE (ours)",
+    "what": "the same question and context are posed to both lanes",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Multi-Turn Reasoning for long videos",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "A two-hour video and the Ferrari livery question: a human jumps three times, SAGE makes seven coloured tool calls and then predicts the answer.",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Single-Turn Reasoning for short videos",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "A 31-second clip and a question about celebrities: the human watches once, SAGE answers from the sampled frames in one step.",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "start of each panel title bar",
+    "what": "name the two panels"
+   },
+   {
+    "marker": "Action-1, Action-2, Action-3",
+    "kind": "order",
+    "at": "the three arrows of the human lane",
+    "what": "the human's successive jumps along the timeline"
+   },
+   {
+    "marker": "#1, #2, #3",
+    "kind": "order",
+    "at": "suffix of each tool-call block",
+    "what": "which turn a call belongs to; matches the colour orange, blue, red"
+   },
+   {
+    "marker": "timestamps (0:00:00, 01:30:07, 01:36:58, 01:46:39, 02:03:58)",
+    "kind": "identity",
+    "at": "thumbnails and timeline ends",
+    "what": "position in the video of the frame shown; coloured like the action that went there"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "video-player thumbnails the human visits in the long video: the start frame with a YouTube play button, then 01:46:39, 01:30:07, 01:36:58",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small frames with player controls visible, outlined in the turn colour and tagged with a dark timestamp"
+   },
+   {
+    "what": "the same three timestamped frames repeated beside SAGE's tool calls",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same outlines and tags as in the Humans lane, placed above or below the matching block"
+   },
+   {
+    "what": "sampled video frames: a thin strip in (a) and a dense mosaic of many tiny frames in (b)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "strip or tiled block labelled 'sampled video frames', feeding the first tool call in (a) and Answer Prediction in (b)"
+   },
+   {
+    "what": "short-clip frames under the human timeline in (b): a start thumbnail with a play button and a film strip of five tiles",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "thumbnail above a thin strip of five small frames, with an arrow beneath"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a user asking how the Ferrari livery looks this year about a two-hour 2025 F1 livery reveal video, with the human's thought notes, three timestamps and seven named tool calls",
+    "form": "intent and context boxes, timeline with notes, tool-call chain, timestamped thumbnails",
+    "real_values": true
+   },
+   {
+    "what": "a question about celebrities other than Will Smith on a 31-second Formula-1 clip, with the human's one-line conclusion",
+    "form": "intent and context boxes, film strip, one-line note",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "tool-use",
+    "drawn_as": "tool calls as named rounded blocks (web-search, extract-video-parts, analyze) chained in order, not as icons around an agent",
+    "parts": [
+     "web-search",
+     "extract-video-parts",
+     "analyze",
+     "Answer Prediction"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "a strip of small frames under the short-clip timeline, a thin strip and a dense mosaic for the sampled frames",
+    "parts": [
+     "film strip",
+     "sampled frames mosaic"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the (a) title bar, reads Intent and Video Context, then the red Humans lane (timeline and three coloured jumps) and the SAGE chain in snake order to Answer Prediction, then repeats the shorter pair in (b)."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two panels stacked top to bottom, long video (a) and short video (b). Each opens with Intent and Video Context boxes, then two framed lanes: a red Humans lane and a dark-teal SAGE (ours) lane. In (a) the SAGE lane is a snake-shaped chain of seven tool-call blocks; in (b) a mosaic of frames goes straight to Answer Prediction.",
+  "panel_count": 2,
+  "lanes": "2 aligned lanes per panel (Humans, SAGE (ours))",
+  "direction": "mixed",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 0.79,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#faf2e9",
+    "used_for": "cream ground under both panels"
+   },
+   {
+    "hex": "#0a3235",
+    "used_for": "dark teal: panel (a) title bar, tabs and frames of Intent, Video Context and SAGE, Answer Prediction blocks"
+   },
+   {
+    "hex": "#424242",
+    "used_for": "dark grey: panel (b) title bar and timestamp tags"
+   },
+   {
+    "hex": "#d47e00",
+    "used_for": "orange: turn 1 (Action-1, web-search #1, extract-video-parts #1, analyze #1, [knowledge] and McLaren)"
+   },
+   {
+    "hex": "#0a4383",
+    "used_for": "dark blue: turn 2 blocks (extract-video-parts #2, analyze #2)"
+   },
+   {
+    "hex": "#0f65c4",
+    "used_for": "blue: Action-2, the RedBull highlight, timeline square (outlines #2a88ef)"
+   },
+   {
+    "hex": "#b70100",
+    "used_for": "dark red: turn 3 blocks and the Humans tab and frame"
+   },
+   {
+    "hex": "#ff1413",
+    "used_for": "red: Action-3, the Ferrari highlight, thumbnail outlines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 to 0.75 pt outlines on frames, thumbnails and arrows; 1.5 pt on the two timelines",
+  "font": "sans (Aptos, Biome), 3.5 to 6.5 pt, bold titles and tags, italic for 'for long videos' and '(ours)'",
+  "corners": "mixed",
+  "arrows": "thin straight and orthogonal arrows with small filled heads, coloured by turn; the chain turns down once at the right edge",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Colour follows the reasoning turn: orange = turn 1, blue = turn 2, red = turn 3. The same colour marks the human's action arrow, the found entity in the note, the thumbnail outline and timestamp, and SAGE's calls #1, #2, #3. Dark teal = system, intent and answer; red frame = humans.",
+  "line_style_means": "no dashed lines; arrow colour gives the turn",
+  "shape_means": "tab on a box = its role (Intent, Video Context, Humans, SAGE); small square on the timeline = a visited position; rounded coloured block = one tool call; dark-teal block = the answer",
+  "marker_means": "Action-n = the human's n-th jump; #n on a tool call = its turn; timestamps = position in the video",
+  "emphasis": "SAGE (ours) sits in a heavier dark frame, and one colour scheme ties each human step to the tool calls that do the same job; the short panel (one arrow) contrasts with the long chain above.",
+  "reusable_patterns": [
+   "framed human-behaviour lane above the framed system lane, sharing one colour per step",
+   "tool-call blocks coloured by reasoning turn in a snake-shaped chain that turns at the right edge",
+   "found entity in the thought note coloured and underlined to match its step",
+   "thumbnails with timestamp tags in the step colour placed beside the call that produced them",
+   "tabbed outlined boxes for the question (Intent) and the data (Video Context)",
+   "mosaic of sampled frames feeding straight into the answer for the single-turn case"
+  ],
+  "weaknesses": [
+   "type is 3.5 to 6.5 pt in a single column, tiny when printed",
+   "dark red is both the Humans frame colour and the turn-3 colour",
+   "the frames of the mosaic in (b) are too small to read"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames and thumbnails from F1 videos",
+   "the user questions",
+   "the human thought notes",
+   "the named tool-call trace with timestamps"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "title bars, tabs, frames",
+   "timelines and squares",
+   "tool-call blocks and arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two panels with dark title bars",
+   "tabbed Intent and Video Context boxes",
+   "human timeline with coloured action arrows and video thumbnails",
+   "chain of coloured tool-call blocks ending in Answer Prediction",
+   "mosaic of sampled video frames"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "long video reasoning",
+   "video agent",
+   "tool calling",
+   "multi-turn reasoning",
+   "any-horizon",
+   "web search",
+   "temporal grounding",
+   "reinforcement learning",
+   "Formula 1"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "filmstrip"
+  ],
+  "new_tags": [
+   {
+    "name": "human-vs-agent-trace",
+    "what": "a framed human behaviour lane (timeline, action arrows, thought notes) set above a framed system lane (typed tool-call chain), both in the same per-step colours"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Motivate an agent design by drawing a human doing the task and the agent doing it in two aligned frames, and give each reasoning turn one colour reused on the human's arrows and notes, the thumbnails and the agent's tool calls. A second, trivial panel (one arrow) shows the same system skipping the loop on the easy case.",
+  "suits": "Agent or multi-turn systems motivated by human behaviour, especially tool-call traces over long media where a short counter-case shows the loop being skipped."
+ },
+ "tags": [
+  "two-panels-stacked",
+  "tabbed-boxes",
+  "snake-chain",
+  "turn-colour-coding",
+  "timestamped-thumbnails",
+  "cream-ground"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.4)"
+  ],
+  "evidence": [
+   "when viewing a 2-hour-long video, as humans, we take an iterative approach to finding the target information (Fig. 1)",
+   "a user would usually ask: ”How does the Ferrari livery look this year?” as an open-ended question"
+  ]
+ },
+ "summary": "SAGE (Smart Any-horizon aGEnt) is a video-reasoning agent whose orchestrator answers short videos in a single turn and long videos through multi-turn tool calls (web search, video-part extraction, analysis). Figure 1 motivates this by imitating human behaviour in two stacked panels. In (a), a question about the Ferrari livery in a two-hour video is answered by a human who jumps along a timeline (Action-1 to Action-3, with thought notes) and by SAGE as a snake-shaped chain of coloured tool-call blocks ending in Answer Prediction. In (b), a short clip needs one action from the human and one pass over sampled frames for SAGE. One colour per turn links arrows, notes, thumbnails and tool calls.",
+ "summary_zh": "SAGE 是长视频推理智能体：短视频一轮作答，长视频多轮调用工具。图 1 分上下两栏：(a) 长视频中人沿时间轴三次跳转，SAGE 以同色工具调用链作答；(b) 短视频里两者都一步完成。按轮次着色对应箭头、笔记、缩略图与调用。",
+ "confidence": "high",
+ "notes": "Prior labels kept. The SAGE chain could be read as a stage-pipeline, but it is one run's trace, so it is recorded under worked-walkthrough and the typed-trace-blocks tag. Picture counts follow the digest (15 placed tiles: 4 human thumbnails, 3 repeats beside SAGE, 2 sampled-frame strips, 1 start thumbnail and a 5-tile film strip in (b)); the mapping of sizes to items is my reading. The Humans lane illustrates how a person would search, as the paper describes it; the text does not say it is a measured run.",
+ "venue": "CVPR26"
+}

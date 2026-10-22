@@ -1,0 +1,489 @@
+{
+ "paper_id": "aaai25-0067",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MPC",
+  "one_liner": "Multi-behavior recommender with several purchase chains that pass embeddings between behaviours and a negative graph that removes negative transfer.",
+  "domain": [
+   "multi-behavior recommendation",
+   "graph neural networks",
+   "negative transfer"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "boxed pipeline of blue-outlined modules joined by green block arrows, with one behavior-transfer module enlarged below by a dashed cone",
+  "argues": "Several purchase chains of different lengths each pass embeddings from one behaviour to the next, and a negative graph filters what should not transfer.",
+  "subject": "Interaction graphs, GCN initialisation, chained behavior-transfer modules with a zoomed negative-graph branch, aggregation and a joint loss.",
+  "elements": [
+   {
+    "name": "Interaction Graphs",
+    "type": "container",
+    "role": "toy interaction graphs of the four behaviours V, H, K and P",
+    "drawn_as": "rounded blue box holding four bipartite graphs (yellow nodes above green nodes) with '•••' between them, edges coloured orange, black, blue, red",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Negative Graphs Construction",
+    "type": "operation",
+    "role": "builds the negative graph of the latter behaviour",
+    "drawn_as": "large hollow blue arrow carrying the title text, from the interaction graphs to the example box",
+    "container": "top band",
+    "is_contribution": true
+   },
+   {
+    "name": "e.g., Negative Graph for K in BT Module (e.g., ...h->k...)",
+    "type": "instance",
+    "role": "worked example: H Graph and K Graph joined by a peach bar and arrow to the K/H Graph, which is used as the negative graph of K",
+    "drawn_as": "rounded blue box with three small graphs, a peach minus-like bar and a peach block arrow",
+    "container": "top band",
+    "is_contribution": true
+   },
+   {
+    "name": "Initialization Module",
+    "type": "container",
+    "role": "learns initial embeddings of users and items under each behaviour",
+    "drawn_as": "tall rounded blue box with four rows and '⋮' between rows",
+    "container": "main row, left",
+    "is_contribution": null
+   },
+   {
+    "name": "V GCN / H GCN / K GCN / P GCN",
+    "type": "module",
+    "role": "graph convolution over the interaction graph of one behaviour",
+    "drawn_as": "stack of offset cards whose top card holds that behaviour's bipartite graph, label below",
+    "container": "Initialization Module",
+    "is_contribution": false
+   },
+   {
+    "name": "e_v, e_h, e_k, e_p",
+    "type": "data",
+    "role": "initial embedding of each behaviour",
+    "drawn_as": "3 by 3 coloured grids: orange, grey, blue, red",
+    "container": "Initialization Module",
+    "is_contribution": false
+   },
+   {
+    "name": "Multiple Purchase Chain",
+    "type": "container",
+    "role": "several chains of behaviours from view towards purchase, each step handing the embedding to the next behaviour",
+    "drawn_as": "large rounded blue box holding rows PC1, PC2 and PCn with '⋮' between rows",
+    "container": "main row, middle",
+    "is_contribution": true
+   },
+   {
+    "name": "PC1: / PC2: / PCn:",
+    "type": "label",
+    "role": "names the purchase chains of increasing length",
+    "drawn_as": "bold row labels at the left of each chain",
+    "container": "Multiple Purchase Chain",
+    "is_contribution": true
+   },
+   {
+    "name": "BT Module",
+    "type": "module",
+    "role": "behavior-transfer module: takes the embedding of the former behaviour as initialisation of the next",
+    "drawn_as": "rounded white box with a bold label; one in PC1, two in PC2, one in PCn",
+    "container": "Multiple Purchase Chain",
+    "is_contribution": true
+   },
+   {
+    "name": "e_v→p, e_v→k, e_k→p, e_•→h, e_h→k, e_•→p",
+    "type": "data",
+    "role": "chain embeddings; subscripts spell the transfer path",
+    "drawn_as": "3 by 3 grids coloured by the target behaviour (grey, blue, pink of different strength)",
+    "container": "Multiple Purchase Chain",
+    "is_contribution": false
+   },
+   {
+    "name": "Behavior-Transfer Module : BT Module(e.g., ...h->k...)",
+    "type": "container",
+    "role": "enlarged inside of one BT Module",
+    "drawn_as": "rounded box under the chain box, tied to PC1's BT Module by a dashed cone",
+    "container": "main row, below the middle",
+    "is_contribution": true
+   },
+   {
+    "name": "K GCN / K/H GCN",
+    "type": "module",
+    "role": "positive branch over the K graph and negative branch over the K/H graph inside the BT Module",
+    "drawn_as": "two stacks of graph cards, K graph with blue edges and K/H graph with black edges",
+    "container": "Behavior-Transfer Module",
+    "is_contribution": true
+   },
+   {
+    "name": "e_h→k,+ / e_h→k,−",
+    "type": "data",
+    "role": "positive and negative representations joined at a circled operator to give e_h→k",
+    "drawn_as": "light-blue and light-grey grids with a circle node (plus-like cross) and an arrow to a blue grid",
+    "container": "Behavior-Transfer Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Aggregate(e.g., k )",
+    "type": "module",
+    "role": "aggregates the embeddings of one behaviour from the different chains into g_k",
+    "drawn_as": "rounded blue box: e_h→k, e_v→k, e_k grids joined by orthogonal lines to a circled plus, then a dark blue grid g_k",
+    "container": "main row, right",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Learning Module",
+    "type": "module",
+    "role": "per-behaviour losses summed into one loss",
+    "drawn_as": "rounded blue box with a bar of ℒ_v ••• ℒ_h ℒ_k ••• ℒ_p, a circled plus and ℒ, with g_v, g_h, g_k, g_p grids below",
+    "container": "lower right",
+    "is_contribution": null
+   },
+   {
+    "name": "(unlabelled) green block arrows",
+    "type": "other",
+    "role": "hand over between Initialization, Multiple Purchase Chain, Aggregate and Joint Learning",
+    "drawn_as": "three thick dark-green block arrows, two pointing right and one down",
+    "container": "main row",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Interaction Graphs",
+    "to": "e.g., Negative Graph for K in BT Module",
+    "what": "negative graphs are constructed from the interaction graphs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V Graph, H Graph, K Graph, P Graph",
+    "to": "V GCN, H GCN, K GCN, P GCN",
+    "what": "the same graph glyph and edge colour reappear on the GCN cards; no arrow",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "V GCN, H GCN, K GCN, P GCN",
+    "to": "e_v, e_h, e_k, e_p",
+    "what": "each GCN gives the embedding of its behaviour",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Initialization Module",
+    "to": "Multiple Purchase Chain",
+    "what": "initial embeddings enter the chains (green block arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "e_v",
+    "to": "BT Module, then e_v→p / e_v→k, BT Module, e_k→p / e_•→h, BT Module, e_h→k, e_•→p",
+    "what": "each chain starts at e_v and passes BT modules, producing a new embedding per behaviour on the way",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "BT Module of PC1",
+    "to": "Behavior-Transfer Module box",
+    "what": "dashed cone enlarges the module into its inside",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "e_•→h",
+    "to": "e_h→k via K GCN and K/H GCN",
+    "what": "inside the BT module the embedding goes through e^(0) to a K GCN (+) and a K/H GCN (−), which are combined at the circled node",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "K/H Graph (top example)",
+    "to": "K/H GCN (inside BT Module)",
+    "what": "same K/H graph glyph in both places; no arrow",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Multiple Purchase Chain",
+    "to": "Aggregate(e.g., k )",
+    "what": "embeddings of behaviour k from the chains (green block arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Aggregate(e.g., k )",
+    "to": "Joint Learning Module",
+    "what": "aggregated embeddings g (green block arrow pointing down)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "g_v, g_h, g_k, g_p",
+    "to": "ℒ_v, ℒ_h, ℒ_k, ℒ_p, then ℒ",
+    "what": "each embedding feeds its loss term; the terms are summed at a circled plus",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "PC1:, PC2:, PCn:",
+    "kind": "identity",
+    "at": "left of each chain row",
+    "what": "name the purchase chains of increasing length"
+   },
+   {
+    "marker": "v, h, k, p",
+    "kind": "identity",
+    "at": "graph names, GCN labels, embedding subscripts",
+    "what": "name the behaviours: view, two intermediate behaviours h and k, purchase"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "toy user-item interaction graphs for four behaviours and the negative-graph example (H graph, K graph, K/H graph)",
+    "form": "bipartite glyph graphs with colour-coded edges",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "bipartite graph glyph: a row of yellow nodes above a row of green nodes joined by coloured edges; a GCN is a stack of offset cards whose top card shows that graph",
+    "parts": [
+     "yellow nodes",
+     "green nodes",
+     "coloured edges",
+     "card stack"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-grid-tile",
+    "drawn_as": "an embedding as a small 3 by 3 coloured grid with the symbol and subscript beneath, colour set by the behaviour",
+    "parts": [
+     "grid",
+     "symbol label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "behavior-chain-rows",
+    "drawn_as": "alternative chains stacked as labelled rows PC1, PC2, PCn of tiles and BT boxes, with '⋮' and '•••' for omitted rows and steps",
+    "parts": [
+     "row labels",
+     "BT boxes",
+     "tiles",
+     "ellipses"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "loss-sum-bar",
+    "drawn_as": "a rounded bar holding the per-behaviour loss terms with ellipses, summed by a circled plus into the total loss",
+    "parts": [
+     "loss terms",
+     "circled plus",
+     "total loss"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Interaction Graphs at top-left and the hollow arrow to the example at top-right; then the main row left to right (Initialization, Multiple Purchase Chain, Aggregate), the zoom below the middle box, and the Joint Learning Module at lower right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A main row of three blue-outlined boxes (Initialization Module, Multiple Purchase Chain, Aggregate) joined by green block arrows; a top band with the interaction graphs and the negative-graph example; an enlarged BT Module below the middle box tied by a dashed cone; the Joint Learning Module below the right box.",
+  "panel_count": 1,
+  "lanes": "chain rows PC1, PC2, PCn inside the Multiple Purchase Chain box",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.03,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#588e31",
+    "used_for": "green item nodes in the graphs and the green block arrows between modules"
+   },
+   {
+    "hex": "#fee695",
+    "used_for": "pale yellow user nodes in the graphs"
+   },
+   {
+    "hex": "#f5b482",
+    "used_for": "orange tiles of the view behaviour (e_v, g_v) and the peach bar and arrow in the negative-graph example"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey tiles of the h behaviour (e_h, g_h, e_•→h)"
+   },
+   {
+    "hex": "#4c79cc",
+    "used_for": "blue tiles of the k behaviour (e_k, e_h→k, e_v→k)"
+   },
+   {
+    "hex": "#91ace0",
+    "used_for": "light blue tiles (e_k in Aggregate, e_h→k,+)"
+   },
+   {
+    "hex": "#2e54a1",
+    "used_for": "dark blue g_k tile and blue K-graph edges (stroke)"
+   },
+   {
+    "hex": "#e02e4b",
+    "used_for": "red tiles of the purchase behaviour (e_p, g_p)"
+   },
+   {
+    "hex": "#c65f10",
+    "used_for": "orange edges of the V graph (stroke)"
+   },
+   {
+    "hex": "#c81d31",
+    "used_for": "red edges of the P graph (stroke)"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey grid lines inside the embedding tiles (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt for nearly everything (black arrows and outlines, grey tile grid lines, blue container outlines), 0.25 pt on 12 shapes; dashed black cone lines",
+  "font": "bold sans (Microsoft YaHei) 4-6 pt for labels, bold serif symbols e and g at 7-9 pt with tiny subscripts, script L for the losses",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads between tiles; thick dark-green block arrows between modules; one large hollow blue arrow; peach block arrow; dashed black cone lines",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per behaviour on graph edges, embedding tiles and loss terms: orange = view, grey = h, blue = k, red or pink = purchase; pink gets paler for chain outputs; green = block arrows and item nodes, pale yellow = user nodes (by reading)",
+  "line_style_means": "thin black arrow = data flow between tiles; thick green block arrow = hand-over between modules; dashed black cone = zoom into the BT module; hollow blue arrow = graph construction; peach bar and arrow = graph operation example",
+  "shape_means": "coloured 3 by 3 grid = embedding; card stack with a small bipartite graph = GCN over that graph; rounded white box = BT Module; circled plus = aggregation or sum; script L = loss; blue rounded outline = module container",
+  "marker_means": "PC1:, PC2:, PCn: name chains; subscripts v, h, k, p name behaviours; arrow subscripts such as h→k spell the transfer",
+  "emphasis": "the three green block arrows carry the eye along the main flow, the dashed cone points at the BT module with its negative branch, and the Multiple Purchase Chain is the largest box",
+  "reusable_patterns": [
+   "one colour per behaviour kept on graph edges, embedding tiles and loss terms across the whole figure",
+   "embedding tiles as small coloured grids with subscripts that spell the transfer path",
+   "chain rows of different lengths stacked and labelled PC1 to PCn, with ellipses for omitted rows and steps",
+   "dashed cone from one module box to an enlarged copy that shows its inside",
+   "thick green block arrows between large modules and thin black arrows inside them",
+   "top band with the input graphs and a hollow arrow into a worked mini example of the graph operation",
+   "GCN drawn as a stack of cards, the top card holding the graph it works on"
+  ],
+  "weaknesses": [
+   "4-6 pt bold labels and subscripts are very small",
+   "the negative graph at the top right reaches the K/H GCN only by glyph reuse, with no arrow",
+   "the figure does not say what h and k stand for",
+   "several tiles differ only in pale shades of pink or blue"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "bipartite graph glyphs",
+   "embedding tile grids",
+   "module boxes and chain rows",
+   "block arrows and dashed cone"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "bipartite interaction graph glyphs in four edge colours",
+   "coloured 3 by 3 embedding tiles",
+   "stacked GCN graph cards",
+   "rounded BT Module boxes in chain rows",
+   "green block arrows between modules",
+   "dashed cone to an enlarged module",
+   "loss bar with script L terms"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "multi-behavior recommendation",
+   "purchase chain",
+   "negative transfer",
+   "graph convolution",
+   "behavior transfer",
+   "negative graph",
+   "joint learning",
+   "embedding"
+  ],
+  "tags": [
+   "zoom-callout",
+   "colour-coded-groups",
+   "matrix-cell-grid",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "chain-rows-with-ellipsis",
+    "what": "alternative chains of different lengths stacked as labelled rows PC1 to PCn, with ellipses for omitted steps and rows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Keep one colour per behaviour on every glyph that belongs to it (graph edges, embedding tiles, loss terms), so the reader can follow a behaviour through a dense multi-module figure, and enlarge the one new module with a dashed cone.",
+  "suits": "graph or sequence models with several behaviours, views or modalities that pass embeddings through many small modules."
+ },
+ "tags": [
+  "colour per behaviour",
+  "coloured embedding tiles",
+  "green block arrows",
+  "dashed zoom cone",
+  "blue rounded containers",
+  "bold sans labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Model Overview (p.3)"
+  ],
+  "evidence": [
+   "MPC consists of three key components: initialization, behavior transfer and negative transfer elimination.",
+   "We construct multiple purchase chains to explicitly model the dependencies between multiple behaviors.",
+   "We construct negative graphs for latter behavior on purchase chains to get the negative representations"
+  ]
+ },
+ "summary": "MPC is a multi-behavior recommender that builds several purchase chains (for example view to purchase, or view to cart to purchase) and removes negative transfer with negative graphs. The figure is a boxed pipeline of blue-outlined modules joined by thick green block arrows. At the top, four interaction graphs (V, H, K, P) feed a hollow arrow labelled Negative Graphs Construction, with a small example in which the H and K graphs lead to the K/H graph. Below, the Initialization Module runs a GCN per behaviour into coloured embedding tiles; the Multiple Purchase Chain box stacks rows PC1 to PCn of BT Module boxes; a dashed cone enlarges one BT Module into K GCN and K/H GCN branches; then come Aggregate and the Joint Learning Module with loss terms. One colour per behaviour runs through graphs, tiles and losses.",
+ "summary_zh": "MPC 的框架图：顶部四种行为的交互图经“负图构建”得到示例负图；下方依次是初始化模块、由 BT 模块串成的多条购买链、聚合与联合学习模块，虚线锥形把 BT 模块放大成正负两路 GCN；行为用统一颜色贯穿图、嵌入块和损失项。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (model-anatomy, stage-pipeline). The framed rounded boxes are module containers of one drawing, not panels, so panel_count is 1 although the index counts 6. The operator inside the BT Module is drawn as a circle with a cross and is read as joining the positive and negative parts. The yellow and green nodes are read as users and items. The digest reports no dashed shapes, but the zoom cone is dashed in print (dash segments).",
+ "venue": "AAAI25"
+}

@@ -1,0 +1,581 @@
+{
+ "paper_id": "aaai25-0073",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "StarNet",
+  "one_liner": "Hypergraph network that links users across social platforms by fusing local trajectory graphs with a global trajectory hypergraph.",
+  "domain": [
+   "user identity linkage",
+   "cross-domain trajectories",
+   "hypergraph learning"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "multi-branch-fusion",
+  "variant_note": "an input example frame at left, a local branch (a) and a global hypergraph branch (b) stacked in the middle, and a fusion module (c) at right",
+  "argues": "Combining a local spatio-temporal graph encoder with a global hypergraph encoder lets the model capture both trajectory-level and high-order cross-domain relations before linking users.",
+  "subject": "Two users' check-in trajectories across two platforms feed a local module, a global hypergraph module and a fusion module that scores user pairs.",
+  "elements": [
+   {
+    "name": "SocialNetwork",
+    "type": "container",
+    "role": "input example: users of two platforms with their check-in trajectories",
+    "drawn_as": "black-framed box with a bold title at the bottom, two tinted ovals and a legend at the top",
+    "container": "left frame",
+    "is_contribution": false
+   },
+   {
+    "name": "U_1 / U_2",
+    "type": "region",
+    "role": "the user sets of the two platforms",
+    "drawn_as": "pale teal oval (U_1) above a pale peach oval (U_2) with bold labels",
+    "container": "SocialNetwork",
+    "is_contribution": false
+   },
+   {
+    "name": "u with indices (u_1^1, u_1^2, u_2^1, u_2^2)",
+    "type": "actor",
+    "role": "users on the two platforms",
+    "drawn_as": "small person avatars with italic labels",
+    "container": "SocialNetwork",
+    "is_contribution": false
+   },
+   {
+    "name": "l_1 … l_6 on POI icons",
+    "type": "data",
+    "role": "check-in locations of the users, in visiting order",
+    "drawn_as": "chains of small point-of-interest icons (beer mug, bus stop, mouse, cloche, dumbbell, building) with italic l labels, joined by dotted arrows",
+    "container": "SocialNetwork",
+    "is_contribution": false
+   },
+   {
+    "name": "temporal influence / geographical infuence / Higher-order relationship",
+    "type": "label",
+    "role": "key of three line styles",
+    "drawn_as": "black dotted arrow, blue dotted line and teal dashed arrow with words, at the top of the left frame",
+    "container": "SocialNetwork",
+    "is_contribution": false
+   },
+   {
+    "name": "(a)Local Spatio-Temporal Enhanced Module",
+    "type": "container",
+    "role": "captures correlations between spatial positions in trajectories and dynamically learns multi-dimensional feature relations",
+    "drawn_as": "wide black-framed box in the upper middle with a bold title at the top left",
+    "container": "middle column",
+    "is_contribution": true
+   },
+   {
+    "name": "Trajectory A / Trajectory B",
+    "type": "data",
+    "role": "location graph of a trajectory",
+    "drawn_as": "blue circles l_1 … l_8 joined by green and teal arrows, labels above and below",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Location + Semantic + Group + Time",
+    "type": "data",
+    "role": "embedding of a location built from four parts",
+    "drawn_as": "dashed box with four stacked strips (pink, yellow, blue, grey) joined by plus signs",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Wt, Ws, Wc",
+    "type": "data",
+    "role": "three small weight grids applied to the embedding (reading of the drawing)",
+    "drawn_as": "teal, blue and orange small grids with bold labels",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "σ(FC) and X + PE",
+    "type": "operation",
+    "role": "fully connected layer with a sigmoid, then the input X plus a positional encoding",
+    "drawn_as": "italic formulas between hollow block arrows",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "A with Compose_pre / Compose_post / Head",
+    "type": "module",
+    "role": "attention with composition before and after across heads",
+    "drawn_as": "orange rounded square A with circular arrows above and below, labels Head and Compose",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "O_l / O_i^l",
+    "type": "data",
+    "role": "output of the local module",
+    "drawn_as": "red 3 by 3 grid O_l, hollow arrow to a red strip O_i^l",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer (a)",
+    "type": "other",
+    "role": "the local block is repeated over layers",
+    "drawn_as": "dashed frames offset behind the front one, a dotted curved arrow to the next layer",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "(b)Global Spatio-Temporal Enhanced Module",
+    "type": "container",
+    "role": "learns connections between trajectories and between users and trajectories and captures high-order features of cross-domain trajectories",
+    "drawn_as": "wide black-framed box in the lower middle with a bold title at the top left",
+    "container": "middle column",
+    "is_contribution": true
+   },
+   {
+    "name": "Tr_1 … Tr_6 capsules",
+    "type": "data",
+    "role": "trajectories grouped by overlapping shapes, the hyperedge idea",
+    "drawn_as": "overlapping blue, pink and teal capsules holding italic Tr labels, hollow arrow to the hypergraph",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "Hypergraph: Tr nodes, u nodes, A_node2edge, A_edge2node, H_1",
+    "type": "module",
+    "role": "node-to-edge and edge-to-node attention between trajectories and users",
+    "drawn_as": "blue circles with curves in blue, orange, green and grey, labels A_node2edge and A_edge2node, a blue grid H_1",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "H_L, H_g, ContraNorm, H_i^g",
+    "type": "module",
+    "role": "the global feature H_g is normalised against H_L by ContraNorm, giving the output H_i^g",
+    "drawn_as": "two blue grids, a blue rounded ContraNorm box with up and down hollow arrows, a blue strip H_i^g on top",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(c)Fusion Enhanced Association Module",
+    "type": "container",
+    "role": "uses an associator to link user identities",
+    "drawn_as": "tall black-framed box at the right with a bold title at the top",
+    "container": "right frame",
+    "is_contribution": true
+   },
+   {
+    "name": "red strip + blue strip",
+    "type": "data",
+    "role": "local output and global output joined by a plus sign",
+    "drawn_as": "pink-red strip and blue strip with a bracket below",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "KAN",
+    "type": "module",
+    "role": "associator that turns the fused vector into pair scores",
+    "drawn_as": "orange rounded box with a hollow arrow down",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "0.01, 0.76, 0.11, …, 0.02, 0.05",
+    "type": "data",
+    "role": "example scores of candidate users",
+    "drawn_as": "column of cells (grey, green, blue, light blue, pink) with numbers; arrows to three avatars",
+    "container": "(c)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "SocialNetwork",
+    "to": "(a) and (b)",
+    "what": "one elbow connector splits into two arrows, up into (a) and down into (b)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a) and (b)",
+    "to": "(c)",
+    "what": "two elbow connectors merge into one arrow entering (c)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trajectory graph",
+    "to": "Location + Semantic + Group + Time",
+    "what": "location features of the nodes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Location + Semantic + Group + Time",
+    "to": "Wt, Ws, Wc, σ(FC), X + PE, A, O_l, O_i^l",
+    "what": "main line of the local module through hollow block arrows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer frames",
+    "to": "next layer",
+    "what": "dotted curved arrow from one layer to the next",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tr capsules",
+    "to": "Hypergraph",
+    "what": "grouped trajectories become the hypergraph (diagonal hollow arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Hypergraph",
+    "to": "H_1, H_L, H_g",
+    "what": "node-to-edge and edge-to-node attention give H_1, then H_L and H_g",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H_L and H_g",
+    "to": "ContraNorm and H_i^g",
+    "what": "hollow arrows down into ContraNorm and up from it to H_i^g",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red strip + blue strip",
+    "to": "KAN, score column, avatars",
+    "what": "fused vector goes through KAN to scores; arrows lead to the candidate avatars, the 0.76 cell to the matched one",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "legend line styles",
+    "to": "dotted arrows and teal dashed arrows in the drawing",
+    "what": "black dotted = temporal, blue dotted = geographical, teal dashed = higher-order",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "SocialNetwork",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "two users' check-in trajectories on two platforms as chains of point-of-interest icons, with a line-style legend",
+    "verdict": "setting"
+   },
+   {
+    "label": "(a)Local Spatio-Temporal Enhanced Module",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "trajectory graph, location, semantic, group and time embeddings, attention with composition, repeated layers",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b)Global Spatio-Temporal Enhanced Module",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "overlapping trajectory capsules, a hypergraph with node-to-edge and edge-to-node attention, ContraNorm",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)Fusion Enhanced Association Module",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "local and global vectors fused, KAN associator, scores and matched user",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "titles of the three module frames",
+    "what": "name the three components, matching the caption"
+   },
+   {
+    "marker": "l_k, Tr_k, u with indices, U_1, U_2, H, O",
+    "kind": "identity",
+    "at": "nodes, capsules, avatars, ovals and grids",
+    "what": "name locations, trajectories, users, user sets and the feature matrices"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "point-of-interest icons: beer mug, bus stop, mouse, cloche, dumbbell, building",
+    "stands_for": "types of check-in location",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 11
+   },
+   {
+    "depicts": "person avatars",
+    "stands_for": "users",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 9
+   }
+  ],
+  "examples": [
+   {
+    "what": "two users' check-in trajectories on two platforms, e.g. a chain of mouse, beer mug, cloche and dumbbell icons for one user",
+    "form": "icon chains with dotted temporal and blue dotted geographical links inside two tinted ovals",
+    "real_values": false
+   },
+   {
+    "what": "scores of five candidate users: 0.01, 0.76, 0.11, 0.02, 0.05 with the highest one linked to one avatar",
+    "form": "column of coloured cells with numbers and arrows to avatars",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "location graph of blue circles joined by green and teal arrows, and a user-trajectory hypergraph of blue circles joined by coloured curves",
+    "parts": [
+     "nodes",
+     "coloured edges"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "an orange box A with circular compose arrows before and after, plus node-to-edge and edge-to-node attention labels on the hypergraph",
+    "parts": [
+     "A box",
+     "Compose arrows",
+     "A_node2edge",
+     "A_edge2node"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-sum-strips",
+    "drawn_as": "four strips coloured by feature type (location, semantic, group, time) stacked and joined by plus signs inside a dashed box",
+    "parts": [
+     "four strips",
+     "plus signs",
+     "dashed box"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "hypergraph-capsules",
+    "drawn_as": "overlapping pastel capsules around labelled trajectories to show groups of members",
+    "parts": [
+     "capsules",
+     "Tr labels"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the legend and the two user ovals in the SocialNetwork frame at the left, follows the elbow arrows to (a) above and (b) below, then merges into (c) at the right, ending in the score column and the matched avatar."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four black-framed boxes in three columns: the SocialNetwork frame at the left, the local module (a) stacked above the global module (b) in the middle, and the fusion module (c) at the right; elbow connectors fan out of the first frame and merge into the last.",
+  "panel_count": 4,
+  "lanes": "two stacked parallel branches, (a) local and (b) global, between the input frame and the fusion frame",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 4,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.42,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e9f8f5",
+    "opacity": 0.61,
+    "used_for": "pale teal oval of U_1"
+   },
+   {
+    "hex": "#fff6e9",
+    "opacity": 0.61,
+    "used_for": "pale peach oval of U_2"
+   },
+   {
+    "hex": "#accfff",
+    "used_for": "light blue circles for locations, trajectories and users"
+   },
+   {
+    "hex": "#4280dd",
+    "used_for": "blue cells of the global-branch grids and blocks"
+   },
+   {
+    "hex": "#71a4e1",
+    "used_for": "mid-blue cells of the global-branch grids"
+   },
+   {
+    "hex": "#ffd78e",
+    "used_for": "orange-yellow A box and KAN box"
+   },
+   {
+    "hex": "#ffa3a0",
+    "used_for": "pink-red cells of O_l and the red strips"
+   },
+   {
+    "hex": "#c5dcff",
+    "opacity": 0.47,
+    "used_for": "blue capsule of the trajectory group in (b)"
+   },
+   {
+    "hex": "#ffc0be",
+    "opacity": 0.39,
+    "used_for": "pink capsule of the trajectory group in (b)"
+   },
+   {
+    "hex": "#b2e8df",
+    "opacity": 0.46,
+    "used_for": "teal capsule of the trajectory group in (b)"
+   },
+   {
+    "hex": "#92d050",
+    "used_for": "green arrows between locations in Trajectory A and B (stroke)"
+   },
+   {
+    "hex": "#101843",
+    "used_for": "dark navy outlines and arrows (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt navy hairlines on most of the 292 thin shapes, 0.75 pt on 87 frames and arrows; 39 dashed shapes (layer frames, the embedding box, the legend)",
+  "font": "serif (Times New Roman) 4-13.5 pt: bold 7.5 pt module titles, symbols at 10-12.5 pt with 4-6.5 pt subscripts, 7.5 pt words; a few labels in Microsoft YaHei",
+  "corners": "mixed",
+  "arrows": "thin navy arrows with small heads; hollow block arrows between steps in (a) and (b); black dotted, blue dotted and teal dashed arrows per the legend; dotted curved arrows to the next layer; elbow connectors between frames",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal and peach ovals = the two platforms' users; embedding strips: pink = location, yellow = semantic, blue = group, grey = time; red = local branch output (O), blue = global branch output (H), both carried into (c); orange-yellow = attention and KAN boxes; green cell in the score column = highest score",
+  "line_style_means": "legend: black dotted arrow = temporal influence, blue dotted line = geographical influence, teal dashed arrow = higher-order relationship; hollow block arrows = steps inside a module; dashed offset frames = repeated layers; dotted curved arrow = to the next layer",
+  "shape_means": "blue circle = location, trajectory or user node; capsule = group of trajectories; coloured grid = matrix; strip of cells = vector; rounded box = module; avatar = user; POI icon = type of location",
+  "marker_means": "(a)(b)(c) name the modules; l, Tr, u, U, H, O name locations, trajectories, users, user sets and features; 0.01, 0.76, 0.11, 0.02, 0.05 are example scores",
+  "emphasis": "the elbow connectors converge on (c), and the green 0.76 cell with an arrow to one avatar shows the linkage result",
+  "reusable_patterns": [
+   "an input example frame at the left, two parallel module frames stacked in the middle and a fusion frame at the right, joined by elbow connectors that fan out and merge",
+   "a line-style legend at the top of the input frame",
+   "icon chains for check-in trajectories (point-of-interest icons joined by dotted arrows)",
+   "repeated layers drawn as dashed frames offset behind the front module with a dotted curved arrow to the next",
+   "an embedding built as stacked strips joined by plus signs",
+   "matrix grids in the branch colour (red local, blue global) reused as strips in the fusion module",
+   "a score column with one highlighted cell and an arrow to the matched user"
+  ],
+  "weaknesses": [
+   "4-7.5 pt labels and tiny subscripts are very small",
+   "the hypergraph panel in (b) has many crossing coloured curves",
+   "the teal of the legend's dashed arrow does not obviously map to the teal arrows in (a)",
+   "many notations (l, Tr, u, U, H, O) share the figure without a key"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "flat-colour point-of-interest icons (beer mug, bus stop, mouse, cloche, dumbbell, building)",
+   "person avatar icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "module frames, grids, strips, graphs and arrows"
+  ],
+  "unknown": [
+   "whether the icons come from an icon library"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "two tinted ovals with users and POI-icon trajectories",
+   "line-style legend",
+   "location graph with coloured arrows",
+   "stacked embedding strips with plus signs",
+   "attention box with compose arrows",
+   "overlapping trajectory capsules",
+   "ContraNorm box with matrices",
+   "KAN box and score column with avatars"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "cross-domain trajectory association",
+   "user identity linkage",
+   "hypergraph",
+   "spatio-temporal attention",
+   "ContraNorm",
+   "KAN",
+   "LBSN",
+   "check-in trajectories"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "matrix-cell-grid",
+   "token-strip",
+   "colour-coded-groups",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "offset-frames-for-layers",
+    "what": "a module repeated over several layers drawn as dashed frames offset behind the front one, with a dotted curved arrow to the next layer"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open the figure with a small worked example frame (users, icon trajectories, a line-style legend), then branch into two lettered module frames and merge them into a fusion frame, keeping the branch colours (red local, blue global) on grids and strips all the way to the fusion.",
+  "suits": "models with a local and a global branch over graph or sequence data that are fused for a final matching or scoring step."
+ },
+ "tags": [
+  "four framed boxes",
+  "elbow connectors",
+  "line-style legend",
+  "icon trajectories",
+  "coloured grids and strips",
+  "serif math labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Methodology (p.3)"
+  ],
+  "evidence": [
+   "(a) The process of capturing correlations between spatial positions in trajectories and dynamically learning multi-dimensional feature relations.",
+   "(c) Utilizing an associator to achieve precise user identity linkage.",
+   "It comprises three key components: (1) Local Spatio-Temporal Enhanced Graph Neural Network Module"
+  ]
+ },
+ "summary": "StarNet links the same user across two social platforms from their location trajectories. The figure frames four boxes. At the left, a SocialNetwork frame shows two users' check-ins as chains of point-of-interest icons inside a teal and a peach oval, with a legend for temporal, geographical and higher-order links. Two stacked frames follow: (a) the Local Spatio-Temporal Enhanced Module, with a trajectory graph, stacked location, semantic, group and time embeddings, an attention box with compose steps and layer frames, and (b) the Global Spatio-Temporal Enhanced Module, with overlapping trajectory capsules, a hypergraph with node-to-edge and edge-to-node attention, and ContraNorm. Their outputs, a red and a blue strip, meet in (c), a KAN box that gives a column of scores and picks the matched user.",
+ "summary_zh": "StarNet 总览图：左侧 SocialNetwork 框用 POI 图标链表示两平台用户轨迹；中间 (a) 局部与 (b) 全局超图模块上下并列，输出的红、蓝向量在右侧 (c) 中经 KAN 打分，匹配同一用户。",
+ "confidence": "medium",
+ "notes": "The figure is very dense and the context gives only the module names and the caption, so the roles of Wt, Ws, Wc, of the grey and orange curves in the hypergraph and of the teal arrows in (a) are read from the drawing. Panel count 4 includes the SocialNetwork frame (framed and titled) next to the three lettered modules; the index counts 3. The legend's teal dashed arrow and the teal arrows in (a) may or may not share a meaning.",
+ "venue": "AAAI25"
+}

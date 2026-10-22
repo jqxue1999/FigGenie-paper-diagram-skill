@@ -1,0 +1,436 @@
+{
+ "paper_id": "icml26-0369",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VideoTemp-o3",
+  "one_liner": "A unified agentic thinking-with-videos model that jointly does temporal grounding and QA, localising, clipping and refining segments on demand.",
+  "domain": [
+   "long video understanding",
+   "temporal grounding",
+   "agentic tool use"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "one real video-QA instance followed over three agent turns, with the real think text, tool calls and returned clips shown as film strips; a colour key ties span highlights to four task types",
+  "argues": "One model can ground a segment on demand, refine its timestamps after inspecting the clip, and then answer from the evidence found, all within a single multi-turn trace.",
+  "subject": "A real Titanic-video question answered over three agent turns with two clip tool calls, a timestamp refinement and a final answer.",
+  "elements": [
+   {
+    "name": "How many ships are shown in the map while the sinking ship sending out message? A. 3 B. 8 C. 11 D. 9",
+    "type": "sample",
+    "role": "the multiple-choice video question given by the user",
+    "drawn_as": "rounded bordered box at the top left beside a user avatar, options in one line",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Turn 1: Grounding",
+    "type": "instance",
+    "role": "first agent turn: think text locating a map scene, ending in a tool call with a rough segment",
+    "drawn_as": "bordered rounded text box with a bold title, the closing <tool_call>[215, 224]</tool_call> highlighted dark orange (#e87032)",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Clip [215, 224]",
+    "type": "data",
+    "role": "the clip returned by the first tool call: it turns out to show magazine and newspaper pages",
+    "drawn_as": "small dark film strip of tilted frames under the Turn 1 box, reached by an arrow with a scissors icon and the label",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Timestamp Refine",
+    "type": "operation",
+    "role": "the model inspects the first clip and corrects the segment in the next turn",
+    "drawn_as": "orange circular-arrows icon with bold orange label, joined to Turn 2 by an orange curved arrow that leaves the first clip strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Turn 2: Grounding",
+    "type": "instance",
+    "role": "second agent turn: re-examines the video, finds the correct map and calls a refined segment",
+    "drawn_as": "bordered text box, re-examination sentences shaded peach (#f6c6ad) and <tool_call>[312, 325]</tool_call> dark orange",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Clip [312, 325]",
+    "type": "data",
+    "role": "the clip returned by the refined call, showing ship blueprints and map frames",
+    "drawn_as": "dark film strip with tilted frames, one map frame enlarged and outlined in thick red, reached by a scissors arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Turn 3: Answer",
+    "type": "instance",
+    "role": "final turn: reasons over the map in the clip, counts the labelled ships and answers",
+    "drawn_as": "bordered text box, the ship-listing reasoning shaded pale green (#c2f1c8)",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "<answer>C</answer>",
+    "type": "data",
+    "role": "the final answer",
+    "drawn_as": "closing tag of the Turn 3 text, highlighted green (#4ea62e)",
+    "container": "Turn 3: Answer",
+    "is_contribution": null
+   },
+   {
+    "name": "Unify multiple tasks",
+    "type": "container",
+    "role": "key tying the four highlight colours to Video Grounding, Timestamp Refine, Video QA and Visual Reasoning",
+    "drawn_as": "light-grey (#e8e8e8) rounded panel at the lower left with a heading and four colour swatches with names",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "question box",
+    "to": "Turn 1: Grounding",
+    "what": "the question starts the agent's first turn",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Turn 1: Grounding",
+    "to": "Clip [215, 224]",
+    "what": "the tool call cuts and returns a clip",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Clip [215, 224]",
+    "to": "Turn 2: Grounding",
+    "what": "the first clip is inspected and the segment refined",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Turn 2: Grounding",
+    "to": "Clip [312, 325]",
+    "what": "the refined tool call cuts and returns a clip",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Clip [312, 325]",
+    "to": "Turn 3: Answer",
+    "what": "the clip with the map is the evidence for the answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "full-video film strip at the top",
+    "to": "the two clip strips",
+    "what": "the clips are segments cut from the full video; no arrow, only the scissors icons and the strip look",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "key swatches",
+    "to": "highlighted spans in the turn texts",
+    "what": "dark orange marks tool calls (video grounding), peach the refinement reasoning, pale green the visual reasoning, green the answer",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Turn 1, Turn 2, Turn 3",
+    "kind": "order",
+    "at": "bold titles above the three text boxes",
+    "what": "order of the agent's turns, each named by its task (Grounding, Grounding, Answer)"
+   },
+   {
+    "marker": "Clip [215, 224], Clip [312, 325]",
+    "kind": "identity",
+    "at": "beside the scissors arrows",
+    "what": "name the clip each tool call returns by its time range in seconds"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "about fifteen frames of a long Titanic documentary video: posters, newspaper clippings, ship blueprints, a map, the presenter at the right end",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 15,
+    "medium": "bitmap",
+    "treatment": "tilted, slightly overlapping frames along a full-width dark film strip with white sprocket holes at top and bottom"
+   },
+   {
+    "what": "about six frames of the first returned clip: magazine cover pages and newspaper pages with yellow highlighter",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "smaller film strip under Turn 1, tilted frames with sprocket holes"
+   },
+   {
+    "what": "about six frames of the refined clip: three ship blueprints with a blue cutaway and three map frames, one map frame enlarged and outlined in thick red",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "film strip under Turn 2, the evidence frame larger than its neighbours with a thick red rectangle"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon user with brown hair and a blue shirt",
+    "stands_for": "the user who asks the question",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "scissors",
+    "stands_for": "the clip tool call that cuts a segment from the video",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "two orange circular arrows",
+    "stands_for": "the Timestamp Refine loop",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a real video-QA instance: the ship-count question, then the model's actual think text, the tool calls [215, 224] and [312, 325], and the answer C",
+    "form": "bordered text boxes with <think>, <tool_call> and <answer> tags, span highlights, and two film-strip tool outputs",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "dark strips with white sprocket holes and tilted, overlapping frames: one full-width strip for the whole video, two smaller strips for clips",
+    "parts": [
+     "sprocket holes",
+     "tilted frames"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a tool_call tag at the end of the turn text, then a down arrow with a scissors icon and a Clip [start, end] label leading to the returned film strip",
+    "parts": [
+     "tool_call tag",
+     "scissors arrow",
+     "clip label",
+     "returned strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "an orange circular-arrows icon with an orange curved arrow carrying the first clip back into the second grounding turn",
+    "parts": [
+     "loop icon",
+     "orange curved arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the full-width film strip, then the user avatar and question at the left, down Turn 1 and its clip, up along the orange Timestamp Refine arrow to Turn 2 at the right, down its clip to Turn 3; the key at the lower left explains the highlight colours."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A full-width film strip on top; below it two columns read one after the other: the left holds the question, Turn 1, its clip and the key, the right holds Turn 2, its clip and Turn 3; an orange curved arrow climbs from the first clip to Turn 2.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.09,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#3a3a3a",
+    "used_for": "dark-grey film strip bodies"
+   },
+   {
+    "hex": "#e8e8e8",
+    "used_for": "light-grey key panel"
+   },
+   {
+    "hex": "#e87032",
+    "used_for": "video grounding: tool_call highlights, key swatch, Timestamp Refine label, loop icon and arrow"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "timestamp refine: peach span shading and key swatch"
+   },
+   {
+    "hex": "#c2f1c8",
+    "used_for": "visual reasoning: pale-green span shading and key swatch"
+   },
+   {
+    "hex": "#4ea62e",
+    "used_for": "video QA: the answer highlight and key swatch"
+   },
+   {
+    "hex": "#e85d5d",
+    "used_for": "red outline on the evidence frame",
+    "approx": true
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark-navy borders of the question and turn boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt dark-navy or black outlines on rounded text boxes, 0.5 pt on small shapes, orange 0.75 pt curved arrow, thick red frame outline",
+  "font": "sans (Comic Sans MS, bold for titles) 4.5-7 pt: 4.5 pt think text, 5.5 pt question, clip labels and key names, 7 pt key heading",
+  "corners": "rounded",
+  "arrows": "straight black arrows with small filled heads between boxes and strips, one orange curved arrow with a loop icon",
+  "rendering": "flat-vector",
+  "effects": "frames tilted and overlapping inside the film strips; no shadows",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "four task colours: dark orange = video grounding, peach = timestamp refine, green = video QA, pale green = visual reasoning; the same colours shade spans in the turn texts and fill the key swatches; red = the evidence frame",
+  "line_style_means": "black straight arrows = turn-to-turn and tool-call flow; the orange curved arrow = timestamp refinement carried into the next turn",
+  "shape_means": "dark film strip with sprocket holes = a video or a clip; rounded bordered box = one turn or the question; scissors = clip tool; circular arrows = refine",
+  "marker_means": "Turn 1, 2, 3 order the agent's steps; [start, end] pairs in the tool_call tags and Clip labels are timestamps in seconds",
+  "emphasis": "dark-orange tool_call highlights and the thick red frame draw the eye to the grounding calls and the evidence; film strips fill the top; the key states the four task types",
+  "reusable_patterns": [
+   "agent trace as stacked bordered text boxes (Turn 1, 2, 3) whose think, tool_call and answer text is highlighted by task colour",
+   "tool output drawn as the real media it returns: a film strip under the turn, reached by an arrow with a scissors icon and a Clip [a, b] label",
+   "full-width film strip on top standing for the whole video, clips as smaller strips below",
+   "orange loop icon and curved arrow labelled Timestamp Refine carrying one clip back into the next turn",
+   "key panel pairing colour swatches with task names, matched by span highlights",
+   "thick red outline on the one frame that carries the evidence"
+  ],
+  "weaknesses": [
+   "the 4.5 pt think text is unreadable at print size",
+   "the orange refine arrow leaves the clip edge and crosses to the other column, easy to lose",
+   "dark orange and peach in the key are close and hard to tell apart in the running text"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames of a real Titanic documentary video",
+   "a real question with options",
+   "the model's actual think text, tool calls and answer",
+   "the clips returned by the tool calls"
+  ],
+  "stock": [
+   "scissors icon",
+   "cartoon user avatar",
+   "circular-arrows icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "film-strip frames and sprocket holes",
+   "text boxes and arrows",
+   "key panel"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "full-width film strip of video frames",
+   "user avatar with question card and options",
+   "bordered turn boxes with think and tool_call text",
+   "scissors-labelled clip arrows",
+   "clip film strips with a red-outlined frame",
+   "orange Timestamp Refine loop",
+   "key panel with four colour swatches"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "agentic thinking-with-videos",
+   "temporal grounding",
+   "video QA",
+   "tool call",
+   "clip",
+   "timestamp refinement",
+   "long video",
+   "visual reasoning"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "highlighted-text-spans",
+   "filmstrip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "evidence-frame-outline",
+    "what": "a thick red outline on the one frame of a returned clip that holds the evidence for the answer"
+   },
+   {
+    "name": "tool-output-as-filmstrip",
+    "what": "a tool call's returned video clip drawn as a smaller film strip under the calling turn, joined by an arrow carrying a scissors icon and the clip's time range"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an agent's multi-turn trace as stacked bordered text boxes whose tags (think, tool_call, answer) are highlighted in one colour per task type, draw each tool output as the real media it returns (film-strip clips), and add a key that ties the colours to the task names.",
+  "suits": "agentic video or multimodal systems where one model interleaves grounding, tool calls and reasoning across turns on a real example."
+ },
+ "tags": [
+  "film strips",
+  "transcript boxes",
+  "four-colour highlights",
+  "comic-sans look",
+  "scissors tool icon",
+  "key panel",
+  "real example"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Figure 1. Illustration of the agentic pipeline in VideoTemp-o3.",
+   "it performs on-demand grounding and refines the initial rough segment",
+   "enabling iterative refinement until sufficient evidence is gathered to produce a reliable answer"
+  ]
+ },
+ "summary": "VideoTemp-o3 is a unified agentic thinking-with-videos framework that jointly models video grounding and question answering, supports on-demand clipping and can refine inaccurate localisations. Figure 1 follows one real example: a long Titanic documentary (a full-width film strip) and a question about how many ships the map shows. In Turn 1 the model's think text ends in a dark-orange tool call [215, 224]; a scissors arrow returns that clip as a small film strip. An orange Timestamp Refine loop carries it into Turn 2, which re-examines the video and calls [312, 325]; the returned clip has the map frame outlined in red. Turn 3 reasons over the map and answers C. A grey key ties four highlight colours to Video Grounding, Timestamp Refine, Video QA and Visual Reasoning.",
+ "summary_zh": "VideoTemp-o3 是统一的智能体式视频思考框架，同时做时间定位与问答。图以泰坦尼克号长视频问题分三轮：先剪出 [215,224]，再细化为 [312,325]，最后基于地图帧推理答 C；左下图例用四色对应四类任务。",
+ "confidence": "high",
+ "notes": "The prior attribute panels=4 was not followed: the Turn boxes are steps of one trace, not panels. Frame counts of the two clip strips are approximate (the digest gives 27 bitmaps in total: 15 for the top strip and 12 for the two clips). The mapping of peach and pale-green spans to Timestamp Refine and Visual Reasoning follows the key and the visible highlights.",
+ "venue": "ICML26"
+}

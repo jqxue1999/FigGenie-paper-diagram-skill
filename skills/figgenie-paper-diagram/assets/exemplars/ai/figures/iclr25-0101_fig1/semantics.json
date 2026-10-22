@@ -1,0 +1,619 @@
+{
+ "paper_id": "iclr25-0101",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Brain-tuning",
+  "one_liner": "Fine-tunes pretrained speech language models on fMRI recordings of people listening to stories to raise brain alignment and semantic downstream performance.",
+  "domain": [
+   "speech language models",
+   "fMRI brain alignment",
+   "fine-tuning with brain recordings"
+  ],
+  "subfield": "audio",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "(a) is a left-to-right network strip; (b) adds the evaluation pipeline and (c) an expected-outcome table, so the figure runs method, measurement, expectation",
+  "argues": "Fine-tuning a speech model on fMRI responses should raise alignment with semantic brain regions, lower the impact of low-level features on that alignment and improve downstream semantic tasks.",
+  "subject": "a speech model fine-tuned to predict fMRI, the pipeline that measures brain alignment and low-level impact, and an expected-outcome grid",
+  "elements": [
+   {
+    "name": "TR-aligned Audio",
+    "type": "data",
+    "role": "speech input aligned to the fMRI sampling interval",
+    "drawn_as": "grey waveform drawn as a vertical stack of centred horizontal bars",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Extractor",
+    "type": "module",
+    "role": "pretrained front end of the speech model, kept frozen",
+    "drawn_as": "tall blue slab with rotated white text and a snowflake, under the caption Freeze",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Transformer Layers (layer 1, layer 2, layer 3, ..., layer L)",
+    "type": "module",
+    "role": "pretrained transformer layers that are fine-tuned",
+    "drawn_as": "peach region with L tall orange bars and an ellipsis, a flame at the lower right, under the caption Fine-tune",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Output tokens",
+    "type": "data",
+    "role": "transformer outputs o1 to oN passed to pooling",
+    "drawn_as": "stacked orange squares with vertical dots, one arrow per token into Pooling",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Pooling",
+    "type": "module",
+    "role": "average pooling over output tokens (added by brain-tuning)",
+    "drawn_as": "tall light-purple slab with rotated text",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "FC Layer",
+    "type": "module",
+    "role": "linear projection head that predicts the fMRI response; trained",
+    "drawn_as": "tall lavender slab with rotated text and a flame",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Predicted fMRI Response",
+    "type": "data",
+    "role": "the head's prediction of the voxel responses",
+    "drawn_as": "row of five peach circles",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "fMRI Response, Voxel Masking, Loss",
+    "type": "operation",
+    "role": "the true response is masked to high-noise-ceiling voxels and compared with the prediction in an L2 loss",
+    "drawn_as": "small brain render, light-purple Voxel Masking box, squiggle strip, black-outlined Loss box, stacked top to bottom",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Input Audio",
+    "type": "data",
+    "role": "speech fed to both branches in panel (b)",
+    "drawn_as": "grey waveform at the left edge with a forked arrow to the two branches",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Speech Model",
+    "type": "module",
+    "role": "pretrained or brain-tuned model whose representations are tested",
+    "drawn_as": "rounded frame holding blue Feature Extractor and orange Transformer slabs, arrow to a column of light-green circles",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Extract Low Level Features, F (Linear Function of Low-Level Feature)",
+    "type": "module",
+    "role": "computes low-level features (e.g. Tri-Phones, Articulation) and a linear map from them",
+    "drawn_as": "two grey-violet boxes, arrow to a column of dark-green circles",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Get Representations / Estimate Brain Alignment",
+    "type": "label",
+    "role": "headings of the two halves of panel (b)",
+    "drawn_as": "serif headings above a grey dashed vertical divider",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "h( ) with Original alignment (B_o) and Residual alignment (B_r)",
+    "type": "formula",
+    "role": "voxel-wise encoding of the original representation and of the residual after removing low-level features, each compared with the true fMRI response",
+    "drawn_as": "circle column inside h( ), approx sign to a caption and a small brain render; the residual column is a circle column minus the dark-green one, braced as residuals",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "(B_o - B_r) ∝ Low-level Impact",
+    "type": "formula",
+    "role": "low-level impact is the drop in alignment after removal",
+    "drawn_as": "centred formula between two vertical arrows from the two alignment captions",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "Brain Alignment, Low-level Features Impact, Downstream Performance",
+    "type": "label",
+    "role": "the three evaluation criteria as table columns, each with a 0 to + colour scale",
+    "drawn_as": "serif column heads over blue-to-red gradient bars with 0, arrow and + above them",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Pretrained, Brain-tuned (Models)",
+    "type": "label",
+    "role": "the two table rows, each headed by a small model icon",
+    "drawn_as": "row labels with a two-block model icon; the Brain-tuned icon carries a brain glyph; rotated word Models at the left, dashed row divider",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Better arrows",
+    "type": "icon",
+    "role": "state which direction is desired: up for alignment, down for low-level impact, up for performance",
+    "drawn_as": "thick red up, blue down, red up arrows with the word Better under each column",
+    "container": "(c)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "TR-aligned Audio",
+    "to": "Feature Extractor",
+    "what": "speech input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Extractor",
+    "to": "Transformer Layers",
+    "what": "frame features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output tokens",
+    "to": "Pooling",
+    "what": "each token is pooled",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pooling",
+    "to": "FC Layer",
+    "what": "pooled vector",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "FC Layer",
+    "to": "Predicted fMRI Response",
+    "what": "projection to voxels",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "fMRI Response",
+    "to": "Loss",
+    "what": "voxel-masked true response as target",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Predicted fMRI Response",
+    "to": "Loss",
+    "what": "prediction compared with target",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input Audio",
+    "to": "Speech Model",
+    "what": "audio to representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input Audio",
+    "to": "Extract Low Level Features",
+    "what": "audio to low-level features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "representation and low-level circle columns",
+    "to": "residuals",
+    "what": "low-level part is subtracted from the representation",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Original alignment (B_o) and Residual alignment (B_r)",
+    "to": "Low-level Impact",
+    "what": "their difference is proportional to impact",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pretrained and Brain-tuned rows",
+    "to": "three metric columns",
+    "what": "each cell shows the expected result of that model on that criterion",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "model colours blue and orange",
+    "to": "Feature Extractor and Transformer in (a), (b) and (c) icons",
+    "what": "same two-colour coding for the same modules in all panels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Proposed brain-tuning approach",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "frozen feature extractor, fine-tuned transformer, pooling, FC head, predicted versus masked true fMRI and the loss",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Approach to estimate brain alignment and low-level feature impact",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "get representations and low-level features, then compare original and residual alignment with the true fMRI response",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Types of evaluation and expected outcomes",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "pretrained versus brain-tuned on brain alignment, low-level impact and downstream performance, with the desired direction",
+    "verdict": "expected outcome"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "under or beside each panel",
+    "what": "name the three panels of the figure"
+   },
+   {
+    "marker": "snowflake / flame",
+    "kind": "identity",
+    "at": "Feature Extractor; Transformer Layers and FC Layer",
+    "what": "frozen versus fine-tuned state"
+   },
+   {
+    "marker": "0 -> +",
+    "kind": "identity",
+    "at": "the three column colour scales in (c)",
+    "what": "direction of the colour scale from low to high"
+   },
+   {
+    "marker": "up / down arrow with Better",
+    "kind": "identity",
+    "at": "under each column in (c)",
+    "what": "which direction counts as improvement"
+   },
+   {
+    "marker": "B_o, B_r, h, F",
+    "kind": "identity",
+    "at": "panel (b)",
+    "what": "symbols for original and residual alignment, the encoding function and the linear function of low-level features"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "fMRI response brain-surface renders",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small lateral brain views with red and yellow activation patches, one by fMRI Response in (a) and two by True fMRI Response in (b)"
+   },
+   {
+    "what": "brain-surface maps in the expected-outcome table",
+    "content": "medical",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "lateral brain renders painted with a blue-to-red colour scale; mostly blue where the criterion is low, speckled red where high; the brain-tuned row is the inverse of the pretrained row for the first two columns"
+   },
+   {
+    "what": "bar charts for ASR, Phons and Words with error bars",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "three gradient-filled bars with black error bars and tiny category labels, no axes; the brain-tuned bars are taller"
+   },
+   {
+    "what": "speech waveform of the input audio",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "vertical stack of centred grey horizontal bars of varying length"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "snowflake and flames",
+    "stands_for": "frozen Feature Extractor versus fine-tuned Transformer Layers and FC Layer",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "rounded frame with a blue block beside an orange block, a brain outline on the brain-tuned one",
+    "stands_for": "the pretrained and the brain-tuned speech model",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "expected outcome of brain-tuning against the pretrained model on three evaluation criteria",
+    "form": "two-row by three-column table of brain maps and bar charts with colour scales and Better arrows",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake on the frozen Feature Extractor and flames on the fine-tuned Transformer Layers and FC Layer, with Freeze and Fine-tune captions under the groups",
+    "parts": [
+     "snowflake",
+     "flame",
+     "Freeze caption",
+     "Fine-tune caption"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "L layers as tall orange bars labelled layer 1, 2, 3 and L with an ellipsis in a peach region; no attention or feed-forward detail",
+    "parts": [
+     "layer bar",
+     "ellipsis",
+     "peach region"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "output tokens as a vertical stack of orange squares with dots; the predicted fMRI response as a row of five circles",
+    "parts": [
+     "token square",
+     "circle cell"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "Pooling and FC Layer as two tall slabs with rotated labels, the FC slab flagged as trained",
+    "parts": [
+     "Pooling slab",
+     "FC Layer slab"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "brain-surface-map",
+    "drawn_as": "lateral 3D brain render painted with voxel values on a blue-to-red scale",
+    "parts": [
+     "brain surface",
+     "colour scale"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "From the audio waveform at top-left along strip (a) to the loss, then down to (b), left to right, and the (c) table row by row."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Panel (a) spans the full width on top as a left-to-right network strip; below it, panel (b) fills the left half (two input branches into an alignment estimate, split by a dashed divider) and panel (c) the right half (a ruled two-row by three-column outcome table with colour scales above and Better arrows below).",
+  "panel_count": 3,
+  "lanes": "(c) three aligned metric columns by two model rows; (b) two aligned input branches",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.59,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#325a9b",
+    "used_for": "Feature Extractor slabs and the blue half of the model icons"
+   },
+   {
+    "hex": "#d79b00",
+    "used_for": "transformer layer bars, output-token squares and the orange half of the model icons"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "ground of the Transformer Layers region"
+   },
+   {
+    "hex": "#ffcc99",
+    "used_for": "peach tint of the transformer region and outlines of token and predicted-response cells"
+   },
+   {
+    "hex": "#e8cbf7",
+    "used_for": "Pooling slab and Voxel Masking box"
+   },
+   {
+    "hex": "#d0cee2",
+    "used_for": "FC Layer slab"
+   },
+   {
+    "hex": "#c6b9d4",
+    "used_for": "Extract Low Level Features box in (b)"
+   },
+   {
+    "hex": "#887e91",
+    "used_for": "F, the linear function of low-level features"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "light-green circles: model representation and residual columns"
+   },
+   {
+    "hex": "#006600",
+    "used_for": "dark-green circles: low-level feature columns"
+   },
+   {
+    "hex": "#fad7ac",
+    "used_for": "light orange edge tint of token and prediction cells"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 to 1.25 pt thin black and grey outlines; grey dashed dividers in (b) and (c); heavy black rules for the table in (c)",
+  "font": "serif (Times), 3 to 9.5 pt, rotated labels on tall slabs, italic symbols in (b); tiny 3 to 3.5 pt layer and bar labels",
+  "corners": "mixed",
+  "arrows": "grey straight and orthogonal with filled heads, one curved fork from the waveform in (b); thick coloured up and down Better arrows in (c)",
+  "rendering": "flat-vector",
+  "effects": "none; gradient-filled bitmaps for colour scales and bars, shaded 3D brain renders",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "blue = feature extractor, orange = transformer layers, kept in the model icons of (b) and (c); light green = model representation, dark green = low-level features; blue-to-red scale = low to high value; red up arrow = increase is better, blue down arrow = decrease is better",
+  "line_style_means": "grey dashed line = divider between stages in (b) and between model rows in (c); heavy black lines = table rules",
+  "shape_means": "tall slab = layer or network block; stacked circles = a feature vector; row of circles = predicted response; rounded frame = a whole model",
+  "marker_means": "snowflake = frozen, flame = fine-tuned; up or down arrow plus Better = desired direction; 0 -> + = scale direction",
+  "emphasis": "the brain-tuned row is told apart from the pretrained row only by a brain glyph on its model icon and by inverted map colours; snowflake and flame icons mark where training happens",
+  "reusable_patterns": [
+   "snowflake and flame icons on modules with Freeze and Fine-tune captions underneath",
+   "expected-outcome table: model icons as row heads, metric columns with colour-scale heads, Better arrows underneath",
+   "residual diagram: representation column minus low-level column, both compared with the same true response",
+   "same two-colour model icon reused as row header and inside the method panels",
+   "colour-scale strip (0 -> +) above each column of heat-mapped cells"
+  ],
+  "weaknesses": [
+   "layer, bar and caption text is 3 to 3.5 pt and unreadable at print size",
+   "the speckled brain renders read as noise; the expected outcome is carried by colour alone"
+  ]
+ },
+ "resources": {
+  "own": [
+   "fMRI brain-surface renders",
+   "expected-result brain maps and bar charts for the outcome table"
+  ],
+  "stock": [
+   "snowflake and flame glyphs",
+   "brain outline glyph",
+   "waveform glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "network slabs, circles and arrows in (a) and (b)",
+   "table rules and Better arrows in (c)",
+   "formulas in (b)"
+  ],
+  "unknown": [
+   "whether the brain maps and bars in (c) are measured values or constructed illustrations of the expected outcome (the caption says expected outcomes)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "audio waveform",
+   "tall slab blocks with rotated labels",
+   "snowflake and flame icons",
+   "stack of circles",
+   "brain-surface renders",
+   "blue-to-red colour scale strips",
+   "two-row by three-column outcome table with bar charts"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "brain-tuning",
+   "speech language models",
+   "fMRI",
+   "brain alignment",
+   "semantic understanding",
+   "low-level features",
+   "fine-tuning",
+   "residual alignment"
+  ],
+  "tags": [
+   "module-state-coding",
+   "colour-coded-groups",
+   "token-strip",
+   "equation-boxes",
+   "saliency-heatmap",
+   "small-multiples",
+   "schematic-plot"
+  ],
+  "new_tags": [
+   {
+    "name": "direction-of-better-arrows",
+    "what": "a coloured up or down arrow with the word Better under each metric column states which direction counts as improvement"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Pair the training network with an expected-outcome table that has the same model icon as row heads, colour-scale column heads and up or down Better arrows, so the hypothesis is drawn before any result. Snowflake and flame icons with Freeze and Fine-tune captions state the trained parts at a glance.",
+  "suits": "Fine-tuning papers that must show a method, how it is measured and what success would look like, especially when the metrics point in different directions."
+ },
+ "tags": [
+  "three-panel-method-eval",
+  "serif-labels",
+  "slab-blocks",
+  "heat-colour-scales",
+  "emoji-state-icons",
+  "expected-outcome-table"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3.3 Brain-tuning approach (p.4)",
+   "Evaluation (p.4-5)"
+  ],
+  "evidence": [
+   "(a) Brain-tuning approach for a given speech model; (b) Evaluation of brain alignment and low-level feature impact",
+   "We freeze the feature extractor and backpropagate the loss to fine-tune the projection head and the transformer layers.",
+   "Types of evaluation and expected outcomes if brain-tuning successfully improves semantic understanding in speech models"
+  ]
+ },
+ "summary": "The paper proposes brain-tuning: fine-tuning pretrained speech language models on fMRI recordings of people listening to stories so they gain brain-relevant semantics. Figure 1 has three parts. Panel (a) draws the training network as one left-to-right strip: audio passes a frozen Feature Extractor (snowflake) and fine-tuned Transformer Layers (flame), output tokens are pooled and projected by an FC layer to a predicted fMRI response, which meets the voxel-masked true response in a loss. Panel (b) shows how brain alignment and low-level feature impact are estimated from original and residual representations. Panel (c) is a pretrained versus brain-tuned table over brain alignment, low-level impact and downstream tasks, drawn with brain-surface maps, bars, colour scales and Better arrows.",
+ "summary_zh": "论文提出脑调优：用听故事时的 fMRI 数据微调语音模型。图 1 分三部分：(a) 冻结特征提取器、微调 Transformer 并回归 fMRI 的训练网络；(b) 估计脑对齐与低层特征影响；(c) 预训练与脑调优的预期对比。",
+ "confidence": "high",
+ "notes": "The prior pass counted two panels; the figure has three (a), (b), (c). Only the (a) caption is inside the figure; the (b) caption is cut off in the preview and the (c) caption is not visible, so their labels come from the figure caption in the context file. The brain maps and bars in (c) are described as expected outcomes in the caption, so they are recorded as illustrations, not results.",
+ "venue": "ICLR25"
+}

@@ -141,3 +141,65 @@ say what could be merged, elided (`…`, `×N`) or moved to a second figure.
 > (b) AllGathers the sharded parameters before forward and backward and ReduceScatters gradients, trading
 > communication for peak memory.
 
+## AI-venue figures — the same brief, with the content it must carry
+
+An AI-venue Figure 1 (`meta.family: ai`: ICLR, ICML, NeurIPS, CVPR, ACL, AAAI) is read by a reader who expects to see
+the paper's material — samples, prompts and answers, pictures, icons, real numbers — not only modules and arrows
+(`references/ai/kinds.md`, `domains.md`). Keep the seven sections; write §1, §2 and §5 like this.
+
+1. **What this figure is** — add the venue (its text width is the figure's width: NeurIPS / ICLR 396 pt, ICML 486,
+   CVPR 495, ACL 454, AAAI 504; one column of a two-column venue only when the content is a column), the kinds the
+   figure is, primary first ("a stage pipeline with a worked example running through it"), and the paper's
+   sub-field (and a second one when it straddles two).
+2. **Components** — besides the modules: every **sample** the figure shows (which image tiles, which prompt and
+   answer, which waveform, which molecule) with its source file or the exact text, every **picture** (a screenshot, a
+   rendered result, a photo) with its role, every **icon** and what it stands for, the **worked example**'s real values,
+   any **chart** or headline number, and the paper's own **logo or mascot** if it has one. Say which of these the user
+   must supply (`meta.ai.materials`) and which you will draw. Name the stock forms you will draw (an LLM box, a
+   Transformer block, a LoRA adapter, a token strip, a diffusion chain, an agent loop, chat bubbles: `meta.ai.idioms`)
+   and what is trained and what frozen when training state matters.
+3. **Flows** — as before; in an actor figure, who exchanges what with whom, and the loop; in a contrast, what each
+   lane changes.
+4. **The one point** — as before: what the reader must see in five seconds and where the eye goes first.
+5. **Layout and style intent** — the arrangement (`references/ai/layouts.md` §1: a row of panels, a grid of cards,
+   bands, lanes, a pipeline row, a hub ...) and why; the panels, lettered or titled, prior first and ours last; the
+   exemplar candidates you will show the user (`references/ai/exemplar-retrieval.md`: 9-12 by kind, field, tags and
+   meaning, at least one from another field; the user picks two to four, and their picks are a strong preference about
+   look and feel); the palette (`references/ai/palettes.md` §9) and what colour will mean (one colour per part, per
+   actor, a verdict, trainable against frozen); whether there is a legend, step markers, a title in the figure. Then
+   what the field usually does and where this figure departs from it (`domains.md`, the two views read together).
+
+Budgets follow the primary kind (`kinds.md`, "Numbers by kind"): a scope overview holds 24 text boxes on median, a
+concept schematic 4; more units means smaller units, never type below 6 pt. If a text sample is longer than two or
+three lines, say which lines will be quoted and that the rest is elided. A figure that looks like none of the
+exemplars is a normal outcome; the paper's material comes before anything an exemplar suggests.
+
+### Example (an LLM-agent paper at ICML)
+
+> **What.** Figure 1 of the paper, ICML (486 pt, full width): a stage pipeline with a worked example running through
+> it (`stage-pipeline` + `worked-walkthrough`), sub-field agents (secondary llm-nlp), for §1.
+>
+> **Components.** Three stages as tinted bands: *Plan* — **Planner** (an LLM box; existing), the user's **task** as a
+> quoted text card (the real task from Table 1, two lines, user supplies the text); *Act* — **Tool calls** (a typed
+> trace of three calls, our contribution, accent) and the **Browser** as a screenshot thumbnail (user supplies
+> `browser.png`, 640 px wide); *Verify* — **Verifier** (an LLM box, frozen: snowflake) and the **answer** as a speech
+> bubble with the real answer. Icons: a robot head for the agent, at label size, drawn from the parts library.
+> Idioms: llm, typed-trace-blocks, gui-screen, chat-bubbles.
+>
+> **Flows.** ① task → Planner → ② Tool calls → Browser (an action), Browser → Tool calls (an observation, dashed), ③
+> Tool calls → Verifier → answer; a loop back from Verifier to Planner when the check fails (curved, labelled "retry").
+>
+> **Point.** The typed trace in the middle is new and is what the verifier reads; the eye should land on it.
+>
+> **Layout.** Arrangement `bands` (three horizontal stages, left to right inside each), panels lettered (a)-(c);
+> palette office-pastel with the trace as the one orange; colour by stage tint, a key for the frozen snowflake;
+> plain step digits. Exemplar candidates to show the user: 10 from the search (`--kind stage-pipeline,worked-walkthrough
+> --subfield agents,llm-nlp --tags typed-trace-blocks,gui-screen,chat-bubbles`), including two from multimodal. The
+> field's habit (agents: icons in 92%, bubbles 55%, tinted regions 51%) is followed; its loop is drawn as the retry arc
+> rather than a ring, because the stages are the story.
+>
+> **Confirm.** (a) Is the Verifier frozen, or fine-tuned with the planner? (b) May the real task text and the browser
+> screenshot be reproduced in the figure? (c) Should the retry loop be drawn, or left to the caption?
+>
+> **Caption.** Figure 1. Given a task, the Planner ① issues tool calls that drive a browser ②; the typed trace of calls
+> and observations is checked by a frozen Verifier ③, which returns the answer or asks the Planner to retry.

@@ -1,0 +1,544 @@
+{
+ "paper_id": "iclr25-0069",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Dobi-SVD",
+  "one_liner": "A differentiable SVD paradigm for LLM compression: trainable truncation positions, optimal weight update by IPCA, and remapped storage.",
+  "domain": [
+   "LLM compression",
+   "singular value decomposition",
+   "model compression"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "paper-roadmap",
+  "variant_note": "five numbered technique tiles of unequal size in one lilac frame, each a mini plot, formula or isometric block diagram; the order comes from the numbers and the caption, not from arrows",
+  "argues": "Three coordinated parts (differentiable truncation training, optimal weight update, remapping) make SVD-based LLM compression adaptive and genuinely smaller.",
+  "subject": "Five technique tiles of Dobi-SVD drawn as 3D singular-value stacks, gradient formulas, an optimisation landscape, an IPCA funnel and storage block equations.",
+  "elements": [
+   {
+    "name": "1. Parameter Renormalization: From Discrete to Continuous",
+    "type": "container",
+    "role": "turns the discrete rank-ratio choice into a continuous one (per the caption, for continuous rank ratio selection)",
+    "drawn_as": "two 3D stacks of per-layer singular-value curves over rank ratio (Layer0.Q to Layer1.Q) joined by a coral-red arrow; a red polyline links the chosen points on each",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "2. Robust Backpropagation",
+    "type": "container",
+    "role": "keeps the SVD gradient stable when singular values are close",
+    "drawn_as": "two blue-headed sub-boxes: 'Singular Values of Activation' with a curve plot and sigma_i ~ sigma_j, and 'Compute the Gradient of the Loss Function' with two formulas",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Singular Values of Activation",
+    "type": "chart",
+    "role": "shows many singular-value curves collapsing so that neighbouring values are nearly equal",
+    "drawn_as": "plot of singular value against rank ratio with a dashed ellipse and a large blue 'sigma_i ~ sigma_j' call-out above the title SVD(XW_atten_k)",
+    "container": "2. Robust Backpropagation",
+    "is_contribution": null
+   },
+   {
+    "name": "Compute the Gradient of the Loss Function",
+    "type": "formula",
+    "role": "gradient dL/dM contains 1/(sigma_i - sigma_j) and explodes to NAN; the Taylor expansion replaces it with a finite sum",
+    "drawn_as": "formula on a pale-yellow arrow shape leading to a boxed bold NAN; a blue Taylor Expansion arrow down to the series formula, which leads to a small Loss against Epoch curve",
+    "container": "2. Robust Backpropagation",
+    "is_contribution": true
+   },
+   {
+    "name": "3. Optimization Landscape of Model Compression",
+    "type": "container",
+    "role": "shows the landscape over layers and training epochs between the original and the compressed model size",
+    "drawn_as": "large 3D surface with axes Compression Ratio, Rank Ratio, Singular Value and a grey 'Training Epoch' arrow; layer names Layer1 to Layer32 Linear.W; planes labelled Original Model Size and Compressed Model Size",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "4. Weight Update",
+    "type": "container",
+    "role": "updates the weights sequentially from the truncated activations with IPCA",
+    "drawn_as": "tall narrow panel: yellow and purple cubes X_n and X_(n-1), a funnel holding A = XW, A_(n-2), A_(n-3), SVD(A) rows and IPCA, a drop, and a pastel slab W~",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "IPCA funnel",
+    "type": "operation",
+    "role": "extracts features of the updated weights one input after another to save memory",
+    "drawn_as": "blue-rimmed funnel narrowing from A = XW through the SVD rows to the word IPCA",
+    "container": "4. Weight Update",
+    "is_contribution": true
+   },
+   {
+    "name": "W~",
+    "type": "data",
+    "role": "the updated weight matrix",
+    "drawn_as": "isometric slab of pastel cells under the funnel",
+    "container": "4. Weight Update",
+    "is_contribution": null
+   },
+   {
+    "name": "5. Remapping",
+    "type": "container",
+    "role": "stores the SVD factors so that truncation position and compression ratio map one to one",
+    "drawn_as": "wide bottom band: a rank-ratio plot with Bijection and Injection tags, then three sub-diagrams on a pale-green caption strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Ours: Remapping / Traditional",
+    "type": "chart",
+    "role": "rank ratio against compression ratio: the straight remapped line versus the traditional piecewise line capped at max(m,n)/(m+n)",
+    "drawn_as": "plot with a thick dark-blue diagonal and a lighter diagonal, pink dashed bands at 1.0 and max(m,n)/(m+n), rotated bold labels",
+    "container": "5. Remapping",
+    "is_contribution": true
+   },
+   {
+    "name": "Bijection / Injection",
+    "type": "icon",
+    "role": "bijection: every rank has its own size; injection: not every size is reachable",
+    "drawn_as": "two pairs of ovals with dots labelled Rank and Size joined by red arrows, the injection pair faded",
+    "container": "5. Remapping",
+    "is_contribution": null
+   },
+   {
+    "name": "1. Traditional Storage Method: k x (m + n)",
+    "type": "formula",
+    "role": "stores U-Sigma and V^T separately, which costs k x (m + n)",
+    "drawn_as": "isometric blocks U-Sigma (m x k) + V^T (k x n) = a product block with pink translucent planes, dimension braces m, k, n",
+    "container": "5. Remapping",
+    "is_contribution": false
+   },
+   {
+    "name": "2. Quantization-friendly",
+    "type": "chart",
+    "role": "the column values of U or V follow a bell-shaped distribution, suited to uniform quantization",
+    "drawn_as": "histogram titled Distribution(Col(U or V)) with Frequency and Value axes",
+    "container": "5. Remapping",
+    "is_contribution": null
+   },
+   {
+    "name": "3. Proposed Storage Method: k x m, m >= n",
+    "type": "formula",
+    "role": "packs the factors into one k x m block with mixed bit widths so storage depends only on the truncation position",
+    "drawn_as": "isometric stacked blocks coloured by bit width equal to a single block, with a legend 16-bit light blue, 8-bit dark blue, 0-bit pink",
+    "container": "5. Remapping",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "discrete 3D stack (panel 1)",
+    "to": "continuous 3D stack (panel 1)",
+    "what": "parameter renormalization from discrete to continuous rank ratio",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "gradient formula with 1/(sigma_i - sigma_j)",
+    "to": "NAN",
+    "what": "gradient explosion when singular values are close",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "gradient formula",
+    "to": "Taylor-expanded formula",
+    "what": "Taylor Expansion",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Taylor-expanded formula",
+    "to": "Loss against Epoch curve",
+    "what": "stable training loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Training Epoch arrow",
+    "to": "layers of the landscape",
+    "what": "training runs along the epoch axis over the layers",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "X_n, X_(n-1)",
+    "to": "IPCA funnel",
+    "what": "activations of successive inputs poured into the funnel",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 4
+   },
+   {
+    "from": "IPCA funnel",
+    "to": "W~",
+    "what": "updated weights from sequentially extracted features",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 4
+   },
+   {
+    "from": "Rank",
+    "to": "Size",
+    "what": "bijection (every rank has a size) versus injection",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "Traditional Storage Method",
+    "to": "Proposed Storage Method",
+    "what": "k x (m + n) versus k x m, shown by blocks side by side",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": 5
+   },
+   {
+    "from": "panels 1 to 5",
+    "to": "panels 1 to 5",
+    "what": "order given by the heading numbers only; no arrows between tiles",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1. Parameter Renormalization: From Discrete to Continuous",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "per-layer singular-value stacks before and after renormalising the rank ratio",
+    "verdict": "ours"
+   },
+   {
+    "label": "2. Robust Backpropagation",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "a gradient formula that explodes to NAN, its Taylor-expanded fix and a loss curve",
+    "verdict": "ours"
+   },
+   {
+    "label": "3. Optimization Landscape of Model Compression",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "3D landscape of singular values across layers and epochs between original and compressed model size",
+    "verdict": "ours"
+   },
+   {
+    "label": "4. Weight Update",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "funnel that feeds activations through SVD and IPCA to give the updated weight W~",
+    "verdict": "ours"
+   },
+   {
+    "label": "5. Remapping",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "bijection against injection, traditional against remapped rank ratio, and traditional against proposed block storage",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1. to 5.",
+    "kind": "order",
+    "at": "bold headings of the five tiles",
+    "what": "numbers the techniques; the caption groups 1-3 as truncation position training, 4 as weight update, 5 as remapping"
+   },
+   {
+    "marker": "k, m, n",
+    "kind": "identity",
+    "at": "braces around the isometric blocks",
+    "what": "names the dimensions of U-Sigma, V^T and the stored block"
+   },
+   {
+    "marker": "sigma_i, sigma_j, sigma_i ~ sigma_j",
+    "kind": "identity",
+    "at": "formulas and plot call-out in tile 2",
+    "what": "names singular values; the approximate equality names the cause of the explosion"
+   },
+   {
+    "marker": "NAN",
+    "kind": "other",
+    "at": "bold boxed word right of the first gradient formula",
+    "what": "flags gradient explosion"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "3D stacks of per-layer singular-value curves against rank ratio",
+    "content": "chart",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "blue and pink 3D curve sheets with layer names; one red polyline across the stack, two stacks side by side joined by an arrow"
+   },
+   {
+    "what": "plots of singular values and of loss against epoch",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small line plots; the singular-value one has a dashed ellipse and a blue call-out"
+   },
+   {
+    "what": "3D optimisation landscape over layers and epochs",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large translucent surface with a trained trajectory, a blue plane for the compressed model size and rotated axis labels"
+   },
+   {
+    "what": "histogram of column values of U or V",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "narrow bell-shaped histogram in light blue"
+   },
+   {
+    "what": "rank ratio against compression ratio line plot",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "two diagonal lines with rotated bold labels and pink dashed bands"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "isometric cuboids and slabs with dimension braces",
+    "stands_for": "matrices U-Sigma, V^T, the product, X_n cubes and the weight W~",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 12
+   },
+   {
+    "depicts": "blue-rimmed funnel with stacked rows of formulas",
+    "stands_for": "IPCA, sequential extraction of features",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "ovals with dots joined by red arrows",
+    "stands_for": "the sets of ranks and sizes under a bijection or an injection",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "matrix-factorisation-blocks",
+    "drawn_as": "U-Sigma and V^T as isometric cuboids joined by plus and equals signs to a product cuboid, with k, m, n braces",
+    "parts": [
+     "U-Sigma cuboid",
+     "V^T cuboid",
+     "plus and equals signs",
+     "product cuboid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "gradient formula dL/dM printed on pale-yellow arrow shapes, one leading to NAN and one to a falling loss curve",
+    "parts": [
+     "formula",
+     "NAN box",
+     "Taylor Expansion arrow",
+     "loss curve"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at heading 1 top left, goes to the stacked heading 2 beneath it, then the large landscape, the narrow Weight Update column and the bottom Remapping band; the numbers carry the order."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Irregular mosaic inside one lilac frame: at the top, tiles 1 and 2 stacked on the left (about 42% of the width), the large landscape tile 3 in the middle and the narrow tall tile 4 at the right; one wide tile 5 spans the bottom, with a rank-ratio plot at its left and three sub-diagrams on a pale-green caption strip. Lilac dashed rules separate the tiles; no arrows join tiles.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "numbers",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.9,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d3bff7",
+    "used_for": "lilac outer frame and dashed rules between tiles"
+   },
+   {
+    "hex": "#a2b1df",
+    "used_for": "blue header bars of the two sub-boxes in tile 2"
+   },
+   {
+    "hex": "#f2f7ed",
+    "used_for": "pale-green caption strip under the sub-diagrams of tile 5"
+   },
+   {
+    "hex": "#002060",
+    "used_for": "navy: NAN, bold call-outs and emphasis words"
+   },
+   {
+    "hex": "#0f4c81",
+    "used_for": "classic blue: plot and block strokes"
+   },
+   {
+    "hex": "#696aab",
+    "used_for": "purple-blue: 8-bit blocks and rank labels"
+   },
+   {
+    "hex": "#92a8d1",
+    "used_for": "light blue: 16-bit blocks and curve sheets"
+   },
+   {
+    "hex": "#fe6f61",
+    "used_for": "coral red: renormalization arrow, red polylines, bijection arrows, ours"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25-0.5 pt blue and navy outlines on blocks and plots, 1.25-1.75 pt coral arrows and lilac frame, dashed lilac rules and dashed highlight boxes",
+  "font": "sans (Calibri) 1.5-11 pt, bold 5.5 pt tile headings, mostly 3-5 pt labels and 1.5-3 pt axis and block labels; Cambria Math bold italics for formulas",
+  "corners": "rounded",
+  "arrows": "thick coral arrow between the two 3D stacks, blue block arrow for Taylor Expansion, grey gradient arrow for Training Epoch, thin red arrows between the ovals",
+  "rendering": "mixed",
+  "effects": "pseudo-3D isometric blocks, translucent 3D surfaces and a gradient funnel",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue and purple shades = singular values, U and V blocks and bit widths (light blue 16-bit, dark blue-purple 8-bit, pink 0-bit); coral red = truncation positions, mapping arrows and the proposed remapping; pale yellow = gradient formulas; lilac = frame and tile separators",
+  "line_style_means": "dashed pink bands in the rank-ratio plot mark the limits 1.0 and max(m,n)/(m+n); dashed ellipse and dashed boxes pick out sigma_i ~ sigma_j and the 1/(sigma_i - sigma_j) term; dashed lilac lines separate tiles",
+  "shape_means": "cuboids = matrices; funnel = IPCA sequential extraction; ovals with dots = sets of ranks and sizes; pale-yellow arrow shapes = a formula leading to its outcome",
+  "marker_means": "heading numbers 1 to 5 order the tiles; k, m, n are block dimensions; NAN flags the explosion",
+  "emphasis": "bold navy NAN and the large blue sigma_i ~ sigma_j call out the problem; the thick dark 'Ours: Remapping' line against the paler 'Traditional' line; coral red arrows mark the transformations",
+  "reusable_patterns": [
+   "numbered technique tiles of unequal size in one tinted frame, each carrying a mini plot, formula or block diagram",
+   "problem-then-fix inside one tile: a formula that explodes to NAN, a Taylor Expansion arrow, then the stable formula with a small loss curve",
+   "before and after 3D stacks joined by one coloured arrow",
+   "traditional versus ours as two lines on one plot, with bijection and injection ovals beside it",
+   "isometric blocks joined by plus and equals signs for a matrix factorisation, with the storage cost written under each design",
+   "funnel for sequential processing of stacked inputs"
+  ],
+  "weaknesses": [
+   "axis labels and block labels as small as 1.5-3.5 pt are unreadable at print size",
+   "no arrows between tiles, so the order rests on the heading numbers",
+   "several visual grammars (3D plots, formulas, funnel, isometric blocks) compete in one figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "3D singular-value stacks, loss curve and landscape from the authors' experiments (likely)"
+  ],
+  "stock": [],
+  "generated": [
+   "isometric 3D block, funnel and slab renders (bitmaps that look made for the figure)"
+  ],
+  "drawn": [
+   "frames, header bars and formula boxes",
+   "arrows, ovals and plots with labels",
+   "block braces and the bit-width legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "numbered technique tiles",
+   "3D singular-value stacks",
+   "gradient formula with NAN box",
+   "3D optimisation landscape",
+   "funnel labelled IPCA",
+   "isometric U-Sigma and V^T blocks with plus and equals signs",
+   "rank-ratio line plot",
+   "bijection and injection ovals"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "SVD compression",
+   "LLM",
+   "differentiable truncation",
+   "singular values",
+   "remapping",
+   "IPCA",
+   "weight update",
+   "gradient stability"
+  ],
+  "tags": [
+   "equation-boxes",
+   "plot-callouts",
+   "schematic-plot",
+   "illustration-style",
+   "matrix-cell-grid",
+   "pictogram-chain",
+   "cost-badges"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each technique its own numbered tile with the picture that best explains it (a 3D plot, a formula that explodes then is fixed, a funnel, isometric blocks), and let the tinted frame, numbers and caption carry the order instead of arrows.",
+  "suits": "method papers with several loosely coupled technical parts, each explained best by a different kind of mini picture."
+ },
+ "tags": [
+  "lilac frame mosaic",
+  "numbered tiles",
+  "isometric 3D blocks",
+  "3D plots",
+  "formula call-outs",
+  "coral red arrows",
+  "very small labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method overview (p.3)",
+   "remapping paragraph (p.7)"
+  ],
+  "evidence": [
+   "using Taylor expansion to prevent gradient explosion",
+   "we derive the theoretical optimal weight update formula and employ Incremental Principal Component Analysis (IPCA)",
+   "This method establishes a bijection mapping between the truncation position and the model compression ratio"
+  ]
+ },
+ "summary": "Dobi-SVD is a paradigm for SVD-based LLM compression with differentiable truncation, an optimal weight update and a remapping of storage. Figure 1 is a mosaic of five numbered tiles in a lilac frame: (1) per-layer singular-value stacks before and after renormalising the rank ratio from discrete to continuous, (2) robust backpropagation, a gradient formula that explodes to NAN and its Taylor-expanded fix, (3) a 3D optimisation landscape between original and compressed model size, (4) a funnel for the IPCA weight update, and (5) remapping, with a bijection versus injection picture, a rank-ratio line plot and isometric block equations for traditional versus proposed storage. No arrows join the tiles; numbers and the caption give the order.",
+ "summary_zh": "Dobi-SVD 用可微分截断、最优权重更新和重映射做 SVD 大模型压缩。图1是紫色边框里五个编号小块的拼贴：3D 奇异值堆叠、泰勒展开修复 NaN 的反向传播、优化地形、IPCA 漏斗权重更新、重映射存储对比。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (contribution-mosaic first) with side-by-side-contrast added for tiles 1, 2 and 5; the figure also has a numbered order (caption: steps 1-3, 4, 5), hence stage-pipeline. The 3D plots look measured but may be schematic, so they are typed chart or schematic-plot by appearance. The funnel's drop below IPCA is unlabelled. The pale-yellow arrow backgrounds and pink 0-bit colour are bitmap colours without a digest hex, so they are not in the palette. The schema has no marker kind for NAN, recorded as other.",
+ "venue": "ICLR25"
+}

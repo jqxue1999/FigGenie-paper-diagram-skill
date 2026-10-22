@@ -1,0 +1,452 @@
+{
+ "paper_id": "iclr26-0160",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "A3 (Any-order Any-subset Autoregressive modeling)",
+  "one_liner": "A generalised autoregressive framework with two-stream attention that predicts arbitrary token groups in any order, adapted progressively from pretrained AR models.",
+  "domain": [
+   "any-order autoregressive language modeling",
+   "two-stream attention",
+   "diffusion language models"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "bottom-up forward pass of one toy sentence: tokens, embedding, an xL two-stream attention block drawn as two mask grids, then the CE loss",
+  "argues": "Group-wise causal masks in two-stream attention let an AR model predict token groups in any order: content stream sees own and earlier groups, query stream only earlier ones.",
+  "subject": "Forward pass of A3's two-stream attention on a six-token sentence split into three groups, drawn as mask grids.",
+  "elements": [
+   {
+    "name": "The / answer / is / 14 / inches / long (input token strip)",
+    "type": "sample",
+    "role": "the toy input sentence, split into groups by colour: G1 teal, G3 purple, G2 orange",
+    "drawn_as": "six adjacent cells tinted by group, group letters written underneath",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Embedding",
+    "type": "module",
+    "role": "turns each token into a hidden-state cell",
+    "drawn_as": "wide white rectangle with black outline, thin lines from the tokens below and arrows up to the states above",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "H(1) ... H(6) colour-coded strip",
+    "type": "data",
+    "role": "hidden states of the content stream, entering the first layer",
+    "drawn_as": "six cells tinted by group (teal, purple, orange)",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "H(1) ... H(6) grey strip",
+    "type": "data",
+    "role": "input states of the query stream (positional conditions according to the caption)",
+    "drawn_as": "six grey-blue cells without group tint",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "x L block",
+    "type": "container",
+    "role": "the two-stream attention module, repeated L times",
+    "drawn_as": "large rounded rectangle with 'x L' at its top-right corner, enclosing both mask grids",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Content Stream",
+    "type": "module",
+    "role": "mask over Q rows and K columns: attends to own group and all preceding groups",
+    "drawn_as": "6x6 grid of cells, blue = 0, white = -inf, three thick group-coloured outlines on the diagonal blocks, title rotated 90 degrees in blue",
+    "container": "x L block",
+    "is_contribution": true
+   },
+   {
+    "name": "Query Stream",
+    "type": "module",
+    "role": "mask over Q rows and K columns: attends only to tokens in preceding groups",
+    "drawn_as": "6x6 grid of the same size; cells of the own group are white, title rotated 90 degrees in green",
+    "container": "x L block",
+    "is_contribution": true
+   },
+   {
+    "name": "G1, G3, G2 brackets",
+    "type": "label",
+    "role": "name the row groups of the mask; their colours repeat on the axis numbers 1-6 and on the thick block outlines",
+    "drawn_as": "curly braces with coloured G labels left of the Q axis, coloured column numbers under the K axis",
+    "container": "x L block",
+    "is_contribution": false
+   },
+   {
+    "name": "Q, K, V / K, V / Q arrow labels",
+    "type": "label",
+    "role": "say which of query, key and value each stream receives",
+    "drawn_as": "plain text next to the three hollow block arrows entering the x L block",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "H^L(1) ... H^L(6) output strip",
+    "type": "data",
+    "role": "output states of the query stream after L layers",
+    "drawn_as": "six grey-blue cells with superscript L in the label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CE Loss",
+    "type": "operation",
+    "role": "cross-entropy between the query-stream output and the target tokens",
+    "drawn_as": "double-headed hollow block arrow between the output strip and the target strip, label to its right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "The / answer / is / 14 / inches / long (target token strip)",
+    "type": "sample",
+    "role": "the target tokens the loss compares with",
+    "drawn_as": "six cells tinted by group, same colours as the input strip",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "dashed vertical divider",
+    "type": "other",
+    "role": "separates the content stream from the query stream inside the x L block",
+    "drawn_as": "black dashed line",
+    "container": "x L block",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "input token strip",
+    "to": "Embedding",
+    "what": "tokens",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Embedding",
+    "to": "H(1) ... H(6) colour-coded strip",
+    "what": "embedded tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H(1) ... H(6) colour-coded strip",
+    "to": "Content Stream",
+    "what": "Q, K, V",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H(1) ... H(6) colour-coded strip",
+    "to": "Query Stream",
+    "what": "K, V",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H(1) ... H(6) grey strip",
+    "to": "Query Stream",
+    "what": "Q",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query Stream",
+    "to": "H^L(1) ... H^L(6) output strip",
+    "what": "output states after L layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H^L(1) ... H^L(6) output strip",
+    "to": "target token strip",
+    "what": "CE Loss",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "token groups (teal, purple, orange)",
+    "to": "mask block outlines, G brackets and axis numbers",
+    "what": "group identity carried by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Q rows",
+    "to": "K columns",
+    "what": "blue cells mark the key positions a query position may attend to",
+    "kind": "attention",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Content Stream",
+    "to": "Query Stream",
+    "what": "separated side by side, same grid shape",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "G1, G2, G3",
+    "kind": "identity",
+    "at": "token strips and mask brackets",
+    "what": "names the three token groups; each has its own colour"
+   },
+   {
+    "marker": "1-6",
+    "kind": "identity",
+    "at": "rows and columns of both mask grids",
+    "what": "token positions, coloured by group on the column axis"
+   },
+   {
+    "marker": "Q, K",
+    "kind": "identity",
+    "at": "top-left and bottom-right of each mask grid",
+    "what": "query rows and key columns of the attention mask"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "the sentence 'The answer is 14 inches long' with grouping G1 = {The, answer, is}, G3 = {14}, G2 = {inches, long}",
+    "form": "token strips tinted by group at input and target, with the two masks drawn for exactly this grouping",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of adjacent rectangular cells for tokens and for hidden states, cell tint = group",
+    "parts": [
+     "input tokens",
+     "hidden states",
+     "output states",
+     "target tokens"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "two token-by-token 6x6 mask grids, blue cell = 0 (allowed), white cell = -inf (blocked), with thick outlines on the diagonal group blocks",
+    "parts": [
+     "Q rows",
+     "K columns",
+     "blue cells",
+     "white cells",
+     "group outlines"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "one large rounded frame labelled 'x L' around the two attention masks; no feed-forward block is drawn",
+    "parts": [
+     "rounded frame",
+     "x L label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "ce-loss-link",
+    "drawn_as": "double-headed hollow block arrow labelled CE Loss between the predicted-state strip and the target token strip",
+    "parts": [
+     "output strip",
+     "double arrow",
+     "target strip"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the bottom-left token strip, goes up through Embedding to the coloured hidden states and the content-stream mask; a diagonal K, V arrow reaches the query-stream mask; ends at the top-right output strip and CE Loss."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A staircase from bottom-left to top-right: the input strip and Embedding sit bottom-left, the grey query strip bottom-right, one big rounded frame in the middle holds two equal mask grids side by side split by a dashed line, and the output and target strips sit top-right.",
+  "panel_count": 1,
+  "lanes": "2 aligned stream columns (content stream, query stream) of equal-size mask grids inside the x L frame, each fed by its own strip underneath",
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.36,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#1ba1e2",
+    "used_for": "mask cells equal to 0 (attention allowed)"
+   },
+   {
+    "hex": "#bac8d3",
+    "used_for": "query-stream input and output state cells (grey-blue)"
+   },
+   {
+    "hex": "#b0e3e6",
+    "used_for": "group G1 tokens and hidden states (teal tint)"
+   },
+   {
+    "hex": "#d0cee2",
+    "used_for": "group G3 token and hidden state (purple tint)"
+   },
+   {
+    "hex": "#fad7ac",
+    "used_for": "group G2 tokens and hidden states (orange tint)"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "hollow block arrows"
+   },
+   {
+    "hex": "#0e8088",
+    "used_for": "thick outline and labels of group G1 (stroke)"
+   },
+   {
+    "hex": "#56517e",
+    "used_for": "thick outline of group G3 (stroke)"
+   },
+   {
+    "hex": "#b46504",
+    "used_for": "thick outline of group G2 (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark outlines on cells and boxes; six thick 1.75 pt group-coloured outlines on the diagonal blocks of the two masks",
+  "font": "hand-drawn style sans (Comic Sans MS), 4.5-11 pt, 6.5 pt for tokens and indices, 10 pt coloured rotated stream titles; serif italic maths for H(i)",
+  "corners": "mixed",
+  "arrows": "hollow light-grey block arrows with grey outline between stages, thin black arrows with filled heads from Embedding to the states, one double-headed block arrow for the loss",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Teal = group G1, purple = group G3, orange = group G2, kept on tokens, hidden states, brackets, axis numbers and thick mask outlines. Blue mask cell = 0 (may attend), white = -inf (blocked). Grey-blue = query-stream states.",
+  "line_style_means": "Dashed vertical line separates the two streams; thick coloured outlines mark the diagonal own-group blocks; hollow block arrows carry tensors between stages.",
+  "shape_means": "Adjacent cells in a row = sequence of tokens or states; 6x6 grid = attention mask (Q rows by K columns); rounded frame with x L = repeated layers.",
+  "marker_means": "G1-G3 name the token groups; 1-6 index positions; Q and K label mask axes and arrows (Q, K, V) say what each stream receives.",
+  "emphasis": "The two mask grids are the largest items and differ only in the own-group blocks, which carry thick coloured outlines, so the rule 'own group visible or not' is the first thing seen.",
+  "reusable_patterns": [
+   "one colour per token group carried from the sentence through states, brackets, axis numbers and mask outlines",
+   "twin mask grids of equal size side by side, differing only in the cells to compare",
+   "thick coloured outline on each group's diagonal block of a mask",
+   "hollow block arrows labelled Q, K, V to say what each stream receives",
+   "double-headed arrow labelled with the loss between prediction strip and target strip",
+   "rounded frame with x L to mark the repeated block"
+  ],
+  "weaknesses": [
+   "what blue and white mean is explained only in the caption, there is no key in the drawing",
+   "the order of generation (G1, then G2, then G3) is not drawn and has to be read off the masks",
+   "the diagonal K, V arrow crosses the frame border and the Q label of the other arrow sits close to it"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a toy sentence with its three-group split",
+   "the two mask patterns computed for that split"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token and state strips",
+   "mask grids with group outlines",
+   "rounded frame and dashed divider",
+   "block arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "token strips coloured by group",
+   "Embedding box",
+   "two 6x6 attention-mask grids",
+   "group brackets G1 G3 G2",
+   "x L rounded frame",
+   "hollow block arrows labelled Q K V",
+   "CE Loss double arrow"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "any-order autoregressive",
+   "two-stream attention",
+   "attention mask",
+   "token groups",
+   "XLNet",
+   "language model",
+   "diffusion language model",
+   "cross-entropy loss"
+  ],
+  "tags": [
+   "attention-mask-grid",
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give every token group one colour and keep it on the tokens, the states, the group braces and the outline of its block in the mask grids, so a pair of small grids explains a masking rule without a key. Draw the two variants as equal grids side by side so only the changed cells differ.",
+  "suits": "Attention-mask or block-sparse architectures where a toy sequence and its grouping explain which positions may see which."
+ },
+ "tags": [
+  "bottom-up flow",
+  "toy sentence",
+  "mask grids",
+  "hollow block arrows",
+  "colour-coded groups",
+  "hand-drawn font",
+  "draw.io style",
+  "single rounded frame"
+ ],
+ "provenance": {
+  "sections": [
+   "Two-stream Attention Design for Any-order Prediction (p.4)"
+  ],
+  "evidence": [
+   "The model employs a two-stream attention module with distinct causal masks.",
+   "Blue entries in the attention mask denote 0, and white entries denote −∞."
+  ]
+ },
+ "summary": "A3 (Any-order Any-subset Autoregressive modeling) generalises autoregressive language modeling to arbitrary token groups and generation orders, adapting pretrained AR models with a two-stream attention design borrowed from XLNet. Figure 1 draws one forward pass on the toy sentence 'The answer is 14 inches long', split into groups G1, G3 and G2 that keep one colour everywhere. Tokens pass through an Embedding box into hidden states and then into an 'x L' frame holding two 6x6 mask grids: the content stream (Q, K, V) sees its own and all earlier groups, the query stream (Q, with K, V from the content stream) only earlier groups. The query output is compared with the target tokens by a CE loss. Flat vector, draw.io look, hand-drawn font, hollow block arrows.",
+ "summary_zh": "A3 模型的前向过程图：示例句子被分成 G1、G3、G2 三组，经 Embedding 后进入 ×L 的双流注意力块，用两张 6×6 掩码网格分别表示内容流与查询流，输出与目标词做交叉熵损失，组别用颜色贯穿全图。",
+ "confidence": "high",
+ "notes": "The pre-screen counted 2 panels; the two streams share one rounded frame and a dashed divider and have no separate frames, so panel_count is 1 and they are recorded as lanes. worked-walkthrough is secondary: one toy sentence runs through the whole pass, but it is drawn once, not redrawn per step. The subscript of the H(i) glyphs (math drawn as paths) could not be read reliably, so element names use H(i).",
+ "venue": "ICLR26"
+}

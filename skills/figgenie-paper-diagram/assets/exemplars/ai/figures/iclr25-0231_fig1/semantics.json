@@ -1,0 +1,664 @@
+{
+ "paper_id": "iclr25-0231",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UNIP (UNified Infrared Pre-training)",
+  "one_liner": "Benchmark RGB pre-trained models on infrared segmentation, explain the gaps through attention patterns, then distil hybrid attention into small models with InfMix, NMI-HAD and LL-FPN.",
+  "domain": [
+   "infrared semantic segmentation",
+   "pre-training and distillation",
+   "attention pattern analysis"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "paper-roadmap",
+  "variant_note": "three tinted bands titled by research questions (Step1 benchmark, Step2 attention analysis, Step3 method), each summarising one part of the paper and joined by labelled coloured arrows",
+  "argues": "Benchmark findings and attention analysis motivate each design choice of UNIP: the hybrid attention pattern, NMI, the distribution shift and the performance/cost ratio each inspire a component.",
+  "subject": "The paper's chain of thought: benchmark charts, a chain of claims with attention maps, and the UNIP method with dataset, teacher-student distillation and feature pyramid.",
+  "elements": [
+   {
+    "name": "Step1: How do various pre-training methods perform?",
+    "type": "container",
+    "role": "band that holds the benchmark and its two findings",
+    "drawn_as": "light-green tinted band with green outline, bold italic green title phrased as a question",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Benchmark",
+    "type": "container",
+    "role": "RGB pre-trained models are applied to infrared segmentation tasks",
+    "drawn_as": "light blue-grey box with a network glyph, a down arrow and a blue bar-chart glyph, lines 'RGB Pre-Trained Models' and 'Infrared Segmentation Tasks'",
+    "container": "Step1: How do various pre-training methods perform?",
+    "is_contribution": null
+   },
+   {
+    "name": "Performance: Supervised/CL > MIM",
+    "type": "label",
+    "role": "first finding: supervised and contrastive pre-training beat masked image modelling",
+    "drawn_as": "plain serif claim after a grey arrow, above a bar chart (Supervised 60.76, CL 61.93, MIM 56.28 average mIoU, ViT-S)",
+    "container": "Step1: How do various pre-training methods perform?",
+    "is_contribution": null
+   },
+   {
+    "name": "Performance/Cost Ratio: Large < Small",
+    "type": "label",
+    "role": "second finding: large models give a lower mIoU per FLOP",
+    "drawn_as": "blue claim after a blue arrow, under a bar chart (Small 0.41, Base 0.11, Large 0.05)",
+    "container": "Step1: How do various pre-training methods perform?",
+    "is_contribution": null
+   },
+   {
+    "name": "Step2: Why do they perform distinctively?",
+    "type": "container",
+    "role": "band that holds the chain of claims about attention patterns",
+    "drawn_as": "light-yellow tinted band with yellow outline, bold italic brown title phrased as a question",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Pretraining Task",
+    "type": "text-block",
+    "role": "claim node: the pre-training task influences the attention pattern and the shape/texture bias",
+    "drawn_as": "plain serif text with grey arrows",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": null
+   },
+   {
+    "name": "Attention Pattern",
+    "type": "text-block",
+    "role": "claim node: measured by NMI and giving the insight that the hybrid pattern helps",
+    "drawn_as": "plain serif text with a purple and a green arrow leaving it",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": null
+   },
+   {
+    "name": "NMI",
+    "type": "text-block",
+    "role": "normalized mutual information, the indicator of the attention pattern",
+    "drawn_as": "purple text with a small waveform-chart glyph",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": true
+   },
+   {
+    "name": "Hybrid Pattern Benefits Segmentation",
+    "type": "text-block",
+    "role": "insight: the hybrid attention pattern is crucial for segmentation",
+    "drawn_as": "two lines of green text",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": true
+   },
+   {
+    "name": "Shape/Texture Bias",
+    "type": "text-block",
+    "role": "claim node that leads to a distribution shift",
+    "drawn_as": "plain serif text with a red arrow down",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": null
+   },
+   {
+    "name": "Distribution Shift",
+    "type": "text-block",
+    "role": "consequence of the texture bias in infrared tasks",
+    "drawn_as": "red text at the end of a red arrow",
+    "container": "Step2: Why do they perform distinctively?",
+    "is_contribution": null
+   },
+   {
+    "name": "Step3: How to improve their performance?",
+    "type": "container",
+    "role": "band for the proposed framework UNIP",
+    "drawn_as": "peach tinted band, bold italic brown title phrased as a question, bold 'UNIP' at the top right, two grey boxes inside",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "InfMix",
+    "type": "data",
+    "role": "mixed pre-training dataset built from 23 infrared datasets, an ImageNet subset and the COCO training set",
+    "drawn_as": "blue-grey cylinder holding three labelled slabs, red-brown title",
+    "container": "Step3: How to improve their performance?",
+    "is_contribution": true
+   },
+   {
+    "name": "NMI-guided Hybrid Attention pattern Distillation (NMI-HAD)",
+    "type": "module",
+    "role": "pre-training task: the hybrid attention pattern of an NMI-selected teacher layer is distilled into a student",
+    "drawn_as": "multi-coloured title over a blue Teacher box (RGB pre-trained) and an orange Student box (randomly initialized) joined by a black elbow arrow",
+    "container": "Step3: How to improve their performance?",
+    "is_contribution": true
+   },
+   {
+    "name": "Last-Layer FPN (LL-FPN)",
+    "type": "module",
+    "role": "fine-tuning architecture that builds all scales from the last layer of the student",
+    "drawn_as": "green title over a Student column of four 1/16 boxes, four orange scale boxes 1/32, 1/16, 1/8, 1/4 and a vertical Decoder box",
+    "container": "Step3: How to improve their performance?",
+    "is_contribution": true
+   },
+   {
+    "name": "Pre-training / Fine-tuning",
+    "type": "label",
+    "role": "names the two grey boxes of Step 3",
+    "drawn_as": "italic blue words in the lower right corner of each grey box",
+    "container": "Step3: How to improve their performance?",
+    "is_contribution": null
+   },
+   {
+    "name": "arrow words: caused by, influence, measured by, insight, inspire",
+    "type": "label",
+    "role": "name the relation along each arrow",
+    "drawn_as": "small italic text beside the arrows",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "RGB Pre-Trained Models",
+    "to": "Infrared Segmentation Tasks",
+    "what": "models are benchmarked on infrared tasks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Benchmark",
+    "to": "Performance: Supervised/CL > MIM",
+    "what": "first finding of the benchmark (grey arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Benchmark",
+    "to": "Performance/Cost Ratio: Large < Small",
+    "what": "second finding (blue arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Performance: Supervised/CL > MIM",
+    "to": "Pretraining Task",
+    "what": "caused by",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Pretraining Task",
+    "to": "Shape/Texture Bias",
+    "what": "influence",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Pretraining Task",
+    "to": "Attention Pattern",
+    "what": "influence",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Attention Pattern",
+    "to": "NMI",
+    "what": "measured by (purple arrow)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Attention Pattern",
+    "to": "Hybrid Pattern Benefits Segmentation",
+    "what": "insight (green arrow)",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Shape/Texture Bias",
+    "to": "Distribution Shift",
+    "what": "influence (red arrow passing between the DINO-S and MAE-S maps)",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Performance/Cost Ratio: Large < Small",
+    "to": "NMI-HAD",
+    "what": "inspire (blue arrow)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "NMI",
+    "to": "NMI-HAD",
+    "what": "inspire (purple arrow)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Hybrid Pattern Benefits Segmentation",
+    "to": "NMI-HAD and LL-FPN",
+    "what": "inspire (two green arrows)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Distribution Shift",
+    "to": "InfMix",
+    "what": "inspire (long red elbow arrow)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "InfMix",
+    "to": "Teacher and Student",
+    "what": "pre-training data goes to both boxes (grey arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Teacher",
+    "to": "Student",
+    "what": "hybrid pattern of the layer selected by NMI is distilled (black elbow arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Student last layer",
+    "to": "1/32, 1/16, 1/8, 1/4 boxes and Decoder",
+    "what": "all scales are built from the last layer, then fed to the decoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-training box",
+    "to": "Fine-tuning box",
+    "what": "side by side; no arrow, the student hand-over is implied",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Step1: How do various pre-training methods perform?",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "benchmark of RGB pre-trained models on infrared segmentation with two mini bar charts and two findings",
+    "verdict": "setting"
+   },
+   {
+    "label": "Step2: Why do they perform distinctively?",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "chain of claims from pre-training task to attention pattern, NMI, hybrid pattern and distribution shift, with DINO-S and MAE-S attention maps",
+    "verdict": null
+   },
+   {
+    "label": "Step3: How to improve their performance?",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "UNIP: InfMix dataset, teacher-student NMI-HAD distillation (pre-training) and last-layer feature pyramid with decoder (fine-tuning)",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Step1, Step2, Step3",
+    "kind": "order",
+    "at": "band titles",
+    "what": "order the three stages of the paper and head each band; they match the caption's Sec. 2, 3 and 4"
+   },
+   {
+    "marker": "1/16, 1/32, 1/8, 1/4",
+    "kind": "identity",
+    "at": "feature-map boxes of the student and the pyramid",
+    "what": "name the stride of each feature map"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two small bar charts: average mIoU (FT) for Supervised, CL and MIM with ViT-S; average mIoU/FLOPs for Small, Base and Large",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "mini axes with value labels on top of grey bars (first chart) and blue bars (second chart), set inside the Step 1 band"
+   },
+   {
+    "what": "attention maps of DINO-S and MAE-S over an infrared scene, in dark blue to green colours",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two square thumbnails with italic model names beneath, the red influence arrow running between them"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "node-and-edge neural network glyph",
+    "stands_for": "RGB pre-trained models",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "blue bar chart with a rising arrow",
+    "stands_for": "infrared segmentation tasks and their performance",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "small waveform chart",
+    "stands_for": "the NMI indicator",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "blue-grey database cylinder with three labelled slabs",
+    "stands_for": "the InfMix dataset",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "benchmark numbers: Supervised 60.76, CL 61.93, MIM 56.28 average mIoU (ViT-S); mIoU/FLOPs 0.41, 0.11, 0.05 for Small, Base, Large",
+    "form": "value labels above the bars of two mini charts",
+    "real_values": true
+   },
+   {
+    "what": "composition of InfMix: 23 Infrared Datasets, ImageNet Subset, COCO Training Set",
+    "form": "three labelled slabs stacked in a cylinder",
+    "real_values": true
+   },
+   {
+    "what": "feature scales of the pyramid: student layers at 1/16, pyramid levels 1/32, 1/16, 1/8, 1/4",
+    "form": "orange boxes of growing width with the stride written inside",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "teacher-student",
+    "drawn_as": "a blue Teacher box (RGB pre-trained) above an orange Student box (randomly initialized), joined by a black elbow arrow labelled 'Layer selected by NMI' and 'Hybrid Pattern'",
+    "parts": [
+     "Teacher",
+     "Student",
+     "elbow arrow",
+     "layer label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "two square heat-map thumbnails of attention over an infrared scene, one per pre-training method, with model names below",
+    "parts": [
+     "DINO-S map",
+     "MAE-S map"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "feature-pyramid",
+    "drawn_as": "four orange bars whose width grows from 1/32 to 1/4, all fed from the last layer of a student column, then into a vertical Decoder box",
+    "parts": [
+     "student column",
+     "scale bars",
+     "Decoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a cylinder holding three labelled slabs standing for 23 infrared datasets, an ImageNet subset and COCO",
+    "parts": [
+     "cylinder",
+     "three slabs",
+     "InfMix title"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "claim-chain",
+    "drawn_as": "plain text claims joined by labelled arrows (caused by, influence, measured by, insight, inspire); arrow and claim colour tie each insight to the component it inspires",
+    "parts": [
+     "claim texts",
+     "labelled coloured arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Step1 title top left, runs right to the Step2 band, follows the claim chain down to the coloured claims, then follows the coloured 'inspire' arrows into the Step3 band and reads InfMix, NMI-HAD and LL-FPN left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two tinted bands side by side at the top (Step1 green, Step2 yellow) over one full-width peach band (Step3) that holds two grey framed boxes, Pre-training and Fine-tuning; coloured arrows run from Step 2 and Step 1 down into Step 3.",
+  "panel_count": 3,
+  "lanes": "inside Step 3, two framed boxes side by side: Pre-training (InfMix and teacher-student) and Fine-tuning (LL-FPN)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.85,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f0f7ec",
+    "used_for": "Step 1 band fill (light green)"
+   },
+   {
+    "hex": "#fff2cc",
+    "opacity": 0.5,
+    "used_for": "Step 2 band fill (light yellow)"
+   },
+   {
+    "hex": "#f8cbad",
+    "opacity": 0.3,
+    "used_for": "Step 3 band fill (peach)"
+   },
+   {
+    "hex": "#deebf7",
+    "opacity": 0.5,
+    "used_for": "Benchmark box fill"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple arrows and text for NMI"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "green arrows and text for the hybrid pattern"
+   },
+   {
+    "hex": "#fe4d3c",
+    "used_for": "red arrows for the distribution shift"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "blue arrows and text for the performance/cost ratio"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "orange fill of Student, scale boxes and Decoder"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "blue fill of the Teacher box and outlines of the grey boxes"
+   },
+   {
+    "hex": "#adb9ca",
+    "opacity": 0.8,
+    "used_for": "InfMix cylinder"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "grey flow arrows and the bars of the Supervised/CL/MIM chart"
+   },
+   {
+    "hex": "#95abd7",
+    "used_for": "blue bars of the mIoU/FLOPs chart"
+   },
+   {
+    "hex": "#be514c",
+    "used_for": "red-brown 'InfMix' label"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt thin outlines; thin coloured outlines on the bands and grey boxes; thick flat-filled arrows for the narrative links",
+  "font": "serif (Times New Roman) 7 pt claims, bold italic 8 pt step titles, italic 5.5 pt arrow words, coloured text for the insights",
+  "corners": "mixed",
+  "arrows": "thick flat arrows in grey or insight colours with italic relation words; thin black elbow arrows with small heads inside the method boxes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each insight keeps one colour on its text, its arrow and the method part it inspires: purple = NMI, green = hybrid pattern, red = distribution shift, blue = performance/cost ratio; band tints green, yellow, peach = Step 1, 2, 3; blue box = RGB-pretrained teacher, orange = student and the pyramid boxes; grey = plain narrative flow",
+  "line_style_means": "grey thick arrows = narrative flow inside a step; coloured thick arrows labelled 'inspire' = insight to component; thin black arrows = data flow inside the method",
+  "shape_means": "cylinder = pre-training dataset, orange bars of different widths = feature scales, vertical rounded box = decoder",
+  "marker_means": "Step1-Step3 head and order the bands; 1/16, 1/32, 1/8, 1/4 give feature strides; the italic word on an arrow gives the relation type",
+  "emphasis": "bold italic step titles phrased as questions, coloured claim text, and a multi-coloured method title that echoes the insight colours",
+  "reusable_patterns": [
+   "bands titled by research questions Step1, Step2, Step3 that mirror the paper's sections",
+   "colour-coded claims whose coloured arrows labelled 'inspire' land on the method part they motivate",
+   "claim chain with relation words on the arrows (caused by, influence, measured by, insight, inspire)",
+   "method title written in the colours of the insights it uses",
+   "mini bar charts embedded in the first band as evidence for a finding",
+   "attention-map thumbnails with model names for two pre-training methods",
+   "dataset cylinder with labelled slabs for a mixed corpus",
+   "feature pyramid drawn as bars of different widths fed from the last layer only"
+  ],
+  "weaknesses": [
+   "many arrows cross the Step 2 to Step 3 boundary, including long coloured elbows, so tracing one insight takes effort",
+   "5.5 pt arrow words are small",
+   "no legend states the colour-to-insight mapping; it relies on matching colours",
+   "no arrow joins the Pre-training box to the Fine-tuning box; the hand-over of the student is implied"
+  ]
+ },
+ "resources": {
+  "own": [
+   "attention maps of DINO-S and MAE-S",
+   "benchmark numbers in two bar charts",
+   "dataset composition of InfMix"
+  ],
+  "stock": [
+   "neural network glyph",
+   "bar-chart glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted bands and boxes",
+   "claim chain and arrows",
+   "teacher-student boxes",
+   "feature pyramid and decoder",
+   "cylinder",
+   "two mini bar charts"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted step bands titled by questions",
+   "benchmark box with network and chart glyphs",
+   "two small bar charts",
+   "claim chain with labelled coloured arrows",
+   "DINO-S and MAE-S attention maps",
+   "InfMix cylinder with three slabs",
+   "teacher and student boxes with an elbow arrow",
+   "feature pyramid bars into a decoder"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "infrared semantic segmentation",
+   "pre-training",
+   "attention patterns",
+   "NMI",
+   "hybrid pattern",
+   "distillation",
+   "feature pyramid",
+   "InfMix",
+   "chain of thought"
+  ],
+  "tags": [
+   "claim-banner",
+   "colour-coded-groups",
+   "flow-type-arrows",
+   "saliency-heatmap",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "research-question-bands",
+    "what": "stacked tinted bands each titled by a research question ('StepN: How / Why ...?') that summarise one part of the paper in order"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Turn the paper's structure into a chain of thought: tinted bands titled by research questions, with each insight given one colour that follows its text, its labelled arrow and the method component it inspires, so the reader sees which finding motivates which design choice.",
+  "suits": "Analysis-driven papers (benchmark, then diagnosis, then method) whose method choices follow from measured findings."
+ },
+ "tags": [
+  "research-question-bands",
+  "colour-matched-arrows",
+  "labelled-arrows",
+  "mini-bar-charts",
+  "attention-thumbnails",
+  "serif-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 Method (p.7-8)",
+   "Related work (p.17)"
+  ],
+  "evidence": [
+   "Figure 1: The Chain-of-Thought (CoT) of our work.",
+   "our work is organized into three stages: benchmark establishment, cause analysis, and method proposal",
+   "It constructs all feature maps of different scales upon the last layer’s features"
+  ]
+ },
+ "summary": "UNIP studies how RGB pre-trained models transfer to infrared semantic segmentation and builds a better recipe for small models. Figure 1 lays out the paper's chain of thought as three tinted bands titled by questions. Step 1 benchmarks pre-trained models: supervised and contrastive pre-training beat masked image modelling, and large models give a poor performance/cost ratio, shown by two small bar charts. Step 2 explains why through a chain of claims from pre-training task to attention pattern, measured by NMI, with DINO-S and MAE-S attention maps and a distribution-shift claim. Step 3 presents UNIP: the InfMix dataset, NMI-guided hybrid attention distillation from a teacher to a student, and a last-layer feature pyramid. Coloured arrows labelled 'inspire' tie each insight to the component it motivates.",
+ "summary_zh": "UNIP 研究 RGB 预训练迁移到红外分割。图 1 用三条问句色带讲思路：Step1 基准测试，Step2 以注意力模式和 NMI 解释差异，Step3 提出 InfMix、NMI-HAD 蒸馏与末层特征金字塔，彩色箭头连接发现与设计。",
+ "confidence": "high",
+ "notes": "The prior pass described three stacked bands read top to bottom; the preview shows Step1 and Step2 side by side over a full-width Step3. The prior listed stage-pipeline second; kept second because the arrows form a research chain, not a method pipeline. Panel count kept at the three bands; the Pre-training and Fine-tuning boxes inside Step 3 are given under lanes. The caption links Step1-3 to Sec. 2-4; the figure itself shows no section numbers.",
+ "venue": "ICLR25"
+}

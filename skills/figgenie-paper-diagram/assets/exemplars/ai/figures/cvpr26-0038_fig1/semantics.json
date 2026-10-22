@@ -1,0 +1,490 @@
+{
+ "paper_id": "cvpr26-0038",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Multimodal RewardBench 2 (MMRB2)",
+  "one_liner": "A benchmark of 1,000 expert-annotated preference pairs per task for reward models judging text-to-image, editing, interleaved and reasoning outputs.",
+  "domain": [
+   "reward model benchmark",
+   "omni models",
+   "multimodal preference"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "side-by-side-contrast"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "four task cards, each a full preference record: prompt, candidates A and B, a human verdict and a GPT-judge verdict",
+  "argues": "MMRB2 covers four demanding omni tasks, each with a real prompt, two candidate responses from strong models or agents, and human versus GPT-judge verdicts with reasons.",
+  "subject": "Four task cards of benchmark examples: prompt, candidate outputs A and B, and human versus GPT verdicts.",
+  "elements": [
+   {
+    "name": "Text-to-Image",
+    "type": "container",
+    "role": "card for the text-to-image preference example",
+    "drawn_as": "rounded pale-pink card, sans title at top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Image Editing:",
+    "type": "container",
+    "role": "card for the image-editing preference example",
+    "drawn_as": "rounded pale-blue card with sans title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Interleaved Generation",
+    "type": "container",
+    "role": "card for the interleaved text-and-image generation example",
+    "drawn_as": "rounded pale-blue card with sans title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Multimodal Reasoning (“thinking with images”):",
+    "type": "container",
+    "role": "card for the multimodal reasoning example",
+    "drawn_as": "rounded pale-pink card with sans title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt:",
+    "type": "text-block",
+    "role": "the task prompt given to the generators; 4 cards, one prompt each (the editing and reasoning prompts sit beside their input photos)",
+    "drawn_as": "typewriter-font paragraph with a bold lead-in word",
+    "container": "each task card",
+    "is_contribution": true
+   },
+   {
+    "name": "(A) FLUX 1.1 / (B) Imagen 4",
+    "type": "instance",
+    "role": "two candidate images for the sign-text prompt",
+    "drawn_as": "two square images side by side, each with a darker peach caption plate holding the bold model name",
+    "container": "Text-to-Image",
+    "is_contribution": true
+   },
+   {
+    "name": "(A) GPT-Image-1 / (B) Nano Banana",
+    "type": "instance",
+    "role": "two candidate edited images for the van-and-butterfly prompt",
+    "drawn_as": "two square images with darker blue caption plates",
+    "container": "Image Editing:",
+    "is_contribution": true
+   },
+   {
+    "name": "(A) Nano Banana / (B) GPT-Flux agent",
+    "type": "instance",
+    "role": "two candidate interleaved answers, each a short text with two images (early growth, harvest) joined by [...]",
+    "drawn_as": "two tall darker-blue boxes side by side, text on the left and images on the right of each",
+    "container": "Interleaved Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "(A) GPT-4.1 / (B) o3-Sketchpad-Agent",
+    "type": "instance",
+    "role": "two candidate reasoning answers: a one-line text answer versus an answer that adds an arrow-annotated image",
+    "drawn_as": "two stacked peach boxes, the second taller with text and an image",
+    "container": "Multimodal Reasoning (“thinking with images”):",
+    "is_contribution": true
+   },
+   {
+    "name": "Human:",
+    "type": "label",
+    "role": "expert preference with the reason, one line per card (4 cards)",
+    "drawn_as": "bold 'Human:' lead-in plus one or two sentences, preceded by a small people icon",
+    "container": "each task card",
+    "is_contribution": true
+   },
+   {
+    "name": "GPT-4o: / GPT-5:",
+    "type": "label",
+    "role": "the model judge's preference with a short reason (GPT-4o on three cards, GPT-5 on the interleaved card)",
+    "drawn_as": "bold judge name plus a sentence, preceded by a black OpenAI logo",
+    "container": "each task card",
+    "is_contribution": false
+   },
+   {
+    "name": "[...] and [IMAGE]",
+    "type": "label",
+    "role": "elide long text and stand in for an image inside a response",
+    "drawn_as": "plain bracketed tokens in the typewriter font",
+    "container": "Interleaved Generation, Multimodal Reasoning",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Prompt:",
+    "to": "candidate responses (A) and (B)",
+    "what": "both candidates answer the same prompt",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "input photos (van, butterfly, farm field, stacked chairs)",
+    "to": "Prompt:",
+    "what": "the images that belong to the prompt, placed at its right edge",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "candidate responses (A) and (B)",
+    "to": "Human:",
+    "what": "the expert's preference and the reason for it",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "candidate responses (A) and (B)",
+    "to": "GPT-4o: / GPT-5:",
+    "what": "the model judge's preference and reason, to be set against the human line",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "task card",
+    "to": "prompt, candidates and verdict lines",
+    "what": "each card holds one complete preference record",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Text-to-Image",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "Prompt for a green direction sign with exact place names; FLUX 1.1 versus Imagen 4; human picks B for garbled text in A, GPT-4o picks A.",
+    "verdict": null
+   },
+   {
+    "label": "Image Editing:",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "Edit prompt with two input photos (yellow van, butterfly); GPT-Image-1 versus Nano Banana; human picks B, GPT-4o picks A.",
+    "verdict": null
+   },
+   {
+    "label": "Interleaved Generation",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "Farm-field image plus a request for four images and text on crop growth; Nano Banana versus GPT-Flux agent; human and GPT-5 both pick A.",
+    "verdict": null
+   },
+   {
+    "label": "Multimodal Reasoning (“thinking with images”):",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "Spatial question about stacked chairs; GPT-4.1 text answer versus o3-Sketchpad-Agent answer with an arrow image; human and GPT-4o both pick B.",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(A) / (B)",
+    "kind": "identity",
+    "at": "each candidate caption",
+    "what": "names the two candidates; the verdict lines refer to them by letter"
+   },
+   {
+    "marker": "Prompt:",
+    "kind": "section",
+    "at": "each card's prompt block",
+    "what": "bold lead-in that heads the task prompt"
+   },
+   {
+    "marker": "Human: / GPT-4o: / GPT-5:",
+    "kind": "identity",
+    "at": "verdict lines",
+    "what": "names the judge who gave the verdict, backed by an icon"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "text-to-image outputs of FLUX 1.1 and Imagen 4 for the sign prompt",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails of equal size on a peach caption plate with the model name below"
+   },
+   {
+    "what": "input photos for the edit: a yellow van at the seaside and a butterfly",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two wide crops butted together at the right end of the prompt text"
+   },
+   {
+    "what": "edited advertisement images from GPT-Image-1 and Nano Banana",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails on blue caption plates, one with the 'Adventure Awaits!' text drawn into the image"
+   },
+   {
+    "what": "farm-field image given as the starting frame of the interleaved prompt",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "single small square at the top right of the card; the same image reappears as the first frame of response B"
+   },
+   {
+    "what": "interleaved response images: early growth and harvest for Nano Banana and for GPT-Flux agent",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "equal squares in two columns, an elided [...] between the early and the harvest image"
+   },
+   {
+    "what": "photo of stacked chairs for the reasoning question, and the same photo with a yellow arrow drawn by the sketchpad agent",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "the plain photo beside the prompt, the annotated copy inside answer B with an [IMAGE] caption"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cluster of three cartoon people",
+    "stands_for": "the human expert judge",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "OpenAI knot logo in black",
+    "stands_for": "the GPT model judge (GPT-4o or GPT-5)",
+    "style": "logo",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "a sign-text prompt with two generated images and the human and GPT-4o verdicts quoting the garbled words",
+    "form": "prompt paragraph, two images, two verdict sentences",
+    "real_values": true
+   },
+   {
+    "what": "an edit instruction using a van photo and a butterfly photo with two edited advertisements",
+    "form": "prompt beside input photos, two output images, verdict sentences",
+    "real_values": true
+   },
+   {
+    "what": "a multi-image growth-process request with two interleaved text-and-image answers",
+    "form": "two response boxes with text snippets and images, elided with [...]",
+    "real_values": true
+   },
+   {
+    "what": "a multiple-choice spatial question with a plain answer and an answer using a drawn arrow",
+    "form": "prompt, two text answers, one annotated photo",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "task card with a prompt, two responses captioned (A) and (B) with model names, and sentence verdicts from two judges instead of ticks and crosses",
+    "parts": [
+     "prompt",
+     "(A) and (B) responses",
+     "Human line",
+     "GPT line"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "small colourful cartoon cluster of people in front of the human expert's verdict",
+    "parts": [
+     "people icon",
+     "Human: verdict text"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "black OpenAI logo in front of the model judge's verdict, no box around the model",
+    "parts": [
+     "logo",
+     "GPT-4o / GPT-5 verdict text"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the top-left Text-to-Image card, then the Image Editing card at top right, then down to Interleaved Generation and Multimodal Reasoning; in each card: title, prompt, A and B, verdicts."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Four rounded tinted cards in two columns of unequal height: text-to-image over interleaved generation on the left, image editing over multimodal reasoning on the right. Pink and blue alternate diagonally. Every card stacks title, prompt with its input photos, two captioned candidates and two verdict lines.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.67,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f4edef",
+    "used_for": "ground of the Text-to-Image and Multimodal Reasoning cards"
+   },
+   {
+    "hex": "#e9f0fa",
+    "used_for": "ground of the Image Editing and Interleaved Generation cards"
+   },
+   {
+    "hex": "#f5e2da",
+    "used_for": "darker peach plates: caption strips under the text-to-image outputs and the answer boxes of the reasoning card"
+   },
+   {
+    "hex": "#dae2f3",
+    "used_for": "darker blue plates: caption strips under the edited images and the response boxes of the interleaved card"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "none: no outlines on cards, plates or images",
+  "font": "typewriter slab serif (American Typewriter) 4 pt for prompts and responses with bold lead-ins; serif 4 pt for verdict lines; sans 7 pt for card titles",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Pink and blue alternate between cards only to separate them (no key); a darker shade of the card's own hue marks the candidate plates and captions.",
+  "line_style_means": null,
+  "shape_means": "rounded tinted rectangle = one task card; darker rounded plate = one candidate response or caption",
+  "marker_means": "(A) and (B) name the candidates; the people icon = human expert verdict; the OpenAI logo = GPT judge verdict",
+  "emphasis": "Little emphasis: bold lead-ins ('Prompt:', model names, 'Human:', 'GPT-4o:') let the reader jump between the parts of a card.",
+  "reusable_patterns": [
+   "four cards with identical anatomy (title, prompt, A/B outputs, two verdict lines)",
+   "judge icons (people vs OpenAI logo) in front of one-sentence verdicts with reasons",
+   "[...] and [IMAGE] stand-ins that shorten long interleaved outputs",
+   "darker caption plate in the card's hue under each candidate",
+   "two tints alternating diagonally over a 2x2 card grid"
+  ],
+  "weaknesses": [
+   "4 pt body text is far too small at print size",
+   "no marks tell which candidate won; the reader must read the verdict sentences",
+   "no key for the pink and blue tints"
+  ]
+ },
+ "resources": {
+  "own": [
+   "benchmark prompts",
+   "images produced by the named models and agents",
+   "interleaved responses",
+   "human and GPT-judge rationales",
+   "input photos"
+  ],
+  "stock": [
+   "OpenAI logo",
+   "cartoon people-group icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted rounded cards",
+   "caption plates",
+   "typeset text blocks"
+  ],
+  "unknown": [
+   "whether the people icon is stock clipart or made for the paper"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "four tinted task cards",
+   "prompt text blocks",
+   "A/B generated image pairs with model-name captions",
+   "human and GPT verdict lines with icons",
+   "input photos (van, butterfly, chairs)",
+   "interleaved text-and-image response boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "reward model benchmark",
+   "preference pairs",
+   "omni models",
+   "text-to-image",
+   "image editing",
+   "interleaved generation",
+   "thinking with images",
+   "LLM-as-a-judge",
+   "human annotation"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "task-definition",
+   "verdict-marks",
+   "brand-logo-icon",
+   "human-in-the-loop"
+  ],
+  "new_tags": [
+   {
+    "name": "judge-verdict-lines",
+    "what": "under the candidate outputs, one icon-led sentence per judge (human expert, model judge) giving a preference and its reason"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "A uniform card anatomy (title, prompt with its input images, two captioned candidates, icon-led verdict lines) lets one figure cover four unlike task types and makes human and model judgments comparable. Elide long outputs with [...] and [IMAGE].",
+  "suits": "Benchmarks or datasets with several task types built on pairwise comparisons, especially reward-model, preference and LLM-as-a-judge evaluations."
+ },
+ "tags": [
+  "tinted-cards",
+  "2x2-grid",
+  "typewriter-text",
+  "photo-thumbnails",
+  "icon-led-verdicts",
+  "no-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Multimodal RewardBench 2 (p.4)"
+  ],
+  "evidence": [
+   "Each subtask contains 1,000 expert-annotated preference pairs, consisting of a task prompt, a preferred response, and a rejected response.",
+   "Examples of multimodal preference pairs in MMRB2 across four subtasks: text-to-image generation, interleaved generation, image editing, and multimodal reasoning"
+  ]
+ },
+ "summary": "Multimodal RewardBench 2 (MMRB2) is a benchmark for reward models of omni models that read and write interleaved text and images, with 1,000 expert-annotated preference pairs for each of four tasks. Figure 1 is a gallery of four tinted cards, one per task: text-to-image, image editing, interleaved generation and multimodal reasoning. Every card has the same anatomy: a title, the prompt with its input photos where the task has them, two candidate responses (A and B) captioned with the generating model or agent, and below them one verdict line from a human expert and one from a GPT judge, each led by an icon. Long outputs are shortened with [...] and [IMAGE]. Flat pink and blue cards, typewriter text, no arrows.",
+ "summary_zh": "MMRB2 是面向图文交错全模态模型的奖励模型基准，每个任务含 1000 对专家标注偏好对。图 1 用四张淡色卡片展示文生图、图像编辑、交错生成和多模态推理，各含提示、A/B 候选输出及人类与 GPT 评审结论。",
+ "confidence": "high",
+ "notes": "Prior labels kept (scope-overview, side-by-side-contrast, example-gallery). Pictures counted as 13 placed images. The human and GPT verdicts disagree in the first two cards and agree in the last two; this is read from the text, the figure does not mark it. The 4 pt text is read from the digest. Human icon is a bitmap and the OpenAI logo is vector, inferred from the digest's picture list (four 11x11 pt bitmaps).",
+ "venue": "CVPR26"
+}

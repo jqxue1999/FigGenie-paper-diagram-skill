@@ -1,0 +1,542 @@
+{
+ "paper_id": "iclr26-0076",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Omni-RewardBench",
+  "one_liner": "The first omni-modal reward-model benchmark with free-form preferences: nine tasks over text, image, video, audio and 3D, each judged under written criteria.",
+  "domain": [
+   "reward modeling",
+   "omni-modal evaluation",
+   "free-form preferences"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "nine pastel task cards ring a central coloured scatter cloud, each card a full query, two responses, two criteria and the preferences",
+  "argues": "Reward modeling spans nine input-output modality pairs, and preferences are free-form: the same two responses can be ranked either way depending on the written criterion.",
+  "subject": "Nine reward-modeling tasks, each shown with a query, two candidate responses, two free-form criteria and the preference under each, around a coloured point cloud.",
+  "elements": [
+   {
+    "name": "Text-to-Text",
+    "type": "container",
+    "role": "task card: rank two text answers; example question on 'superposition state' in quantum physics",
+    "drawn_as": "pale rose rounded card, title at upper left, two italic answers at left, two dashed criteria boxes at right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-Audio-to-Text",
+    "type": "container",
+    "role": "task card: rank two text descriptions of a given audio clip",
+    "drawn_as": "pale lime card with a grey waveform between a piano and a violin glyph after the question",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-to-Audio",
+    "type": "container",
+    "role": "task card: rank two generated audio clips for a text prompt (speech followed by dog sounds)",
+    "drawn_as": "pale green card with two black play buttons, each followed by a waveform strip, labelled R1 and R2",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-to-Video",
+    "type": "container",
+    "role": "task card: rank two generated videos of a dog playing with a ball",
+    "drawn_as": "pale apricot card with two black film strips of three frames each, one per response",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-Video-to-Text",
+    "type": "container",
+    "role": "task card: rank two text answers about what a boy does in a video",
+    "drawn_as": "pale yellow card with one film strip of a boy tidying a room under the question",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-to-Image",
+    "type": "container",
+    "role": "task card: rank two images for 'Hyperrealism, man and woman, together, made of clay'",
+    "drawn_as": "pale pink card with two clay-figure images labelled R1 and R2",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-Image-to-Image",
+    "type": "container",
+    "role": "task card: rank two edits of a coffee photo for 'Replace the coffee with beer'",
+    "drawn_as": "pale lavender card with the original photo and two result images in a row",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-Image-to-Text",
+    "type": "container",
+    "role": "task card: rank two text answers about the techniques of a painting",
+    "drawn_as": "pale peach card with a Starry Night thumbnail beside the question",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Text-to-3D",
+    "type": "container",
+    "role": "task card: rank two 3D assets for a sword with a green and brown handle",
+    "drawn_as": "pale cyan card with a row of four sword views for each response",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Q",
+    "type": "text-block",
+    "role": "the query or prompt of the task",
+    "drawn_as": "bold magenta label Q: followed by the question, plus a media item when the query is audio, video or an image",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "R1, R2",
+    "type": "sample",
+    "role": "the two candidate responses to compare",
+    "drawn_as": "magenta labels with italic text, waveform strips, film strips, images or sword renders",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "C1, C2",
+    "type": "text-block",
+    "role": "free-form criteria written in natural language, each with its own preference",
+    "drawn_as": "dashed grey rounded boxes with tan labels, a preference tag at the lower right",
+    "container": "task cards",
+    "is_contribution": true
+   },
+   {
+    "name": "preference tags",
+    "type": "label",
+    "role": "which response wins under the criterion: R1 > R2, R2 > R1 or R2 ~ R1",
+    "drawn_as": "bold magenta text at the right end of each criterion box",
+    "container": "task cards",
+    "is_contribution": true
+   },
+   {
+    "name": "scatter cloud",
+    "type": "region",
+    "role": "central cloud of points in clusters of different colours (not explained in the figure or the text)",
+    "drawn_as": "multicolour dot cloud with green, orange, yellow, pink, blue and lilac clusters and a few stray dark red dots",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "dashed leader lines",
+    "type": "other",
+    "role": "tie each card to the cloud in the card's colour",
+    "drawn_as": "thin dashed lines in the nine card colours running from card edges to the cloud",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Q",
+    "to": "R1, R2",
+    "what": "two candidate responses to the same query",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "C1, C2",
+    "to": "R1, R2",
+    "what": "each criterion gives its own preference between the responses, written as a tag at its right",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "each task card",
+    "to": "scatter cloud",
+    "what": "card linked to a cluster of the same colour",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "card tint",
+    "to": "leader line and cluster",
+    "what": "one colour per task is kept on card, leader and cluster",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Text-to-Text",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "text query, two text answers, two criteria with opposite preferences (R1 > R2, R2 > R1)",
+    "verdict": null
+   },
+   {
+    "label": "Text-Audio-to-Text",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "audio query, two text descriptions, criteria technical vocabulary and easy to understand",
+    "verdict": null
+   },
+   {
+    "label": "Text-to-Audio",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "text query, two audio clips with play buttons, criteria on enunciation and source separation",
+    "verdict": null
+   },
+   {
+    "label": "Text-to-Video",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "text query, two film strips of a dog, criteria on physical realism and cuteness",
+    "verdict": null
+   },
+   {
+    "label": "Text-Video-to-Text",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "video query, a detailed and a short text answer, criteria concrete versus abstract",
+    "verdict": null
+   },
+   {
+    "label": "Text-to-Image",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "text query, two clay-figure images, criteria on pairing and on clay material",
+    "verdict": null
+   },
+   {
+    "label": "Text-Image-to-Image",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "coffee photo plus instruction, two edited images, criteria on what stays and what changes",
+    "verdict": null
+   },
+   {
+    "label": "Text-Image-to-Text",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "painting query, two text answers, criteria art-historical versus emotional",
+    "verdict": null
+   },
+   {
+    "label": "Text-to-3D",
+    "kind": "other",
+    "axis": "modalities",
+    "shows": "text query, two rows of sword views, criteria on handle colours and textures",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Q, R1, R2, C1, C2",
+    "kind": "identity",
+    "at": "inside every card",
+    "what": "names the query, the two responses and the two criteria"
+   },
+   {
+    "marker": "card titles",
+    "kind": "section",
+    "at": "upper left of each card",
+    "what": "head and name the nine tasks by input and output modality"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "audio waveforms: two response clips and one query clip",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "grey waveform strips about 38 pt wide, two with a black play button at the left"
+   },
+   {
+    "what": "film strips of dog play (two responses) and a boy tidying a room (query)",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "black film strips with sprocket holes holding three consecutive frames each"
+   },
+   {
+    "what": "images: clay figures (two), coffee original and two edits, a Starry Night painting",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "small square thumbnails labelled R1 and R2 beside the question or the criteria"
+   },
+   {
+    "what": "3D sword renders: four views for each of two responses",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "a row of four small views per response on a plain background"
+   },
+   {
+    "what": "central scatter cloud of coloured points",
+    "content": "chart",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "about 86 x 69 pt dot cloud, no axes, clusters in the card colours, pale dashed leaders reaching it"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "black circular play button",
+    "stands_for": "a playable audio clip",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "piano and violin glyphs",
+    "stands_for": "the music in the audio query",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "nine complete reward-modeling examples, each with a query, two responses, two criteria and a preference under each; for instance in Text-to-Text C1 research-level gives R1 > R2 and C2 easy for a general audience gives R2 > R1",
+    "form": "annotated task cards with real text, media thumbnails and preference tags",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "task card with a query, two candidate responses and criteria-conditioned preference tags in place of ticks and crosses",
+    "parts": [
+     "Q",
+     "R1",
+     "R2",
+     "C1",
+     "C2",
+     "preference tag"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "black film strips with sprocket holes holding three frames for each video item",
+    "parts": [
+     "strip",
+     "sprocket holes",
+     "frames"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at Text-to-Text top left, runs down the left column, then down the right column from Text-Audio-to-Text to Text-to-3D; inside a card from Q to R1 and R2, then the C1 and C2 boxes with their tags; the cloud in the middle is read last."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "Nine tinted rounded cards in two columns (five at left, four at right) of unequal heights surround a central coloured scatter cloud, each tied to it by a colour-matched dashed leader; every card repeats one template of title, query, two responses and two dashed criteria boxes.",
+  "panel_count": 9,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "column",
+  "aspect": 1.15,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b82132",
+    "used_for": "Text-to-Text card tint (pale rose) and its leader line",
+    "opacity": 0.05
+   },
+   {
+    "hex": "#89ac46",
+    "used_for": "Text-to-Audio card tint (pale green) and leader",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#d3e671",
+    "used_for": "Text-Audio-to-Text card tint (pale lime)",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#fff574",
+    "used_for": "Text-Video-to-Text card tint (pale yellow)",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#fbd288",
+    "used_for": "Text-to-Video card tint (pale apricot) and leader",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#ff9a9a",
+    "used_for": "Text-to-Image card tint (pale pink)",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#c5baff",
+    "used_for": "Text-Image-to-Image card tint (pale lavender) and leader",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#f26b0f",
+    "used_for": "Text-Image-to-Text card tint (pale peach) and leader",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#a1e3f9",
+    "used_for": "Text-to-3D card tint (pale cyan) and leader",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#720455",
+    "used_for": "dark magenta labels Q, R1, R2 and the preference tags"
+   },
+   {
+    "hex": "#a27b5c",
+    "used_for": "tan labels C1 and C2"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "0.25 pt dashed outline of the 18 criteria boxes"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt dashed grey outline on criteria boxes; 0.25 pt dashed coloured leader lines",
+  "font": "serif (Nimbus Roman) 4.5 pt throughout; italic response text, bold magenta and tan labels",
+  "corners": "rounded",
+  "arrows": "none; dashed coloured leader lines instead",
+  "rendering": "flat-vector",
+  "effects": "none; cards are translucent tints",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each task keeps its own pastel tint on its card, its dashed leader and a cluster of the cloud; magenta = query, response and preference text; tan = criterion labels",
+  "line_style_means": "dashed grey rounded box = one free-form criterion; dashed coloured line = card-to-cluster link",
+  "shape_means": "tinted rounded card = one task; film strip = video; play button with waveform = audio",
+  "marker_means": "Q = query, R1 and R2 = responses, C1 and C2 = criteria; R1 > R2, R2 > R1 or R2 ~ R1 = preference under that criterion",
+  "emphasis": "Bold magenta preference tags at the right of every criterion box and the opposite verdicts under C1 and C2 in several cards carry the message; the cloud sits in the middle.",
+  "reusable_patterns": [
+   "one card template repeated for every task: title, query, two responses, two dashed criteria boxes with preference tags",
+   "one pastel colour per task carried to the card, a dashed leader and a cluster in a central cloud",
+   "film strip and waveform-with-play-button thumbnails for video and audio items",
+   "preference tags pinned to each criterion instead of ticks and crosses",
+   "cards ringed around a central scatter cloud"
+  ],
+  "weaknesses": [
+   "all text is 4.5 pt",
+   "the central cloud is not explained in the figure or in the sentence that cites it",
+   "cards of very different heights make the ring uneven"
+  ]
+ },
+ "resources": {
+  "own": [
+   "nine benchmark examples with queries, responses, criteria and preferences",
+   "images, film strips, audio waveforms and 3D renders from the data",
+   "the point cloud (presumably from the benchmark data)"
+  ],
+  "stock": [
+   "play button glyph",
+   "piano and violin emoji-style glyphs"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted cards, dashed criteria boxes and leader lines"
+  ],
+  "unknown": [
+   "the data behind the scatter cloud"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "nine pastel task cards",
+   "central scatter cloud",
+   "audio waveforms with play buttons",
+   "video film strips",
+   "candidate responses R1 and R2",
+   "dashed criteria boxes C1 and C2",
+   "preference tags"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "reward model",
+   "omni-modal",
+   "free-form preferences",
+   "preference pairs",
+   "text audio video image 3D",
+   "benchmark tasks",
+   "criteria"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "colour-coded-groups",
+   "verdict-marks",
+   "filmstrip",
+   "embedding-scatter-plot",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "ring-of-cards-with-leaders",
+    "what": "task cards arranged around a central picture and tied to its clusters by dashed leader lines in each card's colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give every task the same card template (title, query, two responses, criteria with verdict tags), tint each card in its own colour and carry that colour to a leader line and a cluster in a central cloud, so many modalities read as one family.",
+  "suits": "Benchmarks or datasets spanning many modality combinations where each task needs one full worked sample and the reader should see the breadth at once."
+ },
+ "tags": [
+  "card-ring",
+  "pastel-tints",
+  "serif-small-text",
+  "dashed-criteria-boxes",
+  "media-thumbnails",
+  "single-column"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Omni-RewardBench (p.3)"
+  ],
+  "evidence": [
+   "Illustration of nine reward modeling tasks in Omni-RewardBench.",
+   "Figure 1 provides an overview of the nine tasks covered in Omni-RewardBench, spanning a wide range of modalities."
+  ]
+ },
+ "summary": "Omni-Reward is a step toward generalist omni-modal reward modelling with free-form preferences, with a benchmark, a dataset and a model. Figure 1 illustrates the nine benchmark tasks. Nine pastel cards, five on the left and four on the right, ring a multicolour scatter cloud and are tied to it by colour-matched dashed leaders. Every card follows one template: a task title (Text-to-Text, Text-Audio-to-Text, Text-to-Audio, Text-to-Video, Text-Video-to-Text, Text-to-Image, Text-Image-to-Image, Text-Image-to-Text, Text-to-3D), a query Q, two candidate responses R1 and R2 as text, waveforms, film strips, images or sword renders, and two dashed free-form criteria C1 and C2, each ending in a preference tag such as R1 > R2. The text is 4.5 pt serif throughout.",
+ "summary_zh": "Omni-Reward提出支持自由形式偏好的全模态奖励建模。图1展示九类任务：九张按任务着色的卡片围绕中央彩色散点云，各含问题Q、候选回答R1/R2和虚线框标准C1/C2及偏好标签。",
+ "confidence": "high",
+ "notes": "The meaning of the central scatter cloud (probably the task clusters of the data) is inferred from the colour-matched leaders; the text that cites the figure does not describe it. The Text-Video-to-Text card prints R2 > R1 under both criteria although R1 is the concrete answer; recorded as printed. Pre-screen kind scope-overview kept; the hub arrangement is a modifier, not a second kind.",
+ "venue": "ICLR26"
+}

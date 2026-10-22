@@ -1,0 +1,474 @@
+{
+ "paper_id": "acl23-0082",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "text-visual in-context learning",
+  "one_liner": "Language-only LLMs solve vision-language tasks by reading verbalised images (captions and labels) inside few-shot prompts.",
+  "domain": [
+   "vision-language tasks with text-only LLMs",
+   "in-context learning",
+   "image verbalisation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "left-to-right chain: image verbalisation, a colour-coded prompt template with two task columns, then the LLM and its answer, joined by word-bearing block arrows",
+  "argues": "A text-only LLM can do vision-and-language tasks if images are first converted into text by captioning and classification models and placed in a few-shot prompt.",
+  "subject": "Image verbalisation by two pre-trained models, the colour-coded prompt template (task description, in-context samples, evaluation sample) and the LLM.",
+  "elements": [
+   {
+    "name": "Image-as-text-representation Extraction",
+    "type": "region",
+    "role": "stage that turns each sample image into text",
+    "drawn_as": "pale yellow frame with a bold title above it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Image Classification Models",
+    "type": "module",
+    "role": "pre-trained classifier that yields a keyword list for the image",
+    "drawn_as": "gold rounded box with dark outline",
+    "container": "Image-as-text-representation Extraction",
+    "is_contribution": false
+   },
+   {
+    "name": "Image Captioning Models",
+    "type": "module",
+    "role": "pre-trained captioner that yields a sentence for the image",
+    "drawn_as": "green rounded box with dark outline",
+    "container": "Image-as-text-representation Extraction",
+    "is_contribution": false
+   },
+   {
+    "name": "lake, mountain, forest, sun, clouds",
+    "type": "data",
+    "role": "classification output for the sample image",
+    "drawn_as": "quoted text under the classification box, thin arrow from the box",
+    "container": "Image-as-text-representation Extraction",
+    "is_contribution": null
+   },
+   {
+    "name": "a view of a lake and mountain at sunset",
+    "type": "data",
+    "role": "caption output for the sample image",
+    "drawn_as": "quoted text under the captioning box, thin arrow from the box",
+    "container": "Image-as-text-representation Extraction",
+    "is_contribution": null
+   },
+   {
+    "name": "append to samples",
+    "type": "operation",
+    "role": "adds the image-as-text representation to the prompt samples",
+    "drawn_as": "hollow block arrow with the words inside, from the yellow frame to the blue frame",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Prompt Text",
+    "type": "region",
+    "role": "the prompt that is fed to the LLM",
+    "drawn_as": "large light-blue frame with a big bold title above it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Task Description",
+    "type": "text-block",
+    "role": "task instruction: a shared opening sentence, then 'answer the question' or 'classify whether the context is <TASK-SPECIFIC-PHRASE>' with 'Possible labels: <TASK-LABELS>'",
+    "drawn_as": "grey boxes with blue text under a row label at the left",
+    "container": "Prompt Text",
+    "is_contribution": null
+   },
+   {
+    "name": "Question Answering / Classification",
+    "type": "label",
+    "role": "the two task types, each with its own template column",
+    "drawn_as": "bold column labels above the template boxes",
+    "container": "Prompt Text",
+    "is_contribution": null
+   },
+   {
+    "name": "In-context Samples",
+    "type": "text-block",
+    "role": "n solved samples, each with image-as-text representation, question and answer (and the sample text for classification)",
+    "drawn_as": "tall pink box per column with bold field names, placeholders in angle brackets and an ellipsis between sample 1 and sample n",
+    "container": "Prompt Text",
+    "is_contribution": null
+   },
+   {
+    "name": "Evaluation Sample",
+    "type": "text-block",
+    "role": "the test sample with its fields filled and an empty Answer: for the model to complete",
+    "drawn_as": "bright green box per column",
+    "container": "Prompt Text",
+    "is_contribution": null
+   },
+   {
+    "name": "prompt",
+    "type": "operation",
+    "role": "hands the finished prompt to the LLM",
+    "drawn_as": "hollow block arrow with the word inside",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Large Language Model",
+    "type": "module",
+    "role": "language model that generates the answer text",
+    "drawn_as": "royal blue box with white text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "generate",
+    "type": "operation",
+    "role": "the LLM writes the sequence that follows the word Answer",
+    "drawn_as": "downward hollow block arrow with rotated text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "answer",
+    "type": "data",
+    "role": "generated output",
+    "drawn_as": "small grey box",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Sample Image",
+    "to": "Image Classification Models",
+    "what": "the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sample Image",
+    "to": "Image Captioning Models",
+    "what": "the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Image Classification Models",
+    "to": "lake, mountain, forest, sun, clouds",
+    "what": "keywords",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Image Captioning Models",
+    "to": "a view of a lake and mountain at sunset",
+    "what": "caption",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Image-as-text-representation Extraction",
+    "to": "Prompt Text",
+    "what": "image-as-text representations fill the Image-as-text-rep. fields of the samples",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompt Text",
+    "to": "Large Language Model",
+    "what": "the assembled prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Large Language Model",
+    "to": "answer",
+    "what": "generated answer after the word Answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Question Answering column",
+    "to": "Classification column",
+    "what": "two alternative template layouts for two task types, sharing the row labels",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "In-context Samples",
+    "to": "Evaluation Sample",
+    "what": "same fields, pink solved samples above, green test sample with empty Answer:",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Image-as-text-representation Extraction",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a sample photo goes to a classification and a captioning model that give a keyword list and a caption",
+    "verdict": "ours"
+   },
+   {
+    "label": "Prompt Text",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "colour-coded prompt template: task description, n in-context samples, the evaluation sample, in a question-answering and a classification column",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Task Description, In-context Samples, Evaluation Sample",
+    "kind": "section",
+    "at": "row labels at the left of the prompt frame",
+    "what": "head the three parts of the prompt"
+   },
+   {
+    "marker": "Question Answering, Classification",
+    "kind": "section",
+    "at": "column labels above the template boxes",
+    "what": "head the two task-type columns"
+   },
+   {
+    "marker": "<1_image_text_rep>, <Sample_n_answer>, <TASK-LABELS> and similar",
+    "kind": "identity",
+    "at": "inside the template boxes",
+    "what": "placeholders for the slots filled per sample or per task"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "sunset over a mountain lake with dark conifers",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo of about 70 x 47 pt inside the yellow frame under the label Sample Image, two thin blue arrows down to the model boxes"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a lake-at-sunset photo verbalised as the keyword list 'lake, mountain, forest, sun, clouds' and the caption 'a view of a lake and mountain at sunset'",
+    "form": "photo with two quoted text outputs",
+    "real_values": true
+   },
+   {
+    "what": "the prompt layout for question answering and classification with placeholders for task phrase, labels, samples, question and answer",
+    "form": "colour-coded text boxes with angle-bracket placeholders",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a tall frame holding three stacked colour-coded sections (grey task description, pink in-context samples, green evaluation sample) in two task columns, with bold field names and placeholders",
+    "parts": [
+     "task description",
+     "in-context samples",
+     "evaluation sample",
+     "placeholders"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "plain royal-blue box with white text, small and at the right edge",
+    "parts": [
+     "Large Language Model box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Title and photo at the top left, down through the two verbalisers, across the append arrow into the Prompt Text frame (top to bottom), then the prompt arrow to the LLM and down to answer."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three zones left to right: a yellow extraction frame (photo on top, two model boxes under it, two quoted outputs below), a very large light-blue Prompt Text frame in the middle with row labels at its left and two template columns, and a narrow right column with the LLM box, a downward generate arrow and the answer box; hollow block arrows with words join the zones.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.3,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "Prompt Text frame (light blue)"
+   },
+   {
+    "hex": "#ebcbef",
+    "used_for": "in-context samples (pink)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "image-as-text extraction frame (pale yellow)"
+   },
+   {
+    "hex": "#76ff7c",
+    "used_for": "evaluation sample (bright green)"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "task description boxes and the answer box (grey)"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "Large Language Model box and the thin blue arrows"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "Image Classification Models box (gold)"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "Image Captioning Models box (green)"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light fill of the hollow block arrows (inferred from area)"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "0.5 pt outlines of frames and boxes"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dark-blue outlines on frames and boxes; thin blue arrow lines; hollow block arrows with black outline",
+  "font": "Calibri sans: 5 pt template text with bold field names, 5.5-6.5 pt labels, 8.5 pt bold left title, 13.5 pt bold Prompt Text title",
+  "corners": "mixed",
+  "arrows": "thin blue arrows with small heads from the photo to the models; hollow block arrows carrying words for the hand-offs",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Yellow = the image verbalisation stage (gold classification box, green captioning box); light-blue frame = the prompt; grey = task description; pink = in-context samples; bright green = the evaluation sample; royal blue = the LLM. The caption names these colours; there is no legend.",
+  "line_style_means": "Thin blue arrows = from the image to its two verbalisers and their outputs; hollow block arrows with words = hand-offs between zones.",
+  "shape_means": "Rounded box = a model; rectangle = a part of the prompt; angle brackets = placeholders; block arrow = a stage hand-off.",
+  "marker_means": "Row labels and column labels head the prompt parts and the two task types; bold field names (Text, Image-as-text-rep., Question, Answer) mark the prompt fields; ellipses stand for n repeated samples.",
+  "emphasis": "The prompt frame is the largest object and carries a title three times the size of the others; the LLM is a small box at the edge.",
+  "reusable_patterns": [
+   "prompt drawn as stacked colour-coded sections with row labels at the left and placeholders in angle brackets",
+   "two task-type columns of the same template sharing the row labels",
+   "one photo verbalised by two models into quoted text outputs under their boxes",
+   "hollow block arrows with words inside (append to samples, prompt, generate) as stage hand-offs",
+   "caption names the colours in parentheses instead of a legend"
+  ],
+  "weaknesses": [
+   "5 pt template text is very small",
+   "colour meaning is given only in the caption, and the caption calls the task description blue while the boxes are grey with blue text",
+   "the sample's two text outputs are tied to the template fields only through one block arrow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a photo with its generated keywords and caption",
+   "the prompt templates with their field names"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "PowerPoint frames, boxes and block arrows"
+  ],
+  "unknown": [
+   "origin of the sunset photo"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "sample photo with two verbaliser boxes",
+   "colour-coded prompt template stack",
+   "grey task description boxes",
+   "pink in-context sample box",
+   "green evaluation sample box",
+   "block arrows labelled append to samples, prompt, generate",
+   "LLM box and answer box"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "in-context learning",
+   "vision-language tasks",
+   "image captioning",
+   "image-as-text representation",
+   "prompt template",
+   "large language model",
+   "verbalisation"
+  ],
+  "tags": [
+   "prompt-template-card",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "hollow-block-arrows",
+    "what": "outlined (hollow) block arrows carry the hand-over between stages and may hold a word"
+   },
+   {
+    "name": "row-labelled-prompt-stack",
+    "what": "a prompt template drawn as stacked sections with row labels at the left and task-type columns on top, one colour per section"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the prompt as a colour-coded stack of labelled sections with placeholders in angle brackets and show two task variants as columns; precede it with a verbalisation stage that turns one photo into quoted text, and join the stages with block arrows that carry a word.",
+  "suits": "In-context learning or prompting methods where the prompt layout is the contribution and inputs of another modality are converted to text first."
+ },
+ "tags": [
+  "colour-coded prompt stack",
+  "block arrows with words",
+  "pastel frames",
+  "photo plus quoted text",
+  "PowerPoint look",
+  "wide prompt panel"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Text-Visual In-Context Learning (p.3)"
+  ],
+  "evidence": [
+   "Model architecture for in-context learning for vision-language tasks.",
+   "The prompt text comprises the task description, in-context sample pairs, and the input of the evaluation sample.",
+   "The language model is expected to generate a text sequence that follows the word Answer"
+  ]
+ },
+ "summary": "The paper asks whether language-only large language models can handle vision-language tasks when images are given as text, and compares open models against GPT-3 on five tasks. Figure 1 shows the pipeline from left to right. A yellow frame turns a sample photo into text with an image classification model and an image captioning model, giving a keyword list and a caption. A block arrow appends these to the samples of a blue Prompt Text frame, built from a grey task description, pink in-context samples and a green evaluation sample, in two columns for question answering and classification, all written with placeholders. The prompt goes to a blue LLM box, which generates the answer.",
+ "summary_zh": "论文探究只懂文字的大模型如何做视觉语言任务：先用图像分类和描述模型把图片转成文字，再拼进提示。图 1 自左向右：黄色框中示例照片得到关键词与描述，追加到蓝色提示文本（任务说明、粉色示例、绿色评测样本），交给 LLM 生成答案。",
+ "confidence": "high",
+ "notes": "Prior label kept (stage-pipeline). Two titled frames are counted as panels (extraction and Prompt Text); the LLM and answer column has no title. The digest lists a second small bitmap (29 x 15 pt) that I could not identify on the picture. Task description boxes are grey with blue text inside the blue frame, whereas the caption says blue.",
+ "venue": "ACL23"
+}

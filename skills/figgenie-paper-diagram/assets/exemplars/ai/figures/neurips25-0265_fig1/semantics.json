@@ -1,0 +1,508 @@
+{
+ "paper_id": "neurips25-0265",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CS-Probing (Coefficient Significance Probing)",
+  "one_liner": "Probing study of neural combinatorial optimization models (AM, POMO, LEHD) that reads their hidden embeddings at fixed positions and analyses probe coefficients and significance.",
+  "domain": [
+   "neural combinatorial optimization",
+   "model probing / interpretability",
+   "routing (TSP)"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "two encoder-decoder transformer solvers drawn in the same grammar, each tapped by red probe cones at fixed positions",
+  "argues": "Both families of NCO solvers, one with its attention depth in the encoder and one in the decoder, expose embeddings at a few well-defined positions that can be probed.",
+  "subject": "Block diagrams of the HELD (AM, POMO) and LEHD architectures from node features to next-node probabilities, with six probe positions marked.",
+  "elements": [
+   {
+    "name": "x0 x1 ... xN",
+    "type": "data",
+    "role": "raw node features fed as input (e.g. xy coordinates for TSP)",
+    "drawn_as": "strip of five pale-cream cells with serif italic labels",
+    "container": "Encoder inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "Linear Projection (encoder)",
+    "type": "module",
+    "role": "projects raw node features into a high-dimensional space",
+    "drawn_as": "orange box, bold sans label",
+    "container": "Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Layer × L",
+    "type": "module",
+    "role": "multiple attention layers integrate abstract features across nodes (panel a, encoder)",
+    "drawn_as": "light-blue box with L as italic multiplier",
+    "container": "Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Layer × 1",
+    "type": "module",
+    "role": "single attention layer in the LEHD encoder (panel b)",
+    "drawn_as": "light-blue box, same style as the L-layer box",
+    "container": "Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "h0 h1 ... hN",
+    "type": "data",
+    "role": "final representation of each node, output of the encoder",
+    "drawn_as": "strip of cells shading from pink through orange to lavender",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Context Embedding",
+    "type": "module",
+    "role": "builds the decoding context in the HELD decoder",
+    "drawn_as": "wide box with a red-to-lavender gradient fill",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Head Attention",
+    "type": "module",
+    "role": "attention step in the HELD decoder",
+    "drawn_as": "lavender box",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Compatibility",
+    "type": "module",
+    "role": "compatibility calculation that scores nodes",
+    "drawn_as": "pale-green box",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Softmax",
+    "type": "operation",
+    "role": "turns scores into the selection probability of the next node",
+    "drawn_as": "orange box",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "p0 p1 ... pN",
+    "type": "data",
+    "role": "selection probabilities over nodes",
+    "drawn_as": "strip of grey cells",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "hs and hd",
+    "type": "data",
+    "role": "two extra single-cell embeddings fed to the LEHD decoder next to the node embeddings (meaning not given in the figure)",
+    "drawn_as": "one pale-yellow and one light-blue cell flanking the h strip",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Linear Projection (LEHD decoder, x3)",
+    "type": "module",
+    "role": "projects hs, hd and the decoder attention output",
+    "drawn_as": "orange boxes",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Layer × L (LEHD decoder)",
+    "type": "module",
+    "role": "L attention layers placed in the decoder instead of the encoder",
+    "drawn_as": "light-blue box",
+    "container": "Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder",
+    "type": "container",
+    "role": "groups the input projection and the attention layers",
+    "drawn_as": "dashed rounded region with a small plain label at the lower left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder",
+    "type": "container",
+    "role": "groups the modules that produce next-node probabilities",
+    "drawn_as": "dashed rounded region with a small plain label at the lower right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "P1 P2 P3 P4 P5 P6",
+    "type": "icon",
+    "role": "positions where hidden embeddings are extracted for probing",
+    "drawn_as": "red tapered cones pointing at arrows, each with a bold red label",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "x0 x1 ... xN",
+    "to": "Linear Projection (encoder)",
+    "what": "raw node features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Linear Projection (encoder)",
+    "to": "Attention Layer × L",
+    "what": "projected features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attention Layer × L",
+    "to": "h0 h1 ... hN",
+    "what": "node representations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h0 h1 ... hN (a)",
+    "to": "Context Embedding, Multi-Head Attention, Compatibility",
+    "what": "node embeddings tapped by a bracket line with three arrowheads",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context Embedding",
+    "to": "Multi-Head Attention, then Compatibility, Softmax and p strip",
+    "what": "decoder chain ending in selection probabilities",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x strip (b)",
+    "to": "Linear Projection, Attention Layer × 1, h strip",
+    "what": "light encoder chain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h strip (b)",
+    "to": "hs, h strip copy, hd",
+    "what": "embeddings sent along a top rail that splits into three arrows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hs, hd, h strip copy",
+    "to": "Attention Layer × L (LEHD decoder)",
+    "what": "hs and hd pass through their own Linear Projection, then all three merge into the attention stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attention Layer × L (LEHD decoder)",
+    "to": "p strip (b)",
+    "what": "through Linear Projection and Softmax",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P1 to P6",
+    "to": "the arrow each cone points at",
+    "what": "hidden embedding extracted for probing",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Encoder / Decoder regions",
+    "to": "the modules inside",
+    "what": "grouping",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "panel (a) modules",
+    "to": "panel (b) modules",
+    "what": "same module types share the same fill (orange projection and softmax, blue attention), so the two designs line up",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "HELD structure as in AM and POMO: L attention layers in the encoder; decoder with context embedding, multi-head attention, compatibility, softmax; probes P1 to P4",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "LEHD structure: one encoder attention layer; decoder takes hs, hd and node embeddings through L attention layers; probes P5 and P6",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "P1 to P6",
+    "kind": "identity",
+    "at": "red cones beside the arrows",
+    "what": "names the probe positions: P1 and P2 around the HELD encoder, P3 and P4 inside the HELD decoder, P5 at the LEHD encoder output, P6 inside the LEHD decoder"
+   },
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "below each panel",
+    "what": "heads the HELD panel and the LEHD panel"
+   },
+   {
+    "marker": "x_i, h_i, p_i",
+    "kind": "identity",
+    "at": "cells of the three strips",
+    "what": "names the per-node input features, embeddings and probabilities"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "thin red tapered cone (trumpet shape) with a bold red label",
+    "stands_for": "a probe tapped onto the hidden state at that arrow",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small cells labelled x_0..x_N, h_0..h_N and p_0..p_N, with a colour gradient across the h cells and grey for probabilities",
+    "parts": [
+     "x strip",
+     "h strip",
+     "p strip"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a single light-blue box named Attention Layer with a multiplier (x L or x 1), not opened into attention and feed-forward parts",
+    "parts": [
+     "Attention Layer × L"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "two dashed rounded regions labelled Encoder and Decoder that contain ordinary boxes instead of trapezoids",
+    "parts": [
+     "Encoder region",
+     "Decoder region"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "orange boxes labelled Linear Projection",
+    "parts": [
+     "Linear Projection"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "probe-tap",
+    "drawn_as": "a narrow red cone whose tip touches the arrow between two modules, label P1..P6 at its wide end",
+    "parts": [
+     "cone",
+     "P label"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the bottom-left input strip of (a), climbs through the encoder to the h strip, crosses to the decoder and descends to the p strip; (b) repeats it, red P labels catch the eye on the way."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side, split by a thin vertical rule; each has an encoder region on the left with data flowing upward and a decoder region on the right with data flowing downward, and the red probe cones stick out of the margins into the whitespace.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.97,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fad7ac",
+    "used_for": "Linear Projection and Softmax boxes"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "Attention Layer boxes and the hd cell"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "Multi-Head Attention box, last h cells, end of the Context Embedding gradient"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "Compatibility box"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "first h cell and start of the Context Embedding gradient"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "second h cell"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "hs cell and warm cell tints"
+   },
+   {
+    "hex": "#fffbf0",
+    "used_for": "input x cells"
+   },
+   {
+    "hex": "#d4d4d4",
+    "used_for": "output probability cells p0..pN"
+   },
+   {
+    "hex": "#e51400",
+    "used_for": "probe cones and P labels"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.5 pt black outlines on boxes and arrows; strips outlined in dark violet or gold; encoder and decoder regions in dashed black",
+  "font": "sans (Arial), 4.5 pt bold box labels, 5 pt bold red P labels, 4 pt plain Encoder / Decoder labels, 7 pt bold panel letters; serif italics for x, h, p symbols",
+  "corners": "mixed",
+  "arrows": "thin black orthogonal lines with small filled heads; no dashes; a top rail and a bracket line fan the embeddings out to several modules",
+  "rendering": "flat-vector",
+  "effects": "none (one gradient fill on Context Embedding)",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each module type keeps its pastel fill in both panels (orange projection and softmax, blue attention, lavender multi-head attention, green compatibility); grey = output probabilities; red = probes only",
+  "line_style_means": "dashed rounded outline = encoder or decoder region; solid black arrow = data flow",
+  "shape_means": "strips of cells = per-node vectors; red tapered cone = probe tap on the arrow it touches",
+  "marker_means": "P1 to P6 name probe positions; (a) and (b) name the two architectures",
+  "emphasis": "red is the only saturated colour and appears only on the probes, so the probe positions stand out from the pastel anatomy",
+  "reusable_patterns": [
+   "red tapered cone touching an arrow, labelled P1..Pn, to mark where a model is read out",
+   "same fill for the same module type across the two compared architectures",
+   "cell strips for per-node tensors with a colour ramp across the cells",
+   "dashed rounded Encoder / Decoder regions around ordinary boxes",
+   "thin vertical rule and bold letters under each panel"
+  ],
+  "weaknesses": [
+   "very small type (3.5 to 5 pt) in a 402 pt wide figure",
+   "the meaning of hs and hd is not stated in the figure",
+   "Encoder and Decoder labels sit on the dashed borders"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "cell strips",
+   "dashed regions",
+   "red probe cones"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "encoder and decoder dashed regions",
+   "Linear Projection box",
+   "Attention Layer × L box",
+   "node-embedding cell strip",
+   "red probe cones P1 to P6",
+   "Softmax box and probability strip"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "neural combinatorial optimization",
+   "probing",
+   "TSP",
+   "attention model",
+   "POMO",
+   "LEHD",
+   "interpretability",
+   "encoder-decoder"
+  ],
+  "tags": [
+   "layer-probe-taps",
+   "token-strip"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Mark the places where a model is read out by touching the exact arrow between two blocks with one saturated-colour glyph (a thin red cone) and a numbered label, on an otherwise pastel anatomy; draw two architectures in the same colour grammar so only the depth placement differs.",
+  "suits": "Interpretability, probing or activation-extraction papers that tap hidden states of one or two network families at named positions."
+ },
+ "tags": [
+  "pastel-boxes",
+  "dashed-regions",
+  "red-probe-cones",
+  "cell-strips",
+  "two-panel",
+  "drawio-look"
+ ],
+ "provenance": {
+  "sections": [
+   "2 NCO model background (p.2)"
+  ],
+  "evidence": [
+   "The red arrows in the figure indicate the positions where we probe the model, extracting the embeddings.",
+   "(a) represents the HELD structure, as seen in AM and POMO, while (b) represents the LEHD structure.",
+   "raw features of nodes (e.g., xy coordinates in the Euclidean space) are first fed as inputs."
+  ]
+ },
+ "summary": "The paper probes neural combinatorial optimization (NCO) solvers to see what their hidden representations encode, and introduces CS-Probing. Figure 1 draws the two transformer-based architecture families that are probed. Panel (a) is the HELD structure of AM and POMO: a node-feature strip is linearly projected, passed through L attention layers into node embeddings, then a decoder of context embedding, multi-head attention, compatibility and softmax gives next-node probabilities. Panel (b) is LEHD, with one encoder attention layer and L attention layers in the decoder. Pastel boxes keep one colour per module type, dashed rounded regions mark encoder and decoder, and red tapered cones labelled P1 to P6 point at the arrows where embeddings are extracted.",
+ "summary_zh": "图1画出被探测的两类Transformer神经组合优化模型：(a) AM/POMO 的 HELD 结构，(b) LEHD 结构。淡色方框按模块类型着色，虚线框分编码器与解码器，红色细锥形 P1–P6 标出提取嵌入的探测位置。",
+ "confidence": "high",
+ "notes": "Pre-screen label 'red trumpet markers' confirmed: they are narrow red cones touching the arrow they read. The single placed bitmap (54 x 8 pt) is the red-to-lavender gradient of the Context Embedding box, not a data sample. The expansion of HELD and LEHD is not given in the figure; the drawing only shows the attention depth L in the encoder for (a) and in the decoder for (b).",
+ "venue": "NeurIPS25"
+}

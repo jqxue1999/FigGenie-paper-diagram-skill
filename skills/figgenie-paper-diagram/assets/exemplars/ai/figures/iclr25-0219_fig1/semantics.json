@@ -1,0 +1,572 @@
+{
+ "paper_id": "iclr25-0219",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LoKU (Low-rank Knowledge Unlearning)",
+  "one_liner": "LLM unlearning with an Inverted Hinge Loss (IHL) instead of gradient ascent and a Fisher-weighted LoRA initialization (FILA) for robust, parameter-efficient forgetting.",
+  "domain": [
+   "machine unlearning",
+   "LLM fine-tuning",
+   "low-rank adaptation"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy",
+   "contribution-mosaic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two baseline-versus-proposed pairs (GA vs IHL loss boxes side by side, default vs FILA LoRA initialisation stacked) next to a small set-up illustration on one grey board",
+  "argues": "Unlike gradient ascent, IHL lowers only the unwanted token and lifts the next likely one; FILA puts the weights that matter for the forget data into LoRA adapters first.",
+  "subject": "A grey board with the unlearning set-up, a token-probability comparison of two losses on one query, and two LoRA initialisations drawn on the same weight blocks.",
+  "elements": [
+   {
+    "name": "Machine Unlearning for LLMs",
+    "type": "container",
+    "role": "zone that states the task: forget part of the data without retraining",
+    "drawn_as": "underlined bold title over the cylinder, two robots and a speech bubble",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Please remove my data!",
+    "type": "text-block",
+    "role": "a user's removal request that motivates the unlearning step",
+    "drawn_as": "white rounded speech bubble at the top of the zone, next to an orange ID-book icon",
+    "container": "Machine Unlearning for LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "Retain set D_r / Forget set D_f",
+    "type": "data",
+    "role": "the two parts of the dataset: knowledge to keep and data to forget",
+    "drawn_as": "one database cylinder, blue upper part for the retain set and orange lower part for the forget set, tied to the labels by brackets",
+    "container": "Machine Unlearning for LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "Dataset D = D_f ∪ D_r",
+    "type": "label",
+    "role": "the whole dataset as the union of forget and retain sets",
+    "drawn_as": "caption with a math formula under the cylinder",
+    "container": "Machine Unlearning for LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "Pretrained LLM",
+    "type": "module",
+    "role": "model before unlearning",
+    "drawn_as": "cartoon robot on treads with an orange and a blue exclamation mark",
+    "container": "Machine Unlearning for LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "Unlearned LLM",
+    "type": "module",
+    "role": "model after unlearning",
+    "drawn_as": "the same robot with a blue exclamation mark and an orange question mark",
+    "container": "Machine Unlearning for LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "Gradient Ascent (GA) vs. Inverted Hinge Loss (IHL)",
+    "type": "container",
+    "role": "zone that compares the two objectives on one query",
+    "drawn_as": "underlined bold title over a query line and two white boxes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Query: Did you put your name in the Goblet of Fire, ____",
+    "type": "text-block",
+    "role": "prompt whose next token is to be forgotten",
+    "drawn_as": "bold 'Query:' then orange text ending in a blank line",
+    "container": "Gradient Ascent (GA) vs. Inverted Hinge Loss (IHL)",
+    "is_contribution": false
+   },
+   {
+    "name": "GA box",
+    "type": "container",
+    "role": "gradient ascent: Harry down, or up, Neo and 42 up; loss L_GA = p_theta(x_t | x_<t)",
+    "drawn_as": "white rounded box; orange 'Harry' with a red down arrow, 'or' with a green up arrow, grey 'Neo' and '42' with green up arrows; formula at the bottom",
+    "container": "Gradient Ascent (GA) vs. Inverted Hinge Loss (IHL)",
+    "is_contribution": false
+   },
+   {
+    "name": "IHL box",
+    "type": "container",
+    "role": "inverted hinge loss: Harry down, or up, Neo and 42 unchanged; loss L_IHL = 1 + p_theta(x_t | x_<t) - max over v != x_t of p_theta(v | x_<t)",
+    "drawn_as": "white rounded box, same grammar as the GA box but with dashes after Neo and 42",
+    "container": "Gradient Ascent (GA) vs. Inverted Hinge Loss (IHL)",
+    "is_contribution": true
+   },
+   {
+    "name": "Default LoRA Initialization",
+    "type": "container",
+    "role": "baseline: pretrained weight W with adapters B = 0 and A drawn from a Gaussian",
+    "drawn_as": "underlined bold title over a gradient rectangle and two grey trapezoids",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Pretrained Weight W",
+    "type": "module",
+    "role": "frozen pretrained weight matrix of size d x k",
+    "drawn_as": "rectangle filled with a blue-to-orange gradient, snowflake at its lower left",
+    "container": "Default LoRA Initialization",
+    "is_contribution": false
+   },
+   {
+    "name": "B = 0 and A ~ N(0, sigma^2)",
+    "type": "module",
+    "role": "the two trainable low-rank factors under the default initialisation",
+    "drawn_as": "two grey trapezoids, one above the other, each with a flame icon",
+    "container": "Default LoRA Initialization",
+    "is_contribution": false
+   },
+   {
+    "name": "Fisher-weighted Initialization (FILA)",
+    "type": "container",
+    "role": "proposed: weighted low-rank approximation of W puts the parts important for the forget data into the adapters",
+    "drawn_as": "underlined bold title over an objective formula, a blue rectangle and two orange trapezoids",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "min ||diag(F_W^rel 1)^(1/2) (W - BA)||_2",
+    "type": "formula",
+    "role": "objective of the weighted low-rank approximation over B in R^(d x r) and A in R^(r x k)",
+    "drawn_as": "serif math printed above the blocks",
+    "container": "Fisher-weighted Initialization (FILA)",
+    "is_contribution": true
+   },
+   {
+    "name": "W - B*A*",
+    "type": "module",
+    "role": "the frozen residual weight after the adapters are extracted",
+    "drawn_as": "solid blue rectangle with a snowflake at its lower left, label in white math",
+    "container": "Fisher-weighted Initialization (FILA)",
+    "is_contribution": true
+   },
+   {
+    "name": "B* and A*",
+    "type": "module",
+    "role": "initial trainable adapters, B* in R^(d x r) and A* in R^(r x k)",
+    "drawn_as": "two orange trapezoids, each with a flame icon",
+    "container": "Fisher-weighted Initialization (FILA)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Dataset D",
+    "to": "Pretrained LLM",
+    "what": "the data (retain and forget parts) the model is tied to",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pretrained LLM",
+    "to": "Unlearned LLM",
+    "what": "unlearning turns the pretrained model into the unlearned one",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Please remove my data!",
+    "to": "ID-book icon and robots",
+    "what": "the removal request that triggers unlearning; no connector",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Query",
+    "to": "GA box and IHL box",
+    "what": "the same query is analysed under both losses",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "GA box",
+    "to": "IHL box",
+    "what": "same grammar of candidate tokens with arrows and a loss formula; GA raises Neo and 42, IHL leaves them unchanged",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Default LoRA Initialization",
+    "to": "Fisher-weighted Initialization (FILA)",
+    "what": "the same W, B and A blocks drawn twice; grey adapters with a mixed-colour W against orange adapters and a blue residual W",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "FILA objective",
+    "to": "B* and A*",
+    "what": "the minimiser of the weighted low-rank approximation gives the initial adapters",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "W block",
+    "to": "B and A trapezoids",
+    "what": "adapters stand beside the weight block; no sum node or arrow is drawn",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "orange items (forget set, query text, token Harry, ID-book, B* and A*)",
+    "to": "each other",
+    "what": "orange marks material tied to the forget data across the board",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Machine Unlearning for LLMs",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "dataset split into retain and forget sets, a pretrained robot that becomes an unlearned robot after a removal request",
+    "verdict": "setting"
+   },
+   {
+    "label": "Gradient Ascent (GA) vs. Inverted Hinge Loss (IHL)",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "one query, four candidate tokens, probability arrows and loss formula for each loss",
+    "verdict": "ours"
+   },
+   {
+    "label": "Default LoRA Initialization",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "weight W with grey adapters B = 0 and A ~ N(0, sigma^2), flames on adapters and snowflake on W",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Fisher-weighted Initialization (FILA)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "weighted low-rank objective, residual W - B*A* in blue with a snowflake, orange adapters B* and A* with flames",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "underlined bold titles",
+    "kind": "section",
+    "at": "top of each zone",
+    "what": "head the four zones; no letters or step numbers are used"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "boxy cartoon robot on treads with a waveform on its chest and an antenna",
+    "stands_for": "the LLM before and after unlearning (exclamation marks versus a question mark show its state)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "blue and orange exclamation marks and an orange question mark",
+    "stands_for": "what the model knows versus what it has forgotten",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "database cylinder in blue and orange",
+    "stands_for": "the dataset with its retain and forget parts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "orange ID book with a person outline",
+    "stands_for": "the data owner's personal record",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red flame",
+    "stands_for": "trainable adapter",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "blue snowflake",
+    "stands_for": "frozen weight",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one unlearning query 'Did you put your name in the Goblet of Fire, ____' with candidate next tokens Harry, or, Neo and 42",
+    "form": "orange query text above two white boxes listing the tokens with red down, green up or dash marks",
+    "real_values": true
+   },
+   {
+    "what": "the two loss formulas L_GA and L_IHL written under their boxes",
+    "form": "serif math in the boxes",
+    "real_values": true
+   },
+   {
+    "what": "initialisation values: B = 0, A ~ N(0, sigma^2) versus B* in R^(d x r), A* in R^(r x k) and W - B*A* in R^(d x k)",
+    "form": "math labels on the weight blocks, plus the FILA objective above them",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "a large weight rectangle W with two trapezoids B and A stacked to its right, no sum node; drawn twice with the adapters grey (default) or orange (FILA)",
+    "parts": [
+     "W rectangle",
+     "B trapezoid",
+     "A trapezoid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "blue snowflake on each weight block W, red flame on each adapter trapezoid",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a cartoon robot on treads; its state is shown by exclamation marks (knows) or a question mark (forgot)",
+    "parts": [
+     "robot",
+     "status marks",
+     "label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-cylinder",
+    "drawn_as": "a database cylinder split into a blue retain part and an orange forget part, with brackets to the labels",
+    "parts": [
+     "cylinder",
+     "brackets",
+     "labels"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "a single white speech bubble 'Please remove my data!' at the top, with an ID-book icon instead of an avatar",
+    "parts": [
+     "bubble",
+     "ID-book icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-probability-arrows",
+    "drawn_as": "candidate next tokens in a column, each followed by a red down arrow, a green up arrow or a dash for the change of its probability",
+    "parts": [
+     "token words",
+     "arrows",
+     "dashes"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the 'Machine Unlearning for LLMs' title top left, follows the arrows from dataset to the two robots, drops to the GA versus IHL boxes, then jumps to the right column and reads default LoRA initialisation above FILA."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One rounded grey board cut by black lines into a left column (set-up above, GA vs IHL below) and a right column with two titled halves (default LoRA initialisation above, FILA below); white boxes hold the two loss cases.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "panel-frames",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.44,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e8e8e8",
+    "opacity": 0.5,
+    "used_for": "grey board behind all zones"
+   },
+   {
+    "hex": "#1b75b2",
+    "used_for": "blue: retain-set part of the cylinder and the residual weight W - B*A*"
+   },
+   {
+    "hex": "#76acd1",
+    "used_for": "light blue lid of the cylinder"
+   },
+   {
+    "hex": "#ff7a05",
+    "used_for": "orange: forget-set part of the cylinder, orange adapters B* and A*, query text, token Harry, ID-book icon"
+   },
+   {
+    "hex": "#ffaf69",
+    "used_for": "light orange in the gradient of the pretrained weight and shading of icons"
+   },
+   {
+    "hex": "#aeaeae",
+    "used_for": "grey default-initialisation adapters B and A"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "white loss boxes and speech bubble"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy outlines of blue and orange blocks"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "mixed",
+  "stroke": "0.75 pt black outlines on boxes and zone dividers, 1 pt dark navy outlines on blocks and icons",
+  "font": "bold sans (Arial) 7.5 pt for titles and labels, Cambria Math italic for symbols and formulas, 5.5 pt and 4.5 pt for sub- and superscripts",
+  "corners": "mixed",
+  "arrows": "two thick flat black arrows between dataset and robots; fat red down and green up block arrows for probability change; no connectors elsewhere",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "orange = forget set and material tied to it (cylinder part, query, token Harry, ID book, FILA adapters), blue = retain set and retained weights; the blue-to-orange gradient on W reads as pretrained weights that mix both (inferred, no legend); grey = default adapters and unlikely tokens; green up arrow = probability raised, red down arrow = lowered",
+  "line_style_means": "thick black arrows = unlearning flow from data to pretrained to unlearned model; black lines cut the board into zones; brackets tie labels to cylinder parts",
+  "shape_means": "cylinder = dataset, robot = LLM, rectangle = weight matrix, trapezoids = low-rank factors B and A, white rounded boxes = loss cases",
+  "marker_means": "red down arrow, green up arrow and dash = probability decreased, increased, unchanged; flame = trainable, snowflake = frozen",
+  "emphasis": "the proposed items are not labelled 'ours'; they differ by dashes instead of up arrows and by orange adapters with a blue residual; zone titles are bold and underlined",
+  "reusable_patterns": [
+   "grey board cut into titled zones by black lines",
+   "candidate tokens listed with down, up or dash marks over a loss formula to contrast two objectives",
+   "weight matrix drawn as a gradient rectangle that becomes a blue frozen part plus orange trainable adapters",
+   "snowflake and flame icons on blocks as the frozen/trainable key",
+   "robot icon with exclamation versus question mark for before and after unlearning",
+   "database cylinder split in two colours with brackets for retain and forget sets",
+   "the same adapter drawing repeated for baseline and proposed with only colours and labels changed"
+  ],
+  "weaknesses": [
+   "no legend explains orange versus blue; it has to be read from context and caption",
+   "7.5 pt labels with subscripts and superscripts in formulas are small at double-column width",
+   "the proposed side is not marked 'ours', the caption has to carry that",
+   "the exclamation and question marks on the robots are ambiguous without text"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the example query and its candidate tokens",
+   "the loss and initialisation formulas"
+  ],
+  "stock": [
+   "robot, cylinder, ID-book, exclamation, question-mark, flame and snowflake icons in a flat clip-art style"
+  ],
+  "generated": [],
+  "drawn": [
+   "grey board and zone dividers",
+   "weight rectangles and trapezoids",
+   "loss boxes and arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey board in four zones",
+   "blue and orange database cylinder",
+   "pretrained and unlearned robot icons",
+   "speech bubble 'Please remove my data!'",
+   "two white loss boxes with token arrows and formulas",
+   "weight rectangle with A and B trapezoids carrying flame and snowflake icons",
+   "FILA objective formula"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "machine unlearning",
+   "LLM",
+   "LoRA",
+   "inverted hinge loss",
+   "gradient ascent",
+   "Fisher information",
+   "initialization",
+   "forget set",
+   "retain set"
+  ],
+  "tags": [
+   "module-state-coding",
+   "colour-coded-groups",
+   "equation-boxes",
+   "highlighted-text-spans",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "token-probability-arrows",
+    "what": "candidate next tokens listed with red down, green up or dash marks to show how a loss moves each token's probability"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Contrast two objectives in two identical white boxes: the same candidate tokens with down, up or dash marks and the loss formula underneath. Keep one colour (orange) for everything tied to the forget data so that a weight matrix can visibly split into a frozen blue part and trainable orange adapters.",
+  "suits": "Training-objective or initialisation contributions in LLM papers that can be explained on one toy query and a weight-matrix sketch."
+ },
+ "tags": [
+  "grey-board-zones",
+  "paired-contrast-boxes",
+  "frozen-flame-icons",
+  "robot-icons",
+  "formula-boxes",
+  "orange-vs-blue"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "LLM unlearning aims to forget data points in Df while maintaining knowledge of the retain set Dr.",
+   "IHL, which replaces each unwanted token with the next most-probable one",
+   "FILA extracts and places parameters important in generating Df to LoRA weights a priori via weighted low-rank approximation."
+  ]
+ },
+ "summary": "LoKU (Low-rank Knowledge Unlearning) makes LLM unlearning robust and parameter-efficient with two parts: the Inverted Hinge Loss (IHL) and a Fisher-weighted LoRA initialization (FILA). Figure 1 is one grey board in four titled zones. Top left sets the task: a dataset cylinder split into retain (blue) and forget (orange) sets, and a pretrained robot that becomes an unlearned robot after a user says 'Please remove my data!'. Bottom left compares gradient ascent and IHL on the query 'Did you put your name in the Goblet of Fire, ____': candidate tokens carry red-down, green-up or dash marks, with the loss formula beneath. The right column contrasts default LoRA initialization (B = 0, A random, grey) with FILA, which splits W into a frozen blue part and orange trainable B* and A*, marked with snowflake and flame icons.",
+ "summary_zh": "LoKU 用倒置合页损失（IHL）和 Fisher 加权 LoRA 初始化（FILA）实现稳健省参的大模型遗忘。图 1 灰色底板分四区：遗忘任务设定、GA 与 IHL 的词概率对比、默认与 FILA 初始化对比，雪花与火焰标冻结和可训练。",
+ "confidence": "high",
+ "notes": "The prior pass put contribution-mosaic first and stage-pipeline last; side-by-side-contrast is primary here because two of the three zones are baseline-versus-proposed pairs, and stage-pipeline is dropped (the dataset to pretrained to unlearned chain has only three items). The meaning of 'or' as the next most likely token and of greyed Neo and 42 as unlikely tokens is read from the paper's description of IHL, not from labels. The orange-versus-blue reading of the weight gradient is inferred by colour matching; the figure has no legend.",
+ "venue": "ICLR25"
+}

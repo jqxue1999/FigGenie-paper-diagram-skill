@@ -1,0 +1,360 @@
+{
+ "paper_id": "acl24-0005",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WRP (Weight Recover Prune)",
+  "one_liner": "One-shot 2:4 pruning for LLMs that recovers a few critical pruned weights and stores them separately in sparse CSR form.",
+  "domain": [
+   "LLM pruning",
+   "structured sparsity",
+   "model compression"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "one toy 4x8 weight matrix of numbered cells redrawn as dense, 2:4 pruned and recover-weight grids, then compressed into value, index and CSR arrays",
+  "argues": "2:4 pruning loses some critical weights; recovering a small set and storing it in CSR beside the 2:4 pattern keeps accuracy while the extra index storage stays small.",
+  "subject": "Toy 4x8 weight matrix pruned to 2:4 (values plus 2-bit indices) with recovered weights stored as CSR arrays.",
+  "elements": [
+   {
+    "name": "dense matrix (weight)",
+    "type": "data",
+    "role": "the original weight matrix, 32 entries numbered 1 to 32",
+    "drawn_as": "4 x 8 grid of green cells with black borders and numbers",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "prune",
+    "type": "operation",
+    "role": "keeps two of every four weights in a row",
+    "drawn_as": "short label above a straight arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "2:4 pattern",
+    "type": "data",
+    "role": "the matrix after 2:4 pruning: two kept (green) and two pruned (white) cells in every group of four",
+    "drawn_as": "4 x 8 grid, kept cells green with numbers, pruned cells white",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Compress as 2:4",
+    "type": "operation",
+    "role": "stores the kept weights densely plus their positions",
+    "drawn_as": "label above a straight arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Values",
+    "type": "data",
+    "role": "the kept weights packed row by row (1 4 7 8 / 9 10 13 16 / 19 20 23 24 / 26 27 29 30)",
+    "drawn_as": "4 x 4 grid of green numbered cells",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "2-bit indices",
+    "type": "data",
+    "role": "positions of the kept weights inside each group of four",
+    "drawn_as": "4 x 4 grid of orange cells without numbers",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "recover weight",
+    "type": "data",
+    "role": "the few critical weights that 2:4 pruning would drop (2, 5, 11, 25), kept in a separate sparse matrix",
+    "drawn_as": "4 x 8 grid, four blue numbered cells on white",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Compress as CSR",
+    "type": "operation",
+    "role": "stores the recover matrix in compressed sparse row format",
+    "drawn_as": "label above a straight arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "RowOffsets",
+    "type": "data",
+    "role": "CSR row pointers 0 2 3 3 4",
+    "drawn_as": "orange strip of five numbered cells",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "ColInd",
+    "type": "data",
+    "role": "CSR column indices 1 4 2 0",
+    "drawn_as": "orange strip of four numbered cells",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Values (CSR)",
+    "type": "data",
+    "role": "the recovered weights 2 5 11 25",
+    "drawn_as": "blue strip of four numbered cells",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "dense matrix (weight)",
+    "to": "2:4 pattern",
+    "what": "prune",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2:4 pattern",
+    "to": "Values",
+    "what": "Compress as 2:4: kept weights packed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2:4 pattern",
+    "to": "2-bit indices",
+    "what": "Compress as 2:4: positions of the kept weights",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2:4 pattern",
+    "to": "recover weight",
+    "what": "unlabelled arrow; the recovered cells 2, 5, 11, 25 are white in the 2:4 pattern, so they are picked among the pruned weights",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "recover weight",
+    "to": "RowOffsets, ColInd, Values (CSR)",
+    "what": "Compress as CSR",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green cells in dense matrix, 2:4 pattern and Values",
+    "to": "each other",
+    "what": "same numbers mark the same weight through the steps",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "2-bit indices, RowOffsets, ColInd",
+    "to": "each other",
+    "what": "orange marks index storage, the extra overhead named in the caption",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1 ... 32",
+    "kind": "identity",
+    "at": "cells of the dense matrix, the 2:4 pattern and the Values grid",
+    "what": "number every weight so it can be followed from the dense matrix into the compressed values"
+   },
+   {
+    "marker": "2, 5, 11, 25",
+    "kind": "identity",
+    "at": "blue cells of the recover weight grid and the CSR Values strip",
+    "what": "the recovered weights keep their original numbers"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy 4 x 8 matrix with numbered entries, its 2:4 pattern and the CSR arrays RowOffsets 0 2 3 3 4, ColInd 1 4 2 0, Values 2 5 11 25",
+    "form": "grids and strips of numbered coloured cells",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "sparsity-2-4-pattern",
+    "drawn_as": "4 x 8 grid with two kept green cells in every group of four columns of each row and white pruned cells, next to a packed values grid and an index grid",
+    "parts": [
+     "pattern grid",
+     "values grid",
+     "2-bit index grid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "csr-arrays",
+    "drawn_as": "three strips named RowOffsets, ColInd and Values under each other",
+    "parts": [
+     "RowOffsets",
+     "ColInd",
+     "Values"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Dense matrix at the top left, right along the top row to the compressed 2:4 arrays, then down the single arrow to the recover weight grid and right to the CSR strips."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "Top row left to right: dense matrix, prune arrow, 2:4 pattern, Compress as 2:4 arrow, then a green Values grid and an orange 2-bit indices grid at the right. One vertical arrow drops from the 2:4 pattern to a second row: the recover weight grid, a Compress as CSR arrow and three stacked CSR strips at the right. Matrix names sit under the grids and operation names above the arrows.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.41,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a9d18e",
+    "used_for": "kept weights: dense matrix cells, kept cells of the 2:4 pattern and the Values grid"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "index storage: 2-bit indices, RowOffsets and ColInd"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "recovered weights: blue cells of the recover grid and the CSR Values strip"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "cell borders, arrows and text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "thin black cell borders and arrows, drawn as filled outlines (no stroke attributes in the SVG)",
+  "font": "Times New Roman serif: 5 pt cell numbers, 6.5 pt arrow and array labels, 7.5 pt matrix names",
+  "corners": "square",
+  "arrows": "thin black straight arrows with small heads, operation names written above them",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Green = kept weights (dense matrix, 2:4 pattern, packed values); blue = recovered weights; orange = index storage (2-bit indices, RowOffsets, ColInd); white = pruned or empty cells.",
+  "line_style_means": "Thin black arrows carry the operation names (prune, Compress as 2:4, Compress as CSR); cell borders define each grid.",
+  "shape_means": "Grid of squares = a weight matrix (4 x 8) or a packed array (4 x 4 or 1 x N); orange blocks = index overhead.",
+  "marker_means": "Cell numbers 1 to 32 identify each weight so its fate can be traced; recovered weights keep 2, 5, 11, 25.",
+  "emphasis": "Colour does the work: green for the 2:4 payload, blue for the small recovered set, orange for the index overhead the caption calls the primary additional cost.",
+  "reusable_patterns": [
+   "one toy matrix with numbered cells redrawn at the same size at each step so every weight can be tracked",
+   "white cells for removed entries and colour for kept ones",
+   "operation names as short labels above straight arrows",
+   "storage arrays drawn as strips in the colour of what they store",
+   "orange used for index overhead in both storage formats",
+   "a second small matrix that isolates the recovered subset in its own colour"
+  ],
+  "weaknesses": [
+   "the 2-bit index cells are drawn empty, so the 2:4 index format is not shown with values",
+   "no legend: colour meaning is implied by the arrays and the caption",
+   "the second row hangs off one unlabelled vertical arrow"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "toy numbered matrices and arrays with hand-picked kept and recovered cells",
+   "arrows and labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "numbered 4x8 cell grids (dense, 2:4 pattern, recover weight)",
+   "green, blue and orange cell blocks",
+   "labelled straight arrows",
+   "CSR strips RowOffsets, ColInd, Values",
+   "2-bit indices block"
+  ],
+  "sample_data": "table",
+  "keywords": [
+   "structured sparsity",
+   "2:4 pruning",
+   "weight recovery",
+   "CSR format",
+   "LLM pruning",
+   "one-shot pruning",
+   "model compression"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "toy-values-inline",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "numbered-cell-tracking",
+    "what": "the same toy matrix is redrawn at each step with numbered cells so every entry can be followed through pruning and compression"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Explain a data-format or pruning method on one small matrix with numbered cells, redrawn at the same size after each operation, with one colour per kind of stored content, so a reader can trace any entry by its number.",
+  "suits": "Compression, sparsity, quantisation or memory-layout methods whose point is what is stored where, shown on a toy matrix."
+ },
+ "tags": [
+  "numbered cell grids",
+  "toy matrix",
+  "three-colour coding",
+  "straight labelled arrows",
+  "serif sparse labels",
+  "L-shaped flow"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "4 Experiment (p.6)"
+  ],
+  "evidence": [
+   "we respectively store the sparse matrix in a 2:4 pattern and the recover weights",
+   "Indices storage is the primary additional overhead.",
+   "we partition the weight matrix into two separately stored entities"
+  ]
+ },
+ "summary": "WRP prunes LLM weights one-shot to the hardware-friendly 2:4 pattern but recovers a few critical weights that the pattern would drop and stores them in a separate high-sparsity matrix. Figure 1 shows the storage on one toy 4x8 matrix of numbered cells: the dense matrix is pruned to a 2:4 pattern (two kept cells per group of four, green) and compressed into a values grid and a 2-bit index grid (orange), while the recovered weights 2, 5, 11 and 25 (blue) sit in a second sparse grid that is compressed into the CSR arrays RowOffsets, ColInd and Values. Colour separates payload, recovered weights and index overhead, and operations are named above straight arrows.",
+ "summary_zh": "WRP 在 2:4 结构化稀疏之外恢复少量关键权重。图 1 用一个编号的 4×8 玩具矩阵演示存储：稠密矩阵剪枝成 2:4 模式并压缩为数值加 2 位索引（绿、橙），被恢复的权重（蓝）另存为 CSR 数组，橙色索引是主要额外开销。",
+ "confidence": "high",
+ "notes": "Prior labels kept (worked-walkthrough, stage-pipeline). The measured palette lists #ff0000 and the drawn extent is far larger than the canvas, but no red is visible in the preview; probably off-canvas leftovers. The 2-bit index cells are drawn empty. The vertical arrow from the 2:4 pattern to the recover weight grid has no label; I read it as 'recovered weights are picked among the pruned ones' because cells 2, 5, 11 and 25 are white in the 2:4 pattern. Outlines are filled shapes, so the digest has no strokes.",
+ "venue": "ACL24"
+}

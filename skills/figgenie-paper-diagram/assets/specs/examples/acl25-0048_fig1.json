@@ -1,0 +1,517 @@
+{
+  "meta": {
+    "_purpose": "Spec-writing example only (AI family, an agent figure): it shows which fields exist and how they are filled for a real Figure 1 that mixes an actor loop, a worked trace on a real question and a data-synthesis pipeline. It is not a style reference: for style, look at the figure it was written from (assets/exemplars/ai/figures/acl25-0048_fig1/) and at the exemplars the user picks for your own figure.",
+    "id": "kg-agent-fig1",
+    "title": "KG-Agent: the agent loop on one question, and how its tuning data is synthesized",
+    "system": {
+      "name": "KG-Agent",
+      "one_liner": "an autonomous agent framework in which a small instruction-tuned LLM reasons over a knowledge graph by calling tools step by step, with a knowledge memory updated at each step; its tuning data is synthesized from query graphs"
+    },
+    "family": "ai",
+    "venue": "acl",
+    "kind": "architecture",
+    "figure_kind": "whole-system",
+    "column": "double",
+    "width_pt": 454,
+    "max_height_pt": 250,
+    "template": "ai",
+    "direction": "left-right",
+    "panels": 2,
+    "palette": "role-colours",
+    "font": "times",
+    "step_markers": "plain-numbers",
+    "language": "en",
+    "version": 1,
+    "ai": {
+      "kinds": [
+        "actor-interaction",
+        "worked-walkthrough",
+        "stage-pipeline"
+      ],
+      "variant": "single-agent-loop",
+      "subfield": "agents",
+      "subfield2": "llm-nlp",
+      "arrangement": "bands",
+      "grouping": [
+        "dashed-boxes",
+        "framed-boxes",
+        "tinted-regions",
+        "whitespace"
+      ],
+      "samples": "text",
+      "idioms": [
+        "agent-loop",
+        "tool-use",
+        "memory-store",
+        "chat-bubbles",
+        "knowledge-graph",
+        "code-snippet-box"
+      ],
+      "materials": [
+        "the paper's llama mascot for the Planner (a bitmap the authors supply; a library robot head otherwise)",
+        "the toolbox and executor icons (flat-colour bitmaps the authors supply)",
+        "the real question, its answer, and the four function calls with their results",
+        "the query graph of the question and the two tuning pairs derived from it",
+        "the Freebase, YAGO and Wikidata logos (the authors' to reproduce)"
+      ],
+      "notes": "two full-width bands split by a dashed rule. Top band: the question and the planner's bubbles at the left, the actor triangle (planner, toolbox, executor) under them, the knowledge-memory table in the middle, the four-step trace at the right with a small planner and executor icon per row. Bottom band: the query graph at the left, the colour-coded reasoning program in the middle, two input-output tuning cards at the right, joined by coloured and black dashed arrows."
+    },
+    "caption_draft": "Figure 1. Top: KG-Agent answers a question by iterating, for t = 1 ... 4: the Planner reads the knowledge memory, picks a tool from the Toolbox, the Executor runs it on the KG and returns the result, and the memory is updated. Bottom: instruction-tuning data is synthesized by grounding a query graph on the KG, converting it to a KG reasoning program and splitting the program into input-output pairs.",
+    "open_questions": [
+      "Is the knowledge memory read by the planner at every step, or only after the executor returns (one arrow or two)?",
+      "Should all four trace steps be drawn, or two steps and an ellipsis with the count?"
+    ],
+    "_source": "assets/exemplars/ai/figures/acl25-0048_fig1",
+    "_notes": "Captured: the actor triangle as an agent-loop idiom (three large named icons joined by block arrows, planner -> toolbox -> executor -> planner), the memory as a memory-store node, the trace as four text nodes in a container with plain step markers t=1 ... t=4, the question and the answer as bubbles, the query graph as a small container of graph nodes with labelled edges, the reasoning program as a code text node, the two tuning pairs as text cards, and the colour code that ties each graph region to its program lines (one colour per reasoning step, carried into the legend). Not captured as geometry: the dashed horizontal rule between the bands, the exact column widths of the memory table, the small icons repeated in every trace row (the plan repeats the actor icons at label size)."
+  },
+  "panels": [
+    {
+      "id": "agent",
+      "label": "Autonomous reasoning on one question",
+      "axis": "narrative",
+      "order": 0,
+      "verdict": "ours",
+      "note": "the top band: question, actor triangle, knowledge memory, four-step trace"
+    },
+    {
+      "id": "synthesis",
+      "label": "Instruction-tuning data synthesis",
+      "axis": "narrative",
+      "order": 1,
+      "verdict": "ours",
+      "note": "the bottom band: query graph, reasoning program, tuning pairs"
+    }
+  ],
+  "containers": [
+    {
+      "id": "trace",
+      "label": "Autonomous Reasoning",
+      "kind": "none",
+      "role": "novel",
+      "panel": "agent",
+      "order": 3,
+      "note": "four rows, one per step; no frame of its own, the title sits above the rows"
+    },
+    {
+      "id": "qgraph",
+      "label": "Query Graph Grounded on KG",
+      "kind": "none",
+      "role": "existing",
+      "panel": "synthesis",
+      "order": 0,
+      "note": "a small tree-shaped graph; its three coloured dashed regions are the parts that become program lines"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "question",
+      "label": "Which sports team for which Cristiano Ronaldo played in 2011 was founded last?",
+      "kind": "text",
+      "role": "external",
+      "panel": "agent",
+      "order": 0,
+      "text_lines": [
+        "Which sports team for which Cristiano Ronaldo",
+        "played in 2011 was founded last?"
+      ],
+      "note": "two lines above the planner, the entity in red"
+    },
+    {
+      "id": "planner",
+      "label": "Planner",
+      "kind": "actor",
+      "role": "novel",
+      "panel": "agent",
+      "order": 1,
+      "idiom": "llm",
+      "symbol": "the paper's llama mascot (bitmap the authors supply); a library robot head stands in",
+      "note": "the instruction-tuned LLM; large icon with its bold name under it"
+    },
+    {
+      "id": "answer",
+      "label": "The answer is Portugal national football team",
+      "kind": "bubble",
+      "role": "external",
+      "panel": "agent",
+      "order": 2,
+      "idiom": "chat-bubbles",
+      "text_lines": [
+        "The answer is",
+        "Portugal national football team"
+      ],
+      "note": "two pale blue speech bubbles from the planner"
+    },
+    {
+      "id": "toolbox",
+      "label": "Toolbox",
+      "kind": "icon",
+      "role": "existing",
+      "panel": "agent",
+      "order": 3,
+      "idiom": "tool-use",
+      "symbol": "drawing-board icon (bitmap the authors supply)"
+    },
+    {
+      "id": "executor",
+      "label": "Executor",
+      "kind": "icon",
+      "role": "existing",
+      "panel": "agent",
+      "order": 4,
+      "idiom": "tool-use",
+      "symbol": "robot-arm icon (bitmap the authors supply)"
+    },
+    {
+      "id": "memory",
+      "label": "Knowledge Memory Updating",
+      "kind": "text",
+      "role": "novel",
+      "panel": "agent",
+      "order": 5,
+      "idiom": "memory-store",
+      "text_lines": [
+        "Question | Toolbox Definition",
+        "His_Pro | Cur_KG_Info",
+        "t=1  linked_entity = m.02xt6q | None",
+        "t=2  get_relation(m.02xt6q) | teams, athlete ...",
+        "t=3  v0 = get_tail_entity(m.02xt6q, team) | None",
+        "t=4  get_relation(v0) | from, roster ..."
+      ],
+      "note": "a rounded light-grey box with header cells and one row per step"
+    },
+    {
+      "id": "step1",
+      "label": "get_relation(m.02xt6q)",
+      "kind": "text",
+      "role": "novel",
+      "parent": "trace",
+      "panel": "agent",
+      "order": 0,
+      "text_lines": [
+        "get_relation(m.02xt6q)",
+        "out: [teams, ...]  in: [athlete, ...]"
+      ],
+      "note": "bold monospace call, green monospace result on the return arrow"
+    },
+    {
+      "id": "step2",
+      "label": "v0 = get_tail_entity(m.02xt6q, team)",
+      "kind": "text",
+      "role": "novel",
+      "parent": "trace",
+      "panel": "agent",
+      "order": 1,
+      "text_lines": [
+        "v0 = get_tail_entity(m.02xt6q, team)",
+        "v0 = {m.050fh, ...}"
+      ]
+    },
+    {
+      "id": "step3",
+      "label": "get_relation(v0)",
+      "kind": "text",
+      "role": "novel",
+      "parent": "trace",
+      "panel": "agent",
+      "order": 2,
+      "text_lines": [
+        "get_relation(v0)",
+        "out: [from, ...]  in: [roster, ...]"
+      ]
+    },
+    {
+      "id": "step4",
+      "label": "v1 = get_entity_by_constraint(v0, from, =, 2011)",
+      "kind": "text",
+      "role": "novel",
+      "parent": "trace",
+      "panel": "agent",
+      "order": 3,
+      "text_lines": [
+        "v1 = get_entity_by_constraint(v0, from, =, 2011)",
+        "v1 = {m.06122, ...}"
+      ]
+    },
+    {
+      "id": "ronaldo",
+      "label": "m.02xt6q (Cristiano Ronaldo)",
+      "kind": "other",
+      "role": "existing",
+      "parent": "qgraph",
+      "panel": "synthesis",
+      "order": 0,
+      "idiom": "knowledge-graph",
+      "note": "a square node; the KG logos sit beside the graph's title"
+    },
+    {
+      "id": "cvt",
+      "label": "?c (CVT)",
+      "kind": "other",
+      "role": "existing",
+      "parent": "qgraph",
+      "panel": "synthesis",
+      "order": 1,
+      "legend_ref": "step-2"
+    },
+    {
+      "id": "year",
+      "label": "2011",
+      "kind": "other",
+      "role": "existing",
+      "parent": "qgraph",
+      "panel": "synthesis",
+      "order": 2,
+      "legend_ref": "step-2"
+    },
+    {
+      "id": "team-x",
+      "label": "?x",
+      "kind": "other",
+      "role": "existing",
+      "parent": "qgraph",
+      "panel": "synthesis",
+      "order": 3,
+      "legend_ref": "step-3"
+    },
+    {
+      "id": "argmax",
+      "label": "argmax",
+      "kind": "decision",
+      "role": "existing",
+      "parent": "qgraph",
+      "panel": "synthesis",
+      "order": 4,
+      "legend_ref": "step-4",
+      "note": "a diamond: the aggregation constraint"
+    },
+    {
+      "id": "program",
+      "label": "KG Reasoning Program",
+      "kind": "text",
+      "role": "novel",
+      "panel": "synthesis",
+      "order": 1,
+      "idiom": "code-snippet-box",
+      "text_lines": [
+        "get_relation(m.02xt6q);",
+        "v0 = get_tail_entity(m.02xt6q, team);",
+        "get_relation(v0);",
+        "v1 = get_entity_by_constraint(v0, from, =, 2011);",
+        "...",
+        "ans = end(v3)"
+      ],
+      "note": "a dashed light-grey box of monospace code; each pair of lines in the colour of its graph region"
+    },
+    {
+      "id": "pair1",
+      "label": "Input x1 / Output y1",
+      "kind": "text",
+      "role": "novel",
+      "panel": "synthesis",
+      "order": 2,
+      "legend_ref": "step-1",
+      "text_lines": [
+        "Input x1: Question | Toolbox | Current KG Information | History Program",
+        "Output y1: get_relation(m.02xt6q)"
+      ],
+      "note": "a dashed card with a green Input tab over four grey slots and a peach Output tab"
+    },
+    {
+      "id": "pair2",
+      "label": "Input x2 / Output y2",
+      "kind": "text",
+      "role": "novel",
+      "panel": "synthesis",
+      "order": 3,
+      "legend_ref": "step-2",
+      "text_lines": [
+        "Input x2: Question | Toolbox | Current KG Information | History Program",
+        "Output y2: v0 = get_tail_entity(m.02xt6q, team)"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "pick",
+      "from": "planner",
+      "to": "toolbox",
+      "kind": "control",
+      "style": "solid",
+      "weight": "main",
+      "note": "thick grey block arrow: the planner picks a tool"
+    },
+    {
+      "id": "run",
+      "from": "toolbox",
+      "to": "executor",
+      "kind": "control",
+      "style": "solid",
+      "weight": "main",
+      "note": "block arrow: the chosen function is run"
+    },
+    {
+      "id": "result",
+      "from": "executor",
+      "to": "planner",
+      "kind": "data",
+      "style": "solid",
+      "weight": "main",
+      "note": "block arrow back: the execution result closes the loop"
+    },
+    {
+      "id": "read-memory",
+      "from": "memory",
+      "to": "planner",
+      "kind": "data",
+      "style": "solid",
+      "label": "read at each step"
+    },
+    {
+      "id": "calls",
+      "from": "planner",
+      "to": "step1",
+      "kind": "interaction",
+      "style": "solid",
+      "label": "one call per step",
+      "note": "thin slate arrows per row, planner icon to call text (drawn to the first row; repeated for each step)"
+    },
+    {
+      "id": "returns",
+      "from": "step4",
+      "to": "memory",
+      "kind": "feedback",
+      "style": "solid",
+      "label": "results update the memory",
+      "note": "thin slate return arrows per row, executor icon to result text (the last row stands for all four)"
+    },
+    {
+      "id": "g-team",
+      "from": "ronaldo",
+      "to": "cvt",
+      "kind": "mapping",
+      "style": "solid",
+      "label": "team"
+    },
+    {
+      "id": "g-from",
+      "from": "cvt",
+      "to": "year",
+      "kind": "mapping",
+      "style": "solid",
+      "label": "from"
+    },
+    {
+      "id": "g-roster",
+      "from": "cvt",
+      "to": "team-x",
+      "kind": "mapping",
+      "style": "solid",
+      "label": "roster"
+    },
+    {
+      "id": "g-founded",
+      "from": "team-x",
+      "to": "argmax",
+      "kind": "mapping",
+      "style": "solid",
+      "label": "founded"
+    },
+    {
+      "id": "to-program",
+      "from": "cvt",
+      "to": "program",
+      "kind": "mapping",
+      "style": "dashed",
+      "legend_ref": "derived",
+      "note": "three dashed arrows, one per coloured graph region (the CVT region stands for them), each in that region's colour, into the matching program lines"
+    },
+    {
+      "id": "to-pair1",
+      "from": "program",
+      "to": "pair1",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "derived",
+      "note": "black dashed arrow: the first call becomes output y1"
+    },
+    {
+      "id": "to-pair2",
+      "from": "program",
+      "to": "pair2",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "derived",
+      "note": "the next call becomes output y2"
+    }
+  ],
+  "steps": [
+    {
+      "n": 1,
+      "attached_to": "step1",
+      "text": "the planner asks for the relations of the entity"
+    },
+    {
+      "n": 2,
+      "attached_to": "step2",
+      "text": "it follows the team relation to a CVT node"
+    },
+    {
+      "n": 3,
+      "attached_to": "step3",
+      "text": "it asks for the relations of that node"
+    },
+    {
+      "n": 4,
+      "attached_to": "step4",
+      "text": "it filters by the 2011 constraint"
+    }
+  ],
+  "legend": {
+    "mode": "explicit",
+    "placement": "below",
+    "items": [
+      {
+        "id": "step-1",
+        "label": "reasoning step 1",
+        "swatch": {
+          "kind": "fill",
+          "role": "#a9d18e"
+        }
+      },
+      {
+        "id": "step-2",
+        "label": "reasoning step 2",
+        "swatch": {
+          "kind": "fill",
+          "role": "#9dc3e6"
+        }
+      },
+      {
+        "id": "step-3",
+        "label": "reasoning step 3",
+        "swatch": {
+          "kind": "fill",
+          "role": "#f4b183"
+        }
+      },
+      {
+        "id": "step-4",
+        "label": "reasoning step 4",
+        "swatch": {
+          "kind": "fill",
+          "role": "#ffd966"
+        }
+      },
+      {
+        "id": "derived",
+        "label": "derived from",
+        "swatch": {
+          "kind": "line",
+          "role": "#595959",
+          "line_style": "dashed"
+        }
+      }
+    ]
+  },
+  "notes": "Read the top band from the question at the top left round the actor triangle, across the memory table to the four-step trace at the right (t = 1 ... 4 beside each planner icon, memory row and result); then the bottom band left to right: query graph, program, tuning pairs. The step colours are the one code of the figure: a graph region, its dashed arrow, its program lines and the pair it yields share a colour."
+}

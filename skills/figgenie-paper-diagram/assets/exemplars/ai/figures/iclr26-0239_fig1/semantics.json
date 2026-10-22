@@ -1,0 +1,521 @@
+{
+ "paper_id": "iclr26-0239",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TAVAE (VAE with adaptable priors)",
+  "one_liner": "A VAE whose natural-image prior is swapped for a task prior explains contextual modulation of V1 responses in mice trained on a Go/NoGo task.",
+  "domain": [
+   "computational neuroscience",
+   "visual cortex V1",
+   "variational autoencoders with task priors"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "eight lettered panels: mouse setup and stimuli, recorded data, a VAE vs TAVAE cartoon with latent and prior pictures, and model responses that echo the recorded profile",
+  "argues": "An adaptable-prior VAE (TAVAE) that swaps the natural prior for a task prior reproduces how task training reshapes V1 population responses to the Go stimulus.",
+  "subject": "Mouse Go/NoGo experiment, recorded V1 population responses, the VAE-to-TAVAE change, the task prior and simulated responses.",
+  "elements": [
+   {
+    "name": "Two-photon microscope / Spherical treadmill / Lickometer and water",
+    "type": "label",
+    "role": "names the parts of the recording rig in panel a",
+    "drawn_as": "plain sans labels on and beside the rig illustration, one inside a dark box",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "Training / Test/Recording",
+    "type": "label",
+    "role": "column headings of the stimulus schedule",
+    "drawn_as": "small serif headings above two columns of the framed rows",
+    "container": "b",
+    "is_contribution": false
+   },
+   {
+    "name": "Go row (45°)",
+    "type": "region",
+    "role": "Go stimulus, 45° in training and in testing",
+    "drawn_as": "green-framed row with a green Go label and green 45° captions",
+    "container": "b",
+    "is_contribution": false
+   },
+   {
+    "name": "NoGo row (135°; D1: 135, D2: 90, D3: 75, D4: 70, D5: 65, D6: 60)",
+    "type": "region",
+    "role": "NoGo stimulus, 135° in training, then moved toward the Go orientation over test days D1 to D6",
+    "drawn_as": "red-framed row with a red NoGo label and red orientation captions",
+    "container": "b",
+    "is_contribution": false
+   },
+   {
+    "name": "x, z, x̂",
+    "type": "data",
+    "role": "input, latent and reconstruction of the VAE",
+    "drawn_as": "tall light-grey rectangles, one trio per model row",
+    "container": "e",
+    "is_contribution": false
+   },
+   {
+    "name": "q(z | x)",
+    "type": "module",
+    "role": "recognition model of the VAE",
+    "drawn_as": "dark-orange trapezoid narrowing toward z",
+    "container": "e",
+    "is_contribution": false
+   },
+   {
+    "name": "p(x | z)",
+    "type": "module",
+    "role": "generative model, reused unchanged in TAVAE",
+    "drawn_as": "pale-orange trapezoid widening toward x̂, same colour in both rows",
+    "container": "e",
+    "is_contribution": false
+   },
+   {
+    "name": "q_T(z | x)",
+    "type": "module",
+    "role": "TAVAE recognition model: the VAE posterior reweighed with the task prior",
+    "drawn_as": "mint trapezoid holding a white rounded box in which the dark-orange VAE trapezoid sits",
+    "container": "e",
+    "is_contribution": true
+   },
+   {
+    "name": "dashed reference lines at 45° and 135°",
+    "type": "label",
+    "role": "mark the Go (45°) and NoGo (135°) orientations on the response profiles",
+    "drawn_as": "thin green dashed line in d, thick grey dashes in h",
+    "container": "d, h",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "x",
+    "to": "z",
+    "what": "encoded by q(z | x)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "z",
+    "to": "x̂",
+    "what": "decoded by p(x | z)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "q(z | x) of the VAE",
+    "to": "q_T(z | x) of TAVAE",
+    "what": "the VAE recognition model is reweighed with the task prior (Eq. 3)",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "p(x | z) of the VAE",
+    "to": "p(x | z) of TAVAE",
+    "what": "reused unchanged",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "d trained and naive lines",
+    "to": "h task-prior and natural-prior lines",
+    "what": "recorded profiles against TAVAE responses on the same axes and colours",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "latent axes of the posterior map",
+    "to": "receptive-field patches",
+    "what": "a patch at the end of each axis shows what that latent responds to",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "reference lines",
+    "to": "response profile plots",
+    "what": "stimulus orientation",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "Experimental setup: a mouse on a spherical treadmill under a two-photon microscope, facing a grating screen, with lickometer and water",
+    "verdict": "setting"
+   },
+   {
+    "label": "b",
+    "kind": "other",
+    "axis": "time",
+    "shows": "Go-NoGo stimuli: 45° Go and 135° NoGo in training; NoGo at 135° on D1, then 90°, 75°, 70°, 65°, 60° on D2 to D6",
+    "verdict": "setting"
+   },
+   {
+    "label": "c",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Population response map of the recorded V1 population on D1 for the Go stimulus: preferred orientation by time, hot spot at stimulus onset",
+    "verdict": "data"
+   },
+   {
+    "label": "d",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "Time-averaged population response profile by orientation for trained (green) and naive (blue) mice",
+    "verdict": "data"
+   },
+   {
+    "label": "e",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "VAE (top) and TAVAE (bottom) as trapezoid recognition and generative models; the generative model is reused, the recognition model is reweighed",
+    "verdict": "ours"
+   },
+   {
+    "label": "f",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Posterior over two latent dimensions as a density map, with the receptive fields of the two latents as insets",
+    "verdict": "ours"
+   },
+   {
+    "label": "g",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Task prior of TAVAE over orientation (Laplace scale), with main peaks near 45° and 135°",
+    "verdict": "ours"
+   },
+   {
+    "label": "h",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "TAVAE responses to the Go stimulus with task prior (green) and natural prior (blue), drawn like d",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a-h",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "bold lowercase letters head the panels; there are no panel titles"
+   },
+   {
+    "marker": "D1-D6",
+    "kind": "order",
+    "at": "NoGo test thumbnails in b",
+    "what": "test days of the recordings, each with its NoGo orientation"
+   },
+   {
+    "marker": "Go, NoGo",
+    "kind": "identity",
+    "at": "row labels in b",
+    "what": "name the two stimulus classes, green and red"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "rig illustration: mouse on a spherical treadmill in front of a grating screen, microscope above, lickometer and water tube",
+    "content": "other",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "monochrome drawing with one blue water tube and plain-text labels"
+   },
+   {
+    "what": "Go and NoGo grating stimuli: 45° and 135° in training; Go 45° and NoGo 135°, 90°, 75°, 70°, 65°, 60° in testing",
+    "content": "other",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "small square black-and-white grating thumbnails with the angle written above in green or red, in two framed rows"
+   },
+   {
+    "what": "population response map of recorded V1 neurons to the Go stimulus on D1, preferred orientation by time, colourbar APrE/trial",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "viridis heat map with a bright spot near 45° at onset and dark suppressed bands elsewhere, colourbar at the right"
+   },
+   {
+    "what": "time-averaged population response profile, trained vs naive mice",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "orientation on the y axis, activity on x; green trained line with a narrow peak at 45°, light-blue naive line with a broad peak, translucent bands, dashed line at 45°, legend bottom-right"
+   },
+   {
+    "what": "posterior density over two latent dimensions",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "dark viridis square with one yellow-green Gaussian blob, two black axis arrows without ticks"
+   },
+   {
+    "what": "receptive fields of the two latents",
+    "content": "other",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small grey Gabor-like patches placed at the end of each axis as insets"
+   },
+   {
+    "what": "task prior of TAVAE over orientation",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "purple curve on the orientation axis with vector axes; the curve appears to be a placed bitmap"
+   },
+   {
+    "what": "TAVAE responses to the Go stimulus with task and natural priors",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "same axes and colours as d, sharp green peak at 45°, light-green dots, two thick grey dashed lines at 45° and 135°"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "task stimuli over training and six test days: Go 45°; NoGo 135°, then 135°, 90°, 75°, 70°, 65°, 60°",
+    "form": "grating thumbnails with orientation captions in framed rows",
+    "real_values": true
+   },
+   {
+    "what": "recorded and simulated V1 population response profiles for the Go stimulus",
+    "form": "line plots on matching axes and colours",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "grey input rectangle, trapezoid narrowing to a grey latent rectangle, trapezoid widening to a grey output rectangle, abutting with no arrows",
+    "parts": [
+     "x",
+     "q(z | x)",
+     "z",
+     "p(x | z)",
+     "x̂"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "square density map of two latent dimensions with one Gaussian blob and a receptive-field patch at the end of each axis",
+    "parts": [
+     "density map",
+     "axis arrows",
+     "two receptive-field insets"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at panel a top-left and goes right through b (below a), c and d; the second row repeats left to right with e, f, g and h; d and h are stacked on the same axes for comparison."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Eight lettered panels with no frames: the top row holds the rig picture over the stimulus strip (a over b), the recorded heat map (c) and the response profile (d); the bottom row holds the VAE and TAVAE cartoon (e), the latent posterior map (f), the task prior (g) and the model response profile (h).",
+  "panel_count": 8,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.29,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff9300",
+    "used_for": "recognition model q(z | x) of the VAE (dark orange), also inside q_T",
+    "opacity": 0.83
+   },
+   {
+    "hex": "#ffd479",
+    "used_for": "generative model p(x | z), reused in TAVAE (pale orange)"
+   },
+   {
+    "hex": "#73fcd6",
+    "used_for": "TAVAE recognition model q_T(z | x) (mint)",
+    "opacity": 0.83
+   },
+   {
+    "hex": "#ebebeb",
+    "used_for": "grey rectangles for x, z and x̂"
+   },
+   {
+    "hex": "#65c0ff",
+    "used_for": "naive mice in d, natural prior in h"
+   },
+   {
+    "hex": "#4f8f00",
+    "used_for": "trained mice in d, task prior in h; translucent bands at 0.3 opacity"
+   },
+   {
+    "hex": "#450757",
+    "used_for": "darkest viridis value: background of the latent posterior map"
+   },
+   {
+    "hex": "#009051",
+    "used_for": "Go labels in b (text)"
+   },
+   {
+    "hex": "#ff2600",
+    "used_for": "NoGo and day labels in b (text)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt axes, ticks and cartoon outlines; plot lines about 1.25 pt; 2 pt axis arrows in f; thick grey dashed reference lines in h",
+  "font": "sans, 3-9.5 pt, mostly 4-4.5 pt (DejaVu Sans in the plots, Arial and Liberation Sans for labels), Garamond serif in b, STIX italics for the model symbols, bold 9.5 pt panel letters",
+  "corners": "mixed",
+  "arrows": "almost none: two heavy black axis arrows in f and a blue water tube in a; the VAE cartoon uses abutting shapes instead of arrows",
+  "rendering": "mixed",
+  "effects": "translucent bands around the profile lines and 0.83-opacity fills; no shadows",
+  "model_depiction": "trapezoid",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "Green = trained mice (d) and task prior (h), light blue = naive mice (d) and natural prior (h); in b, green = Go and red = NoGo. In e, dark orange = VAE recognition model, pale orange = generative model (reused), mint = TAVAE recognition model; grey = x, z, x̂. Viridis = response size (c) and posterior density (f).",
+  "line_style_means": "Dashed lines mark stimulus orientations (thin green at 45° in d, thick grey at 45° and 135° in h); translucent bands around the lines show spread (not defined in the figure).",
+  "shape_means": "Trapezoids = recognition and generative models (narrow at z, wide at x and x̂); tall grey rectangles = x, z, x̂; square thumbnails = gratings; coloured frames = Go and NoGo rows.",
+  "marker_means": "Lowercase letters a-h name the panels; D1-D6 name the test days; the degree values are stimulus orientations.",
+  "emphasis": "The recorded profile (d) and the model profile (h) share axes and colours, so the match reads by eye; the mint trapezoid is the only new colour in e and the yellow hot spot is the one bright item in c.",
+  "reusable_patterns": [
+   "experiment panels in the top row and model panels in the bottom row, with the recorded profile and the simulated profile on the same axes and colours",
+   "stimulus strip with one thumbnail per session and its parameter in coloured text, in framed Go and NoGo rows",
+   "baseline and proposed model drawn as two rows of the same trapezoids, the unchanged block keeping its colour and the old block nested inside the new one",
+   "dashed horizontal reference lines at the stimulus orientation across line plots",
+   "receptive-field thumbnails at the axis ends of a latent-space sketch to show what each latent encodes",
+   "apparatus illustration with plain text labels as the setup panel"
+  ],
+  "weaknesses": [
+   "text is only 3-4.5 pt",
+   "green means Go in b but trained or task prior in d and h",
+   "panel h has no legend of its own, the colour key is in d and the caption",
+   "no arrow ties the data panels to the model panels or shows how the task prior enters q_T"
+  ]
+ },
+ "resources": {
+  "own": [
+   "recorded V1 population heat map and response profile",
+   "grating stimuli",
+   "TAVAE outputs: prior curve, latent posterior map, response profile",
+   "learned receptive-field patches"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "VAE and TAVAE trapezoid cartoon",
+   "Go and NoGo frames and labels",
+   "axis arrows of the latent map"
+  ],
+  "unknown": [
+   "origin of the mouse-rig illustration (may be reused from the authors' earlier experimental paper)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "mouse on spherical treadmill with microscope",
+   "Go and NoGo grating thumbnails",
+   "population response heat map with colourbar",
+   "trained vs naive response profile plot",
+   "VAE and TAVAE trapezoid cartoon",
+   "latent posterior map with receptive-field insets",
+   "task prior curve"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "visual cortex",
+   "V1",
+   "contextual modulation",
+   "VAE",
+   "adaptable prior",
+   "Go/NoGo task",
+   "population response",
+   "task prior",
+   "receptive fields",
+   "computational neuroscience"
+  ],
+  "tags": [
+   "prediction-vs-data",
+   "task-definition",
+   "small-multiples",
+   "colour-coded-groups",
+   "embedding-space-sketch",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "apparatus-illustration",
+    "what": "an illustration or photo of a lab rig or physical setup with plain text labels on its parts, used as the experimental-setup panel"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put experiment panels (setup, stimuli, recorded map and profile) over model panels (cartoon, latent picture, prior, simulated profile) and give the recorded and the simulated profile the same axes and colours so the match is checked by eye. Draw baseline and proposed model as two rows of the same trapezoids, keeping the colour of the unchanged block and nesting the old block inside the new.",
+  "suits": "Computational-neuroscience or model-versus-data papers that tell an experiment and a model in one lettered multi-panel figure."
+ },
+ "tags": [
+  "8 lettered panels",
+  "experiment over model",
+  "heat maps and line plots",
+  "matplotlib-style plots",
+  "grating thumbnails",
+  "trapezoid VAE cartoon",
+  "tiny text",
+  "viridis"
+ ],
+ "provenance": {
+  "sections": [
+   "Results: task and recordings (p.5)",
+   "Results: systematic biases of contextual priors (p.7)"
+  ],
+  "evidence": [
+   "The TAVAE generative model component of VAE (pale orange) is reused in TAVAE",
+   "the NoGo stimulus gradually converged to the Go stimulus (Fig. 1b)"
+  ]
+ },
+ "summary": "TAVAE is a variational autoencoder whose prior can be swapped for a task prior, used to explain how learning a Go/NoGo orientation task changes responses in mouse primary visual cortex. Figure 1 is an eight-panel composite. The top row covers the experiment: a rig illustration (a), the Go (45°) and NoGo gratings across training and six test days (b), a population response heat map for the Go stimulus (c) and the trained-versus-naive response profile (d). The bottom row covers the model: a trapezoid cartoon of VAE and TAVAE, the latter reusing the pale-orange generative model and framing the old recognition model inside a mint one (e), a latent posterior map with receptive fields (f), the task prior (g) and model responses with task and natural priors (h), drawn like d.",
+ "summary_zh": "TAVAE 是带可调先验的 VAE，用来解释小鼠视觉皮层在 Go/NoGo 任务中的响应变化。图 1 的 a 到 h 面板：上排为实验装置、刺激、记录热图与响应曲线，下排为 VAE/TAVAE 示意、潜变量后验、任务先验和模型响应。",
+ "confidence": "high",
+ "notes": "The pre-screen kinds (concept-schematic, model-anatomy) were kept; side-by-side-contrast was added for d vs h and VAE vs TAVAE. The left quarter of the preview is blank canvas padding. The bitmap or vector status of panel a and of the curve in g was inferred from the SVG image list (the g curve looks like a placed bitmap rotated 90 degrees).",
+ "venue": "ICLR26"
+}

@@ -1,0 +1,488 @@
+{
+ "paper_id": "aaai25-0059",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SceneX",
+  "one_liner": "Framework that turns text descriptions into large-scale 3D scenes by having an LLM planner drive procedural modules and assets in Blender.",
+  "domain": [
+   "procedural 3D scene generation",
+   "LLM planning for Blender",
+   "procedural content generation"
+  ],
+  "subfield": "generative",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "four slanted render strips as a teaser, then two titled component boxes (planner and hub) and a strip of user instructions",
+  "argues": "One system can build both natural scenes and unbounded cities from short text instructions, by combining a planner with a hub of procedural modules and assets.",
+  "subject": "Rendered scene strips above the PCGPlanner stage chain and the PCGHub module list, with the user instructions below.",
+  "elements": [
+   {
+    "name": "User descriptions: Generate beautiful cherry blossoms/ Generate a modern city/ Generate a fall forest/ Generate the noonday woods.",
+    "type": "text-block",
+    "role": "the four natural-language instructions given to the system",
+    "drawn_as": "light grey strip with one line of text along the bottom of the figure",
+    "container": "bottom band",
+    "is_contribution": false
+   },
+   {
+    "name": "PCGPlanner",
+    "type": "container",
+    "role": "generates executable actions for Blender from the instruction",
+    "drawn_as": "pale olive box with a dashed grey title bar and a purple dashed inner box",
+    "container": "middle band, left",
+    "is_contribution": true
+   },
+   {
+    "name": "Scene Decomposition",
+    "type": "operation",
+    "role": "first planner stage",
+    "drawn_as": "widest bold-labelled olive rectangle at the top of a leftward staircase",
+    "container": "PCGPlanner",
+    "is_contribution": true
+   },
+   {
+    "name": "Terrain Generation",
+    "type": "operation",
+    "role": "second planner stage",
+    "drawn_as": "olive rectangle one step to the left, a grey block arrow above it",
+    "container": "PCGPlanner",
+    "is_contribution": true
+   },
+   {
+    "name": "Objects Generation & Retrieval",
+    "type": "operation",
+    "role": "third planner stage",
+    "drawn_as": "olive rectangle one more step to the left",
+    "container": "PCGPlanner",
+    "is_contribution": true
+   },
+   {
+    "name": "Assets Placement",
+    "type": "operation",
+    "role": "last planner stage",
+    "drawn_as": "darkest olive rectangle at the bottom of the staircase",
+    "container": "PCGPlanner",
+    "is_contribution": true
+   },
+   {
+    "name": "Scene Generate",
+    "type": "label",
+    "role": "rotated label on a dotted arrow pointing down the right side of the planner box, next to a thick grey up arrow whose meaning is not stated",
+    "drawn_as": "rotated bold text, dotted black arrow and a tall grey block arrow",
+    "container": "PCGPlanner",
+    "is_contribution": null
+   },
+   {
+    "name": "(unlabelled) green OpenAI logo",
+    "type": "icon",
+    "role": "the LLM that plans",
+    "drawn_as": "green logo at the lower left of the planner box with a double-headed diagonal arrow to the API icon",
+    "container": "PCGPlanner",
+    "is_contribution": null
+   },
+   {
+    "name": "API",
+    "type": "icon",
+    "role": "the API layer between the LLM and Blender",
+    "drawn_as": "orange ring of three nodes with the word API, dashed arrow to Blender",
+    "container": "PCGPlanner",
+    "is_contribution": null
+   },
+   {
+    "name": "(unlabelled) Blender logo",
+    "type": "icon",
+    "role": "the 3D software that runs the actions and produces the scenes (orange arrow to the first render)",
+    "drawn_as": "orange and blue logo at the top left of the planner box",
+    "container": "PCGPlanner",
+    "is_contribution": false
+   },
+   {
+    "name": "PCGHub: Various PCG Modules and Assets",
+    "type": "container",
+    "role": "collection of accessible procedural modules and assets with hand-crafted API documents",
+    "drawn_as": "warm beige box with a dashed grey title bar and a purple dashed inner box",
+    "container": "middle band, right",
+    "is_contribution": true
+   },
+   {
+    "name": "Effortlessly integrate user PCG and assets / Simple formatting and packaging / Smooth workflows / 500+ procedural modules / 10,000+ high-quality assets",
+    "type": "text-block",
+    "role": "features and scale of the hub",
+    "drawn_as": "bulleted list in serif, first bullet bold",
+    "container": "PCGHub",
+    "is_contribution": true
+   },
+   {
+    "name": "(unlabelled) round tool badges: SCATTER, mirage, K-Cycles, JUNGLE SCAPES, Quick Physics V2.0, …",
+    "type": "icon",
+    "role": "existing procedural tools or modules included in the hub (reading by eye)",
+    "drawn_as": "row of five round logos ending with an ellipsis, under the word cloud",
+    "container": "PCGHub",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Scene Decomposition",
+    "to": "Terrain Generation, Objects Generation & Retrieval, Assets Placement",
+    "what": "stage order, each step shifted left",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OpenAI logo",
+    "to": "API",
+    "what": "two-way exchange between the LLM and the API icon",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "API",
+    "to": "Blender logo",
+    "what": "API calls reach Blender (thin dashed arrow)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Blender logo",
+    "to": "first render strip",
+    "what": "orange curved arrow from the software up into the cherry-blossom render",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "User descriptions",
+    "to": "four render strips",
+    "what": "each instruction matches the render in the same left-to-right position; no arrow",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "PCGPlanner",
+    "to": "PCGHub",
+    "what": "the planner coordinates the hub's modules (side by side)",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "bottom of the planner box",
+    "to": "top stage row",
+    "what": "thick grey up arrow beside the dotted down arrow Scene Generate; meaning not stated",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "PCGPlanner",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "four-stage staircase from Scene Decomposition to Assets Placement beside an LLM, API and Blender icon chain",
+    "verdict": "ours"
+   },
+   {
+    "label": "PCGHub: Various PCG Modules and Assets",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "bullet list with counts, a word cloud of module categories and a row of tool logos",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "four rendered 3D scenes: cherry-blossom river, modern city, fall forest, noonday woods",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four slanted parallelogram strips with white diagonal gaps, edge to edge across the full width at the top, no frames or captions"
+   },
+   {
+    "what": "word cloud of PCG module and asset categories (Nature, City, Buildings, Animals, Marble, Water, Materials, ...)",
+    "content": "chart",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue and grey words sized by weight, Nature and City largest, filling the right half of the hub box"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "Blender logo",
+    "stands_for": "the 3D software that executes the actions",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "ring of three nodes with the word API",
+    "stands_for": "the API layer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "OpenAI logo in green",
+    "stands_for": "the LLM planner",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "round brand badges (SCATTER, mirage, K-Cycles, JUNGLE SCAPES, Quick Physics)",
+    "stands_for": "existing procedural tools included in the hub (reading by eye)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "four user instructions: 'Generate beautiful cherry blossoms', 'Generate a modern city', 'Generate a fall forest', 'Generate the noonday woods'",
+    "form": "one grey text strip along the bottom, in the same order as the four render strips above",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "the OpenAI logo in green as the language model",
+    "parts": [
+     "logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a three-icon chain: LLM logo, API node ring, Blender logo joined by a double arrow and a dashed arrow",
+    "parts": [
+     "LLM logo",
+     "API icon",
+     "Blender logo",
+     "arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "the hub as a box with bullet-point counts (500+ modules, 10,000+ assets), a word cloud of categories and a row of tool logos",
+    "parts": [
+     "bullets with counts",
+     "word cloud",
+     "logo row"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "word-cloud",
+    "drawn_as": "category names sized by weight, Nature and City largest, to show the breadth of a library",
+    "parts": [
+     "words"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "staircase-stage-chain",
+    "drawn_as": "four olive rectangles shifted one step left each, joined by short grey block arrows pointing down, fill darkening step by step",
+    "parts": [
+     "four stage boxes",
+     "block arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "The large renders at the top catch the eye first, left to right; then the planner box at lower left (icon chain, staircase) and the hub box at lower right; the grey instruction strip at the bottom is read last or first as the input."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked bands: a full-width strip of four slanted scene renders, a middle band of two side-by-side dashed boxes (PCGPlanner left, PCGHub right) each with a title bar, and a thin grey strip of user instructions at the bottom; an orange arrow climbs from the Blender icon into the first render.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.17,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#92a000",
+    "opacity": 0.11,
+    "used_for": "first stage box (Scene Decomposition); the four stage boxes ramp up through 0.17 and 0.21 to 0.29"
+   },
+   {
+    "hex": "#92a000",
+    "opacity": 0.29,
+    "used_for": "last stage box (Assets Placement)"
+   },
+   {
+    "hex": "#92a000",
+    "opacity": 0.07,
+    "used_for": "pale olive tint of the PCGPlanner box"
+   },
+   {
+    "hex": "#a05900",
+    "opacity": 0.08,
+    "used_for": "warm beige tint of the PCGHub box"
+   },
+   {
+    "hex": "#000000",
+    "opacity": 0.08,
+    "used_for": "light grey strip behind the user descriptions"
+   },
+   {
+    "hex": "#808080",
+    "used_for": "grey block arrows between the stages and the tall up arrow"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple dashed outline of the two inner boxes (from the measured palette)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "no strokes in the SVG; the dashed grey title boxes and purple inner boxes are drawn as filled dash segments",
+  "font": "serif (Times New Roman) 8-9 pt, bold for the stage names and the first hub bullet; the word cloud inside is a bitmap",
+  "corners": "mixed",
+  "arrows": "thick grey block arrows between stages and a tall grey up arrow; dotted black vertical arrow; thin dashed arrow from API to Blender; double-headed diagonal arrow; one curved orange arrow",
+  "rendering": "mixed",
+  "effects": "none on the layout; the renders carry their own lighting",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "olive that darkens step by step = successive planner stages; pale olive box = PCGPlanner, warm beige box = PCGHub; purple dashed outline = inner content boxes; orange = the output arrow from Blender; blue and grey words = module categories",
+  "line_style_means": "dashed boxes = components; thick grey block arrows = stage order; dotted vertical arrow = Scene Generate direction; thin dashed arrow = API call; double-headed diagonal arrow = LLM and API exchange; orange curved arrow = render output",
+  "shape_means": "slanted strips = rendered results; staircase rectangles = planner stages; round badges = existing tool logos; node ring = API",
+  "marker_means": "no numbers; the first hub bullet is bold; ellipses after the word cloud and the logo row mean more items",
+  "emphasis": "the renders take the top half edge to edge; the darkening staircase draws the eye to the planner's stage flow; counts in the bullets (500+, 10,000+) stress scale",
+  "reusable_patterns": [
+   "result renders cut into slanted strips with white diagonal gaps as a teaser band above the method",
+   "staircase of stage boxes whose fill darkens step by step",
+   "instruction strip at the bottom in the same order as the result strips above",
+   "hub drawn as a bullet list with counts, a word cloud of categories and a row of round tool logos",
+   "icon chain LLM, API, Blender joined by arrows to show how the planner drives the software",
+   "orange arrow from the software logo up into the first render to show where results come from"
+  ],
+  "weaknesses": [
+   "no arrow ties each instruction to its render; the match relies on left-to-right order",
+   "the tall grey up arrow and the dotted down arrow with the rotated label Scene Generate are not explained",
+   "the word cloud and the tool badges are small and partly illegible",
+   "the title bars sit apart from the inner boxes, so each component looks like two boxes"
+  ]
+ },
+ "resources": {
+  "own": [
+   "four rendered 3D scenes produced by the system",
+   "the user instruction texts",
+   "a word cloud of the hub's module categories"
+  ],
+  "stock": [
+   "Blender logo",
+   "OpenAI logo",
+   "API node-ring icon",
+   "five round logos of existing tools"
+  ],
+  "generated": [],
+  "drawn": [
+   "stage boxes and block arrows",
+   "dashed boxes and title bars",
+   "the instruction strip"
+  ],
+  "unknown": [
+   "how the word cloud image was made"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "four slanted render strips",
+   "PCGPlanner staircase of stage boxes",
+   "PCGHub bullet list with word cloud",
+   "Blender and OpenAI logos with an API icon",
+   "round tool logos",
+   "grey user-instruction strip"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "procedural content generation",
+   "3D scene generation",
+   "LLM planner",
+   "Blender",
+   "asset retrieval",
+   "large-scale scenes",
+   "text-to-scene",
+   "city generation"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "illustration-style",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "slanted-strip-gallery",
+    "what": "result images cut into parallelogram strips with white diagonal gaps and placed edge to edge across the top of the figure as a teaser"
+   },
+   {
+    "name": "word-cloud-scope",
+    "what": "a word cloud of category names beside a bullet list of counts, showing the breadth of a library or dataset"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open with a full-width band of the system's own renders cut into slanted strips, then give each component its own titled box below; a bottom strip with the user instructions in the same left-to-right order as the renders links input to output without arrows.",
+  "suits": "generative systems whose results are visually rich and whose method has two or three parts, such as a planner and a resource library."
+ },
+ "tags": [
+  "teaser band",
+  "slanted strips",
+  "staircase stages",
+  "brand logos",
+  "two component boxes",
+  "word cloud"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "The proposed SceneX can create large-scale 3D natural scenes or unbounded cities automatically according to user instructions.",
+   "we develop the PCGPlanner to coordinate PCG methods within these constraints.",
+   "PCGHub offers a platform for continuously incorporating new PCG capabilities"
+  ]
+ },
+ "summary": "SceneX turns short text instructions into large-scale 3D scenes, natural landscapes and unbounded cities, by combining a planner with a hub of procedural assets that run in Blender. The figure works as a teaser: four slanted strips of rendered scenes (a cherry-blossom river, a modern city, a fall forest, noonday woods) run across the top, edge to edge. Below, two dashed boxes carry the components. PCGPlanner draws a four-step staircase, Scene Decomposition, Terrain Generation, Objects Generation and Retrieval, Assets Placement, next to an LLM, API and Blender icon chain; PCGHub lists its features and counts, with a word cloud of module categories and a row of tool logos. A grey strip with the four user instructions closes the figure.",
+ "summary_zh": "SceneX 首图：顶部四条斜切渲染图展示樱花河、城市、森林；下方 PCGPlanner 用阶梯画出从场景分解到资产摆放的四步，配 LLM、API、Blender 图标；PCGHub 用要点、词云和工具标志说明模块库，底部为用户指令。",
+ "confidence": "high",
+ "notes": "Prior kinds kept in the same order (contribution-mosaic, stage-pipeline, scope-overview). The meaning of the tall grey up arrow and of the dotted down arrow labelled Scene Generate is not stated. Tool badge names are read by eye and partly legible. The digest reports no strokes because dashed outlines are filled dash segments. The render strips are the system's own outputs, so they are listed as own, not generated.",
+ "venue": "AAAI25"
+}

@@ -1,0 +1,570 @@
+{
+ "paper_id": "cvpr25-0073",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Universal Scene Graph (USG)",
+  "one_liner": "One scene-graph representation that can be generated from any combination of text, image, video and 3D point-cloud input, merging what each single-modality graph offers.",
+  "domain": [
+   "scene graph generation",
+   "multimodal scene understanding"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "worked-walkthrough"
+  ],
+  "variant": "design-family",
+  "variant_note": "four single-modality scene graphs in coloured cards over their raw inputs, contrasted with one universal graph band below",
+  "argues": "Scene graphs of single modalities each describe the same scene with different strengths; the universal graph keeps all of them and marks which modality each object came from.",
+  "subject": "One scene (a person with headphones on a sofa with a phone) as a sentence, image, video and point cloud, each with its scene graph, and the merged universal graphs.",
+  "elements": [
+   {
+    "name": "Text SG: Abstract/Descriptive",
+    "type": "container",
+    "role": "scene graph of the sentence: abstract entities and actions",
+    "drawn_as": "rounded card with orange header, pale-orange tint and a small node-link graph",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Image SG: Visually Detailed",
+    "type": "container",
+    "role": "scene graph of the image: concrete objects and spatial relations",
+    "drawn_as": "rounded card with green header, pale-green tint and a node-link graph",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Video SG: Dynamic/Sequential",
+    "type": "container",
+    "role": "scene graphs of the video frames over time",
+    "drawn_as": "rounded card with purple header holding four skewed translucent planes, one graph per plane, an ellipsis and a timeline arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "3DSG: Spatial/Immersive",
+    "type": "container",
+    "role": "scene graph of the 3D scene: spatial relations between objects",
+    "drawn_as": "rounded card with blue header, pale-blue tint and a node-link graph",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Text",
+    "type": "sample",
+    "role": "input sentence about the scene",
+    "drawn_as": "light-grey rounded text card, key words coloured like their graph nodes, caption below",
+    "container": "raw-input band",
+    "is_contribution": null
+   },
+   {
+    "name": "Image",
+    "type": "sample",
+    "role": "input picture of the same scene",
+    "drawn_as": "small bitmap with caption below",
+    "container": "raw-input band",
+    "is_contribution": null
+   },
+   {
+    "name": "Video",
+    "type": "sample",
+    "role": "input frames of the same scene over time",
+    "drawn_as": "four bitmap frames skewed in perspective along a black timeline arrow, then an ellipsis",
+    "container": "raw-input band",
+    "is_contribution": null
+   },
+   {
+    "name": "3D Point Cloud",
+    "type": "sample",
+    "role": "input 3D reconstruction of the scene",
+    "drawn_as": "coloured point-cloud render with caption below",
+    "container": "raw-input band",
+    "is_contribution": null
+   },
+   {
+    "name": "raw-input band",
+    "type": "region",
+    "role": "holds the four raw inputs of the scene between the single-modality graphs and the universal graph",
+    "drawn_as": "full-width pale-pink band with a dashed rounded outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "colour-matched block arrows",
+    "type": "operation",
+    "role": "each raw input is turned into the scene graph of its own modality (orange, green, purple, blue); a pink arrow leads from the whole band to the universal graphs",
+    "drawn_as": "short fat arrows in the colour of the header above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Universal SG: Modality-comprehensive",
+    "type": "container",
+    "role": "the proposed representation, usable with any combination of the four modalities",
+    "drawn_as": "full-width band with a pink outline and a pink pill label on its lower edge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "five universal scene graphs in sequence",
+    "type": "instance",
+    "role": "universal graph at consecutive time steps; objects from all modalities, with small stamps for their source",
+    "drawn_as": "five grey rounded cards in a row joined by black arrows, a final arrow leaving the row",
+    "container": "Universal SG: Modality-comprehensive",
+    "is_contribution": true
+   },
+   {
+    "name": "object nodes and relation words",
+    "type": "data",
+    "role": "objects (Peter, sofa, iphone, plant, curtain, window ...) linked by relations such as wearing, watching, lying, in front of, standing on, close by",
+    "drawn_as": "coloured dots with same-colour labels and black arrows carrying small words",
+    "container": "all graph cards",
+    "is_contribution": null
+   },
+   {
+    "name": "modality colour stamps",
+    "type": "label",
+    "role": "record the source modality of each object in the universal graph",
+    "drawn_as": "tiny squares in yellow, magenta, cyan and black beside the nodes",
+    "container": "Universal SG: Modality-comprehensive",
+    "is_contribution": true
+   },
+   {
+    "name": "Source modality of objects: Text, Image, Video, 3D",
+    "type": "label",
+    "role": "key for the stamps",
+    "drawn_as": "italic serif words beside four colour squares, bottom right",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Text",
+    "to": "Text SG: Abstract/Descriptive",
+    "what": "the sentence yields a graph of entities and actions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Image",
+    "to": "Image SG: Visually Detailed",
+    "what": "the picture yields a graph of visible objects",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Video",
+    "to": "Video SG: Dynamic/Sequential",
+    "what": "the frames yield a graph per frame",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D Point Cloud",
+    "to": "3DSG: Spatial/Immersive",
+    "what": "the point cloud yields a 3D graph",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "raw-input band",
+    "to": "Universal SG: Modality-comprehensive",
+    "what": "any combination of the four inputs gives the universal graphs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "universal graph at step t",
+    "to": "universal graph at step t+1",
+    "what": "graphs follow the video over time",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Video frames",
+    "to": "ellipsis",
+    "what": "the video and its graphs continue",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Peter (Text SG)",
+    "to": "Peter (Universal SG)",
+    "what": "the same object keeps its colour in every graph",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Text",
+    "to": "Image",
+    "what": "words in the sentence share colours with the matching nodes, linking the textual object to the visual one",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "modality colour stamps",
+    "to": "Source modality of objects",
+    "what": "stamp colours explained by the key",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Text SG: Abstract/Descriptive",
+    "kind": "concept-schematic",
+    "axis": "modalities",
+    "shows": "scene graph of a one-sentence description",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Image SG: Visually Detailed",
+    "kind": "concept-schematic",
+    "axis": "modalities",
+    "shows": "scene graph of one image with objects and spatial relations",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Video SG: Dynamic/Sequential",
+    "kind": "concept-schematic",
+    "axis": "modalities",
+    "shows": "one graph per video frame, laid on skewed planes along a timeline",
+    "verdict": "baseline"
+   },
+   {
+    "label": "3DSG: Spatial/Immersive",
+    "kind": "concept-schematic",
+    "axis": "modalities",
+    "shows": "scene graph of the 3D scene with objects such as door, frame, carpet, table, vase",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Universal SG: Modality-comprehensive",
+    "kind": "concept-schematic",
+    "axis": "modalities",
+    "shows": "five consecutive graphs that hold objects from all four modalities with source stamps",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "yellow, magenta, cyan, black squares",
+    "kind": "identity",
+    "at": "beside the nodes of the universal graphs",
+    "what": "source modality of the object: Text, Image, Video, 3D"
+   },
+   {
+    "marker": "coloured node dots and same-colour labels",
+    "kind": "identity",
+    "at": "every graph",
+    "what": "names an object class with one colour kept across modalities"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "one-sentence description with its key words coloured",
+    "content": "document",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "grey rounded text card, serif text, words in the colour of their graph nodes"
+   },
+   {
+    "what": "stylised room picture: person with headphones and a phone on a teal sofa",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small flat picture centred under the Image SG card, caption below"
+   },
+   {
+    "what": "frames of the same scene",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "frames skewed in perspective along a timeline arrow, ellipsis at the end"
+   },
+   {
+    "what": "colour-labelled room point cloud with a red plant",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "cut-out render under the 3DSG card"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one scene described four ways: a sentence, a picture, video frames and a point cloud, each with its scene graph",
+    "form": "inputs in a dashed band under graph cards",
+    "real_values": true
+   },
+   {
+    "what": "scene-graph triples such as Peter wearing headphones, Peter watching iphone, plant standing on floor",
+    "form": "coloured dots with labelled arrows",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "scene-graph",
+    "drawn_as": "coloured dot nodes with same-colour category labels joined by thin black arrows labelled with relation words",
+    "parts": [
+     "object node",
+     "relation word",
+     "arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "video frames skewed in perspective along a timeline arrow with an ellipsis; the Video SG repeats this with translucent planes",
+    "parts": [
+     "skewed frames",
+     "timeline arrow",
+     "ellipsis"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "coloured segmentation-like point-cloud render of a room corner",
+    "parts": [
+     "render"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the top-left Text SG card, runs across the four modality cards, drops to the raw inputs, then follows the pink arrow to the bottom band, read left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked full-width bands: a row of four tinted graph cards, a dashed pale-pink band of raw inputs aligned under them, and a pink-outlined band with five universal graphs in a row; colour-matched block arrows link the bands.",
+  "panel_count": 5,
+  "lanes": "four aligned modality columns (text, image, video, 3D) running from the graph cards down to the raw inputs",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.5,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff7f7",
+    "used_for": "pale-pink ground of the raw-input band and the universal band"
+   },
+   {
+    "hex": "#fdf3ee",
+    "used_for": "tint of the Text SG card"
+   },
+   {
+    "hex": "#edfaf4",
+    "used_for": "tint of the Image SG card"
+   },
+   {
+    "hex": "#fcf9fd",
+    "used_for": "tint of the Video SG card"
+   },
+   {
+    "hex": "#f5f8fe",
+    "used_for": "tint of the 3DSG card"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "Text SG header and arrow",
+    "opacity": 0.89
+   },
+   {
+    "hex": "#47ce98",
+    "used_for": "Image SG header and arrow",
+    "opacity": 0.85
+   },
+   {
+    "hex": "#c570da",
+    "used_for": "Video SG header and arrow",
+    "opacity": 0.86
+   },
+   {
+    "hex": "#8ca7ec",
+    "used_for": "3DSG header and arrow",
+    "opacity": 0.86
+   },
+   {
+    "hex": "#fe9395",
+    "used_for": "Universal SG pill label and the arrow into it"
+   },
+   {
+    "hex": "#f7ea00",
+    "used_for": "modality stamp for Text"
+   },
+   {
+    "hex": "#e50088",
+    "used_for": "modality stamp for Image"
+   },
+   {
+    "hex": "#00a9e8",
+    "used_for": "modality stamp for Video; headphones nodes"
+   },
+   {
+    "hex": "#f44336",
+    "used_for": "Peter / person nodes"
+   },
+   {
+    "hex": "#009688",
+    "used_for": "sofa nodes"
+   },
+   {
+    "hex": "#673ab7",
+    "used_for": "iphone / phone nodes"
+   },
+   {
+    "hex": "#795548",
+    "used_for": "room and wall nodes"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black arrows inside graphs, 0.75 pt coloured card outlines, grey card edges",
+  "font": "serif (Times New Roman) 4.5-6.5 pt for node and edge words, sans (Comic Sans MS) 6.5 pt for card headers, italic for the legend",
+  "corners": "rounded",
+  "arrows": "thin straight black arrows with small filled heads carrying relation words; short fat block arrows in the header colour between bands",
+  "rendering": "flat-vector",
+  "effects": "translucent skewed planes for the video graphs and perspective skew on the video frames",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "header and block-arrow colour = modality of the card (orange text, green image, purple video, blue 3D, pink universal); node and label colour = object class, kept across all graphs; tiny stamps yellow / magenta / cyan / black = source modality Text / Image / Video / 3D",
+  "line_style_means": "dashed pink outline = the group of raw inputs; thin black arrows = relations between objects",
+  "shape_means": "dot plus label = object; arrow with a word = relation; skewed plane = one video frame",
+  "marker_means": "tiny squares beside a node say which modality the object came from",
+  "emphasis": "the universal graphs take the whole bottom band with a salmon pill label and a long arrow row; top cards are smaller and shown as the baselines",
+  "reusable_patterns": [
+   "one scene shown once per source in the same graph grammar, each card headed in its own colour",
+   "colour-matched block arrow from each raw input up to its card",
+   "tiny colour stamps beside items to record their source, with a key in the corner",
+   "same object keeps one colour in every graph so cross-modal links need no lines",
+   "row of identical cards joined by arrows and an ellipsis for time steps",
+   "video frames and their graphs drawn as skewed planes along a timeline"
+  ],
+  "weaknesses": [
+   "node and edge words are 4.5 pt and crowded",
+   "tiny stamps are hard to read at print size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a scene shown as sentence, picture, video frames and point cloud",
+   "hand-built scene graphs of that scene"
+  ],
+  "stock": [],
+  "generated": [
+   "stylised room picture and video frames, which look illustrated or generated"
+  ],
+  "drawn": [
+   "graph nodes and edges",
+   "tinted cards and bands",
+   "block arrows",
+   "stamps and key"
+  ],
+  "unknown": [
+   "source of the point-cloud render"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "four coloured scene-graph cards",
+   "sentence card with coloured words",
+   "room picture",
+   "four skewed video frames",
+   "point-cloud render",
+   "five universal graph cards in a row",
+   "modality colour stamps"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "scene graph",
+   "universal scene graph",
+   "multimodal",
+   "text",
+   "image",
+   "video",
+   "3D point cloud",
+   "modality-comprehensive"
+  ],
+  "tags": [
+   "task-definition",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "knowledge-graph",
+   "small-multiples",
+   "filmstrip"
+  ],
+  "new_tags": [
+   {
+    "name": "provenance-colour-stamps",
+    "what": "tiny colour squares beside graph nodes mark the source modality of each node, explained by a key in the corner"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show a unification, draw the same instance once per source in one visual grammar with its own coloured header and an arrow from its raw input, then merge them in one wide band below whose items carry small colour stamps for their source. Keep item colours fixed across all graphs.",
+  "suits": "Papers that unify several modalities, views or data sources into one representation and want to show what each source adds."
+ },
+ "tags": [
+  "tinted cards",
+  "bands",
+  "colour-matched arrows",
+  "node-link graphs",
+  "pastel",
+  "dense"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 Universal Scene Graph (p.3)"
+  ],
+  "evidence": [
+   "Caption: single-modality scene graphs for text, image, video and 3D at the top, the proposed Universal SG at the bottom.",
+   "Caption: the shown USG uses all four modalities, but any modality can be absent.",
+   "Section 2: the textual object Peter corresponds to the visual object person, and the 3D sofa to the image sofa."
+  ]
+ },
+ "summary": "Universal Scene Graph Generation proposes one scene-graph representation that can be built from any mix of text, image, video and 3D input. Figure 1 uses one scene, a person with headphones relaxing on a sofa with a phone. Four tinted cards at the top show what a scene graph of each single modality looks like: a sentence graph, an image graph, a sequence of video graphs on skewed planes and a 3D graph. Each card sits over its raw input and is joined to it by a colour-matched arrow. A pink band at the bottom holds five consecutive universal graphs whose nodes carry tiny colour stamps naming their source modality, explained by a key. Object colours stay the same in every graph.",
+ "summary_zh": "提出可由文本、图像、视频、3D任意组合生成的通用场景图。图中以同一场景为例，上排四张彩色卡片分别画出单一模态的场景图并配原始输入，下方粉色带是五帧通用场景图，节点用小色块标明来源模态。",
+ "confidence": "high",
+ "notes": "Prior pass said scope-overview + stage-pipeline; the figure is a contrast of single-modality scene graphs with the proposed one on a single scene, so side-by-side-contrast leads, with the scene-graph drawing as a formal diagram. The bottom caption text is partly in the preview and was ignored.",
+ "venue": "CVPR25"
+}

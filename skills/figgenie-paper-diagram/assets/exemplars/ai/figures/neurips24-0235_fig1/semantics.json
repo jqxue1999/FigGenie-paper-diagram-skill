@@ -1,0 +1,443 @@
+{
+ "paper_id": "neurips24-0235",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WINGS",
+  "one_liner": "A multimodal LLM with visual and textual learners in parallel with each attention block, keeping text-only skills while learning multimodal ones.",
+  "domain": [
+   "multimodal LLM",
+   "catastrophic forgetting",
+   "interleaved image-text dialogue"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "worked-walkthrough"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "chat cards on both sides of a central radar chart; three coloured headings name text-only, interleaved and multimodal instructions",
+  "argues": "WINGS answers well in all three input modes, text-only, interleaved image-text and multimodal, and its radar polygon covers the baselines on both text-only and multimodal benchmarks.",
+  "subject": "A watermelon conversation as chat cards, with a radar chart over 18 benchmarks comparing WINGS, LLaVA-Next and DeepSeek-VL.",
+  "elements": [
+   {
+    "name": "Text-only Instruction",
+    "type": "label",
+    "role": "names the first card: a question without any image",
+    "drawn_as": "bold serif heading on a yellow highlighter bar",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Interleaved Image-Text Context",
+    "type": "label",
+    "role": "names the second card: a user turn with two photos inside the text",
+    "drawn_as": "bold serif heading on a green highlighter bar",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Multimodal Instruction",
+    "type": "label",
+    "role": "names the card whose question relies on one image",
+    "drawn_as": "bold serif heading on a pink highlighter bar",
+    "container": "right column",
+    "is_contribution": false
+   },
+   {
+    "name": "User turns",
+    "type": "sample",
+    "role": "the four user messages: refreshing fruits, two watermelons in the garden, pick a better watermelon, the carved watermelon",
+    "drawn_as": "white speech bubbles with a thin dark outline and a tail, bold User: prefix, serif 6.5 to 7 pt",
+    "container": "chat cards",
+    "is_contribution": false
+   },
+   {
+    "name": "WINGS (Ours) replies",
+    "type": "sample",
+    "role": "the model's answers; key words are highlighted",
+    "drawn_as": "rounded boxes tinted cream, light green or light pink, bold small-caps WINGS (Ours): prefix, key words in white on solid green, some bold phrases",
+    "container": "chat cards",
+    "is_contribution": true
+   },
+   {
+    "name": "Text-only QA v.s. Multimodal QA",
+    "type": "label",
+    "role": "title of the radar chart; Text-only QA is underlined like the left-half axis labels",
+    "drawn_as": "bold serif 8 pt heading with an underline under the first part",
+    "container": "centre column",
+    "is_contribution": false
+   },
+   {
+    "name": "18 benchmark axes",
+    "type": "label",
+    "role": "left half text-only: MMLU, CMMLU, RACE-M, RACE-H, ARC, HellaSwag, WinoGrande, GSM8K, MBPP; right half multimodal: HallusionBench, AI2D, SEED-Bench, ScienceQA, MME, MMBench-CN, MMBench-EN, MMMU-TEST, MMMU-VAL",
+    "drawn_as": "5.5 pt sans labels around the spider grid, the nine text-only labels underlined",
+    "container": "centre column",
+    "is_contribution": false
+   },
+   {
+    "name": "LLaVA-Next / DeepSeek-VL / WINGS (Ours)",
+    "type": "label",
+    "role": "legend of the three polygons; dark green is WINGS (caption)",
+    "drawn_as": "three short coloured line samples with names in a dashed grey frame under the chart",
+    "container": "centre column",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "User turns",
+    "to": "WINGS (Ours) replies",
+    "what": "each reply box sits directly under the bubble it answers",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Text-only Instruction",
+    "to": "Interleaved Image-Text Context",
+    "what": "the same watermelon conversation continues from a text-only to an interleaved turn",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Interleaved Image-Text Context",
+    "to": "Let's pick out a better watermelon (top-right card)",
+    "what": "the follow-up refers to the two photos, the reply says the left one; same green tint",
+    "kind": "time",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Interleaved Image-Text Context",
+    "to": "Multimodal Instruction",
+    "what": "next turn of the conversation, now with one image",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "photos labelled 1 and 2",
+    "to": "WINGS reply of the interleaved card",
+    "what": "the reply names them as 1 and 2",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "green key-word boxes and WINGS polygon",
+    "to": "WINGS (Ours) legend entry",
+    "what": "one green stands for WINGS in chat replies and in the radar",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "underlined axis labels",
+    "to": "Text-only QA",
+    "what": "underline marks the text-only benchmarks on the left half of the radar",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Text-only Instruction",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a question about refreshing fruits answered with a list in which watermelon is highlighted",
+    "verdict": "ours"
+   },
+   {
+    "label": "Interleaved Image-Text Context",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a user turn with two watermelon photos, the reply describing both, and a follow-up card at the top right that picks the left one",
+    "verdict": "ours"
+   },
+   {
+    "label": "Text-only QA v.s. Multimodal QA",
+    "axis": "narrative",
+    "shows": "radar chart of 18 benchmarks, nine text-only and nine multimodal, for LLaVA-Next, DeepSeek-VL and WINGS",
+    "verdict": "ours"
+   },
+   {
+    "label": "Multimodal Instruction",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a question about a carved watermelon photo and a reply with highlighted key words",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1 2",
+    "kind": "identity",
+    "at": "above the two watermelon photos in the interleaved user turn",
+    "what": "name the images so the reply can refer to them"
+   },
+   {
+    "marker": "underline",
+    "kind": "identity",
+    "at": "Text-only QA heading and the nine left-half axis labels",
+    "what": "mark the text-only benchmarks"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two round-cropped watermelon photos",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "circular cut-outs placed inline at the end of the user turn, numbers 1 and 2 above them"
+   },
+   {
+    "what": "carved watermelon with a heart, roses and the letters K & M",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "round-cropped photo overlapping the corner of the user bubble and the reply box"
+   },
+   {
+    "what": "radar chart of 18 benchmark scores for three models",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "three translucent polygons over a light-grey spider grid; the dark-green WINGS polygon lies outermost; axis labels are live text; dashed legend box beneath"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "text-only question What are some refreshing fruits to beat the summer heat? and the reply listing watermelon, strawberries, blueberries",
+    "form": "speech bubble over a reply box, key word highlighted",
+    "real_values": true
+   },
+   {
+    "what": "user shares two watermelon photos; the reply says both are ripe, green and striped; the follow-up asks to pick the better one and the reply picks the left one",
+    "form": "two chat cards with inline photos and highlighted key words",
+    "real_values": true
+   },
+   {
+    "what": "photo of a carved watermelon; the reply describes the heart shape, the roses made from the flesh and the initials K & M",
+    "form": "speech bubble with a photo over a reply box with highlighted words",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "white speech bubble with a tail for the user, tinted rounded box for the model reply, bold speaker prefixes instead of avatars",
+    "parts": [
+     "user bubble",
+     "reply box",
+     "speaker prefix"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "radar-chart",
+    "drawn_as": "18-axis spider chart split into text-only benchmarks on the left and multimodal ones on the right, with three translucent polygons",
+    "parts": [
+     "axes",
+     "polygons",
+     "legend"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Eye starts at the yellow Text-only Instruction heading at top left, goes down the left column, crosses to the radar chart, then reads the right column from the follow-up card to the Multimodal Instruction card."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three columns without outer frames: two stacked chat cards on the left, the radar chart with its title and legend in the centre, two stacked chat cards on the right; one watermelon photo overlaps the corner of the lower right card.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.26,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#67aa51",
+    "used_for": "solid boxes behind key words in WINGS replies (white text) and the WINGS polygon"
+   },
+   {
+    "hex": "#a4d896",
+    "used_for": "green highlighter bar behind Interleaved Image-Text Context"
+   },
+   {
+    "hex": "#fef6ac",
+    "used_for": "yellow highlighter bar behind Text-only Instruction"
+   },
+   {
+    "hex": "#ffc4c7",
+    "used_for": "pink highlighter bar behind Multimodal Instruction"
+   },
+   {
+    "hex": "#f7fff8",
+    "used_for": "pale green tint of the reply boxes of the interleaved cards"
+   },
+   {
+    "hex": "#fffdf5",
+    "used_for": "pale cream tint of the text-only reply box"
+   },
+   {
+    "hex": "#fff8f5",
+    "used_for": "pale pink tint of the multimodal reply box"
+   },
+   {
+    "hex": "#262626",
+    "used_for": "outline of speech bubbles and reply boxes"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "radar grid lines and legend frame"
+   },
+   {
+    "hex": "#f4868d",
+    "used_for": "LLaVA-Next polygon line",
+    "approx": true
+   },
+   {
+    "hex": "#f9d94a",
+    "used_for": "DeepSeek-VL polygon line",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark outlines on bubbles and reply boxes; light-grey radar grid; dashed grey frame round the legend",
+  "font": "serif (Times New Roman) 6 to 7 pt chat text, bold 7 to 8 pt headings and speaker prefixes, WINGS in small caps; light sans (Calibri) 5.5 pt for radar labels",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "highlighter heading colour names the instruction type (yellow text-only, green interleaved, pink multimodal) and tints the reply box; in the radar green = WINGS, pink = LLaVA-Next, yellow = DeepSeek-VL; white-on-green key words mark what WINGS picks out",
+  "line_style_means": "speech bubble with a tail = user turn; plain rounded box = model reply; underline = text-only; dashed grey frame = radar legend",
+  "shape_means": "left half of the radar = text-only benchmarks, right half = multimodal ones; polygon = one model's scores; round cut-out photos = images inside an instruction",
+  "marker_means": "1 and 2 name the two photos; bold words inside replies point at key content",
+  "emphasis": "solid green key-word boxes and the outermost dark-green polygon; coloured heading bars",
+  "reusable_patterns": [
+   "three coloured highlighter headings naming input types above chat cards",
+   "user turn as a speech bubble with a tail over a rounded reply box",
+   "key words of the reply set as white text on solid green boxes",
+   "radar chart whose halves split benchmarks into two modalities, placed between the chat cards",
+   "numbered image thumbnails inside the user turn that the reply refers to",
+   "dashed legend box under a chart"
+  ],
+  "weaknesses": [
+   "the 18 radar axis labels are 5.5 pt and the chart has no numbers, so the margin of the gains cannot be read",
+   "the top-right card has no heading, so its link to the interleaved context is only shown by tint and content"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real user instructions and WINGS replies",
+   "benchmark scores drawn as a radar chart for three models"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "speech bubbles and reply boxes",
+   "highlighter heading bars",
+   "key-word highlight boxes",
+   "legend frame"
+  ],
+  "unknown": [
+   "origin of the watermelon photos"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "speech-bubble user turns with tails",
+   "WINGS reply boxes with green key-word highlights",
+   "three coloured highlighter headings",
+   "radar chart of 18 benchmarks with three polygons",
+   "round watermelon photos numbered 1 and 2",
+   "carved watermelon photo",
+   "dashed legend box"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal LLM",
+   "text-only forgetting",
+   "interleaved image-text",
+   "radar chart",
+   "chat examples",
+   "WINGS",
+   "LLaVA-Next",
+   "DeepSeek-VL"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "radar-chart",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "highlighter-headings",
+    "what": "short coloured highlighter bars behind card headings (yellow, green, pink) that name each input type and recolour the card's tint"
+   },
+   {
+    "name": "chat-flanked-chart",
+    "what": "a results chart centred between chat-example cards, so one teaser shows behaviour and score together"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show behaviour and score in one teaser: chat cards on both sides, headed by coloured highlighter labels for the input types, around a central radar chart; set key words of the model reply on solid green so the reader sees what it got right.",
+  "suits": "papers on chat models or multimodal LLMs that claim balanced capability across input types and have a summary chart over many benchmarks."
+ },
+ "tags": [
+  "chat-cards",
+  "radar-centre",
+  "highlighted-keywords",
+  "colour-headings",
+  "serif-text",
+  "teaser"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)",
+   "Experiments (p.9)"
+  ],
+  "evidence": [
+   "users often start with text-only inquiries and then, if not fully satisfied",
+   "with dark green indicating WINGS with the comprehensive performance",
+   "WINGS excels in handling text-only tasks while improving performance on visual-related instructions."
+  ]
+ },
+ "summary": "WINGS is a multimodal LLM that adds visual and textual learners in parallel with each attention block so that it keeps its text-only skills while learning multimodal ones. Figure 1 is a teaser that sets chat cards on both sides of a radar chart. Three coloured highlighter headings name the instruction types: Text-only Instruction, Interleaved Image-Text Context and Multimodal Instruction. Each card has a speech-bubble user turn over a WINGS reply box in which key words sit on solid green; watermelon photos serve as images. The centre radar compares WINGS, LLaVA-Next and DeepSeek-VL over nine text-only and nine multimodal benchmarks, with WINGS in dark green.",
+ "summary_zh": "WINGS 是在注意力层并联视觉与文本学习器的多模态大模型，既保留纯文本能力又学习多模态。图 1 在雷达图两侧放置对话卡片，三色高亮标题区分纯文本、图文交错和多模态指令，雷达图比较 WINGS 与两个基线在 18 个基准上的表现。",
+ "confidence": "high",
+ "notes": "Prior labels listed scope-overview (benchmark-dashboard); the radar is a result chart, not a map of a task space, so scope-overview is dropped and the chat cards are kept as a real-io-trace walkthrough. The unheaded card at the top right is read as the follow-up of the interleaved context from its green tint and its reply about the left one. The radar polygons seem to be placed as clipped bitmaps with live axis labels.",
+ "venue": "NeurIPS24"
+}

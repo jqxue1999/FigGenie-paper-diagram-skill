@@ -1,0 +1,540 @@
+{
+ "paper_id": "neurips24-0227",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VITRON",
+  "one_liner": "A unified pixel-level vision LLM that understands, generates, segments and edits both images and videos.",
+  "domain": [
+   "vision LLM",
+   "pixel-level vision",
+   "image and video editing"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "four tinted task-cluster quadrants placed on two gradient axes around a central logo, each task a pale tab over one real sample",
+  "argues": "One model covers four clusters of vision tasks, from understanding to generation and from low-level to high-level semantics, with an example for each task.",
+  "subject": "A two-axis capability map of 23 vision tasks in four quadrants around the VITRON logo, each with a sample.",
+  "elements": [
+   {
+    "name": "VITRON",
+    "type": "icon",
+    "role": "names the model at the junction of the four clusters",
+    "drawn_as": "round white disc with a green eye whose pupil is a lightbulb, VITRON wordmark in teal small caps beneath",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Low-level Visual Semantics / High-level Visual Semantics",
+    "type": "label",
+    "role": "horizontal axis: from low-level to high-level semantics",
+    "drawn_as": "wide double-headed block arrow along the top with a light-blue to light-yellow gradient, serif 8 pt labels at the two ends",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Visual Understanding / Visual Generating",
+    "type": "label",
+    "role": "vertical axis: from understanding to generating",
+    "drawn_as": "wide double-headed block arrow down the left edge with a blue to pink gradient, rotated serif labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Vision Segmentation & Grounding",
+    "type": "container",
+    "role": "cluster of 7 tasks: Panoptic, Instance, Semantic, Referring, Phrase Grounding, Video Grounding, Video Object Segmentation (Tracking)",
+    "drawn_as": "light-blue quadrant with a saturated blue header chip, white text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Pixel-level Vision Understanding",
+    "type": "container",
+    "role": "cluster of 7 tasks: Image/Video Captioning, Referring Captioning, Image QA, Video QA, Language-Image Retrieval, Language-Video Retrieval, Video Temporal Grounding",
+    "drawn_as": "light-yellow quadrant with a gold header chip, white text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Vision Synthesis & Generation",
+    "type": "container",
+    "role": "cluster of 3 tasks: Text-to-Image Generation, Text-to-Video Generation, Image-to-Video Generation",
+    "drawn_as": "light-pink quadrant with a red header chip, white text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Vision Editing & Inpainting",
+    "type": "container",
+    "role": "cluster of 6 tasks: Adding, Removing, Replacing, Moving, Style Changing, Color Changing",
+    "drawn_as": "light-teal quadrant with a teal header chip, white text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "task tabs",
+    "type": "label",
+    "role": "name one task each, e.g. Panoptic, Image QA, Moving",
+    "drawn_as": "pale rounded tab in the cluster's tint with a serif 6.5 pt title, sitting on top of the sample",
+    "container": "task clusters",
+    "is_contribution": false
+   },
+   {
+    "name": "prompt and answer strips",
+    "type": "text-block",
+    "role": "the text belonging to a sample: A white horse, A toddler in a blue shirt is steering his toy on a grass field, Q: Where is the child sitting? A: Arms, A corgi runs on the grass, A polar bear swimming.",
+    "drawn_as": "4 pt serif text on small light-grey strips under or above the thumbnails",
+    "container": "task clusters",
+    "is_contribution": false
+   },
+   {
+    "name": "retrieval scores",
+    "type": "label",
+    "role": "relevance of each retrieved image or clip: 0.9, 0.5, 0.7",
+    "drawn_as": "small blue pills with white numbers on the result tiles",
+    "container": "Pixel-level Vision Understanding",
+    "is_contribution": false
+   },
+   {
+    "name": "walking / running",
+    "type": "label",
+    "role": "the two time segments found by Video Temporal Grounding",
+    "drawn_as": "thin black double-headed arrows under the film strip, each with a word on a white label",
+    "container": "Pixel-level Vision Understanding",
+    "is_contribution": false
+   },
+   {
+    "name": "grey arrow in Image-to-Video Generation",
+    "type": "other",
+    "role": "from the input image to the generated clip",
+    "drawn_as": "short grey block arrow between a single image and a film strip",
+    "container": "Vision Synthesis & Generation",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Low-level Visual Semantics",
+    "to": "High-level Visual Semantics",
+    "what": "left column is low level, right column high level",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Understanding",
+    "to": "Visual Generating",
+    "what": "top row understanding, bottom row generating",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VITRON",
+    "to": "four task clusters",
+    "what": "the logo sits at the common corner of the four quadrants",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "cluster header chip",
+    "to": "task tabs and quadrant",
+    "what": "chip, tabs and tint share one hue per cluster",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "words of the grounding captions",
+    "to": "boxes in the image or frames",
+    "what": "each phrase has the colour of its box",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "query text (panda, emu, ostrich, A group of people play rugby on the grass)",
+    "to": "retrieved images and clips",
+    "what": "results carry relevance scores",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "input image in Image-to-Video Generation",
+    "to": "generated film strip",
+    "what": "the clip generated from the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left tile of each editing pair",
+    "to": "right tile",
+    "what": "original image and edited result",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Vision Segmentation & Grounding",
+    "axis": "overview",
+    "shows": "seven tasks with masks, boxes and tracked masks on photos and video frames",
+    "verdict": null
+   },
+   {
+    "label": "Pixel-level Vision Understanding",
+    "axis": "overview",
+    "shows": "captioning, question answering, retrieval and temporal grounding on photos and clips",
+    "verdict": null
+   },
+   {
+    "label": "Vision Synthesis & Generation",
+    "axis": "overview",
+    "shows": "text-to-image, text-to-video and image-to-video outputs",
+    "verdict": null
+   },
+   {
+    "label": "Vision Editing & Inpainting",
+    "axis": "overview",
+    "shows": "six edit types as before and after image pairs",
+    "verdict": null
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "street, umbrella and city scenes with coloured masks (Panoptic, Instance, Semantic) and a horse herd with one white horse (Referring)",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "square thumbnails with translucent colour masks, each under a pale tab"
+   },
+   {
+    "what": "toddler on grass with coloured boxes (Phrase Grounding)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo with red, blue and purple boxes whose colours match the words of the caption below"
+   },
+   {
+    "what": "video clips as film strips (Video Grounding, Video Object Segmentation, Video QA, Language-Video Retrieval, Video Temporal Grounding, Text-to-Video, Image-to-Video)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "rows of 4 to 8 consecutive frames with dashed blue sprocket borders at both ends; boxes or masks overlaid in the grounding and tracking strips"
+   },
+   {
+    "what": "photos and drawing used for captioning and question answering (pink and blue creature drawing, woman on a bench, mother with baby)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "photo above a grey text strip; one has a green box for the referred woman"
+   },
+   {
+    "what": "retrieved images for panda, emu and ostrich",
+    "content": "natural-image",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "adjacent tiles with blue score pills and a word tag at the left"
+   },
+   {
+    "what": "generated corgi image and the first image of image-to-video (woman with hat)",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "one photo under a prompt strip, one next to a grey arrow to the clip"
+   },
+   {
+    "what": "editing pairs: giraffe plus dinosaur, steak removed, cat replaced by dog, cup moved, horse restyled, red car recoloured",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "two adjoining square tiles per edit, original left and edited right, under a teal tab"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "green eye with a lightbulb pupil and light rays",
+    "stands_for": "the VITRON model",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "referring expression A white horse picks one horse out of a herd",
+    "form": "caption strip on a photo with a mask",
+    "real_values": true
+   },
+   {
+    "what": "grounding captions A toddler in a blue shirt is steering his toy on a grass field and A little girl plays by a pond with a plastic shovel",
+    "form": "words coloured red, blue, green or purple to match boxes in the image or frames",
+    "real_values": true
+   },
+   {
+    "what": "Q: Where is the child sitting? A: Arms, and Q: Why is the child sitting on a cardboard? A: trying to slide down the slope",
+    "form": "bold Q and A text strips under photo and clip",
+    "real_values": true
+   },
+   {
+    "what": "generation prompts A corgi runs on the grass and A polar bear swimming, and retrieval queries panda, emu, ostrich and A group of people play rugby on the grass",
+    "form": "small text strips beside the outputs or results",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "rows of consecutive frames with dashed blue sprocket borders at both ends",
+    "parts": [
+     "frames",
+     "sprocket borders"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "query text beside retrieved image or clip tiles marked with blue score pills, no database drawn",
+    "parts": [
+     "query",
+     "result tiles",
+     "score pills"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the top-left axis label and the blue quadrant, moves across the top row, then the bottom row; the central logo is a landmark between the quadrants, not a start."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four tinted quadrants in a 2 by 2 grid, placed by two gradient block arrows on the top and left edges, with the VITRON logo in a white disc over the central junction; each quadrant holds titled tabs over thumbnails in rows.",
+  "panel_count": 4,
+  "lanes": "2 columns by semantic level and 2 rows by understanding or generating, named by the two gradient arrows",
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.3,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ecf3fb",
+    "used_for": "Vision Segmentation & Grounding quadrant tint"
+   },
+   {
+    "hex": "#fff7d9",
+    "used_for": "Pixel-level Vision Understanding quadrant tint"
+   },
+   {
+    "hex": "#fff4f4",
+    "used_for": "Vision Synthesis & Generation quadrant tint"
+   },
+   {
+    "hex": "#e4f8f5",
+    "used_for": "Vision Editing & Inpainting quadrant tint"
+   },
+   {
+    "hex": "#4672c4",
+    "used_for": "header chip of the segmentation and grounding cluster"
+   },
+   {
+    "hex": "#e1a900",
+    "used_for": "header chip of the pixel-level understanding cluster"
+   },
+   {
+    "hex": "#de4145",
+    "used_for": "header chip of the synthesis and generation cluster"
+   },
+   {
+    "hex": "#2a9d8c",
+    "used_for": "header chip of the editing and inpainting cluster"
+   },
+   {
+    "hex": "#cae4ff",
+    "used_for": "task tabs of the blue cluster and the low-level end of the top arrow"
+   },
+   {
+    "hex": "#ffebae",
+    "used_for": "task tabs of the yellow cluster and the high-level end of the top arrow"
+   },
+   {
+    "hex": "#ffd0d0",
+    "used_for": "task tabs of the pink cluster"
+   },
+   {
+    "hex": "#86dfd1",
+    "used_for": "task tabs of the teal cluster"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey strips holding prompts, answers and captions"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red words and boxes in the grounding examples"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple words and boxes in the grounding examples"
+   },
+   {
+    "hex": "#00b050",
+    "used_for": "green words and boxes in the grounding examples"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue words in the grounding examples"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "hairline light-grey (#c8c8c8) frames on thumbnails; 0.25 to 0.5 pt coloured boxes for grounding",
+  "font": "serif (Nimbus Roman): 6.5 pt task titles, 8 pt axis labels, 4 pt captions; Comic Sans-like sans 7 pt in white on the cluster chips",
+  "corners": "rounded",
+  "arrows": "wide double-headed gradient block arrows for the two axes; thin black double-headed arrows under the temporal strip; a short grey block arrow in image-to-video",
+  "rendering": "flat-vector",
+  "effects": "colour gradient in the two axis arrows; otherwise none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one hue per task cluster on its quadrant tint, header chip and task tabs (blue segmentation and grounding, gold pixel-level understanding, red synthesis and generation, teal editing and inpainting); in grounding examples a word and its box share a colour",
+  "line_style_means": "dashed blue borders at both ends of a strip mean video; double-headed thin arrows with words mark time segments; coloured boxes mark grounded objects",
+  "shape_means": "pale tab on a thumbnail = one task; saturated chip = a cluster; white disc with the logo = the model",
+  "marker_means": "blue pills with 0.9, 0.5, 0.7 are retrieval scores; walking and running label the two time segments",
+  "emphasis": "the logo in a white disc at the junction of the four quadrants, and saturated cluster chips against pale task tabs",
+  "reusable_patterns": [
+   "two gradient block arrows along the top and left edges naming the axes of a task map",
+   "four tinted quadrants with saturated header chips and pale task tabs from one hue",
+   "model logo in a white disc at the junction of the quadrants",
+   "one real sample under every task tab with its prompt in a small grey strip",
+   "film strips with sprocket borders for video tasks",
+   "before and after image pairs for editing tasks",
+   "words coloured to match their boxes for grounding",
+   "blue score pills on retrieval results"
+  ],
+  "weaknesses": [
+   "4 pt captions and 3 pt score numbers are tiny",
+   "the placement rule for each cluster on the two axes is only implied",
+   "all 23 task tabs have the same weight, so no task stands out"
+  ]
+ },
+ "resources": {
+  "own": [
+   "task samples and outputs: masks, boxes, retrieval results, generated frames, edited images"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "quadrant tints, header chips, task tabs",
+   "two gradient axis arrows",
+   "score pills, boxes and time arrows"
+  ],
+  "unknown": [
+   "origin of the VITRON eye-lightbulb logo",
+   "source of the stylised woman image used for image-to-video"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "four tinted quadrants with header chips",
+   "pale task tabs over sample thumbnails",
+   "film strips with sprocket borders",
+   "gradient axis arrows",
+   "VITRON logo in a white disc",
+   "before and after editing pairs",
+   "colour-matched grounding captions and boxes",
+   "retrieval results with score pills"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "vision LLM",
+   "pixel-level",
+   "segmentation",
+   "grounding",
+   "image editing",
+   "video generation",
+   "retrieval",
+   "captioning and question answering"
+  ],
+  "tags": [
+   "title-branding",
+   "filmstrip",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "schematic-plot",
+   "small-multiples",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-axis-arrows",
+    "what": "wide double-headed block arrows with a colour gradient along the figure edges, naming two axes of a quadrant map"
+   },
+   {
+    "name": "tabbed-task-cards",
+    "what": "each task is a pale tab with a serif title sitting on its sample thumbnail, grouped under a saturated cluster chip in a tinted quadrant"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Lay a capability map out as tinted quadrants placed by two named axes drawn as gradient arrows on the edges, put the model logo in a white disc at the junction, and give each task one pale tab over a real sample, all in one hue per cluster.",
+  "suits": "generalist models or benchmarks that cover many tasks in a few clusters and need one sample per task, with a clear two-axis organising idea."
+ },
+ "tags": [
+  "quadrant-map",
+  "tinted-regions",
+  "tabbed-cards",
+  "filmstrips",
+  "gradient-axis-arrows",
+  "central-logo",
+  "photo-heavy"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.1)",
+   "Abstract"
+  ],
+  "evidence": [
+   "VITRON supports four main task clusters of visions, spanning visual comprehension to visual generation, from low level to high level.",
+   "unified support for both images and videos, and insufficient coverage across various vision tasks"
+  ]
+ },
+ "summary": "VITRON is a unified pixel-level vision LLM that understands, generates, segments and edits images and videos. Figure 1 is a two-axis capability map: gradient arrows along the top (low-level to high-level visual semantics) and the left edge (visual understanding to visual generating) frame four tinted quadrants, each with a saturated header chip: Vision Segmentation & Grounding, Pixel-level Vision Understanding, Vision Synthesis & Generation, and Vision Editing & Inpainting. Pale tabs name 23 tasks, each over one real sample (masks, boxes, film strips, question-answer text, retrieval scores, before and after edits), and the VITRON logo sits in a white disc at the centre.",
+ "summary_zh": "VITRON 是统一的像素级视觉大模型，覆盖理解、生成、分割与编辑。图 1 用顶部（低层到高层语义）和左侧（理解到生成）两条渐变箭头界定四个色块，共 23 个任务，每个任务配一个真实样例，中央放置 VITRON 标志。",
+ "confidence": "high",
+ "notes": "No paragraph mentions the figure; roles come from the caption, abstract and picture. Prior labels had contribution-mosaic first; the two-axis placement of clusters makes scope-overview the primary kind, with capability-cards as the second. The grey #d8d8d8 area in the digest is backing rectangles behind thumbnails, not a visible colour. The 23 tasks are counted from the tab titles.",
+ "venue": "NeurIPS24"
+}

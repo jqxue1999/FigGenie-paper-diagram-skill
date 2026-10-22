@@ -1,0 +1,436 @@
+{
+ "paper_id": "neurips24-0272",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DapperFL",
+  "one_liner": "A heterogeneous federated learning framework with model fusion pruning and domain adaptive regularization for edge devices; the figure motivates it.",
+  "domain": [
+   "federated learning",
+   "edge computing",
+   "domain adaptation"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "a server band above three device cards joined by numbered solid down arrows and dotted up arrows, one federated round with a failed device and two different data domains",
+  "argues": "In federated learning on edge devices, a resource-limited device that times out and clients holding data from different domains degrade the aggregated global model.",
+  "subject": "one federated round: server, aggregated global model, three heterogeneous devices with local data, one timeout, falling accuracy on two domains",
+  "elements": [
+   {
+    "name": "Central Server",
+    "type": "actor",
+    "role": "sends the global model and aggregates the returned local models",
+    "drawn_as": "dark line-art server icon above the label, inside a light-blue rounded band",
+    "container": "server band",
+    "is_contribution": false
+   },
+   {
+    "name": "Aggregated global model",
+    "type": "data",
+    "role": "result of aggregation (step 4)",
+    "drawn_as": "neural-network glyph with yellow nodes above the label and a red-brown circled 4",
+    "container": "server band",
+    "is_contribution": false
+   },
+   {
+    "name": "Accuracy on domain 2 / Accuracy on domain 3",
+    "type": "chart",
+    "role": "show that accuracy on both domains falls",
+    "drawn_as": "two small red line-chart icons with a falling curve, each followed by a label",
+    "container": "server band",
+    "is_contribution": null
+   },
+   {
+    "name": "Global model performance degradation",
+    "type": "label",
+    "role": "the consequence flagged in the figure",
+    "drawn_as": "two lines of red text under the chart icons",
+    "container": "server band",
+    "is_contribution": null
+   },
+   {
+    "name": "Global model (step 1)",
+    "type": "label",
+    "role": "the model sent from the server to each device",
+    "drawn_as": "two-line label beside a solid black down arrow, one per device, with a red-brown circled 1",
+    "container": "between bands",
+    "is_contribution": null
+   },
+   {
+    "name": "Local update on Device 1",
+    "type": "actor",
+    "role": "a resource-limited device that cannot finish its update",
+    "drawn_as": "lilac card with a car-with-wifi icon, a network glyph with green input nodes and red hollow output nodes, and the red words Update timeout",
+    "container": "device band",
+    "is_contribution": null
+   },
+   {
+    "name": "Local update on Device 2",
+    "type": "actor",
+    "role": "a device holding data of domain 2",
+    "drawn_as": "lilac card with a phone icon, three photo stacks (backpack, mug, bicycle) and the caption Local data for domain 2",
+    "container": "device band",
+    "is_contribution": null
+   },
+   {
+    "name": "Local update on Device 3",
+    "type": "actor",
+    "role": "a device holding data of domain 3",
+    "drawn_as": "lilac card with a camera icon, three photo stacks (person, mug, bicycle) and the caption Local data for domain 3",
+    "container": "device band",
+    "is_contribution": null
+   },
+   {
+    "name": "Local model (step 3)",
+    "type": "label",
+    "role": "the model returned from Devices 2 and 3 to the server",
+    "drawn_as": "two-line label beside a dotted black up arrow, with a red-brown circled 3; none for Device 1",
+    "container": "between bands",
+    "is_contribution": null
+   },
+   {
+    "name": "Update timeout",
+    "type": "label",
+    "role": "marks that Device 1 misses the allowed time",
+    "drawn_as": "red text under the network glyph",
+    "container": "Device 1 card",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Central Server",
+    "to": "Device 1, Device 2, Device 3",
+    "what": "step 1: global model sent to every device",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Local data",
+    "to": "Local update",
+    "what": "step 2: each device trains on its own data",
+    "kind": "data",
+    "drawn": "containment",
+    "step": 2
+   },
+   {
+    "from": "Device 2, Device 3",
+    "to": "Central Server",
+    "what": "step 3: local models returned by dotted up arrows; Device 1 returns nothing because of the timeout",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "returned local models",
+    "to": "Aggregated global model",
+    "what": "step 4: aggregation",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 4
+   },
+   {
+    "from": "Aggregated global model",
+    "to": "Accuracy on domain 2 / domain 3",
+    "what": "the aggregated model shows lower accuracy; linked by position only",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Device 1 card",
+    "to": "Update timeout",
+    "what": "the red words name the failure of this device",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1",
+    "kind": "order",
+    "at": "Global model labels beside the down arrows",
+    "what": "global model is sent to the devices"
+   },
+   {
+    "marker": "2",
+    "kind": "order",
+    "at": "Local update on Device 1, 2, 3",
+    "what": "devices train locally"
+   },
+   {
+    "marker": "3",
+    "kind": "order",
+    "at": "Local model labels beside the dotted up arrows",
+    "what": "local models are returned"
+   },
+   {
+    "marker": "4",
+    "kind": "order",
+    "at": "Aggregated global model",
+    "what": "the server aggregates"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "local data thumbnails of domain 2",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "clean product-style photos (backpack, mug, bicycle) on light grounds, each with faded copies stacked behind it"
+   },
+   {
+    "what": "local data thumbnails of domain 3",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "real-world photos with backgrounds (person, mug on a table, bicycle outdoors), each with blurred copies stacked behind it"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "dark server rack",
+    "stands_for": "the central server",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "car with wireless waves, phone, security camera",
+    "stands_for": "three heterogeneous edge devices",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "node-link network glyph, yellow nodes",
+    "stands_for": "the aggregated global model",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "node-link network glyph with green input nodes and red hollow output nodes",
+    "stands_for": "an unfinished local model on Device 1",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "red falling curve on axes",
+    "stands_for": "accuracy on a domain dropping",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "local data of two different domains",
+    "form": "stacks of photo thumbnails of the same object classes in clean versus real-world style",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "federated-round",
+    "drawn_as": "a server band over a row of device cards with numbered solid down arrows for the global model and dotted up arrows for local models; the failed device has no return arrow",
+    "parts": [
+     "server band",
+     "device cards",
+     "down arrows",
+     "dotted up arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "photo thumbnails with faded copies stacked behind them and a caption Local data for domain n",
+    "parts": [
+     "thumbnail stack",
+     "caption"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "network-glyph",
+    "drawn_as": "three columns of circles joined by lines, coloured to say which model it is",
+    "parts": [
+     "input nodes",
+     "hidden nodes",
+     "output nodes"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the server band at the top, follows the numbered down arrows to the three device cards, then back up along the dotted arrows to the aggregated model and the red degradation text."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A light-blue band at the top holds the server, the aggregated model and the red degradation notes; a row of three equal lilac device cards sits below; solid and dotted arrows cross the gap between them in the same three columns.",
+  "panel_count": 1,
+  "lanes": "3 aligned device columns under the server band",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.47,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dbeef3",
+    "used_for": "light-blue band of the central server"
+   },
+   {
+    "hex": "#eeeaf2",
+    "used_for": "lilac device cards"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red text, chart icons and hollow output nodes that flag the problem"
+   },
+   {
+    "hex": "#c05046",
+    "used_for": "red-brown circled step numbers"
+   },
+   {
+    "hex": "#ffd965",
+    "used_for": "yellow nodes of the global-model glyph"
+   },
+   {
+    "hex": "#333333",
+    "used_for": "dark grey device and server icons"
+   },
+   {
+    "hex": "#231815",
+    "used_for": "near-black text and arrows"
+   },
+   {
+    "hex": "#8fbc3b",
+    "used_for": "green input nodes of the Device 1 model glyph",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt black hairlines on the network glyphs, 0.75 pt red chart lines, about 1 pt black arrows, dotted for the returning arrows",
+  "font": "serif (Times-like), converted to outlines so sizes cannot be measured",
+  "corners": "rounded",
+  "arrows": "solid black down arrows and dotted black up arrows with filled heads",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "red = the problem (degradation text, falling-curve icons, hollow output nodes, Update timeout); light blue = server side; lilac = device side; yellow nodes = global model; green input nodes = a local model",
+  "line_style_means": "solid black down arrow = global model sent; dotted black up arrow = local model returned; no up arrow on Device 1 = nothing arrives",
+  "shape_means": "rounded band = server; rounded cards = devices; node-link glyph = a model; falling-curve icon = accuracy dropping",
+  "marker_means": "circled 1 = global model sent, 2 = local update, 3 = local model returned, 4 = aggregation",
+  "emphasis": "red text is the only strong colour; the missing return arrow of Device 1",
+  "reusable_patterns": [
+   "server band over a row of client cards with solid down arrows for broadcasts and dotted up arrows for returns, the failed client missing its return arrow",
+   "one device icon per client (car, phone, camera) to show heterogeneity",
+   "a stack of faded thumbnails per client to show different local domains",
+   "red text tags that name the problem where it occurs",
+   "the same circled number repeated beside parallel arrows to name one step for every client"
+  ],
+  "weaknesses": [
+   "the link between the degradation icons and the aggregation is by position only",
+   "text is outlined, so the figure carries no text layer",
+   "the drawing uses only about 60% of the canvas width"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos for domain 2 and domain 3 (backpack, mug, bicycle, person)"
+  ],
+  "stock": [
+   "server, car, phone and security-camera icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "bands, cards and arrows",
+   "network glyphs",
+   "red falling-curve icons"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "server icon in a light-blue band",
+   "aggregated global model glyph",
+   "three device cards with car, phone and camera icons",
+   "stacked photo thumbnails per domain",
+   "solid down and dotted up arrows",
+   "red degradation text and curve icons"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "federated learning",
+   "domain shift",
+   "system heterogeneity",
+   "edge devices",
+   "update timeout",
+   "global model aggregation",
+   "motivation"
+  ],
+  "tags": [
+   "problem-only",
+   "model-pictogram",
+   "stacked-cards",
+   "error-callouts"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "A motivation figure can show the problem as one numbered round: a server band over client cards, a missing return arrow and a red tag on the failed client, and stacked thumbnails that differ per client to show data shift.",
+  "suits": "motivation figures for federated or distributed learning where system heterogeneity and data heterogeneity must appear in one picture."
+ },
+ "tags": [
+  "server band",
+  "lilac device cards",
+  "circled numbers",
+  "solid and dotted arrows",
+  "red problem text",
+  "serif outlined text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Device 1, with stringent resource constraints, fails to complete its model update within the maximum allowed time.",
+   "Devices 2 and 3 collect data from different domains, leading to diverse local models.",
+   "A motivational example of DapperFL with heterogeneous devices and multiple domains."
+  ]
+ },
+ "summary": "DapperFL is a heterogeneous federated learning framework, and Figure 1 is its motivational example drawn as one communication round. A light-blue band holds the central server, the aggregated global model as a network glyph, and two red falling-accuracy icons for domains 2 and 3 above the red words Global model performance degradation. Below, three lilac cards for a car, a phone and a camera each receive the global model by a numbered solid arrow (1), do a local update (2) and return the local model by a dotted arrow (3). Device 1 shows a red Update timeout and returns nothing; Devices 2 and 3 hold stacked photo thumbnails from different domains.",
+ "summary_zh": "DapperFL 的动机图画出一轮联邦学习：浅蓝服务器带聚合后的全局模型和红色的精度下降提示，下方车、手机、摄像头三张设备卡，编号箭头表示下发、本地更新、回传、聚合；设备 1 超时没有回传，设备 2、3 的数据来自不同域。",
+ "confidence": "high",
+ "notes": "Prior kinds kept, with worked-walkthrough added for the numbered round. All text is outlined, so the strings were read from the picture. The medium of the icons is a guess (vector). The drawn content spans only x 79-317 of a 399 pt canvas.",
+ "venue": "NeurIPS24"
+}

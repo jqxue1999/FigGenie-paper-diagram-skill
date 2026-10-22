@@ -1,0 +1,459 @@
+{
+ "paper_id": "neurips25-0130",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OS-Harm",
+  "one_liner": "Benchmark of 150 tasks measuring the safety of LLM computer-use agents in OSWorld across misuse, prompt injection and misbehaviour, graded by an LLM judge.",
+  "domain": [
+   "computer-use agents",
+   "AI safety benchmark",
+   "LLM-as-judge"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "four equal pale blue cards in a row: tasks, agent, traces, judge",
+  "argues": "Safety of computer use agents can be measured by running tasks from three harm categories in OSWorld and having an LLM judge grade completion and safety from execution traces.",
+  "subject": "Four cards: tasks in an Ubuntu VM, the LLM agent, its traces of screenshots and accessibility trees, an LLM judge.",
+  "elements": [
+   {
+    "name": "OS-Harm tasks",
+    "type": "container",
+    "role": "the benchmark tasks that are run in the OSWorld environment",
+    "drawn_as": "pale blue square card with 10 pt bold title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "run in OSWorld Ubuntu VM",
+    "type": "label",
+    "role": "environment in which the tasks run",
+    "drawn_as": "one line of 6 pt text under the card title",
+    "container": "OS-Harm tasks",
+    "is_contribution": false
+   },
+   {
+    "name": "Mail / Chrome / VS Code",
+    "type": "icon",
+    "role": "example applications the tasks require",
+    "drawn_as": "three app logos with small captions",
+    "container": "OS-Harm tasks",
+    "is_contribution": null
+   },
+   {
+    "name": "C1. Deliberate misuse",
+    "type": "label",
+    "role": "harm category where the user asks for something harmful",
+    "drawn_as": "line of text with bold C1 prefix",
+    "container": "OS-Harm tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "C2. Prompt injections",
+    "type": "label",
+    "role": "harm category where attackers plant malicious content in third-party data",
+    "drawn_as": "line of text with bold C2 prefix",
+    "container": "OS-Harm tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "C3. Model misbehavior",
+    "type": "label",
+    "role": "harm category of costly mistakes or misalignment on benign tasks",
+    "drawn_as": "line of text with bold C3 prefix",
+    "container": "OS-Harm tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM Agent",
+    "type": "module",
+    "role": "the computer-use agent under test",
+    "drawn_as": "pale blue card with a blue robot icon",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Frontier LLMs + OSWorld scaffolding",
+    "type": "label",
+    "role": "what the agent is made of",
+    "drawn_as": "two lines of 7 pt text under the robot",
+    "container": "LLM Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "OpenAI / Gemini / ANTHROPIC logos",
+    "type": "icon",
+    "role": "vendors of the frontier models evaluated",
+    "drawn_as": "row of three brand logos",
+    "container": "LLM Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "Agent Traces",
+    "type": "container",
+    "role": "recorded runs of the agent, the input of the judge",
+    "drawn_as": "pale blue card holding two captioned sample tiles",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "screenshots (images)",
+    "type": "sample",
+    "role": "GUI screenshots part of a trace",
+    "drawn_as": "mock Ubuntu desktop tile with a Terminal window, captioned underneath",
+    "container": "Agent Traces",
+    "is_contribution": null
+   },
+   {
+    "name": "accessibility trees (text-only)",
+    "type": "sample",
+    "role": "text summary of the GUI part of a trace",
+    "drawn_as": "mock tree tile with a Window node over three Button nodes",
+    "container": "Agent Traces",
+    "is_contribution": null
+   },
+   {
+    "name": "LLM Judge",
+    "type": "module",
+    "role": "grades each trace on task success and safety",
+    "drawn_as": "pale blue card with a blue robot in a judge's robe holding a gavel",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Q1. Was the task successfully completed?",
+    "type": "text-block",
+    "role": "first criterion the judge answers",
+    "drawn_as": "bold Q1 prefix, the word successfully in blue",
+    "container": "LLM Judge",
+    "is_contribution": true
+   },
+   {
+    "name": "Q2. Were any unsafe actions taken?",
+    "type": "text-block",
+    "role": "second criterion the judge answers",
+    "drawn_as": "bold Q2 prefix, the word unsafe in red",
+    "container": "LLM Judge",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "OS-Harm tasks",
+    "to": "LLM Agent",
+    "what": "tasks the agent must carry out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Agent",
+    "to": "Agent Traces",
+    "what": "recorded run of the agent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent Traces",
+    "to": "LLM Judge",
+    "what": "traces handed to the judge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Judge",
+    "to": "Q1 and Q2",
+    "what": "the two questions the judge answers",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Frontier LLMs + OSWorld scaffolding",
+    "to": "vendor logos",
+    "what": "which model families are plugged in",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "OS-Harm tasks",
+    "kind": "scope-overview",
+    "axis": "stages",
+    "shows": "apps and the three harm categories C1 to C3 that the tasks cover, run in an OSWorld Ubuntu VM",
+    "verdict": "ours"
+   },
+   {
+    "label": "LLM Agent",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a robot standing for frontier LLMs with OSWorld scaffolding and three vendor logos",
+    "verdict": "setting"
+   },
+   {
+    "label": "Agent Traces",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "the two trace modalities: screenshots (images) and accessibility trees (text-only)",
+    "verdict": "setting"
+   },
+   {
+    "label": "LLM Judge",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a robot with gavel asking whether the task was completed and whether any unsafe actions were taken",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "C1, C2, C3",
+    "kind": "identity",
+    "at": "OS-Harm tasks",
+    "what": "name the three harm categories"
+   },
+   {
+    "marker": "Q1, Q2",
+    "kind": "identity",
+    "at": "LLM Judge",
+    "what": "name the two questions the judge answers"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "mock Ubuntu desktop screenshot with a Terminal window showing a shell prompt",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "simplified wireframe tile with thin black frame, top bar and dock glyphs, captioned 'screenshots (images)'"
+   },
+   {
+    "what": "mock accessibility tree: a Window node over three Button nodes",
+    "content": "other",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small tree diagram of rounded node boxes on a pale tile with thin black frame, captioned 'accessibility trees (text-only)'"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flat blue robot with antenna and smile",
+    "stands_for": "the LLM agent",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "the same robot in a judge's robe with a gavel",
+    "stands_for": "the LLM judge",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "app logos (mail client, Chrome, VS Code)",
+    "stands_for": "the applications the tasks use",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "OpenAI, Gemini and Anthropic logos",
+    "stands_for": "the frontier model families evaluated as agents",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "mock trace items: a terminal screenshot and an accessibility tree",
+    "form": "two small white tiles with captions",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "flat blue robot with antenna and smile standing for the agent",
+    "parts": [
+     "robot head",
+     "antenna",
+     "body"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm-judge",
+    "drawn_as": "the same robot in a judge's robe holding a gavel",
+    "parts": [
+     "robot",
+     "robe",
+     "gavel"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the OS-Harm tasks card at the left and follows the three arrows across the cards to the LLM Judge, whose two questions end the chain."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Four equal pale blue square cards in one row joined by three thick black arrows; each card has a large bold title on top, a robot, logo row or sample tile in the middle and short text below.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.17,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cfe2f3",
+    "used_for": "fill of all four stage cards"
+   },
+   {
+    "hex": "#3d85c6",
+    "used_for": "robot icons",
+    "approx": true
+   },
+   {
+    "hex": "#0000ff",
+    "used_for": "the word successfully in Q1",
+    "approx": true
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "the word unsafe in Q2",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black outline on the four cards, 0.25 pt on the sample tiles",
+  "font": "sans (Trebuchet MS), 10 pt bold card titles, 6.5 pt bold or regular body, 5.5 pt captions",
+  "corners": "square",
+  "arrows": "three thick straight black arrows with solid triangular heads between cards",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pale blue for every stage card; blue robots are the LLM actors; in the judge's questions blue and red words point at the two criteria, success and unsafe",
+  "line_style_means": "none: all outlines are thin solid",
+  "shape_means": "square pale blue card = stage; white tile = sample trace item; robot = LLM, with robe and gavel = judge",
+  "marker_means": "C1 to C3 name harm categories; Q1 and Q2 name the judge's two questions",
+  "emphasis": "oversized bold card titles, thick arrows and the red and blue key words in the judge card",
+  "reusable_patterns": [
+   "four equal tinted cards joined by thick arrows, each headed by a large bold stage title",
+   "one robot character reused for agent and judge, the judge with robe and gavel",
+   "row of vendor logos under the agent box to say which models run",
+   "mini mock tiles with captions showing what a trace contains",
+   "judge's output drawn as two numbered questions with coloured key words"
+  ],
+  "weaknesses": [
+   "arrows are unlabelled, so what passes between cards is left to the caption",
+   "card titles are much larger than the content they head",
+   "the mock trace tiles are tiny"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "app logos of a mail client, Chrome and VS Code",
+   "vendor logos of OpenAI, Gemini and Anthropic"
+  ],
+  "generated": [
+   "flat blue robot character in agent and judge versions"
+  ],
+  "drawn": [
+   "cards and thick arrows",
+   "card titles and question text",
+   "mock screenshot and accessibility-tree tiles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four pale blue cards in a row",
+   "robot agent icon",
+   "robot judge with gavel",
+   "app logos Mail, Chrome, VS Code",
+   "vendor logo row",
+   "mock screenshot and accessibility-tree tiles",
+   "two judge questions"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "computer-use agents",
+   "safety benchmark",
+   "OSWorld",
+   "LLM judge",
+   "prompt injection",
+   "deliberate misuse",
+   "model misbehavior",
+   "execution traces"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "gui-screen",
+   "mascot-character",
+   "model-pictogram",
+   "highlighted-text-spans"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each stage of an evaluation pipeline one equal tinted card with a big title, one recognisable icon and a few short lines; reuse the same robot character for agent and judge (adding a robe and gavel) so roles read at a glance, and end the chain with the judge's questions as the output.",
+  "suits": "Benchmark or evaluation-harness papers where tasks, a model under test, recorded traces and a grader form a short linear chain."
+ },
+ "tags": [
+  "four equal cards",
+  "pale blue",
+  "thick arrows",
+  "robot icons",
+  "app and vendor logos",
+  "large bold titles"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "An LLM judge grades the successful completion of tasks and the safety of agent behavior according to a detailed prompt",
+   "First, we identify three main categories of risk: (1) deliberate user misuse",
+   "using execution traces that consist of agent reasoning steps, GUI screenshots, and summaries of accessibility trees."
+  ]
+ },
+ "summary": "OS-Harm is a benchmark of 150 tasks, built on OSWorld, for measuring the safety of LLM computer-use agents across deliberate user misuse, prompt injection and model misbehaviour, with an LLM judge that grades task success and safety. Figure 1 is a left-to-right chain of four equal pale blue cards joined by thick arrows: OS-Harm tasks (apps Mail, Chrome and VS Code, categories C1 to C3, run in an Ubuntu VM), the LLM Agent (a blue robot, frontier LLMs plus OSWorld scaffolding, three vendor logos), Agent Traces (a mock screenshot and an accessibility tree) and the LLM Judge (the robot with a gavel asking Q1 and Q2).",
+ "summary_zh": "OS-Harm 是衡量计算机使用智能体安全性的基准。图 1 用四张等大浅蓝卡片连成流程：任务（三类危害与应用图标）、LLM 智能体、执行轨迹（截图与无障碍树）、LLM 评审（戴法槌的机器人，问 Q1、Q2）。",
+ "confidence": "high",
+ "notes": "The pre-screen listed only stage-pipeline; scope-overview is added as a minor second kind for the harm categories and app icons in the first card. The four cards are counted as panels with axis stages; the figure can equally be read as one pipeline drawing with four stage boxes. The two trace tiles are drawn mocks, not real traces.",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,494 @@
+{
+ "paper_id": "neurips24-0356",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "A proof that a DNN learns AND-OR interactions between input variables in two phases, which explains the move from under-fitting to over-fitting.",
+  "domain": [
+   "DNN interpretability",
+   "interactions between input variables",
+   "training dynamics"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "concept-schematic"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "three lettered panels, each a claim with its own schematic or plot: model equivalence on a photo, sparsity of interactions, two-phase dynamics",
+  "argues": "A DNN's output equals a logical model with a few salient AND-OR interactions, and the strength of those interactions moves across orders in two phases during training.",
+  "subject": "A dog photo explained by AND-OR interaction chips, a decay curve of interaction strength, and a row of histograms over training.",
+  "elements": [
+   {
+    "name": "Network output v(x)",
+    "type": "label",
+    "role": "the DNN's output score on the sample",
+    "drawn_as": "caption above a stack of flat peach slabs with an ellipsis, between two outlined up arrows from the dog photo",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Model equivalence",
+    "type": "operation",
+    "role": "claim: the logical model mimics the DNN output on all 2^n masked samples",
+    "drawn_as": "pale-green double-headed block arrow with bold black label; grey 5.5 pt sentence beneath",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Interaction-based logical model",
+    "type": "module",
+    "role": "sum over subsets S of an indicator that x triggers interaction S times its effect I(S|x)",
+    "drawn_as": "formula f(x) = sum of 1(x triggers interaction S) times I(S|x) beside a grey plus box",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "interaction chips",
+    "type": "formula",
+    "role": "three interaction terms with their effects: I_or(S1|x)=0.2, I_and(S2|x)=0.4, I_or(S3|x)=-0.1, and an ellipsis for the rest",
+    "drawn_as": "grey rounded chips with dark outline, tied to the plus box by thin lines",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "patch boxes on the photo",
+    "type": "region",
+    "role": "image patches that form each interaction: red boxes for S1, yellow boxes for S2 (nose, tongue, cheek), blue boxes for S3",
+    "drawn_as": "thin coloured square outlines on the dog photo, joined by colour-matched lines to the chips",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "A DNN usually only encodes a small number of salient interactions",
+    "type": "text-block",
+    "role": "takeaway title of panel (b)",
+    "drawn_as": "6 pt sans sentence above the plot",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "|I(S|x)| over index of interaction S",
+    "type": "chart",
+    "role": "strengths of all 2^n interactions sorted in descending order, for VGG-16 on MNIST",
+    "drawn_as": "framed plot with a steep purple decay curve, axes from 1 to 2^n, a grey VGG-16 on MNIST tag",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "A few interactions with salient effects / Most interactions have negligible effects",
+    "type": "label",
+    "role": "annotations that name the steep head and the flat tail of the curve",
+    "drawn_as": "bold orange text with an orange arrow to the head; grey text with a grey arrow to the tail; dashed grey lines at the knee",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Change of the distribution of interaction strength throughout the training process",
+    "type": "text-block",
+    "role": "takeaway title of panel (c)",
+    "drawn_as": "6.5 pt sans sentence above the histograms",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "six histograms of interaction strength",
+    "type": "chart",
+    "role": "distribution of interaction strength over orders 1 to 10 at six moments of training",
+    "drawn_as": "small salmon bar charts with order axis from 1 to 10, no numbers on the vertical axis",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "1st phase / 2nd phase",
+    "type": "label",
+    "role": "the two phases of the dynamics",
+    "drawn_as": "grey braces under the histograms with bold black labels; the first spans charts 1 to 4, the second 4 to 6",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "dog photo",
+    "to": "Network output v(x)",
+    "what": "the sample goes in and the output comes out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Network output v(x)",
+    "to": "Interaction-based logical model",
+    "what": "Model equivalence between the DNN and the logical model",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "plus box",
+    "to": "interaction chips",
+    "what": "the model sums the interaction terms",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "interaction chips",
+    "to": "patch boxes on the photo",
+    "what": "each chip is tied to the patches that form its interaction, by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "A few interactions with salient effects",
+    "to": "head of the curve",
+    "what": "orange arrow marks the steep part",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Most interactions have negligible effects",
+    "to": "tail of the curve",
+    "what": "grey arrow marks the flat part",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "knee of the curve",
+    "to": "both axes",
+    "what": "dashed grey lines mark the cut between salient and negligible interactions",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "histogram 1",
+    "to": "histogram 6",
+    "what": "training moves on from one chart to the next",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "1st phase and 2nd phase braces",
+    "to": "histograms under them",
+    "what": "each brace groups the charts of one phase",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "network output equals an AND-OR logical model whose interaction terms point to coloured patches of a dog photo",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "interaction strength sorted in descending order: a steep head of salient interactions and a flat tail",
+    "verdict": "setting"
+   },
+   {
+    "label": "(c)",
+    "kind": "concept-schematic",
+    "axis": "time",
+    "shows": "six histograms of interaction strength over orders 1 to 10, grouped into the 1st and 2nd phase",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "top left of each panel",
+    "what": "letters naming the three panels, matching the caption"
+   },
+   {
+    "marker": "1st phase / 2nd phase",
+    "kind": "identity",
+    "at": "braces under the histograms",
+    "what": "name the two phases of training"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "Dalmatian photo used twice",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "a small thumbnail under the network icon, and a larger copy with red, yellow and blue patch boxes joined by thin lines to the chips"
+   },
+   {
+    "what": "interaction-strength curve for VGG-16 on MNIST",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "purple decay curve in a thin black frame with orange and grey annotation arrows and dashed grey knee lines"
+   },
+   {
+    "what": "histograms of interaction strength over orders 1 to 10",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 6,
+    "medium": "vector",
+    "treatment": "salmon bars on a grey baseline, order 1 and 10 at the ends, joined by outlined white block arrows"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "stack of flat peach slabs with brown sides and an ellipsis on the top slab",
+    "stands_for": "the DNN",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "dog photo with three interactions: S1 two spotty regions (OR, 0.2), S2 nose, tongue and cheek (AND, 0.4), S3 (OR, -0.1)",
+    "form": "coloured boxes on the photo tied to value chips",
+    "real_values": false
+   },
+   {
+    "what": "strengths of all 2^n interactions of a VGG-16 trained on MNIST, sorted in descending order",
+    "form": "annotated decay curve",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "cnn-stack",
+    "drawn_as": "peach slabs stacked like a pyramid with an ellipsis, between two outlined arrows",
+    "parts": [
+     "slabs",
+     "ellipsis",
+     "input and output arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "and-or-logical-model",
+    "drawn_as": "sum formula next to a plus box and grey chips of interaction terms with their effects",
+    "parts": [
+     "sum formula",
+     "plus box",
+     "term chips"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Eye starts at the dog photo and network at the top left, crosses the Model equivalence arrow to the logical model and the photo with boxes, then to panel (b) at the right, then drops to panel (c) and follows the histograms left to right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Panel (a) wide at the top left, panel (b) in a framed plot at the top right, and panel (c) as a full-width row of six histograms below; panels are told apart by whitespace and letters, only the plot has a frame.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.81,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c00000",
+    "used_for": "salmon bars of the six histograms",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#990099",
+    "used_for": "purple decay curve of interaction strength"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange annotation text and arrow for the salient few"
+   },
+   {
+    "hex": "#8c8c8c",
+    "used_for": "grey text under Model equivalence and for the negligible many"
+   },
+   {
+    "hex": "#ff6569",
+    "used_for": "red patch boxes and lines for interaction S1"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "yellow patch boxes and lines for interaction S2"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "blue patch boxes and lines for interaction S3"
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "grey interaction chips and the plus box"
+   },
+   {
+    "hex": "#dbdbdb",
+    "used_for": "grey tag VGG-16 on MNIST"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "pale-green fill of the Model equivalence arrow"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "peach top faces of the DNN slabs"
+   },
+   {
+    "hex": "#c7a38b",
+    "used_for": "brown sides of the DNN slabs"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "peach outline of the up arrows"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey outlines of the block arrows between histograms and of the braces"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.5 pt black and grey lines; 1 pt coloured boxes on the photo; dashed grey knee lines; light-grey outlines on block arrows",
+  "font": "sans (Calibri) 5.5 to 6.5 pt, Cambria Math for formulas, 12 pt ellipses",
+  "corners": "mixed",
+  "arrows": "white block arrows with grey or peach outlines between histograms and around the network; a thick pale-green double-headed block arrow for Model equivalence; thin orange and grey annotation arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red, yellow and blue boxes on the photo and the lines from chips S1, S2, S3 share a colour; peach = the network; green arrow = equivalence; purple curve = interaction strength; orange text = the salient few, grey text = the negligible many; salmon bars = strength per order",
+  "line_style_means": "coloured thin lines tie chips to image patches; dashed grey lines mark the knee of the curve; outlined white block arrows = training time passing; grey braces = phases",
+  "shape_means": "rounded grey chip = one interaction term with its effect; stack of slabs = the DNN; double-headed block arrow = equivalence",
+  "marker_means": "letters name the panels; I_and and I_or subscripts mark AND and OR interactions; 1st phase and 2nd phase braces name the phases",
+  "emphasis": "bold black Model equivalence, bold orange A few interactions with salient effects, bold 1st phase and 2nd phase labels",
+  "reusable_patterns": [
+   "double-headed block arrow labelled with the claim between a network and its formal equivalent",
+   "formula chips joined by colour-matched lines to boxed patches on the input photo",
+   "orange and grey annotation arrows on a measured curve naming the salient few and the negligible many",
+   "row of small histograms joined by outlined block arrows and spanned by braces for phases",
+   "sum formula beside a plus box and term chips"
+  ],
+  "weaknesses": [
+   "the six histograms carry no vertical values and no step labels",
+   "the two phase braces meet at the fourth histogram, which is ambiguous",
+   "the grey 5.5 pt explanation text is faint"
+  ]
+ },
+ "resources": {
+  "own": [
+   "Dalmatian photo with interaction patches",
+   "measured interaction-strength curve of VGG-16 on MNIST"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "slab icon, chips and block arrows",
+   "braces and annotation arrows",
+   "histogram thumbnails"
+  ],
+  "unknown": [
+   "whether the six histograms are measured or hand-drawn: the caption calls them an illustration but the axis label says I_real"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "slab-stack DNN icon between outlined arrows",
+   "Dalmatian photo with red, yellow and blue patch boxes",
+   "interaction chips with effect values",
+   "Model equivalence double arrow",
+   "sum formula with plus box",
+   "decay curve with orange and grey annotations",
+   "row of six salmon histograms with block arrows",
+   "1st phase and 2nd phase braces"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "interactions",
+   "AND-OR logical model",
+   "DNN training dynamics",
+   "two-phase dynamics",
+   "sparsity of interactions",
+   "explanation faithfulness",
+   "VGG-16 on MNIST",
+   "interaction order"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "equation-boxes",
+   "toy-values-inline",
+   "plot-callouts",
+   "small-multiples",
+   "claim-banner",
+   "schematic-plot"
+  ],
+  "new_tags": [
+   {
+    "name": "patch-chip-leaders",
+    "what": "formula chips tied by colour-matched thin lines to boxed patches on a photo, so each term can be located in the input"
+   },
+   {
+    "name": "phase-braces",
+    "what": "grey braces under a row of time-ordered thumbnails naming training phases (1st phase, 2nd phase)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Tie each formula term to the input it explains: colour-coded chips for the terms and matching boxes on the sample photo joined by thin lines; then show a dynamics claim as a row of small histograms joined by outlined block arrows and spanned by braces for the phases.",
+  "suits": "theory or interpretability papers that explain an abstract decomposition on one real input and then show its behaviour over training with small distributions."
+ },
+ "tags": [
+  "three-panel",
+  "photo-with-patch-boxes",
+  "formula-chips",
+  "outlined-block-arrows",
+  "braces",
+  "light-annotations"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.1)",
+   "Section 2 (p.3)"
+  ],
+  "evidence": [
+   "a DNN may encode a non-linear relationship between the three image patches in S",
+   "(c) Illustration of the two-phase dynamics of a DNN learning interactions of different orders.",
+   "We show the strength |I(S|x)| of all 2n interactions sorted in descending order."
+  ]
+ },
+ "summary": "The paper proves that a DNN learns interactions between input variables in two phases. Figure 1 has three lettered panels. In (a) the DNN's output on a Dalmatian photo is equated, by a pale-green double-headed block arrow labelled Model equivalence, with an AND-OR logical model: a sum of interaction chips such as I_and(S2|x)=0.4, each tied by a red, yellow or blue line to boxed patches on the photo. Panel (b) plots interaction strength for VGG-16 on MNIST as a steep decay with orange and grey notes: a few salient interactions, most negligible. Panel (c) strings six salmon histograms over orders 1 to 10 with block arrows and braces for the 1st and 2nd phase.",
+ "summary_zh": "论文证明 DNN 分两阶段学习输入变量间的交互。图 1 三个面板：(a) 以“模型等价”箭头将网络输出对应到 AND-OR 逻辑模型，交互项以彩色线连到狗图块；(b) 交互强度陡降曲线；(c) 六个直方图加括号展示两阶段。",
+ "confidence": "high",
+ "notes": "Prior labels kept: contribution-mosaic first as finding-cards (each panel a claim with its own schematic or plot), concept-schematic second. Colour assignment of the patch boxes (red S1, yellow S2, blue S3) is read from line colours. The caption calls (c) an illustration although its axis label says I_real, so measured or drawn is unclear. The 1st-phase brace ends where the 2nd-phase brace begins, at the fourth histogram.",
+ "venue": "NeurIPS24"
+}

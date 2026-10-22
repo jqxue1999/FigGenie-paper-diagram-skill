@@ -1,0 +1,593 @@
+{
+ "paper_id": "aaai23-0023",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FinalMLP",
+  "one_liner": "Two-stream MLP for CTR prediction with stream-specific feature gating and multi-head bilinear fusion of the two stream outputs.",
+  "domain": [
+   "CTR prediction",
+   "recommender systems",
+   "feature interaction"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "central layer-by-layer framework with two enlarged zoom panels tied to it by orange dashed leader lines",
+  "argues": "A plain two-stream MLP is upgraded by two plug-in layers: stream-specific feature selection at the input and bilinear fusion at the output.",
+  "subject": "Bottom-up two-stream CTR framework with the feature-selection gate and the bilinear and multi-head bilinear fusion enlarged beside it.",
+  "elements": [
+   {
+    "name": "Input",
+    "type": "data",
+    "role": "raw feature fields of one record, one box per field",
+    "drawn_as": "bold layer label plus a row of white boxes holding circles marked 0 or 1 (grey for 1) and one box with 0.7",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Embedding",
+    "type": "module",
+    "role": "turns each input field into an embedding vector",
+    "drawn_as": "light-green band holding boxes of three lavender circles, '......' between them",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Selection",
+    "type": "module",
+    "role": "stream-specific gating of the concatenated embeddings, giving each stream its own weighted input",
+    "drawn_as": "orange rounded box with two arrows fanning out to the streams",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Network 1 / Network 2",
+    "type": "module",
+    "role": "the two parallel streams that learn feature interactions",
+    "drawn_as": "two cyan trapezoids, narrower at the top",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Output 1 / Output 2",
+    "type": "data",
+    "role": "stream outputs handed to the fusion",
+    "drawn_as": "two light-blue rectangles above the trapezoids",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Fusion",
+    "type": "module",
+    "role": "merges the two stream outputs into the prediction",
+    "drawn_as": "pale-yellow rounded box with dashed leaders to panel (c)",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "pCTR",
+    "type": "data",
+    "role": "predicted click-through rate",
+    "drawn_as": "plain text on the arrow leaving Fusion",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Output / Fusion / Two-Stream Feature Interaction / Feature Selection / Embedding / Input",
+    "type": "label",
+    "role": "names the six layers of the framework",
+    "drawn_as": "bold serif labels in a left column, split by dashed horizontal rules",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) dashed row of embedding groups",
+    "type": "data",
+    "role": "the concatenated embeddings that enter both gates",
+    "drawn_as": "dashed box with groups of three lavender circles and '…'",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "user features / item features",
+    "type": "data",
+    "role": "conditional features that drive each gate: a user view for stream 1, an item view for stream 2",
+    "drawn_as": "two small boxes of coloured circles with '…' (green for user, yellow and brown for item)",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "MLP",
+    "type": "module",
+    "role": "gating network that turns the conditional features into gate values",
+    "drawn_as": "two white rounded boxes, one per stream",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "σ and 2x",
+    "type": "operation",
+    "role": "sigmoid followed by a multiplier of 2, so gate weights lie in [0, 2]",
+    "drawn_as": "small circle with σ and an arrow labelled 2x",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "⊙",
+    "type": "operation",
+    "role": "element-wise product of the embeddings and the gate weights",
+    "drawn_as": "small circle with a dot, one per stream",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Stream 1 / Stream 2",
+    "type": "data",
+    "role": "weighted feature outputs passed on to each stream",
+    "drawn_as": "plain labels at the heads of two upward arrows",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Bilinear Fusion (BF)",
+    "type": "module",
+    "role": "combines the stream outputs o1 and o2 through weighted sums that include a cross term",
+    "drawn_as": "small tree: o1 and o2 in boxes of circles, three sum nodes, a middle box with a 2x2 circle grid",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "o1, o2",
+    "type": "data",
+    "role": "the two stream outputs entering the fusion",
+    "drawn_as": "boxes of two circles, light blue for o1 and darker blue for o2",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "w1, w2, W3",
+    "type": "formula",
+    "role": "weights beside the left sum, the right sum and the middle cross-term box (reading of the drawing)",
+    "drawn_as": "serif math symbols beside the Σ nodes and the middle box",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Σ",
+    "type": "operation",
+    "role": "sums the branches",
+    "drawn_as": "circles with Σ: three in the BF drawing, one on top of the multi-head drawing",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Head Bilinear Fusion",
+    "type": "module",
+    "role": "cuts o1 and o2 into k chunks each, applies BF blocks to the chunks and sums their outputs",
+    "drawn_as": "row of BF boxes over two rows of chunk boxes with a Σ on top",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "o11 … o1k / o21 … o2k",
+    "type": "data",
+    "role": "the k chunks of o1 and of o2",
+    "drawn_as": "small boxes with subscripted labels, light blue for o1 chunks and darker blue for o2 chunks",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Chunking",
+    "type": "operation",
+    "role": "splits o1 and o2 into pieces",
+    "drawn_as": "small up arrow and a bracket under each chunk row, labelled Chunking, with o1 and o2 below",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "BF",
+    "type": "module",
+    "role": "one bilinear fusion head of the multi-head layer",
+    "drawn_as": "small white rectangles labelled BF with '…' between them",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input",
+    "to": "Embedding",
+    "what": "values of each field",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding",
+    "to": "Feature Selection",
+    "what": "embeddings of all fields, three lines converging",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Selection",
+    "to": "Network 1 / Network 2",
+    "what": "one weighted input per stream",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Network 1 / Network 2",
+    "to": "Output 1 / Output 2",
+    "what": "stream outputs, one per stream",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output 1 / Output 2",
+    "to": "Fusion",
+    "what": "both outputs enter the fusion",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fusion",
+    "to": "pCTR",
+    "what": "predicted click probability",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Selection",
+    "to": "panel (a)",
+    "what": "panel (a) enlarges this box; two dashed orange lines fan out to the frame corners",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Fusion",
+    "to": "panel (c)",
+    "what": "panel (c) enlarges this box; two dashed orange lines fan out to the frame",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "dashed row of embedding groups",
+    "to": "⊙ (stream 1 and stream 2)",
+    "what": "embeddings to be re-weighted",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "user features / item features",
+    "to": "MLP, σ, ⊙",
+    "what": "gate weights in [0, 2] (the 2x arrow), user view for stream 1, item view for stream 2",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "⊙",
+    "to": "Stream 1 / Stream 2",
+    "what": "weighted feature outputs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "o1, o2",
+    "to": "Σ nodes and W3 box",
+    "what": "o1 and o2 feed the two outer sums and the middle cross-term box; all three feed the top Σ",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "o1, o2",
+    "to": "o11 … o1k / o21 … o2k",
+    "what": "Chunking cuts each output into k chunks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "chunks",
+    "to": "BF blocks, then Σ",
+    "what": "chunks go into BF blocks (crossing lines), whose outputs are summed",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Stream-Specific Feature Selection",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "two mirrored gates (MLP, σ, 2x, ⊙) re-weight the concatenated embeddings, driven by user features for stream 1 and item features for stream 2",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "general two-stream CTR framework as six labelled layers from Input to pCTR, with the two new modules coloured warm",
+    "verdict": "setting"
+   },
+   {
+    "label": "(c) Bilinear Fusion (BF) and Multi-Head Bilinear Fusion",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "BF as a sum tree over o1, o2, w1, w2, W3, and its multi-head version that chunks o1 and o2 first; two titled halves share one frame",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "below each panel frame",
+    "what": "name the three panels"
+   },
+   {
+    "marker": "1, 2",
+    "kind": "identity",
+    "at": "Stream, Network and Output labels",
+    "what": "tell the two streams apart"
+   },
+   {
+    "marker": "o1, o2, o11 … o2k, w1, w2, W3",
+    "kind": "identity",
+    "at": "panel (c)",
+    "what": "symbols placed on the drawing so it doubles as the fusion equation"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "toy input fields: bit vectors 0 / 1 for categorical fields and a numeric field 0.7",
+    "form": "white boxes holding small circles, grey for 1",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "mlp-head",
+    "drawn_as": "small white rounded box labelled MLP feeding a σ circle, used as a gating network",
+    "parts": [
+     "MLP box",
+     "σ circle",
+     "2x arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "sigmoid-gate",
+    "drawn_as": "σ output multiplied element-wise (⊙) into the embedding vector, with the multiplier 2x written on the arrow",
+    "parts": [
+     "σ circle",
+     "⊙ circle",
+     "arrow marked 2x"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "network-trapezoid",
+    "drawn_as": "each stream network as a trapezoid narrowing upward, labelled Network 1 / Network 2",
+    "parts": [
+     "trapezoid",
+     "name label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-vector-circles",
+    "drawn_as": "each field embedding as a box holding a short row of circles, '......' for more fields",
+    "parts": [
+     "box",
+     "circles",
+     "ellipsis"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "bilinear-fusion-tree",
+    "drawn_as": "two vectors and a small circle-grid matrix feeding sum nodes that feed a top Σ",
+    "parts": [
+     "o1",
+     "o2",
+     "W3 box",
+     "Σ nodes"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "The eye lands on the central stack and climbs from Input to pCTR; the orange dashed lines then send it to (a) on the left from Feature Selection and to (c) on the right from Fusion."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three units in a row: a tall central stack (b) of six labelled layers read bottom to top, flanked by two tinted dashed zoom frames, (a) on the left and (c) on the right; the right frame holds two titled halves split by a dashed divider.",
+  "panel_count": 3,
+  "lanes": "six layer bands in (b) named in a left label column and split by dashed rules; two parallel stream columns inside them",
+  "direction": "bottom-up",
+  "reading_start": "centre",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.27,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fef7f3",
+    "used_for": "very pale peach tint inside the zoom frames (a) and (c)"
+   },
+   {
+    "hex": "#f9c499",
+    "used_for": "Feature Selection box fill and the dashed leader lines to the zoom frames"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Fusion box fill"
+   },
+   {
+    "hex": "#b7dde8",
+    "used_for": "Network 1 and Network 2 trapezoids"
+   },
+   {
+    "hex": "#c9dbf8",
+    "used_for": "Output 1 and Output 2 boxes"
+   },
+   {
+    "hex": "#d7e3bf",
+    "used_for": "Embedding band"
+   },
+   {
+    "hex": "#ddd6e5",
+    "used_for": "lavender embedding circles"
+   },
+   {
+    "hex": "#d9e2f3",
+    "used_for": "light blue o1 chunk boxes and circles in panel (c)"
+   },
+   {
+    "hex": "#aabfe4",
+    "used_for": "darker blue o2 chunk boxes and circles in panel (c)"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey circles for input bits equal to 1 (from the measured palette)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on boxes, circles and arrows, 0.25 pt on a few shapes; dashed grey frames for the zoom panels and dashed black rules between layers",
+  "font": "serif (Times New Roman), 6.5-9.5 pt, bold for layer and panel titles; math symbols o, w, W with subscripts in Cambria Math at 9.5 pt",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows with small filled heads, nearly all pointing up; dashed orange lines (no heads) as zoom leaders",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each layer has its own pastel fill (green embedding, orange Feature Selection, cyan networks, light-blue outputs, yellow Fusion); green vs yellow circles tell user from item features; light vs darker blue tell o1 from o2",
+  "line_style_means": "solid black arrows = data flow; dashed orange = zoom leader; dashed black rules = layer separators; dashed grey frames = zoom panels",
+  "shape_means": "trapezoid = stream network; rounded box = layer-level module; plain rectangle = data; circle = value or operator (⊙, σ, Σ)",
+  "marker_means": "(a)(b)(c) name panels; subscripts 1 and 2 separate the two streams; o, w, W match the fusion equation; 2x labels the gate multiplier",
+  "emphasis": "only the two new modules are filled in warm colours (orange, yellow) and get enlarged zoom panels; generic parts use cool pastels",
+  "reusable_patterns": [
+   "bold layer names in a left column, aligned with dashed rules between the bands of a bottom-up stack",
+   "warm dashed leader lines from a module to a tinted zoom frame, the module itself in a warm fill",
+   "mirrored left-right pair of gates so the two streams read as symmetrical",
+   "symbols (o, w, W) placed on the drawing so it doubles as the equation",
+   "ellipses inside and between boxes for variable-length vectors and fields",
+   "two zoom topics stacked in one tinted frame, split by a dashed divider"
+  ],
+  "weaknesses": [
+   "labels are 6.5-7 pt and the crossing lines in the multi-head fusion are crowded",
+   "panel letter (b) sits lower than (a) and (c)",
+   "the concatenated-embedding row in (a) carries no name"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, trapezoids, circles, arrows and zoom frames (PowerPoint, per the file metadata)",
+   "the sum tree of the bilinear fusion",
+   "math symbols set as text"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two trapezoid network streams",
+   "orange Feature Selection box",
+   "yellow Fusion box",
+   "green embedding band with circle vectors",
+   "gate made of MLP, sigma and dot nodes",
+   "dashed tinted zoom frames with leader lines",
+   "sum-node trees of bilinear fusion"
+  ],
+  "sample_data": "table",
+  "keywords": [
+   "CTR prediction",
+   "two-stream MLP",
+   "feature selection",
+   "gating",
+   "bilinear fusion",
+   "multi-head bilinear fusion",
+   "recommender systems",
+   "feature interaction"
+  ],
+  "tags": [
+   "zoom-callout",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "formula-as-tree",
+    "what": "an equation drawn as a tree of sum nodes with symbol-labelled operands (vectors, weights, a matrix glyph) instead of being printed"
+   },
+   {
+    "name": "layer-label-column",
+    "what": "bold layer names in a left column, each aligned with its band of the architecture and split by dashed rules"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the general framework once as a labelled layer stack, colour only the new modules warmly, and enlarge each into a tinted dashed frame tied back by thin leader lines, so the contribution is both located and opened up.",
+  "suits": "plug-in modules for a known architecture family (two-tower, two-stream, encoder-head) where the novelty sits in one or two layers."
+ },
+ "tags": [
+  "overview-plus-zoom",
+  "pastel layer fills",
+  "dashed zoom frames",
+  "serif labels",
+  "bottom-up stack",
+  "powerpoint style"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.4): paragraphs on stream-specific feature selection and bilinear fusion"
+  ],
+  "evidence": [
+   "(a) An illustration of stream-specific feature selection. (b) A general framework of two-stream CTR models.",
+   "Figure 1(a) demonstrates a case of userand item-specific feature gating",
+   "As illustrated in Figure 1(c), the predicted click probability is formulated as follows."
+  ]
+ },
+ "summary": "FinalMLP is a CTR-prediction model built from two parallel MLP streams plus two plug-in layers: a stream-specific feature-selection gate in front of the streams and a bilinear fusion layer behind them. The figure is a model-anatomy overview with zoom. Panel (b), in the centre, stacks six labelled layers from Input through Embedding, Feature Selection, Two-Stream Feature Interaction (two trapezoids) and Fusion up to the pCTR output. Orange dashed leader lines tie the Feature Selection box to panel (a), which shows two mirrored gates (MLP, sigmoid, 2x, element-wise product) driven by user and item features, and tie the Fusion box to panel (c), which shows bilinear fusion as a sum tree and its multi-head variant with chunking. Pastel fills, serif labels, no bitmaps.",
+ "summary_zh": "FinalMLP 的总览图：中间 (b) 自下而上画出双流 CTR 框架，两条橙色虚线把特征选择与融合模块放大到左右两侧的浅色框 (a)、(c)，分别画出用户/物品门控以及双线性与多头双线性融合。",
+ "confidence": "high",
+ "notes": "Kind confirmed as the prior label (model-anatomy, overview-plus-zoom). Subfield is recommender systems / CTR prediction, which the subfield list lacks, so 'other' with 'ml-core'. sample_data is 'table' because the Input row shows toy field vectors of tabular CTR records. Roles of w1, w2, W3 and of the chunk pairing are read off the drawing (the equation is not in the context). The preview shows the top of the caption cut at the bottom edge; ignored.",
+ "venue": "AAAI23"
+}

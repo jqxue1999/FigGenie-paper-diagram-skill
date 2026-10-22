@@ -1,0 +1,502 @@
+{
+ "paper_id": "iclr25-0012",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AgentOccam",
+  "one_liner": "A simple LLM web agent whose action and observation spaces are aligned with LLM training: fewer actions, cleaner observations, branch and prune planning.",
+  "domain": [
+   "web agents",
+   "LLM policy",
+   "action and observation space design"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "side-by-side-contrast"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "agent-environment loop with a central coloured band that turns the original action and observation spaces into aligned ones, drawn as paired grey and teal strips",
+  "argues": "A plain LLM policy does better on web tasks when its actions and observations are made more compact and less redundant, instead of building a compound policy.",
+  "subject": "Agent and web environment exchanging action A_t and observation O_t, with original versus aligned action chips and observation text in between.",
+  "elements": [
+   {
+    "name": "Agent",
+    "type": "container",
+    "role": "the LLM web agent side of the loop",
+    "drawn_as": "large mid-grey rounded region at the left with a bold 10 pt title at the bottom",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LLM Policy",
+    "type": "actor",
+    "role": "the language model that picks the next action from the goal and the observation",
+    "drawn_as": "detailed illustrated retro robot in a light-grey rounded inset, bold label underneath",
+    "container": "Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "My goal is, to list reviewers, if any, who mention ear cups being small.",
+    "type": "sample",
+    "role": "the task goal as the policy states it",
+    "drawn_as": "dark-teal speech bubble with white handwriting-style text, tail towards the robot",
+    "container": "Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Given the web observation and available actions, click the \"review\" link!",
+    "type": "sample",
+    "role": "the policy's reasoning that ends in a click action",
+    "drawn_as": "dark-teal speech bubble, tail towards the robot",
+    "container": "Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Previous Approaches: Compound LLM Policy",
+    "type": "label",
+    "role": "the prior way of building agents, set against the single LLM policy",
+    "drawn_as": "dark-grey tag with bold text in the light-grey inset beside the robot",
+    "container": "Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "action A_t",
+    "type": "label",
+    "role": "names the action passed from the policy to the environment at step t",
+    "drawn_as": "black tag with white text on a black arrow that leaves the robot upwards",
+    "container": "Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Aligned Actions",
+    "type": "data",
+    "role": "the reduced action set the agent chooses from: click, type, note, stop, go_back and the two new planning actions branch and prune",
+    "drawn_as": "teal title chip above a light-grey tray of rounded chips: blue, light blue, grey and red",
+    "container": "Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "AgentOccam: Action and Observation Space Alignment",
+    "type": "module",
+    "role": "the method: makes the action space more compact and the observation space less redundant yet as informative",
+    "drawn_as": "central teal rounded band split into three rows: '+ Action Space: More Compact', the method name in Courier plus bold title, '+ Observation Space: Less Redundant Yet As Informative'",
+    "container": "Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Aligned Observation",
+    "type": "data",
+    "role": "the shortened page text the policy actually reads",
+    "drawn_as": "teal title chip above a white rounded box with a few accessibility-tree lines",
+    "container": "Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "observation O_t",
+    "type": "label",
+    "role": "names the observation passed from the environment to the policy at step t",
+    "drawn_as": "black tag with white text on a black arrow that enters the robot from below",
+    "container": "Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Environment",
+    "type": "container",
+    "role": "the web side of the loop",
+    "drawn_as": "white region at the right behind a thick dashed vertical line, bold 8 pt title at the bottom",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Original Actions",
+    "type": "data",
+    "role": "the full original action space of the web environment",
+    "drawn_as": "grey title chip above two rows of chips: blue click and five '...' chips, grey new_tab, go_back and '...' chips",
+    "container": "Environment",
+    "is_contribution": false
+   },
+   {
+    "name": "Web Server",
+    "type": "actor",
+    "role": "the web site the agent acts on; it returns pages as observations",
+    "drawn_as": "stack of three overlapping browser windows showing a shop page, bold label underneath",
+    "container": "Environment",
+    "is_contribution": false
+   },
+   {
+    "name": "Original Observation",
+    "type": "data",
+    "role": "the raw page text with many redundant elements (RootWebArea, link, StaticText lines)",
+    "drawn_as": "grey title chip above a white rounded box with small sans lines of accessibility-tree text",
+    "container": "Environment",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "LLM Policy",
+    "to": "Aligned Actions",
+    "what": "action A_t chosen by the policy",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Aligned Actions",
+    "to": "Original Actions",
+    "what": "compact actions mapped back to the original action space through the teal band",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original Actions",
+    "to": "Web Server",
+    "what": "the action is executed on the web page",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Web Server",
+    "to": "Original Observation",
+    "what": "page content as raw observation text",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Original Observation",
+    "to": "Aligned Observation",
+    "what": "raw text restructured and trimmed through the teal band",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Aligned Observation",
+    "to": "LLM Policy",
+    "what": "observation O_t read by the policy",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Aligned Actions",
+    "to": "Original Actions",
+    "what": "same action space before and after alignment, drawn as strips in the same grammar",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Aligned Observation",
+    "to": "Original Observation",
+    "what": "same page before and after alignment, drawn as text boxes in the same grammar",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM Policy",
+    "to": "Previous Approaches: Compound LLM Policy",
+    "what": "the simple single policy beside the prior compound policy",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Agent",
+    "kind": "actor-interaction",
+    "axis": "other",
+    "shows": "the policy with its speech bubbles, the aligned action and observation, and the central alignment band",
+    "verdict": "ours"
+   },
+   {
+    "label": "Environment",
+    "kind": "actor-interaction",
+    "axis": "other",
+    "shows": "the web server with its original actions and original observation text",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Agent, Environment",
+    "kind": "section",
+    "at": "bold titles at the bottom of the two regions",
+    "what": "heads the two sides of the loop"
+   },
+   {
+    "marker": "action A_t, observation O_t",
+    "kind": "identity",
+    "at": "black tags on the loop arrows",
+    "what": "names the action and the observation exchanged at step t"
+   },
+   {
+    "marker": "Aligned / Original title chips",
+    "kind": "identity",
+    "at": "above the strips and text boxes",
+    "what": "names each strip or box as the aligned or the original version"
+   },
+   {
+    "marker": "...",
+    "kind": "other",
+    "at": "chips of the Original Actions strip and ends of the observation boxes",
+    "what": "more actions or lines omitted"
+   },
+   {
+    "marker": "+",
+    "kind": "other",
+    "at": "start of the two outer rows of the teal band",
+    "what": "marks what AgentOccam adds: a more compact action space and a less redundant observation space"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "three overlapping browser windows showing an online shop page",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "windows offset to the left in a stack, with traffic-light dots, labelled Web Server"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "detailed illustrated retro robot",
+    "stands_for": "the LLM policy",
+    "style": "ai-generated",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a shopping task goal, the policy's click decision and the page text before and after alignment",
+    "form": "speech bubbles with the goal and the action; small text boxes with raw and aligned accessibility-tree lines for 'Wireless Headphones'",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "agent and environment exchanging action A_t and observation O_t on black rounded-corner arrows that run round the outside of the drawing; no reward is drawn",
+    "parts": [
+     "Agent",
+     "Environment",
+     "action A_t",
+     "observation O_t"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "two dark-teal speech bubbles with tails towards the robot, holding the goal and the reasoning in handwriting-style type",
+    "parts": [
+     "goal bubble",
+     "reasoning bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "an illustrated robot image labelled LLM Policy, set against a grey tag Previous Approaches: Compound LLM Policy",
+    "parts": [
+     "robot image",
+     "label",
+     "prior-approach tag"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the robot and its speech bubbles in the grey region, follows the black arrow up to the aligned action chips, then the teal band, across the dashed line to the original strips and the web server, and back along the lower black arrow to the policy."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two regions side by side behind a thick dashed vertical line: a mid-grey rounded Agent region (about two thirds of the width) with the robot and bubbles at the left, the aligned action chips at the top, the aligned observation at the bottom and a teal band in the middle; and the Environment at the right with the original action chips, the web server screenshots and the original observation text. Black loop arrows run round the outside and teal arrows cross the divider.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.63,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b3b3b3",
+    "used_for": "Agent region (mid-grey rounded panel)"
+   },
+   {
+    "hex": "#e6e6e6",
+    "used_for": "light-grey inset behind the robot and tag"
+   },
+   {
+    "hex": "#cccccc",
+    "used_for": "trays behind the chip strips"
+   },
+   {
+    "hex": "#45c4b0",
+    "used_for": "AgentOccam band and the Aligned title chips"
+   },
+   {
+    "hex": "#2a786c",
+    "used_for": "speech bubbles and the teal connector lines"
+   },
+   {
+    "hex": "#808080",
+    "used_for": "Original title chips and the Previous Approaches tag"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "grey navigation chips"
+   },
+   {
+    "hex": "#215ba6",
+    "used_for": "blue action chips (click, type, original actions)"
+   },
+   {
+    "hex": "#77bdd9",
+    "used_for": "light-blue chips (note, stop)"
+   },
+   {
+    "hex": "#d93d4a",
+    "used_for": "red chips for the new planning actions branch and prune"
+   },
+   {
+    "hex": "#09090c",
+    "used_for": "black A_t and O_t tags and loop arrows"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "1.5 pt black loop arrows and thick dashed divider, 0.5 pt black outlines on the observation boxes, no outline on chips",
+  "font": "sans (Arial) 4-10 pt, bold titles and tags; handwriting-style (Comic Sans) in the speech bubbles; Courier for the method name in the band; serif italics for A_t and O_t",
+  "corners": "rounded",
+  "arrows": "thick black rounded-corner arrows starting with a dot for the agent-environment exchange; thick teal arrows and lines for the alignment mapping",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal = AgentOccam's alignment (band, Aligned title chips, speech bubbles, teal arrows); grey = original or prior (Original title chips, prior-approach tag, grey panel); red chips = the new planning actions branch and prune; blue, light-blue and grey chips = other action types (unexplained); black = agent-environment exchange",
+  "line_style_means": "black dot-start arrows = exchange between agent and environment; teal arrows = alignment mapping; thick dashed black line = border between agent and environment",
+  "shape_means": "rounded chips = actions; white rounded boxes with small text = observations; speech bubble = policy's words; teal rounded band = the method; stack of windows = web server",
+  "marker_means": "A_t and O_t tags name what crosses between agent and environment; '...' chips stand for omitted actions; '+' in the band marks what AgentOccam adds",
+  "emphasis": "teal band at the centre carries the method name in the largest bold text; teal versus grey colouring tells aligned from original items; the red chips single out the new actions",
+  "reusable_patterns": [
+   "paired strips with a grey Original title chip and a teal Aligned title chip to show an interface before and after",
+   "chip strip with '...' chips for a large action space beside a short strip for the reduced one",
+   "central coloured band between agent and environment that names the method and holds its two changes",
+   "black tag labels on the loop arrows naming the action and the observation",
+   "thick dashed vertical line separating agent from environment",
+   "small text boxes of raw versus aligned observation lines"
+  ],
+  "weaknesses": [
+   "teal arrows from the band to the original strips cross the dashed divider and the black loop, which makes the path hard to trace",
+   "the roles of the two speech bubbles and of the Previous Approaches tag are not spelled out",
+   "the blue, light-blue and grey chip colours are not explained",
+   "4 pt text in the observation boxes is hard to read"
+  ]
+ },
+ "resources": {
+  "own": [
+   "web observation text in accessibility-tree form",
+   "screenshots of an online-shop page (likely captured from the benchmark site)"
+  ],
+  "stock": [],
+  "generated": [
+   "robot illustration (looks AI-generated or a stock illustration)"
+  ],
+  "drawn": [
+   "chips and trays",
+   "speech bubbles",
+   "teal band",
+   "region frames, dashed divider and arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey Agent region",
+   "robot with speech bubbles",
+   "action chip strips (Aligned and Original)",
+   "teal alignment band",
+   "stack of browser screenshots labelled Web Server",
+   "observation text boxes",
+   "black loop arrows with A_t and O_t tags"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "web agents",
+   "action space",
+   "observation space",
+   "LLM policy",
+   "web navigation",
+   "planning actions",
+   "branch and prune",
+   "space alignment"
+  ],
+  "tags": [
+   "model-pictogram",
+   "gui-screen",
+   "flow-type-arrows",
+   "claim-banner",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "action-chip-strips",
+    "what": "a strip of small coloured chips naming the available actions, shown before and after reduction, with ellipsis chips for omitted actions"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put the method as a coloured band between agent and environment and show its two effects as paired Original (grey) and Aligned (teal) strips, so the reader sees what was shortened without reading prose.",
+  "suits": "interface-design contributions (action and observation spaces) for agents that interact with an environment, where before and after versions can be drawn in the same grammar."
+ },
+ "tags": [
+  "grey agent panel",
+  "teal method band",
+  "chip strips",
+  "illustrated robot",
+  "speech bubbles",
+  "dashed agent-environment divider",
+  "black loop arrows with tags"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "We reduce non-essential actions to minimize the agent's embodiment and trivial interaction needs",
+   "We introduce two planning actions (branch and prune), which enables the agent to self-organize navigation workflow with a planning tree",
+   "we enhance the web agent simply by aligning the web interaction action and observation space"
+  ]
+ },
+ "summary": "AgentOccam is a simple baseline for LLM-based web agents that improves the agent by aligning the action and observation spaces with what the LLM learned in training, instead of building compound LLM policies. Figure 1 is an agent-environment loop: a grey Agent region at the left with an illustrated robot (the LLM policy) and two speech bubbles, a dashed divider, and an Environment at the right with a stack of shop-page screenshots (Web Server). A central teal band named AgentOccam shrinks the original action chips into a short aligned set that adds red branch and prune chips, and turns the raw accessibility-tree text into a shorter aligned observation. Black arrows tagged action A_t and observation O_t carry the exchange.",
+ "summary_zh": "AgentOccam 是 LLM 网页智能体基线，让动作与观察空间对齐 LLM 训练所学。图1画智能体与环境的循环：灰色智能体区有机器人和气泡，青绿色条带把原始动作与观察压缩，并新增 branch、prune 规划动作。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The Agent and Environment regions are counted as two titled panels; they could equally be read as containers of one drawing. The direction of the teal arrow between Aligned Actions and Original Actions is read from its arrowhead at the Original Actions strip; the thin teal line to Aligned Actions has no head. The roles of the speech bubbles (goal and reasoning of the policy) follow from their tails pointing to the robot. Chip colours other than red (the paper's two new planning actions) are not explained in the figure.",
+ "venue": "ICLR25"
+}

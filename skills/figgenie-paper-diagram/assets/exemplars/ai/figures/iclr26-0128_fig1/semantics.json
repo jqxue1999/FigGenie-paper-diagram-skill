@@ -1,0 +1,419 @@
+{
+ "paper_id": "iclr26-0128",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Shows that SSMs trained on interactive tool-use trajectories generalise to much larger problems than the training length, unlike when trained on single-turn tool use.",
+  "domain": [
+   "state space models",
+   "tool use",
+   "length generalization"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "design-family",
+  "variant_note": "three agent strategies drawn as columns of typed trajectory boxes, with one result chart beside them",
+  "argues": "Mamba generalises to far larger codebases when trained to imitate interactive tool-using agents, but not when trained on single-turn tool use.",
+  "subject": "Three ways of collecting coding-agent trajectories (single-turn, interactive, distilled SWE-agent) and a chart of Mamba and Pythia pass rates against codebase size.",
+  "elements": [
+   {
+    "name": "1) Single-Turn Tool-Use:",
+    "type": "container",
+    "role": "hard-coded agent that prints all files and then outputs all required changes",
+    "drawn_as": "bold serif heading above a short stack of three boxes, top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "2) Interactive Tool-Use:",
+    "type": "container",
+    "role": "hard-coded agent that runs the code, changes a few files and runs it again until the problems are resolved",
+    "drawn_as": "bold serif heading above a longer stack of alternating boxes, bottom left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "3) Distillation:",
+    "type": "container",
+    "role": "trajectories from an SWE-agent language model told to solve the bug",
+    "drawn_as": "bold serif heading above an instruction bubble, an agent box and a trajectory, middle column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "command boxes (cat *.py, sed -i ..., python main.py, ls -la, cat main.py)",
+    "type": "sample",
+    "role": "shell commands issued by the agent",
+    "drawn_as": "orange rounded boxes with monospace text, wide and flush left",
+    "container": "all three columns",
+    "is_contribution": null
+   },
+   {
+    "name": "tool-output boxes (foo.py listing, Traceback ..., total 8 ...)",
+    "type": "sample",
+    "role": "what the environment returns after a command",
+    "drawn_as": "green rounded boxes with monospace text, narrower and indented to the right",
+    "container": "all three columns",
+    "is_contribution": null
+   },
+   {
+    "name": "Fix the bug in main.py. You can use bash commands and edit files to implement the necessary changes ...",
+    "type": "text-block",
+    "role": "task instruction given to the SWE-agent",
+    "drawn_as": "grey rounded bubble with italic text",
+    "container": "3) Distillation:",
+    "is_contribution": null
+   },
+   {
+    "name": "SWE-agent 32B",
+    "type": "module",
+    "role": "the coding agent that produces the distilled trajectories",
+    "drawn_as": "light-blue rounded box with bold label and a small hand-on-keyboard icon",
+    "container": "3) Distillation:",
+    "is_contribution": false
+   },
+   {
+    "name": "agent messages (Let's start by examining the repository structure. / Now let's look at the content of main.py ...)",
+    "type": "text-block",
+    "role": "the agent's natural-language steps between commands",
+    "drawn_as": "light-blue rounded bubbles with italic text",
+    "container": "3) Distillation:",
+    "is_contribution": null
+   },
+   {
+    "name": "vertical ellipsis",
+    "type": "label",
+    "role": "the trajectory continues beyond what is shown",
+    "drawn_as": "small vertical dots at the end of each column and inside boxes",
+    "container": "all three columns",
+    "is_contribution": false
+   },
+   {
+    "name": "Train Max #Funcs: 16",
+    "type": "label",
+    "role": "largest codebase seen in training",
+    "drawn_as": "red dashed vertical line with a faint rotated label inside the chart",
+    "container": "chart",
+    "is_contribution": null
+   },
+   {
+    "name": "legend: Mamba-1.4b / Pythia-1.4b x Single-Turn (1), Interactive (2), Distillation (3)",
+    "type": "label",
+    "role": "maps line colour to model and dash style to strategy number",
+    "drawn_as": "bordered two-column key below the chart",
+    "container": "chart",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Fix the bug in main.py ... bubble",
+    "to": "SWE-agent 32B",
+    "what": "instruction goes to the agent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SWE-agent 32B",
+    "to": "trajectory of messages, commands and outputs",
+    "what": "the agent produces the trajectory",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "command box",
+    "to": "tool-output box",
+    "what": "each command is answered by the environment's output, top to bottom in time",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "1) 2) 3) headings",
+    "to": "(1) (2) (3) legend entries",
+    "what": "strategy number ties each column to its chart lines",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "trajectories of the three strategies",
+    "to": "Mamba-1.4b and Pythia-1.4b lines",
+    "what": "models fine-tuned on each kind of trajectory are evaluated on larger codebases (caption)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1) Single-Turn Tool-Use:",
+    "kind": "worked-walkthrough",
+    "axis": "alternatives",
+    "shows": "print all files with cat, receive them, then output all the sed edits in one go",
+    "verdict": "fails"
+   },
+   {
+    "label": "2) Interactive Tool-Use:",
+    "kind": "worked-walkthrough",
+    "axis": "alternatives",
+    "shows": "run python main.py, read the traceback, edit with sed, run again",
+    "verdict": "ours"
+   },
+   {
+    "label": "3) Distillation:",
+    "kind": "worked-walkthrough",
+    "axis": "alternatives",
+    "shows": "instruction, SWE-agent 32B and a trajectory of thoughts, commands and outputs",
+    "verdict": "ours"
+   },
+   {
+    "label": "Comparing Length Generalization for 3 Tool-Use Strategies",
+    "kind": "other",
+    "axis": "other",
+    "shows": "pass rate against number of functions for Mamba-1.4b and Pythia-1.4b under each strategy, with the training limit marked",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1), 2), 3)",
+    "kind": "identity",
+    "at": "column headings and legend entries",
+    "what": "names the three tool-use strategies and links them to the chart lines (they head the columns, they do not order steps)"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "line chart of pass rate (0-100 %) against number of functions (4-30) for six model and strategy pairs, with a dashed red vertical line at 16 functions",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "plot-library look: light grid, colour for model (steel blue Mamba, rust Pythia), dash style for strategy (dotted, dashed, solid), legend in a bordered box below"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "hand typing on a keyboard in front of a screen",
+    "stands_for": "the SWE-agent coding agent",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a code-fixing trajectory: cat all files, a foo.py listing, sed renames of v5 and v4 to v10; or python main.py, a traceback, sed on f169.py, python main.py again",
+    "form": "monospace command boxes (orange) and output boxes (green) in trajectory order",
+    "real_values": true
+   },
+   {
+    "what": "the SWE-agent's instruction and its stated steps",
+    "form": "grey instruction bubble and light-blue italic message bubbles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "tool-use",
+    "drawn_as": "agent commands as orange boxes answered by green tool-output boxes, alternating down a column instead of icons around an agent",
+    "parts": [
+     "command boxes",
+     "output boxes"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey rounded bubble with an italic task instruction",
+    "parts": [
+     "instruction bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "light-blue rounded box labelled 'SWE-agent 32B' with a small hand-on-keyboard icon",
+    "parts": [
+     "labelled box",
+     "icon"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Top-left heading 1), then 2) below it, then the middle column 3) from instruction down to the trajectory, and finally the chart at the right with its legend underneath."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three columns: the left holds strategy 1 above strategy 2, the middle column holds strategy 3 as a long top-down chain, the right holds the result chart with its key beneath. Panels have no frames; whitespace separates them.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "below",
+  "panel_markers": "numbers",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.1,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f6c6ad",
+    "used_for": "command boxes (what the agent issues)"
+   },
+   {
+    "hex": "#b4e5a2",
+    "used_for": "tool-output boxes (what the environment returns)"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "SWE-agent 32B box and the agent's message bubbles"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "task instruction bubble"
+   },
+   {
+    "hex": "#376380",
+    "used_for": "Mamba-1.4b lines in the chart and legend"
+   },
+   {
+    "hex": "#bf572e",
+    "used_for": "Pythia-1.4b lines in the chart and legend"
+   },
+   {
+    "hex": "#f08080",
+    "used_for": "dashed vertical line and label for the training limit of 16 functions"
+   },
+   {
+    "hex": "#b0b0b0",
+    "used_for": "light grid lines of the chart"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black outlines on the typed boxes, 0.75 pt chart lines, 0.25 pt grid; dotted, dashed and solid chart lines",
+  "font": "monospace (Lucida Console) 5.5 pt for commands and outputs, italic sans (Aptos) 6 pt for messages, bold serif 9 pt for headings; sans in the chart",
+  "corners": "rounded",
+  "arrows": "two hollow downward block arrows (instruction to agent to trajectory); no other arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = a command issued by the agent; green = tool output returned by the environment; light blue = the agent's own messages and the agent box; grey = the task instruction; in the chart steel blue = Mamba, rust = Pythia, red dashed = largest training codebase",
+  "line_style_means": "in the chart dotted = single-turn (1), dashed = interactive (2), solid = distillation (3)",
+  "shape_means": "rounded boxes whose width and indent carry the speaker: commands wide and flush left, outputs narrower and indented right; vertical ellipsis = trace continues",
+  "marker_means": "1), 2), 3) name the strategies and return as (1), (2), (3) in the chart legend",
+  "emphasis": "bold serif column headings, the red dashed training limit in the chart, and Mamba's interactive lines staying high beyond it",
+  "reusable_patterns": [
+   "colour-typed boxes for a trajectory: grey instruction, orange command, green output, blue message",
+   "commands flush left and outputs indented right so the alternation reads like a dialogue",
+   "vertical ellipsis to show a truncated trace",
+   "strategy numbers on the column headings repeated in the legend of the result chart",
+   "red dashed vertical line marking the training range in a result chart",
+   "hollow block arrows for instruction, agent and trajectory"
+  ],
+  "weaknesses": [
+   "six lines in two hues are hard to separate where they overlap in the chart",
+   "code text is only 5.5 pt",
+   "the two models never appear in the left columns, only in the chart legend"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real command lines and tool outputs from agent trajectories",
+   "pass-rate curves for six model and strategy pairs"
+  ],
+  "stock": [
+   "hand-on-keyboard icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "typed rounded boxes, hollow block arrows, headings",
+   "line chart in a plotting-library style"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "orange command boxes",
+   "green tool-output boxes",
+   "grey instruction bubble",
+   "SWE-agent 32B box with keyboard icon",
+   "light-blue agent message bubbles",
+   "six-line pass-rate chart with dashed training limit",
+   "bordered legend"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "state space models",
+   "Mamba",
+   "length generalization",
+   "tool use",
+   "coding agent",
+   "SWE-agent",
+   "trajectory distillation",
+   "Pythia"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "code-snippet-box"
+  ],
+  "new_tags": [
+   {
+    "name": "alternating-indent-dialogue",
+    "what": "trace blocks of two kinds alternate in one column, commands wide and flush left, outputs narrower and indented right, so the exchange reads like a chat"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw each agent policy as a column of colour-typed boxes (instruction grey, command orange, output green, thought blue) with commands flush left and outputs indented, and put the result chart beside the columns with legend numbers matching the column headings.",
+  "suits": "Comparisons of data-generation or agent strategies whose training traces differ, where a real trace excerpt per strategy plus one result chart tells the story."
+ },
+ "tags": [
+  "typed colour boxes",
+  "monospace code text",
+  "numbered columns",
+  "hollow block arrows",
+  "line chart with dashed limit",
+  "bordered legend"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Experiments (p.9-10)"
+  ],
+  "evidence": [
+   "Hard-coded agent that iteratively runs the code, changes a few files, runs the code again",
+   "Models are trained on codebases of up to 16 files (dashed red line), with context length 8,192",
+   "Mamba displays favorable performance on large codebases when trained to imitate interactive agents (agents 2 and 3)"
+  ]
+ },
+ "summary": "The paper shows that state space models, which have fixed-size memory, can generalise to much longer problems when they use tools interactively. Figure 1 sets three tool-use agents beside a result chart. Three columns show excerpts of real trajectories for a code-fixing task: a single-turn agent that prints all files and then edits, an interactive agent that runs code, reads tracebacks and edits again, and an SWE-agent 32B whose instruction, messages, commands and outputs are distilled. Orange boxes are commands, green boxes tool output, blue italic bubbles the agent's messages. On the right a line chart of pass rate against number of functions compares Mamba-1.4b and Pythia-1.4b under each strategy, with a dashed line at the training limit of 16 functions.",
+ "summary_zh": "状态空间模型借助交互式工具调用可泛化到更长的问题。图并排三种智能体的真实轨迹节选（单轮、交互式、蒸馏自 SWE-agent），橙色是命令、绿色是输出；右侧折线图比较 Mamba 与 Pythia 的通过率，虚线为训练上限 16 个函数。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The numbers 1-3 name strategies and are not step markers. The hand-on-keyboard icon is taken to be the single placed bitmap (18x18 pt). Verdict 'fails' for strategy 1 follows the caption and text (Mamba fails on complex codebases when trained single-turn).",
+ "venue": "ICLR26"
+}

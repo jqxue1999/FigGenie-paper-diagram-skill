@@ -402,3 +402,31 @@ None of these is required: a comparison can live on a shared start and three lab
 tag, a walkthrough can trace its path with a single bold wavy line instead of numbers. Use the device the story
 needs, draw it in the same line weight as the rest, and keep one meaning per device within a figure.
 
+## 10. AI-venue figures — the parts they add
+
+The defaults of §8 hold for the AI family too (line, arrow, container, legend, badge, cylinder, ×N stack), with three
+shifts the corpus makes: lighter strokes (median 0.47 pt), pale Office tints for modules and regions instead of grey
+scaffolding, and letters (a) (b) on panels rather than circled step numbers (`references/ai/style-rules.md`). What the
+family adds is the stock drawn forms of AI papers and the devices around samples, cut from 271 Figure 1s into
+`assets/symbols/` (`subtype: "ai"`, 998 parts in 183 families under 9 themes; browse `catalog-ai-<theme>.png`, search
+`index.json` by `family` / `by_family_ai`, `domain`, `tags`, `depicts`; `placeholders` says how many bitmaps of the
+source became grey slots). Frequencies are over the 336 AI semantic records; `references/ai/encoding.md` says when each
+device is the right one.
+
+| form or device | what it says | how it is drawn by default | theme / families to look in |
+|---|---|---|---|
+| the model | an LLM, a network, an encoder | a rounded box named for the model (29% of records), a trapezoid for an encoder / decoder (6%; anatomy 17%), a layer stack (6%); a robot or brain icon only where the figure is about actors (robot 11%) | `things-models` → `llm` (20), `trapezoid-module`, `transformer-block` (14), `model-pictogram` |
+| a block opened up | attention, feed-forward, a LoRA branch, a codebook | the standard sub-blocks stacked with `×N`, residual lines around them; the paper's change the one coloured block | `things-models` → `transformer-block`, `lora-adapter`, `vae-codebook`, `unet`, `skip-connection`, `attention` |
+| tokens, embeddings, patches | a sequence or a vector | a strip of small equal cells (20% of records; anatomy 50%), coloured by role or type, an ellipsis for the rest | `things-data` → `token-strip` (35), `vector-cells` (15), `vit-patchify`, `matrix-cell-grid` |
+| a sample | the input, the output, a data item | a picture at its own aspect in a thin frame (`image.role`), a quoted text card of two or three lines, a film strip of frames, stacked cards for a batch | `things-data` → `filmstrip`, `stacked-cards`, `dataset-card`, `benchmark-card` (16), `masked-input`; a `text` node |
+| a message | what an actor says or thinks | a speech or thought bubble with a short text, its tail to the actor (10% of records; agents 30%) | `things-agents` → `chat-bubbles` (16), `thought-bubble`, `typed-trace-blocks` |
+| an actor | a user, an agent, a tool, the environment | an icon at label size (8-12 pt) in one style, next to its name; a role tint behind its lane; a grey slot where the paper's logo goes | `things-agents` → `agent-loop` (11), `tool-use`, `memory-store`, `gui-screen`, `rl-loop` |
+| training state | trained against frozen | a snowflake and a flame glyph at the box's corner (6%), a padlock (1%), or the palette's two state colours; a key either way | `devices-marks` → `frozen-trainable`, `module-state-coding` |
+| a verdict | right against wrong, ours against theirs | a green tick and a red cross (15%) at the lane's end, a one-word label; never colour alone | `devices-marks` → `verdict-marks` (12), `error-callouts` |
+| a zoom | the part opened up | a wedge or two leader lines from the small box to the enlarged one (19%), the enlarged one framed; or a lettered sub-panel named in the main drawing | `devices-layout` → `zoom-callout` (15), `new:dashed-group-boxes` |
+| a title or a claim | the figure's own headline | a bold line set into the figure, a pill or tab title on a panel (6%; scope overviews 19%) | `devices-titles-notes` → `frame-border-titles`, `pill-title-headers`, `tab-titled-panels`, `claim-banner` |
+| a hand-over | from one stage or panel to the next | a block arrow (12%; a third of the records tag it) or a plain arrow between bands, colour-coded by flow kind (33%) | `devices-arrows-colour` → `block-arrows` (27), `flow-type-arrows` (24), `colour-coded-groups` (20) |
+| a region | a stage, a role, a panel | a pale tint (`#f2f2f2`, `#fff2cc`, `#fbe3d6`, `#d9f2d0`, `#deebf7`; lightness ≈ 0.9) with a title, framed or not | `devices-layout` → `option-catalog`, `notation-key`; `references/ai/palettes.md` §7 |
+
+None of these is required. A part is copied as the inner `<g>`, recoloured by role, and sized to the figure's own line
+weight; a bitmap the part replaced with a grey slot is the paper's to supply (`image` node) or stays a slot.

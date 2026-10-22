@@ -1,0 +1,495 @@
+{
+ "paper_id": "cvpr23-0038",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DGM4 (task); model HAMMER not drawn here",
+  "one_liner": "Defines the DGM4 task: detect whether an image-text pair is manipulated and ground the edited image box and text tokens.",
+  "domain": [
+   "multi-modal media manipulation",
+   "misinformation detection",
+   "grounding"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "worked-walkthrough"
+  ],
+  "variant": "hub-and-spoke",
+  "variant_note": "one annotated image-text record in the middle, the four detection questions at the left and the two grounding answers at the right, tied to it by blue block arrows and orange curves",
+  "argues": "DGM4 asks for more than a real/fake label: manipulation types plus the manipulated image box and text tokens, a more interpretable answer than single-modal binary detection.",
+  "subject": "One manipulated news image-text pair in the centre, with detection questions at the left and grounding answers (box coordinates, tokens) at the right",
+  "elements": [
+   {
+    "name": "Detecting and Grounding Multi-Modal Media Manipulation",
+    "type": "label",
+    "role": "names the task (DGM4) the figure defines",
+    "drawn_as": "white rounded title tab straddling the top border of the grey container; 'Detecting' in blue, 'Grounding' in orange, rest black, bold italic sans",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Detection",
+    "type": "label",
+    "role": "heads the left column of detection tasks",
+    "drawn_as": "bold blue word with a warning-triangle icon",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "DeepFake Detection: Real or Fake ?",
+    "type": "operation",
+    "role": "image-only forgery detection, an existing single-modal task",
+    "drawn_as": "light-blue rounded box, bold italic title, 'Real' in green and 'Fake' in red",
+    "container": "Detection",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Modal Misinformation Detection: Real or Fake ?",
+    "type": "operation",
+    "role": "real or fake decision on the image-text pair",
+    "drawn_as": "light-blue rounded box, bold italic title, 'Real' in green and 'Fake' in red",
+    "container": "Detection",
+    "is_contribution": null
+   },
+   {
+    "name": "Text Fake News Detection: Real or Fake ?",
+    "type": "operation",
+    "role": "text-only fake news detection, an existing single-modal task",
+    "drawn_as": "light-blue rounded box, bold italic title, 'Real' in green and 'Fake' in red",
+    "container": "Detection",
+    "is_contribution": false
+   },
+   {
+    "name": "[FS, FA, TS, TA]",
+    "type": "operation",
+    "role": "the four manipulation types (Face Swap, Face Attribute, Text Swap, Text Attribute, defined in the caption) answered with tick or cross marks",
+    "drawn_as": "light-blue rounded box with the four abbreviations over a green tick, red cross, red cross, green tick",
+    "container": "Detection",
+    "is_contribution": true
+   },
+   {
+    "name": "Text",
+    "type": "sample",
+    "role": "caption of the news item; the phrase 'is forced to resign' is marked as the manipulated span",
+    "drawn_as": "white box with a serif sentence, 'Gordon Brown is forced to resign EU meeting by Nicolas Sarkozy the French president in Paris.', a pink span with an orange outline over the phrase",
+    "container": "central panel",
+    "is_contribution": false
+   },
+   {
+    "name": "orange box on the face",
+    "type": "region",
+    "role": "marks the manipulated face region of the photo",
+    "drawn_as": "orange 2.25 pt rectangle with a dot at its centre on the photo",
+    "container": "central panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Manipulation",
+    "type": "container",
+    "role": "shows each manipulated item next to its original",
+    "drawn_as": "pale rounded panel with a grey border at the right of the central panel, holding two framed pairs joined by black arrows",
+    "container": "central panel",
+    "is_contribution": false
+   },
+   {
+    "name": "'is welcomed to' and 'is forced to resign'",
+    "type": "instance",
+    "role": "original phrase and its manipulated replacement",
+    "drawn_as": "green-bordered box above an orange-bordered box in which 'forced' and 'resign' are red bold italic, joined by a black down arrow",
+    "container": "Manipulation",
+    "is_contribution": false
+   },
+   {
+    "name": "Grounding",
+    "type": "label",
+    "role": "heads the right column of grounding outputs",
+    "drawn_as": "bold orange word with a magnifying-glass icon",
+    "container": "right column",
+    "is_contribution": false
+   },
+   {
+    "name": "Manipulated Bounding Box: x1 = 105, y1 = 69, x2 = 160, y2 = 158,",
+    "type": "instance",
+    "role": "grounding output for the image: coordinates of the edited face box",
+    "drawn_as": "orange-tinted rounded box, bold italic title, red bold serif coordinates",
+    "container": "Grounding",
+    "is_contribution": true
+   },
+   {
+    "name": "Manipulated Tokens: 'forced', 'resign'",
+    "type": "instance",
+    "role": "grounding output for the text: the edited words",
+    "drawn_as": "orange-tinted rounded box, bold italic title, red bold serif tokens",
+    "container": "Grounding",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Image area of the central panel",
+    "to": "DeepFake Detection: Real or Fake ?",
+    "what": "the photo is what an image-only detector sees; fat blue arrow starts at the photo side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central panel",
+    "to": "Multi-Modal Misinformation Detection: Real or Fake ?",
+    "what": "the image-text pair is classified as a whole",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text",
+    "to": "Text Fake News Detection: Real or Fake ?",
+    "what": "the caption is what a text-only detector sees; fat blue arrow starts at the text side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central panel",
+    "to": "[FS, FA, TS, TA]",
+    "what": "manipulation types of the pair",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange box on the face",
+    "to": "orange-framed manipulated face crop",
+    "what": "leader line from the box (dot at its centre) to the enlarged crop",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "highlighted phrase in Text",
+    "to": "'is welcomed to' and 'is forced to resign'",
+    "what": "leader line from the highlighted span (dot at its end) to the orange-framed phrase",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "original face crop",
+    "to": "orange-framed manipulated face crop",
+    "what": "original becomes the manipulated face",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange-framed manipulated face crop",
+    "to": "Manipulated Bounding Box: x1 = 105, y1 = 69, x2 = 160, y2 = 158,",
+    "what": "box coordinates of the edited face",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "'is welcomed to' and 'is forced to resign'",
+    "to": "Manipulated Tokens: 'forced', 'resign'",
+    "what": "the edited tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "title words Detecting and Grounding",
+    "to": "Detection and Grounding columns",
+    "what": "word colour (blue, orange) matches the column heading, boxes and arrows",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Detection, Grounding, Image, Text, Manipulation",
+    "kind": "section",
+    "at": "column heads and region labels",
+    "what": "head the left column, the right column and the three areas of the central panel"
+   },
+   {
+    "marker": "FS, FA, TS, TA",
+    "kind": "identity",
+    "at": "fourth detection box",
+    "what": "abbreviations of the four manipulation types, defined only in the caption"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "news photograph of two men in suits talking, the face of the man at the right marked as manipulated",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "wide photo with a black outline in the green panel; an orange box with a dot on the manipulated face and an orange line out to the enlarged crop"
+   },
+   {
+    "what": "face crops: original (green border) above, manipulated (orange border) below",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two square crops stacked in the Manipulation panel and joined by a short black arrow; green frame for the original, orange frame for the edited one"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "warning triangle with an exclamation mark",
+    "stands_for": "detection of fake media (heading of the Detection column)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "magnifying glass",
+    "stands_for": "grounding, locating the manipulation (heading of the Grounding column)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a manipulated news item: a photo with a swapped face and the caption 'Gordon Brown is forced to resign EU meeting by Nicolas Sarkozy the French president in Paris.'",
+    "form": "photo and sentence inside the green central panel, manipulated parts boxed in orange",
+    "real_values": true
+   },
+   {
+    "what": "the original phrase 'is welcomed to' replaced by 'is forced to resign'",
+    "form": "green-framed box above an orange-framed box with a black arrow",
+    "real_values": true
+   },
+   {
+    "what": "grounding answers: box x1 = 105, y1 = 69, x2 = 160, y2 = 158 and tokens 'forced', 'resign'",
+    "form": "orange-tinted boxes with red bold serif values",
+    "real_values": null
+   },
+   {
+    "what": "manipulation types [FS, FA, TS, TA] answered tick, cross, cross, tick",
+    "form": "box with bold abbreviations over green ticks and red crosses",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "four rounded task boxes: three ask 'Real or Fake ?' with Real in green and Fake in red, the fourth answers with a tick and cross row",
+    "parts": [
+     "task title",
+     "Real or Fake ? question",
+     "tick and cross marks"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "The eye lands on the title tab and the large photo in the centre, then follows the fat blue arrows left to the detection boxes and the orange curves right to the grounding boxes."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "One large rounded grey container with a title tab over its top edge. Inside, three zones are divided by black dashed vertical lines: Detection at the left (four stacked task boxes), a green central panel with the photo, the caption and a Manipulation sub-panel, and Grounding at the right (two stacked output boxes). Fat blue arrows run from the centre to each detection box and orange curves from the edited crop and phrase to the grounding boxes.",
+  "panel_count": 1,
+  "lanes": "three columns divided by dashed vertical lines: detection tasks, the input pair with its manipulation, grounding outputs",
+  "direction": "radial",
+  "reading_start": "centre",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.58,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5f5f5",
+    "used_for": "outer rounded container"
+   },
+   {
+    "hex": "#d5e8d4",
+    "opacity": 0.8,
+    "used_for": "central green panel holding the input pair"
+   },
+   {
+    "hex": "#d4e1f5",
+    "used_for": "detection task boxes and the fat block arrows"
+   },
+   {
+    "hex": "#ffce9f",
+    "used_for": "grounding output boxes"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "pink fill of the manipulated phrase in the caption"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "grey border of the Manipulation sub-panel"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red words and values: Fake, crosses, edited tokens, box coordinates"
+   },
+   {
+    "hex": "#ff8000",
+    "used_for": "orange outlines of the edited face and phrase, leader lines, curved arrows, the word Grounding"
+   },
+   {
+    "hex": "#0066cc",
+    "used_for": "blue words Detection and Detecting"
+   },
+   {
+    "hex": "#004c99",
+    "used_for": "dark-blue outline of the block arrows (stroke)"
+   },
+   {
+    "hex": "#006600",
+    "used_for": "dark-green frames of the original crop and phrase (stroke)"
+   },
+   {
+    "hex": "#009900",
+    "used_for": "green words and marks: Real, ticks"
+   },
+   {
+    "hex": "#000000",
+    "opacity": 0.25,
+    "used_for": "soft drop shadows under boxes and containers"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt black outlines on boxes and the container; 2.25 pt orange outlines on the edited face and phrase; dark-blue outline on the block arrows; black dashed vertical dividers",
+  "font": "bold italic sans (Arial) 6.5 to 7.5 pt for headings and box titles, serif (Times New Roman) 6.5 pt for the caption sentence, bold serif (Georgia) in red for the coordinates",
+  "corners": "mixed",
+  "arrows": "fat outlined block arrows in light blue pointing left, thick orange curved arrows with filled heads pointing right, thin black short arrows between original and edited items, straight orange leader lines with a dot",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under boxes and containers",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = detection (heading, task boxes, block arrows, the word Detecting); orange = grounding and manipulated content (heading, output boxes, outlines on the edited face and phrase, curved arrows); green = real or original (Real, ticks, frames of the originals, central panel); red = the values the task flags or outputs (Fake, crosses, edited tokens, coordinates)",
+  "line_style_means": "fat blue arrows = from the input pair to the detection tasks; orange curves = from the edited crop or phrase to the grounding outputs; straight orange lines with a dot = from the marked region to its enlarged crop; thin black arrows = original becomes manipulated; black dashed vertical lines = column dividers",
+  "shape_means": "rounded boxes = task or output cards; the big green rounded panel = the input record; framed squares = face crops; the fat left-pointing arrows = which input a task reads",
+  "marker_means": "tick and cross mark which manipulation types apply (here FS and TA ticked, matching the swapped face and the rewritten phrase); green frame = original, orange frame = manipulated; the dot on a box or phrase starts a leader line",
+  "emphasis": "The title tab splits the task name into blue 'Detecting' and orange 'Grounding', matching the two side columns; orange outlines on the face and the phrase pull the eye to the manipulated parts.",
+  "reusable_patterns": [
+   "task name as a title tab straddling the top border, its words coloured like the columns they head",
+   "one annotated input record in the centre with questions fanning out to the left and answers to the right",
+   "fat arrows in the column colour from the input to each task box",
+   "boxed region on a photo tied by a leader line to an enlarged crop",
+   "original (green frame) above its edited version (orange frame) joined by a short arrow",
+   "ticks and crosses under abbreviations for a multi-label answer",
+   "black dashed vertical dividers inside one rounded container"
+  ],
+  "weaknesses": [
+   "FS, FA, TS, TA are defined only in the caption",
+   "orange marks both the manipulated content and the grounding column, so one colour carries two meanings"
+  ]
+ },
+ "resources": {
+  "own": [
+   "manipulated news photo and its face crops",
+   "the manipulated caption",
+   "box coordinates and tokens of a sample"
+  ],
+  "stock": [
+   "warning-triangle icon",
+   "magnifying-glass icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "task boxes",
+   "block arrows",
+   "green central panel",
+   "title tab",
+   "orange leader lines and curved arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "manipulated news photo with an orange face box",
+   "caption with a highlighted phrase",
+   "four detection task boxes",
+   "original and manipulated face crops",
+   "grounding output boxes",
+   "fat block arrows",
+   "tick and cross marks"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multi-modal media manipulation",
+   "deepfake detection",
+   "fake news",
+   "misinformation",
+   "grounding",
+   "image-text pairs",
+   "face swap",
+   "bounding box",
+   "manipulated tokens"
+  ],
+  "tags": [
+   "task-definition",
+   "annotated-record-card",
+   "highlighted-text-spans",
+   "verdict-marks",
+   "zoom-callout",
+   "colour-coded-groups",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "before-after-crop-pair",
+    "what": "an original crop or phrase in a green frame above its edited version in an orange frame, joined by a short down arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Define a new task with one annotated example: put the input record in the middle, send the questions (detection) to one side and the answers to be located (grounding) to the other, and give each side one colour that also colours the title words, headings, boxes and arrows.",
+  "suits": "Task or benchmark proposals whose output has several parts (labels plus locations) that one real sample can show, such as detection plus grounding or multi-label annotation."
+ },
+ "tags": [
+  "rounded container with title tab",
+  "hub with spokes",
+  "photo with orange bounding box",
+  "blue arrows left, orange arrows right",
+  "soft shadows",
+  "dashed vertical dividers",
+  "green and red verdict words"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Different from existing single-modal forgery detection tasks, DGM4 not only performs real/fake classification on the input image-text pair",
+   "attempts to detect more fine-grained manipulation types and ground manipulated image bboxes and text tokens",
+   "FS: Face Swap Manipulation, FA: Face Attribute Manipulation, TS: Text Swap Manipulation, TA: Text Attribute Manipulation"
+  ]
+ },
+ "summary": "The paper defines a new task, Detecting and Grounding Multi-Modal Media Manipulation (DGM4): for an image-text pair, say whether it is real or fake, which manipulation types occurred, and where the edits are. Figure 1 draws one manipulated news item in a green panel at the centre: a photo with an orange box on a swapped face and a caption with the rewritten phrase 'is forced to resign' highlighted, plus a Manipulation panel that pairs each original crop or phrase with its edited version. Fat blue arrows lead left to four detection boxes (Real or Fake ? three times, and ticks and crosses for FS, FA, TS, TA); orange curved arrows lead right to the grounding outputs, box coordinates and tokens. Blue and orange colour the two sides throughout.",
+ "summary_zh": "论文提出新任务 DGM4：对图文对判断真假、操纵类型，并定位被篡改的图像框和文字词。图中央用一条被篡改的新闻（换脸照片加改写的句子）做示例，蓝色箭头指向左侧四个检测问题，橙色箭头指向右侧的框坐标和词。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (scope-overview, worked-walkthrough). No model is drawn: HAMMER, the paper's model, does not appear in this figure. The three zones are treated as columns (lanes) of one drawing, not as panels, because arrows join them and one title covers the whole; the prior's panels=3 is not followed. The tick and cross reading (FS and TA ticked, FA and TS crossed) is inferred from the example shown. The warning-triangle and magnifier icons are 11 pt bitmaps.",
+ "venue": "CVPR23"
+}

@@ -1,0 +1,443 @@
+{
+ "paper_id": "icml26-0234",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MetaphorVU",
+  "one_liner": "A benchmark for metaphorical video understanding plus an inference-time method (MetaphorBoost) that augments cross-domain mapping with a metaphor knowledge graph.",
+  "domain": [
+   "metaphorical video understanding",
+   "multimodal LLM benchmark",
+   "cross-domain mapping"
+  ],
+  "subfield": "multimodal",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "scope-overview"
+  ],
+  "variant": "tiers-on-one-example",
+  "variant_note": "one example film clip read through three stacked tiers of understanding at the right, a column of platform logos and theme cards at the left",
+  "argues": "Metaphorical videos are everywhere and must be understood beyond object recognition and event description: viewers map visual elements to underlying concepts to reach implicit meanings.",
+  "subject": "Platforms and five video themes at left; one example film clip read through recognition, event description and metaphor understanding at right.",
+  "elements": [
+   {
+    "name": "platform logos and ...",
+    "type": "data",
+    "role": "social platforms where metaphorical videos circulate",
+    "drawn_as": "grey rounded box with eight logos in two rows (YouTube, Vimeo, Reddit, TikTok, Twitter, Bilibili, Facebook, Weibo) and an ellipsis",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Society Criticism / Life Contemplation / Value Advocacy / Relationship Insight / Situation Portrayal",
+    "type": "sample",
+    "role": "five themes of metaphorical videos, each with a still",
+    "drawn_as": "grey rounded column of five thumbnails with a white circled play button, caption under each, ellipsis at the end",
+    "container": "left column",
+    "is_contribution": null
+   },
+   {
+    "name": "Video",
+    "type": "instance",
+    "role": "the example video that is analysed",
+    "drawn_as": "peach box with an orange camera icon, the word Video and a film strip of six frames with sprocket holes",
+    "container": "right panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Recognition",
+    "type": "operation",
+    "role": "lists the objects that can be seen",
+    "drawn_as": "grey header pill with a 2x2 grid icon above a dashed box: pig, tailcoat, judge's attire, wine, banquet, cat, food scraps ...",
+    "container": "right panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Event Description",
+    "type": "operation",
+    "role": "says what happens, event by event",
+    "drawn_as": "grey header pill with a loop-arrows icon above a dashed box of three chips joined by small arrows: Tailcoat pigs are eating, drinking. / Enjoy party and lavish banquet. / Cats under table eat food scraps.",
+    "container": "right panel",
+    "is_contribution": false
+   },
+   {
+    "name": "We focus on a deeper level",
+    "type": "label",
+    "role": "marks the metaphor tier as the paper's target",
+    "drawn_as": "italic orange sentence between the grey tiers and the orange tier",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Metaphor Understanding",
+    "type": "container",
+    "role": "deepest tier: from visual elements through concepts to implicit meaning",
+    "drawn_as": "orange-tinted panel with orange header pill and a network icon",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Visual Elements",
+    "type": "data",
+    "role": "things in the video that carry the metaphor",
+    "drawn_as": "dashed orange column with a scattered-dots icon and four chips joined by small down arrows: tailcoat pigs, eating, drinking, good banquet, cats, food scrap",
+    "container": "Metaphor Understanding",
+    "is_contribution": true
+   },
+   {
+    "name": "Underlying Concepts",
+    "type": "data",
+    "role": "abstract concepts the elements stand for",
+    "drawn_as": "dashed orange column with a thought-cloud icon and four chips: ruling group, plunder, waste, social wealth, underprivileged",
+    "container": "Metaphor Understanding",
+    "is_contribution": true
+   },
+   {
+    "name": "Implicit Meanings",
+    "type": "text-block",
+    "role": "the message of the video",
+    "drawn_as": "tinted block with a star-in-circle icon and the text 'Ruling group plunders social wealth, while the lower class people only ...'",
+    "container": "Metaphor Understanding",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "platform logos",
+    "to": "five theme cards",
+    "what": "videos from these platforms fall into these themes",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Video",
+    "to": "Recognition",
+    "what": "objects are read off the video",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Recognition",
+    "to": "Event Description",
+    "what": "objects are turned into events",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Event Description",
+    "to": "Metaphor Understanding",
+    "what": "a deeper level than description",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Elements",
+    "to": "Underlying Concepts",
+    "what": "cross-domain mapping from visual elements to concepts, row by row (tailcoat pigs to ruling group, good banquet to social wealth, cats and food scrap to underprivileged)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Underlying Concepts",
+    "to": "Implicit Meanings",
+    "what": "concepts combine into the implicit message",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "event chips",
+    "to": "next event chip",
+    "what": "the story proceeds from eating to banquet to cats under the table",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "eight platform logos opening through a dashed cone into five video-theme cards with thumbnails",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "one example video read through Recognition, Event Description and Metaphor Understanding",
+    "verdict": null
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "stills of the five theme videos",
+    "content": "video-frames",
+    "role": "data-thumbnail",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "equal-width stills with a white circled play button in the centre and a serif caption beneath, stacked in a grey rounded column"
+   },
+   {
+    "what": "film strip of the example video: pigs in tailcoats at a banquet and cats under the table",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "one strip image with six frames and sprocket holes inside a peach box"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "platform logos: YouTube, Vimeo, Reddit, TikTok, Twitter, Bilibili, Facebook, Weibo",
+    "stands_for": "social media platforms",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "orange video camera",
+    "stands_for": "video (at the dashed cone and next to the Video label)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "grey 2x2 grid, loop arrows and orange network icons",
+    "stands_for": "the tiers Recognition, Event Description and Metaphor Understanding",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "scattered dots, thought cloud and star-in-circle in orange",
+    "stands_for": "Visual Elements, Underlying Concepts and Implicit Meanings",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "white circled play triangle",
+    "stands_for": "a video",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "an animated film clip of tailcoat pigs feasting while cats eat scraps under the table, described at three tiers: objects, events, then elements, concepts and implicit meaning",
+    "form": "film strip followed by titled boxes with dashed text chips",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "six consecutive frames in a strip with sprocket holes along both edges, inside a peach box with a camera icon",
+    "parts": [
+     "frames",
+     "sprocket holes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "column of thumbnail cards with play buttons and one theme name each, fed by a platform logo grid through a dashed cone",
+    "parts": [
+     "logo grid",
+     "dashed cone",
+     "theme cards"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "three stacked tiers joined by wide soft down arrows, deepest tier in the accent colour with an italic sentence above it",
+    "parts": [
+     "Recognition",
+     "Event Description",
+     "Metaphor Understanding"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the logo grid at the top left, drops through the dashed cone to the theme cards, then jumps to the film strip at the top right and reads down the three tiers to the orange tier, which is read left to right across its three columns."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "two grey rounded panels side by side: a narrow left column (logo box, dashed cone, five theme cards) and a wide right panel stacking the film strip, two grey tiers and the orange metaphor tier, whose three columns run left to right",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.19,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ededed",
+    "opacity": 0.4,
+    "used_for": "grey ground of the left column, the right panel and the grey tiers"
+   },
+   {
+    "hex": "#dbdbdb",
+    "opacity": 0.6,
+    "used_for": "grey header pills of Recognition and Event Description; dashed grey borders (stroke)"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "peach ground of the Video box and the Metaphor Understanding panel"
+   },
+   {
+    "hex": "#f8cbad",
+    "opacity": 0.6,
+    "used_for": "orange header pill Metaphor Understanding and the orange block arrows"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "dashed orange borders of the three columns (stroke)"
+   },
+   {
+    "hex": "#c9c9c9",
+    "used_for": "thin grey outlines (stroke)"
+   },
+   {
+    "hex": "#c55a11",
+    "approx": true,
+    "used_for": "dark orange of the camera icons and the italic sentence, read off the preview"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dashed light-grey and orange outlines on text boxes and columns; header pills have no outline",
+  "font": "serif (Times New Roman) 6.5 pt for text and 5.5 pt for column titles, bold sans (Arial) tier titles, italic orange serif sentence",
+  "corners": "rounded",
+  "arrows": "wide soft grey down arrows between video and tiers; small grey arrows between event chips and between visual elements; orange block arrows between the three columns",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey = surface levels (recognition, event description) and the platform and theme column; orange = the video and the deep level the paper focuses on (metaphor understanding)",
+  "line_style_means": "dashed boxes = a set of text items (objects, events, elements, concepts); dashed grey cone from the platform box via a camera icon to the theme cards = videos come from these platforms in these themes",
+  "shape_means": "header pill with icon = a tier or a column; chip = one extracted item; wide block arrow = a step to a deeper tier; strip with sprocket holes = a video",
+  "marker_means": "no numbers or letters; arrows give the order; ellipses mean more items",
+  "emphasis": "the orange tier is highlighted by the italic sentence 'We focus on a deeper level' while the grey tiers above recede",
+  "reusable_patterns": [
+   "film strip of one example video at the top of a tiered explanation",
+   "stacked tiers joined by wide soft arrows with only the deepest tier in the accent colour and a short italic claim above it",
+   "dashed text boxes with comma-separated items or chip rows at each tier",
+   "row-aligned columns (elements, concepts, meanings) joined by block arrows so that the mapping is read across",
+   "logo grid of platforms feeding a column of themed thumbnail cards through a dashed cone",
+   "play-button overlay on thumbnails to mark them as videos"
+  ],
+  "weaknesses": [
+   "the row-wise mapping from visual elements to concepts is implied by alignment only, no connecting lines",
+   "6.5 pt text and many chips at single-column width",
+   "the left column has no title, its meaning is carried by the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames of an example metaphorical film clip",
+   "five theme video stills",
+   "the example annotations at each tier"
+  ],
+  "stock": [
+   "platform logos of YouTube, Vimeo, Reddit, TikTok, Twitter, Bilibili, Facebook and Weibo",
+   "flat icons for camera, grid, loop, network, dots, cloud and star",
+   "play-button overlay"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, dashed boxes, header pills, chips and arrows"
+  ],
+  "unknown": [
+   "whether the theme stills and the film strip are taken from benchmark videos (they look like film and animation stills)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "social platform logo grid",
+   "video theme cards with play buttons",
+   "film strip",
+   "tier header pills with icons",
+   "dashed text boxes with chips",
+   "wide soft down arrows",
+   "orange block arrows"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "metaphorical video understanding",
+   "benchmark",
+   "multimodal LLMs",
+   "cross-domain mapping",
+   "implicit meaning",
+   "social media videos",
+   "recognition",
+   "event description"
+  ],
+  "tags": [
+   "task-definition",
+   "level-ladder",
+   "brand-logo-icon",
+   "filmstrip",
+   "claim-banner"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Stack the levels of understanding for one concrete example (film strip, then Recognition, Event Description, Metaphor Understanding) as titled tiers joined by wide soft arrows, and tint only the deepest tier in the accent colour with a short italic claim above it.",
+  "suits": "Task-introduction figures for benchmarks about higher-level understanding, where the point is how far beyond surface recognition the task goes."
+ },
+ "tags": [
+  "two grey panels",
+  "film strip",
+  "tiered boxes",
+  "dashed text chips",
+  "grey plus orange accent",
+  "single-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "humans can link visual elements (e.g., tailcoat pigs, banquet, and cats under table) with underlying concepts",
+   "metaphorical video understanding requires high-order cognitive capabilities",
+   "the core lying in cross-domain mapping that links visual elements to underlying concepts"
+  ]
+ },
+ "summary": "MetaphorVU introduces MetaphorVU-Bench, a benchmark for understanding metaphorical videos, and MetaphorBoost, an inference-time enhancement that adds a metaphor knowledge graph to improve cross-domain mapping in multimodal LLMs. Figure 1 is a task-introduction figure in two grey rounded panels. At left a grid of eight platform logos opens through a dashed cone into five video-theme cards with play-button thumbnails (Society Criticism, Life Contemplation, Value Advocacy, Relationship Insight, Situation Portrayal). At right one animated clip, shown as a film strip, is read through three stacked tiers joined by wide arrows: Recognition lists objects, Event Description gives three event chips, and the orange Metaphor Understanding tier, flagged 'We focus on a deeper level', maps visual elements to underlying concepts and an implicit meaning.",
+ "summary_zh": "MetaphorVU 提出隐喻视频理解基准及增强方法。图 1 为任务介绍图：左栏用平台图标和主题视频卡片说明隐喻视频无处不在；右栏用胶片条展示一段示例，经识别、事件描述到橙色的隐喻理解三层，把视觉元素映射到概念和隐含意义。",
+ "confidence": "high",
+ "notes": "Prior labels had scope-overview first; the right panel covers more of the area and follows one instance through tiers, so worked-walkthrough is listed first and scope-overview kept for the left column. The five theme names are not called benchmark categories in the supplied text. The film strip is one bitmap holding six frames. The mapping of elements to concepts is read from row alignment and the introduction paragraph.",
+ "venue": "ICML26"
+}

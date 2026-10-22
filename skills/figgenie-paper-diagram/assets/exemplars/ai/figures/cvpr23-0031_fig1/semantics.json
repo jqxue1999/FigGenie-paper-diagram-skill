@@ -1,0 +1,509 @@
+{
+ "paper_id": "cvpr23-0031",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FlowGrad",
+  "one_liner": "Optimises the output of a pretrained generative ODE by adding per-step control variables to the whole trajectory and back-propagating guidance gradients to them.",
+  "domain": [
+   "controllable generation",
+   "generative ODEs",
+   "text-guided image manipulation"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "design-family",
+  "variant_note": "four lettered designs (a) to (d) for steering a generative model with a guidance loss, the proposed one last and marked Ours; (c) and (d) share one unrolled ODE chain",
+  "argues": "FlowGrad adds control variables to every step of the complete frozen ODE and optimises them with gradients from the guidance model, with smaller discretization error and no noised guidance model.",
+  "subject": "Four designs for controlled generation with a guidance loss: GAN inversion, DiffusionCLIP, classifier guidance, FlowGrad",
+  "elements": [
+   {
+    "name": "z",
+    "type": "data",
+    "role": "latent code of the GAN that design (a) optimises",
+    "drawn_as": "italic symbol before the GAN box, end point of the blue return arrow",
+    "container": "(a) GAN Inversion",
+    "is_contribution": false
+   },
+   {
+    "name": "GAN",
+    "type": "module",
+    "role": "pre-trained generator used as a prior, drawn frozen",
+    "drawn_as": "light blue-grey square box under a red 'Frozen'",
+    "container": "(a) GAN Inversion",
+    "is_contribution": false
+   },
+   {
+    "name": "Guidance",
+    "type": "module",
+    "role": "model that scores the output with the guidance objective L",
+    "drawn_as": "peach box, same colour wherever it appears",
+    "container": "(a), (b), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "∇x L(x) and ∇x1 L(x1)",
+    "type": "data",
+    "role": "gradient of the guidance objective at the output, sent back",
+    "drawn_as": "italic formula under the Guidance box, fed by a short blue down arrow",
+    "container": "(a), (b), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Gradient",
+    "type": "label",
+    "role": "names the blue return path from the gradient to the variable being optimised",
+    "drawn_as": "bold blue word under a long blue elbow arrow",
+    "container": "(a), (b), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Fine-tune / Inference",
+    "type": "label",
+    "role": "headings of the two phases of DiffusionCLIP, split by a dark-blue dashed vertical line",
+    "drawn_as": "bold dark-grey headings above the two halves",
+    "container": "(b) DiffusionCLIP",
+    "is_contribution": false
+   },
+   {
+    "name": "Shortened PF ODE",
+    "type": "module",
+    "role": "ODE with few steps that DiffusionCLIP fine-tunes; the caption names its large discretization error",
+    "drawn_as": "orange box with two-line label, input x0^train and output x1^train",
+    "container": "(b) Fine-tune",
+    "is_contribution": false
+   },
+   {
+    "name": "Complete PF ODE",
+    "type": "module",
+    "role": "full ODE run at inference with the fine-tuned model",
+    "drawn_as": "orange box under a red bold 'Fine-tuned', x0 in and x1 out",
+    "container": "(b) Inference",
+    "is_contribution": false
+   },
+   {
+    "name": "PF ODE Model",
+    "type": "module",
+    "role": "frozen ODE velocity model applied at each step; two copies per chain with ellipses for the steps between",
+    "drawn_as": "orange box under a red bold 'Frozen'",
+    "container": "(c), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "v(x0, 0) and v(x_k/N, k/N)",
+    "type": "data",
+    "role": "output of the ODE model at that step",
+    "drawn_as": "italic formula on the arrow after each PF ODE Model",
+    "container": "(c), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "circled plus",
+    "type": "operation",
+    "role": "adds a correction term to the ODE output at a step: the guidance gradient in (c), the control variable u in (d)",
+    "drawn_as": "circle with a plus on the main arrow, two per chain",
+    "container": "(c), (d)",
+    "is_contribution": null
+   },
+   {
+    "name": "x_1/N ... x_k/N ... x_(k+1)/N ... x1",
+    "type": "data",
+    "role": "states along the ODE trajectory, ellipses for omitted steps",
+    "drawn_as": "italic symbols with fractional subscripts on black arrows",
+    "container": "(c), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Noised Guidance",
+    "type": "module",
+    "role": "guidance model that has to give gradients for noised images at intermediate steps (caption)",
+    "drawn_as": "light-green box, two copies above the sum nodes",
+    "container": "(c) Classifier Guidance",
+    "is_contribution": false
+   },
+   {
+    "name": "∇x0 L(x0) and ∇x_k/N L(x_k/N)",
+    "type": "data",
+    "role": "gradients from the noised guidance model, fed into the sum nodes at step 0 and step k",
+    "drawn_as": "italic formulas on short black down arrows",
+    "container": "(c) Classifier Guidance",
+    "is_contribution": false
+   },
+   {
+    "name": "u0 and u_k/N",
+    "type": "data",
+    "role": "control variables added at each step of the complete ODE trajectory and optimised with the gradient",
+    "drawn_as": "bold red italic symbols below the sum nodes, black up arrows into them and blue gradient arrows reaching them",
+    "container": "(d) FlowGrad (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "Frozen / Fine-tuned",
+    "type": "label",
+    "role": "says whether the model above is kept fixed or has been fine-tuned",
+    "drawn_as": "red bold 11.5 pt word above each model box",
+    "container": "(a), (b), (c), (d)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "z",
+    "to": "GAN",
+    "what": "latent code",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GAN",
+    "to": "Guidance",
+    "what": "generated image x",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Guidance",
+    "to": "∇x L(x) and ∇x1 L(x1)",
+    "what": "gradient of the guidance loss at the output",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "∇x L(x) and ∇x1 L(x1)",
+    "to": "z",
+    "what": "(a) gradient returns to the latent code along the blue elbow arrow labelled Gradient",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Shortened PF ODE",
+    "to": "Guidance",
+    "what": "(b) x0^train goes through the shortened ODE to x1^train and then to the guidance",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "∇x L(x) and ∇x1 L(x1)",
+    "to": "Shortened PF ODE",
+    "what": "(b) gradient returns to the input side of the shortened ODE (arrowhead under x0^train)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fine-tune / Inference",
+    "to": "Complete PF ODE",
+    "what": "inference uses the fine-tuned model; only the label 'Fine-tuned' and the divider link the halves",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "PF ODE Model",
+    "to": "circled plus",
+    "what": "velocity output goes into the sum node, whose output is the next state; chain x0 to x1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Noised Guidance",
+    "to": "circled plus",
+    "what": "(c) gradient at the noised state enters the sum node from above; drawn in black, not blue",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "u0 and u_k/N",
+    "to": "circled plus",
+    "what": "(d) control variable enters each sum node from below",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x1",
+    "to": "Guidance",
+    "what": "(d) final state of the chain goes to the guidance box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Guidance",
+    "to": "u0 and u_k/N",
+    "what": "(d) gradient of the guidance loss returns along one long blue arrow with an upward head at each control variable",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) GAN Inversion",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "frozen GAN, guidance on its output, gradient back to the latent z; caption: a good z for initialization can be hard to get",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) DiffusionCLIP",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "Fine-tune: shortened PF ODE plus guidance with a gradient return; Inference: complete fine-tuned PF ODE; caption: large discretization error",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) Classifier Guidance",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "frozen PF ODE chain where a noised guidance model adds its gradient at every step; caption: needs a new guidance model for noised images",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(d) FlowGrad (Ours)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "the same frozen chain with control variables u added at each step and optimised by the gradient from one guidance box at the end",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c) (d)",
+    "kind": "section",
+    "at": "titles under each design",
+    "what": "head the four designs; (d) adds '(Ours)'"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "short blue arrow from the Guidance box to its gradient formula, then a long blue elbow arrow along the bottom back to the optimised variable (z, the input, or the control variables), with a bold 'Gradient' word",
+    "parts": [
+     "Guidance box",
+     "gradient formula",
+     "blue return arrow",
+     "Gradient label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "red bold word 'Frozen' or 'Fine-tuned' above each model box in place of a snowflake or flame",
+    "parts": [
+     "Frozen label",
+     "Fine-tuned label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "horizontal chain: PF ODE Model boxes at step 0 and step k with ellipses between, states x on black arrows, a circled plus after each model; symbols only, no image thumbnails",
+    "parts": [
+     "PF ODE Model boxes",
+     "state symbols",
+     "ellipses",
+     "circled plus"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "sum-node",
+    "drawn_as": "circled plus on the arrow after each ODE output, with the correction term entering from above (c) or below (d)",
+    "parts": [
+     "circled plus",
+     "incoming correction arrow"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at (a) top-left, reads each chain left to right, then moves down panel by panel past the grey dashed rules to (d), the longest chain, which holds the only red u symbols and the long blue return arrow."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three rows divided by grey dashed horizontal rules: the top row is split by a grey dashed vertical rule into (a) and (b), and (b) is split again by a dark-blue dashed vertical line into Fine-tune and Inference; (c) and (d) each take a full row. Every panel is a left-to-right chain with its title underneath.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "other",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.56,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fc8d62",
+    "used_for": "PF ODE boxes (shortened, complete, frozen)"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "Guidance boxes"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "Noised Guidance boxes"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "GAN box"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "gradient arrows and the Gradient labels"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "long gradient return arrows in (a) and (b)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "bold words Frozen and Fine-tuned and the control variables u"
+   },
+   {
+    "hex": "#3b3838",
+    "used_for": "bold dark-grey headings Fine-tune and Inference"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey dashed separators between designs (stroke)"
+   },
+   {
+    "hex": "#002060",
+    "used_for": "dark-blue dashed divider inside (b) (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on boxes; 1 pt grey dashed separators; 0.75 pt dark-blue dashed divider in (b)",
+  "font": "serif (Times New Roman, Cambria Math italics for symbols): 8.5 pt in boxes, 11.5 pt panel titles and red state words, 9.5 pt bold blue Gradient, 5.5 to 6.5 pt subscripts, 13.5 pt plus signs",
+  "corners": "square",
+  "arrows": "short straight black arrows with small filled heads; blue elbow arrows with filled heads for gradients; thin black down arrows into the sum nodes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "orange = the PF ODE model, peach = the guidance model, green = the noised guidance model, blue-grey = the GAN, blue = gradient flow, red = state words (Frozen, Fine-tuned) and FlowGrad's control variables u, dark grey = phase headings",
+  "line_style_means": "black solid arrows = forward data flow; blue arrows = gradient back-propagation; grey dashed lines = separators between designs; dark-blue dashed vertical line = split between Fine-tune and Inference",
+  "shape_means": "rectangle = model, circled plus = sum node, plain italic symbol = a signal",
+  "marker_means": "(a) to (d) head the designs; red Frozen or Fine-tuned says whether the model is updated; (Ours) marks FlowGrad",
+  "emphasis": "FlowGrad is the last and longest chain, the only one with red control variables u and a blue return arrow that reaches every step; its title is bold and carries (Ours).",
+  "reusable_patterns": [
+   "one chain redrawn for each alternative with only the changed element in a new colour",
+   "blue return arrow with a bold Gradient label under the chain showing where the gradient lands",
+   "red bold state word above each model box in place of icons",
+   "same box colour for the same model type across panels",
+   "grey dashed rules between alternatives and a dark-blue dashed rule splitting phases inside one alternative",
+   "(Ours) appended to the title of the last panel"
+  ],
+  "weaknesses": [
+   "the gradients from the noised guidance in (c) are drawn in black, unlike the blue gradients elsewhere",
+   "formula labels with nested subscripts are small (5.5 to 6.5 pt)",
+   "in (b) the gradient arrow ends at the input x0^train, which reads like input optimisation although the caption says the ODE is fine-tuned"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "model boxes, arrows and sum nodes",
+   "typeset formula labels",
+   "dashed separators"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "frozen model boxes",
+   "guidance boxes",
+   "blue gradient return arrows",
+   "circled-plus sum nodes",
+   "noised guidance boxes",
+   "control variables u",
+   "dashed panel separators"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "generative ODE",
+   "controllable generation",
+   "gradient guidance",
+   "GAN inversion",
+   "DiffusionCLIP",
+   "classifier guidance",
+   "control variables",
+   "image editing"
+  ],
+  "tags": [
+   "module-state-coding",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-return-arrow",
+    "what": "a coloured elbow arrow from the loss or gradient label back to the variable being optimised, with a bold 'Gradient' word beside it, redrawn once per alternative"
+   },
+   {
+    "name": "formula-labelled-arrows",
+    "what": "signals on the arrows (states, velocities, gradients) are named by typeset formulas so the boxes can stay generic"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw every alternative as the same left-to-right chain, keep one colour per model type across panels, and put the single thing that differs (here the control variables u and the gradient's landing point) in a distinct colour on the proposed design.",
+  "suits": "Methods that differ from prior work in where a signal (gradient, control, loss) enters or returns, such as guidance, fine-tuning or inversion variants of one base model."
+ },
+ "tags": [
+  "four lettered designs",
+  "grey dashed panel rules",
+  "serif text with typeset formulas",
+  "red state words",
+  "blue gradient arrows",
+  "box-and-arrow chains",
+  "no sample data"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.2)"
+  ],
+  "evidence": [
+   "Our FlowGrad adds control variables to each time step of the complete ODE trajectory",
+   "it adopts a shortened ODE with large discretization error",
+   "it needs to train a new guidance model that provides gradient for the noised version of the images"
+  ]
+ },
+ "summary": "FlowGrad controls the output of a pretrained generative ODE by optimising a guidance loss with gradients. Figure 1 compares four designs drawn in the same grammar, in a three-row grid. (a) GAN inversion sends the guidance gradient back to the latent z of a frozen GAN. (b) DiffusionCLIP fine-tunes a shortened ODE and then runs the complete ODE at inference. (c) Classifier guidance adds the gradient of a noised guidance model at each step of a frozen ODE chain through circled plus nodes. (d) FlowGrad, marked Ours, uses the same frozen chain but adds control variables u at every step and sends the gradient from one guidance box back to them along a long blue arrow. Colour codes model types, blue marks gradients, and red marks Frozen, Fine-tuned and u.",
+ "summary_zh": "FlowGrad 用梯度控制生成式 ODE 的输出。图对比四种方案：(a) GAN 反演、(b) DiffusionCLIP、(c) 分类器引导、(d) FlowGrad，后者在冻结 ODE 每一步加控制变量 u，蓝色长箭头传回梯度。",
+ "confidence": "high",
+ "notes": "Prior labels kept (side-by-side-contrast, model-anatomy). No paragraph of the paper mentions the figure; everything comes from the caption, the abstract and the drawing. State is shown by red words, not icons. The meaning of the ODE symbols is only as drawn; the context file does not explain x_k/N or v.",
+ "venue": "CVPR23"
+}

@@ -1,0 +1,398 @@
+{
+ "paper_id": "neurips23-0116",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Response Length Perception and Sequence Scheduling",
+  "one_liner": "LLM inference pipeline that predicts each response length, groups requests of similar length into micro-batches and recomputes failures, raising throughput.",
+  "domain": [
+   "LLM inference efficiency",
+   "batch scheduling",
+   "response length prediction"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "left panel diagnoses naive batching on six toy requests, right panel redraws the same six through perception, scheduling and failure recomputation",
+  "argues": "Mixing short and long responses in one batch makes 66% of generated tokens redundant; predicting length, regrouping requests and recomputing failures avoids this waste.",
+  "subject": "Six numbered requests with response-length bars, batched naively on the left and scheduled by predicted length on the right.",
+  "elements": [
+   {
+    "name": "Instruction",
+    "type": "sample",
+    "role": "six numbered requests (1-6) tracked through every stage",
+    "drawn_as": "small pink boxes with black digits, in a column",
+    "container": "both panels",
+    "is_contribution": false
+   },
+   {
+    "name": "Response",
+    "type": "data",
+    "role": "actual response length of each request",
+    "drawn_as": "lavender-blue horizontal bars of different lengths",
+    "container": "both panels",
+    "is_contribution": false
+   },
+   {
+    "name": "Micro-batch",
+    "type": "container",
+    "role": "requests processed together on one GPU; every bar runs to the longest in its batch",
+    "drawn_as": "orange dashed rectangle around a group of bars",
+    "container": "both panels",
+    "is_contribution": null
+   },
+   {
+    "name": "Redundant computation",
+    "type": "region",
+    "role": "tokens generated after a short response has finished, while the batch waits for the longest",
+    "drawn_as": "white bar with a grey top edge continuing a short blue bar",
+    "container": "both panels",
+    "is_contribution": false
+   },
+   {
+    "name": "66%",
+    "type": "label",
+    "role": "share of redundant tokens in the vanilla batches",
+    "drawn_as": "black-framed white box fed by dashed grey curved arrows from the redundant bars",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Response Length Perception",
+    "type": "module",
+    "role": "estimates the response length of each instruction",
+    "drawn_as": "tall light-grey rectangle with rotated text",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Predicted Length",
+    "type": "data",
+    "role": "estimated length shown against the real response",
+    "drawn_as": "cyan dashed outline and fill extending or cutting the blue bar",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Wrong prediction",
+    "type": "label",
+    "role": "marks the case where the real response is longer than predicted (instruction 4)",
+    "drawn_as": "salmon-red text pinned at the end of one bar",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Sequence Scheduling",
+    "type": "module",
+    "role": "groups instructions with similar predicted length into micro-batches",
+    "drawn_as": "tall light-grey rectangle with rotated text",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Variable mirco-batch size according to length",
+    "type": "label",
+    "role": "regrouped micro-batches (2,4,5,6 and 1,3) with larger batches for shorter responses",
+    "drawn_as": "black caption under the two orange dashed batches",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Failure Collection",
+    "type": "operation",
+    "role": "collects instructions whose prediction was wrong; 15% is written on the arrow",
+    "drawn_as": "salmon-red text with a grey curved arrow",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Failures from other micro-batchs",
+    "type": "data",
+    "role": "collected failed instructions regathered into one batch",
+    "drawn_as": "pink instruction box (blank) and a full-length blue bar",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Failure Recomputation",
+    "type": "operation",
+    "role": "failed instructions are run again in a micro-batch of their own",
+    "drawn_as": "orange dashed micro-batch with salmon-red title beneath",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "legend",
+    "type": "other",
+    "role": "keys Micro-batch, Instruction, Response, Redundant computation, Predicted length",
+    "drawn_as": "framed box under the left panel with five colour swatches",
+    "container": "left panel",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Redundant computation (left)",
+    "to": "66%",
+    "what": "wasted tokens add up to the boxed share",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Instruction",
+    "to": "Response Length Perception",
+    "what": "each of the six instructions goes through the length estimator",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Response Length Perception",
+    "to": "Predicted Length",
+    "what": "one estimated length per instruction, laid over the response bar",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Predicted Length",
+    "to": "Sequence Scheduling",
+    "what": "predicted lengths decide the regrouping",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Sequence Scheduling",
+    "to": "Variable micro-batches",
+    "what": "instructions reordered into two batches of similar length (2,4,5,6 and 1,3)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "micro-batch holding instruction 4",
+    "to": "Failure Collection",
+    "what": "the instruction with a wrong prediction is collected (15% on the arrow)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Failure Collection",
+    "to": "Failure Recomputation",
+    "what": "collected failures are recomputed",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left panel",
+    "to": "right panel",
+    "what": "same six requests, naive versus scheduled",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "vanilla batch inference: two micro-batches of three requests, redundant computation drawn as white tails, 66% callout",
+    "verdict": "baseline"
+   },
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "the proposed pipeline on the same six requests: perception, predicted length, scheduling, failure collection and recomputation",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1-6",
+    "kind": "identity",
+    "at": "Instruction boxes",
+    "what": "numbers each request so it can be followed after reordering"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "six toy requests with different response lengths, two vanilla micro-batches versus length-sorted micro-batches",
+    "form": "numbered boxes and length bars, no text content",
+    "real_values": false
+   }
+  ],
+  "idioms": [],
+  "reading_order": "Starts at the Instruction and Response headers top-left, reads the vanilla batches and the 66% box, crosses the grey divider and follows the pipeline left to right to Failure Recomputation bottom-right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two unframed panels split by a thick grey vertical rule: a narrow left one (vanilla batches, 66% box, legend underneath) and a wider right one where instructions, perception box, predicted-length bars, scheduling box and regrouped responses run left to right, with the failure recomputation batch dropped to the lower right.",
+  "panel_count": 2,
+  "lanes": "six aligned instruction rows across the left panel and the first columns of the right panel (rows are reordered after scheduling)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.57,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffbfbf",
+    "used_for": "instruction boxes"
+   },
+   {
+    "hex": "#bfbfff",
+    "used_for": "response bars"
+   },
+   {
+    "hex": "#bfffff",
+    "used_for": "predicted-length bars and legend swatch (dashed outline)"
+   },
+   {
+    "hex": "#ebebeb",
+    "used_for": "Response Length Perception and Sequence Scheduling boxes"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "outlines of boxes and bars, dashed curved arrows, divider rule"
+   },
+   {
+    "hex": "#f96809",
+    "used_for": "dashed micro-batch frames"
+   },
+   {
+    "hex": "#ff7e79",
+    "used_for": "failure-related text: Wrong prediction, Failure Collection, 15%, Failure Recomputation"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt grey on boxes and bars, orange dashed micro-batch frames, cyan dashed predicted-length outlines, one 1.5 pt grey vertical divider",
+  "font": "sans (Helvetica Neue) 4.5-7.5 pt, no bold; rotated 7.5 pt labels inside the module boxes",
+  "corners": "square",
+  "arrows": "curved, small filled heads; dashed grey on the left to the 66% box, solid grey on the failure path; no arrows between pipeline stages",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink = instruction, lavender-blue = response tokens, cyan dashed = predicted length, white bar with grey top = redundant computation, grey = pipeline modules, salmon-red text = the failure path",
+  "line_style_means": "orange dashed frame = one micro-batch; cyan dashed outline = predicted length; grey dashed curved arrows = redundant tokens counted into 66%",
+  "shape_means": "long thin bars = response length; tall grey rectangles with rotated text = modules",
+  "marker_means": "digits 1-6 identify instructions across stages; 66% and 15% are quantities written in boxes or on arrows",
+  "emphasis": "boxed 66% callout on the baseline; modules in grey amid pastel bars; the red-labelled failure path stands out at the lower right",
+  "reusable_patterns": [
+   "same numbered items redrawn after each stage so reordering is visible",
+   "waste drawn as a white bar with a grey edge that continues a short bar up to the batch maximum",
+   "predicted value shown as a dashed overlay on the true bar to expose over- and under-estimates",
+   "boxed percentage fed by dashed curved arrows from the wasted parts"
+  ],
+  "weaknesses": [
+   "stages are joined by position only, no arrows",
+   "typo 'mirco-batch' in a label",
+   "15% on the failure arrow is not explained in the caption",
+   "legend is tucked under the left panel only"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "numbered instruction boxes",
+   "response, predicted and redundant bars",
+   "module boxes",
+   "micro-batch frames",
+   "curved arrows",
+   "legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "numbered instruction boxes",
+   "response-length bars",
+   "orange dashed micro-batch frames",
+   "66% callout",
+   "grey module boxes with rotated text",
+   "legend box"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "LLM inference",
+   "response length prediction",
+   "sequence scheduling",
+   "micro-batch",
+   "redundant computation",
+   "throughput",
+   "failure recomputation"
+  ],
+  "tags": [
+   "schedule-lanes",
+   "error-callouts",
+   "cost-badges"
+  ],
+  "new_tags": [
+   {
+    "name": "padding-bars",
+    "what": "wasted or padded computation drawn as a white bar with a grey edge that continues a short bar up to the batch maximum"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a batching or scheduling fix by redrawing the same numbered items as length bars before and after, with waste drawn as a white continuation up to the batch maximum and one boxed percentage as the cost.",
+  "suits": "Systems or efficiency methods about batching, padding, scheduling or load balance, where a toy set of numbered items can stand in for real workloads."
+ },
+ "tags": [
+  "bar-lanes",
+  "numbered-items",
+  "orange-dashed-groups",
+  "two-panel",
+  "pastel-flat",
+  "unframed-panels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 Sequence Scheduling (p.6)"
+  ],
+  "evidence": [
+   "Vanilla batch inference leads to underperformance with 66% redundant tokens",
+   "Failure collection and recomputation strategy is adopted to avoid wrong predictions degenerating the performance."
+  ]
+ },
+ "summary": "The paper speeds up LLM inference by letting the model perceive each response length, grouping requests of similar predicted length into micro-batches and recomputing failures. Figure 1 follows six numbered toy requests. On the left, vanilla batching pads short responses to the longest in the batch, drawn as white tails, and a boxed 66% counts the waste. On the right, the same requests pass a Response Length Perception box that adds dashed predicted-length bars, a Sequence Scheduling box that regroups them into variable micro-batches, and a failure collection and recomputation path in red. Flat pastel bars, orange dashed batch frames, sans text.",
+ "summary_zh": "论文用大模型预测每条回复的长度，再把长度相近的请求编入同一微批，失败的再重算。图1用六条编号请求对比：左边朴素分批产生66%冗余计算，右边经感知、调度和失败重算三步。",
+ "confidence": "high",
+ "notes": "Prior variant paired-lanes changed to problem-then-fix because the left panel is a failure diagnosis with a 66% callout. The 9 small bitmaps in the SVG are the shaded redundant-computation bars, not data pictures, so pictures is empty. What 15% measures is not stated in the caption.",
+ "venue": "NeurIPS23"
+}

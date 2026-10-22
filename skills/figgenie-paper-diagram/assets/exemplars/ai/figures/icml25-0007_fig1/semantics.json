@@ -1,0 +1,772 @@
+{
+ "paper_id": "icml25-0007",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AMCN (Adaptive Multi-prompt Contrastive Network)",
+  "one_liner": "A CLIP-based network for few-shot OOD detection that learns ID and OOD prompts with class-wise adaptive boundaries and a prompt-guided ID-OOD separation module.",
+  "domain": [
+   "few-shot OOD detection",
+   "prompt learning",
+   "vision-language models"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "three small motivation tiles (task contrast, AUROC versus shots, class diversity) above one large tinted framework tile with train and test regions",
+  "argues": "Few-shot OOD detection suffers when the number of shots shrinks and classes differ in diversity; adaptive multi-prompt boundaries per class (AMCN) keep performance high.",
+  "subject": "Four tiles: traditional versus few-shot OOD setting, AUROC versus shots for three methods, class diversity of tabby versus ox, and the AMCN train and test framework.",
+  "elements": [
+   {
+    "name": "train-set grid: Cat, Dog, ..., Bird, Ship by 1, K, N",
+    "type": "container",
+    "role": "the training set arranged by class (rows) and shot index (columns); the same grid is drawn for traditional and for few-shot OOD detection",
+    "drawn_as": "black dashed brackets around a class-by-shot grid of small photos with ellipses; shot indices in italics above",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Test set: ID and OOD columns",
+    "type": "container",
+    "role": "test samples split into in-distribution and out-of-distribution",
+    "drawn_as": "two tall columns of small photos, ID tinted light green and OOD tinted light blue",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Few-shot learning",
+    "type": "operation",
+    "role": "turns the traditional setting into the few-shot one by keeping only a few shots per class",
+    "drawn_as": "bold text on a black arrow between the two grids",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "1-shot and K-shot brackets",
+    "type": "label",
+    "role": "mark the columns that remain available in few-shot OOD detection",
+    "drawn_as": "red italic '1-shot' and green italic 'K-shot' brackets over the first columns of the second grid",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Tabby (Less diversity)",
+    "type": "instance",
+    "role": "a class with narrow feature distribution",
+    "drawn_as": "bold caption under a row of five tabby cat photos; narrow magenta bell curve beside it",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Ox (More diversity)",
+    "type": "instance",
+    "role": "a class with wide feature distribution",
+    "drawn_as": "bold caption under a row of five photos of oxen and yaks; wide green curve beside it",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Different diversity",
+    "type": "label",
+    "role": "says the two classes have different spreads",
+    "drawn_as": "small text with a double-headed arrow between the narrow and wide curves",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "K-shot ID images",
+    "type": "sample",
+    "role": "the few labelled in-distribution images of a class, used to compute statistics",
+    "drawn_as": "grid of four cat photos with ellipses, bold caption under it",
+    "container": "(d)",
+    "is_contribution": false
+   },
+   {
+    "name": "LIPs (learnable ID prompts)",
+    "type": "module",
+    "role": "learnable prompt of the ID class: context tokens W1 W2 W3 ... and a label token y_i",
+    "drawn_as": "row of light-grey cells with flame icons on the W cells and a snowflake on y_i; ID Labels (Dog, Cat, ...) in light-green cells below with a green up arrow",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "LFOPs (label-fixed OOD prompts)",
+    "type": "module",
+    "role": "OOD prompts with fixed OOD label names (Tree, Car, ...): M1 M2 M3 ... and o_i",
+    "drawn_as": "row of light-yellow cells with flame icons and a snowflake on the cyan o_i cell; OOD Labels in cyan cells below",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "LAOPs (label-adaptive OOD prompts)",
+    "type": "module",
+    "role": "OOD prompts whose labels adapt to the ID classes: H1 H2 H3 ... and o'_i",
+    "drawn_as": "row of light-yellow cells with flame icons, last cell cyan",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Statistics (mu, sigma) with bell curves (x4)",
+    "type": "operation",
+    "role": "summarises each branch (ID images, LIPs, LFOPs, LAOPs) by mean and standard deviation of its features",
+    "drawn_as": "bold coloured 'Statistics' with mu, sigma under it, a coloured arrow into a hand-drawn bell curve; magenta, blue, red, purple",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "lambda (x4)",
+    "type": "operation",
+    "role": "weight that merges a branch's statistics into its prototype",
+    "drawn_as": "bold coloured lambda on an arrow from each bell curve to a prototype marker",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Prototypes (orange square, yellow pentagon, blue star, purple triangle)",
+    "type": "data",
+    "role": "class prototypes of the four branches in a feature-space sketch",
+    "drawn_as": "four flat markers; square and pentagon inside a green dashed ellipse, star and triangle outside",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Pull / Push",
+    "type": "operation",
+    "role": "ID prototypes are pulled together, OOD prototypes are pushed away from the ID ones",
+    "drawn_as": "big green 'Pull' above a green dashed ellipse; grey dashed arrows and grey 'Push' towards the star and the triangle",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "P_c = lambda mu_c + (1 - lambda) mu_c-bar",
+    "type": "formula",
+    "role": "class distribution statistic as a lambda-weighted mix, passed on to the test path",
+    "drawn_as": "bold math text above the star with a black arrow from the orange square; a long black line leads to the Test region",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Intra-class DN, Inter-class DN",
+    "type": "operation",
+    "role": "distribution normalization within a class and across classes",
+    "drawn_as": "a solid ellipse around two cat photos and a dashed ellipse around a cat and a cow photo, captions below, arrows into Cosine similarity",
+    "container": "(d) Train",
+    "is_contribution": true
+   },
+   {
+    "name": "Cosine similarity (Train)",
+    "type": "operation",
+    "role": "similarity computed after distribution normalization",
+    "drawn_as": "light-grey rounded box with black arrows in",
+    "container": "(d) Train",
+    "is_contribution": null
+   },
+   {
+    "name": "Train",
+    "type": "region",
+    "role": "training path of the framework",
+    "drawn_as": "light-blue tinted rounded region with a bold 12.5 pt title at the bottom right",
+    "container": "(d)",
+    "is_contribution": null
+   },
+   {
+    "name": "Any image",
+    "type": "sample",
+    "role": "a test image of unknown status",
+    "drawn_as": "one cat photo with bold caption, at the top right of the Test region",
+    "container": "(d) Test",
+    "is_contribution": false
+   },
+   {
+    "name": "Distribution matching",
+    "type": "operation",
+    "role": "matches the test image against the stored class distribution",
+    "drawn_as": "bold caption with a magenta bell curve and black arrows",
+    "container": "(d) Test",
+    "is_contribution": true
+   },
+   {
+    "name": "Cosine similarity (Test)",
+    "type": "operation",
+    "role": "similarity of the test image with the ID and OOD prompts",
+    "drawn_as": "light-grey rounded box",
+    "container": "(d) Test",
+    "is_contribution": null
+   },
+   {
+    "name": "ID (cat)",
+    "type": "label",
+    "role": "the predicted outcome: an in-distribution cat",
+    "drawn_as": "bold caption under a probability bar chart whose Cat bar is highest",
+    "container": "(d) Test",
+    "is_contribution": false
+   },
+   {
+    "name": "Test",
+    "type": "region",
+    "role": "test path of the framework",
+    "drawn_as": "peach tinted rounded region with a bold 12.5 pt title at the bottom right",
+    "container": "(d)",
+    "is_contribution": null
+   },
+   {
+    "name": "abbreviation legend (LIP, LAOP, LFOP, DN, mu, sigma, prototypes)",
+    "type": "label",
+    "role": "defines the abbreviations and shows the four prototype markers",
+    "drawn_as": "three lines of 7-8 pt text at the bottom left of (d) with the four markers and the word Prototypes",
+    "container": "(d)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "traditional OOD detection grid",
+    "to": "few-shot OOD detection grid",
+    "what": "Few-shot learning: only 1 to K shots per class remain",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "row of tabby photos / row of ox photos",
+    "to": "narrow magenta curve / wide green curve",
+    "what": "the feature distribution of the class, tied by a dashed arrow of the curve colour",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "narrow magenta curve",
+    "to": "wide green curve",
+    "what": "Different diversity",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "K-shot ID images",
+    "to": "orange square prototype",
+    "what": "Statistics mu, sigma (magenta), a bell curve, then lambda",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LIPs and ID Labels",
+    "to": "yellow pentagon prototype",
+    "what": "Statistics mu, sigma (blue), a bell curve, then lambda; the ID label cell feeds the label token y_i by a green arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LFOPs and OOD Labels",
+    "to": "blue star prototype",
+    "what": "Statistics mu, sigma (red), a bell curve, then lambda (the arrow runs to the left)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LAOPs and OOD Labels",
+    "to": "purple triangle prototype",
+    "what": "Statistics mu, sigma (purple), a bell curve, then lambda (the arrow runs to the left)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OOD Labels",
+    "to": "LFOPs and LAOPs",
+    "what": "OOD label names fill the label cells o_i and o'_i",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange square and yellow pentagon",
+    "to": "blue star and purple triangle",
+    "what": "Push: OOD prototypes are pushed away from the ID prototypes; the ID pair is held together by Pull",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange square",
+    "to": "P_c = lambda mu_c + (1 - lambda) mu_c-bar",
+    "what": "the weighted class statistic is formed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P_c = lambda mu_c + (1 - lambda) mu_c-bar",
+    "to": "Distribution matching",
+    "what": "the class statistic is carried into the test path",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Intra-class DN and Inter-class DN",
+    "to": "Cosine similarity (Train)",
+    "what": "normalised features are compared",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Any image",
+    "to": "Distribution matching",
+    "what": "the test image is matched against the class distribution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Distribution matching",
+    "to": "Cosine similarity (Test)",
+    "what": "matched feature goes to the similarity",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cosine similarity (Test)",
+    "to": "ID (cat)",
+    "what": "probability over labels Dog, Cat, Tree, ... with the highest bar on Cat",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "magenta, blue, red, purple of Statistics labels, bell curves and lambda arrows",
+    "to": "the branch they belong to",
+    "what": "one colour per branch kept across its three parts",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Traditional OOD detection vs few-shot OOD detection",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "the same class-by-shot photo grid with ID and OOD test columns, first complete, then restricted to 1-shot or K-shot after a Few-shot learning arrow",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Effect of different shots",
+    "kind": "other",
+    "axis": "other",
+    "shows": "AUROC of NPOS, PALM and Ours against shots from 1000 down to 1: the baselines fall, Ours stays near the top",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Distinct diversity for different classes",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "tabby cats with a narrow bell curve versus oxen with a wide curve, marked as different diversity",
+    "verdict": "setting"
+   },
+   {
+    "label": "(d) Framework of our proposed method",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "Train: four coloured statistics branches give four prototypes with Pull and Push and a cosine similarity; Test: distribution matching and cosine similarity give ID (cat)",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "bold titles under the tiles",
+    "what": "head the four panels"
+   },
+   {
+    "marker": "1, K, N",
+    "kind": "identity",
+    "at": "column headers of the photo grids",
+    "what": "index the shots of each class: first, K-th, N-th"
+   },
+   {
+    "marker": "1-shot, K-shot",
+    "kind": "identity",
+    "at": "red and green brackets over the few-shot grid",
+    "what": "mark which columns remain available"
+   },
+   {
+    "marker": "lambda, mu, sigma",
+    "kind": "identity",
+    "at": "arrows, curves and the formula in (d)",
+    "what": "weight and statistics, defined in the legend"
+   },
+   {
+    "marker": "W1..W3, M1..M3, H1..H3 with y_i, o_i, o'_i",
+    "kind": "identity",
+    "at": "cells of the prompt rows",
+    "what": "index the learnable context tokens and the label token of each prompt"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "small photos of classes (cat, dog, bird, ship) in the train grids and ID and OOD test columns",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 44,
+    "medium": "bitmap",
+    "treatment": "tiny square thumbnails in two class-by-shot grids and two test columns each, tinted green (ID) or blue (OOD) behind the columns"
+   },
+   {
+    "what": "line chart of AUROC against shots for NPOS, PALM and Ours",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grid-lined plot with markers (squares, circles, triangles), legend inside the axes, categorical shot axis from 1000 to 1"
+   },
+   {
+    "what": "photo rows of tabby cats and of oxen and yaks",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "two rows of five photos with an ellipsis, one caption under each row"
+   },
+   {
+    "what": "photos in the framework: K-shot cat images, cat and cow photos inside the DN ellipses, the test image",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "medium square photos; two inside a solid ellipse, two inside a dashed ellipse"
+   },
+   {
+    "what": "bar chart of probabilities over Dog, Cat, Tree and so on",
+    "content": "chart",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "four bars with the Cat bar highest, axis ticks, caption 'ID (cat)'"
+   },
+   {
+    "what": "hand-drawn bell curves of class feature distributions",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 7,
+    "medium": "vector",
+    "treatment": "thin curves without axes, one colour per branch; narrow versus wide in (c)"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "orange flame",
+    "stands_for": "learnable prompt tokens",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 13
+   },
+   {
+    "depicts": "light-blue snowflake",
+    "stands_for": "frozen label tokens",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "orange square, yellow pentagon, blue star, purple triangle",
+    "stands_for": "class prototypes of the ID-image, LIP, LFOP and LAOP branches",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "ID class names (Dog, Cat, ...) and OOD label names (Tree, Car, ...) in the prompt rows; a test cat image classified as ID (cat)",
+    "form": "coloured label cells and a probability bar chart",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "ID prototypes inside a green dashed ellipse labelled Pull, OOD prototypes outside joined to them by grey dashed arrows labelled Push",
+    "parts": [
+     "Pull ellipse",
+     "Push arrows",
+     "four prototype markers"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "a small feature-space sketch with four flat markers, a dashed ellipse and dashed arrows, no axes",
+    "parts": [
+     "markers",
+     "ellipse",
+     "arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "orange flames on learnable context tokens and a snowflake on the label token of each prompt row",
+    "parts": [
+     "flame",
+     "snowflake"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "each prompt is a row of small cells W1 W2 W3 ... y_i, the last cell coloured differently as the label slot",
+    "parts": [
+     "context cells",
+     "label cell"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "learnable prompts as token rows with the class label cells (ID green, OOD cyan) below them",
+    "parts": [
+     "prompt row",
+     "label cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a class-by-shot grid of tiny photos inside dashed brackets, titled Train set, next to ID and OOD test columns",
+    "parts": [
+     "train grid",
+     "test columns"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "distribution-bell",
+    "drawn_as": "a hand-drawn bell curve per branch, narrow for low diversity and wide for high diversity",
+    "parts": [
+     "bell curve"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at (a) top left, moves right along (b) and (c) for the evidence, then down to (d): the Train region left to right through the four branches into the prototypes, then the long black line to the Test region and ID (cat)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A top band of three lettered tiles of unequal width, (a) wide at the left, (b) a plot in the middle, (c) photo rows at the right, each titled in bold below. Under them one large tile (d): a light-blue Train region on the left and two thirds of the width, a peach Test region at the right, a legend line of abbreviations at the bottom, and its title under the whole tile.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.8,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#eaf2f9",
+    "used_for": "Train region of (d)"
+   },
+   {
+    "hex": "#fbe5d5",
+    "used_for": "Test region of (d)"
+   },
+   {
+    "hex": "#e2efd9",
+    "used_for": "ID column behind the test thumbnails in (a)"
+   },
+   {
+    "hex": "#deebf6",
+    "used_for": "OOD column behind the test thumbnails in (a)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "cells of the OOD prompt rows"
+   },
+   {
+    "hex": "#ddffdb",
+    "used_for": "ID label cells"
+   },
+   {
+    "hex": "#cbffff",
+    "used_for": "OOD label cells and the label token cells"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange square prototype"
+   },
+   {
+    "hex": "#fd13d5",
+    "used_for": "magenta branch: ID-image statistics, curve and lambda; narrow curve in (c)"
+   },
+   {
+    "hex": "#0061a8",
+    "used_for": "blue branch: LIP statistics, curve and lambda"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red branch: LFOP statistics, curve and lambda; the 1-shot bracket"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple branch: LAOP statistics, curve and lambda; the triangle prototype"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green Pull ellipse, K-shot bracket and wide curve in (c)"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey dashed Push arrows and Push label"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black and coloured lines; dashed ellipses and brackets; thin bell curves",
+  "font": "serif (Times-like) bold 6-12.5 pt; panel titles 9 pt bold; Train and Test 12.5 pt bold; italic math symbols",
+  "corners": "mixed",
+  "arrows": "thin coloured straight arrows (magenta, blue, red, purple) with small heads; grey dashed arrows for Push; black orthogonal arrows into the cosine-similarity boxes; one green up arrow",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "in (d) one colour per branch: magenta = statistics of the K-shot ID images, blue = learnable ID prompts, red = label-fixed OOD prompts, purple = label-adaptive OOD prompts, kept on the Statistics label, the bell curve and the lambda arrow; light-blue ground = Train, peach ground = Test; in (a) green tint = ID column, blue tint = OOD column; in (b) blue, orange and purple lines = NPOS, PALM and Ours; in (c) narrow magenta curve = less diversity, wide green curve = more diversity",
+  "line_style_means": "green dashed ellipse = Pull; grey dashed arrows = Push; magenta and green dashed arrows in (c) tie photo rows to their curve; solid versus dashed ellipse = intra-class versus inter-class distribution normalization; black arrows = data flow to the similarity boxes",
+  "shape_means": "orange square, yellow pentagon, blue star, purple triangle = four prototypes; bell curve = feature distribution; cells W, M, H = learnable prompt tokens; flame = learnable, snowflake = frozen; grey rounded box = cosine similarity",
+  "marker_means": "(a)-(d) letters head the tiles; 1, K, N index shots; 1-shot and K-shot brackets mark kept columns; lambda, mu, sigma are the weight and statistics",
+  "emphasis": "big bold green Pull and grey Push, the red and green shot brackets in (a), the flat purple Ours line on top in (b), the 12.5 pt Train and Test titles",
+  "reusable_patterns": [
+   "three small motivation tiles (task contrast, result plot, class diversity) above one large tinted method tile",
+   "the same data grid drawn twice with 1-shot and K-shot brackets to show the few-shot restriction",
+   "bell-curve glyphs of different widths for less versus more diversity",
+   "one colour per prompt branch carried over its label text, curve, weight arrow and prototype",
+   "a Pull ellipse and Push dashed arrows among prototype markers",
+   "flame and snowflake icons on prompt token cells",
+   "train and test as blue and peach tinted regions inside one tile",
+   "a legend line of abbreviations at the foot of the method tile"
+  ],
+  "weaknesses": [
+   "very dense at 3.5-12.5 pt with about 78 placed bitmaps",
+   "the flame and snowflake icons are not explained in the legend",
+   "branch colours and prototype colours differ (the magenta branch ends in an orange square)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photo thumbnails of animals, vehicles and birds from the datasets",
+   "an AUROC line chart of measured results",
+   "a probability bar chart of a test image"
+  ],
+  "stock": [
+   "flame and snowflake icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, brackets and arrows",
+   "bell curves",
+   "prototype markers and ellipses",
+   "prompt token rows and label cells"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "class-by-shot photo grids with 1-shot and K-shot brackets",
+   "ID and OOD test columns",
+   "AUROC versus shot line chart",
+   "tabby and ox photo rows with bell curves",
+   "prompt token rows with flame and snowflake icons",
+   "statistics arrows with coloured bell curves",
+   "four prototype markers with Pull ellipse and Push arrows",
+   "cosine similarity boxes",
+   "test image with probability bar chart",
+   "abbreviation legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "few-shot OOD detection",
+   "prompt learning",
+   "contrastive",
+   "distribution normalization",
+   "CLIP",
+   "class diversity",
+   "prototypes",
+   "AUROC",
+   "ID-OOD separation"
+  ],
+  "tags": [
+   "task-definition",
+   "distribution-glyph",
+   "embedding-space-sketch",
+   "module-state-coding",
+   "token-strip",
+   "colour-coded-groups",
+   "notation-key",
+   "positive-negative-pairs"
+  ],
+  "new_tags": [
+   {
+    "name": "motivation-row-over-method",
+    "what": "a row of small lettered motivation tiles (task contrast, performance plot, example diversity) above one large tinted method tile"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Stack three small motivation tiles (the same grid drawn twice for the task contrast, a result plot, a diversity illustration with bell curves) above one large tinted method tile, and keep one colour per prompt branch from its statistics label through its curve and weight arrow.",
+  "suits": "Intro figures that must set a problem, show a failure of prior work with a plot, and then present the framework in one composite."
+ },
+ "tags": [
+  "four-panel-composite",
+  "photo-grids",
+  "bell-curves",
+  "colour-branches",
+  "tinted-train-test",
+  "dense-small-text",
+  "serif-bold"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Comparison between traditional OOD detection and Few-shot OOD detection.",
+   "Diversity comparison between the “cat” class and the “ox” class.",
+   "Brief framework of our method."
+  ]
+ },
+ "summary": "AMCN targets few-shot out-of-distribution detection with CLIP: it learns ID prompts, label-fixed and label-adaptive OOD prompts, class-wise thresholds from intra- and inter-class distributions, and a prompt-guided ID-OOD separation module. Figure 1 is a four-tile composite. (a) draws the same class-by-shot photo grid with ID and OOD test columns for traditional OOD detection and, after a Few-shot learning arrow, for few-shot detection with 1-shot and K-shot brackets. (b) plots AUROC against shots for NPOS, PALM and Ours, which stays near 96 while the others fall. (c) contrasts tabby cats (narrow bell curve) with oxen (wide curve). (d) shows the framework: colour-coded statistics branches feed four prototypes with Pull and Push, then cosine similarity at test time.",
+ "summary_zh": "AMCN用CLIP做少样本OOD检测。图1含四块：(a)传统与少样本设定对比；(b)AUROC随样本数变化，Ours持平而NPOS、PALM下降；(c)虎斑猫与牛分布宽窄不同；(d)多色统计分支得四个原型，拉近ID、推远OOD。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper mentioning the figure was found; (a)-(c) are clear from the caption, but in (d) the pairing of branches with prototypes, the route of the black line from the P_c formula to the Test region and the exact role of Intra-class and Inter-class DN were read from the drawing and the abstract only. Prior kinds are kept but re-ordered: the four lettered tiles make contribution-mosaic the primary kind, and the problem-then-fix reading (b, c as diagnosis, d as remedy) is carried by side-by-side-contrast. Counts of thumbnails and icons are read from the preview and are approximate; the digest places 78 bitmaps (36 different), among them the two chart rasters. The caption speaks of a 'cat' class in (c) while the figure labels it Tabby.",
+ "venue": "ICML25"
+}

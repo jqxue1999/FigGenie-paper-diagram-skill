@@ -1,0 +1,514 @@
+{
+ "paper_id": "acl23-0002",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MoralDial",
+  "one_liner": "A framework that splits expressed morality into basic RoTs, discussion state and discusser behaviour, to train and evaluate moral dialogue systems through simulated moral discussions.",
+  "domain": [
+   "moral dialogue systems",
+   "rules of thumb (RoTs)",
+   "moral discussion"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "a three-part framework drawn as titled dashed regions, each filled with turns of one moral dialogue",
+  "argues": "Expressing morality in a discussion needs three parts: knowing basic RoTs, handling a moral conflict between the answer and the user's RoT, then explaining or revising a moral view.",
+  "subject": "A moral dialogue about guilt after cheating, laid out in three dashed regions: RoTs, conflict state, explanation and revision.",
+  "elements": [
+   {
+    "name": "Standpoint Sentences/Phrases",
+    "type": "container",
+    "role": "part 1 of the framework: the basic standpoints (RoTs) the chatbot pre-learns",
+    "drawn_as": "full-width grey dashed frame at the top, bold serif title at its top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Expression of basic RoTs",
+    "type": "module",
+    "role": "the pre-learned set of basic rules of thumb that explanation and revision turns draw on",
+    "drawn_as": "salmon rounded box with an eye icon at its right end, hand-written-style title",
+    "container": "Standpoint Sentences/Phrases",
+    "is_contribution": true
+   },
+   {
+    "name": "six bullets starting 'You shouldn't rat out other people.'",
+    "type": "data",
+    "role": "sample RoTs: five sentences and an ellipsis",
+    "drawn_as": "large salmon rounded box with a bulleted list, tied to the box on its left by a curly brace",
+    "container": "Standpoint Sentences/Phrases",
+    "is_contribution": false
+   },
+   {
+    "name": "Discussion State",
+    "type": "container",
+    "role": "part 2: where the discussion stands, conflict or harmony between an answer and the user's values",
+    "drawn_as": "grey dashed frame at the bottom left, bold serif title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Moral Conflict/Harmony",
+    "type": "module",
+    "role": "state of the discussion: whether the chatbot's answer is aligned with the user's RoT; only the conflict case is drawn",
+    "drawn_as": "mid-blue rounded box with a crossed-swords icon, holding three turns stacked top to bottom",
+    "container": "Discussion State",
+    "is_contribution": true
+   },
+   {
+    "name": "If a woman cheats on her boyfriend (or visa versa), should the person cheated with feel guilty?",
+    "type": "instance",
+    "role": "the user's morality-related question",
+    "drawn_as": "yellow rounded box beside a person icon",
+    "container": "Moral Conflict/Harmony",
+    "is_contribution": false
+   },
+   {
+    "name": "User RoT: People should not feel guilty for others' faults.",
+    "type": "instance",
+    "role": "the user's own standpoint, the value the answer is checked against",
+    "drawn_as": "salmon box with bold italic text beside an ID-card icon",
+    "container": "Moral Conflict/Harmony",
+    "is_contribution": false
+   },
+   {
+    "name": "Yes, They are guilty in some way.",
+    "type": "instance",
+    "role": "the chatbot's answer, which does not match the user's RoT",
+    "drawn_as": "light-blue rounded box beside a robot-face icon",
+    "container": "Moral Conflict/Harmony",
+    "is_contribution": false
+   },
+   {
+    "name": "Alignment",
+    "type": "label",
+    "role": "the check between the user's RoT and the chatbot's answer; the red cross says they are not aligned",
+    "drawn_as": "red-ringed circle with a cross on a thin vertical line between the RoT box and the answer box, bold label to its right",
+    "container": "Moral Conflict/Harmony",
+    "is_contribution": true
+   },
+   {
+    "name": "Discusser Behavior",
+    "type": "container",
+    "role": "part 3: what a discusser does when a conflict arises",
+    "drawn_as": "grey dashed frame at the right, bold serif title, holding two stacked green boxes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Moral Explanation",
+    "type": "module",
+    "role": "the discusser explains its moral view when asked why",
+    "drawn_as": "green rounded box with a question-mark icon, holding a question turn and an explanation turn side by side",
+    "container": "Discusser Behavior",
+    "is_contribution": true
+   },
+   {
+    "name": "Why do you say that?",
+    "type": "instance",
+    "role": "the user asks for the reason behind the answer",
+    "drawn_as": "yellow rounded box beside a person icon",
+    "container": "Moral Explanation",
+    "is_contribution": false
+   },
+   {
+    "name": "Treating our spouses badly will make him/her betray us.",
+    "type": "instance",
+    "role": "the chatbot's explanation, which states a RoT",
+    "drawn_as": "salmon rounded box beside a robot-face icon",
+    "container": "Moral Explanation",
+    "is_contribution": false
+   },
+   {
+    "name": "Moral Revision",
+    "type": "module",
+    "role": "the discusser revises its moral view after the other side objects",
+    "drawn_as": "green rounded box with a pencil-on-paper icon, holding an objection turn and a revised answer side by side",
+    "container": "Discusser Behavior",
+    "is_contribution": true
+   },
+   {
+    "name": "But from my perspective, it is wrong to cheat on our spouses.",
+    "type": "instance",
+    "role": "the user objects with their own RoT",
+    "drawn_as": "salmon rounded box beside a person icon",
+    "container": "Moral Revision",
+    "is_contribution": false
+   },
+   {
+    "name": "Yes, you are right. They shouldn't feel guilty. It's not their fault that they were cheated on.",
+    "type": "instance",
+    "role": "the chatbot's revised answer",
+    "drawn_as": "light-blue rounded box beside a robot-face icon",
+    "container": "Moral Revision",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Expression of basic RoTs",
+    "to": "six bullets starting 'You shouldn't rat out other people.'",
+    "what": "the label unfolds into sample RoTs (curly brace)",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "If a woman cheats on her boyfriend (or visa versa), should the person cheated with feel guilty?",
+    "to": "Yes, They are guilty in some way.",
+    "what": "the chatbot answers the user's morality question (stacked top to bottom)",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "User RoT: People should not feel guilty for others' faults.",
+    "to": "Yes, They are guilty in some way.",
+    "what": "the answer is checked against the user's standpoint; the red cross marks that they do not align, a moral conflict",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Moral Conflict/Harmony",
+    "to": "Moral Explanation",
+    "what": "a conflict can be followed by an explanation (elbow arrow)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Moral Conflict/Harmony",
+    "to": "Moral Revision",
+    "what": "a conflict can be followed by a revision (second branch of the same elbow arrow)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Why do you say that?",
+    "to": "Treating our spouses badly will make him/her betray us.",
+    "what": "the user asks for a reason, the chatbot gives one that states a RoT (left to right)",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "But from my perspective, it is wrong to cheat on our spouses.",
+    "to": "Yes, you are right. They shouldn't feel guilty. It's not their fault that they were cheated on.",
+    "what": "the user objects with their own view, the chatbot changes its answer (left to right)",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Expression of basic RoTs",
+    "to": "salmon turns: User RoT, the explanation, the user's objection",
+    "what": "caption: the discusser uses the expression of basic RoTs when explaining or revising; the same salmon fill marks every sentence that states a RoT",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Discusser Behavior",
+    "to": "Moral Explanation and Moral Revision",
+    "what": "the two behaviours sit as alternative boxes inside one frame",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Standpoint Sentences/Phrases",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the basic-RoT label unfolded by a brace into a list of sample rules of thumb",
+    "verdict": "ours"
+   },
+   {
+    "label": "Discussion State",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a user question, the user's own RoT and the chatbot's answer, with a red cross marking misalignment",
+    "verdict": "ours"
+   },
+   {
+    "label": "Discusser Behavior",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "two alternative follow-ups to a conflict: explaining the view when asked, or revising it when challenged",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "outlined person bust",
+    "stands_for": "the user",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "square robot or monitor face with two eyes and a mouth",
+    "stands_for": "the chatbot (dialogue system)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "ID card with a portrait and text lines",
+    "stands_for": "the user's own RoT (their values)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "eye",
+    "stands_for": "understanding the expression of basic RoTs (caption step 1)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "crossed swords",
+    "stands_for": "moral conflict",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "question mark in a circle",
+    "stands_for": "moral explanation (asking why)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "sheet of paper with a pencil",
+    "stands_for": "moral revision (editing a view)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "circle with a red ring and a black cross",
+    "stands_for": "no alignment between the user's RoT and the answer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one moral dialogue: a question about guilt after cheating, the user's own RoT, the chatbot's misaligned answer, then an explanation exchange and a revision exchange",
+    "form": "rounded turn boxes next to user and robot icons, filled by turn role",
+    "real_values": true
+   },
+   {
+    "what": "five sample RoTs such as 'You shouldn't rat out other people.'",
+    "form": "bulleted list inside one salmon box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded text boxes, each beside an avatar (person or robot), filled by turn role and without speech tails; stacked vertically in the state box, left-to-right pairs in the behaviour boxes",
+    "parts": [
+     "avatar icon",
+     "turn box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chatbot-icon",
+    "drawn_as": "line-art square robot face for the dialogue system and a plain person bust for the user",
+    "parts": [
+     "robot face",
+     "person bust"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Top-left title and RoT list first, then down to Discussion State (question, user RoT, answer with red cross), then right along the elbow arrows to Explanation above and Revision below."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One full-width dashed frame on top holds the RoT label and its list; below, two dashed frames side by side: the left holds one blue box with three stacked turns, the right holds two stacked green boxes with two turns each, joined to the blue box by an elbow arrow that forks.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.61,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f8cbad",
+    "used_for": "sentences that express RoTs: the basic-RoT box, the RoT list, the user's RoT and the turns that state a RoT"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "Moral Conflict/Harmony box (discussion state)"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "Moral Explanation and Moral Revision boxes (discusser behaviour)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "the user's question turns"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "the chatbot's answer turns"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "dashed frames of the three framework parts"
+   },
+   {
+    "hex": "#e53935",
+    "approx": true,
+    "used_for": "ring of the misalignment cross icon (read off the bitmap)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "thin black outlines (about 0.75 pt, estimated from the preview) on all boxes and turns; grey dashed frames drawn as filled bars about 1.9 pt thick and 7.6 pt long; the PDF export carries no stroke attributes",
+  "font": "serif (Times New Roman) 7.5 pt for turns and RoT sentences, bold 11.5 pt for part titles; hand-written-style sans (Comic Sans MS) 10 pt for box titles",
+  "corners": "mixed",
+  "arrows": "thin black elbow connector with small open arrowheads; a curly brace and a plain line carry the other links",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Salmon marks every sentence that expresses a RoT (basic-RoT list, the user's RoT, the explanation, the user's objection), as the caption says; yellow marks the user's question turns and light blue the chatbot's answer turns (read from the figure, not stated); blue box = discussion state, green boxes = discusser behaviours.",
+  "line_style_means": "grey dashed frames bound the three framework parts; solid black outlines bound boxes and turns; the red-crossed line compares two turns.",
+  "shape_means": "person bust = user, square robot face = chatbot; rounded boxes = modules and turns; eye, swords, question mark and pencil icons name Expression of RoTs, conflict, explanation and revision; curly brace = unfolds into examples.",
+  "marker_means": "The red-ringed cross on the line under 'User RoT' means the answer is not aligned with it, a moral conflict.",
+  "emphasis": "Part titles are the largest text; salmon repeated across the regions pulls the eye to RoT use; the red cross is the only saturated red and sits at the pivot between state and behaviours.",
+  "reusable_patterns": [
+   "dashed titled frames that name the parts of a framework",
+   "avatar plus rounded box per dialogue turn, fill colour by turn role",
+   "curly brace that unfolds a concept label into sample sentences",
+   "red-ringed cross badge on the link between two turns to flag a mismatch",
+   "one fill colour for every sentence that states a RoT, carried across frames",
+   "small icon at the end of each box title naming the concept (swords, question mark, pencil)",
+   "elbow connector forking from one state box to two alternative behaviour boxes"
+  ],
+  "weaknesses": [
+   "colour roles of yellow and light blue are explained neither in the figure nor in the caption",
+   "the Standpoint frame is tied to the rest only by colour, there is no arrow",
+   "the elbow arrows run over the dashed frame of Discusser Behavior"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real sentences: the RoT list and the turns of one dialogue"
+  ],
+  "stock": [
+   "line-art icons: person, robot face, ID card, eye, crossed swords, question mark, pencil on paper",
+   "red cross badge"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed frames",
+   "coloured rounded boxes",
+   "elbow connector and curly brace"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed region frames",
+   "coloured dialogue turn boxes with user and robot icons",
+   "RoT list with curly brace",
+   "blue conflict box with crossed swords",
+   "green explanation and revision boxes",
+   "red cross alignment badge"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "moral dialogue",
+   "rules of thumb",
+   "moral discussion",
+   "moral conflict",
+   "moral explanation",
+   "moral revision",
+   "dialogue system",
+   "value alignment"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "verdict-marks",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "avatar-turn-boxes",
+    "what": "dialogue turns as rounded boxes with a user or robot icon beside them, filled by turn role, no bubble tails"
+   },
+   {
+    "name": "icon-in-box-title",
+    "what": "a small line-art icon at the end of each box title that names the concept (eye, swords, question mark, pencil)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Fill a framework diagram with the turns of one concrete dialogue: dashed titled frames name the parts, avatar-plus-box turns sit inside, and one fill colour per turn role lets the reader follow shared knowledge (here RoTs) across frames. A red cross on the link between two turns flags the mismatch that triggers the next branch.",
+  "suits": "Interactive or conversational mechanisms that decompose into a few named parts and can be shown on one short example exchange: dialogue, tutoring, negotiation, feedback loops."
+ },
+ "tags": [
+  "framework-diagram",
+  "dashed-region-frames",
+  "dialogue-turn-boxes",
+  "line-art-icons",
+  "pastel-fills",
+  "handwritten-style-titles"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Framework of Expressed Morality (p.3)",
+   "3 Methodology (p.3)"
+  ],
+  "evidence": [
+   "It consists of three submodules: (1) Standpoint Sentences/Phrases, (2) Discussion State, (3) Discusser Behavior.",
+   "the discusser would use the expression of basic RoTs (marked in the same color)",
+   "Moral Conflict may happen between the answer and the user’s values (or those universal values)"
+  ]
+ },
+ "summary": "MoralDial is a framework for training and evaluating moral dialogue systems through simulated moral discussions. Figure 1 lays out how morality is expressed in such a discussion as three titled dashed regions. Standpoint Sentences/Phrases holds the basic rules of thumb (RoTs) a chatbot should know, unfolded by a brace into a bulleted list. Discussion State shows a user's question, the user's own RoT and the chatbot's answer, with a red cross marking that the answer is not aligned, a moral conflict. Discusser Behavior shows two follow-ups reached by elbow arrows: an explanation when asked why, and a revision after an objection. Each turn is a rounded box beside a user or robot icon, and salmon marks every sentence that expresses a RoT. One dialogue about guilt after infidelity runs through all regions.",
+ "summary_zh": "MoralDial 框架图：三个带标题的虚线区域依次是基本道德准则（RoT）列表、讨论状态（用户提问、用户准则与机器人回答，红叉表示不一致即道德冲突）、讨论者行为（解释与修正）。肉色标出表达准则的语句，一段示例对话贯穿全图。",
+ "confidence": "high",
+ "notes": "The prior pass put worked-walkthrough first; the figure is organised by the three framework parts (titled dashed frames) with no numbered steps, so concept-schematic is listed first and the dialogue is treated as the example that fills it. Only the salmon link is stated in the caption; the roles of yellow (user question) and light blue (chatbot answer) are read from which speaker uses them. The paragraph text is cut after 'it is important to', so the meaning of the two elbow arrows is taken from the caption's list (2) to (4). Line widths are estimated because the PDF export has no stroke attributes (outlines and dashes are filled shapes). [layout.aspect set to 1.61 (was 2.41): the figure box was corrected by hand, see workspace/bbox_overrides.json.]",
+ "venue": "ACL23"
+}

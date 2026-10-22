@@ -1,0 +1,487 @@
+{
+ "paper_id": "iclr24-0119",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MR-HuBERT",
+  "one_liner": "A self-supervised speech model with a hierarchical Transformer that encodes speech at two resolutions and predicts masked units at both.",
+  "domain": [
+   "speech self-supervised learning",
+   "masked unit prediction",
+   "multi-resolution Transformer"
+  ],
+  "subfield": "audio",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "one vertical column of modules from waveform to two prediction heads, with a left skip arrow, a right detour for the low-resolution branch and a quantizer at the bottom",
+  "argues": "One hierarchical Transformer encodes speech at two resolutions: a down- and upsampled low-resolution branch gets its own unit-prediction head beside the usual high-resolution one.",
+  "subject": "Pre-training network of MR-HuBERT from speech waveform through encoders and resampling modules to two unit-prediction heads with quantizer targets.",
+  "elements": [
+   {
+    "name": "Multi-resolution HuBERT",
+    "type": "container",
+    "role": "names the framework; encloses the whole drawing",
+    "drawn_as": "bold serif title inside a large dashed rounded frame",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Convolutional Feature Extractor",
+    "type": "module",
+    "role": "turns the waveform S into frame-level features (f0)",
+    "drawn_as": "peach rectangle, symbol f0 at its left",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Convolutional Feature Masking",
+    "type": "operation",
+    "role": "masks a span of the frame features before the encoder (output H~0)",
+    "drawn_as": "cloud-shaped container holding a row of pale-blue bars with a dashed span of three green bars and an ellipsis",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "High Resolution Transformer Encoder (f1)",
+    "type": "module",
+    "role": "HuBERT-style encoder at the original resolution; the paper says it has a pre-convolution module and Transformer layers",
+    "drawn_as": "peach rectangle, symbol f1 at its left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Downsampling Module",
+    "type": "module",
+    "role": "lowers the time resolution of f1's output",
+    "drawn_as": "blue-grey rectangle with the small sans label DOWN at its left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Low Resolution Transformer Encoder (f2)",
+    "type": "module",
+    "role": "encoder on the downsampled sequence; its output feeds the low-resolution unit prediction",
+    "drawn_as": "peach rectangle, symbol f2 at its left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Upsampling Module",
+    "type": "module",
+    "role": "brings the low-resolution output back to the high resolution",
+    "drawn_as": "blue-grey rectangle with the small sans label UP at its left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "High Resolution Transformer Encoder (f3)",
+    "type": "module",
+    "role": "second high-resolution encoder; takes the upsampled output and the skip from f1; feeds the high-resolution unit prediction",
+    "drawn_as": "peach rectangle, symbol f3 at its left",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "High Resolution Unit Prediction",
+    "type": "data",
+    "role": "predicted discrete units at the high resolution, g^q_R1(S)",
+    "drawn_as": "cloud-shaped container with a row of pale-yellow squares and a dashed span of three squares plus an ellipsis",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Low Resolution Unit Prediction",
+    "type": "data",
+    "role": "predicted discrete units at the low resolution, g^q_R2(S)",
+    "drawn_as": "cloud-shaped container with a row of pale-yellow squares, every second square faded with a dashed outline, and a dashed span",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Quantization Method",
+    "type": "module",
+    "role": "produces the target units g^q_{R1,R2} from the waveform for both heads",
+    "drawn_as": "grey-mauve cylinder at the bottom centre",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "S (speech waveform)",
+    "to": "Convolutional Feature Extractor",
+    "what": "raw speech",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Convolutional Feature Extractor",
+    "to": "Convolutional Feature Masking",
+    "what": "frame-level features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Convolutional Feature Masking",
+    "to": "High Resolution Transformer Encoder (f1)",
+    "what": "masked features H~0",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "High Resolution Transformer Encoder (f1)",
+    "to": "Downsampling Module",
+    "what": "high-resolution hidden states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Downsampling Module",
+    "to": "Low Resolution Transformer Encoder (f2)",
+    "what": "downsampled hidden states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Low Resolution Transformer Encoder (f2)",
+    "to": "Upsampling Module",
+    "what": "low-resolution hidden states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Upsampling Module",
+    "to": "High Resolution Transformer Encoder (f3)",
+    "what": "upsampled hidden states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "High Resolution Transformer Encoder (f1)",
+    "to": "High Resolution Transformer Encoder (f3)",
+    "what": "skip connection that bypasses the low-resolution branch",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "High Resolution Transformer Encoder (f3)",
+    "to": "High Resolution Unit Prediction",
+    "what": "features for predicting high-resolution units",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Low Resolution Transformer Encoder (f2)",
+    "to": "Low Resolution Unit Prediction",
+    "what": "features for predicting low-resolution units, drawn as a detour down the right side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "S (speech waveform)",
+    "to": "Quantization Method",
+    "what": "waveform goes to the quantizer through a long line round the right edge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Quantization Method",
+    "to": "High Resolution Unit Prediction",
+    "what": "target units, dotted arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Quantization Method",
+    "to": "Low Resolution Unit Prediction",
+    "what": "target units, dotted arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "f0, f1, f2, f3",
+    "kind": "identity",
+    "at": "left of the four encoder boxes",
+    "what": "names the four modules by the symbols used in the equations"
+   },
+   {
+    "marker": "S, H~0, g^q_R1(S), g^q_R2(S), g^q_{R1,R2}",
+    "kind": "identity",
+    "at": "beside the waveform, the masked features, the two heads and the quantizer",
+    "what": "names the signals and targets by the paper's symbols"
+   },
+   {
+    "marker": "DOWN, UP",
+    "kind": "identity",
+    "at": "left of the resampling modules",
+    "what": "names the operators in small sans type"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "speech waveform S",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue waveform strip across the top with the symbol S at its left; a line leaves its right end and runs round the right side to the quantizer"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "row of thin vertical bars, pale blue with a dashed span of green bars",
+    "stands_for": "frame-level features, with the masked span marked",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "rows of small pale-yellow squares, some faded with dashed outline",
+    "stands_for": "discrete target units at each resolution",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "grey-mauve cylinder",
+    "stands_for": "the quantization method that supplies target units",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "unet",
+    "drawn_as": "high-resolution encoder, downsampling, low-resolution encoder, upsampling, high-resolution encoder stacked in one column with a long left skip arrow from the first to the last high-resolution encoder",
+    "parts": [
+     "f1",
+     "Downsampling Module",
+     "f2",
+     "Upsampling Module",
+     "f3",
+     "skip arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "frame features as thin bars and units as small squares in a row, a dashed rounded box around a masked span ending in an ellipsis",
+    "parts": [
+     "bars",
+     "squares",
+     "dashed span",
+     "ellipsis"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "each Transformer encoder is one plain labelled peach rectangle without internal layers",
+    "parts": [
+     "f1",
+     "f2",
+     "f3"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "codebook-quantizer",
+    "drawn_as": "cylinder labelled Quantization Method with dotted arrows up to both prediction heads",
+    "parts": [
+     "cylinder",
+     "dotted arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the waveform S at the top, follows the central column down to the two heads, then picks up the quantizer at the bottom and its dotted target arrows; the skip and the detour are read as side branches."
+ },
+ "layout": {
+  "arrangement": "pipeline-column",
+  "arrangement_note": "One central column of boxes from the waveform at the top to two unit-prediction heads at the bottom, a long skip arrow down the left side from f1 to f3, a right-hand detour for f2's output, and a quantizer cylinder at the bottom centre; all inside one large dashed rounded frame titled Multi-resolution HuBERT.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.24,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbe5d6",
+    "used_for": "convolutional feature extractor and the three Transformer encoders (peach)"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "downsampling and upsampling modules (blue-grey)"
+   },
+   {
+    "hex": "#d6d0d6",
+    "used_for": "quantization cylinder (grey-mauve)"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "pale-blue feature bars"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "green bars of the masked span"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale-yellow unit squares"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outlines of boxes, cloud containers, dashed spans and the outer frame"
+   },
+   {
+    "hex": "#0000ff",
+    "used_for": "speech waveform bitmap",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt dark navy on boxes, cloud containers and the dashed outer frame; black arrows",
+  "font": "serif (Times) 7.5 pt for labels, 9 pt bold title; formula symbols in Computer Modern italics; 5.5 pt sans for DOWN and UP",
+  "corners": "mixed",
+  "arrows": "thin black orthogonal arrows with small heads; dotted arrows for the quantizer targets; long solid detours for the skip and for the waveform to the quantizer",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach = learned encoder modules (convolutional extractor and Transformer encoders), blue-grey = resampling modules, mauve cylinder = quantizer, pale blue bars = frame features, green bars = masked span, pale yellow squares = discrete units",
+  "line_style_means": "dotted arrows = target units from the quantizer; solid arrows = forward data flow; dashed rounded boxes = the span of masked features or units; dashed outer frame = the whole framework",
+  "shape_means": "rectangle = module; wavy-edged cloud container = a representation sequence or prediction target; cylinder = quantizer; thin bars = frame features; small squares = discrete units",
+  "marker_means": "f0 to f3 name the modules; S, H~0 and g(S) name the signals as in the equations; DOWN and UP name the resampling operators",
+  "emphasis": "the two blue-grey resampling boxes sit in the middle of the peach column and the low-resolution encoder is narrower than the others, which marks the new multi-resolution step",
+  "reusable_patterns": [
+   "equation symbols printed beside each module so the figure maps onto the method section",
+   "representation sequences as bars or squares inside cloud-shaped containers with a dashed span for the masked part",
+   "narrower box for the low-resolution encoder in the middle of a column of full-width boxes",
+   "long skip arrow down one side bypassing the low-resolution branch",
+   "dotted arrows from a cylinder to the heads for the training targets",
+   "large dashed rounded frame with the model name as a bold title"
+  ],
+  "weaknesses": [
+   "no legend: the green bars, the dashed spans and the faded squares are not explained in the figure",
+   "the waveform-to-quantizer line is long and crosses the right side of the drawing"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes, cloud containers, bars, squares, cylinder and arrows",
+   "formula symbols typeset in LaTeX and pasted in",
+   "dashed outer frame and title"
+  ],
+  "unknown": [
+   "speech waveform bitmap (real-looking, origin not stated)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "speech waveform",
+   "peach encoder boxes",
+   "downsampling and upsampling boxes",
+   "cloud-shaped feature and unit containers",
+   "bars and squares",
+   "quantizer cylinder",
+   "skip arrow"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "HuBERT",
+   "multi-resolution",
+   "self-supervised speech",
+   "masked unit prediction",
+   "hierarchical Transformer",
+   "downsampling",
+   "upsampling",
+   "quantization"
+  ],
+  "tags": [
+   "token-strip",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "wavy-cloud-containers",
+    "what": "representation sequences (bars, unit squares) enclosed in cloud-like wavy-edged rounded boxes, as opposed to rectangular module boxes"
+   },
+   {
+    "name": "symbol-labels-beside-modules",
+    "what": "bare equation symbols (f0, f1, g(S)) printed next to each module or signal without a key, tying the drawing to the method equations"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Print the paper's own symbols beside every module and signal, and draw the sequences as bars or squares in cloud-shaped containers with a dashed span for the masked part, so the figure doubles as a map of the method section.",
+  "suits": "encoder stacks with resolution changes (hourglass or U-shaped) in speech, audio or video self-supervised learning, drawn as one column with side skip arrows."
+ },
+ "tags": [
+  "single column",
+  "peach and blue-grey boxes",
+  "cloud containers",
+  "serif labels",
+  "dashed outer frame",
+  "equation symbols beside modules",
+  "dotted target arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "Section 3 (p.3)"
+  ],
+  "evidence": [
+   "The framework utilizes multi-resolution masked units prediction.",
+   "This architecture employs a hierarchical Transformer to explicitly encode hidden representations at multiple resolutions",
+   "For this explanation, we exemplify a model with two resolutions."
+  ]
+ },
+ "summary": "Multi-resolution HuBERT (MR-HuBERT) is a self-supervised speech model that processes speech at two time resolutions instead of the fixed 20 ms frame rate, trained with HuBERT-style masked unit prediction. Figure 1 draws the pre-training framework as one top-down column inside a large dashed rounded frame: the waveform S passes a convolutional feature extractor f0 and a masking step, a high-resolution Transformer encoder f1, a downsampling module, a low-resolution encoder f2, an upsampling module and a second high-resolution encoder f3. Two cloud-shaped heads predict discrete units at the high and low resolution; a cylinder labelled Quantization Method, fed from the waveform, supplies the target units through dotted arrows. A long left arrow carries f1's output to f3. Peach boxes are encoders, blue-grey boxes resample, and equation symbols sit beside every module.",
+ "summary_zh": "MR-HuBERT 是语音自监督模型，在两种时间分辨率上做掩码单元预测。图1自上而下一列：波形经特征提取与掩码，过高分辨率编码器、下采样、低分辨率编码器、上采样，再回高分辨率编码器；两个预测头预测两种单元，量化器给目标。",
+ "confidence": "high",
+ "notes": "Prior kind model-anatomy (end-to-end-network) kept. The 0 pt text and Courier font in the digest are LaTeX formula strings pasted into the SVG; the visible labels are Times 7.5 pt. The waveform is the only bitmap. The dashed spans in the feature and unit rows, the green bars and the faded squares in the low-resolution row are unlabelled; they read as masked positions and a lower unit rate. The waveform hex is read off the bitmap.",
+ "venue": "ICLR24"
+}

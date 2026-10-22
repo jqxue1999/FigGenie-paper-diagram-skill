@@ -1,0 +1,379 @@
+{
+ "paper_id": "icml24-0059",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Two RL agents trained against each other: an adversary generating hard instances and an algorithm agent learning a robust online matching algorithm.",
+  "domain": [
+   "online matching with stochastic rewards",
+   "adversarial reinforcement learning",
+   "competitive analysis"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "two mirrored RL loops that each treat the other as environment, closed into a cycle by two thick arcs that hand over worst-case instances and a robust algorithm",
+  "argues": "Two RL agents that treat each other as the environment, one producing worst-case instances and one producing a robust algorithm, can be trained iteratively against each other.",
+  "subject": "Two mirrored RL loops, an adversary agent and an algorithm agent, linked by arrows carrying worst-case instances and a robust algorithm.",
+  "elements": [
+   {
+    "name": "Adversary agent",
+    "type": "container",
+    "role": "the agent that learns to generate hard (worst-case) instances, together with its own agent-environment loop",
+    "drawn_as": "dashed rounded region on the left with a bold 10.5 pt title rotated along its left edge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Algorithm agent",
+    "type": "container",
+    "role": "the agent that learns algorithms with larger competitive ratios, together with its own agent-environment loop",
+    "drawn_as": "dashed rounded region on the right with a bold 10.5 pt title rotated along its right edge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Agent (adversary)",
+    "type": "module",
+    "role": "the learner of the adversary: a policy trained by an RL algorithm",
+    "drawn_as": "large rounded box in the upper part of the left region, bold title, containing RL Alg. below Policy",
+    "container": "Adversary agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Policy and RL Alg. (x2 pairs)",
+    "type": "module",
+    "role": "the policy that acts and the RL algorithm that updates it, inside each Agent box",
+    "drawn_as": "two small rounded boxes joined by a thin arrow from RL Alg. to Policy; Policy on top in the left region, below in the right region",
+    "container": "Agent (adversary) and Agent (algorithm)",
+    "is_contribution": false
+   },
+   {
+    "name": "Environment (adversary)",
+    "type": "module",
+    "role": "what the adversary acts on; receives the robust algorithm",
+    "drawn_as": "small rounded box with bold 6 pt text at the bottom of the left region",
+    "container": "Adversary agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Environment (algorithm)",
+    "type": "module",
+    "role": "what the algorithm agent acts on; receives the worst-case instances",
+    "drawn_as": "small rounded box with bold 6 pt text at the top of the right region",
+    "container": "Algorithm agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Agent (algorithm)",
+    "type": "module",
+    "role": "the learner of the algorithm agent: RL Alg. above Policy",
+    "drawn_as": "large rounded box in the lower part of the right region, bold title below its blocks",
+    "container": "Algorithm agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation / Action / Reward (x2 sets)",
+    "type": "label",
+    "role": "the standard RL signals exchanged between agent and environment",
+    "drawn_as": "serif labels along thick orthogonal arrows; Observation and Action are rotated on the vertical runs",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Worst-case instances",
+    "type": "data",
+    "role": "hard instances produced by the adversary and handed to the algorithm agent's environment",
+    "drawn_as": "thick curved arrow over the top from the adversary's Agent box to the right Environment, label above it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Robust Algorithm",
+    "type": "data",
+    "role": "the algorithm learned by the algorithm agent, handed back to the adversary's environment",
+    "drawn_as": "thick curved arrow under the bottom from the right Agent box to the left Environment, label below it",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Environment (adversary)",
+    "to": "Agent (adversary)",
+    "what": "Observation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent (adversary)",
+    "to": "Environment (adversary)",
+    "what": "Action",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Environment (adversary)",
+    "to": "Agent (adversary)",
+    "what": "Reward, entering RL Alg. through the agent's bottom edge",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent (adversary)",
+    "to": "Worst-case instances",
+    "what": "the adversary's output leaves from the top of its Agent box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Worst-case instances",
+    "to": "Environment (algorithm)",
+    "what": "worst-case instances become the algorithm agent's environment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Environment (algorithm)",
+    "to": "Agent (algorithm)",
+    "what": "Reward, entering RL Alg. from the top",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Environment (algorithm)",
+    "to": "Agent (algorithm)",
+    "what": "arrow labelled Action, as drawn running from Environment down to Agent on the left side",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent (algorithm)",
+    "to": "Environment (algorithm)",
+    "what": "arrow labelled Observation, as drawn running from Agent up to Environment on the right side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent (algorithm)",
+    "to": "Robust Algorithm",
+    "what": "the learned algorithm leaves from the bottom of its Agent box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Robust Algorithm",
+    "to": "Environment (adversary)",
+    "what": "the robust algorithm becomes the adversary's environment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RL Alg.",
+    "to": "Policy",
+    "what": "the RL algorithm updates the policy",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Adversary agent",
+    "kind": "actor-interaction",
+    "axis": "other",
+    "shows": "RL loop of the adversary: an Agent with Policy and RL Alg. and an Environment exchanging Observation, Action and Reward; emits worst-case instances",
+    "verdict": null
+   },
+   {
+    "label": "Algorithm agent",
+    "kind": "actor-interaction",
+    "axis": "other",
+    "shows": "the mirrored RL loop of the algorithm agent: Environment on top, Agent below; its environment receives the worst-case instances; emits the robust algorithm",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Adversary agent / Algorithm agent",
+    "kind": "section",
+    "at": "rotated bold titles on the outer edges of the two dashed regions",
+    "what": "title the two units"
+   },
+   {
+    "marker": "Observation, Action, Reward",
+    "kind": "identity",
+    "at": "arrows inside each loop",
+    "what": "name the three RL signals"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "an Agent box (Policy, RL Alg.) and an Environment box joined by Observation, Action and Reward arrows; drawn twice, the second copy flipped vertically",
+    "parts": [
+     "Agent",
+     "Policy",
+     "RL Alg.",
+     "Environment",
+     "Observation",
+     "Action",
+     "Reward"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "adversarial-pair",
+    "drawn_as": "two dashed units, each the other's environment, closed into a cycle by two thick outer arcs named by what is handed over",
+    "parts": [
+     "Worst-case instances arc",
+     "Robust Algorithm arc"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Adversary agent region on the left, follows the thick top arc 'Worst-case instances' into the Algorithm agent region, then the bottom arc 'Robust Algorithm' back; the small loops inside each region are read afterwards."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two mirrored dashed rounded regions side by side, each titled by a rotated bold label on its outer edge and holding the same agent-environment loop (the right copy flipped vertically). Two thick curved arcs, one over the top and one under the bottom, connect the regions and close a cycle between them.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.34,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#000000",
+    "used_for": "all outlines, arrows and text; boxes are unfilled white"
+   }
+  ],
+  "ground": "white",
+  "fill": "none",
+  "stroke": "0.75 pt black outlines on boxes, 1 pt dashed outlines on the two regions, thick filled arrows for loop signals and the two arcs",
+  "font": "serif (Nimbus Roman, Times-like) 6-10.5 pt; bold for Agent, Environment and the rotated region titles",
+  "corners": "rounded",
+  "arrows": "thick black orthogonal arrows with filled heads for Observation and Action, thicker curved arcs for the two hand-offs, thin straight arrows inside the Agent box",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "none: the figure is monochrome",
+  "line_style_means": "dashed rounded outline = one learning agent with its loop; solid outline = module; the two thickest arcs = what each agent hands to the other",
+  "shape_means": "rounded box = module; large rounded box holding Policy and RL Alg. = an RL agent; dashed region = adversary or algorithm unit",
+  "marker_means": "rotated bold titles name the regions; Observation, Action and Reward name RL signals; no numbers",
+  "emphasis": "the two thick outer arcs are the heaviest strokes and carry the two exchanged objects, so the adversarial cycle reads first",
+  "reusable_patterns": [
+   "the same RL loop drawn twice, the second copy flipped vertically, to show symmetric adversaries",
+   "dashed rounded regions with bold titles rotated along the outer edges",
+   "two thick outer arcs, one over the top and one under the bottom, closing a cycle between two units",
+   "arrow labels rotated along vertical runs",
+   "Agent box with Policy and RL Alg. nested inside"
+  ],
+  "weaknesses": [
+   "in the right region the labels Action and Observation sit on arrows that run opposite to the usual loop drawn on the left",
+   "monochrome: only position tells the two agents apart"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, regions and arrows",
+   "rotated titles and labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two dashed regions titled Adversary agent and Algorithm agent",
+   "Agent boxes holding Policy and RL Alg.",
+   "Environment boxes",
+   "Observation, Action and Reward arrows",
+   "two thick curved arrows labelled Worst-case instances and Robust Algorithm"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "adversarial reinforcement learning",
+   "online matching",
+   "stochastic rewards",
+   "worst-case instances",
+   "competitive ratio",
+   "robust algorithm",
+   "adversary agent",
+   "algorithm agent",
+   "hard instances"
+  ],
+  "tags": [],
+  "new_tags": [
+   {
+    "name": "mirrored-twin-loops",
+    "what": "the same agent-environment loop drawn twice, one copy flipped, in two dashed regions that hand their outputs to each other through two outer arcs, forming an adversarial or co-training cycle"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an adversarial or co-trained pair by drawing the same RL loop twice (the second flipped) inside dashed regions with rotated titles, then close the cycle with two thick outer arcs named by what each agent hands to the other.",
+  "suits": "Min-max, adversarial, GAN-like, self-play or alternating-optimisation frameworks where two learners treat each other as the environment."
+ },
+ "tags": [
+  "monochrome",
+  "line-art",
+  "dashed-regions",
+  "rotated-titles",
+  "mirrored-loops",
+  "serif-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.3)"
+  ],
+  "evidence": [
+   "Each agent views the other as its environment, and rewards are opposite to each other.",
+   "Figure 1. Our adversarial reinforcement learning framework."
+  ]
+ },
+ "summary": "The paper studies online matching with stochastic rewards (OMSR) and uses adversarial reinforcement learning to learn a robust algorithm and to discover hard instances, from which two structural properties are distilled to improve the known hardness bound from 0.621 to 0.597. Figure 1 draws the framework as two mirrored RL loops inside dashed rounded regions titled Adversary agent and Algorithm agent. Each loop has an Agent box holding Policy and RL Alg. and an Environment box, joined by Observation, Action and Reward arrows. Two thick curved arrows close the cycle: Worst-case instances go from the adversary's agent to the algorithm agent's environment, and the Robust Algorithm goes back to the adversary's environment. The drawing is monochrome serif line art.",
+ "summary_zh": "论文用对抗强化学习研究带随机奖励的在线匹配。图1画出两个镜像的强化学习回路：对手智能体与算法智能体互为环境，两条粗弧线分别传递最坏情形实例和鲁棒算法，构成闭环。全图为单色线稿。",
+ "confidence": "high",
+ "notes": "The prior second kind concept-schematic is dropped: the figure is a framework diagram of two RL loops, not an abstract-idea picture; stage-pipeline (closed-loop) is added for the iterative cycle drawn by the two arcs. In the right region the arrows labelled Action (left, running from Environment down to Agent) and Observation (right, running from Agent up to Environment) run opposite to the left loop and to the usual RL convention; recorded as drawn, the paper text does not explain it. The two dashed regions are counted as panels because each is framed and titled, although the arcs tie them into one cycle.",
+ "venue": "ICML24"
+}

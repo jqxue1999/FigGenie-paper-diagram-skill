@@ -1,0 +1,519 @@
+{
+ "paper_id": "neurips23-0140",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Token-Scaled Logit Distillation (TSLD)",
+  "one_liner": "Quantization-aware training of ternary-weight generative language models with a token-scaled logit distillation loss; this figure gives the motivation.",
+  "domain": [
+   "LLM quantization",
+   "knowledge distillation",
+   "generative language models"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "(a) encoder row above decoder row and (b) encoder column beside decoder column, both drawn in the same grammar so only the difference remains",
+  "argues": "Causal attention piles quantization error onto later tokens of a decoder, and a decoder gets a ground-truth loss on every token over a ~50k vocabulary, unlike an encoder.",
+  "subject": "Attention matrices with quantization error and causal mask, and encoder versus decoder layer stacks with label and logit distributions.",
+  "elements": [
+   {
+    "name": "Self-Attention",
+    "type": "data",
+    "role": "4x4 attention probabilities of the encoder, tokens 0-3",
+    "drawn_as": "grid of light-blue cells inside a bracket labelled Token",
+    "container": "(a) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Q_err",
+    "type": "data",
+    "role": "quantization-error part of the attention probabilities",
+    "drawn_as": "grid of light-green cells with a blue outline on row 1 and a red outline on row 3",
+    "container": "(a) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Self-Attention",
+    "type": "data",
+    "role": "causal attention of the decoder: each token sees itself and earlier ones",
+    "drawn_as": "light-blue lower triangle with dark-grey masked cells above it",
+    "container": "(a) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Q_err (masked)",
+    "type": "data",
+    "role": "quantization error under the causal mask; token 1 row has 2 live cells, token 3 row has 4",
+    "drawn_as": "green grid with dark-grey mask cells, blue box on 2 cells, red box on 4 cells",
+    "container": "(a) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Value",
+    "type": "data",
+    "role": "value vector column weighted by the attention probabilities",
+    "drawn_as": "grey column of four cells after a multiplication sign",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Output",
+    "type": "data",
+    "role": "attention output without quantization error",
+    "drawn_as": "blue column of four cells after an equals sign",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Output Q_err",
+    "type": "data",
+    "role": "quantization error in the output; even over tokens for the encoder, growing towards token 3 for the decoder",
+    "drawn_as": "green column, darker for later tokens in the decoder, with blue and red outlines on tokens 1 and 3",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder layers",
+    "type": "module",
+    "role": "encoder stack; dashed grey arrows show attention from the class token to all inputs",
+    "drawn_as": "light-grey rounded bar between the input and output rows",
+    "container": "(b) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "input x_cls, x0, x1, x2 ('I like milk')",
+    "type": "sample",
+    "role": "NLU input tokens with a special class token",
+    "drawn_as": "row of light-green cells with monospace words below",
+    "container": "(b) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Head (encoder)",
+    "type": "module",
+    "role": "maps the class-token output to the class logit",
+    "drawn_as": "light-orange box above the first output cell only",
+    "container": "(b) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "label z / logit z_cls",
+    "type": "data",
+    "role": "single label and class logit joined by a Loss double arrow; both marked Correct",
+    "drawn_as": "blue cell over a light-green cell inside a dashed grey frame",
+    "container": "(b) Encoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder layers",
+    "type": "module",
+    "role": "decoder stack with causal attention, teacher-forcing input",
+    "drawn_as": "light-grey rounded bar",
+    "container": "(b) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "input x0 x1 x2 x3 ('May the force be')",
+    "type": "sample",
+    "role": "language-modelling input tokens",
+    "drawn_as": "row of light-green cells with monospace words, 'force' in blue bold",
+    "container": "(b) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Head (decoder)",
+    "type": "module",
+    "role": "maps every output token to a vocabulary-sized logit",
+    "drawn_as": "wide light-orange bar over all three outputs",
+    "container": "(b) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "logit z0 z1 z2 and label x1 x2 x3",
+    "type": "data",
+    "role": "per-token predictions ('the with be') compared with the next-token labels ('the force be') by a Loss arrow at each token",
+    "drawn_as": "green cells under blue cells, three Loss double arrows, wrong word 'with' in red bold",
+    "container": "(b) Decoder",
+    "is_contribution": false
+   },
+   {
+    "name": "legend (Token 1 / Token 3 Error by Quantization, Mask, Attention)",
+    "type": "label",
+    "role": "keys blue box, red box, dark-grey cell and dashed grey arrow",
+    "drawn_as": "small swatches with text at the bottom-left of each panel",
+    "container": "(a), (b)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Self-Attention and Q_err",
+    "to": "Value",
+    "what": "attention probabilities with their quantization error weight the Value",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Value",
+    "to": "Output and Output Q_err",
+    "what": "result of the weighted sum, split into clean output and error part",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "blue row of Q_err",
+    "to": "blue cell of Output Q_err",
+    "what": "token 1 error carried to the output",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "red row of Q_err",
+    "to": "red cell of Output Q_err",
+    "what": "token 3 error carried to the output",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "output y_cls",
+    "to": "input x_cls, x0, x1, x2",
+    "what": "attention of the class token over all inputs",
+    "kind": "attention",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "logit z_cls",
+    "to": "label z",
+    "what": "Loss between the class logit and the single label",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "logits z0 z1 z2",
+    "to": "labels x1 x2 x3",
+    "what": "token-wise Loss at every position",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "label z",
+    "to": "Binary (0 or 1) chart",
+    "what": "the label as a one-hot distribution over two classes",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "label tokens",
+    "to": "Vocab. (~50k) chart",
+    "what": "the label as a one-hot distribution over the vocabulary",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder row",
+    "to": "Decoder row",
+    "what": "same attention computation, with and without causal mask",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "attention plus quantization error for an encoder (top) and a decoder (bottom); the causal mask makes later tokens collect more error",
+    "verdict": "motivation"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "an encoder gets one label loss on a class token, a decoder gets a token-wise loss over the vocabulary with teacher forcing",
+    "verdict": "motivation"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "under each panel",
+    "what": "letter the two panels"
+   },
+   {
+    "marker": "0, 1, 2, 3",
+    "kind": "identity",
+    "at": "left of the matrices",
+    "what": "index the tokens"
+   },
+   {
+    "marker": "x, y, z with subscripts",
+    "kind": "identity",
+    "at": "token cells in (b)",
+    "what": "name input, output and logit tokens"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four small bar charts: one-hot binary label vs class probabilities 0.8 / 0.2 (encoder), one-hot vocabulary label vs probabilities 0.1 / 0.2 / 0.4 / 0.3 over soul, force, with, be (decoder)",
+    "content": "chart",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "toy bar charts with value numbers, inside dashed grey frames beside the label and logit cells"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "an NLU input 'I like milk' for the encoder and a language-modelling input 'May the force be' for the decoder with a wrong prediction 'with' instead of 'force'",
+    "form": "monospace words under token cells, correct word in blue bold and wrong word in red bold",
+    "real_values": true
+   },
+   {
+    "what": "toy attention and error matrices of 4 tokens and toy probabilities",
+    "form": "cell grids and numbers on the bars",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention-map",
+    "drawn_as": "4x4 token-by-token grids; the decoder grid has a dark-grey causal mask above the diagonal",
+    "parts": [
+     "attention grid",
+     "mask cells",
+     "Q_err grid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of square cells with subscripted x, y, z and the words below in monospace",
+    "parts": [
+     "input row",
+     "output row",
+     "logit row",
+     "label row"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a plain grey bar labelled Encoder layers or Decoder layers",
+    "parts": [
+     "layers bar"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "a light-orange box labelled Head between output and logit",
+    "parts": [
+     "Head box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-double-arrow",
+    "drawn_as": "vertical double-headed arrow labelled Loss between logit and label cells",
+    "parts": [
+     "Loss arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the encoder matrices top-left of (a), reads left to right as an equation, repeats for the decoder row, then goes to (b) and reads each column bottom-up from the input words to the label."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Panel (a) on the left is two stacked rows (encoder above decoder) of matrices joined by plus, times and equals signs, with a legend under them; panel (b) on the right is two side-by-side columns (encoder, decoder) read bottom-up with row names input, output, logit, label at the far left.",
+  "panel_count": 2,
+  "lanes": "(a) 2 stacked rows (encoder, decoder); (b) 2 side-by-side columns (encoder, decoder) sharing the row names input, output, logit, label",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.23,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "Self-Attention cells"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "Output column and ground-truth label cells"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "Q_err cells and the output and logit token cells in (b)"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "Output Q_err column (darker for later tokens)",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#595959",
+    "used_for": "causal mask cells"
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "Value column"
+   },
+   {
+    "hex": "#dddddd",
+    "used_for": "Encoder layers and Decoder layers bars"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Head boxes"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "token 3 outline, wrong word with"
+   },
+   {
+    "hex": "#0432ff",
+    "used_for": "token 1 outline, correct word force"
+   },
+   {
+    "hex": "#a7a7a7",
+    "used_for": "dashed frames and attention arrows"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black grid lines, 1.25 pt red and blue outlines, dashed light-grey frames, white cell borders",
+  "font": "sans (Arial) 4-7 pt for labels and symbols, monospace (Menlo) for the words in the sentences, bold monospace for force and with",
+  "corners": "mixed",
+  "arrows": "dashed grey arrows for attention, short black double-headed arrows for Loss, dashed grey arcs from labels to charts",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "light blue = attention probabilities, blue = outputs and ground-truth labels, green = quantization error and model outputs or logits, grey = value and layers, dark grey = mask, orange = head; blue and red outlines = token 1 and token 3 in (a), and blue and red words = correct and wrong token in (b)",
+  "line_style_means": "dashed grey = attention link or the frame that groups a label with its distribution; double arrow = loss; thick blue and red boxes = the two tokens followed",
+  "shape_means": "grid of squares = matrix, bracket = token index, row of squares = tokens, small bars = distribution",
+  "marker_means": "0-3 index tokens; x, y, z = input, output, logit; numbers over bars are toy probabilities; (a) and (b) letter the panels",
+  "emphasis": "two outline colours followed from the error matrix into the output column; the red wrong word and its red bar",
+  "reusable_patterns": [
+   "formula drawn as matrices joined by plus, times and equals signs",
+   "causal mask as a dark-grey triangle inside the attention grid",
+   "two outline colours carried from a matrix into the output column to show which token collects more error",
+   "row names at the far left shared by two side-by-side columns",
+   "toy bar charts with numbers: one-hot label above soft prediction"
+  ],
+  "weaknesses": [
+   "4-5 pt labels are very small",
+   "the Encoder and Decoder titles in (a) sit between rows and are easy to assign to the wrong row",
+   "the legend swatches are far from the matrices they key"
+  ]
+ },
+ "resources": {
+  "own": [
+   "two sample sentences (I like milk, May the force be)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "attention and error matrices",
+   "token cells and layer bars",
+   "four toy bar charts as pasted bitmaps",
+   "arrows and legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "attention-matrix grids",
+   "dark-grey causal mask cells",
+   "blue and red outlined rows",
+   "token cells with subscripts",
+   "toy bar charts",
+   "layer bars",
+   "head boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "ternary weights",
+   "quantization error",
+   "causal attention",
+   "encoder versus decoder",
+   "logit distillation",
+   "ground-truth loss",
+   "teacher forcing",
+   "generative language model"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "attention-mask-grid",
+   "toy-values-inline",
+   "distribution-glyph",
+   "highlighted-text-spans",
+   "error-callouts",
+   "token-strip"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw an equation as a row of matrices with operator signs, and outline the same two tokens in two colours through the matrix and the output to show the effect; mirror the two alternatives in identical grammar so only the causal mask differs.",
+  "suits": "Explaining why a mechanism behaves differently in two model families (masking, error accumulation, loss signals) with small toy matrices and toy distributions."
+ },
+ "tags": [
+  "two-panel-row",
+  "equation-as-matrices",
+  "paired-rows-and-columns",
+  "toy-bar-charts",
+  "monospace-samples",
+  "pastel-cells"
+ ],
+ "provenance": {
+  "sections": [
+   "4 Method, quantization error in the decoder and necessity of ground-truth loss (p.4)",
+   "5 Experiments (p.9)"
+  ],
+  "evidence": [
+   "This illustration highlights that causal attention inherently leads to a disproportionate accumulation of quantization errors in the latter tokens.",
+   "Encoder models for NLU tasks use a single special token to compute cross-entropy loss with a limited number of classes"
+  ]
+ },
+ "summary": "The paper trains ternary-weight generative language models with a token-scaled logit distillation loss. Figure 1 is the motivation, not the method. Panel (a) draws attention as matrices joined by plus, times and equals: for an encoder every token collects the same quantization error, while the decoder's causal mask makes token 3 (red box) accumulate more than token 1 (blue box). Panel (b) sets an encoder, with one class-token label and a binary distribution, beside a decoder with a token-wise loss over a 50k vocabulary, on toy sentences with a wrong word in red. Flat pastel cells, thin outlines, small toy bar charts.",
+ "summary_zh": "论文为三值权重生成式语言模型提出逐词缩放的logit蒸馏。图1是动机图：(a)用矩阵等式对比编码器与解码器的量化误差，因果掩码使后面的词累积更多误差；(b)对比单标签与逐词词表级损失。",
+ "confidence": "high",
+ "notes": "The method itself (TSLD) is not drawn; the figure only motivates it. The four bitmaps in the SVG were read as the four bar charts. The role of Head in the encoder (class token only) is read from the drawing. Panel verdict 'motivation' is my own short word.",
+ "venue": "NeurIPS23"
+}

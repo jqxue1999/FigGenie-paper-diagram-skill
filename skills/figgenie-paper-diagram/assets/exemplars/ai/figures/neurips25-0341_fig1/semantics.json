@@ -1,0 +1,470 @@
+{
+ "paper_id": "neurips25-0341",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TREND (Temporal REndering with Neural fielD)",
+  "one_liner": "Unsupervised 3D pre-training for LiDAR perception that forecasts future point clouds from the current scan through a recurrent embedding and a temporal LiDAR neural field.",
+  "domain": [
+   "LiDAR perception",
+   "unsupervised 3D representation learning",
+   "temporal forecasting"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "design-family",
+  "variant_note": "three sibling pretext pipelines (masked autoencoding, contrastive, temporal forecasting) in one grammar of input scan, backbone block and target, the proposed one last",
+  "argues": "Masking and contrast assume hand-picked nuisance variability, whereas forecasting future LiDAR scans lets object motion decide what the backbone must encode.",
+  "subject": "Three unsupervised pre-training schemes for LiDAR point clouds drawn as input, 3D backbone and target, using one real scan as the running example.",
+  "elements": [
+   {
+    "name": "(a) Masked Autoencoding",
+    "type": "label",
+    "role": "title of the first pipeline: random masking and pre-training by reconstruction",
+    "drawn_as": "bold sans title under the top-left pipeline",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Current Point Cloud (masked)",
+    "type": "sample",
+    "role": "input scan with masked areas",
+    "drawn_as": "framed blue-point LiDAR image with three black hatched squares",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "3D backbone (grey)",
+    "type": "module",
+    "role": "network pre-trained by the pretext task in (a) and (b)",
+    "drawn_as": "nested stack of three 3D slabs in dark grey with shaded faces",
+    "container": "(a), (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Current Point Cloud (reconstructed)",
+    "type": "sample",
+    "role": "reconstruction target: the full scan",
+    "drawn_as": "framed blue-point LiDAR image, same scene as the input",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Contrastive Learning",
+    "type": "label",
+    "role": "title of the second pipeline",
+    "drawn_as": "bold sans title under the top-right pipeline",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Views of Point Cloud",
+    "type": "sample",
+    "role": "two views built from one frame or adjacent frames",
+    "drawn_as": "two tilted, overlapping image planes with blue points",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Positive and negative pairs",
+    "type": "region",
+    "role": "embedding space where positive pairs are pulled together and negative pairs pushed apart",
+    "drawn_as": "dark-outlined ellipse with three blue and three orange nodes, solid coloured arrows between same-colour nodes, dashed black arrows between blue and orange",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "(c) TREND: Temporal Forecasting",
+    "type": "label",
+    "role": "title of the proposed pipeline",
+    "drawn_as": "bold sans title under the bottom pipeline",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Current Scan",
+    "type": "sample",
+    "role": "input of TREND",
+    "drawn_as": "framed blue-point LiDAR image",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "3D backbone (blue)",
+    "type": "module",
+    "role": "backbone pre-trained by temporal forecasting",
+    "drawn_as": "nested stack of three 3D slabs in light blue",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "LiDAR Point Clouds at Timestamp t0, t1, ..., tk",
+    "type": "sample",
+    "role": "forecast targets: scans at current and future timestamps",
+    "drawn_as": "three framed blue-point scans in a row with an ellipsis between the last two",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "pre-trained backbones",
+    "type": "label",
+    "role": "legend naming the block glyph in grey and in blue",
+    "drawn_as": "two small 3D block glyphs with the caption below, bottom right",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Current Point Cloud (masked)",
+    "to": "3D backbone (grey) in (a)",
+    "what": "masked scan",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D backbone (grey) in (a)",
+    "to": "Current Point Cloud (reconstructed)",
+    "what": "reconstruction of the masked areas",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Views of Point Cloud",
+    "to": "3D backbone (grey) in (b)",
+    "what": "two views",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D backbone (grey) in (b)",
+    "to": "Positive and negative pairs",
+    "what": "embeddings of the views",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "same-colour nodes",
+    "to": "same-colour nodes",
+    "what": "positive pairs pulled together",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "blue nodes",
+    "to": "orange nodes",
+    "what": "negative pairs pushed apart",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Current Scan",
+    "to": "3D backbone (blue)",
+    "what": "current observation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D backbone (blue)",
+    "to": "LiDAR Point Clouds at t0, t1, ..., tk",
+    "what": "forecast of the future scans",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "legend glyphs",
+    "to": "grey and blue backbone blocks",
+    "what": "both block colours are named pre-trained backbones",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Masked Autoencoding",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "random masking of the current point cloud, reconstruction as the pretext task",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) Contrastive Learning",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "two views of a point cloud, positive pairs pulled together and negative pairs pushed apart",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) TREND: Temporal Forecasting",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "the current scan is mapped to LiDAR point clouds at t0, t1, ..., tk, using object motion as the signal",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "bold titles under each pipeline",
+    "what": "letters and names the three pretext schemes"
+   },
+   {
+    "marker": "t0, t1, ..., tk",
+    "kind": "identity",
+    "at": "label under the output scans",
+    "what": "timestamps of the forecast scans"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "one real LiDAR scan reused as the running input: current point cloud, two views, current scan",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "blue points forming concentric rings on white, thin black frame; the masked copy carries three black hatched squares; the two contrastive views are tilted overlapping planes"
+   },
+   {
+    "what": "reconstruction and forecast scans: the reconstructed cloud, then scans at t0, t1 and tk",
+    "content": "point-cloud",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "same frame and blue-point style as the inputs; the forecast row shows different scenes for later timestamps with an ellipsis between the last two"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "nested stack of three 3D slabs of decreasing height",
+    "stands_for": "the 3D backbone network being pre-trained (grey in a and b, blue in c)",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy embedding space with two positive pairs (blue, orange) and negative links between blue and orange nodes",
+    "form": "circles in an ellipse joined by solid and dashed arrows",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "same-colour nodes joined by a solid coloured arrow for positives, blue-orange node pairs joined by dashed black arrows for negatives, inside an ellipse",
+    "parts": [
+     "blue nodes",
+     "orange nodes",
+     "solid arrows",
+     "dashed arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "a dark-outlined ellipse holding six coloured circles",
+    "parts": [
+     "ellipse",
+     "nodes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "LiDAR returns as blue points forming concentric rings around the ego vehicle on a white frame",
+    "parts": [
+     "scan image"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "masked-input",
+    "drawn_as": "three black squares with white diagonal hatching laid over the input scan",
+    "parts": [
+     "hatched squares"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the top-left masked scan, follows the arrows through (a), jumps to (b), then to the wider bottom row (c) and ends at the legend."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three lettered pipelines in a 2x2 grid: (a) top-left, (b) top-right, (c) as a wider bottom row; the fourth cell holds the small legend. Each pipeline reads left to right as input scan, backbone block, target, with its bold title under it.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.95,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a6caec",
+    "used_for": "front faces of the blue TREND backbone"
+   },
+   {
+    "hex": "#85a2be",
+    "used_for": "shaded side faces of the blue backbone"
+   },
+   {
+    "hex": "#b7d4f0",
+    "used_for": "light faces of the blue backbone"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "orange nodes and the orange pair arrow"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "blue nodes and the blue pair arrow"
+   },
+   {
+    "hex": "#0e2841",
+    "used_for": "outline of the pair ellipse"
+   },
+   {
+    "hex": "#7f7f7f",
+    "approx": true,
+    "used_for": "grey 3D backbone blocks of (a) and (b), bitmap gradient faces"
+   },
+   {
+    "hex": "#0000ff",
+    "approx": true,
+    "used_for": "blue points of the LiDAR scans, bitmap"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black arrows, 0.25 to 0.5 pt black frames on the scans, dark outline on the ellipse and nodes",
+  "font": "sans (Aptos), 5 to 5.5 pt, bold for the lettered titles; Cambria Math italics for t0, t1, tk",
+  "corners": "mixed",
+  "arrows": "thick straight black arrows with small solid heads between stages; in the ellipse solid coloured arrows and dashed black arrows",
+  "rendering": "mixed",
+  "effects": "3D-shaded slab blocks with gradient faces and tilted view planes",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey block = backbone in the prior pretexts, blue block = TREND's backbone; blue points = LiDAR returns; in the ellipse blue and orange nodes are two different instances whose positives share a colour",
+  "line_style_means": "thick black arrow = data flow; solid coloured arrow between same-colour nodes = positive pair pulled together; dashed black arrow = negative pair pushed apart",
+  "shape_means": "nested 3D slabs = backbone; framed picture = LiDAR scan; tilted planes = two views; ellipse = embedding space; black hatched squares = masked regions",
+  "marker_means": "bold letters name the schemes; t0 to tk label the forecast timestamps; the ellipsis stands for further scans",
+  "emphasis": "TREND comes last, in a wider row with a blue backbone and several output scans, against grey backbones and a single output in the baselines",
+  "reusable_patterns": [
+   "one real input scan reused in every row so only the pretext task differs",
+   "same input, backbone, target grammar for each baseline, the proposed method last and tinted",
+   "hatched black squares over the picture for masked regions",
+   "tilted overlapping planes for two views",
+   "ellipse with coloured nodes, solid arrows for positive pairs, dashed arrows for negative pairs",
+   "tiny legend that names the backbone glyph in both its colours",
+   "an ellipsis between output frames for a sequence up to t_k"
+  ],
+  "weaknesses": [
+   "the legend names grey and blue blocks the same, so the colour change between baseline and TREND is not explained",
+   "the first forecast scan looks identical to the input, so the forecast is not distinguishable from the current frame"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real LiDAR scans from the datasets, rendered as blue point images"
+  ],
+  "stock": [
+   "3D block icons (PowerPoint-style shapes)"
+  ],
+  "generated": [],
+  "drawn": [
+   "arrows and titles",
+   "pair ellipse with nodes",
+   "hatched mask squares"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "LiDAR point-cloud images",
+   "3D slab-stack backbone blocks",
+   "hatched black mask squares",
+   "tilted view planes",
+   "ellipse with blue and orange nodes and solid and dashed arrows",
+   "row of future scans with ellipsis"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "LiDAR",
+   "unsupervised pre-training",
+   "temporal forecasting",
+   "masked autoencoding",
+   "contrastive learning",
+   "point cloud",
+   "3D representation",
+   "object motion"
+  ],
+  "tags": [
+   "positive-negative-pairs",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "slab-stack-network",
+    "what": "a network drawn as a nested stack of 3D slabs, reused in every row or panel, with colour telling which method's network it is"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Compare pretext tasks by drawing each as the same three-part chain (input, backbone, target) on the same real example, with the proposed one last, wider and tinted blue, so the reader sees only the target change.",
+  "suits": "Self-supervised or pre-training papers contrasting their pretext task with a few standard ones on a modality where one real sample can be reused, such as point clouds or images."
+ },
+ "tags": [
+  "design-family",
+  "shared-grammar",
+  "real-sample-reuse",
+  "3d-block-icons",
+  "bold-lettered-titles",
+  "powerpoint-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "(c) TREND explores object motion and semantic information via temporal forecasting in LiDAR sequence.",
+   "(a) Masked Autoencoding applies random masking and pre-train by reconstruction.",
+   "pre-train by pulling together positive pairs and pushing away negative pairs."
+  ]
+ },
+ "summary": "TREND is an unsupervised 3D pre-training method for LiDAR perception that forecasts future scans from the current one, so object motion decides what the backbone has to encode. Figure 1 compares three pretext schemes in one grammar of input scan, 3D backbone block and target. (a) Masked autoencoding hides three squares of a point cloud and reconstructs it; (b) contrastive learning feeds two views and pulls positive pairs together while pushing negatives apart in an ellipse of blue and orange nodes; (c) TREND, last and drawn with a blue backbone, maps the current scan to point clouds at t0, t1, ..., tk. One real LiDAR scan is reused as the input, and a small legend names the grey and blue blocks pre-trained backbones.",
+ "summary_zh": "TREND 通过预测未来 LiDAR 帧做无监督 3D 预训练。图1以同一画法（输入点云、3D 主干、目标）对比：(a) 掩码自编码，(b) 对比学习的正负样本对，(c) TREND 预测 t0 至 tk 时刻点云，主干为蓝色。",
+ "confidence": "high",
+ "notes": "Picture counts are read from the preview: 8 framed point-cloud tiles; the digest lists 33 placed bitmaps because the 3D block faces are also bitmaps. Which forecast scan belongs to which timestamp is not labelled individually, only the group. The pre-screen counted 10 pictures.",
+ "venue": "NeurIPS25"
+}

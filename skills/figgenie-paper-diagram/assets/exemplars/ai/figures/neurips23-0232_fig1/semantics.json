@@ -1,0 +1,474 @@
+{
+ "paper_id": "neurips23-0232",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "In-context algorithm selection (Post-ICL validation, Pre-ICL testing)",
+  "one_liner": "Theory that one transformer can implement base in-context learning algorithms and select among them per input sequence, by post-ICL validation or pre-ICL testing.",
+  "domain": [
+   "in-context learning theory",
+   "transformers",
+   "algorithm selection"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "each example shows a black-box transformer's behaviour on two kinds of input; a thick curved arrow ties it to a dashed TF box that opens the mechanism as a bottom-up stack of stages; two such pairs sit side by side",
+  "argues": "A single transformer can pick, per input sequence, which base algorithm or task to run, via validation losses after running algorithms or a distribution test before.",
+  "subject": "Two examples of in-context algorithm selection and the two constructed mechanisms, post-ICL validation and pre-ICL testing, drawn inside the transformer.",
+  "elements": [
+   {
+    "name": "Transformer",
+    "type": "module",
+    "role": "single transformer that gives Ridge with a different lambda for each noise level (Example 1) or LinReg for regression data and LogReg for classification data (Example 2)",
+    "drawn_as": "large grey rectangle with a thin black outline and grey up arrows below and above, two copies",
+    "container": "Example 1, Example 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Data 1 (Reg w/noise σ1), Data 2 (Reg w/noise σ2)",
+    "type": "data",
+    "role": "two input sequences of regression data with different observation noise",
+    "drawn_as": "text labels under grey up arrows",
+    "container": "Example 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Data 1 (Regression), Data 2 (Classification)",
+    "type": "data",
+    "role": "a regression sequence and a classification sequence",
+    "drawn_as": "text labels under grey up arrows",
+    "container": "Example 2",
+    "is_contribution": false
+   },
+   {
+    "name": "ŷ_{N+1}: Ridge_λ1(D, x_{N+1}), Ridge_λ2(D, x_{N+1})",
+    "type": "formula",
+    "role": "predictions: ridge with a lambda suited to each noise level",
+    "drawn_as": "formula line above the transformer box",
+    "container": "Example 1",
+    "is_contribution": null
+   },
+   {
+    "name": "ŷ_{N+1}: LinReg(D, x_{N+1}), LogReg(D, x_{N+1})",
+    "type": "formula",
+    "role": "predictions: linear regression for regression data, logistic regression for classification data",
+    "drawn_as": "formula line above the transformer box",
+    "container": "Example 2",
+    "is_contribution": null
+   },
+   {
+    "name": "TF",
+    "type": "container",
+    "role": "the inside of the transformer where the mechanism is constructed",
+    "drawn_as": "dashed grey box with a small TF tag at the bottom right, two copies",
+    "container": "Mechanism 1, Mechanism 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Train-validation split",
+    "type": "operation",
+    "role": "splits the in-context data into a training and a validation part",
+    "drawn_as": "very light lavender box at the bottom of the stack",
+    "container": "Mechanism 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Alg_1(D_train) ...... Alg_K(D_train)",
+    "type": "operation",
+    "role": "K base algorithms run on the training part",
+    "drawn_as": "full-width row of green cells with an ellipsis",
+    "container": "Mechanism 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Loss_1(D_val) ...... Loss_K(D_val)",
+    "type": "data",
+    "role": "validation loss of each base algorithm",
+    "drawn_as": "full-width row of green cells with an ellipsis",
+    "container": "Mechanism 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Which loss is the smallest?",
+    "type": "operation",
+    "role": "selects the algorithm with the smallest validation loss",
+    "drawn_as": "pale-yellow box at the top of the stack",
+    "container": "Mechanism 1",
+    "is_contribution": true
+   },
+   {
+    "name": "ŷ_{N+1} = Alg_k⋆(D_train, x_{N+1})",
+    "type": "formula",
+    "role": "output of the selected algorithm k⋆",
+    "drawn_as": "formula line above the TF box",
+    "container": "Mechanism 1",
+    "is_contribution": null
+   },
+   {
+    "name": "Which distribution?",
+    "type": "operation",
+    "role": "tests which data distribution the sequence comes from, before running any algorithm",
+    "drawn_as": "pale-yellow box above Data",
+    "container": "Mechanism 2",
+    "is_contribution": true
+   },
+   {
+    "name": "dist 1 ... dist K",
+    "type": "label",
+    "role": "outcomes of the test that route to the matching algorithm",
+    "drawn_as": "text beside two thick grey up arrows",
+    "container": "Mechanism 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Alg_1 ...... Alg_K",
+    "type": "operation",
+    "role": "K base algorithms, one per candidate distribution",
+    "drawn_as": "full-width row of green cells with an ellipsis",
+    "container": "Mechanism 2",
+    "is_contribution": true
+   },
+   {
+    "name": "ŷ_{N+1} = Alg_k⋆(D, x_{N+1})",
+    "type": "formula",
+    "role": "output of the selected algorithm",
+    "drawn_as": "formula line above the TF box with two diagonal grey arrows from Alg_1 and Alg_K",
+    "container": "Mechanism 2",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Data 1 and Data 2",
+    "to": "Transformer",
+    "what": "input sequences of two kinds",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformer",
+    "to": "ŷ outputs",
+    "what": "predictions with a different algorithm for each input kind",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "TF (Mechanism 1)",
+    "to": "Transformer (Example 1)",
+    "what": "the example is achieved by this mechanism inside the transformer",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "TF (Mechanism 2)",
+    "to": "Transformer (Example 2)",
+    "what": "the example is achieved by this mechanism inside the transformer",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Data",
+    "to": "Train-validation split",
+    "what": "in-context data enters the first stage",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Train-validation split",
+    "to": "Alg_1(D_train) ...... Alg_K(D_train)",
+    "what": "training part fed to every base algorithm",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Alg_1(D_train) ...... Alg_K(D_train)",
+    "to": "Loss_1(D_val) ...... Loss_K(D_val)",
+    "what": "each algorithm's loss on the validation part",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Loss_1(D_val) ...... Loss_K(D_val)",
+    "to": "Which loss is the smallest?",
+    "what": "losses compared",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Which loss is the smallest?",
+    "to": "ŷ_{N+1} = Alg_k⋆(D_train, x_{N+1})",
+    "what": "prediction of the best algorithm",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Data",
+    "to": "Which distribution?",
+    "what": "data is tested first",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Which distribution?",
+    "to": "Alg_1 ...... Alg_K",
+    "what": "outcome dist 1 to dist K selects the algorithm",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Alg_1 and Alg_K",
+    "to": "ŷ_{N+1} = Alg_k⋆(D, x_{N+1})",
+    "what": "the selected algorithm produces the prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Example 1: Ridge with different λ",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "one transformer gives ridge regression with a different lambda for data with noise sigma 1 and sigma 2",
+    "verdict": null
+   },
+   {
+    "label": "Mechanism 1: Post-ICL Validation",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "split the data, run K algorithms on the training part, compare validation losses, pick the smallest",
+    "verdict": "ours"
+   },
+   {
+    "label": "Example 2: Regression + Classification",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "one transformer performs linear regression on regression data and logistic regression on classification data",
+    "verdict": null
+   },
+   {
+    "label": "Mechanism 2: Pre-ICL Testing",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "test which distribution the data comes from, then run the matching algorithm",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2",
+    "kind": "identity",
+    "at": "titles Example 1 / Mechanism 1 and Example 2 / Mechanism 2",
+    "what": "pair each example with the mechanism that realises it"
+   },
+   {
+    "marker": "Example n, Mechanism n",
+    "kind": "section",
+    "at": "bold titles above each unit",
+    "what": "head the four units"
+   },
+   {
+    "marker": "k⋆, 1...K, λ1, λ2, σ1, σ2",
+    "kind": "identity",
+    "at": "formulas and cell labels",
+    "what": "index candidate algorithms, the selected one, ridge penalties and noise levels"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "ridge regression with two noise levels choosing two lambdas, and regression versus classification data choosing linear versus logistic regression",
+    "form": "named input sequences and formula outputs around a black-box transformer",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-black-box",
+    "drawn_as": "large plain grey rectangle labelled Transformer with grey up arrows for the input sequences and the predictions",
+    "parts": [
+     "Transformer box",
+     "input arrows",
+     "output arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "algorithm-selection-stack",
+    "drawn_as": "bottom-up stack of full-width boxes inside a dashed TF box: data preparation, a row of K algorithm cells, a row of K loss cells, a selector box",
+    "parts": [
+     "split box",
+     "Alg row",
+     "Loss row",
+     "selector box"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at Example 1 top-left, then the thick curved arrow to Mechanism 1, read bottom-up from Data to the output formula; the dotted rule leads to Example 2 and Mechanism 2, read the same way."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Four titled units in one wide row, two example-and-mechanism pairs split by a dotted vertical rule; in each pair a grey Transformer box on the left is tied by a thick curved black arrow, pointing left, to a dashed grey TF box on the right that holds a bottom-up stack of stages.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 3.82,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d6d6d6",
+    "used_for": "Transformer boxes and the dashed TF boxes"
+   },
+   {
+    "hex": "#ddf0d2",
+    "used_for": "rows of algorithm and loss cells"
+   },
+   {
+    "hex": "#fff8e1",
+    "used_for": "selection and test boxes (Which loss is the smallest?, Which distribution?)"
+   },
+   {
+    "hex": "#f5f5fc",
+    "used_for": "Train-validation split box"
+   },
+   {
+    "hex": "#797979",
+    "used_for": "up arrows between stages and the dashed TF outline"
+   },
+   {
+    "hex": "#424242",
+    "used_for": "two thick curved arrows from mechanisms to examples"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black on boxes and cells, 2.5 pt dark-grey curved arrows, dashed grey TF boxes, one dotted vertical divider",
+  "font": "sans (Avenir Next) 4-6.5 pt, bold 6 pt unit titles, serif (STIX) math lines set as small images",
+  "corners": "square",
+  "arrows": "short thick grey block-style up arrows for data flow; two large black curved arrows pointing left; two diagonal grey arrows in Mechanism 2",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey = the transformer (black box and its dashed inside), green = candidate algorithms or their losses, pale yellow = a selection or test step, lavender = data preparation",
+  "line_style_means": "dashed grey box = the inside of the transformer (TF); dotted vertical rule = separates the two example-and-mechanism pairs; thick curved arrow = the left box does this inside",
+  "shape_means": "large plain rectangle = black-box transformer; row of cells with an ellipsis = K candidates; single box = a step or decision",
+  "marker_means": "subscripts 1 to K index algorithms, k⋆ the chosen one; numbers 1 and 2 pair an example with its mechanism",
+  "emphasis": "bold unit titles, thick curved arrows linking mechanism to behaviour, pale-yellow selection boxes",
+  "reusable_patterns": [
+   "black-box behaviour on two kinds of input beside the mechanism opened as a dashed inner box, tied by one thick curved arrow",
+   "bottom-up stack of full-width boxes with grey up arrows inside a dashed container",
+   "rows of K cells with an ellipsis for candidate algorithms or losses",
+   "output formula line above the stack that names the selected candidate"
+  ],
+  "weaknesses": [
+   "the curved arrow runs from the explanation back to the example, against the left-to-right reading",
+   "math lines are small bitmaps",
+   "the TF tag in the corner is tiny"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "boxes, cells and arrows",
+   "formula lines rendered as small bitmaps",
+   "unit titles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey Transformer boxes with up arrows",
+   "dashed TF box with a stack of boxes",
+   "rows of green algorithm and loss cells",
+   "pale-yellow decision boxes",
+   "thick curved black arrows",
+   "dotted vertical divider"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "in-context learning",
+   "algorithm selection",
+   "transformers",
+   "post-ICL validation",
+   "pre-ICL testing",
+   "ridge regression",
+   "learning theory",
+   "statistician"
+  ],
+  "tags": [
+   "zoom-callout",
+   "equation-boxes",
+   "option-catalog"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Pair a black-box behaviour (what the model does on two kinds of input) with the mechanism inside it: draw the mechanism as a dashed inner box of stacked stages and tie it back with one thick curved arrow; repeat the grammar for a second pair to put two mechanisms side by side.",
+  "suits": "Theory or interpretability papers that construct a mechanism inside a model and want to show both the visible behaviour and the internal stages."
+ },
+ "tags": [
+  "paired-example-mechanism",
+  "dashed-inner-box",
+  "bottom-up-stack",
+  "thick-curved-arrow",
+  "grey-flat",
+  "sparse-colour"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.3)",
+   "4 In-context algorithm selection (p.12)"
+  ],
+  "evidence": [
+   "Figure 1 provides a pictorial illustration of the two mechanisms.",
+   "We construct two general mechanisms: Post-ICL validation, and Pre-ICL testing; See Figure 1 for a pictorial illustration."
+  ]
+ },
+ "summary": "The paper gives a statistical theory of in-context learning in transformers, including in-context algorithm selection. Figure 1 shows the idea in two example-and-mechanism pairs split by a dotted rule. In Example 1 a single grey Transformer returns ridge regression with a different lambda for data with different noise; in Example 2 it returns linear regression for regression data and logistic regression for classification data. A thick curved arrow ties each to a dashed TF box that opens the mechanism as a bottom-up stack: train-validation split, K algorithms, K validation losses and a pick of the smallest (post-ICL validation), or a distribution test routing to K algorithms (pre-ICL testing).",
+ "summary_zh": "论文建立了Transformer上下文学习的统计理论，并证明其能在上下文中选择算法。图1分两组：左边展示单个Transformer在不同数据上给出不同算法的行为，粗弧线箭头连到虚线框，展开为验证式或检验式两种选择机制。",
+ "confidence": "high",
+ "notes": "The four bitmaps in the SVG are the formula lines above the boxes (wide, 14 pt high), not data pictures. Primary kind chosen as model-anatomy (overview-plus-zoom) because the TF box opens the transformer; the pre-screen had concept-schematic first. Panel verdict null for the two example panels.",
+ "venue": "NeurIPS23"
+}

@@ -1,0 +1,520 @@
+{
+ "paper_id": "aaai24-0047",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "XKD",
+  "one_liner": "Self-supervised audio-video learning: masked autoencoders per modality, then cross-modal teacher-student distillation after aligning the two feature domains.",
+  "domain": [
+   "self-supervised learning",
+   "audio-visual representation learning",
+   "knowledge distillation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "audio"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "mirrored video and audio branches; three objectives (reconstruction, domain alignment, distillation) drawn as colour-coded arrows between feature distributions",
+  "argues": "Video and audio can teach each other: after aligning their feature domains, each modality's student is distilled from the other modality's teacher, on top of masked reconstruction.",
+  "subject": "Mirrored audio and video autoencoder-student and teacher branches with feature distributions linked by distillation and alignment arrows.",
+  "elements": [
+   {
+    "name": "video autoencoder (encoder + decoder) / audio autoencoder (encoder + decoder)",
+    "type": "module",
+    "role": "reconstructs the highly masked input of one modality so the encoder learns modality-specific information",
+    "drawn_as": "italic label above a tall encoder box and a decoder box",
+    "container": "top tracks",
+    "is_contribution": false
+   },
+   {
+    "name": "encoder",
+    "type": "module",
+    "role": "shared by the autoencoder path and the student path, one per modality",
+    "drawn_as": "tall white rounded rectangle, rotated label, 0.75 pt black outline",
+    "container": "top tracks",
+    "is_contribution": false
+   },
+   {
+    "name": "decoder",
+    "type": "module",
+    "role": "reconstructs the masked input from the encoder output",
+    "drawn_as": "tall white rounded rectangle, rotated label, beside the encoder",
+    "container": "top tracks",
+    "is_contribution": false
+   },
+   {
+    "name": "head",
+    "type": "module",
+    "role": "student head that turns the encoder output into the student feature",
+    "drawn_as": "small white rounded rectangle, rotated label, under the decoder",
+    "container": "top tracks",
+    "is_contribution": false
+   },
+   {
+    "name": "video student (encoder + head) / audio student (encoder + head)",
+    "type": "module",
+    "role": "student that is distilled from the cross-modal teacher",
+    "drawn_as": "italic label under the encoder and head",
+    "container": "top tracks",
+    "is_contribution": null
+   },
+   {
+    "name": "f_s^v / f_s^a",
+    "type": "data",
+    "role": "feature distribution of the video / audio student",
+    "drawn_as": "bell curve at the end of the student branch, grey-green and wide for video, pale for audio",
+    "container": "top tracks",
+    "is_contribution": null
+   },
+   {
+    "name": "audio teacher (encoder + head) / video teacher (encoder + head)",
+    "type": "module",
+    "role": "gives cross-modal supervision to the student of the opposite modality",
+    "drawn_as": "hatched grey encoder and head boxes followed by a white refine box",
+    "container": "bottom tracks",
+    "is_contribution": true
+   },
+   {
+    "name": "refine",
+    "type": "module",
+    "role": "feature refinement, one half of the domain-alignment step",
+    "drawn_as": "white rounded box with rotated label after each teacher head",
+    "container": "bottom tracks",
+    "is_contribution": true
+   },
+   {
+    "name": "f_t^a / f_t^v",
+    "type": "data",
+    "role": "refined teacher feature distribution",
+    "drawn_as": "narrow bell curve, pale for audio and darker for video",
+    "container": "bottom tracks",
+    "is_contribution": null
+   },
+   {
+    "name": "masked reconstruction",
+    "type": "operation",
+    "role": "objective: reconstruct highly masked inputs",
+    "drawn_as": "thick green arrow with a green italic label above each autoencoder, pointing along its data flow",
+    "container": "top tracks",
+    "is_contribution": false
+   },
+   {
+    "name": "cross-modal knowledge distillation",
+    "type": "operation",
+    "role": "objective: each student distils from the cross-modal teacher",
+    "drawn_as": "two thick red curved arrows from teacher bell up to student bell, red italic labels",
+    "container": "centre",
+    "is_contribution": true
+   },
+   {
+    "name": "domain alignment",
+    "type": "operation",
+    "role": "minimises the discrepancy between the video and audio feature distributions",
+    "drawn_as": "four short blue double-headed arrows beside the bells, blue italic labels between the halves",
+    "container": "centre",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "masked global clip (x̂ v g) and smaller crop (x v l)",
+    "to": "video encoder",
+    "what": "two inputs entering the shared video encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "encoder",
+    "to": "decoder",
+    "what": "latent for reconstruction of the masked input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "decoder",
+    "to": "reconstruction (x′ g)",
+    "what": "reconstructed frames or spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "encoder",
+    "to": "head",
+    "what": "student path splits off the encoder output (vertical arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "head",
+    "to": "f_s^v / f_s^a",
+    "what": "student feature distribution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_a^g / x_v^g",
+    "to": "teacher encoder, head, refine, f_t",
+    "what": "teacher input passes encoder, head and refine to the teacher feature",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_t^a",
+    "to": "f_s^v",
+    "what": "cross-modal knowledge distillation: audio teacher supervises the video student",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_t^v",
+    "to": "f_s^a",
+    "what": "cross-modal knowledge distillation: video teacher supervises the audio student",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_s^v",
+    "to": "f_s^a",
+    "what": "domain alignment between the two student features",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_t^a",
+    "to": "f_t^v",
+    "what": "domain alignment between the two teacher features",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "masked input",
+    "to": "reconstruction",
+    "what": "green arrow labelled masked reconstruction runs above each autoencoder",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "x̂, x′, x with superscripts g, l and subscripts v, a",
+    "kind": "identity",
+    "at": "beside every picture",
+    "what": "names the masked input, reconstruction and views of each modality (g and l presumably global and local views)"
+   },
+   {
+    "marker": "f with subscript s or t and superscript v or a",
+    "kind": "identity",
+    "at": "under each bell curve",
+    "what": "student (s) or teacher (t) feature of the video (v) or audio (a) modality"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "masked video clip x̂_v^g",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four frames stacked with a diagonal offset; grey squares hide most patches, a few olive and picture patches stay visible"
+   },
+   {
+    "what": "smaller crop of the clip x_v^l",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two offset frames, unmasked"
+   },
+   {
+    "what": "reconstructed video x′_v^g",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "offset stack of frames at the decoder output"
+   },
+   {
+    "what": "video frames x_v^g fed to the video teacher",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "offset stack of frames, unmasked"
+   },
+   {
+    "what": "masked audio spectrogram x̂_a^g",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grid of grey squares with only a few coloured spectrogram patches showing"
+   },
+   {
+    "what": "reconstructed spectrogram x′_a^g",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "single purple-to-orange spectrogram at the decoder output"
+   },
+   {
+    "what": "spectrogram crop x_a^l",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "smaller unmasked crop"
+   },
+   {
+    "what": "spectrogram x_a^g fed to the audio teacher",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "single unmasked spectrogram"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one cricket-match video clip and its audio spectrogram, shown masked, cropped, reconstructed and as teacher input",
+    "form": "frame stacks and spectrogram images placed beside each module",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "teacher-student",
+    "drawn_as": "plain white student encoder and head above a hatched teacher encoder and head plus a refine box, joined by a thick red curved arrow from the teacher bell to the student bell",
+    "parts": [
+     "student encoder + head",
+     "hatched teacher encoder + head",
+     "refine box",
+     "red curved arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "masked-patch-grid",
+    "drawn_as": "frames and spectrogram cut into a grid of squares, most filled grey (masked), a few left showing the picture",
+    "parts": [
+     "grey squares",
+     "visible patches"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "encoder and decoder as tall rounded rectangles with rotated labels; the encoder output also feeds a head box",
+    "parts": [
+     "encoder",
+     "decoder",
+     "head"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "feature-distribution-bell",
+    "drawn_as": "a bell curve at the end of each branch, width and shade differing by modality, double arrows between bells for alignment",
+    "parts": [
+     "bell curve",
+     "f label",
+     "blue double arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "a video clip as a stack of diagonally offset frames",
+    "parts": [
+     "frame stack"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts top-left at the masked video input, follows the thick black arrows through encoder, head and bell, crosses to the mirrored audio half, then the red and blue arrows in the centre tie students to teachers."
+ },
+ "layout": {
+  "arrangement": "other",
+  "arrangement_note": "Mirror-symmetric 2x2 of tracks: the top tracks hold the autoencoder and student (video flows left to right, audio right to left), the bottom tracks the hatched teachers; the two halves meet in the centre, where red curves and blue double arrows connect the feature bells.",
+  "panel_count": 1,
+  "lanes": "four horizontal tracks: video autoencoder and student (top-left), audio autoencoder and student (top-right), audio teacher (bottom-left), video teacher (bottom-right)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.95,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey masked patches over the frames and spectrograms"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "fill of encoder, decoder, head and refine boxes"
+   },
+   {
+    "hex": "#00b050",
+    "used_for": "masked-reconstruction arrows and labels"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "domain-alignment arrows and labels"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "cross-modal distillation curved arrows",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red italic label text of the distillation arrows"
+   },
+   {
+    "hex": "#7e8c35",
+    "used_for": "olive visible patches in the masked video clip"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.75 pt black outlines on the 12 white module boxes, 1 pt white gaps between masked patches; arrows are filled block shapes with no outline",
+  "font": "serif (Cambria Math), italic labels at 8-9 pt, symbols at 11.5 pt, no bold",
+  "corners": "rounded",
+  "arrows": "thick black block arrows with triangular heads; thick green straight arrows; thick red curved arrows at about 70% opacity with the head at the student; short blue double-headed arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "green = masked reconstruction, blue = domain alignment, red = cross-modal knowledge distillation (each on its arrows and its italic label); bell shade: darker = video features, paler = audio features; grey squares = masked patches",
+  "line_style_means": "thick black arrows = data flow; thick red curves = teacher-to-student distillation; short blue double arrows = alignment between two distributions; green arrow = reconstruction along the autoencoder",
+  "shape_means": "tall rounded rectangle with rotated text = encoder or decoder; small rounded rectangle = head or refine; bell curve = feature distribution; hatched fill = teacher modules (no key given); grey square = masked patch",
+  "marker_means": "x with hat or prime and superscripts g and l name the inputs and outputs; f with subscript s or t and superscript v or a names student and teacher features per modality",
+  "emphasis": "three saturated colours for the three objectives stand out against a grey-and-black body, and the red curves cut across the centre where the eye lands",
+  "reusable_patterns": [
+   "mirror-symmetric two-modality layout with the cross-modal links in the centre",
+   "colour-coded objective arrows with matching coloured italic labels instead of a legend",
+   "hatched fill for teacher modules, plain white for students",
+   "bell-curve glyphs on feature outputs with double arrows between them for distribution alignment",
+   "one sample clip reused in every view, with masked inputs drawn as grey patch grids",
+   "rotated labels inside tall boxes to save width"
+  ],
+  "weaknesses": [
+   "rotated text inside the boxes is hard to read",
+   "blue double arrows overlap the red arrowheads at the bells",
+   "the hatched fill is not explained by a key",
+   "which encoder is shared by autoencoder and student is only visible from the vertical split arrow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "video frames of one sample clip (cricket scene) reused for every video view",
+   "the audio spectrogram of the clip in a purple-to-orange colour map, reused for every audio view"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "encoder, decoder, head and refine boxes",
+   "block arrows in black, green, blue and red",
+   "grey masking grids over frames and spectrograms",
+   "bell-curve glyphs"
+  ],
+  "unknown": [
+   "which dataset the sample clip comes from"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "masked patch grids over frame stacks and spectrograms",
+   "tall rounded encoder and decoder boxes with rotated text",
+   "hatched teacher boxes",
+   "bell-curve feature distributions",
+   "red curved distillation arrows",
+   "blue double alignment arrows",
+   "frame stacks and spectrogram images"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "cross-modal knowledge distillation",
+   "domain alignment",
+   "video representation learning",
+   "masked reconstruction",
+   "audio-visual",
+   "self-supervised",
+   "teacher-student"
+  ],
+  "tags": [
+   "distribution-glyph",
+   "flow-type-arrows",
+   "matrix-cell-grid",
+   "stacked-cards",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "mirrored-two-branch-layout",
+    "what": "two modalities or views drawn as mirror images, flows converging on the centre where the cross-branch links are drawn"
+   },
+   {
+    "name": "rotated-label-boxes",
+    "what": "tall module boxes whose names are written rotated by 90 degrees inside them"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each objective one saturated colour used on its arrow and on a same-colour italic label over a grey-and-black body, so the losses are told apart without a legend; mirror the two modalities so the cross-modal links meet in the centre.",
+  "suits": "multi-objective self-supervised frameworks with two symmetric branches (two modalities, two views, teacher and student) where several losses tie together the same few features."
+ },
+ "tags": [
+  "mirrored two-modality layout",
+  "colour-coded objectives",
+  "hatched teacher modules",
+  "bell-curve distributions",
+  "real frames and spectrograms",
+  "serif italic labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3.1 Overview (p.2)"
+  ],
+  "evidence": [
+   "Masked reconstruction: autoencoders are used to learn representations from individual modalities through reconstruction of highly masked inputs.",
+   "two domains are aligned through feature refinement and minimizing domain discrepancies.",
+   "The students are used to distil knowledge from their respective cross-modal teachers."
+  ]
+ },
+ "summary": "XKD is a self-supervised framework that learns video and audio representations together: each modality has a masked autoencoder, and the student of one modality is distilled from the teacher of the other after a domain-alignment step. The figure draws this as a mirrored 2x2 layout. Video flows left to right on the left and audio right to left on the right; the top tracks hold the masked autoencoder and student (encoder, decoder, head), the bottom tracks the hatched teachers with a refine box. Bell curves mark feature distributions, and three colours mark the three objectives: green reconstruction, blue domain alignment, red cross-modal distillation. Real frames and spectrograms of one sample clip appear in every view.",
+ "summary_zh": "XKD 的总览图：视频与音频左右镜像排布，上排是带掩码重建的自编码器和学生网络，下排是斜线填充的教师网络；钟形曲线表示特征分布，绿、蓝、红三色分别标出掩码重建、域对齐和跨模态蒸馏，各视图都用同一段板球视频及其频谱图作样例。",
+ "confidence": "high",
+ "notes": "Kind kept as the prior (model-anatomy, objective-graph); the caption speaks of 3 steps but the figure shows them as simultaneous colour-coded objectives, not as a sequence, so stage-pipeline is not listed. The meaning of the hatched fill (teacher) and of the superscripts g and l (global and local view) is read from the drawing; the provided paper text does not define them. Picture counts are by eye (the digest counts 22 tiles; some sit under the masking grids). The bell glyphs are not vector fills, so their shades are described only in words.",
+ "venue": "AAAI24"
+}

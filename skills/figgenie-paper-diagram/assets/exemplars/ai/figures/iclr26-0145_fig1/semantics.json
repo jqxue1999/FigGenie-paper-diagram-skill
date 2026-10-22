@@ -1,0 +1,485 @@
+{
+ "paper_id": "iclr26-0145",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "World-In-World",
+  "one_liner": "An open platform that benchmarks generative world models by closed-loop embodied task success rather than visual quality.",
+  "domain": [
+   "world models",
+   "embodied agents",
+   "closed-loop benchmark"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "actor-interaction"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "a question banner, a three-zone platform band (models, platform with a policy, four task cards) and an answer banner holding a leaderboard tile and three schematic plots",
+  "argues": "World models should be ranked by embodied task success, not visual quality; the figure poses the question and shows the platform, leaderboard and scaling findings.",
+  "subject": "A closed-loop platform linking video world models to an embodied policy and four task environments, with a leaderboard and three schematic result plots.",
+  "elements": [
+   {
+    "name": "Do Better Video Models Lead to Higher Embodied Success?",
+    "type": "label",
+    "role": "the research question of the paper",
+    "drawn_as": "blue-to-purple gradient banner across the top with white bold italic text",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "SoTA video models",
+    "type": "container",
+    "role": "the world models under test: Wan, Cosmos, SVD, Runway, LTX, Hunyuan",
+    "drawn_as": "light-blue rounded zone with six logo and grey italic name pairs and a bold italic caption",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "World-In-World: an open platform",
+    "type": "container",
+    "role": "the benchmark platform that connects models, a policy and tasks",
+    "drawn_as": "rounded box with a brown outline, big purple gradient name and an underlined italic subtitle",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Embodied Policy",
+    "type": "actor",
+    "role": "the agent that plans with a world model and acts in the tasks",
+    "drawn_as": "purple line-art robot at the centre of the platform box, an italic label on the arrow to the right zone",
+    "container": "World-In-World",
+    "is_contribution": true
+   },
+   {
+    "name": "small video-window icon",
+    "type": "icon",
+    "role": "stands for the video that the models generate for the policy (read from the layout)",
+    "drawn_as": "blue and purple video-player glyph at the tail of the arrow into the robot",
+    "container": "World-In-World",
+    "is_contribution": null
+   },
+   {
+    "name": "Unified Action",
+    "type": "operation",
+    "role": "the standardized action API from the policy to the world models",
+    "drawn_as": "dark-blue pill label under a left-pointing grey-blue block arrow",
+    "container": "World-In-World",
+    "is_contribution": true
+   },
+   {
+    "name": "Closed-Loop Interaction",
+    "type": "operation",
+    "role": "the loop in which the environment answers the policy's actions",
+    "drawn_as": "dark-blue pill label under a left-pointing grey-blue block arrow from the task zone",
+    "container": "World-In-World",
+    "is_contribution": true
+   },
+   {
+    "name": "Active Recognition / Navigation / Question Answering / Manipulation",
+    "type": "container",
+    "role": "the four closed-loop task environments",
+    "drawn_as": "four cards in a light-purple zone, each with a line icon, a bold title and a scene render",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "World models are ranked by embodied success, not flawless visuals",
+    "type": "label",
+    "role": "headline answer of the paper",
+    "drawn_as": "dark blue-to-purple rounded banner with white bold italic text over a translucent grey panel",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Leaderboard",
+    "type": "data",
+    "role": "ranking of models by task success and generation quality",
+    "drawn_as": "dark rounded screenshot tile with rank badges, names, coloured bars and two metric columns",
+    "container": "answer banner",
+    "is_contribution": true
+   },
+   {
+    "name": "Data Scaling",
+    "type": "chart",
+    "role": "task success rises with the number of seen examples, one line per model",
+    "drawn_as": "schematic plot: axis arrows, italic labels Task success and Seen examples, two rising lines ending in model logos",
+    "container": "answer banner",
+    "is_contribution": true
+   },
+   {
+    "name": "Inference-time Scaling",
+    "type": "chart",
+    "role": "task success rises with inference count",
+    "drawn_as": "schematic plot: axis arrows, italic labels Task success and Inference count, two rising lines ending in model logos",
+    "container": "answer banner",
+    "is_contribution": true
+   },
+   {
+    "name": "Correlation",
+    "type": "chart",
+    "role": "relation between task success and visual quality across models",
+    "drawn_as": "schematic scatter with axis arrows labelled Task success and Visual quality and six model logos as points",
+    "container": "answer banner",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "SoTA video models",
+    "to": "Embodied Policy",
+    "what": "predictions from the world models go to the policy",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embodied Policy",
+    "to": "SoTA video models",
+    "what": "actions are passed through a unified action interface",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embodied Policy",
+    "to": "task cards",
+    "what": "the policy acts in the four environments",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "task cards",
+    "to": "Embodied Policy",
+    "what": "observations and outcomes return in closed-loop interaction",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "answer banner",
+    "to": "Leaderboard, Data Scaling, Inference-time Scaling, Correlation",
+    "what": "the claim holds four result tiles",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "logos in SoTA video models",
+    "to": "logos in the plots",
+    "what": "the same logos mark the same models in the plots",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "SoTA video models",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "six world-model families as logo and name pairs: Wan, Cosmos, SVD, Runway, LTX, Hunyuan",
+    "verdict": "setting"
+   },
+   {
+    "label": "World-In-World: an open platform",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "a robot policy exchanging Unified Action with the video models and Closed-Loop Interaction with the task environments",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "four task cards, each a line icon, a name and a scene render: Active Recognition, Navigation, Question Answering, Manipulation",
+    "verdict": "setting"
+   },
+   {
+    "label": "World models are ranked by embodied success, not flawless visuals",
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "a leaderboard screenshot and three schematic plots: data scaling, inference-time scaling and correlation of task success with visual quality",
+    "verdict": "result"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "scene renders of the four task environments: an indoor room, a top-down apartment plan with a green path, a 3D house with a path, a robot arm over an orange table with coloured blocks",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "one render under each task title in the light-purple zone, sizes between 46 x 40 and 59 x 22 pt"
+   },
+   {
+    "what": "leaderboard screenshot: ranks 1 to 3 with Wan2.1, SVD and Cosmos, task success 62.6 %, 61.0 %, 60.3 % and generation quality 0.380, 0.363, 0.360",
+    "content": "screenshot",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "dark rounded tile with coloured progress bars, placed at the left of the answer banner"
+   },
+   {
+    "what": "three schematic plots without ticks: task success against seen examples, against inference count and against visual quality, with model logos as markers",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "white axis arrows and italic white labels on a translucent grey panel; Wan and SVD logos at the ends of the lines; six logos scattered in the correlation plot"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "brand logos of Wan, Cosmos, SVD, Runway, LTX and Hunyuan",
+    "stands_for": "the video world models under test",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 16
+   },
+   {
+    "depicts": "purple line-art robot",
+    "stands_for": "the embodied policy",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "blue and purple video-player window",
+    "stands_for": "generated video",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "line icons: eye with object, route map, robot head with speech bubble, robot arm",
+    "stands_for": "the four task types",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "leaderboard rows: Wan2.1 (Alibaba) 62.6 % and 0.380, SVD (Stability AI) 61.0 % and 0.363, Cosmos (Nvidia) 60.3 % and 0.360 for task success and generation quality",
+    "form": "dark leaderboard tile with coloured bars",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "a robot policy in the middle with a pair of arrows to the world models (Unified Action) and a pair of arrows with the task environments (Embodied Policy out, Closed-Loop Interaction back)",
+    "parts": [
+     "robot",
+     "four block arrows",
+     "pill labels"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "leaderboard-table",
+    "drawn_as": "dark rounded table tile with rank badges, model names, coloured progress bars and metric columns",
+    "parts": [
+     "rank badges",
+     "names",
+     "bars",
+     "metric columns"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "scaling-law-plot",
+    "drawn_as": "axis arrows without ticks and two rising lines with different slopes, model logos at the line ends",
+    "parts": [
+     "axes",
+     "lines",
+     "logo markers"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the question banner on top, then the light-blue models zone, the platform box and its arrows, the light-purple task cards at the right, and finally the answer banner with the leaderboard and the three plots."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A gradient question banner on top; a middle band with three zones (light-blue models, a brown-outlined platform box with a robot, light-purple task cards) joined by four horizontal block arrows; a dark gradient answer banner at the bottom holding a leaderboard tile and three schematic plots on a translucent grey panel.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.89,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c6d9f1",
+    "used_for": "light-blue zone of the video models"
+   },
+   {
+    "hex": "#ccc1da",
+    "used_for": "light-purple zone of the task cards"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "translucent grey panel behind the leaderboard and plots",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "platform name, robot icon and video icon"
+   },
+   {
+    "hex": "#8fa4be",
+    "used_for": "grey-blue block arrows between the zones"
+   },
+   {
+    "hex": "#984807",
+    "used_for": "brown outline of the platform box"
+   },
+   {
+    "hex": "#0d0d0d",
+    "used_for": "dark ground of the leaderboard tile"
+   },
+   {
+    "hex": "#7ea6dc",
+    "used_for": "left end of the blue-to-purple banners",
+    "approx": true
+   },
+   {
+    "hex": "#4a2c6e",
+    "used_for": "right end of the blue-to-purple banners",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "2.75 pt grey-blue block arrows, 1.5 pt brown platform outline, 0.75 pt light-grey plot axes",
+  "font": "sans (Arial) bold italic 6.5-12.5 pt; banner text 12.5 pt white bold italic; zone captions 8-10 pt; grey italic logo names 8.5 pt",
+  "corners": "rounded",
+  "arrows": "four wide flat grey-blue block arrows (two right, two left) with dark pill labels on the lower two, small white axis arrows in the plots",
+  "rendering": "mixed",
+  "effects": "gradient banners and a translucent grey panel",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue zone = the models under test, purple zone = the environments, purple name and robot = the proposed platform; dark gradient banners = the question and the answer; logos keep their brand colours and return as markers in the plots",
+  "line_style_means": "wide grey-blue block arrows = directions of interaction; the brown outline marks the platform boundary",
+  "shape_means": "rounded zones and cards; dark pill labels name the interfaces on the return arrows; the plots are drawn as axis arrows only",
+  "marker_means": "no numbers; italic labels on the arrows name the interfaces (Embodied Policy, Unified Action, Closed-Loop Interaction)",
+  "emphasis": "two white bold-italic banners state the question and the answer; the large purple platform name; the dark leaderboard tile",
+  "reusable_patterns": [
+   "question banner on top and answer banner at the bottom framing the content",
+   "brand logos reused as markers in the schematic result plots",
+   "platform box with a policy icon whose arrows lead to a models zone on the left and a tasks zone on the right",
+   "interface names as dark pill labels on the return arrows",
+   "four task cards each with a line icon, a name and a scene render",
+   "schematic plots: axis arrows with italic labels and logos at the line ends",
+   "dark leaderboard screenshot next to translucent plots on one grey panel"
+  ],
+  "weaknesses": [
+   "white text on the gradient banner has uneven contrast at its blue end",
+   "the three plots are schematic and carry no values",
+   "the small video icon near the first arrow is not explained in the figure or caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "scene renders of the four environments",
+   "leaderboard screenshot with real values"
+  ],
+  "stock": [
+   "brand logos of the six video models",
+   "robot icon, task line icons and video-window icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "zones, platform box, block arrows, pill labels, banners and schematic plots"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "question banner",
+   "model logos with names",
+   "platform box with robot policy",
+   "grey-blue block arrows with pill labels",
+   "four task cards with scene renders",
+   "leaderboard screenshot",
+   "three schematic plots with logo markers",
+   "answer banner"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "world models",
+   "embodied agents",
+   "closed-loop evaluation",
+   "video generation",
+   "benchmark",
+   "leaderboard",
+   "scaling law",
+   "task success versus visual quality"
+  ],
+  "tags": [
+   "claim-banner",
+   "brand-logo-icon",
+   "schematic-plot",
+   "title-branding",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "logos-as-plot-markers",
+    "what": "brand logos of the compared models used as the markers or line-end labels in schematic result plots"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Frame a benchmark teaser with a question banner on top and an answer banner below; in between put the platform box with a policy icon whose arrows join model logos on one side to task cards on the other, then close with a leaderboard tile and tick-less schematic plots that reuse the logos as markers.",
+  "suits": "Benchmark or platform papers that want one overview showing the question, the platform, the tasks, the models and the headline findings."
+ },
+ "tags": [
+  "gradient banners",
+  "pastel zones",
+  "brand logos",
+  "block arrows with pill labels",
+  "scene render cards",
+  "dark leaderboard tile"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.1)"
+  ],
+  "evidence": [
+   "We introduce the first open benchmark to evaluate world models by closed-loop task success",
+   "analyze the link between task success and visual quality, and investigate scaling laws",
+   "World-in-World provides a unified online planning strategy and a standardized action API"
+  ]
+ },
+ "summary": "World-In-World is an open platform that benchmarks generative world models by how much they help an embodied agent succeed in closed-loop tasks, instead of by visual quality. Figure 1 is a teaser in three bands. A gradient banner asks 'Do Better Video Models Lead to Higher Embodied Success?'. Below, a light-blue zone lists six video models by logo and name, a brown-outlined platform box holds a purple robot policy with arrows labelled Embodied Policy, Unified Action and Closed-Loop Interaction, and a light-purple zone shows four task cards (Active Recognition, Navigation, Question Answering, Manipulation) with scene renders. A dark banner states 'World models are ranked by embodied success, not flawless visuals' over a leaderboard screenshot and three schematic plots for data scaling, inference-time scaling and correlation.",
+ "summary_zh": "World-In-World 是一个开放平台，用闭环具身任务成功率而非画面质量来评测生成式世界模型。图为三段式预告：顶部提问横幅，中间左为视频模型徽标、居中为带机器人策略的平台框、右为四张任务卡，底部深色横幅给出排行榜与三张示意曲线。",
+ "confidence": "high",
+ "notes": "No body paragraph mentions the figure; roles come from the caption, abstract and figure text. Prior kinds kept (contribution-mosaic first). Arrow meanings are read from the labels and layout: models to policy, policy to models (Unified Action), policy to tasks (Embodied Policy), tasks to policy (Closed-Loop Interaction). The two gradient banners are placed bitmaps in the digest. The light-grey fill #ededed in the digest could not be matched to a single element.",
+ "venue": "ICLR26"
+}

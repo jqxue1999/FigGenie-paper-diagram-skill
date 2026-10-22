@@ -1,0 +1,379 @@
+{
+ "paper_id": "neurips25-0114",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MoniTor",
+  "one_liner": "Training-free online video anomaly detection: a VLM captions streaming frames and an LLM scores anomalies using memory, a scoring queue and behaviour prediction.",
+  "domain": [
+   "video anomaly detection",
+   "online surveillance",
+   "training-free VLM and LLM"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "scope-overview"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "four columns, each following one real CCTV clip from its frame to a plain caption, then a scored caption with prediction, then a class chip",
+  "argues": "MoniTor turns streaming surveillance clips into captions, predicted next behaviour and anomaly scores, and names the incident across different cameras: Abuse, Robbery, Explosion, Fighting.",
+  "subject": "Four real CCTV clips followed from frame to caption to scored caption plus prediction, each ending in a class chip.",
+  "elements": [
+   {
+    "name": "Monitor",
+    "type": "icon",
+    "role": "names the system; logo lockup placed above the second column",
+    "drawn_as": "glossy cartoon CCTV camera next to the word 'Monitor' in blue-violet gradient lettering",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "person icon (4 copies)",
+    "type": "icon",
+    "role": "marks the video input at the head of each column; its meaning is not stated",
+    "drawn_as": "small blue outline head-and-shoulders beside each clip frame",
+    "container": "each column",
+    "is_contribution": false
+   },
+   {
+    "name": "camera icon (8 copies)",
+    "type": "icon",
+    "role": "sits beside both caption boxes of every column, presumably marking MoniTor as the producer of the text; not stated",
+    "drawn_as": "small blue outline CCTV camera at the left edge of a text box",
+    "container": "each column",
+    "is_contribution": null
+   },
+   {
+    "name": "Caption: '...'",
+    "type": "text-block",
+    "role": "plain description of what happens in the clip, e.g. a man climbs a fence while a dog runs through the gate",
+    "drawn_as": "white rounded box with dark navy outline, bold 'Caption:' lead-in, four to six lines",
+    "container": "each column",
+    "is_contribution": false
+   },
+   {
+    "name": "Caption with score 0.4 / 1.0 / 0.8 / 0.7",
+    "type": "text-block",
+    "role": "longer second caption headed by a score, followed by a Prediction and an Anomaly Score; the paper links this to its score queue and prediction mechanism",
+    "drawn_as": "taller white rounded box with navy outline, bold field names, key words in red or yellow",
+    "container": "each column",
+    "is_contribution": true
+   },
+   {
+    "name": "Prediction",
+    "type": "text-block",
+    "role": "forecast of what happens next in the scene, e.g. the dog chases a man, two men flee the flames",
+    "drawn_as": "bold 'Prediction:' paragraph inside the scored-caption box",
+    "container": "Caption with score",
+    "is_contribution": true
+   },
+   {
+    "name": "Anomaly Score : 0.5 / 1.0 / 0.9 / 0.7",
+    "type": "data",
+    "role": "final per-clip anomaly score, last line of the scored box",
+    "drawn_as": "bold label with the value in plain text",
+    "container": "Caption with score",
+    "is_contribution": true
+   },
+   {
+    "name": "highlighted words (climbing over, chases, pointing at a door, shot, kicked, fire, fighting; gas pump, gas station)",
+    "type": "label",
+    "role": "mark the anomalous actions in red and scene objects in yellow; meaning not explained",
+    "drawn_as": "coloured text spans inside the scored captions",
+    "container": "Caption with score",
+    "is_contribution": null
+   },
+   {
+    "name": "Abuse",
+    "type": "label",
+    "role": "incident class of column 1",
+    "drawn_as": "bold black text on a light green rectangular chip",
+    "container": "column 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Robbery",
+    "type": "label",
+    "role": "incident class of column 2",
+    "drawn_as": "bold black text on an amber chip",
+    "container": "column 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Explosion",
+    "type": "label",
+    "role": "incident class of column 3",
+    "drawn_as": "bold black text on a pale blue chip",
+    "container": "column 3",
+    "is_contribution": false
+   },
+   {
+    "name": "Fighting",
+    "type": "label",
+    "role": "incident class of column 4",
+    "drawn_as": "bold black text on a saturated red chip",
+    "container": "column 4",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "person icon",
+    "to": "surveillance frame",
+    "what": "the video supplied for this column",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "surveillance frame",
+    "to": "Caption: '...'",
+    "what": "clip described in words",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Caption: '...'",
+    "to": "Caption with score",
+    "what": "caption carried into the scored caption with prediction",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Prediction",
+    "to": "Anomaly Score",
+    "what": "score follows the predicted behaviour inside the same box",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Caption with score",
+    "to": "class chip",
+    "what": "outcome class named under each column",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "camera icon",
+    "to": "text boxes",
+    "what": "marks the boxes that the system writes",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "four CCTV still frames: a man at a gate with a dog, a man at a shop door, a burning gas station at night, a crowd fighting in a subway station",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "one still per clip, about 67x34 pt, inside a rounded dark navy frame, camera timestamp overlays left visible"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue outline head and shoulders",
+    "stands_for": "the user or video source (not stated)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "blue outline CCTV camera",
+    "stands_for": "MoniTor as the writer of the captions (inferred from the logo)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "glossy cartoon CCTV camera with blue lens plus 'Monitor' wordmark in gradient lettering",
+    "stands_for": "the MoniTor system",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "four real clips with MoniTor's captions, predictions and scores, e.g. a man sets fire to a gas pump, predicted 'Two men flee the scene as flames engulf the gas pump', score 0.9, class Explosion",
+    "form": "stacked rounded text boxes with red and yellow highlighted key words, one stack per column",
+    "real_values": true
+   }
+  ],
+  "idioms": [],
+  "reading_order": "Start at the first clip at top left and read each column top to bottom (frame, caption, scored caption with prediction and score, class chip), then move right; the Monitor logo heads the figure."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Four vertical lanes, one per clip, each stacking frame, plain caption, scored caption and a class chip at the foot; box heights and starting points are staggered between lanes and the Monitor logo sits above the second lane.",
+  "panel_count": 1,
+  "lanes": "4 aligned columns (Abuse, Robbery, Explosion, Fighting), each with the same stack of frame, caption, scored caption, class chip",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.91,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#172c51",
+    "used_for": "thin outlines of every frame and text box"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "Abuse chip fill"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Robbery chip fill and yellow highlighted words (gas pump, gas station)"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "Explosion chip fill"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "Fighting chip fill and red highlighted anomaly words"
+   },
+   {
+    "hex": "#2a8fe8",
+    "used_for": "line-art person and camera icons",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "thin dark navy rounded outlines on frames and text boxes, drawn as filled shapes rather than strokes; none on the class chips",
+  "font": "5.5 pt body with bold field names and bold 6 pt class labels; the preview shows a Times-like serif body although the SVG declares Helvetica Neue",
+  "corners": "rounded",
+  "arrows": "none drawn; order comes from vertical stacking",
+  "rendering": "flat-vector",
+  "effects": "none, except the gradient lettering of the bitmap Monitor wordmark",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "chip colour only names the class (green Abuse, amber Robbery, pale blue Explosion, red Fighting); red text marks anomalous actions and yellow text marks scene objects, not explained in the figure; blue = the person and camera icons",
+  "line_style_means": "one outline style for every frame and box, so line style carries nothing",
+  "shape_means": "rounded rectangle = clip frame or text box; flat rectangular chip = class label; camera icon = MoniTor step; person icon = user input",
+  "marker_means": "numbers after 'Caption with score' and 'Anomaly Score' are data values between 0 and 1, not step markers",
+  "emphasis": "saturated class chip at the foot of each column, red highlighted action words and the Monitor logo as headline",
+  "reusable_patterns": [
+   "identical four-level stack repeated per example column",
+   "coloured class chip as the column footer that names the outcome",
+   "key words coloured inside generated text to point at the evidence",
+   "small camera icon beside each text box to mark which system wrote it",
+   "real CCTV still with its timestamp overlay as the column input"
+  ],
+  "weaknesses": [
+   "no arrows or step marks, so the order of the two caption boxes is inferred from stacking",
+   "meaning of the person and camera icons and of red versus yellow text is not given in the caption",
+   "5.5 pt text is small for a double-column width"
+  ]
+ },
+ "resources": {
+  "own": [
+   "four real CCTV frames with timestamps",
+   "real captions, predictions and anomaly scores produced by the method"
+  ],
+  "stock": [
+   "blue line-art person and camera icons",
+   "glossy cartoon camera of the logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded text boxes with highlighted words",
+   "class chips",
+   "Monitor wordmark styled as gradient lettering",
+   "column layout"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "CCTV still frames in rounded frames",
+   "caption text boxes",
+   "scored caption with prediction",
+   "anomaly score line",
+   "coloured class chips",
+   "blue camera icons",
+   "person icons",
+   "Monitor logo"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video anomaly detection",
+   "online VAD",
+   "training-free",
+   "VLM captioning",
+   "LLM scoring",
+   "surveillance",
+   "UCF-Crime",
+   "anomaly score",
+   "behaviour prediction"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "title-branding",
+   "model-pictogram",
+   "typed-trace-blocks"
+  ],
+  "new_tags": [
+   {
+    "name": "class-chip-footer",
+    "what": "a saturated, differently coloured pill at the foot of each example column naming the detected class"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Repeat one identical stack (input still, intermediate text, final text with score, class chip) across several columns, one per incident type; the repetition shows breadth and real text with a few coloured key words shows what the system actually writes.",
+  "suits": "Teaser figures for perception or monitoring systems where a few real inputs, generated text outputs and a category label show the capability without a method diagram."
+ },
+ "tags": [
+  "four-column examples",
+  "real CCTV stills",
+  "rounded text boxes",
+  "coloured class chips",
+  "bitmap icons",
+  "no arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Illustration of MoniTor which detects abnormal events across multiple surveillance perspectives.",
+   "MoniTor identifies critical security incidents: Abuse, Robbery, Explosion, Fighting and so on.",
+   "As shown in Fig. 1, our MoniTor can precisely and efficiently identify various abnormal events."
+  ]
+ },
+ "summary": "MoniTor is a training-free approach to online video anomaly detection: streaming frames go to a vision-language model, and a dual memory, a scoring queue with an anomaly prior and behaviour prediction guide an LLM in scoring anomalies over time. Figure 1 is a teaser built from four real CCTV clips, one per column. Each column stacks the clip frame, a plain caption, a longer 'Caption with score' that also holds a predicted next behaviour and an anomaly score, and a coloured chip naming the incident (Abuse, Robbery, Explosion, Fighting). Blue line-art person and camera icons sit beside the boxes, red and yellow words highlight anomalous actions and places, and a glossy camera logo with the Monitor wordmark heads the figure. No arrows are drawn.",
+ "summary_zh": "MoniTor 是免训练的在线视频异常检测方法。图 1 用四段真实监控视频各排一列：画面、普通描述、带分数与预测的描述，底部彩色标签标出 Abuse、Robbery、Explosion、Fighting，红黄字标出异常动作。",
+ "confidence": "medium",
+ "notes": "Prior labels kept (worked-walkthrough, scope-overview) but the boxes are rounded rectangles without tails, so they are not speech bubbles. The meaning of the person icon, of the camera icons and of red versus yellow text is not given in the caption or the quoted paragraph; the camera meaning is inferred from the Monitor logo. The figure sits at the bottom of the preview: the caption line is cut off in the PNG.",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,576 @@
+{
+ "paper_id": "neurips23-0131",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "STEVE-1",
+  "one_liner": "Instruction-tuned VPT agent for Minecraft: a CVAE prior turns text into MineCLIP goal embeddings that condition a finetuned VPT policy.",
+  "domain": [
+   "Minecraft agents",
+   "text-to-behavior",
+   "instruction following"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "three tinted panels (MineCLIP, Prior, Policy) wired by embedding strips from the text prompt to mouse and keyboard actions",
+  "argues": "Like unCLIP, two models are enough: a policy that follows MineCLIP visual goal embeddings, and a prior that maps text to such embeddings, so the agent follows text and visual instructions.",
+  "subject": "Frozen MineCLIP encoders, a CVAE prior from text embedding to goal embedding, and a VPT policy conditioned on that goal.",
+  "elements": [
+   {
+    "name": "Video encoder",
+    "type": "module",
+    "role": "MineCLIP encoder that embeds a goal video clip",
+    "drawn_as": "green inverted trapezoid narrowing to the embedding strip",
+    "container": "MineCLIP (Frozen)",
+    "is_contribution": false
+   },
+   {
+    "name": "z_τgoal",
+    "type": "data",
+    "role": "visual goal embedding of the clip (and, in the Prior panel, the sampled output)",
+    "drawn_as": "short strip of green cells",
+    "container": "MineCLIP (Frozen), Prior",
+    "is_contribution": null
+   },
+   {
+    "name": "CLIP Objective",
+    "type": "operation",
+    "role": "MineCLIP objective tying the text embedding to the video embedding",
+    "drawn_as": "label on a vertical double-headed arrow between the two strips",
+    "container": "MineCLIP (Frozen)",
+    "is_contribution": false
+   },
+   {
+    "name": "z_y",
+    "type": "data",
+    "role": "MineCLIP text embedding of the instruction",
+    "drawn_as": "strip of blue cells",
+    "container": "MineCLIP (Frozen), Prior",
+    "is_contribution": null
+   },
+   {
+    "name": "Text Encoder",
+    "type": "module",
+    "role": "MineCLIP encoder that embeds the instruction",
+    "drawn_as": "blue upright trapezoid",
+    "container": "MineCLIP (Frozen)",
+    "is_contribution": false
+   },
+   {
+    "name": "“chop a tree”",
+    "type": "text-block",
+    "role": "example text instruction y",
+    "drawn_as": "blue quoted text with an italic y",
+    "container": "MineCLIP (Frozen)",
+    "is_contribution": null
+   },
+   {
+    "name": "MineCLIP (Frozen)",
+    "type": "container",
+    "role": "pretrained, frozen encoders of video and text",
+    "drawn_as": "light-green dotted-frame panel with a green bold name and (Frozen) in small text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CVAE",
+    "type": "module",
+    "role": "samples a goal embedding given the text embedding and Gaussian noise",
+    "drawn_as": "yellow skewed trapezoid with two curved arrows entering",
+    "container": "Prior",
+    "is_contribution": true
+   },
+   {
+    "name": "Gaussian Prior",
+    "type": "data",
+    "role": "noise input to the CVAE",
+    "drawn_as": "bitmap 2-D blob on crosshair axes",
+    "container": "Prior",
+    "is_contribution": null
+   },
+   {
+    "name": "Prior",
+    "type": "container",
+    "role": "second model: text embedding to MineCLIP visual embedding",
+    "drawn_as": "light-yellow dotted-frame panel with a bold name",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "linear",
+    "type": "module",
+    "role": "projection between the sampled goal embedding and the policy (role read from the label only)",
+    "drawn_as": "grey trapezoid with rotated-free text, between the panels",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "ResNet",
+    "type": "module",
+    "role": "encodes each observation frame (three copies, one per time step)",
+    "drawn_as": "three peach trapezoids",
+    "container": "Policy",
+    "is_contribution": false
+   },
+   {
+    "name": "⊕",
+    "type": "operation",
+    "role": "adds the goal embedding to each frame embedding before the transformer",
+    "drawn_as": "three circled-plus nodes with dashed arrows from the goal strip",
+    "container": "Policy",
+    "is_contribution": null
+   },
+   {
+    "name": "Transformer (VPT)",
+    "type": "module",
+    "role": "pretrained VPT backbone finetuned to reach MineCLIP goals",
+    "drawn_as": "wide pink rounded bar with (VPT) in bold red",
+    "container": "Policy",
+    "is_contribution": true
+   },
+   {
+    "name": "a0, a1, a2",
+    "type": "data",
+    "role": "actions at three successive steps",
+    "drawn_as": "three small grey rounded boxes with italic subscripts",
+    "container": "Policy",
+    "is_contribution": null
+   },
+   {
+    "name": "Mouse/Keyboard",
+    "type": "label",
+    "role": "the low-level action space",
+    "drawn_as": "text with a mouse icon and a keyboard icon",
+    "container": "Policy",
+    "is_contribution": null
+   },
+   {
+    "name": "Policy",
+    "type": "container",
+    "role": "first model: VPT finetuned to follow goal embeddings",
+    "drawn_as": "grey dotted-frame panel with a bold name at the right edge",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Video encoder",
+    "to": "z_τgoal",
+    "what": "goal clip embedded into the visual goal vector",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Text Encoder",
+    "to": "z_y",
+    "what": "instruction embedded into the text vector",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "z_τgoal",
+    "to": "z_y",
+    "what": "CLIP Objective aligns the two embeddings",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_y (MineCLIP)",
+    "to": "z_y (Prior)",
+    "what": "text embedding handed to the prior, link drawn with a // break",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_y (Prior)",
+    "to": "CVAE",
+    "what": "condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gaussian Prior",
+    "to": "CVAE",
+    "what": "noise sample",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CVAE",
+    "to": "z_τgoal (sampled)",
+    "what": "sampled MineCLIP visual embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_τgoal (sampled)",
+    "to": "linear",
+    "what": "sampled goal passes into the policy side",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "linear",
+    "to": "⊕",
+    "what": "goal embedding injected at each of the three steps",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ResNet",
+    "to": "⊕",
+    "what": "frame embedding strip joins the goal embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "⊕",
+    "to": "Transformer (VPT)",
+    "what": "goal-conditioned frame features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformer (VPT)",
+    "to": "a0, a1, a2",
+    "what": "one action per time step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "MineCLIP (Frozen)",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "video and text encoders that produce the goal and text embeddings, tied by the CLIP objective",
+    "verdict": "setting"
+   },
+   {
+    "label": "Prior",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "CVAE that samples a visual goal embedding from the text embedding and a Gaussian prior",
+    "verdict": "ours"
+   },
+   {
+    "label": "Policy",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "frame-wise ResNets, goal embedding added at each step, VPT transformer, actions a0 to a2",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "MineCLIP, Prior, Policy",
+    "kind": "section",
+    "at": "panel names",
+    "what": "names each of the three framed units"
+   },
+   {
+    "marker": "z_y, z_τgoal, y",
+    "kind": "identity",
+    "at": "embedding strips and instruction text",
+    "what": "names the text embedding, goal embedding and instruction"
+   },
+   {
+    "marker": "a0, a1, a2",
+    "kind": "order",
+    "at": "action boxes",
+    "what": "actions at successive time steps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "three Minecraft frames of the goal clip, tree trunks in close-up",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three small tiles side by side above the video encoder"
+   },
+   {
+    "what": "three first-person Minecraft observation frames (river bank, tree trunk, tree with log)",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "wide thumbnails above the ResNets, one per time step"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "2-D Gaussian blob on crosshair axes",
+    "stands_for": "the Gaussian prior noise fed to the CVAE",
+    "style": "other",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "mouse and keyboard outlines",
+    "stands_for": "the low-level mouse and keyboard actions",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "the text instruction 'chop a tree' with Minecraft gameplay frames as observations and as a goal clip",
+    "form": "quoted text under the text encoder and frame thumbnails above the encoders",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "encoders and maps as trapezoids narrowing toward a coloured embedding strip: green video encoder, blue text encoder, peach ResNets, grey linear, yellow CVAE",
+    "parts": [
+     "Video encoder",
+     "Text Encoder",
+     "ResNet",
+     "linear",
+     "CVAE"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "embeddings as short strips of coloured cells, green for the visual goal, blue for text, grey for frame features",
+    "parts": [
+     "z_τgoal",
+     "z_y",
+     "frame strips",
+     "goal strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "two embedding strips joined by a vertical double-headed arrow labelled CLIP Objective",
+    "parts": [
+     "z_τgoal",
+     "z_y",
+     "CLIP Objective"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "one wide rounded bar labelled Transformer (VPT) spanning all time-step columns",
+    "parts": [
+     "Transformer (VPT)"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "the words (Frozen) under the green MineCLIP name; no marker on the trained parts",
+    "parts": [
+     "(Frozen)"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the quoted text 'chop a tree' in the green panel, goes up the Text Encoder to z_y, crosses the dashed link into the yellow Prior, then linear into the grey Policy and down to the actions."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three tinted dotted-frame panels left to right (green MineCLIP, yellow Prior, grey Policy) of different heights; the policy panel repeats three frame, ResNet and circled-plus columns over one wide VPT bar with actions below. Roughly the top third of the canvas is empty.",
+  "panel_count": 3,
+  "lanes": "3 aligned time-step columns inside the Policy panel",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.91,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9ead3",
+    "used_for": "MineCLIP panel background"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Prior panel background"
+   },
+   {
+    "hex": "#f3f3f3",
+    "used_for": "Policy panel background"
+   },
+   {
+    "hex": "#b6d7a8",
+    "used_for": "Video encoder"
+   },
+   {
+    "hex": "#a4c2f4",
+    "used_for": "Text Encoder"
+   },
+   {
+    "hex": "#ffe599",
+    "used_for": "CVAE"
+   },
+   {
+    "hex": "#fce5cd",
+    "used_for": "ResNet frame encoders"
+   },
+   {
+    "hex": "#e6b8af",
+    "used_for": "Transformer (VPT) bar"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "linear trapezoid and action boxes"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "all outlines and arrows"
+   },
+   {
+    "hex": "#6aa84f",
+    "used_for": "MineCLIP name text"
+   },
+   {
+    "hex": "#3c78d8",
+    "used_for": "quoted instruction text"
+   },
+   {
+    "hex": "#cc4125",
+    "used_for": "(VPT) tag"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt dark grey on every box and arrow, dotted panel frames",
+  "font": "sans 5.5-7 pt, bold panel names, italic serif-like symbols (z, a, y) set as images",
+  "corners": "mixed",
+  "arrows": "thin dark grey with small heads; curved into the CVAE, dashed for the cross-panel text embedding and for goal injection into the circled plus nodes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "green = visual side of MineCLIP (video encoder, goal embedding, panel), blue = text side (text encoder, text embedding, instruction), yellow = prior, peach = frame encoders, pink = VPT, grey = policy",
+  "line_style_means": "dashed arrows carry an embedding across a panel border or into the circled plus nodes; dotted frame = panel boundary; solid = forward flow",
+  "shape_means": "trapezoid = encoder or learned map, rounded wide bar = transformer, coloured strip = embedding vector, circled plus = addition, small rounded box = action",
+  "marker_means": "z_y text embedding, z_τgoal goal embedding, a0-a2 actions per step, // a break in a long link, (Frozen) not trained",
+  "emphasis": "one tint and one bold name per model; only the prior and the policy are the trained parts, the frozen part is labelled in text",
+  "reusable_patterns": [
+   "one tinted dotted-frame panel per model with its name in bold",
+   "embedding vectors drawn as coloured cell strips whose hue follows the modality",
+   "dashed arrow with a // break carrying an embedding from one panel to the next",
+   "real game frames as input thumbnails above the encoder",
+   "circled-plus nodes with dashed arrows to inject a goal into every time step"
+  ],
+  "weaknesses": [
+   "about a third of the canvas above the panels is blank",
+   "panel names sit in different places (bottom left, bottom, right)",
+   "role of linear and the circled plus is not in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "Minecraft gameplay frames from the agent's observations and goal clips"
+  ],
+  "stock": [
+   "mouse and keyboard outline icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, trapezoids and bars",
+   "embedding strips",
+   "arrows",
+   "Gaussian blob glyph",
+   "italic symbols"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "MineCLIP video and text encoder trapezoids",
+   "embedding strips",
+   "CVAE trapezoid with Gaussian blob",
+   "three Minecraft frames",
+   "ResNet trapezoids with circled plus",
+   "VPT transformer bar",
+   "mouse and keyboard icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "Minecraft",
+   "instruction following",
+   "MineCLIP",
+   "VPT",
+   "CVAE",
+   "unCLIP",
+   "text-to-behavior",
+   "goal-conditioned policy"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "token-strip",
+   "distribution-glyph"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each model of a multi-model method its own tinted dotted-frame panel, and show the interfaces between them as short colour-coded embedding strips so the reader sees which modality each vector comes from.",
+  "suits": "Compositional methods built from pretrained parts, such as a prior plus a conditioned decoder or policy, where embeddings are the interface between modules."
+ },
+ "tags": [
+  "three-panel-row",
+  "tinted-dotted-frames",
+  "embedding-strips",
+  "thin-outlines",
+  "trapezoid-encoders",
+  "game-screenshots"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2), caption only"
+  ],
+  "evidence": [
+   "Like unCLIP [48], our approach involves two models.",
+   "we train a CVAE [54] to sample MineCLIP visual embeddings given a text prompt."
+  ]
+ },
+ "summary": "STEVE-1 turns the VPT Minecraft agent into a text- and image-instructable policy without text-labelled trajectories. Figure 1 draws three tinted dotted-frame panels from left to right. In the green MineCLIP panel (Frozen), a video encoder and a text encoder produce the goal embedding and the text embedding, tied by the CLIP objective. In the yellow Prior panel, a CVAE samples the goal embedding from the text embedding and a Gaussian prior. In the grey Policy panel, three frame ResNets get the goal added at each step and feed the VPT transformer that emits actions a0 to a2. Small embedding strips and game screenshots carry the data.",
+ "summary_zh": "STEVE-1让VPT智能体听懂文字和图像指令。图1分三块着色虚线框：冻结的MineCLIP编码器、由CVAE构成的先验、以及逐帧ResNet加VPT Transformer的策略，输出鼠标键盘动作。",
+ "confidence": "medium",
+ "notes": "No paragraph in the paper text mentions the figure; roles come from the caption, abstract and labels. The purpose of linear and of the circled plus nodes is read from the drawing only. Panel names are placed at different spots; the top third of the canvas is blank.",
+ "venue": "NeurIPS23"
+}

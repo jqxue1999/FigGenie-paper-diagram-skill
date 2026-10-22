@@ -1,0 +1,588 @@
+{
+ "paper_id": "cvpr26-0083",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "centroid-based deanonymization of text-to-image leaderboards",
+  "one_liner": "An attack that identifies which text-to-image model made an image by matching its embedding to model-specific clusters, breaking leaderboard anonymity.",
+  "domain": [
+   "text-to-image leaderboards",
+   "deanonymization attack",
+   "image embeddings"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "a voting arena, a prompt database, candidate models and a hooded adversary exchanging prompts, votes and rankings, with the attacker's embedding pipeline inside a red dashed frame",
+  "argues": "Images of each T2I model form separate clusters in embedding space, so an adversary can identify the model behind anonymous leaderboard images and then steer votes.",
+  "subject": "A voting leaderboard shows a prompt and two anonymous images; an adversary embeds them, matches model clusters and submits votes that change the ranking.",
+  "elements": [
+   {
+    "name": "vertical card of model logos",
+    "type": "region",
+    "role": "the models taking part in the arena, listed publicly on the leaderboard",
+    "drawn_as": "tall black-outlined rounded card holding four logos and an ellipsis",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Generations from two (unknown) models",
+    "type": "label",
+    "role": "two models are picked at random (dice) and their images shown without names",
+    "drawn_as": "small caption under a brace beneath the two images, with a dice icon at the end of an arrow from the logo card",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Hidden valley filled with mystical creatures and lush landscapes, depicted in anime style",
+    "type": "sample",
+    "role": "the prompt of the example round",
+    "drawn_as": "light blue rounded box with a thick black outline above the two generations",
+    "container": "grey dashed box",
+    "is_contribution": false
+   },
+   {
+    "name": "Prompt Database",
+    "type": "module",
+    "role": "source of prompts for the arena; the adversary may add to it",
+    "drawn_as": "blue database cylinder with a cloud and a code symbol, label beneath",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Adversary",
+    "type": "actor",
+    "role": "sees the pair, runs the attack and votes",
+    "drawn_as": "hooded figure with a red mask and a lock-and-circuit chest panel, label beneath; straddles the left edge of the red frame",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Contribute Prompts",
+    "type": "operation",
+    "role": "optional prompt control: the adversary feeds prompts to the database",
+    "drawn_as": "dotted arrow from the adversary to the database with a small label",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Submit Vote",
+    "type": "operation",
+    "role": "the adversary votes for the model it has identified",
+    "drawn_as": "solid arrow from the adversary up to a window icon, small label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Changed Model Rankings",
+    "type": "label",
+    "role": "the consequence of the votes: the leaderboard order changes",
+    "drawn_as": "arrow from the window icon to a podium with 2, 1, 3 and a trophy, with two small logos",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "A / B",
+    "type": "sample",
+    "role": "the two anonymous generations handed to the embedding step",
+    "drawn_as": "two small image thumbnails with the letters A and B",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding Model (left)",
+    "type": "module",
+    "role": "turns A and B into embedding vectors",
+    "drawn_as": "neural-network glyph with coloured input and output cells, label beneath",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "emb(A) / emb(B)",
+    "type": "data",
+    "role": "the embeddings of the two images, pink and blue",
+    "drawn_as": "short horizontal coloured bars with labels",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "scatter of coloured clusters with two stars",
+    "type": "other",
+    "role": "embedding space with four model-specific clusters; the two stars (pink, blue) mark where emb(A) and emb(B) land",
+    "drawn_as": "plain axes with arrowheads, four groups of coloured dots (pink, orange, green, blue) and two stars, no tick labels",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Embeddings",
+    "type": "data",
+    "role": "embeddings of the candidate models' images, one stack per model, colours matching the clusters",
+    "drawn_as": "four stacks of wavy slabs in orange, blue, pink and green, label beneath",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding Model (right)",
+    "type": "module",
+    "role": "embeds the image stacks of the candidate models",
+    "drawn_as": "same neural-network glyph, label beneath, arrows in from the four stacks and out to the four embedding stacks",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Candidate Models",
+    "type": "region",
+    "role": "the models the adversary can generate from; each row pairs a logo with a stack of its images",
+    "drawn_as": "column of four rows, each a stack of three offset images and a logo, label under the column",
+    "container": "red dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "red dashed frame",
+    "type": "container",
+    "role": "encloses the adversarial deanonymization pipeline",
+    "drawn_as": "large rounded red dashed rectangle",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Prompt Database",
+    "to": "prompt box",
+    "what": "a prompt is taken from the database for the round",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "vertical card of model logos",
+    "to": "Generations from two (unknown) models",
+    "what": "two models are chosen at random (dice) to generate for the prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "prompt box and the two generations",
+    "to": "Adversary",
+    "what": "the adversary sees the prompt and the anonymous pair",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Adversary",
+    "to": "Prompt Database",
+    "what": "optional prompt control by contributing prompts (dotted arrow)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Adversary",
+    "to": "A / B",
+    "what": "the two images are taken into the pipeline (dotted arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "A / B",
+    "to": "Embedding Model (left)",
+    "what": "images are embedded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding Model (left)",
+    "to": "emb(A) / emb(B)",
+    "what": "embedding vectors of the pair",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "emb(A) / emb(B)",
+    "to": "stars in the scatter",
+    "what": "each embedding lands in the cluster of the model that made it (pink star in the pink cluster, blue star in the blue one)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Candidate Models",
+    "to": "Embedding Model (right)",
+    "what": "image stacks of each candidate model are embedded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding Model (right)",
+    "to": "Embeddings",
+    "what": "one embedding stack per candidate model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embeddings",
+    "to": "clusters in the scatter",
+    "what": "each stack corresponds to the cluster of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Adversary",
+    "to": "window icon",
+    "what": "Submit Vote for the identified model",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "window icon",
+    "to": "podium",
+    "what": "Changed Model Rankings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "axis": "narrative",
+    "shows": "(a) in the caption: the voting arena, with models, prompt database, a prompt and two anonymous generations, and the leaderboard that the votes change. Not framed and not lettered in the figure.",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "axis": "narrative",
+    "shows": "(b) in the caption: the adversarial deanonymization pipeline inside a red dashed frame: embed the pair, match model clusters, which are built from candidate-model image stacks.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A, B",
+    "kind": "identity",
+    "at": "the two small thumbnails",
+    "what": "names the two anonymous generations"
+   },
+   {
+    "marker": "emb(A), emb(B)",
+    "kind": "identity",
+    "at": "the pink and blue bars",
+    "what": "name the embeddings of A and B"
+   },
+   {
+    "marker": "stars",
+    "kind": "identity",
+    "at": "inside two clusters of the scatter",
+    "what": "mark where emb(A) and emb(B) fall"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two anime-style generations of the same prompt (an elf with a deer in a valley; a valley with a waterfall)",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two equal squares side by side in a grey dashed box under the prompt, a brace under them pointing to the caption"
+   },
+   {
+    "what": "the two generations again as small thumbnails marked A and B",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small squares with a letter each, on dotted arrows from the adversary to the left embedding model"
+   },
+   {
+    "what": "four stacks of three offset generations, one stack per candidate model, the same valley scene in different styles",
+    "content": "generated-image",
+    "role": "data-thumbnail",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "stack of three squares shifted up and right, a model logo beside each stack, the stacks in one column at the right edge"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "hooded figure with a red mask and a lock-and-circuit chest panel",
+    "stands_for": "the adversary",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "model logos: a sailboat, a palette in a blue circle, a blue square with white bars, the OpenAI knot",
+    "stands_for": "the participating and candidate T2I models",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "podium with 1, 2, 3 and a trophy, two small logos on the steps",
+    "stands_for": "the leaderboard ranking",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "database cylinder with a cloud and a code symbol",
+    "stands_for": "the prompt database",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "browser-like window with lines and toggles",
+    "stands_for": "the arena interface where votes are submitted",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two red dice",
+    "stands_for": "random choice of the two models",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "neural-network glyph with coloured input and output cells",
+    "stands_for": "the embedding model",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one arena round: the anime valley prompt, two generations, and the pair as A and B through the pipeline into two clusters",
+    "form": "prompt box, two images, thumbnails, scatter with stars",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "plain scatter on arrowed axes with four coloured groups of dots and two stars for the query embeddings",
+    "parts": [
+     "axes",
+     "four clusters",
+     "pink star",
+     "blue star"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "embeddings as short coloured bars (single vectors) and as stacks of wavy coloured slabs (sets of vectors per model)",
+    "parts": [
+     "emb(A)",
+     "emb(B)",
+     "four slab stacks"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "a database cylinder with a cloud and a code symbol as the prompt store, with a solid arrow out and a dotted arrow in",
+    "parts": [
+     "cylinder",
+     "arrow out",
+     "dotted arrow in"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the model logo card on the left, follows the generations to the adversary, then the red frame: A and B to the embedding model and the scatter, the model image stacks at the right; the vote arrow goes back up to the podium."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two regions side by side: the voting arena on the left (logo card, prompt, two images, prompt database, leaderboard icons) and a large red dashed frame on the right holding the pipeline. The adversary icon straddles the frame's left edge; the vote arrow loops back to the podium at top left.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.86,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2aa84",
+    "used_for": "orange model cluster and its embedding stack"
+   },
+   {
+    "hex": "#e69edd",
+    "used_for": "pink model cluster, its embedding stack and the emb(A) bar"
+   },
+   {
+    "hex": "#61ccf5",
+    "used_for": "blue model cluster, its embedding stack and the emb(B) bar"
+   },
+   {
+    "hex": "#83e391",
+    "used_for": "green model cluster and its embedding stack"
+   },
+   {
+    "hex": "#c1e5f5",
+    "used_for": "fill of the prompt box"
+   },
+   {
+    "hex": "#d1d1d1",
+    "opacity": 0.5,
+    "used_for": "grey region behind the prompt and the two generations"
+   },
+   {
+    "hex": "#aa0b0a",
+    "used_for": "red dashed frame around the attack pipeline"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark outlines of icons and curved arrows"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 to 0.75 pt dark outlines and arrows; 0.75 pt red dashed frame; thick black outline on the prompt box",
+  "font": "sans (Aptos) 4 to 5 pt labels, no bold",
+  "corners": "rounded",
+  "arrows": "thin curved and straight black arrows with small filled heads; dotted arrows for the adversary's actions; black axes with arrowheads in the scatter",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Four pastel hues stand for four candidate models: the same orange, blue, pink or green on a cluster, on that model's embedding stack and, for the pair, on the emb bars and stars. Red dashed frame = the attack pipeline; grey region = the anonymous pair seen by voters; light blue = the prompt.",
+  "line_style_means": "dotted arrows = the adversary's own actions and the query-time path (contribute prompts, A and B into the embedding model, embeddings to the stars); solid arrows = the other flows. The figure gives no key for this.",
+  "shape_means": "circle group = one model's generations in embedding space; star = the embedding of a query image; wavy slab stack = a set of embeddings; short bar = one embedding; three offset squares = a set of generations; network glyph = the embedding model",
+  "marker_means": "A and B label the two anonymous images, emb(A) and emb(B) their embeddings, stars mark where they land",
+  "emphasis": "The red dashed frame singles out the attack pipeline, the adversary icon straddles its edge, and the stars inside two clusters carry the result.",
+  "reusable_patterns": [
+   "attacker icon on the border of a dashed frame that holds its pipeline",
+   "colour-coded embedding stacks matched to same-colour clusters in a plain scatter, with stars for query points",
+   "stack of three offset images beside each candidate model's logo",
+   "dotted arrows for the adversary's own actions, solid for the platform",
+   "dice icon for random pairing of anonymous models",
+   "trophy podium with changed ranks as the final consequence"
+  ],
+  "weaknesses": [
+   "many 4 to 5 pt labels",
+   "the caption's (a) and (b) are not drawn in the figure",
+   "long curved arrows into the right embedding model cross each other",
+   "the same embedding model is drawn twice as separate glyphs"
+  ]
+ },
+ "resources": {
+  "own": [
+   "two real generations of a prompt",
+   "image stacks from candidate models",
+   "the example prompt"
+  ],
+  "stock": [
+   "adversary, database, window, podium, dice and neural-network icons",
+   "model logos (sailboat, palette, blue square, OpenAI)"
+  ],
+  "generated": [],
+  "drawn": [
+   "red dashed frame",
+   "scatter with clusters and stars",
+   "embedding slab stacks and bars",
+   "arrows"
+  ],
+  "unknown": [
+   "which models the palette and blue-square logos stand for"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "hooded adversary icon",
+   "red dashed pipeline frame",
+   "scatter with coloured clusters and stars",
+   "stacks of generated images beside model logos",
+   "neural-network embedding glyph",
+   "leaderboard window and trophy podium",
+   "prompt database cylinder"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "text-to-image",
+   "leaderboard",
+   "deanonymization",
+   "embeddings",
+   "vote manipulation",
+   "adversary",
+   "threat model",
+   "model fingerprints",
+   "clustering"
+  ],
+  "tags": [
+   "stacked-cards",
+   "brand-logo-icon",
+   "embedding-space-sketch",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "adversary-actor-icon",
+    "what": "a hooded hacker icon as the central actor of a threat-model figure, its actions drawn as dotted arrows into the victim system"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a threat model by putting the adversary icon on the border of a dashed frame that holds its pipeline, tie its actions to the victim system with dotted arrows, and end on the consequence (changed rankings on a podium). Show the key mechanism as a plain scatter whose colours match the sample stacks that produced it.",
+  "suits": "Threat-model, privacy or attack papers where an adversary acts on a platform and a representation-space mechanism (clusters, fingerprints) makes the attack work."
+ },
+ "tags": [
+  "red-dashed-frame",
+  "icon-rich-flat",
+  "dotted-attack-arrows",
+  "image-stacks-with-logos",
+  "small-sans-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Threat Model (p.2)",
+   "3 Threat Model (p.3)"
+  ],
+  "evidence": [
+   "In voting-based T2I leaderboards, users are provided a pair of image generations without any information about the underlying generation model",
+   "Overview of our setting: (a) voting-based leaderboard and (b) adversarial deanonymization pipeline leveraging model-specific clustering in embedding space."
+  ]
+ },
+ "summary": "The paper shows that anonymity in voting-based text-to-image leaderboards can be broken: each model's images form their own cluster in an image-embedding space, so an adversary can tell which model made an image without controlling prompts. Figure 1 draws the setting in one picture. On the left, a voting arena shows a prompt and two anonymous generations from two of the listed models, and a hooded adversary icon watches. Inside a red dashed frame at the right, the adversary embeds the two images, matches them to colour-coded clusters built from image stacks of the candidate models, and then submits votes that change the model rankings on a trophy podium.",
+ "summary_zh": "论文证明文生图投票排行榜的匿名性可被攻破：各模型生成图在图像嵌入空间里自成簇。图 1 左侧是投票擂台与匿名图对，红色虚线框内攻击者把两图嵌入并匹配到按颜色区分的模型簇，识别后投票改变排名。",
+ "confidence": "high",
+ "notes": "Prior labels kept. The caption names panels (a) and (b), but the printed figure carries no letters: (b) is the red dashed frame, (a) the unframed left part, so both panel labels are null. The dotted versus solid arrow meaning is my reading and is not keyed in the figure. Icon counts follow what is visible (the digest lists 33 placed bitmaps). The embedding model is drawn as a network glyph; the T2I models are drawn as logos.",
+ "venue": "CVPR26"
+}

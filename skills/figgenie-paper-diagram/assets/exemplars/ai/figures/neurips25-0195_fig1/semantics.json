@@ -1,0 +1,580 @@
+{
+ "paper_id": "neurips25-0195",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AWMSystem (TP-MDDN benchmark)",
+  "one_liner": "Autonomous decision-making navigation system with LLM-based subtask decomposition, goal selection and completion monitoring for multi-demand navigation with task preferences.",
+  "domain": [
+   "embodied navigation",
+   "multi-demand navigation",
+   "LLM decision making"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "three question-titled panels, each a user and robot exchange on a real example, beside a performance panel with a scatter plot and a bar chart",
+  "argues": "Three LLM-driven decisions (choose a subtask, generate dual-tempo actions, check completion) yield a 16% higher success rate than DDN and InstructNav under the TP-MDDN benchmark, with better efficiency than InstructNav.",
+  "subject": "Three tinted dialogue panels (choose subtask, dual-tempo actions, completion check) beside a scatter plot and a bar chart.",
+  "elements": [
+   {
+    "name": "(a) Overview",
+    "type": "label",
+    "role": "section header over the three decision panels",
+    "drawn_as": "10.5 pt bold grey title centred on a grey rule with end ticks",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Performance",
+    "type": "label",
+    "role": "section header over the results panel",
+    "drawn_as": "10.5 pt bold grey title on a grey rule with an end tick",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "How to choose one of the subtask?",
+    "type": "container",
+    "role": "panel for subtask selection using landmark semantic memory (caption: pink area)",
+    "drawn_as": "tall pink rounded panel with a bold question title",
+    "container": "(a) Overview",
+    "is_contribution": true
+   },
+   {
+    "name": "Construct LandMark Semantic Memory",
+    "type": "module",
+    "role": "builds the spatial memory from observations and a depth point cloud, answering the request for a memory bank",
+    "drawn_as": "white rounded box holding two dotted sub-boxes",
+    "container": "How to choose one of the subtask?",
+    "is_contribution": true
+   },
+   {
+    "name": "Observations / Extract depth point cloud",
+    "type": "operation",
+    "role": "inputs and depth-based point cloud step of the memory construction",
+    "drawn_as": "two dotted sub-boxes with small image tiles",
+    "container": "Construct LandMark Semantic Memory",
+    "is_contribution": null
+   },
+   {
+    "name": "Answer: Your next subtask: create a leisure area with entertainment options. Your target object: Book, Sculpture.",
+    "type": "text-block",
+    "role": "the model's choice of the next subtask and its target objects, with a map showing the path",
+    "drawn_as": "white rounded box with underlined phrase, red target words and a brain glyph",
+    "container": "How to choose one of the subtask?",
+    "is_contribution": null
+   },
+   {
+    "name": "How to generate Dual-Tempo actions?",
+    "type": "container",
+    "role": "panel for action generation via generalist and specialist policies (caption: yellow area)",
+    "drawn_as": "yellow rounded panel with a bold question title",
+    "container": "(a) Overview",
+    "is_contribution": true
+   },
+   {
+    "name": "Generalist Policy",
+    "type": "module",
+    "role": "gives a target position and an action list, e.g. (2.1,4.6) and TurnLeft, Move",
+    "drawn_as": "rounded box with a globe icon, a hollow down arrow and red field names",
+    "container": "How to generate Dual-Tempo actions?",
+    "is_contribution": true
+   },
+   {
+    "name": "Specialist Policy",
+    "type": "module",
+    "role": "fine control with small action primitives; the abstract pairs zero-shot planning with policy-based fine control",
+    "drawn_as": "rounded box with a teacher-at-board icon, a hollow down arrow and three circular action icons",
+    "container": "How to generate Dual-Tempo actions?",
+    "is_contribution": true
+   },
+   {
+    "name": "How to check the completion status of subtasks?",
+    "type": "container",
+    "role": "panel for dynamic subtask completion checks (caption: green area)",
+    "drawn_as": "green rounded panel with a bold question title",
+    "container": "(a) Overview",
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt: Given historical subtask status values and current observations, infer the current status of all subtasks.",
+    "type": "text-block",
+    "role": "prompt for the completion check",
+    "drawn_as": "rounded box with bold Prompt label and two underlined slot phrases",
+    "container": "How to check the completion status of subtasks?",
+    "is_contribution": null
+   },
+   {
+    "name": "Answer: {create a leisure area with entertainment options: True,...}",
+    "type": "text-block",
+    "role": "status of each subtask returned as true or false",
+    "drawn_as": "rounded box with bold Answer label and a red True",
+    "container": "How to check the completion status of subtasks?",
+    "is_contribution": null
+   },
+   {
+    "name": "user questions",
+    "type": "text-block",
+    "role": "I have some Demands, what should I do next?; How can I quickly get there and conduct a meticulous inspection?; How do I know when to switch to the next subtask?",
+    "drawn_as": "speech bubbles in a bold typewriter-like face with a tail towards a headset-person icon",
+    "container": "the three panels",
+    "is_contribution": null
+   },
+   {
+    "name": "Give me your past status and your memory bank.",
+    "type": "text-block",
+    "role": "the robot's request for context before it can choose a subtask",
+    "drawn_as": "speech bubble in sans type with a tail towards the robot icon",
+    "container": "How to choose one of the subtask?",
+    "is_contribution": null
+   },
+   {
+    "name": "Performance v.s. Efficiency",
+    "type": "container",
+    "role": "scatter plot of success rate against execution time for Ours, DDN, MO-DDN and InstructNav",
+    "drawn_as": "white chart tile with dashed level lines, a +16% arrow and a hollow Desirable arrow",
+    "container": "(b) Performance",
+    "is_contribution": true
+   },
+   {
+    "name": "Experiments under TP-MDDN benchmark",
+    "type": "container",
+    "role": "bar chart of Success Rate and Individual Success Rate for the four methods",
+    "drawn_as": "white chart tile with green and orange bars, value labels and a legend",
+    "container": "(b) Performance",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "user question",
+    "to": "robot answer",
+    "what": "question and reply in each panel, top to bottom",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Observations",
+    "to": "Extract depth point cloud",
+    "what": "observations turned into a point cloud inside the memory construction",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Construct LandMark Semantic Memory",
+    "to": "Answer: Your next subtask",
+    "what": "memory used to choose the next subtask and target objects",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "globe icon",
+    "to": "Target Position and Action List",
+    "what": "generalist policy output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "teacher icon",
+    "to": "circular action icons",
+    "what": "specialist policy output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompt",
+    "to": "Answer",
+    "what": "status prompt and its true or false reply",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "DDN level",
+    "to": "Ours",
+    "what": "+16% success rate gain",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "panel colours",
+    "to": "caption",
+    "what": "the caption names the pink, yellow and green areas; the order of the three panels is implied by layout only",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "How to choose one of the subtask?",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "user asks what to do next; the robot asks for status and memory; landmark semantic memory is built from observations and a point cloud; the answer names the next subtask and target objects",
+    "verdict": "ours"
+   },
+   {
+    "label": "How to generate Dual-Tempo actions?",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "a quick but careful movement request answered by a generalist policy (target position, action list) and a specialist policy (action primitives)",
+    "verdict": "ours"
+   },
+   {
+    "label": "How to check the completion status of subtasks?",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "a prompt over historical status and current observations and an answer listing each subtask as True or False",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Performance",
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "scatter plot of success rate versus execution time and a bar chart of success rates for Ours, DDN, MO-DDN and InstructNav",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "section headers",
+    "what": "head the Overview and the Performance sections"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four views of a simulated indoor room (left, front, right, back) arranged around a centre",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small tile inside a dotted sub-box titled Observations"
+   },
+   {
+    "what": "3D point cloud with red camera rays over a black floor plan",
+    "content": "point-cloud",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small tile inside a dotted sub-box titled Extract depth point cloud"
+   },
+   {
+    "what": "top-down colour map with a green navigation path to the robot and a small inset photo of a room with a table",
+    "content": "map",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "tiles under the answer text, the green line marks the path"
+   },
+   {
+    "what": "scatter plot of success rate versus execution time with Ours, DDN, MO-DDN and InstructNav, dashed levels, a +16% arrow and a Desirable arrow",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "white tile in the blue panel with a broken time axis"
+   },
+   {
+    "what": "grouped bar chart of Success Rate and Individual Success Rate: DDN 16.00 and 44.67, MO-DDN 13.33 and 39.78, InstructNav 16.00 and 42.44, Ours 32.00 and 62.89",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "white tile with value labels above the bars and a legend underneath"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "black silhouette of a person with a headset",
+    "stands_for": "the asking side, the user or the navigating agent (not labelled)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "black robot on tracks with a heartbeat chest",
+    "stands_for": "the model that answers and decides",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "brain glyph",
+    "stands_for": "LLM reasoning in the answer box and the policy panel",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "globe",
+    "stands_for": "the generalist policy",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "teacher pointing at a board before a class",
+    "stands_for": "the specialist policy",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "round buttons with turn and arrow glyphs",
+    "stands_for": "small action primitives",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "one multi-demand step: next subtask create a leisure area with entertainment options, target objects Book and Sculpture, target position (2.1,4.6), actions TurnLeft and Move, completion status True",
+    "form": "prompt, answer and observation boxes with underlined and red words",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "tailed bubbles beside avatars, the user's in a bold typewriter-like face and the robot's in sans",
+    "parts": [
+     "user bubble",
+     "robot bubble",
+     "headset icon",
+     "robot icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "black robot icon for the answering model, a brain glyph marking reasoning steps",
+    "parts": [
+     "robot icon",
+     "brain glyph"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "rounded box starting with a bold Prompt label and two underlined slot phrases, followed by an Answer box",
+    "parts": [
+     "Prompt label",
+     "underlined slots",
+     "Answer box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "3D point cloud with red camera rays over a black floor plan",
+    "parts": [
+     "points",
+     "camera rays",
+     "floor plan"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "titled box Construct LandMark Semantic Memory holding two dotted sub-boxes",
+    "parts": [
+     "title",
+     "Observations",
+     "Extract depth point cloud"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at (a) Overview with the pink panel at the left and reads its dialogue downwards, then the yellow and green panels in the middle, then the blue (b) Performance panel at the right, scatter plot first and bar chart below."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two lettered sections: (a) Overview holds a tall pink panel at the left and yellow over green panels in the middle, (b) Performance holds one tall blue panel at the right with a scatter plot over a bar chart; each (a) panel is a column of avatars with speech bubbles and boxes.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.95,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbe5d6",
+    "used_for": "pink panel: choose a subtask"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "yellow panel: Dual-Tempo actions"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "green panel: completion check"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "blue performance panel"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "thin dark blue outlines of the speech bubbles"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey section rules, end ticks and chart axes"
+   },
+   {
+    "hex": "#00ff00",
+    "used_for": "green navigation path on the map"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red key words in answers and field names",
+    "approx": true
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "orange Individual Success Rate bars",
+    "approx": true
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "green Success Rate bars",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 to 1 pt: dark blue outlines on speech bubbles, black outlines on policy and prompt boxes, dotted outlines on sub-boxes, grey rules with end ticks for the section headers",
+  "font": "sans (Nimbus Sans, Arial) at 4 to 6 pt, user bubbles in a bold Bodoni-like face, 10.5 pt bold grey section titles",
+  "corners": "rounded",
+  "arrows": "hollow down arrows inside the policy boxes; a blue +16% up arrow and a hollow diagonal Desirable arrow in the scatter plot; speech-bubble tails; no arrows between panels",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink, yellow and green panels = the three decision parts named in the caption (subtask selection, Dual-Tempo action generation, completion checks); blue panel = results; red words in answers = key labels or values; green and orange bars = Success Rate and Individual Success Rate",
+  "line_style_means": "dotted boxes = sub-steps of the memory construction; hollow arrows = steps inside the policies; dashed grey lines in the scatter plot = baseline levels",
+  "shape_means": "tailed bubble = utterance (typewriter face for the asking side, sans for the robot); rounded box = module, prompt or answer; headset person = asking side; robot = answering model",
+  "marker_means": "(a) and (b) head the two sections; +16% arrow = gain over the baselines; Desirable arrow = direction of better, higher success at lower time",
+  "emphasis": "Ours as the top-left point of the scatter plot with a +16% arrow and a Desirable arrow; the tallest bars for Ours in the bar chart",
+  "reusable_patterns": [
+   "question-titled panels (How to ...?) each showing the exchange that answers the question with real prompt and answer text",
+   "red or underlined words inside prompts and answers to point at the key items",
+   "overview panels at the left and a performance panel at the right under lettered section rules",
+   "scatter plot with a Desirable arrow and a gain arrow (+16%) to show the trade-off",
+   "the same two avatars repeated in every panel as a fixed cast"
+  ],
+  "weaknesses": [
+   "the order of the three decision panels is implied by layout only",
+   "4 to 4.5 pt text in the bubbles and boxes",
+   "the figure does not say which module (BreakLLM, LocateLLM, StatusMLLM) each robot icon stands for"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real prompts and answers",
+   "simulated indoor observations, point cloud and map with path",
+   "measured scatter and bar charts"
+  ],
+  "stock": [
+   "headset person, robot, brain, globe, teacher and action icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted panels",
+   "speech bubbles",
+   "policy and prompt boxes",
+   "section header rules"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted question panels",
+   "user and robot avatars with speech bubbles",
+   "landmark semantic memory boxes with observation and point cloud tiles",
+   "generalist and specialist policy boxes",
+   "prompt and answer cards",
+   "scatter plot with Ours, DDN, MO-DDN, InstructNav",
+   "bar chart of success rates"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "embodied navigation",
+   "multi-demand navigation",
+   "LLM decision making",
+   "subtask selection",
+   "dual-tempo actions",
+   "completion check",
+   "TP-MDDN",
+   "semantic map"
+  ],
+  "tags": [
+   "claim-banner",
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "plot-callouts",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Title each overview panel with the question it answers and fill it with a short exchange between a fixed pair of avatars on a real example, so every module reads as one capability; put a results panel with a trade-off scatter plot (gain arrow, Desirable arrow) and a bar chart in the same figure.",
+  "suits": "Agent or embodied-AI papers whose system is a few LLM decisions that can each be shown with a real prompt and answer, plus a headline efficiency and accuracy result."
+ },
+ "tags": [
+  "question-titled panels",
+  "pastel panels",
+  "avatar dialogues",
+  "scatter plus bar chart",
+  "lettered section rules",
+  "red highlighted words"
+ ],
+ "provenance": {
+  "sections": [
+   "Experiments, efficiency analysis (p.9)"
+  ],
+  "evidence": [
+   "The pink area shows subtask selection using landmark semantic memory",
+   "the green area details dynamic subtask completion checks.",
+   "Our method achieves a 16% higher success rate than DDN [1] and InstructNav [2] under the TP-MDDN benchmark"
+  ]
+ },
+ "summary": "TP-MDDN is a benchmark for long-horizon navigation with several demands and explicit task preferences, and AWMSystem is the paper's autonomous decision-making system built from LLM modules, a semantic memory map and a dual-tempo action generator. Figure 1 has two lettered sections. In (a) Overview, three tinted panels titled by questions (choose a subtask, generate dual-tempo actions, check completion) each stage a user and robot dialogue with real prompts and answers: landmark semantic memory built from observations and a point cloud, generalist and specialist policy boxes, a status prompt and answer. In (b) Performance, a scatter plot of success against time with a +16% arrow and a bar chart compare Ours with DDN, MO-DDN and InstructNav.",
+ "summary_zh": "TP-MDDN 是多需求导航基准，AWMSystem 是其决策系统。图 1 的 (a) 用三块以问题命名的彩色面板，以用户与机器人对话展示选子任务、双节奏动作和完成检查；(b) 用散点图和柱状图对比 DDN 等基线。",
+ "confidence": "high",
+ "notes": "The pre-screen order (contribution-mosaic, actor-interaction, worked-walkthrough) is kept; the three question panels are counted as panels together with the blue results panel, and the letters (a) and (b) head sections that group them. The meaning of the headset-person icon (user or navigating agent) is not stated. Generalist as zero-shot planning and specialist as fine control follow the abstract, not the figure.",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,620 @@
+{
+ "paper_id": "aaai26-0001",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ToxiAlert-Bench",
+  "one_liner": "A 30k-clip speech toxicity benchmark built from eight real corpora, labelled by multimodal models, an LLM and annotators, and extended with synthetic speech.",
+  "domain": [
+   "speech toxicity detection",
+   "audio dataset construction",
+   "paralinguistic cues"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "data-construction",
+  "variant_note": "two parallel pipelines (real-world and synthetic) of pale tinted stage boxes, each box showing its own prompt and a sample answer, converging in one shared verification band",
+  "argues": "Real and synthetic speech are filtered and labelled by multimodal models, an LLM and humans into one toxicity dataset whose toxic source (content or tone) is annotated.",
+  "subject": "two pipelines of tinted stage boxes converging in one verification box, with prompts and sample answers",
+  "elements": [
+   {
+    "name": "Dataset Collection",
+    "type": "container",
+    "role": "gathers audio from existing speech corpora",
+    "drawn_as": "lavender region with a bar-and-pie chart icon in its title and a large purple block arrow leaving it to the right",
+    "container": "Pipeline 1",
+    "is_contribution": false
+   },
+   {
+    "name": "TIMIT, IEMOCAP, VCTK, LibriSpeech, VoxCeleb1, LJSpeech, Common Voice, MELD",
+    "type": "data",
+    "role": "the eight source datasets, each with year and short facts",
+    "drawn_as": "eight dashed cards in two columns plus two full-width cards; bold underlined name and year, three star-bullet lines, three small coloured dots in the corner",
+    "container": "Dataset Collection",
+    "is_contribution": false
+   },
+   {
+    "name": "Large Multimodal Model Data Filtering",
+    "type": "container",
+    "role": "initial filtering and preliminary toxicity assessment of each clip",
+    "drawn_as": "light grey region with a funnel-and-screen icon in its title",
+    "container": "Pipeline 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Query: Analyze the audio and determine if it contains harmful content",
+    "type": "text-block",
+    "role": "the query given to the multimodal models; harmful clips are classified into categories such as Sarcasm, Horror, Sexual content",
+    "drawn_as": "dashed card headed Query: with three coloured dots, quoted text",
+    "container": "Large Multimodal Model Data Filtering",
+    "is_contribution": true
+   },
+   {
+    "name": "two AI robots with answers",
+    "type": "actor",
+    "role": "the two multimodal models and their answers: a sexist statement is found by one, nothing harmful by the other (which robot is which model is not labelled)",
+    "drawn_as": "a blue and an orange robot with AI on the face, each next to an oval speech bubble",
+    "container": "Large Multimodal Model Data Filtering",
+    "is_contribution": true
+   },
+   {
+    "name": "Large Language Model Label Extraction",
+    "type": "container",
+    "role": "an LLM extracts label suggestions for toxicity, coarse category and source from the descriptions",
+    "drawn_as": "pale blue region with a document-grid icon in its title",
+    "container": "Pipeline 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Query: The following is a description of an audio clip. Classify harmful content...",
+    "type": "text-block",
+    "role": "the query for label extraction, based only on the description",
+    "drawn_as": "dashed card headed Query: with three coloured dots",
+    "container": "Large Language Model Label Extraction",
+    "is_contribution": true
+   },
+   {
+    "name": "answer forms Yes / No, <A> <B> <C> <D>, Content Tone Both",
+    "type": "sample",
+    "role": "structured answer: toxic or not, coarse category, and whether the source is content, tone or both; the chosen option is bold and underlined",
+    "drawn_as": "two small white cards with a check mark by Yes and a cross by No, an OpenAI logo between them",
+    "container": "Large Language Model Label Extraction",
+    "is_contribution": true
+   },
+   {
+    "name": "Hybrid Verification",
+    "type": "container",
+    "role": "consistency check, clustering of free-form descriptions and human review that produce the final labels",
+    "drawn_as": "rose region spanning the bottom of both pipelines with a detective-with-magnifier icon in its title",
+    "container": "bottom band",
+    "is_contribution": true
+   },
+   {
+    "name": "Automatic Grouping sketch: Death, Violence, Drugs",
+    "type": "icon",
+    "role": "descriptions are clustered automatically into fine-grained toxic types",
+    "drawn_as": "small axes with blue and yellow dot clusters and labelled arrows to the clusters",
+    "container": "Hybrid Verification",
+    "is_contribution": true
+   },
+   {
+    "name": "annotator group",
+    "type": "icon",
+    "role": "human annotators who verify and correct the labels",
+    "drawn_as": "three-person icon with small sparkles between the sketch and the annotation card",
+    "container": "Hybrid Verification",
+    "is_contribution": true
+   },
+   {
+    "name": "annotation card: Yes / No, <C1> ... <C7>, Content Tone Both, Description: Gender Stereotypes",
+    "type": "instance",
+    "role": "one annotated record with toxicity, one of seven major classes, the source and a free-form description",
+    "drawn_as": "white card, selected options bold and underlined, a magnifier badge in the corner",
+    "container": "Hybrid Verification",
+    "is_contribution": true
+   },
+   {
+    "name": "speaker icons with angel and devil faces",
+    "type": "icon",
+    "role": "the labelled outputs: non-toxic audio and toxic audio",
+    "drawn_as": "two loudspeaker icons, one with a haloed smiley and one with an angry red devil face, reached by a grey and a rose arrow",
+    "container": "Hybrid Verification",
+    "is_contribution": false
+   },
+   {
+    "name": "Text Generation",
+    "type": "container",
+    "role": "GPT-4o writes emotionally charged but textually non-toxic sentences",
+    "drawn_as": "peach region with a text-document-and-gear icon in its title",
+    "container": "Pipeline 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Query: Generate multiple unsettling sentences with subtle psychological horror...",
+    "type": "text-block",
+    "role": "the generation prompt",
+    "drawn_as": "dashed card headed Query: with three coloured dots, then a green arrow down",
+    "container": "Text Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "I found a dusty old diary in the attic, but the last entry was...",
+    "type": "sample",
+    "role": "a generated sentence",
+    "drawn_as": "quoted text in a thin-framed card beside an OpenAI logo, repeated in italics in the next stage",
+    "container": "Text Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "Speech Synthesis",
+    "type": "container",
+    "role": "a text-to-speech engine voices the sentence with a chosen persona so that toxicity sits in the tone",
+    "drawn_as": "pale green region with a document-and-speaker icon in its title",
+    "container": "Pipeline 2",
+    "is_contribution": true
+   },
+   {
+    "name": "persona and TTS icons",
+    "type": "icon",
+    "role": "a character persona with vocal-style sliders drives the voice, producing toxic audio",
+    "drawn_as": "person-at-mixing-console icon under the italic sentence, a yellow block arrow to a loudspeaker with an angry face",
+    "container": "Speech Synthesis",
+    "is_contribution": true
+   },
+   {
+    "name": "Pipeline 1: Real-world Data Construction / Pipeline 2: Synthetic Data Construction",
+    "type": "label",
+    "role": "titles of the two parallel pipelines",
+    "drawn_as": "large sans titles with circled numbers on dash-dot header lines with end ticks",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Dataset Collection",
+    "to": "Large Multimodal Model Data Filtering",
+    "what": "audio clips from the eight datasets",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query (filtering)",
+    "to": "two AI robots",
+    "what": "the same query goes to two multimodal models",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "blue AI robot",
+    "to": "Large Language Model Label Extraction",
+    "what": "its answer about the clip",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange AI robot",
+    "to": "Large Language Model Label Extraction",
+    "what": "its answer about the clip",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Large Language Model Label Extraction (blue path)",
+    "to": "Hybrid Verification",
+    "what": "label suggestions, entering the clustering side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Large Language Model Label Extraction (orange path)",
+    "to": "Hybrid Verification",
+    "what": "label suggestions, entering the annotation-card side",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Automatic Grouping sketch",
+    "to": "annotation card",
+    "what": "clusters are reviewed by annotators before final labels",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "annotation card",
+    "to": "speaker icons",
+    "what": "final label: non-toxic or toxic audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Generation query",
+    "to": "generated sentence",
+    "what": "GPT-4o writes the sentence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "generated sentence",
+    "to": "Speech Synthesis",
+    "what": "the same sentence is repeated as the text to voice; the two boxes are joined by stacking, not by an arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "sentence",
+    "to": "toxic loudspeaker",
+    "what": "text-to-speech with a persona",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Speech Synthesis",
+    "to": "Hybrid Verification",
+    "what": "synthetic toxic speech",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1 and 2 (circled)",
+    "kind": "section",
+    "at": "the two pipeline titles",
+    "what": "names Pipeline 1 (real-world) and Pipeline 2 (synthetic), as the caption does"
+   },
+   {
+    "marker": "<A> <B> <C> <D>",
+    "kind": "identity",
+    "at": "answer forms",
+    "what": "the four coarse toxic categories (Sarcasm, Horror, Sexual Content, Other Harmful Content per the paper text)"
+   },
+   {
+    "marker": "<C1> ... <C7>",
+    "kind": "identity",
+    "at": "annotation card",
+    "what": "the seven major toxic classes; C7 is chosen in the example"
+   },
+   {
+    "marker": "check mark and cross",
+    "kind": "identity",
+    "at": "Yes and No options",
+    "what": "marks the answer options, the chosen one is in bold"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "scatter sketch of clustered description points with axes and labelled clusters",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small boxed sketch with red axis arrows, blue and yellow dots, labels Death, Violence, Drugs and Automatic Grouping"
+   },
+   {
+    "what": "small coloured wavy lines in blue, orange and green standing for audio",
+    "content": "audio-waveform",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "squiggles on the edges of stage boxes where audio is handed over, colours matching the arrows of the same path"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon robot head with AI on the face, blue and orange",
+    "stands_for": "the two large multimodal models",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "OpenAI knot logo in green",
+    "stands_for": "GPT-4o (label extraction and sentence generation)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "loudspeaker with a haloed smiley or an angry devil face",
+    "stands_for": "non-toxic and toxic audio",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "group of three people with sparkles; person at a mixing console",
+    "stands_for": "human annotators; a TTS persona with style controls",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "stage title icons: chart, funnel with screen, document grid, detective with magnifier, text document, document with speaker",
+    "stands_for": "the kind of work done in each stage",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "star-burst bullets and three small coloured dots on cards",
+    "stands_for": "bullet marks and window-like decoration",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 40
+   }
+  ],
+  "examples": [
+   {
+    "what": "the three prompts: harmful-content filtering, description-based label extraction and sentence generation",
+    "form": "quoted text in cards headed Query:",
+    "real_values": true
+   },
+   {
+    "what": "model answers and one annotated record: a sexist statement, no harmful content, Description: Gender Stereotypes",
+    "form": "speech bubbles and a form card with the chosen options in bold",
+    "real_values": true
+   },
+   {
+    "what": "a generated sentence about a dusty old diary carried into speech synthesis",
+    "form": "quoted text card repeated in italics in the next stage",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "dashed card per source corpus with bold underlined name and year, three star-bullet fact lines and window-like dots",
+    "parts": [
+     "name and year",
+     "fact lines",
+     "corner dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "dashed card headed Query: holding the quoted prompt, three coloured dots in the corner, no highlighted slots",
+    "parts": [
+     "Query: header",
+     "quoted prompt",
+     "corner dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "AI-faced robot heads for the multimodal models and the green OpenAI logo for GPT-4o",
+    "parts": [
+     "robot head",
+     "OpenAI logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "oval speech bubbles beside each robot holding its answer",
+    "parts": [
+     "robot avatar",
+     "bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "three-person icon with sparkles standing between the clustering sketch and the annotation card",
+    "parts": [
+     "person group"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at Dataset Collection at the top left, follows the purple arrow into the multimodal filtering box and down through label extraction to Hybrid Verification; Pipeline 2 at the top right is read downwards and joins the same bottom band."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Dataset Collection is a tall lavender column at the left; next to it a column of three tinted boxes (multimodal filtering, label extraction, hybrid verification) runs top-down; a narrower right column holds the synthetic pipeline (text generation, speech synthesis). Hybrid Verification stretches under both pipelines as a shared band. Dash-dot header lines carry the two pipeline titles.",
+  "panel_count": 1,
+  "lanes": "2 parallel top-down pipelines (real-world, synthetic) that converge in one shared Hybrid Verification band",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.96,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ebe4f1",
+    "used_for": "Dataset Collection region (lavender)"
+   },
+   {
+    "hex": "#dfdfdf",
+    "used_for": "Large Multimodal Model Data Filtering region (light grey)"
+   },
+   {
+    "hex": "#d4e2f2",
+    "used_for": "Large Language Model Label Extraction region (pale blue)"
+   },
+   {
+    "hex": "#e8d9d7",
+    "used_for": "Hybrid Verification region (pale rose)"
+   },
+   {
+    "hex": "#ffe3c7",
+    "used_for": "Text Generation region (pale peach)"
+   },
+   {
+    "hex": "#d0efc9",
+    "used_for": "Speech Synthesis region (pale green)"
+   },
+   {
+    "hex": "#a0c3e0",
+    "used_for": "blue block arrows and the blue robot path"
+   },
+   {
+    "hex": "#ffcd9b",
+    "used_for": "orange block arrows and the orange robot path"
+   },
+   {
+    "hex": "#404040",
+    "used_for": "text and dark icon strokes"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on cards, dashed outlines on cards, dash-dot header lines",
+  "font": "sans: Arial for body text, a Comic Sans-like face for stage titles; 5.5-7.5 pt, 6 pt for almost all text, bold for dataset names and Query: headers",
+  "corners": "mixed",
+  "arrows": "wide flat block arrows in purple, blue, orange, green and yellow; thin grey and rose arrows to the speaker icons; dash-dot header lines with end ticks",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Each stage has its own pale tint (lavender collection, grey filtering, blue label extraction, rose verification, peach text generation, green speech synthesis). Arrow colour follows the source: purple from collection, blue and orange for the two multimodal models' paths (matching the blue and orange robots), green for the synthetic branch; coloured wavy lines mark audio.",
+  "line_style_means": "Dashed rectangles = cards (datasets, queries, answers); dash-dot lines with end ticks = titles of the two pipelines.",
+  "shape_means": "Oval speech bubble = a model's answer; card with three coloured dots = a query window; loudspeaker with halo or devil face = non-toxic or toxic audio; person group = annotators; block arrow = hand-over.",
+  "marker_means": "Circled 1 and 2 name the pipelines; check mark and cross with a bold underlined option mark the chosen answer; <A>-<D> and <C1>-<C7> name coarse and major toxic classes.",
+  "emphasis": "The wide Hybrid Verification band under both pipelines, where the arrow colours meet; no single new part is highlighted.",
+  "reusable_patterns": [
+   "each stage box holds its own prompt card with a Query: header and a sample answer below it",
+   "two model paths kept apart by colour (robots, arrows, audio waves) until they meet",
+   "answer form with the selected option in bold and underlined, with check and cross marks",
+   "haloed and devil-faced loudspeakers as non-toxic and toxic audio labels",
+   "parallel real and synthetic pipelines joined by one shared verification band",
+   "dataset cards with name, year and star-bullet facts"
+  ],
+  "weaknesses": [
+   "6 pt text almost everywhere, with 8 dataset cards of running text",
+   "which robot is which multimodal model, and what the blue and orange paths stand for, are not labelled",
+   "the synthetic pipeline ends inside the real pipeline's band, so the two pipeline titles do not cover the shared box",
+   "many clip-art icons in different styles"
+  ]
+ },
+ "resources": {
+  "own": [
+   "prompt texts and sample answers",
+   "the example sentence and annotation record"
+  ],
+  "stock": [
+   "OpenAI logo",
+   "AI robot icons",
+   "loudspeaker icons with angel and devil faces",
+   "person-group and persona icons",
+   "stage title icons",
+   "star bullets and wave lines",
+   "check and cross marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted stage regions",
+   "dashed cards",
+   "block arrows",
+   "answer forms",
+   "dash-dot header lines"
+  ],
+  "unknown": [
+   "scatter sketch in the Automatic Grouping box (drawn or clip art)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "eight dataset cards",
+   "query cards with window dots",
+   "AI robots with speech bubbles",
+   "OpenAI logo",
+   "Yes/No answer forms",
+   "clustering sketch with labelled clusters",
+   "angel and devil loudspeaker icons",
+   "block arrows in five colours"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "speech toxicity",
+   "paralinguistic cues",
+   "dataset construction",
+   "multimodal LLM annotation",
+   "synthetic speech",
+   "text-to-speech",
+   "hybrid verification",
+   "ToxiAlert-Bench"
+  ],
+  "tags": [
+   "verdict-marks",
+   "human-in-the-loop",
+   "brand-logo-icon",
+   "model-pictogram",
+   "annotated-record-card",
+   "embedding-space-sketch",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "window-dot-cards",
+    "what": "prompt or record cards carry three small coloured dots in a corner, like window buttons, so they read as an interface window"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show each stage of an annotation pipeline as a tinted box that holds its own prompt card and a sample answer, and keep two model paths apart by colour until they meet in a shared verification box.",
+  "suits": "Dataset-construction figures where model annotators, prompts and a human check must be shown and several sources feed one final dataset."
+ },
+ "tags": [
+  "tinted-stage-boxes",
+  "clip-art-icons",
+  "block-arrows",
+  "dash-dot-headers",
+  "dense-small-text",
+  "sans-serif"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.3)",
+   "front (p.4)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "GPT-4o is used to extract structured label suggestions regarding toxicity, coarse category, and source.",
+   "If any disagreement arises, the sample is forwarded to re-annotation for validation.",
+   "Pipeline2 (right) depicts the generation of synthetic toxic speech."
+  ]
+ },
+ "summary": "ToxiAlert-Bench is a large audio dataset of toxic and non-toxic speech whose labels also say whether the toxicity comes from content or tone. Figure 1 draws its construction as two parallel pipelines of pale tinted stage boxes. Pipeline 1 (real-world) runs from eight source-dataset cards through a multimodal-model filtering box (two AI robots answering one query) and an LLM label-extraction box (OpenAI logo, yes/no and category forms) to a hybrid verification box with clustering and annotators. Pipeline 2 (synthetic) has GPT-4o write a sentence and a text-to-speech persona voice it. Every stage shows its own prompt and a sample answer, and both pipelines end in one shared verification band whose output is a haloed or devil-faced loudspeaker.",
+ "summary_zh": "ToxiAlert-Bench 是带副语言线索标注的语音毒性数据集。图用两条并行流水线展示构建过程：真实数据经八个来源、多模态模型过滤、LLM 标签抽取到混合验证，合成数据由 GPT-4o 写句子再做语音合成，各阶段附提示词与示例回答。",
+ "confidence": "high",
+ "notes": "The two pipelines are treated as lanes of one drawing (they share the Hybrid Verification box and are not framed), so panels is empty; the prior labels said two panels. Which robot is which multimodal model, and whether blue and orange paths mean the two models, is read from the drawing and the paper text (two models are named but not tied to colours). The digest counts 83 placed bitmaps (mostly small bullets and dots), so the icon counts are approximate.",
+ "venue": "AAAI26"
+}

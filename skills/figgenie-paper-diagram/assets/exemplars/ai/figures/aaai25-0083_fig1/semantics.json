@@ -1,0 +1,622 @@
+{
+ "paper_id": "aaai25-0083",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PFGNAS",
+  "one_liner": "An LLM proposes GNN architectures per client in personalized federated learning; a weight-sharing supernet on each client limits client drift.",
+  "domain": [
+   "personalized federated learning",
+   "graph neural architecture search",
+   "LLM-guided search"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "an LLM controller, a server and clients exchange four colour-coded message types; prompt cards above and a supernet beside the clients complete the loop",
+  "argues": "An LLM controller, driven by four prompt parts and refined by client performance fed back into the prompt, can steer personalized per-client GNN architectures over federated rounds.",
+  "subject": "LLM-driven architecture search loop across a server and clients holding pruned supernets, with four message types",
+  "elements": [
+   {
+    "name": "(1) Prompt: Search Task",
+    "type": "text-block",
+    "role": "states the federated setting for the LLM: number of clients <N>, dataset <D>, average shortest path length and network density <Π>",
+    "drawn_as": "grey card with folded corner and a bold title tab; person-graph icon on its left with a small arrow into the card",
+    "container": "prompt band",
+    "is_contribution": true
+   },
+   {
+    "name": "(2) Prompt: Search Space",
+    "type": "text-block",
+    "role": "lists the widely adopted GNN operations and activation function operations (dashes stand for the lists)",
+    "drawn_as": "grey folded-corner card with a neural-network glyph and arrow on its left",
+    "container": "prompt band",
+    "is_contribution": true
+   },
+   {
+    "name": "(3) Prompt: Search Strategy",
+    "type": "text-block",
+    "role": "gives separate instructions for the Exploration stage and the Exploitation stage",
+    "drawn_as": "grey folded-corner card with a circular-arrows icon and arrow on its left; stage words in bold",
+    "container": "prompt band",
+    "is_contribution": true
+   },
+   {
+    "name": "(4) Prompt: Performance Feedback",
+    "type": "text-block",
+    "role": "gives the historical results: tested frameworks <Λ> and the current top five architectures <𝒫>",
+    "drawn_as": "grey folded-corner card, receives the dark blue arrow from below",
+    "container": "prompt band",
+    "is_contribution": true
+   },
+   {
+    "name": "<N>, <D>, <Π>, <Λ>, <𝒫>",
+    "type": "label",
+    "role": "placeholders in the prompts: blue = task-specific configurations, orange = calculated input statistics (per the caption)",
+    "drawn_as": "coloured text inside the prompt cards",
+    "container": "prompt cards",
+    "is_contribution": null
+   },
+   {
+    "name": "Input: Prompt",
+    "type": "label",
+    "role": "marks the LLM's input end",
+    "drawn_as": "serif label with a teal double-chevron icon",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM Controller",
+    "type": "module",
+    "role": "generates architectures for the clients from the prompt",
+    "drawn_as": "rounded outlined box with a blue bold title and three vendor logos in a row",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "Output: List",
+    "type": "label",
+    "role": "marks the LLM's output end",
+    "drawn_as": "serif label with a teal double-chevron icon",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Architecture 1 / Architecture 2 / Architecture 10",
+    "type": "data",
+    "role": "the generated list of architectures, one row each, with a strip of coloured cells under each of Client 1, Client 2 ... Client N; ellipses stand for the rest (what one cell encodes is not stated)",
+    "drawn_as": "rows of four-cell strips wrapped in quotation marks on a pink rounded region; yellow, blue and navy rows",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "Server",
+    "type": "actor",
+    "role": "hub that receives the architecture list and exchanges information with the clients",
+    "drawn_as": "cloud icon with a server rack, word label to its left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "message arrows Λi, Infoi, InfoAgg, 𝒫",
+    "type": "operation",
+    "role": "the four communication processes between server and clients, named by a symbol written on each arrow and keyed in the legend",
+    "drawn_as": "wide block arrows in light green, salmon, light blue and dark blue, rotated to point along their route",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Supernet",
+    "type": "module",
+    "role": "shared super-network on the client side: Input, Block 1, Block 2, Block 3, AC function, Output",
+    "drawn_as": "pale-blue Input and Output boxes, white block boxes, black down arrows, dashed red and blue arcs between blocks, inside a dashed orange outline",
+    "container": "client region",
+    "is_contribution": true
+   },
+   {
+    "name": "pruning",
+    "type": "operation",
+    "role": "the supernet is pruned into a personalized client model",
+    "drawn_as": "salmon block arrow pointing right with a word label above",
+    "container": "client region",
+    "is_contribution": true
+   },
+   {
+    "name": "Weight Sharing",
+    "type": "operation",
+    "role": "client model weights flow back to the supernet (per the paper text: clients update supernet weights)",
+    "drawn_as": "salmon block arrow pointing left with a word label above",
+    "container": "client region",
+    "is_contribution": true
+   },
+   {
+    "name": "Client N / Client 1 / Model 1",
+    "type": "module",
+    "role": "each client holds a pruned model with the same block layout; faded arcs mark what is no longer used",
+    "drawn_as": "two offset stacked pale-orange cards labelled Client N and Client 1, the front one holding Model 1 (Input, Block 1-3, AC function, Output)",
+    "container": "client region",
+    "is_contribution": true
+   },
+   {
+    "name": "Architecture j",
+    "type": "label",
+    "role": "names the architecture handed to the client side (exact referent not stated)",
+    "drawn_as": "plain serif label above the supernet",
+    "container": "client region",
+    "is_contribution": null
+   },
+   {
+    "name": "client-group icon",
+    "type": "icon",
+    "role": "stands for the group of clients",
+    "drawn_as": "small building with person-in-circle badges, at the top-left of the dashed client region",
+    "container": "client region",
+    "is_contribution": false
+   },
+   {
+    "name": "Communication Process:",
+    "type": "container",
+    "role": "legend strip naming the four message types, in order",
+    "drawn_as": "framed full-width strip with four small coloured arrows, each followed by a numbered caption",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "prompt cards (1)-(4)",
+    "to": "LLM Controller",
+    "what": "the combined prompt: search task, space, strategy, history",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "small icons (person graph, network glyph, circular arrows)",
+    "to": "prompt cards (1)-(3)",
+    "what": "each prompt part is introduced by an icon",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Controller",
+    "to": "Output: List",
+    "what": "generated architectures",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM Controller",
+    "to": "Server",
+    "what": null,
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Architecture list",
+    "to": "Server",
+    "what": "per-client architectures",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Server",
+    "to": "Client models",
+    "what": "Λi: the generated architecture",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Client models",
+    "to": "Server",
+    "what": "Infoi: federated information such as gradient and weight",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Server",
+    "to": "Client models",
+    "what": "InfoAgg: aggregated federated information",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Client models",
+    "to": "(4) Prompt: Performance Feedback",
+    "what": "𝒫: performance of the final test, which re-enters the prompt",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Supernet",
+    "to": "Model 1",
+    "what": "personalized model obtained by pruning",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model 1",
+    "to": "Supernet",
+    "what": "weight sharing",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input, Block 1, Block 2, Block 3, AC function, Output",
+    "to": "next block",
+    "what": "forward pass through the blocks, with dashed red and blue arcs skipping between non-adjacent blocks (meaning of the arcs not explained)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "(1) (2) (3) (4)",
+    "kind": "section",
+    "at": "titles of the four prompt cards",
+    "what": "heads the four prompt parts: search task, search space, search strategy, performance feedback"
+   },
+   {
+    "marker": "1. 2. 3. 4.",
+    "kind": "order",
+    "at": "Communication Process legend strip",
+    "what": "orders the four communication processes; each number is tied to one arrow colour"
+   },
+   {
+    "marker": "Λi, Infoi, InfoAgg, 𝒫",
+    "kind": "identity",
+    "at": "the four block arrows",
+    "what": "names the message that each coloured arrow carries"
+   },
+   {
+    "marker": "Client 1 ... Client N, Block 1-3, Architecture 1/2/10",
+    "kind": "identity",
+    "at": "list columns, client cards and network blocks",
+    "what": "names repeated clients, blocks and candidate architectures"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "seven small coloured person figures joined into a graph",
+    "stands_for": "federated clients holding graph data",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "neural-network glyph (nodes and crossing links on a grey square)",
+    "stands_for": "the GNN search space",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two circular arrows around the letter T",
+    "stands_for": "the iterative search strategy",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "teal double chevron with dots",
+    "stands_for": "marks the LLM input and output ends (meaning not explained)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "OpenAI knot logo, PaLM 2 mark with wordmark, and a blue elephant badge",
+    "stands_for": "the LLM controller (GPT, PaLM 2 and a third model that is not named)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "cloud with a server rack",
+    "stands_for": "the server",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "building ringed by person-in-circle badges",
+    "stands_for": "the group of clients",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "prompt texts with slot placeholders and dashes standing for long lists (operations, stage instructions)",
+    "form": "text on four grey folded-corner cards",
+    "real_values": false
+   },
+   {
+    "what": "candidate architectures 1, 2 and 10 for clients 1, 2 and N",
+    "form": "quoted strips of four coloured cells, one colour per architecture row",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "rounded box titled LLM Controller holding three vendor logos side by side",
+    "parts": [
+     "title",
+     "OpenAI logo",
+     "PaLM 2 logo",
+     "elephant badge"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey cards with a folded corner and a bold numbered title tab; text with blue and orange slots and bold stage words",
+    "parts": [
+     "title tab",
+     "card body",
+     "coloured slots",
+     "bold keywords"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "federated-round",
+    "drawn_as": "cloud-and-rack server in the middle, a stack of offset client cards at the right, four coloured block arrows between them keyed in a legend strip",
+    "parts": [
+     "server",
+     "client cards",
+     "message arrows",
+     "legend strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "supernet-pruning",
+    "drawn_as": "a stack of blocks with dashed blue and red arcs between non-adjacent blocks, next to a copy of the same stack whose arcs are partly faded, joined by a block arrow labelled pruning",
+    "parts": [
+     "supernet",
+     "pruned client copy",
+     "pruning arrow",
+     "weight-sharing arrow"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "per client a strip of four coloured cells inside quotation marks, one colour per architecture",
+    "parts": [
+     "cell strip",
+     "quote marks",
+     "ellipsis"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the numbered prompt cards (top-left), drops below the dashed divider to the LLM controller and list, crosses the server to the supernet and clients; the dark blue arrow climbs back to card (4)."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Top band: four prompt cards in a 2x2 grid (cards 1-2 left, 3-4 right). A dashed divider follows. Middle band, left to right: LLM controller and architecture list, the server in the centre, a dashed orange region with supernet and stacked clients at the right. Bottom band: a framed legend strip.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.49,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "fill of the four prompt cards and the network glyph"
+   },
+   {
+    "hex": "#fef4ed",
+    "used_for": "pale orange tint of the client cards and client region"
+   },
+   {
+    "hex": "#fa7f6f",
+    "opacity": 0.15,
+    "used_for": "pink tint behind the architecture list"
+   },
+   {
+    "hex": "#dbeef3",
+    "used_for": "Input and Output boxes of the networks"
+   },
+   {
+    "hex": "#fbdd85",
+    "used_for": "yellow cells of Architecture 1"
+   },
+   {
+    "hex": "#80a6e2",
+    "used_for": "blue cells of Architecture 2"
+   },
+   {
+    "hex": "#403990",
+    "used_for": "navy cells of Architecture 10"
+   },
+   {
+    "hex": "#ff8884",
+    "used_for": "salmon arrows (client info, pruning, weight sharing) and dashed arcs"
+   },
+   {
+    "hex": "#9ac9db",
+    "used_for": "light blue aggregated-info arrow and arcs"
+   },
+   {
+    "hex": "#c82423",
+    "used_for": "red dashed arcs inside the networks"
+   },
+   {
+    "hex": "#2878b5",
+    "used_for": "blue dashed arcs, the performance arrow and the blue prompt slots"
+   },
+   {
+    "hex": "#f9c499",
+    "used_for": "dashed orange outline around the client side"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "grey curved arrows into the server",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt thin black outlines on blocks, dashed 0.5 pt orange outline on the client region, 0.25 pt dashed coloured arcs, none on tinted fills",
+  "font": "serif (Times New Roman), 4.5-11 pt, 8 pt body text in the cards, bold card titles, calligraphic italic symbols",
+  "corners": "mixed",
+  "arrows": "wide coloured block arrows for messages, thick grey curved arrows into the server, thin black arrows from icons to cards and between blocks, dashed curved arcs inside the networks",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "Arrow colour names the message (green architecture, salmon client info, light blue aggregated info, dark blue performance, keyed in the legend); blue prompt slots = task-specific configuration, orange slots = calculated statistics; yellow / blue / navy cell rows = Architecture 1 / 2 / 10; pale orange = client side; pink = architecture list.",
+  "line_style_means": "Dashed orange outline = client side (supernet and clients); dashed divider = prompt band versus system; dashed red and blue arcs inside networks are not explained.",
+  "shape_means": "Grey folded-corner card = prompt text; cloud with rack = server; rounded rectangle = LLM controller and architecture list; wide block arrow = message or operation.",
+  "marker_means": "(1)-(4) on the cards head the four prompt parts; 1.-4. in the legend order the four communication processes.",
+  "emphasis": "The four saturated block arrows around the server draw the eye first; prompt cards stay neutral grey; no single contribution is highlighted.",
+  "reusable_patterns": [
+   "numbered prompt cards above a dashed divider, each with a small icon and an arrow into a folded-corner text card",
+   "coloured placeholder slots in prompt text (blue configuration, orange statistics)",
+   "legend strip of four coloured sample arrows with numbered captions",
+   "a full network next to its pruned copy with faded arcs, joined by a labelled block arrow",
+   "offset stacked cards for clients",
+   "vendor logos in a row inside a rounded box for the LLM",
+   "feedback arrow that climbs back into the prompt card to close the loop"
+  ],
+  "weaknesses": [
+   "the (1)-(4) of the prompt cards and the 1-4 of the communication steps share numbers but mean different things",
+   "the dashed red and blue arcs in the networks and the two grey arrows into the server are not explained",
+   "8 pt text in a 510 pt figure makes the cards and the legend hard to read when scaled"
+  ]
+ },
+ "resources": {
+  "own": [
+   "prompt texts with their slots",
+   "the list of coloured architecture strips"
+  ],
+  "stock": [
+   "OpenAI logo",
+   "PaLM 2 logo",
+   "person-figure icons",
+   "cloud-server icon",
+   "building icon",
+   "neural-network glyph",
+   "circular-arrow icon",
+   "teal chevron icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "supernet and client block diagrams with dashed arcs",
+   "wide coloured message arrows",
+   "tinted regions and dashed outlines",
+   "legend strip"
+  ],
+  "unknown": [
+   "blue elephant badge (model not identifiable)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "prompt cards with coloured slots",
+   "LLM controller box with vendor logos",
+   "architecture list strips",
+   "cloud server icon",
+   "supernet block stack with dashed arcs",
+   "stacked client cards",
+   "colour-coded block arrows",
+   "numbered legend strip"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "personalized federated learning",
+   "graph neural architecture search",
+   "LLM controller",
+   "supernet",
+   "weight sharing",
+   "pruning",
+   "client drift",
+   "prompt design"
+  ],
+  "tags": [
+   "prompt-template-card",
+   "highlighted-text-spans",
+   "flow-type-arrows",
+   "brand-logo-icon",
+   "stacked-cards",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "pruned-copy-pair",
+    "what": "a full network drawn next to its pruned or specialised copy, with removed connections faded, joined by a labelled block arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an LLM's prompt as a band of numbered, titled grey cards with coloured slots above the system, and let the feedback arrow climb back into the last card so the loop closes without extra boxes. A legend strip of coloured sample arrows names each message type.",
+  "suits": "Client-server or LLM-in-the-loop methods where several prompt parts, a hub and per-client models must share one frame, and where messages differ by kind."
+ },
+ "tags": [
+  "serif-labels",
+  "folded-corner-cards",
+  "colour-coded-block-arrows",
+  "vendor-logo-row",
+  "dashed-region-outline",
+  "dense-composite"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.3)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "The framework optimal the parameters of GNAS and supernet through four communication processes.",
+   "Each client acquires a personalized model by pruning the supernet and begins to train the model in a federated way.",
+   "We design prompts that combine the search task, search space, strategy, and historical performance"
+  ]
+ },
+ "summary": "PFGNAS lets an LLM act as a controller that proposes graph neural network architectures for each client in personalized federated learning, while a weight-shared supernet on every client limits client drift. Figure 1 draws the whole loop in one frame: four grey prompt cards (search task, search space, search strategy, performance feedback) with coloured slots sit above a dashed divider. Below, an LLM controller box with three vendor logos outputs a list of per-client architectures, which a cloud-server icon exchanges with the clients through four colour-coded block arrows. On the right a supernet with dashed red and blue arcs is pruned into a client model. A numbered legend strip names the four message types.",
+ "summary_zh": "PFGNAS 让大语言模型为个性化联邦学习中的每个客户端生成图神经网络架构，并用权重共享的超网缓解客户端漂移。图中四张提示词卡片位于上方，下方是 LLM 控制器、服务器与客户端，四色箭头对应四种通信，右侧超网被剪枝成客户端子模型。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The figure is also a closed loop (arrow 4 climbs into prompt card 4), though the legend says the performance goes to the server. The two grey arrows into the server are unlabelled, the third LLM logo (blue elephant) is not identifiable, and the teal chevron icons and the dashed arcs are not explained in the figure or caption. Client-to-client Architecture strips: what one cell encodes is not stated.",
+ "venue": "AAAI25"
+}

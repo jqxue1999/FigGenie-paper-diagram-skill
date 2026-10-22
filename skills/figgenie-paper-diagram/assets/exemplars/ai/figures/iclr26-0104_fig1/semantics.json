@@ -1,0 +1,488 @@
+{
+ "paper_id": "iclr26-0104",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Rodrigues Network (RodriNet) with the Neural Rodrigues Operator",
+  "one_liner": "A learnable generalisation of the classical Rodrigues rotation formula for forward kinematics, used as the building block of a network for robot action learning.",
+  "domain": [
+   "robot learning",
+   "articulated kinematics",
+   "neural operators"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline",
+   "model-anatomy",
+   "contribution-mosaic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "the classical Rodrigues formula and its learnable counterpart drawn in the same tensor-times-vector grammar side by side, then three application cards",
+  "argues": "Replacing the fixed coefficients and joint angles of the classical Rodrigues formula with trainable weights and abstract joint features gives a neural operator that keeps the kinematic structure and serves several action-learning tasks.",
+  "subject": "The classical formula as fixed coefficients times a joint state on a robot arm, its learnable version as message passing with weights times features, and three applications.",
+  "elements": [
+   {
+    "name": "Classical Operator",
+    "type": "label",
+    "role": "title of the first column",
+    "drawn_as": "bold serif title above a rounded frame",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Rodrigues' Rotation Formula for robot control",
+    "type": "label",
+    "role": "names the classical operator inside its frame",
+    "drawn_as": "bold name over a regular-weight second line",
+    "container": "Classical Operator",
+    "is_contribution": false
+   },
+   {
+    "name": "robot arm with Rotation arrow",
+    "type": "icon",
+    "role": "an articulated arm whose joints rotate; the classical formula describes that rotation",
+    "drawn_as": "grey-white arm with orange ring joints and a curved orange arrow labelled Rotation in orange",
+    "container": "Classical Operator",
+    "is_contribution": false
+   },
+   {
+    "name": "Fixed coefficients",
+    "type": "data",
+    "role": "the constant coefficients of the formula",
+    "drawn_as": "stack of three offset grids in yellow, peach and orange cells with navy cell borders, orange caption",
+    "container": "Classical Operator",
+    "is_contribution": false
+   },
+   {
+    "name": "Joint state",
+    "type": "data",
+    "role": "the joint angle entering the formula as the vector (1, sin θ, cos θ)",
+    "drawn_as": "column vector in large parentheses after a black dot, grey caption",
+    "container": "Classical Operator",
+    "is_contribution": false
+   },
+   {
+    "name": "Learnable Operator",
+    "type": "label",
+    "role": "title of the second column",
+    "drawn_as": "bold serif title above a rounded frame",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Neural Rodrigues Operator for robot learning",
+    "type": "label",
+    "role": "names the proposed operator inside its frame",
+    "drawn_as": "bold name over a regular-weight second line",
+    "container": "Learnable Operator",
+    "is_contribution": true
+   },
+   {
+    "name": "message-passing chain",
+    "type": "module",
+    "role": "information passes along the chain of joints, with a further edge leaving the top node",
+    "drawn_as": "four pale-green circles with dark-green outlines joined by grey arrows in a zigzag, green curved arrow labelled Message passing",
+    "container": "Learnable Operator",
+    "is_contribution": true
+   },
+   {
+    "name": "Learnable weights",
+    "type": "data",
+    "role": "trainable weights replacing the fixed coefficients",
+    "drawn_as": "stack of offset grids whose cells are many different colours, green caption",
+    "container": "Learnable Operator",
+    "is_contribution": true
+   },
+   {
+    "name": "Joint features",
+    "type": "data",
+    "role": "abstract features replacing the joint angles",
+    "drawn_as": "stack of grey and blue-grey slabs after a black dot, grey caption",
+    "container": "Learnable Operator",
+    "is_contribution": true
+   },
+   {
+    "name": "Applications",
+    "type": "label",
+    "role": "title of the third column",
+    "drawn_as": "bold serif title above three dashed cards",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Motion prediction",
+    "type": "container",
+    "role": "application: predicting the motion of an articulated arm",
+    "drawn_as": "dashed rounded card with the name at the left and two arm renders, grey and mint-green, with red dots joined by a dashed line",
+    "container": "Applications",
+    "is_contribution": null
+   },
+   {
+    "name": "Imitation learning",
+    "type": "container",
+    "role": "application: learning robot actions from demonstrations",
+    "drawn_as": "dashed rounded card with two simulator frames of a robot arm, one on a wooden table with a red target",
+    "container": "Applications",
+    "is_contribution": null
+   },
+   {
+    "name": "Hand pose estimation",
+    "type": "container",
+    "role": "application: estimating hand poses",
+    "drawn_as": "dashed rounded card with two photos carrying an overlaid white hand model",
+    "container": "Applications",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Classical Operator",
+    "to": "Learnable Operator",
+    "what": "learnable extension: coefficients become weights, joint angles become abstract features",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Learnable Operator",
+    "to": "Motion prediction, Imitation learning, Hand pose estimation",
+    "what": "the network built on the operator is applied to these tasks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fixed coefficients",
+    "to": "Learnable weights",
+    "what": "same position and role in the mirrored frame",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Joint state",
+    "to": "Joint features",
+    "what": "same position and role in the mirrored frame",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "robot arm with Rotation arrow",
+    "to": "message-passing chain",
+    "what": "the chain of joints becomes a chain of nodes",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "orange Rotation arrow",
+    "to": "green Message passing arrow",
+    "what": "the rotation step of the classical formula corresponds to message passing",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Classical Operator",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "robot arm with orange joints and Rotation, fixed coefficients times the joint state (1, sin θ, cos θ)",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Learnable Operator",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "green node chain with Message passing, learnable weights times joint features",
+    "verdict": "ours"
+   },
+   {
+    "label": "Applications",
+    "kind": "contribution-mosaic",
+    "axis": "examples",
+    "shows": "three dashed cards with thumbnails: Motion prediction, Imitation learning, Hand pose estimation",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Classical Operator, Learnable Operator, Applications",
+    "kind": "section",
+    "at": "above each column",
+    "what": "bold titles head the three columns"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "robot-arm renders with target points: a grey arm and a mint-green arm joined by a dashed line",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two renders side by side in the Motion prediction card, red dots on the arms and a dashed grey line between them"
+   },
+   {
+    "what": "simulator frames of a robot arm, one on a wooden table with a red target and one on a black ground",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two square thumbnails at the right of the Imitation learning card"
+   },
+   {
+    "what": "photos of hands with an overlaid white hand model",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two square thumbnails at the right of the Hand pose estimation card"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "articulated robot arm with orange ring joints",
+    "stands_for": "the robot and its kinematic chain",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "pale-green circles linked by arrows",
+    "stands_for": "joints as nodes of a message-passing graph",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "a zigzag chain of four green nodes with grey arrows and a green curved arrow labelled Message passing, mirroring the arm's joint chain",
+    "parts": [
+     "nodes",
+     "edges",
+     "Message passing arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tensor-stack-times-vector",
+    "drawn_as": "a stack of offset grids, a black dot and a vector or a stack of slabs, joined like a formula, with a coloured caption under each part",
+    "parts": [
+     "coefficient grids",
+     "dot",
+     "joint-state vector or feature slabs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "robot-arm-kinematic-chain",
+    "drawn_as": "a grey articulated arm with orange ring joints and a curved orange arrow for rotation about a joint",
+    "parts": [
+     "links",
+     "ring joints",
+     "Rotation arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Classical Operator title top left, reads the robot arm and the fixed coefficients times joint state, crosses the arrow to the mirrored Learnable Operator frame, then follows three arrows to the application cards."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three titled columns left to right: a rounded frame for the classical operator, an identically laid out frame for the learnable operator, and a column of three dashed application cards fed by three short arrows from the second frame.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.25,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f18c25",
+    "used_for": "orange of the classical side: joint rings, Rotation label and arrow, Fixed coefficients caption"
+   },
+   {
+    "hex": "#faeca8",
+    "used_for": "pale yellow cells of the fixed coefficient grids"
+   },
+   {
+    "hex": "#ffe9d2",
+    "used_for": "pale peach cells of the fixed coefficient grids"
+   },
+   {
+    "hex": "#fff59d",
+    "used_for": "yellow cells of the fixed coefficient grids"
+   },
+   {
+    "hex": "#97d1a0",
+    "used_for": "green of the Message passing label and arrow"
+   },
+   {
+    "hex": "#cde7d7",
+    "used_for": "pale green fill of the graph nodes"
+   },
+   {
+    "hex": "#1f803c",
+    "used_for": "dark green outlines of the graph nodes"
+   },
+   {
+    "hex": "#abdaec",
+    "used_for": "light-blue cells of the learnable weights"
+   },
+   {
+    "hex": "#6a9ace",
+    "used_for": "blue cells of the learnable weights"
+   },
+   {
+    "hex": "#715ea9",
+    "used_for": "purple cells of the learnable weights"
+   },
+   {
+    "hex": "#63c2bf",
+    "used_for": "teal cells of the learnable weights"
+   },
+   {
+    "hex": "#f6c0cc",
+    "used_for": "pink cells of the learnable weights"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "grey arrows between nodes and the joint feature slabs"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy 0.5 pt borders of all grid cells"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey 1.25 pt frames and text"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "light grey body of the robot arm"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt dark grey rounded frames and dashed cards; 0.5 pt navy cell borders",
+  "font": "serif (Times New Roman) 7.5 pt labels, bold 9.5 pt column titles, bold operator names; coloured captions under the tensors; Cambria Math for the vector",
+  "corners": "rounded",
+  "arrows": "thin grey arrows with small heads between columns; light grey chain arrows between nodes; curved orange and green arrows for rotation and message passing",
+  "rendering": "flat-vector",
+  "effects": "none; grids are offset copies to suggest a stack",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange family = classical operator (joints, Rotation, fixed coefficients); green family = learnable operator (nodes, Message passing, weights); warm uniform cells = fixed values and many-coloured cells = learnable values; grey = joint state and features",
+  "line_style_means": "solid rounded frames = operators; dashed rounded frames = application cards; dashed grey line in Motion prediction = predicted displacement",
+  "shape_means": "offset grids = tensors; green circles = joints as nodes; grey slabs = feature stacks; black dot = product",
+  "marker_means": "the dot between the stacks means the operator multiplies them; the caption under each stack names its role (Fixed coefficients, Joint state, Learnable weights, Joint features)",
+  "emphasis": "The second frame mirrors the first with the same layout, so only the colour family, the cell colours and the captions change; three arrows fan out to the applications.",
+  "reusable_patterns": [
+   "classical and learnable versions as mirrored frames with identical layout and a swapped colour family",
+   "tensor stack times vector or feature stack joined by a dot as a picture of a formula",
+   "robot arm with orange ring joints next to a graph of green nodes for the same chain",
+   "three arrows fanning from the proposed frame into three dashed application cards with two thumbnails each",
+   "coloured captions under each tensor naming its role"
+  ],
+  "weaknesses": [
+   "the three layers of the full network (Rodrigues Layer, Joint Layer, Self-Attention Layer) are not drawn",
+   "the application thumbnails are about 25 pt wide, so the task content is hard to read"
+  ]
+ },
+ "resources": {
+  "own": [
+   "robot-arm renders, simulator frames and hand-pose photos with overlays from the experiments"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "robot arm illustration",
+   "tensor grids and slabs",
+   "node graph, arrows and frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "articulated robot arm with orange joints",
+   "stacked coefficient grids",
+   "joint-state vector (1, sin θ, cos θ)",
+   "green node graph with message passing",
+   "learnable weight tensor stack",
+   "joint feature slabs",
+   "three dashed application cards with thumbnails"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "Rodrigues rotation formula",
+   "neural operator",
+   "robot kinematics",
+   "message passing",
+   "articulated systems",
+   "imitation learning",
+   "hand pose estimation",
+   "motion prediction"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "mirrored-classical-vs-learnable",
+    "what": "a classical formula and its learnable generalisation drawn as two framed panels with identical layout, one colour family each"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show a learnable generalisation, draw the classical formula and the new operator as mirrored frames with identical layout (tensor stack times vector stack), swap the colour family and replace uniform cells by multicoloured ones, then fan out to application cards.",
+  "suits": "Papers that turn a classical operator or formula into a neural module and then apply it to several tasks."
+ },
+ "tags": [
+  "teaser",
+  "mirrored-panels",
+  "tensor-stacks",
+  "dashed-application-cards",
+  "serif-text",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "the original coefficients are replaced with trainable weights and joint angles are generalized to abstract features",
+   "the Rodrigues Network leverages the kinematic structure of articulated systems to advance a wide range of action-learning tasks"
+  ]
+ },
+ "summary": "The paper proposes the Neural Rodrigues Operator, a learnable generalisation of the classical Rodrigues rotation formula for forward kinematics, and builds the Rodrigues Network on it for robot action learning. Figure 1 is a teaser in three titled columns. In the Classical Operator frame an articulated robot arm with orange joints and a Rotation arrow sits beside a stack of fixed coefficient grids multiplied by the joint-state vector (1, sin θ, cos θ). The Learnable Operator frame mirrors it: a chain of green nodes with Message passing, and a stack of multicoloured learnable weights times a stack of joint features. Three arrows then fan out to dashed Applications cards with thumbnails: Motion prediction, Imitation learning and Hand pose estimation.",
+ "summary_zh": "论文提出神经罗德里格斯算子，把经典罗德里格斯旋转公式变为可学习，并据此构建Rodrigues网络学习机器人动作。图1分三栏：经典算子（机械臂、固定系数乘关节状态）、镜像的可学习算子（消息传递、可学习权重乘关节特征）和三张虚线应用卡片。",
+ "confidence": "high",
+ "notes": "All four pre-screen kinds kept; contribution-mosaic only covers the Applications column. The text that cites the figure says the figure illustrates the network, but only the operator and the applications are drawn. Thumbnail count (2 per card) follows the preview; the digest lists 6 placed bitmaps of which two are tiny.",
+ "venue": "ICLR26"
+}

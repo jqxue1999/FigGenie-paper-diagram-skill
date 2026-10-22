@@ -1,0 +1,527 @@
+{
+ "paper_id": "iclr26-0025",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Gene expression prediction from DNA: longer input sequences do not help, so the paper integrates proximal multimodal epigenomic signals, which contribute unequally.",
+  "domain": [
+   "gene expression prediction",
+   "epigenomic signals",
+   "long-sequence modelling"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "concept-schematic"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "six titled panels in a 2x3 grid, three schematics of the biology and models over three measured charts, each carrying one finding of the motivation",
+  "argues": "Extending the input sequence does not improve expression prediction; nearby multimodal epigenomic signals matter, contribute unequally, and models over-depend on background signals.",
+  "subject": "Chromatin looping, an SSM long-sequence model with three limitations, stacked epigenomic tracks, and three charts of input length and signal ablations.",
+  "elements": [
+   {
+    "name": "DNA strand with E1, E2 and TSS",
+    "type": "data",
+    "role": "linear DNA with two distal enhancers (E1 ~100kb, E2 ~50kb) acting on the TSS",
+    "drawn_as": "grey line with double-helix ends, orange enhancer squares, teal TSS square with a yellow promoter bar, and two red dashed arcs to the TSS",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "chromatin loop drawing",
+    "type": "region",
+    "role": "the same interaction folded in space: enhancers meet promoter and TSS",
+    "drawn_as": "thick grey looped strand with orange clusters near the yellow promoter and teal TSS, a tiny blue peak glyph under it",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "key: Enhancer, TSS, Promoter, H3K27ac",
+    "type": "label",
+    "role": "names the coloured glyphs of (a)",
+    "drawn_as": "four small glyphs with bold serif names at the right edge of the panel",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "200 kb sequence",
+    "type": "data",
+    "role": "the long DNA input of current models",
+    "drawn_as": "grey segmented bar with dotted gaps under a brace labelled 200 kb, inside a dash-dot frame",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "SSM Long-sequence",
+    "type": "module",
+    "role": "a state-space long-sequence model fed with the 200 kb input",
+    "drawn_as": "yellow rounded box with bold serif text, a black arrow labelled input pointing into it",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Weak / Strong gradient arrow",
+    "type": "other",
+    "role": "strength across the input, weak at both ends and strong next to the model (read as the recency effect named below)",
+    "drawn_as": "double-headed block arrow shaded orange to red to purple on both sides of the SSM box with Weak and Strong labels",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "Recency Bias, Fix Hidden States, Performance Degradation",
+    "type": "label",
+    "role": "three limitations of current long-sequence models",
+    "drawn_as": "three red bold serif items, each led by a red ✘",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "sequence with TSS window",
+    "type": "data",
+    "role": "the sequence around the TSS, with the proximal region marked",
+    "drawn_as": "grey bar labelled Sequence: with a teal TSS and a black rectangle covering ~1kb on each side, ~100kb at the far ends",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "H3K27ac, DNase, Hi-C tracks",
+    "type": "data",
+    "role": "three epigenomic signals aligned along the sequence",
+    "drawn_as": "stacked peak profiles in green, orange and purple with bold names at the left, dotted gaps, grey rounded backdrop",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "grey funnel",
+    "type": "region",
+    "role": "ties the narrow window near the TSS to the whole ~100kb span (proximal signals reflect distal activity)",
+    "drawn_as": "translucent grey wedges from the window to the far ends of the tracks",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Model Performance by Input Length",
+    "type": "chart",
+    "role": "Pearson correlation of Seq2Exp(soft) and Cadeceus w/ signals for inputs from 100 to 200000 bp",
+    "drawn_as": "line chart on a log x axis with two marked series and a legend strip on top",
+    "container": "(d)",
+    "is_contribution": null
+   },
+   {
+    "name": "Cadeceus Performance (Consistent Training/Testing)",
+    "type": "chart",
+    "role": "contribution of each signal: No Signal 0.8485, w/ H3K27ac 0.8628, w/ DNase 0.8497, w/ Hi-C 0.8530, w/ All Signals 0.8652",
+    "drawn_as": "five bars in five pastel colours with value labels",
+    "container": "(e)",
+    "is_contribution": null
+   },
+   {
+    "name": "Cadeceus Performance (Full Signals Training, Ablated Signal Testing)",
+    "type": "chart",
+    "role": "drop in correlation when a signal is removed at test time: All 0.8652, Drop H3K27ac 0.6964, Drop DNase 0.8189, Drop Hi-C 0.8467",
+    "drawn_as": "four bars in orange, red and pink with value labels",
+    "container": "(f)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "E1, E2",
+    "to": "TSS",
+    "what": "distal enhancers regulate the gene from ~100kb and ~50kb away",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "200 kb sequence",
+    "to": "SSM Long-sequence",
+    "what": "input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Weak / Strong gradient arrow",
+    "to": "Recency Bias, Fix Hidden States, Performance Degradation",
+    "what": "the limitations are listed under the model they describe",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "grey funnel",
+    "to": "sequence with TSS window",
+    "what": "wide tracks narrow to the ~1kb window around the TSS",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "(b)",
+    "to": "(d)",
+    "what": "(d) tests the claim that long inputs help SSMs; linked by the paper text only",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "(c)",
+    "to": "(e), (f)",
+    "what": "(e) and (f) measure the contribution of the signals drawn in (c); linked by the paper text only",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) DNA Long -range Interaction",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "enhancers E1 and E2 act on the TSS over long distances through chromatin looping",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Current Long-sequence Models",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "an SSM reads a 200 kb input and shows recency bias, fixed hidden states and performance degradation",
+    "verdict": "fails"
+   },
+   {
+    "label": "(c) Multimodal Signals Matter",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "H3K27ac, DNase and Hi-C tracks around a ~1kb window at the TSS carry cell-type specific information",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) Model Performance by Input Length",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "longer inputs give no clear gain for Seq2Exp(soft) and a drop for Caduceus after 2000 bp",
+    "verdict": "fails"
+   },
+   {
+    "label": "(e) Cadeceus Performance (Consistent Training/Testing)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "each signal helps; H3K27ac helps most and all signals about equals it",
+    "verdict": null
+   },
+   {
+    "label": "(f) Cadeceus Performance (Full Signals Training, Ablated Signal Testing)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "removing a background signal at test time hurts a lot, most for H3K27ac",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) - (f)",
+    "kind": "section",
+    "at": "left of each panel title",
+    "what": "letters head the six panels"
+   },
+   {
+    "marker": "E1, E2, TSS",
+    "kind": "identity",
+    "at": "under the DNA strand",
+    "what": "names the two enhancers and the transcription start site with their distances"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "Pearson correlation versus input sequence length for two models",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "line chart with dashed grid and sans-serif matplotlib text, placed as JPEG pieces (plot and legend strip) in a figure of serif text"
+   },
+   {
+    "what": "bar charts of signal contributions and ablations",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "pastel bars, one colour per condition, value printed above every bar, serif axis labels with rotated category names"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "DNA double helix",
+    "stands_for": "the ends of the DNA strand",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "orange rounded square, teal square, yellow bar",
+    "stands_for": "enhancer, TSS, promoter in the key of (a) and in the drawing",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "small blue peak profile",
+    "stands_for": "H3K27ac signal in the key of (a)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red cross mark",
+    "stands_for": "a limitation of current long-sequence models",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "enhancer-promoter-loop",
+    "drawn_as": "a linear strand with enhancers linked to the TSS by dashed red arcs, plus the same contact folded as a thick looped strand",
+    "parts": [
+     "E1",
+     "E2",
+     "TSS",
+     "promoter",
+     "loop"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "genome-browser-tracks",
+    "drawn_as": "stacked coloured peak profiles (H3K27ac, DNase, Hi-C) aligned under one sequence bar, with a window around the TSS",
+    "parts": [
+     "sequence bar",
+     "track rows",
+     "window"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "ssm-box",
+    "drawn_as": "yellow rounded box labelled SSM / Long-sequence fed from above, with a gradient double arrow running through it",
+    "parts": [
+     "box",
+     "input arrow",
+     "gradient arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at (a) top left, then (b) and (c) across the top row; the eye then drops to the line chart (d) and moves across the bars (e) and (f)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Six unframed panels in two rows of three: schematics (a), (b), (c) on top, measured charts (d), (e), (f) below, each headed by its letter and a bold serif title; a grey rounded backdrop only inside (c).",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.85,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ee8d5a",
+    "used_for": "enhancer squares in (a)"
+   },
+   {
+    "hex": "#529a9f",
+    "used_for": "TSS square in (a) and (c)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "promoter bar in (a)"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "SSM Long-sequence box in (b)"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey rounded backdrop of the tracks in (c)"
+   },
+   {
+    "hex": "#c9c9c9",
+    "used_for": "grey DNA sequence bars"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "darker grey parts of the strand"
+   },
+   {
+    "hex": "#ff5050",
+    "used_for": "red dashed arcs from enhancers to the TSS in (a)"
+   },
+   {
+    "hex": "#3c9bc9",
+    "used_for": "No Signal bar in (e)"
+   },
+   {
+    "hex": "#65bdba",
+    "used_for": "w/ H3K27ac bar in (e)"
+   },
+   {
+    "hex": "#b0d6a9",
+    "used_for": "w/ DNase bar in (e)"
+   },
+   {
+    "hex": "#fee199",
+    "used_for": "w/ Hi-C bar in (e)"
+   },
+   {
+    "hex": "#fdcd94",
+    "used_for": "w/ All Signals bar in (e)"
+   },
+   {
+    "hex": "#faa26f",
+    "used_for": "w/ All Signals bar in (f)"
+   },
+   {
+    "hex": "#fc757b",
+    "used_for": "Drop DNase bar in (f)"
+   },
+   {
+    "hex": "#f7a6ac",
+    "used_for": "Drop Hi-C bar in (f)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25-0.5 pt black outlines, a few 0.75 pt lines and one 2.25 pt line; red dashed arcs; thick grey strand",
+  "font": "serif (Times / Nimbus Roman) 4-7 pt, bold for titles and labels; sans numbers inside the charts",
+  "corners": "mixed",
+  "arrows": "thin black arrow for the input; red dashed arcs for regulation; a shaded double-headed block arrow in (b)",
+  "rendering": "mixed",
+  "effects": "soft gradient on the funnel in (c) and on the block arrow in (b); faint shadow under the chromatin loop",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "(a) orange = enhancer, teal = TSS, yellow = promoter; (c) green, orange, purple tracks = H3K27ac, DNase, Hi-C; (e) one pastel colour per signal condition; (f) orange, red and pink for full model and ablations; red text and crosses = limitations",
+  "line_style_means": "red dashed arc = regulatory contact; dash-dot frame = the 200 kb input window; dashed grey grid in (d)",
+  "shape_means": "orange square = enhancer, teal square = TSS, yellow bar = promoter, yellow rounded box = SSM, black rectangle = ~1kb window around the TSS",
+  "marker_means": "panel letters head panels; red ✘ flags each limitation; numbers on bars give the correlation",
+  "emphasis": "Bold serif panel titles carry each claim; red ✘ items under the SSM stand out; in (f) the 0.6964 bar is the visual outlier.",
+  "reusable_patterns": [
+   "row of claim-titled schematics over a row of evidence charts",
+   "red cross list of limitations pinned under a model box",
+   "gradient double-headed arrow with Weak and Strong ends for strength across a sequence",
+   "grey funnel from a long span to a narrow window to say a local view reflects far context",
+   "stacked genomic tracks aligned under a sequence bar",
+   "value labels on top of every bar",
+   "small key of glyphs placed inside a schematic panel"
+  ],
+  "weaknesses": [
+   "bar colours in (e) do not reuse the track colours of (c)",
+   "the gradient arrow in (b) is not explained inside the figure",
+   "chart (d) is a JPEG in sans type next to vector serif parts",
+   "the model name is spelt Cadeceus in panel titles"
+  ]
+ },
+ "resources": {
+  "own": [
+   "Pearson correlations for Caduceus and Seq2Exp across input lengths",
+   "signal ablation results with and without each signal"
+  ],
+  "stock": [
+   "DNA double-helix glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "chromatin loop drawing (placed as a bitmap)",
+   "SSM box with gradient arrow and red cross list",
+   "stacked epigenomic tracks and funnel",
+   "enhancer, TSS and promoter glyphs"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "DNA strand with enhancers and TSS",
+   "chromatin loop",
+   "SSM long-sequence box",
+   "red cross limitation list",
+   "stacked epigenomic tracks",
+   "line chart over input length",
+   "bar charts of signal contributions"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "gene expression prediction",
+   "long-sequence SSM",
+   "epigenomic signals",
+   "H3K27ac",
+   "enhancer",
+   "input length",
+   "Caduceus",
+   "Seq2Exp"
+  ],
+  "tags": [
+   "problem-only",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "genomic-track-stack",
+    "what": "stacked coloured peak profiles of epigenomic signals aligned under a sequence bar with a window marked around a site"
+   },
+   {
+    "name": "limitation-cross-list",
+    "what": "red cross bullets with short names of a method's limitations placed under its block"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "A motivation figure can be a 2x3 board: three claim-titled schematics (the setting, the baseline's limitations, the idea) over three measured charts that back each claim, so the paper's premise is argued before any method is drawn.",
+  "suits": "Position or motivation figures that argue against a prevailing practice (longer inputs, bigger models) using one schematic and one measurement per claim."
+ },
+ "tags": [
+  "six-panel-grid",
+  "serif-titles",
+  "schematics-over-charts",
+  "pastel-bars",
+  "motivation-figure",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "2 Preliminary study (p.3-4)"
+  ],
+  "evidence": [
+   "(b) Current longsequence models suffer from technical limitations.",
+   "(c) Multimodal epigenomic signals provide cell-type specific regulatory information.",
+   "removing background signals during testing from models trained on all signals causes severe performance degradation"
+  ]
+ },
+ "summary": "The paper predicts gene expression from DNA sequence and argues that extending the input length is not what helps; proximal multimodal epigenomic signals matter more and contribute unequally. Figure 1 is a six-panel motivation figure. Three schematics come first: (a) enhancers E1 and E2 reaching a TSS through chromatin looping, (b) an SSM long-sequence model reading a 200 kb input, with a Weak and Strong gradient arrow and three red-cross limitations (recency bias, fixed hidden states, performance degradation), and (c) H3K27ac, DNase and Hi-C tracks around a ~1kb window. Three measured charts follow: a line chart of Pearson correlation against input length for Seq2Exp and Caduceus, a bar chart of signal contributions and a bar chart of test-time ablations. Serif titles, flat colour, white ground.",
+ "summary_zh": "论文指出基因表达预测的关键不是加长输入序列，而是近端多模态表观基因组信号。图1为六格动机图：上排三幅示意图（染色质环、SSM的三项缺陷、信号轨道），下排三幅实测图（输入长度折线图、信号贡献与消融柱状图）。",
+ "confidence": "high",
+ "notes": "Prior kinds changed: contribution-mosaic (finding-cards) is primary because the six panels are separate findings, not alternatives, so side-by-side-contrast is dropped; concept-schematic stays for (a)-(c). The meaning of the Weak/Strong gradient arrow is read from the later text about recency bias. The grey funnel in (c) is a wide-to-narrow wedge, not a zoom inset. Chart (d) is a JPEG; (e) and (f) are vector, their tick text is not in the live text layer.",
+ "venue": "ICLR26"
+}

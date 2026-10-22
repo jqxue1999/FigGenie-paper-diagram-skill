@@ -1,0 +1,514 @@
+{
+ "paper_id": "cvpr23-0059",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "X-Pruner",
+  "one_liner": "Explainable pruning of vision transformers: class-wise explainability-aware masks are learned per prunable unit and used to choose which units to prune.",
+  "domain": [
+   "model pruning",
+   "vision transformers",
+   "explainability"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline",
+   "concept-schematic"
+  ],
+  "variant": "tensor-diagram",
+  "variant_note": "the method drawn in tensor notation: offset stacks of 5 by 5 cell grids for weights, class masks and activations, with translucent cones for multiplication and pruning, in a Training panel and a Testing panel",
+  "argues": "Class-wise explainability-aware masks learned in training are summed over classes into one pruning mask that shrinks W, so pruning follows each unit's relevance to the classes.",
+  "subject": "Weight matrix W with class mask columns in training, and a sum reduction of the masks into a pruning mask that gives Pruned W in testing",
+  "elements": [
+   {
+    "name": "W",
+    "type": "module",
+    "role": "weight matrix of a transformer layer whose units are to be pruned",
+    "drawn_as": "5 by 5 grey grid with a bold W on the front slice; six copies stacked with an offset up and to the right",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "M:,0  M:,1  M:,2  M:,3",
+    "type": "data",
+    "role": "class-wise explainability-aware mask, one column per class 0 to 3, measuring each unit's contribution to each class (caption)",
+    "drawn_as": "four 5-cell columns in purple, green, blue and red with a tint that fades down each column, rotated labels on top",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "W_ij M:,y_k",
+    "type": "formula",
+    "role": "weight element times the mask of the sample's class y_k",
+    "drawn_as": "purple bold italic label above the stacks, tied to the back slice by a purple outline",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "slice pairs: W grid, white gap, class mask column",
+    "type": "data",
+    "role": "a weight matrix joined to the mask column of one class; six pairs are stacked",
+    "drawn_as": "wide slices outlined in the class colour (blue at the front, purple at the back): grey W grid at the left, white gap, 5-cell coloured column at the right, stacked with an offset",
+    "container": "Training",
+    "is_contribution": null
+   },
+   {
+    "name": "Indexed by y_k",
+    "type": "label",
+    "role": "picks the mask column of label y_k out of the four class columns",
+    "drawn_as": "serif label under a thin blue curved arrow running from the mask columns to the slice stack",
+    "container": "Training",
+    "is_contribution": null
+   },
+   {
+    "name": "stack of class-tinted grids (unlabelled)",
+    "type": "data",
+    "role": "lower stack that the blue cone leads to and that goes into the matrix multiplication",
+    "drawn_as": "grids tinted light blue (front), pink, green, blue, green, lilac, offset up and right, with a narrow coloured column beside each",
+    "container": "Training",
+    "is_contribution": null
+   },
+   {
+    "name": "Matrix multiplication",
+    "type": "operation",
+    "role": "multiplies the lower stack with the layer input",
+    "drawn_as": "black-outlined frame around the lower stack and the dark grey input column, label at its foot",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "x_j^l",
+    "type": "data",
+    "role": "layer input of sample j",
+    "drawn_as": "stack of grey 5-cell columns, darkest at the front and fading backwards",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "x_j^{l+1}",
+    "type": "data",
+    "role": "layer output of sample j, tinted with the sample's class colour",
+    "drawn_as": "stack of 5-cell columns in blue, red, green, blue, green, purple tints, reached by a black arrow from the multiplication frame",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "Sum reduction",
+    "type": "operation",
+    "role": "reduces the class-wise masks over the classes to a single mask column",
+    "drawn_as": "circled R on the line leaving the mask columns; the text label is reached by a black elbow arrow",
+    "container": "Testing",
+    "is_contribution": true
+   },
+   {
+    "name": "orange pruning mask and W",
+    "type": "data",
+    "role": "the reduced mask (one orange column) next to the weight matrix W",
+    "drawn_as": "orange-outlined box: 5-cell orange column at the left, white gap, grey W grid at the right",
+    "container": "Testing",
+    "is_contribution": true
+   },
+   {
+    "name": "Pruning",
+    "type": "operation",
+    "role": "removes units of W according to the pruning mask",
+    "drawn_as": "bold orange word on an orange translucent cone that narrows from the orange box to Pruned W",
+    "container": "Testing",
+    "is_contribution": true
+   },
+   {
+    "name": "Pruned W",
+    "type": "data",
+    "role": "weight matrix after pruning",
+    "drawn_as": "grey grid with fewer rows than W, label inside",
+    "container": "Testing",
+    "is_contribution": true
+   },
+   {
+    "name": "Batch x",
+    "type": "data",
+    "role": "input batch",
+    "drawn_as": "white 5 by 5 grid with the label inside",
+    "container": "Testing",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "M:,0  M:,1  M:,2  M:,3",
+    "to": "slice pairs: W grid, white gap, class mask column",
+    "what": "the column of each sample's label is picked (Indexed by y_k)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W_ij M:,y_k",
+    "to": "slice pairs: W grid, white gap, class mask column",
+    "what": "a purple outline ties the label to the back slice pair",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "slice pairs: W grid, white gap, class mask column",
+    "to": "stack of class-tinted grids (unlabelled)",
+    "what": "blue translucent cone from the front slice down to the lower stack",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "stack of class-tinted grids (unlabelled)",
+    "to": "Matrix multiplication",
+    "what": "the lower stack and the dark input column sit inside the multiplication frame",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Matrix multiplication",
+    "to": "x_j^{l+1}",
+    "what": "product handed to the output stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M:,0  M:,1  M:,2  M:,3",
+    "to": "Sum reduction",
+    "what": "all class columns leave the Training panel by one black line into the circled R",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Sum reduction",
+    "to": "orange pruning mask and W",
+    "what": "reduced mask column",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange pruning mask and W",
+    "to": "Pruned W",
+    "what": "orange translucent cone labelled Pruning narrows the box to the smaller grid",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Pruned W",
+    "to": "Batch x",
+    "what": "placed side by side at the foot of the Testing panel; no operator drawn between them",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "class colours (purple, green, blue, red)",
+    "to": "mask columns, slice outlines, tinted grids, x_j^{l+1}",
+    "what": "one colour per class carried from the masks through the stacks to the outputs",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Training",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "weights W paired with class mask columns, multiplied into class-tinted slices and then with the layer input x^l to give x^{l+1}",
+    "verdict": "setting"
+   },
+   {
+    "label": "Testing",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "class masks reduced by a sum to one orange pruning mask that prunes W into Pruned W, with an input batch x beside it",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "M:,0  M:,1  M:,2  M:,3",
+    "kind": "identity",
+    "at": "rotated labels above the four mask columns",
+    "what": "name the mask column of class 0 to 3"
+   },
+   {
+    "marker": "x_j^l, x_j^{l+1}",
+    "kind": "identity",
+    "at": "above the two column stacks",
+    "what": "name the layer input and output of sample j"
+   },
+   {
+    "marker": "circled R",
+    "kind": "identity",
+    "at": "on the line between the masks and the orange column",
+    "what": "operator glyph of the sum reduction"
+   },
+   {
+    "marker": "Training, Testing",
+    "kind": "section",
+    "at": "bold words at the foot of the two panels",
+    "what": "head the two phases"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "weight-matrix-grid",
+    "drawn_as": "a matrix as a 5 by 5 grey grid with light grid lines and a bold symbol on it; masks and activations as narrow 5-cell columns",
+    "parts": [
+     "grid",
+     "grid lines",
+     "symbol"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "stacked-slices",
+    "drawn_as": "six copies of a grid or column offset up and to the right, one slice per sample or class, front slice outlined",
+    "parts": [
+     "front slice",
+     "back slices"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "pruning-funnel",
+    "drawn_as": "orange translucent cone narrowing from the full weight grid with its mask to the smaller Pruned W grid, with a bold orange label",
+    "parts": [
+     "orange box",
+     "cone",
+     "Pruning label",
+     "Pruned W"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "reduce-operator",
+    "drawn_as": "circle with an R on a line, with a text label reached by an elbow arrow",
+    "parts": [
+     "circled R",
+     "Sum reduction label"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the W stack and the purple W_ij M label at the top left of Training, goes down the blue cone to the lower stack and along the black arrow to the coloured output stack, then crosses to Testing: sum reduction at the top, the orange cone down to Pruned W and Batch x."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two grey-framed panels side by side: Training (about 60% of the width) and Testing, whose frame is split by a horizontal line into an upper and a lower cell. In Training, oblique stacks of grids run from the weights and mask columns at the top left through a blue translucent cone to the lower stack, and a black arrow leads to the coloured output stack; in Testing the masks are reduced to one orange column, an orange cone narrows W to Pruned W, and the Batch x grid sits beside it. The phase names are bold words at the foot of each panel.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.11,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey weight-matrix grids (W, Pruned W)"
+   },
+   {
+    "hex": "#b1cfe5",
+    "used_for": "light-blue tinted grid (front of the lower stack)"
+   },
+   {
+    "hex": "#b5deb5",
+    "used_for": "light-green tinted grids"
+   },
+   {
+    "hex": "#f1b3b4",
+    "used_for": "light-red tinted grids"
+   },
+   {
+    "hex": "#dacae8",
+    "used_for": "light-purple tinted grids"
+   },
+   {
+    "hex": "#79add2",
+    "used_for": "blue mask cells, fading to #bcd6e8 down the column"
+   },
+   {
+    "hex": "#abd9ab",
+    "used_for": "green mask cells"
+   },
+   {
+    "hex": "#ea9393",
+    "used_for": "red mask cells"
+   },
+   {
+    "hex": "#8fbbd9",
+    "opacity": 0.6,
+    "used_for": "blue translucent cone from the slice pairs to the lower stack"
+   },
+   {
+    "hex": "#c9b3de",
+    "opacity": 0.6,
+    "used_for": "lilac band under the slice-pair stack"
+   },
+   {
+    "hex": "#ffbf86",
+    "opacity": 0.6,
+    "used_for": "orange translucent pruning cone"
+   },
+   {
+    "hex": "#9467bd",
+    "used_for": "class 0 outlines and the purple W_ij M label (stroke)"
+   },
+   {
+    "hex": "#2ca02c",
+    "used_for": "class 1 outlines (stroke)"
+   },
+   {
+    "hex": "#1f77b4",
+    "used_for": "class 2 outlines and the Indexed by y_k arrow (stroke)"
+   },
+   {
+    "hex": "#d62728",
+    "used_for": "class 3 outlines (stroke)"
+   },
+   {
+    "hex": "#ff7f0e",
+    "used_for": "pruning mask outline and the Pruning label (stroke)"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "cell grid lines (stroke) and the dark input column"
+   },
+   {
+    "hex": "#7f807f",
+    "used_for": "panel frames and slice outlines (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.75 pt throughout: pale grey (#bfbfbf) cell grid lines, grey panel frames, black frame and arrows, class-coloured slice outlines",
+  "font": "serif (Nimbus Roman) 10.5 pt labels with 9 pt subscripts; bold italic math (Computer Modern) for W, M and x; the W_ij M label in purple and the Pruning label in bold orange",
+  "corners": "square",
+  "arrows": "thin black arrows with solid triangular heads; one thin blue curved arrow for the label indexing; translucent cones instead of arrows between the stacks",
+  "rendering": "flat-vector",
+  "effects": "translucent overlays (blue, lilac, orange) and a tint that fades down each mask column; no shadows",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per class (purple 0, green 1, blue 2, red 3) carried from the mask columns to the slice outlines, the tinted grids, the output columns and the W_ij M label; grey = weights W and the input; orange = the pruning mask and pruning; the tint down a mask column fades (its meaning is not stated)",
+  "line_style_means": "black arrows and lines = data flow into the output and from the masks into the reduction; thin blue curved arrow = selecting the column by label; translucent cones = the operation that turns the upper matrices into the lower ones; grey frames = panels",
+  "shape_means": "5 by 5 grid = a matrix; narrow 5-cell column = a mask or an activation vector; offset stack = one slice per sample or class; circled R = sum reduction; black frame = the matrix multiplication block",
+  "marker_means": "M with a column index = class mask; y_k = label of sample k; x with l and l+1 = layer input and output; R = reduction over classes",
+  "emphasis": "Orange appears only in Testing: the mask, the Pruning cone and its label, so the pruning step is the one coloured cone that shrinks the weight grid.",
+  "reusable_patterns": [
+   "offset stacks of cell grids, one slice per sample or class, in tensor notation",
+   "one colour per class carried from the mask columns through the slices to the outputs",
+   "translucent cone joining the source matrices to the result of an operation",
+   "orange funnel from a full weight grid to the smaller pruned grid",
+   "circled operator glyph on a line with a text label",
+   "Training and Testing as two framed panels with the phase names at the foot"
+  ],
+  "weaknesses": [
+   "the slice pairs, white gaps and cones are not explained inside the figure and need the paper's notation",
+   "the caption's steps (threshold search, fine-tuning) have no drawn counterpart other than the Pruning cone",
+   "the phase names sit at the bottom edge, far from where the eye starts"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "cell grids and offset stacks",
+   "translucent cones",
+   "circled R operator",
+   "arrows and frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "offset stacks of grey weight-matrix grids",
+   "class mask columns in four colours",
+   "translucent blue and orange cones",
+   "circled R sum-reduction operator",
+   "Pruned W grid",
+   "Batch x grid",
+   "output column stack"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "explainable pruning",
+   "vision transformer",
+   "class-wise mask",
+   "weight pruning",
+   "sum reduction",
+   "pruned weights",
+   "matrix multiplication",
+   "tensor diagram"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "colour-coded-groups",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "translucent-operation-cone",
+    "what": "a translucent cone or trapezoid joins the source matrices to the result of an operation (multiplication, pruning) in place of an arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a tensor operation as offset stacks of cell grids, keep one class colour from the mask columns through the slices to the outputs, and join the before and after matrices with a translucent cone labelled with the operation.",
+  "suits": "Methods that act on weight or activation matrices (masking, pruning, low rank, sparsity), where a picture of the matrices is the explanation."
+ },
+ "tags": [
+  "oblique stacks of matrix grids",
+  "class colour per slice",
+  "translucent cones",
+  "serif math labels",
+  "two framed panels",
+  "no sample data"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.3)",
+   "Abstract"
+  ],
+  "evidence": [
+   "train a transformer with the proposed explainability-aware masks",
+   "Then we explore the layer-wise pruning threshold",
+   "a novel explainability-aware mask is proposed and learned in an end-to-end manner"
+  ]
+ },
+ "summary": "X-Pruner is an explainable pruning framework for vision transformers that learns class-wise explainability-aware masks for the prunable units of a layer and prunes with them. Figure 1 is a tensor-level diagram in two framed panels. In Training, a stack of weight matrices W, each paired with the mask column of its sample's class (picked from four class columns by the label y_k), leads through a blue cone to a class-tinted stack that is multiplied with the layer input x to give the next layer's output, with one colour per class throughout. In Testing, the class masks are reduced by a sum to one orange column, an orange cone narrows W to Pruned W, and a Batch x grid sits beside it. All items are cell grids; there is no sample data.",
+ "summary_zh": "X-Pruner 为视觉 Transformer 学习按类别区分的掩码来剪枝。图用矩阵切片堆叠画法分两栏：训练栏中权重 W 乘以按标签选出的类别掩码列；测试栏把各类掩码求和成一列橙色剪枝掩码，把 W 剪成 Pruned W。",
+ "confidence": "medium",
+ "notes": "The index calls this chart/bar (pgfplots metadata); it is a tensor-notation diagram, not a chart. Prior kinds (model-anatomy, concept-schematic) kept, stage-pipeline added for the Training to Testing hand-over of the masks. No paragraph mentions the figure: the reading of the six-slice stacks as one slice per sample with its class colour, of the white gaps and of the cones is inferred from the labels (W_ij M:,y_k, Indexed by y_k, Sum reduction, Matrix multiplication, Pruning) and may not match the authors' exact intent. The class colours are the matplotlib tab10 hues.",
+ "venue": "CVPR23"
+}

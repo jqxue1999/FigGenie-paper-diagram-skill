@@ -63,6 +63,9 @@ LINES = ('path', 'line', 'polyline')
 PREFIX = {'n:': 'node', 'e:': 'edge', 'c:': 'container', 'l:': 'lane', 's:': 'step', 'a:': 'annotation', 'p:': 'panel', 'v:': 'value'}
 MECH_THRESH = SKILL / 'references' / 'mechanism' / 'style-thresholds.json'
 MECH_NODE_BUDGET = {'single': {'q3': 12, 'p90': 14}, 'double': {'q3': 15, 'p90': 17}}   # label-distinct, spec_validate.py MECH_BOX_*
+AI_THRESH = SKILL / 'references' / 'ai' / 'style-thresholds.json'     # meta.family = ai: venue width bands, ceilings, budgets by kind, ai_pass parameters
+AI_NODE_BUDGET_DEFAULT = {'q3': 28, 'p90': 57}                           # family-wide labelled boxes p75 / p95 (good AI-venue figures)
+HUE_BINS = ((0.04, 'red'), (0.11, 'orange'), (0.19, 'yellow'), (0.45, 'green'), (0.55, 'teal'), (0.72, 'blue'), (0.83, 'purple'), (0.93, 'pink'), (1.01, 'red'))
 
 
 def kind_of(el):
@@ -126,6 +129,7 @@ class Lint:
         self.texts = [e for e in els if e['tag'] == 'text' and e.get('text')]
         self.W, self.H = data['W'], data['H']
         self.mech = ((self.spec.get('meta') or {}).get('kind') == 'mechanism')
+        self.ai = ((self.spec.get('meta') or {}).get('family') == 'ai')          # AI-venue family: venue bands, ai_pass checks
         sp = [q for q in (self.spec.get('panels') or []) if isinstance(q, dict) and q.get('id')]
         self.panel_parent = {q['id']: q.get('parent') for q in sp}
         self.panel_axis = {q['id']: q.get('axis', 'alternatives') for q in sp}
@@ -267,7 +271,9 @@ class Lint:
         if abs(vb[0]) > 1e-6 or abs(vb[1]) > 1e-6: self.add('error', 'canvas.origin', f'viewBox origin is {vb[0]},{vb[1]}; must be 0 0')
         W = vb[2]; cols = self.thr.get('columns', {})
         col = (self.spec.get('meta') or {}).get('column')
-        if not col: col = 'double' if W >= 380 else 'single'
+        if not col: col = 'double' if (self.ai or W >= 380) else 'single'
+        if self.ai and not cols:
+            self.add('warn', 'canvas.venue', 'meta.venue is missing or unknown, so the width band of the venue (references/ai/style-thresholds.json) cannot be checked')
         band = cols.get(col, {}).get('width_p5_p95'); target = cols.get(col, {}).get('width_target')
         if band and not (band[0] - 2 <= W <= band[1] + 2):
             self.add('error', 'canvas.width', f'width {W:.0f} pt is outside the {col}-column band {band[0]:.0f}–{band[1]:.0f} pt (target {target} pt)')
@@ -476,11 +482,13 @@ class Lint:
                 widths.add(round(e['strokeWidth'] * 4) / 4)
         colours = [c for c in fills if not is_grey(c)]
         mx = self.thr.get('lint', {}).get('max_fill_colours', 12)
-        if len(colours) > mx: self.add('warn', 'colour.count', f'{len(colours)} distinct non-grey fills (good figures: median 6, p95 {mx}); merge roles')
+        norm = 'AI-venue good figures: median 9, p75 14' if self.ai else f'good figures: median 6, p95 {mx}'
+        if len(colours) > mx: self.add('warn', 'colour.count', f'{len(colours)} distinct non-grey fills ({norm}); merge roles')
         sat = [c for c in colours if saturated(c)]
-        msat = self.thr.get('lint', {}).get('max_saturated_fills', 2)       # a named style may allow more (references/styles/)
+        msat = self.thr.get('lint', {}).get('max_saturated_fills', 2)       # a named style or the AI family may allow more
         if len(sat) > msat: self.add('warn', 'colour.saturated', f'{len(sat)} saturated fills {["#%02x%02x%02x" % c for c in sat]}; keep saturated colour for the accent only (≤ {msat})')
-        if len(widths) > 3: self.add('warn', 'stroke.widths', f'{len(widths)} distinct stroke widths {sorted(widths)}; use 2 (box 0.5–0.75, main path 1–1.5)')
+        mw = self.thr.get('lint', {}).get('max_stroke_widths', 3)
+        if len(widths) > mw: self.add('warn', 'stroke.widths', f'{len(widths)} distinct stroke widths {sorted(widths)}; use 2 (box 0.5–0.75, main path 1–1.5)')
         for w in widths:
             if w < 0.3: self.add('warn', 'stroke.thin', f'stroke width {w} pt is hairline-thin (< 0.3 pt) and may vanish in print')
             if w > 2.5: self.add('warn', 'stroke.thick', f'stroke width {w} pt is heavy (> 2.5 pt)')
@@ -856,10 +864,37 @@ class Lint:
                 if want not in texts and not all(w in texts for w in want.split()):
                     self.add('warn', 'guard.unlabelled', f'{g} does not draw its guard "{e["guard"]}" (a <text> inside the edge group); unlabelled transitions and branches are the most common logic-figure fault', [g])
 
+    # ---- 2026-10-10 AI-venue family (meta.family = ai): the advisory checks of references/ai/anti-patterns.md §5, all warn / info
+    def check_ai(self):
+        if not self.ai: return
+        p = self.thr.get('ai') or {}
+        col = (self.spec.get('meta') or {}).get('column') or 'double'
+        bare = p.get('bare_text_runs', 20)
+        if col == 'double' and len(self.texts) <= bare:
+            self.add('warn', 'ai.bare', f'{len(self.texts)} text runs on a full-width figure (at most {bare}: 9% of good AI-venue figures, 32% of bad); '
+                     'the weak figures of this family are the empty ones -- put the content in (a real input and output, what each stage produces, the one example)')
+        loud = 0.0; fam = {}; legend = any(kind_of(g) == 'legend' or gid == 'legend' for gid, g in self.groups.items())
+        for e in self.els:
+            if e['tag'] not in SHAPES or e['fill'] in ('none', 'rgba(0, 0, 0, 0)') or e['w'] <= 2 or e['h'] <= 2: continue
+            c = rgb(e['fill'])
+            if not c or is_grey(c) or (c[0] > 245 and c[1] > 245 and c[2] > 245): continue
+            r, g, b = [v / 255 for v in c]; h, l, s = colorsys.rgb_to_hls(r, g, b)
+            a = min(e['w'], self.W) * min(e['h'], self.H)
+            if l < 0.80: loud += a
+            name = next(n for lim, n in HUE_BINS if h < lim); fam[name] = fam.get(name, 0) + a
+        frac = loud / max(1.0, self.W * self.H); lim = p.get('loud_ink_frac', 0.15)
+        if frac >= lim:
+            self.add('warn', 'ai.loud-ink', f'mid or strong fills cover {frac:.0%} of the canvas (at least {lim:.0%}: 10% of good figures, 25% of bad); '
+                     'keep large fields pale (lightness ≈ 0.9) and spend strong colour on the small things that must be found')
+        big = [n for n, a in fam.items() if a >= 0.005 * self.W * self.H]
+        if len(big) >= p.get('hue_families_key', 4) and not legend:
+            self.add('info', 'ai.hues-no-key', f'{len(big)} hue families ({", ".join(sorted(big))}) and no legend: if they carry a meaning, a key or a direct label on the first '
+                     'instance of each is needed; a code the figure does not explain is named in 41% of the records')
+
     def run(self):
         for fn in (self.check_canvas, self.check_bleed, self.check_fonts, self.check_glyphs, self.check_text, self.check_overflow, self.check_overlap,
                    self.check_contain, self.check_align, self.check_centre, self.check_edges, self.check_heads, self.check_replicas, self.check_titles,
-                   self.check_images, self.check_colour, self.check_style, self.check_density, self.check_spec, self.check_mechanism):
+                   self.check_images, self.check_colour, self.check_style, self.check_density, self.check_spec, self.check_mechanism, self.check_ai):
             try: fn()
             except Exception as ex:  # a failing check must not hide the others
                 self.add('info', 'lint.internal', f'{fn.__name__} failed: {ex!r}')
@@ -896,6 +931,18 @@ def main():
         mech = json.loads(MECH_THRESH.read_text(encoding='utf-8'))
         thr = dict(thr); thr['columns'] = mech.get('columns', thr.get('columns', {}))
         thr['lint'] = dict(thr.get('lint', {})); thr['lint']['node_budget'] = MECH_NODE_BUDGET
+    meta_ = (spec or {}).get('meta') or {}
+    if meta_.get('family') == 'ai' and a.thresholds == str(DEFAULT_THRESH) and AI_THRESH.exists():
+        # AI-venue figures: the venue's width band, the family's fill / stroke ceilings, the primary kind's box budget,
+        # and the parameters of the advisory ai_pass checks; the print floors stay those of the shared file
+        ai = json.loads(AI_THRESH.read_text(encoding='utf-8')); al = ai.get('lint', {})
+        thr = dict(thr); thr['columns'] = (ai.get('columns') or {}).get(meta_.get('venue') or '', {})
+        thr['lint'] = dict(thr.get('lint', {}))
+        for k in ('max_fill_colours', 'max_saturated_fills', 'max_stroke_widths'):
+            if k in al: thr['lint'][k] = al[k]
+        kb = (al.get('node_budget') or {}).get(((meta_.get('ai') or {}).get('kinds') or [''])[0]) or AI_NODE_BUDGET_DEFAULT
+        thr['lint']['node_budget'] = {'single': kb, 'double': kb}
+        thr['ai'] = al.get('ai_pass', {})
     style = ((spec or {}).get('meta') or {}).get('style')
     if style and style != 'corpus':                                      # named style: references/styles/<style>.json
         sp = SKILL / 'references' / 'styles' / f'{style}.json'

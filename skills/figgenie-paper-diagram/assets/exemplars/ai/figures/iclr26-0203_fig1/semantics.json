@@ -1,0 +1,500 @@
+{
+ "paper_id": "iclr26-0203",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SAE on Dora-VAE latents (feature decomposition pipeline)",
+  "one_liner": "Applies a sparse autoencoder to the latent vectors of the Dora-VAE 3D reconstruction model to isolate, visualise, ablate and add single features.",
+  "domain": [
+   "sparse autoencoders",
+   "3D representations",
+   "interpretability of 3D VAEs"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "Dora-VAE encoder and decoder drawn with their internals around a latent bottleneck, an SAE column spliced into the bottleneck, and the SAE feeding two framed result galleries",
+  "argues": "An SAE tapped into the VAE's latent vectors can isolate single features whose presence can be plotted on 3D shapes and whose ablation or addition changes the reconstruction.",
+  "subject": "Dora-VAE encoder and decoder around a latent bottleneck, a sparse-autoencoder column with tensor shapes, and two galleries of 3D renders.",
+  "elements": [
+   {
+    "name": "Dora-VAE",
+    "type": "container",
+    "role": "the 3D reconstruction model that encodes a 3D object to M latent vectors and decodes them",
+    "drawn_as": "serif title over the left column of lilac Encoder and Decoder boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "3D Model",
+    "type": "data",
+    "role": "input object of the VAE",
+    "drawn_as": "white box with a bold purple outline at the top of the left column",
+    "container": "Dora-VAE",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder",
+    "type": "module",
+    "role": "turns the point cloud into point features through sampling and cross attention",
+    "drawn_as": "lilac box with black outline holding white labelled boxes (Point Cloud, Sampled Points, Point Cloud Embeddings, Sampled Embeddings, Point Features) joined by pale purple arrows, 'Cross Attention' in faded italics",
+    "container": "Dora-VAE",
+    "is_contribution": false
+   },
+   {
+    "name": "Latent Vectors (VAE)",
+    "type": "data",
+    "role": "M x 64 bottleneck of the VAE; the SAE reads it and writes modified versions back",
+    "drawn_as": "white box with a bold purple outline between Encoder and Decoder",
+    "container": "Dora-VAE",
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder",
+    "type": "module",
+    "role": "maps latent vectors and point queries to an occupancy field through self and cross attention",
+    "drawn_as": "lilac box with black outline holding Point Queries, Latent Vectors, Occupancy Field boxes and faded italic 'Self Attention' and 'Cross Attention'",
+    "container": "Dora-VAE",
+    "is_contribution": false
+   },
+   {
+    "name": "Reconstruction",
+    "type": "data",
+    "role": "decoded 3D output",
+    "drawn_as": "white box with a bold purple outline at the bottom of the left column",
+    "container": "Dora-VAE",
+    "is_contribution": false
+   },
+   {
+    "name": "SAE",
+    "type": "container",
+    "role": "sparse autoencoder column: latent vectors, feature vectors, one isolated feature, latent modifiers",
+    "drawn_as": "pale teal box with dark outline and serif title, four white boxes with teal outlines joined by thick dark-teal arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Latent Vectors (SAE input)",
+    "type": "data",
+    "role": "M x 64 latents copied from the VAE",
+    "drawn_as": "white box at the top of the SAE column, shape label 'M x 64' above it",
+    "container": "SAE",
+    "is_contribution": null
+   },
+   {
+    "name": "Feature Vectors",
+    "type": "data",
+    "role": "M x 512 sparse feature activations after the SAE",
+    "drawn_as": "white box, arrow labelled 'SAE' above it",
+    "container": "SAE",
+    "is_contribution": true
+   },
+   {
+    "name": "Isolated Feature",
+    "type": "data",
+    "role": "M x 1 slice for one chosen feature",
+    "drawn_as": "white box in the SAE column",
+    "container": "SAE",
+    "is_contribution": true
+   },
+   {
+    "name": "Latent Modifiers",
+    "type": "data",
+    "role": "M x 64 latent vectors rebuilt from the edited features, sent back to the VAE decoder",
+    "drawn_as": "white box at the bottom of the SAE column, arrow labelled 'Decoder' above it",
+    "container": "SAE",
+    "is_contribution": true
+   },
+   {
+    "name": "Feature Decomposition (3.1)",
+    "type": "container",
+    "role": "gallery that shows a feature's presence in each latent vector",
+    "drawn_as": "rounded light-blue frame with bold italic title at the top right, 2 x 2 renders",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Feature Ablation and Addition (3.2)",
+    "type": "container",
+    "role": "gallery of reconstructions after modifying the latent vector",
+    "drawn_as": "rounded light-blue frame with bold italic title below it at the right, three renders",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "3D Model",
+    "to": "Encoder",
+    "what": "input object goes into the encoder (pale purple arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder",
+    "to": "Latent Vectors (VAE)",
+    "what": "encoded M latent vectors of size 64",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Vectors (VAE)",
+    "to": "Decoder",
+    "what": "latents enter the decoder, where self attention and cross attention with the point queries are labelled",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Decoder",
+    "to": "Reconstruction",
+    "what": "occupancy field becomes the reconstruction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Vectors (VAE)",
+    "to": "Latent Vectors (SAE input)",
+    "what": "the SAE reads the VAE latents (dark elbow arrow up and right)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Vectors (SAE input)",
+    "to": "Feature Vectors",
+    "what": "SAE encoding from 64 to 512 dimensions (arrow labelled SAE)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Vectors",
+    "to": "Isolated Feature",
+    "what": "one feature is selected",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Isolated Feature",
+    "to": "Latent Modifiers",
+    "what": "decoded back to latent space (arrow labelled Decoder)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Modifiers",
+    "to": "Latent Vectors (VAE)",
+    "what": "modified latents are written back before decoding (dark elbow arrow to the left)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SAE column",
+    "to": "Feature Decomposition (3.1)",
+    "what": "feature presence per latent vector is plotted on the shape (dark arrow to the first gallery)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reconstruction",
+    "to": "Feature Ablation and Addition (3.2)",
+    "what": "reconstructions after modifying the latents (dark elbow arrow to the second gallery)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Dora-VAE",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "3D model, encoder with sampling and cross attention, latent vectors, decoder with self and cross attention, reconstruction",
+    "verdict": "setting"
+   },
+   {
+    "label": "SAE",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "latent vectors M x 64, feature vectors M x 512, isolated feature M x 1, latent modifiers M x 64",
+    "verdict": "ours"
+   },
+   {
+    "label": "Feature Decomposition (3.1)",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "2 x 2 point-cloud renders of one 3D scene with red dots where a feature is present",
+    "verdict": "ours"
+   },
+   {
+    "label": "Feature Ablation and Addition (3.2)",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "three reconstructions of the scene after ablating or adding features",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(3.1), (3.2)",
+    "kind": "section",
+    "at": "titles of the two galleries",
+    "what": "point to the paper sections that explain each analysis"
+   },
+   {
+    "marker": "M x 64, M x 512, M x 1",
+    "kind": "identity",
+    "at": "above each box of the SAE column and the VAE latents",
+    "what": "give the tensor shape"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "point-cloud renders of one 3D scene (tall green column, bushes, a curled arch, a tree, a table) with red dots marking where a feature is present",
+    "content": "point-cloud",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "2 x 2 grid of the same view in blue-green colours inside a rounded light-blue frame"
+   },
+   {
+    "what": "mesh-like renders of the reconstructed scene after ablating or adding features",
+    "content": "3d-render",
+    "role": "result",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three wide renders side by side in blue-green colours inside a rounded light-blue frame"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one 3D model shown four times with a feature's presence as red dots and three times as reconstructions after feature ablation or addition",
+    "form": "point-cloud and mesh renders in two framed galleries",
+    "real_values": true
+   },
+   {
+    "what": "tensor shapes along the SAE: M x 64, M x 512, M x 1, M x 64",
+    "form": "small italic labels above the boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "encoder box, a bold Latent Vectors box as bottleneck, decoder box stacked top to bottom",
+    "parts": [
+     "Encoder",
+     "Latent Vectors",
+     "Decoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "sparse-autoencoder",
+    "drawn_as": "a column of four white boxes joined by thick teal arrows, shapes M x 64, M x 512, M x 1, M x 64, between the VAE latents going in and modified latents coming out",
+    "parts": [
+     "Latent Vectors",
+     "Feature Vectors",
+     "Isolated Feature",
+     "Latent Modifiers"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "coloured point-cloud and mesh renders of a 3D scene, with red dots marking a feature",
+    "parts": [
+     "point cloud",
+     "red dots",
+     "mesh render"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the '3D Model' box top left, runs down the Dora-VAE column to the Latent Vectors box, jumps right into the SAE column and down, then follows the dark arrows to the two galleries at the right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three columns read left to right: the Dora-VAE column (flow runs top to bottom), the SAE column (also top to bottom) and two stacked framed galleries; dark elbow arrows hand the latents to the SAE and back and lead to the galleries.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.22,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d2e9",
+    "used_for": "lilac fill of the Encoder and Decoder boxes"
+   },
+   {
+    "hex": "#b4a7d6",
+    "used_for": "pale purple arrows and box outlines inside the Dora-VAE"
+   },
+   {
+    "hex": "#8e7cc3",
+    "used_for": "purple outlines of internal boxes"
+   },
+   {
+    "hex": "#674ea7",
+    "used_for": "bold purple outlines of 3D Model, Latent Vectors and Reconstruction"
+   },
+   {
+    "hex": "#d0e0e3",
+    "used_for": "pale teal fill of the SAE box"
+   },
+   {
+    "hex": "#134f5c",
+    "used_for": "dark teal arrows and outlines of the SAE column"
+   },
+   {
+    "hex": "#45818e",
+    "used_for": "teal outlines of the white boxes in the SAE column"
+   },
+   {
+    "hex": "#434343",
+    "used_for": "dark grey elbow arrows between modules and to the galleries"
+   },
+   {
+    "hex": "#a4c2f4",
+    "used_for": "light blue frames of the two galleries"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt outlines on internal boxes, 0.75 pt on key boxes and frames; dark teal and bold purple outlines for the main boxes",
+  "font": "serif (Times New Roman) 7 pt for key box labels, 5 pt for internal boxes with faded grey italics for attention labels, 5.5 pt bold italic gallery titles, 4.5 pt italic tensor shapes",
+  "corners": "mixed",
+  "arrows": "thin pale purple arrows inside the VAE; thick dark-teal arrows with italic labels in the SAE; thick dark grey elbow arrows between modules and galleries",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "lilac and purple = the Dora-VAE (existing model), teal = the SAE (the added module), dark grey arrows = hand-over between them and to the results, light blue frames = result galleries; red dots in the renders = where the isolated feature is present; the blue-green colouring of the renders is not explained",
+  "line_style_means": "thin pale arrows = flow inside the Dora-VAE, thick teal arrows = SAE encode and decode steps, dark elbow arrows = hand-over to and from the SAE and to the galleries",
+  "shape_means": "lilac rectangles = encoder and decoder, pale teal rectangle = SAE, white rounded boxes = tensors or blocks",
+  "marker_means": "(3.1) and (3.2) in the gallery titles point to the paper sections; M x d labels give tensor shapes",
+  "emphasis": "VAE internals are drawn in pale strokes and faded grey italics while the SAE is saturated teal with large labels; bold purple outlines mark the VAE's input, bottleneck and output",
+  "reusable_patterns": [
+   "pale, faded internals for the existing model with a saturated add-on column for the new module",
+   "add-on module tapped into a bottleneck by two elbow arrows, one reading the activation out and one writing a modified activation back",
+   "tensor shapes written above each box in the add-on column",
+   "two framed galleries on the right, each titled in bold italic with its section number and fed by one arrow",
+   "the same scene repeated in a 2 x 2 grid with red dots to show a feature's presence in different latent vectors",
+   "bold coloured outlines marking input, bottleneck and output of the base model"
+  ],
+  "weaknesses": [
+   "VAE internals in pale strokes and 5 pt grey italics are hard to read at print size",
+   "the arrow from the SAE column to the first gallery starts at the box edge without saying which box feeds it",
+   "the blue-green colouring of the renders and the tiny red dots are not explained in a legend",
+   "the internal step 'Isolated Feature' is a bare box; how a feature is chosen is not drawn"
+  ]
+ },
+ "resources": {
+  "own": [
+   "point-cloud and mesh renders of the paper's own analysis (7 images)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "encoder and decoder boxes with internals",
+   "SAE column",
+   "arrows",
+   "gallery frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "Dora-VAE encoder and decoder boxes with faded internals",
+   "bold purple Latent Vectors bottleneck box",
+   "teal SAE column with tensor shapes",
+   "elbow arrows into and out of the SAE",
+   "framed 2 x 2 gallery of point-cloud renders with red dots",
+   "framed gallery of three mesh renders"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "sparse autoencoder",
+   "3D representations",
+   "Dora-VAE",
+   "feature decomposition",
+   "feature ablation",
+   "latent vectors",
+   "interpretability",
+   "Objaverse"
+  ],
+  "tags": [
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "read-write-tap",
+    "what": "an analysis or editing module attached to a model's bottleneck with one arrow reading the activation out and one arrow writing a modified activation back"
+   },
+   {
+    "name": "faded-baseline-internals",
+    "what": "the existing model's internal blocks drawn in pale strokes and grey italic text while the new module is saturated"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the existing model's internals in pale strokes and put the new module in a saturated column that taps the bottleneck with one arrow out and one arrow back, then send one arrow to each result gallery titled with its section number.",
+  "suits": "Interpretability or intervention methods that insert an analysis module (SAE, probe, editor) into a pretrained model and show the effects on rendered outputs."
+ },
+ "tags": [
+  "faded-baseline",
+  "bottleneck-tap",
+  "tensor-shape-labels",
+  "framed-result-galleries",
+  "serif-labels",
+  "3d-renders"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (Sections 3.1 and 3.2)"
+  ],
+  "evidence": [
+   "Dora-VAE is a 3D reconstruction model, encoding 3D objects to M latent vectors each.",
+   "We apply our SAE to these latent vectors, decomposing each vector to a linear combination of features.",
+   "modifying the latent vector and observing the effects on the reconstruction (Section 3.2)"
+  ]
+ },
+ "summary": "This paper applies sparse autoencoders (SAEs) to 3D representations for the first time, analysing the latent vectors of the Dora-VAE reconstruction model on Objaverse objects. Figure 1 shows the feature decomposition pipeline from left to right. A lilac Dora-VAE column draws the encoder and decoder internals in pale strokes, with a bold Latent Vectors box (M x 64) at the bottleneck. A teal SAE column maps those latents to feature vectors (M x 512), isolates one feature (M x 1) and decodes it into latent modifiers (M x 64) that return to the decoder. Two framed galleries show the outcomes: a 2 x 2 grid of point-cloud renders with red dots where a feature is present (Section 3.1) and three reconstructions after ablating or adding features (Section 3.2).",
+ "summary_zh": "论文首次把稀疏自编码器（SAE）用于 3D 表示，分析 Dora-VAE 潜向量。图 1 从左到右：淡紫色 Dora-VAE、青色 SAE 列（M×64→512→1→64），以及特征分布（3.1）、特征消融与添加后重建（3.2）两组结果。",
+ "confidence": "medium",
+ "notes": "No body paragraph mentions the figure, so roles come from the caption, the abstract and the drawing. The meaning of the red dots and of the blue-green colouring of the renders, and which SAE box feeds the first gallery, are read from the picture only. The prior pass's contribution-mosaic is dropped because the galleries are outputs of one pipeline, not separate contributions; stage-pipeline (fan-out) is added because the SAE feeds two analyses.",
+ "venue": "ICLR26"
+}

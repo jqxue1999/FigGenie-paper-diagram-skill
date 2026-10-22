@@ -1,0 +1,534 @@
+{
+ "paper_id": "neurips25-0369",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Deep Video Discovery (DVD)",
+  "one_liner": "An LLM agent that treats a long video as a search environment: it reasons, calls search tools over a multi-granular clip database and iterates on observations to answer.",
+  "domain": [
+   "long-form video understanding",
+   "agentic search",
+   "tool use"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough",
+   "contribution-mosaic"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "a sequence-diagram with three coloured lifelines (reasoning LLM, search toolset, video database) carrying one real question through thought, tool-use and observation turns, beside a radar chart of the headline result",
+  "argues": "An agent that autonomously reasons, picks search tools and iterates over video clips answers long-video questions, and beats all compared methods on every LVBench category.",
+  "subject": "One real question about a video answered through Thought, Tool use and Observation turns, and a radar chart comparing the agent with four baselines on seven LVBench categories.",
+  "elements": [
+   {
+    "name": "user (question and answer)",
+    "type": "actor",
+    "role": "asks the question at the top and receives the answer at the bottom",
+    "drawn_as": "outline person icon, twice, at the left end of the first and last messages",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "“Who gets the lollipop last?”",
+    "type": "text-block",
+    "role": "the user query",
+    "drawn_as": "bold quoted text above a grey arrow into the LLM lifeline",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "LLM with Reasoning",
+    "type": "actor",
+    "role": "plans on its current observation state and chooses tools",
+    "drawn_as": "pale-green header box with a head-and-brain icon, solid green lifeline below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Search Toolset",
+    "type": "actor",
+    "role": "search-centric tools the agent calls (ClipSearch, GlobalBrowse)",
+    "drawn_as": "pale-orange header box with a wrench-and-screwdriver icon, solid orange lifeline",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Video Database",
+    "type": "actor",
+    "role": "multi-granular store of segmented video clips",
+    "drawn_as": "pale-blue header box with a database cylinder icon, solid blue lifeline",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Thought: subtask(1) I need to first …",
+    "type": "text-block",
+    "role": "first reasoning step of the agent",
+    "drawn_as": "bold italic dark-green text beside the LLM lifeline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Tool use: ClipSearch(“lollipop”)",
+    "type": "text-block",
+    "role": "first tool call with its argument",
+    "drawn_as": "bold italic orange text under a grey arrow towards the toolset lifeline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "gathering info …",
+    "type": "label",
+    "role": "the toolset reads the database",
+    "drawn_as": "double-headed grey arrow between the toolset and database lifelines with the label above it",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Observation: Relevant clips captions: …",
+    "type": "text-block",
+    "role": "tool result returned to the LLM",
+    "drawn_as": "bold black text on a grey arrow pointing back to the LLM lifeline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Thought: subtask(2) I need to … / Tool use: GlobalBrowse()",
+    "type": "text-block",
+    "role": "second reasoning step and a different tool call",
+    "drawn_as": "same green italic and orange italic text pair, repeated lower on the lifelines",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "…",
+    "type": "label",
+    "role": "further rounds are elided",
+    "drawn_as": "large bold ellipsis at the bottom of the toolset and database lifelines",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "“The zombie gets it at last according to the observation that…”",
+    "type": "text-block",
+    "role": "final answer returned to the user",
+    "drawn_as": "bold quoted text on a grey arrow from the LLM lifeline to the second user icon",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "radar chart of LVBench categories",
+    "type": "chart",
+    "role": "performance comparison of five methods on seven categories",
+    "drawn_as": "seven-axis radar with filled translucent polygons, a dashed inner ring and vertex values",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "legend: Ours, MR. Video, OpenAI o3, Gemini-2.0-flash, GPT-4o",
+    "type": "label",
+    "role": "names the five polygons",
+    "drawn_as": "five short coloured line samples with bold labels at the lower right",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "user",
+    "to": "LLM with Reasoning",
+    "what": "the question",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM with Reasoning",
+    "to": "Search Toolset",
+    "what": "Tool use: ClipSearch(“lollipop”), later GlobalBrowse()",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Search Toolset",
+    "to": "Video Database",
+    "what": "gathering info, a two-way access",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Search Toolset",
+    "to": "LLM with Reasoning",
+    "what": "Observation: relevant clips captions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM with Reasoning",
+    "to": "user",
+    "what": "final answer after the observations",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video thumbnail",
+    "to": "question",
+    "what": "the long video the question is about, shown under the query",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "actor colour",
+    "to": "header box, lifeline and text of that actor",
+    "what": "green for the LLM and its Thought, orange for the toolset and Tool use, blue for the database",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "legend colours",
+    "to": "radar polygons",
+    "what": "which method is which",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "left trace",
+    "to": "radar chart",
+    "what": "how the agent works, then how well it does",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "the agent's trace on one real question: Thought, Tool use, gathering info and Observation turns between LLM, toolset and database, ending in the answer",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "radar chart on LVBench: Ours outermost, ahead of MR. Video, OpenAI o3, Gemini-2.0-flash and GPT-4o on all seven categories",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "subtask(1), subtask(2)",
+    "kind": "order",
+    "at": "the Thought lines",
+    "what": "numbers the sub-tasks the agent works on in turn"
+   },
+   {
+    "marker": "vertex values 80.4, 72.3 and so on",
+    "kind": "identity",
+    "at": "radar vertices",
+    "what": "scores of the compared methods on each category"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "a frame of a long animated video (blue monster holding a lollipop) with a camera glyph",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "framed thumbnail with black border under the question, a black line-art video camera icon over its lower-left corner"
+   },
+   {
+    "what": "radar chart of five methods over seven LVBench categories",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "plotting-library radar with translucent filled polygons per method, red Ours outermost, dashed inner ring, vertex scores, axis names outside, legend at lower right"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "outline person (head and shoulders)",
+    "stands_for": "the user who asks and receives the answer",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "head profile with a node network inside",
+    "stands_for": "the LLM with reasoning",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "crossed wrench and screwdriver",
+    "stands_for": "the search toolset",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "database cylinder",
+    "stands_for": "the video database",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "video camera",
+    "stands_for": "the long video as the source of the clips",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one real question about a video, the agent's two Thought and Tool use rounds with an Observation, and the final answer, each cut with an ellipsis",
+    "form": "text snippets along three lifelines, coloured by actor",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "Thought, Tool use and Observation turns repeated down the lifelines with an ellipsis for further rounds, instead of a circular loop",
+    "parts": [
+     "Thought",
+     "Tool use",
+     "Observation"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a header box with a wrench-and-screwdriver icon as one lifeline the LLM sends calls to",
+    "parts": [
+     "Search Toolset",
+     "ClipSearch",
+     "GlobalBrowse"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "toolset and database cylinder connected by a double-headed arrow labelled gathering info",
+    "parts": [
+     "Search Toolset",
+     "Video Database"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "pale-green box titled LLM with Reasoning holding a head-and-brain icon",
+    "parts": [
+     "header box",
+     "brain-head icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "radar-chart",
+    "drawn_as": "seven-axis radar with one translucent filled polygon per method and the proposed method outermost",
+    "parts": [
+     "axes",
+     "polygons",
+     "legend"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the user icon and question at top left, goes down the three lifelines turn by turn to the final answer at the bottom, then moves right to the radar chart and its legend."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two unframed halves side by side: on the left a sequence-style trace with three lifelines under header boxes and horizontal message arrows, on the right a radar chart with its legend at the lower right; the caption names them Left and Right.",
+  "panel_count": 2,
+  "lanes": "3 vertical lifelines (LLM, toolset, database) with time running downwards",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "per-panel",
+  "panel_markers": "none",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.66,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dbf1cf",
+    "used_for": "header box of LLM with Reasoning (green outline, green lifeline)"
+   },
+   {
+    "hex": "#fae2d5",
+    "used_for": "header box of Search Toolset (orange outline, orange lifeline)"
+   },
+   {
+    "hex": "#c5e4f6",
+    "used_for": "header box of Video Database (blue outline, blue lifeline)"
+   },
+   {
+    "hex": "#c04f15",
+    "used_for": "orange outline of the toolset box; the Tool use text is a similar dark orange"
+   },
+   {
+    "hex": "#205f9a",
+    "used_for": "blue outline of the database box"
+   },
+   {
+    "hex": "#747474",
+    "used_for": "grey message arrows"
+   },
+   {
+    "hex": "#d62728",
+    "used_for": "radar polygon of Ours (translucent red fill)"
+   },
+   {
+    "hex": "#ff7f0e",
+    "used_for": "radar polygon of MR. Video"
+   },
+   {
+    "hex": "#e377c2",
+    "used_for": "radar polygon of OpenAI o3"
+   },
+   {
+    "hex": "#2ca02c",
+    "used_for": "radar polygon of Gemini-2.0-flash"
+   },
+   {
+    "hex": "#17becf",
+    "used_for": "radar polygon of GPT-4o"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt coloured outlines on the header boxes and lifelines, 0.25 pt grey message arrows, dashed inner ring in the radar",
+  "font": "sans (Arial) bold, 5 pt for all trace text with italics for Thought and Tool use lines, 9.5 pt ellipses; radar axis names and values are larger bitmap text",
+  "corners": "square",
+  "arrows": "thin grey straight message arrows with small heads, double-headed between toolset and database; solid coloured vertical lifelines",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under the three header boxes",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "left half: green = LLM, orange = search toolset, blue = video database, carried to header, lifeline and its text; right half (plotting palette): red = Ours, orange = MR. Video, pink = OpenAI o3, green = Gemini-2.0-flash, cyan = GPT-4o",
+  "line_style_means": "solid vertical line = lifeline of one actor; thin grey arrow = a message or call; double-headed arrow = two-way access between toolset and database",
+  "shape_means": "header box with icon = an actor; outline person = the user; filled translucent polygon = a method's scores over the categories",
+  "marker_means": "subtask(1) and subtask(2) order the reasoning steps; numbers at the radar vertices are scores",
+  "emphasis": "Ours is the outermost red, filled polygon and encloses all others; the trace is typed by colour so Thought, Tool use and Observation are told apart at a glance",
+  "reusable_patterns": [
+   "sequence-diagram lifelines with coloured actor header boxes carrying icons",
+   "typed text turns (Thought, Tool use, Observation) in the colour of the actor that produces them",
+   "an ellipsis at the bottom of the lifelines to say further rounds follow",
+   "one real question with a video thumbnail and camera glyph, closed by the final answer",
+   "a radar chart of per-category scores as the headline result next to the method trace",
+   "double-headed arrow with an activity label between a tool and its store"
+  ],
+  "weaknesses": [
+   "colours are reused with different meanings in the two halves (green LLM versus green Gemini, orange tools versus orange MR. Video)",
+   "radar value labels overlap near the centre",
+   "5 pt trace text, cut with ellipses"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real question and answer about a video",
+   "LVBench scores of five methods in the radar chart"
+  ],
+  "stock": [
+   "line-art icons: person, head with network, wrench and screwdriver, database, video camera"
+  ],
+  "generated": [],
+  "drawn": [
+   "lifelines, header boxes and arrows",
+   "text turns"
+  ],
+  "unknown": [
+   "source of the animated video frame"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "sequence-diagram lifelines",
+   "three coloured header boxes with icons",
+   "outline user icons",
+   "video thumbnail with camera glyph",
+   "Thought, Tool use and Observation text turns",
+   "radar chart with five polygons",
+   "legend line samples"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "long video understanding",
+   "agentic search",
+   "tool use",
+   "LLM agent",
+   "LVBench",
+   "ClipSearch",
+   "video database",
+   "radar chart"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "radar-chart",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "lifeline-sequence-diagram",
+    "what": "a sequence diagram with one vertical lifeline per actor (LLM, tool, store) under icon header boxes and horizontal message arrows carrying typed text"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw an agent run as a sequence diagram: one lifeline per actor in its own colour, typed text turns (Thought, Tool use, Observation) coloured by actor, a real question and answer at the two ends; pair it with a radar chart as the headline result.",
+  "suits": "Tool-using agent papers whose contribution is the tool set and the adaptive reasoning loop, with one multi-category benchmark summarising the gain."
+ },
+ "tags": [
+  "sequence-diagram-style",
+  "actor-coloured-lifelines",
+  "line-art-icons",
+  "trace-plus-radar",
+  "two-halves",
+  "soft-shadows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "which autonomously reasons on user query, iterative use tools to obtain the final answer.",
+   "Right: Performance comparison on LVBench.",
+   "we conceptualize the challenge of understanding extremely long videos as a multi-step information search problem"
+  ]
+ },
+ "summary": "Deep Video Discovery (DVD) is an LLM agent that treats a long video as an environment to search: it reasons, calls search tools over a multi-granular video database and iterates on its observations. Figure 1 has two halves. On the left, a sequence-style trace with three lifelines under icon header boxes (LLM with Reasoning in green, Search Toolset in orange, Video Database in blue) carries one real question, Who gets the lollipop last?, with a video thumbnail, through Thought, Tool use (ClipSearch, GlobalBrowse), gathering info and Observation turns to the final answer. On the right, a radar chart compares Ours with MR. Video, OpenAI o3, Gemini-2.0-flash and GPT-4o on seven LVBench categories, Ours outermost in red.",
+ "summary_zh": "DVD 把长视频当作可搜索的环境，让 LLM 智能体推理并调用检索工具。图1左：时序图式轨迹，绿色 LLM、橙色搜索工具、蓝色视频数据库三条生命线，附真实问答；右：雷达图比较 Ours 与四个基线在 LVBench 七类任务的得分。",
+ "confidence": "high",
+ "notes": "The index counts one panel while the pre-screen counted two; here the two halves are counted because the caption names them Left and Right, although neither is framed or titled in the figure. contribution-mosaic is added for the radar half. The radar chart, with its polygons and labels, is a bitmap (about 91 x 106 pt for the polygons).",
+ "venue": "NeurIPS25"
+}

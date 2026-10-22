@@ -1,0 +1,536 @@
+{
+ "paper_id": "acl26-0044",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GRPO-CARE and SEED-Bench-R1",
+  "one_liner": "A consistency-aware RL method for multimodal reasoning (GRPO-CARE) and a three-level video benchmark (SEED-Bench-R1) used to study post-training of MLLMs.",
+  "domain": [
+   "multimodal reasoning",
+   "reinforcement learning post-training",
+   "egocentric video QA"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "side-by-side-contrast"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "two deliverables side by side: at left the benchmark's three validation levels as tinted cards, at right the model performance as paired bar charts above two reasoning bubbles for GRPO and GRPO-CARE",
+  "argues": "GRPO-CARE beats outcome-supervised GRPO at every difficulty level and keeps reasoning consistent with the answer, shown on a benchmark with ordered generalisation levels.",
+  "subject": "the three validation levels of SEED-Bench-R1 with one question drawn in full, and the gains and an example reasoning of GRPO versus GRPO-CARE",
+  "elements": [
+   {
+    "name": "Hierarchy of SEED-Bench-R1 (SB-R1)'s Validation Set",
+    "type": "label",
+    "role": "title of the benchmark half",
+    "drawn_as": "large bold comic-style caption under the three cards",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Level-1: In-distribution",
+    "type": "container",
+    "role": "easiest level: Daily Life tasks in seen kitchens; carries the full example question",
+    "drawn_as": "large pale-blue rounded card with a header line, a question, a filmstrip, candidate actions and a kitchen icon",
+    "container": "Hierarchy of SEED-Bench-R1 (SB-R1)'s Validation Set",
+    "is_contribution": true
+   },
+   {
+    "name": "Question",
+    "type": "sample",
+    "role": "open-form task question: what action to take next in order to clean the sink (Task Goal)",
+    "drawn_as": "text block with bold Question, the task goal in blue italics with an underline",
+    "container": "Level-1: In-distribution",
+    "is_contribution": null
+   },
+   {
+    "name": "Task Progress",
+    "type": "label",
+    "role": "labels the filmstrip of past frames; a thin arrow leads on to the Current Observation",
+    "drawn_as": "small rounded tag with a pie icon on a light-blue arrow",
+    "container": "Level-1: In-distribution",
+    "is_contribution": null
+   },
+   {
+    "name": "Current Observation",
+    "type": "label",
+    "role": "labels the latest first-person frame that the next action must follow",
+    "drawn_as": "small rounded tag with a goggles icon at the arrow tip, above the larger frame",
+    "container": "Level-1: In-distribution",
+    "is_contribution": null
+   },
+   {
+    "name": "Candidate Actions",
+    "type": "data",
+    "role": "four options: A. pick up cloth, B. wring cloth, C. close tap, D. rinse cloth",
+    "drawn_as": "bold heading and four short lines in two columns beside a kitchen icon",
+    "container": "Level-1: In-distribution",
+    "is_contribution": null
+   },
+   {
+    "name": "Level-2: Cross-environment",
+    "type": "container",
+    "role": "middle level: Daily life tasks in unseen kitchens",
+    "drawn_as": "pale-yellow rounded card with a three-line header, an offset stack of orange-framed photos and a kitchen icon",
+    "container": "Hierarchy of SEED-Bench-R1 (SB-R1)'s Validation Set",
+    "is_contribution": true
+   },
+   {
+    "name": "Level-3: Cross-task & Cross-environment",
+    "type": "container",
+    "role": "hardest level: Hobbies, Daily life, Recreation and Work tasks in unseen indoor and outdoor scenes",
+    "drawn_as": "pale-pink rounded card with a three-line header, an offset stack of pink-framed photos and four domain icons",
+    "container": "Hierarchy of SEED-Bench-R1 (SB-R1)'s Validation Set",
+    "is_contribution": true
+   },
+   {
+    "name": "Model Performance",
+    "type": "label",
+    "role": "title of the results half",
+    "drawn_as": "large bold comic-style caption under the charts and bubbles",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "GRPO",
+    "type": "module",
+    "role": "baseline: outcome-supervised GRPO, whose reasoning ends in the wrong action D. rinse cloth",
+    "drawn_as": "bold name beside a broken-heart icon above a wobbly-outlined bubble with <think> and <answer> text, red spans and a red cross",
+    "container": "Model Performance",
+    "is_contribution": false
+   },
+   {
+    "name": "GRPO-CARE (ours)",
+    "type": "module",
+    "role": "the proposed method: reasoning ends in the right action C. close tap",
+    "drawn_as": "bold name beside a sparkling light-bulb icon above a wobbly-outlined bubble with <think> and <answer> text and a green check",
+    "container": "Model Performance",
+    "is_contribution": true
+   },
+   {
+    "name": "legend GRPO and GRPO-CARE",
+    "type": "label",
+    "role": "maps bar colour to method: amber for GRPO, light blue for GRPO-CARE",
+    "drawn_as": "two small squares with names under the charts",
+    "container": "Model Performance",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Task Progress filmstrip",
+    "to": "Current Observation",
+    "what": "progress so far leads to the frame where the next action is chosen",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Level-1 question",
+    "to": "GRPO and GRPO-CARE bubbles",
+    "what": "the same question is answered by both models",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Level-1, Level-2, Level-3 cards",
+    "to": "Level-1, Level-2, Level-3 charts",
+    "what": "each chart reports the models' accuracy on that level",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "GRPO bar",
+    "to": "GRPO-CARE bar",
+    "what": "gain of the proposed method: +4.7%, +3.8%, +6.7% accuracy and +24.5% consistency",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "GRPO bubble",
+    "to": "GRPO-CARE bubble",
+    "what": "wrong versus right answer for the same question",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "amber, light blue",
+    "to": "bars and legend swatches",
+    "what": "method identity kept by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Level cards",
+    "to": "photo-stack frame colours",
+    "what": "orange frames on the yellow card and pink frames on the pink card",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Hierarchy of SEED-Bench-R1 (SB-R1)'s Validation Set",
+    "kind": "scope-overview",
+    "axis": "overview",
+    "shows": "three tinted level cards of rising generalisation difficulty, the first drawn in full with a question, frames and options",
+    "verdict": "setting"
+   },
+   {
+    "label": "Model Performance",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "paired bars of GRPO against GRPO-CARE for three levels and consistency, and the two models' reasoning on one question",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Level-1, Level-2, Level-3",
+    "kind": "identity",
+    "at": "card headers and chart titles",
+    "what": "name the three validation levels, repeated on the charts"
+   },
+   {
+    "marker": "A, B, C, D",
+    "kind": "identity",
+    "at": "candidate actions",
+    "what": "name the answer options"
+   },
+   {
+    "marker": "+4.7%, +3.8%, +6.7%, +24.5%",
+    "kind": "other",
+    "at": "red brackets over the bar pairs",
+    "what": "state the gain of GRPO-CARE over GRPO"
+   },
+   {
+    "marker": "red cross and green check",
+    "kind": "other",
+    "at": "corners of the two reasoning bubbles",
+    "what": "mark the wrong and the right final answer"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "egocentric kitchen video frames: three past frames and a larger current observation at a sink",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "three frames inside a light-blue film strip with sprocket holes, then a larger frame to the right"
+   },
+   {
+    "what": "photo stacks of first-person scenes for Level-2 (kitchens) and Level-3 (crafts and other tasks)",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "offset stacks of overlapping photos with an orange frame on the yellow card and a pink frame on the pink card; some frames are hidden behind the front photo"
+   },
+   {
+    "what": "four small bar charts: Level-1, Level-2, Level-3 accuracy and Consistency Rate",
+    "content": "chart",
+    "role": "result",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "an amber GRPO bar beside a light-blue GRPO-CARE bar, grey gridlines, a red bracket and a red gain label over each pair, inside a dotted rounded box"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "kitchen stove with hood",
+    "stands_for": "the kitchen environment of Level-1 and Level-2",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "plant with a shovel, kitchen cabinet, game console, tape measure",
+    "stands_for": "task domains of Level-3: hobbies, daily life, recreation, work",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "thinking face with a hand on the chin",
+    "stands_for": "the model thinking about the question",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "broken heart",
+    "stands_for": "GRPO: reasoning inconsistent with the answer",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "light bulb with sparkles",
+    "stands_for": "GRPO-CARE: consistent, insightful reasoning",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "pie chart tag and goggles tag",
+    "stands_for": "Task Progress and Current Observation",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "red cross and green check mark",
+    "stands_for": "wrong and right final answer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "question 'what action should I take next in order to clean the sink (Task Goal)?' with options A. pick up cloth, B. wring cloth, C. close tap, D. rinse cloth",
+    "form": "question text, filmstrip with an arrow to the current observation, option list",
+    "real_values": true
+   },
+   {
+    "what": "GRPO reasoning that proposes wringing out the cloth and ends in D. rinse cloth versus GRPO-CARE reasoning that closes the tap and ends in C. close tap",
+    "form": "two bubbles with <think> and <answer> text, red spans on the wrong reasoning, cross and check marks",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "three tinted cards for Level-1 to Level-3 of rising generalisation difficulty, one large and two small, each with a domain and environment header",
+    "parts": [
+     "Level-1",
+     "Level-2",
+     "Level-3"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a question with a filmstrip and lettered options, followed by two model answers in bubbles marked with a cross and a check",
+    "parts": [
+     "question",
+     "options",
+     "model bubbles",
+     "cross and check"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "three frames inside a light-blue strip with sprocket holes, tagged Task Progress, followed by a larger frame tagged Current Observation",
+    "parts": [
+     "sprocket strip",
+     "frames",
+     "current frame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "an offset stack of three photos with a coloured frame standing for a validation set",
+    "parts": [
+     "photo stack",
+     "domain icons"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Level-1 card at top left (header, question, filmstrip, options), moves to the Level-2 and Level-3 cards below, then to the bar charts at top right and down to the two reasoning bubbles."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A wide left half holds the benchmark: a large Level-1 card above a smaller Level-2 card and Level-3 card, with a title below; a narrower right half holds the results: a dotted box of four small bar charts above two stacked reasoning bubbles, with a title below; a curved arrow links the Level-1 card to the bubbles.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ecf3fa",
+    "used_for": "Level-1 card background"
+   },
+   {
+    "hex": "#f8f3d4",
+    "used_for": "Level-2 card background"
+   },
+   {
+    "hex": "#f6e6e6",
+    "used_for": "Level-3 card background"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "GRPO bars and legend swatch"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "GRPO-CARE bars, legend swatch, filmstrip border and Task Progress arrow"
+   },
+   {
+    "hex": "#c41f3a",
+    "used_for": "gain brackets and labels, wrong-reasoning spans and the cross in the GRPO bubble"
+   },
+   {
+    "hex": "#fea613",
+    "used_for": "orange frames of the Level-2 photo stack"
+   },
+   {
+    "hex": "#dfa5a5",
+    "used_for": "pink frames of the Level-3 photo stack"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "chart gridlines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt grey chart gridlines, 0.5-1 pt red brackets and tinted frames, hand-drawn-looking black outlines on the reasoning bubbles, one dotted outline around the chart block",
+  "font": "sans: Calibri 5.5-6 pt for body text and bubbles; a comic-style face (Comic Sans MS) at 8.5 pt bold for the two panel titles and the level header lines",
+  "corners": "rounded",
+  "arrows": "one thin light-blue arrow along the filmstrip, one curved black arrow from the thinking face to the bubbles, red square brackets over the bar pairs",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "card tint = validation level (blue Level-1, yellow Level-2, pink Level-3) with photo-stack frames in orange and pink; amber bars = GRPO and light-blue bars = GRPO-CARE; red = gains, wrong reasoning spans and the cross; green check = right answer",
+  "line_style_means": "dotted rounded outline = the chart block; wobbly black outline = model output bubble; thin light-blue arrow = progress to the current observation; curved black arrow = the question goes to the models",
+  "shape_means": "film strip with sprocket holes = video progress; offset photo stack = a set of samples; paired bars = method comparison; rounded bubble = a model's reasoning and answer",
+  "marker_means": "red +x% = gain of GRPO-CARE over GRPO; red cross and green check = wrong and right final answer; broken heart and sparkling bulb = bad and good reasoning consistency",
+  "emphasis": "Red spans in GRPO's reasoning, red gain brackets, the (ours) tag and the large panel titles draw the eye.",
+  "reusable_patterns": [
+   "tinted cards for ordered evaluation levels: the first drawn in full with a filmstrip question, the others as photo stacks with domain icons",
+   "film strip of task progress with an arrow to a larger current-observation frame",
+   "paired bars with a red bracket and a gain label for each setting",
+   "two reasoning bubbles side by side, the wrong one with red spans and a cross, the right one with a check",
+   "emoji-like icons (broken heart, sparkling bulb, thinking face) as mood markers",
+   "bar-chart block above the example bubbles so the numbers and one concrete case share a panel"
+  ],
+  "weaknesses": [
+   "blue and yellow mean the level at left but the method at right",
+   "5.5 pt text in the bubbles is small at column width",
+   "the long curved arrow from the thinking face to the bubbles is easy to miss",
+   "the caption's (a) and (b) are not drawn in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "egocentric video frames of the benchmark",
+   "a real question, options and two real model responses",
+   "measured accuracy and consistency numbers"
+  ],
+  "stock": [
+   "kitchen, hobby, game and tool icons",
+   "emoji-like thinking face, broken heart and sparkling bulb",
+   "check and cross icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted cards",
+   "bar charts and red brackets",
+   "reasoning bubbles",
+   "film strip border"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted level cards",
+   "video filmstrip question card",
+   "stacked photo cards with domain icons",
+   "four paired bar charts with red gain brackets",
+   "two reasoning bubbles with a red cross and a green check",
+   "emoji-like heart, bulb and thinking-face icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "GRPO",
+   "multimodal reasoning",
+   "reasoning consistency",
+   "egocentric video QA",
+   "SEED-Bench-R1",
+   "RL post-training",
+   "generalisation levels",
+   "reward"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "stacked-cards",
+   "filmstrip",
+   "level-ladder",
+   "small-multiples",
+   "plot-callouts",
+   "verdict-marks",
+   "highlighted-text-spans",
+   "error-callouts"
+  ],
+  "new_tags": [
+   {
+    "name": "mood-emoji-markers",
+    "what": "emoji-like icons (broken heart, sparkling bulb, thinking face) used as heading marks for bad, good and thinking model outputs"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Pair a benchmark panel and a results panel in one teaser: ordered level cards with one record drawn in full on the left, paired bars with red gain brackets above two reasoning bubbles marked with a cross and a check on the right, so the numbers and one concrete failure are read together.",
+  "suits": "papers that contribute both a benchmark and a method, where one teaser must show the evaluation levels, the headline gains and a before-and-after example."
+ },
+ "tags": [
+  "two-half teaser",
+  "tinted level cards",
+  "photo stacks",
+  "paired bars with gain brackets",
+  "reasoning bubbles",
+  "emoji markers"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Pilot Study with SEED-Bench-R1 (p.3, p.5)"
+  ],
+  "evidence": [
+   "SEED-Bench-R1 (SB-R1) provides a systematic, three-level evaluation of post-training methods for MLLMs",
+   "while it improves answer accuracy, it often compromises logical consistency between reasoning and answers"
+  ]
+ },
+ "summary": "GRPO-CARE is a consistency-aware reinforcement learning method for multimodal reasoning, evaluated on the new SEED-Bench-R1 benchmark. Figure 1 puts the two contributions side by side. At left, titled Hierarchy of SEED-Bench-R1's Validation Set, three tinted cards stand for in-distribution, cross-environment and cross-task-and-environment levels; Level-1 is drawn in full with a question, a filmstrip of task progress, the current observation and four candidate actions, while Levels 2 and 3 are photo stacks with domain icons. At right, titled Model Performance, four paired bar charts show GRPO-CARE gains over GRPO with red brackets, above two reasoning bubbles for the same question: GRPO ends in a wrong answer (red cross), GRPO-CARE in the right one (green check).",
+ "summary_zh": "GRPO-CARE 是面向多模态推理的一致性感知强化学习方法，并配套 SEED-Bench-R1 基准。图一左侧用三张色块卡片展示三级验证集（第一级含问题、视频胶片和候选动作），右侧用成对柱状图和红色提升括号对比 GRPO 与 GRPO-CARE，下方两个推理气泡分别标红叉与绿勾。",
+ "confidence": "high",
+ "notes": "The caption letters (a) and (b) are not drawn; the two halves are identified by their bottom titles. Prior kinds kept, with deliverables-triptych as variant (two deliverables: benchmark and method results). The curved arrow from the thinking face to the bubbles is read as the same question going to both models. Photo-stack count 9 is the number of placed bitmaps from the digest; fewer are visible.",
+ "venue": "ACL26"
+}

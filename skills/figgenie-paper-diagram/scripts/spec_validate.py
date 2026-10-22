@@ -66,6 +66,30 @@ MECH_EDGE_MAX = {"single": 11, "double": 12}
 MECH_BOX_MIN = 5
 MECH_GROUPS = ("comparison", "evolution", "logic", "walkthrough", "anatomy")
 ACCENT_MAX = 2                   # palettes.json general_rules.saturated_fills
+# meta.family = ai: bands and budgets come from references/ai/style-thresholds.json (build_ai_thresholds.py): the
+# venue's text width, the good figures' p5-p95 height (126-317 pt) and aspect, labelled boxes per figure kind.
+AI_THRESH = os.path.join(ROOT, "references", "ai", "style-thresholds.json")
+AI_VENUES = ("iclr", "icml", "neurips", "cvpr", "acl", "aaai")
+AI_ASPECT_BAND = (1.2, 3.5)      # good AI-venue figures p5 1.23 / p95 3.48
+AI_BUDGET_DEFAULT = {"q3": 28, "p90": 57, "min": 5, "edges": 47}   # family-wide: text boxes p75 / p95, arrowheads p95
+AI_SAMPLE_KINDS = ("scope-overview", "contribution-mosaic", "worked-walkthrough", "side-by-side-contrast")
+
+
+def load_ai_thresholds():
+    try:
+        with open(AI_THRESH, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+def ai_budget(thr, kind):
+    """(q3, p90, min, edges) of labelled boxes for the primary kind, from by_kind of the thresholds file."""
+    bk = (thr.get("by_kind") or {}).get(kind) or {}
+    tb, ah = bk.get("density.text_boxes") or {}, bk.get("arrows.heads") or {}
+    d = AI_BUDGET_DEFAULT
+    return (int(round(tb.get("p75", d["q3"]))), int(round(tb.get("p95", d["p90"]))),
+            max(3, int(round(tb.get("p25", d["min"])))), int(round(ah.get("p95", d["edges"]))))
 STEP_MAX = 8                     # encoding.md Part D: 3-8 steps
 LANES_MAX_SINGLE = 3             # layouts.md phase-lanes
 NESTING_WARN, NESTING_ERROR = 3, 4        # anti-patterns SS3 #20
@@ -397,10 +421,32 @@ def reference_pass(spec, palettes, rep, base_dir=None):
     elif pal in {p.get("id") for p in (palettes.get("palettes") or []) if p.get("style")} if palettes else False:
         rep.warn("meta.palette", "palette %r belongs to a named style; set meta.style = %r to get its rules "
                                  "(references/styles/%s.md)" % (pal, pal, pal))
-    if meta.get("template") and meta["template"] not in TEMPLATES and meta["template"] != "mechanism":
-        rep.error("meta.template", "%r is not one of the 15 template ids in layouts.md" % meta["template"])
+    if meta.get("template") and meta["template"] not in TEMPLATES and meta["template"] not in ("mechanism", "ai", "custom"):
+        rep.error("meta.template", "%r is not one of the template ids in layouts.md (nor mechanism / ai / custom)" % meta["template"])
     if meta.get("template") == "mechanism" and meta.get("kind", "architecture") != "mechanism":
         rep.error("meta.template", "template 'mechanism' needs meta.kind = 'mechanism'")
+    if meta.get("template") == "ai" and meta.get("family") != "ai":
+        rep.error("meta.template", "template 'ai' needs meta.family = 'ai'")
+    # the AI family: the venue sets the width band; kinds and sub-field route the budgets and the advice
+    if meta.get("family") == "ai":
+        if meta.get("venue") not in AI_VENUES:
+            rep.error("meta.venue", "meta.family 'ai' needs meta.venue (iclr, icml, neurips, cvpr, acl, aaai): "
+                                    "the width band is the venue's text width (references/ai/style-thresholds.json)")
+        if meta.get("column") == "single" and meta.get("venue") in ("neurips", "iclr"):
+            rep.error("meta.column", "NeurIPS and ICLR are single-column templates: a figure spans the text width "
+                                     "(column 'double' here); 'single' exists for ICML, CVPR, ACL and AAAI")
+        ai = meta.get("ai") or {}
+        if not ai.get("kinds"):
+            rep.warn("meta.ai.kinds", "name the figure's kinds, primary first (references/ai/kinds.md); the budgets "
+                                      "and the advisory checks follow the primary kind")
+        if not ai.get("subfield") or ai.get("subfield") == "other":
+            rep.warn("meta.ai.subfield", "name the paper's sub-field (references/ai/domains.md says what it draws "
+                                         "differently); 'other' is for the few papers outside the nine")
+        if meta.get("template") not in (None, "", "ai", "custom"):
+            rep.info("meta.template", "an AI-venue figure takes its arrangement from meta.ai.arrangement "
+                                      "(references/ai/layouts.md); template %r is read as a hint only" % meta["template"])
+    elif meta.get("ai") or meta.get("venue"):
+        rep.warn("meta.family", "meta.ai and meta.venue are fields of the AI family; set meta.family = 'ai' or drop them")
     for m in meta.get("modifiers") or []:
         if m not in TEMPLATES:
             rep.error("meta.modifiers", "%r is not a template id in layouts.md" % m)
@@ -468,10 +514,13 @@ def distinct_encodings(spec):
 
 def style_pass(spec, rep):
     meta = spec.get("meta") or {}
-    col = meta.get("column", "single")
-    col = col if col in ("single", "double") else "single"
-    width = float(meta.get("width_pt", 240 if col == "single" else 504))
-    height = float(meta.get("max_height_pt", 160))
+    ai = meta.get("family") == "ai"
+    ai_thr = load_ai_thresholds() if ai else {}
+    col = meta.get("column", "double" if ai else "single")
+    col = col if col in ("single", "double") else ("double" if ai else "single")
+    venue_band = ((ai_thr.get("columns") or {}).get(meta.get("venue") or "") or {}).get(col) or {}
+    width = float(meta.get("width_pt", venue_band.get("width_target") or (240 if col == "single" else 504)))
+    height = float(meta.get("max_height_pt", 198 if ai else 160))
     nodes = [n for n in (spec.get("nodes") or []) if isinstance(n, dict)]
     containers = [c for c in (spec.get("containers") or []) if isinstance(c, dict)]
     lanes = [l for l in (spec.get("lanes") or []) if isinstance(l, dict)]
@@ -482,23 +531,29 @@ def style_pass(spec, rep):
     mech = meta.get("kind", "architecture") == "mechanism"
 
     # --- canvas -------------------------------------------------------------
-    lo, hi = WIDTH_BAND[col]
+    if ai and venue_band:
+        lo, hi = venue_band["width_p5_p95"]; target = venue_band["width_target"]
+        hmax, aspect_band = venue_band.get("height_max_p95", 317), AI_ASPECT_BAND
+        band_name = "%s %s" % (meta.get("venue"), "full-width" if col == "double" else "column")
+    elif ai:
+        lo, hi, target, hmax, aspect_band, band_name = 0, 10 ** 6, width, 317, AI_ASPECT_BAND, "venue (unknown)"
+    else:
+        lo, hi = WIDTH_BAND[col]; target = 240 if col == "single" else 504
+        hmax, aspect_band, band_name = HEIGHT_MAX[col], ASPECT_BAND, "%s-column" % col
     if not lo <= width <= hi:
-        rep.warn("meta.width_pt", "%.0f pt is outside the %s-column band %d-%d pt "
-                                 "(target %d)" % (width, col, lo, hi, 240 if col == "single" else 504))
-    if height > HEIGHT_MAX[col]:
-        rep.warn("meta.max_height_pt", "%.0f pt is above the %s-column p95 of %d pt"
-                 % (height, col, HEIGHT_MAX[col]))
+        rep.warn("meta.width_pt", "%.0f pt is outside the %s band %d-%d pt (target %d)" % (width, band_name, lo, hi, target))
+    if height > hmax:
+        rep.warn("meta.max_height_pt", "%.0f pt is above the %s p95 of %d pt" % (height, band_name, hmax))
     aspect = width / height if height else 0
-    if aspect and not ASPECT_BAND[0] <= aspect <= ASPECT_BAND[1]:
+    if aspect and not aspect_band[0] <= aspect <= aspect_band[1]:
         rep.warn("meta", "aspect %.2f (width/max_height) is outside %.1f-%.1f; a figure this "
                          "%s is a recorded weakness"
-                 % (aspect, ASPECT_BAND[0], ASPECT_BAND[1],
+                 % (aspect, aspect_band[0], aspect_band[1],
                     "tall" if aspect < 1 else "wide"))
-    if meta.get("direction") == "bottom-up":
+    if meta.get("direction") == "bottom-up" and not ai:
         rep.warn("meta.direction", "bottom-up appears 13/727 times in the corpus -- use it only "
                                    "for a memory hierarchy read from the device outward")
-    if col == "double" and meta.get("template") == "layered":
+    if col == "double" and meta.get("template") == "layered" and not ai:
         rep.warn("meta.template", "only 5% of layered figures are double column; a layered "
                                   "figure that will not fit at 240 pt should get taller, not wider")
     all_panels = [q for q in (spec.get("panels") or []) if isinstance(q, dict)]
@@ -508,6 +563,10 @@ def style_pass(spec, rep):
             rep.info("meta.panels", "composite figure with %d parts (%s): each part is budgeted on its own, and the "
                                     "reader needs a shared legend, one numbering and the same identity colours in every "
                                     "part (spec-guide §8)" % (len(parts), ", ".join(str(q.get("id")) for q in parts)))
+        elif ai:
+            rep.info("meta.panels", "%s panels: three is the commonest count of the AI family (32%%; four 13%%, five or more "
+                                    "8%%) -- letter or title them, keep one grammar across them, and give each its budget "
+                                    "(references/ai/layouts.md §2)" % meta.get("panels"))
         else:
             rep.warn("meta.panels", "%s panels -- 'too many panels' is a recorded weakness; consider a chained "
                                     "drill-down, or, when the user wants one overview figure, declare the panels as the "
@@ -516,6 +575,11 @@ def style_pass(spec, rep):
     # --- density ------------------------------------------------------------
     box_q3, box_p90, edge_max, box_min = ((MECH_BOX_Q3, MECH_BOX_P90, MECH_EDGE_MAX, MECH_BOX_MIN) if mech
                                           else (BOX_Q3, BOX_P90, EDGE_MAX, BOX_MIN))
+    if ai:
+        # the AI family's budgets: labelled boxes (q3 / p90) and arrowheads (p95) of the good figures of the primary
+        # kind, full width or column alike (references/ai/style-thresholds.json by_kind; kinds.md "Numbers by kind")
+        q3, p90, bmin, emax = ai_budget(ai_thr, ((meta.get("ai") or {}).get("kinds") or [""])[0])
+        box_q3, box_p90, edge_max, box_min = {col: q3}, {col: p90}, {col: emax}, bmin
     if mech:
         # the mechanism semantic records count the elements of ONE panel by their label: mirrored devices,
         # repeated slots and per-panel copies count once, as they do in the corpus bands; borderless
@@ -528,7 +592,7 @@ def style_pass(spec, rep):
     else:
         boxes = len(nodes) + len(containers) + len(lanes)
         n_edges = len(edges)
-    budget = max(1, round(width * height / AREA_PT2_PER_BOX))
+    budget = 10 ** 6 if ai else max(1, round(width * height / AREA_PT2_PER_BOX))   # the area rule is the systems corpus's
     if parts:
         # composite: several small figures in one frame -- hold each part to the single-column bands
         pid_parent = {q.get("id"): q.get("parent") for q in all_panels}
@@ -567,7 +631,7 @@ def style_pass(spec, rep):
     if boxes < box_min:
         rep.warn("nodes", "only %d labelled boxes; good figures carry >= %d (q1) and bad ones "
                           "median 6 -- add the components you elided, or say why it is this simple"
-                 % (boxes, 7 if mech else 11))
+                 % (boxes, box_min if ai else (7 if mech else 11)))
     if n_edges > edge_max[col]:
         rep.warn("edges", "%d flows exceeds the corpus p90 of %d -- drop the edges that are not "
                           "load-bearing" % (n_edges, edge_max[col]))
@@ -577,8 +641,8 @@ def style_pass(spec, rep):
                       % n.get("kind", "module"))
     if mech:
         mechanism_pass(spec, rep)
-    elif (spec.get("panels") and not parts) or spec.get("deltas") or meta.get("mechanism") or \
-            (spec.get("values") and not parts):
+    elif not ai and ((spec.get("panels") and not parts) or spec.get("deltas") or meta.get("mechanism") or
+                     (spec.get("values") and not parts)):
         rep.warn("meta.kind", "panels[] / deltas[] / values[] / meta.mechanism are mechanism-figure "
                               "fields; set meta.kind = 'mechanism' or drop them (a composite figure of parts, "
                               "panels[] with axis 'part', may keep them in either kind)")
@@ -599,11 +663,12 @@ def style_pass(spec, rep):
             if n.get("emphasis") == "accent":
                 seen_acc.setdefault(((n.get("label") or "").strip().lower(), n.get("kind", "module")), n["id"])
         accents = list(seen_acc.values())
-    if len(accents) > ACCENT_MAX:
+    accent_max = (ai_thr.get("lint") or {}).get("max_saturated_fills", ACCENT_MAX) if ai else ACCENT_MAX
+    if len(accents) > accent_max:
         rep.warn("nodes[].emphasis", "%d accent nodes (%s); the ceiling is %d saturated fills "
                                      "per figure -- use role='novel' for the rest and let the "
                                      "module fill carry it"
-                 % (len(accents), ", ".join(accents[:6]), ACCENT_MAX))
+                 % (len(accents), ", ".join(accents[:6]), accent_max))
     main = [e["id"] for e in edges if e.get("weight") == "main"]
     if len(main) > 6:
         rep.warn("edges[].weight", "%d edges marked 'main'; the main path should be one "
@@ -762,6 +827,37 @@ def style_pass(spec, rep):
 
 
 # ------------------------------------------------------------ mechanism pass
+def ai_pass(spec, rep):
+    """meta.family = ai: advisory readings of the spec against the AI family's habits (references/ai/anti-patterns.md
+    §5, kinds.md). Everything here is a warning or an info; how the figure is drawn is the agent's call."""
+    meta = spec.get("meta") or {}
+    ai = meta.get("ai") or {}
+    kinds = [k for k in (ai.get("kinds") or []) if k]
+    nodes = [n for n in (spec.get("nodes") or []) if isinstance(n, dict)]
+    content = [n for n in nodes if n.get("kind") in ("image", "text", "bubble", "chart") or n.get("image")]
+    if kinds and kinds[0] in AI_SAMPLE_KINDS and not content and not spec.get("values"):
+        rep.info("ai.no-sample", "a %s without a picture, a quoted text, a bubble, a chart or values: most good figures "
+                                 "of this kind carry a sample or a worked example (kinds.md); if the paper has one, "
+                                 "the brief should name it" % kinds[0])
+    if not ai.get("arrangement") or ai.get("arrangement") == "other":
+        rep.info("meta.ai.arrangement", "describe the arrangement (references/ai/layouts.md §1: panels-row, panels-grid, "
+                                        "bands, lanes, pipeline-row, cards-grid, hub ...; 'other' with a note is fine)")
+    for i, n in enumerate(nodes):
+        lines = n.get("text_lines") or []
+        label = (n.get("label") or "")
+        if n.get("kind") in ("text", "bubble") and (len(lines) > 3 or len(label) > 160):
+            rep.info("nodes[%d]" % i, "a %s node with %d lines / %d characters: quote the two or three lines that carry "
+                                      "the point and elide the rest (anti-patterns.md §2, the wall of text)"
+                     % (n.get("kind"), len(lines), len(label)))
+    if not meta.get("palette"):
+        rep.info("meta.palette", "no palette named; the AI family's starting points are office-pastel (the default look), "
+                                 "tinted-regions, role-colours, verdict-contrast and frozen-trainable (references/ai/palettes.md §9)")
+    icons = [n for n in nodes if n.get("kind") == "icon"]
+    if len(icons) >= 6 and len(icons) >= len(nodes) / 2:
+        rep.info("nodes", "%d of %d nodes are icons: icons name actors at label size; the content (samples, text, the "
+                          "model's parts) must be drawn too (anti-patterns.md §2, clip-art as the content)" % (len(icons), len(nodes)))
+
+
 def mechanism_pass(spec, rep):
     """Checks for meta.kind = mechanism: the group's own block is present and the panel structure is consistent
     (references/mechanism/, mech-prescreen/typedisc/types_v3.md)."""
@@ -885,6 +981,8 @@ def main(argv=None):
             schema_pass(spec, schema, rep)
         reference_pass(spec, palettes, rep, base_dir=os.path.dirname(os.path.abspath(args.spec)))
         style_pass(spec, rep)
+        if (spec.get("meta") or {}).get("family") == "ai":
+            ai_pass(spec, rep)
 
     if args.as_json:
         print(json.dumps({

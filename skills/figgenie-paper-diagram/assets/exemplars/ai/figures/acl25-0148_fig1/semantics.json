@@ -1,0 +1,585 @@
+{
+ "paper_id": "acl25-0148",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CROSSAGENTIE",
+  "one_liner": "A multi-agent LLM framework for zero-shot information extraction: type agents debate conflicting NER and RE labels, then a single LLM is fine-tuned on the outputs.",
+  "domain": [
+   "information extraction",
+   "multi-agent LLM collaboration",
+   "named entity and relation extraction"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "stage-chain-with-detail-panels",
+  "variant_note": "three zoom columns: the main process on the left, three stacked dashed collaboration stages in the middle, and one detail panel per stage on the right joined by magnifier arrows, with an inference row along the bottom",
+  "argues": "Agents per entity or relation type resolve conflicting labels through grouped and cross-task discussion, and the resolved outputs can be distilled into one LLM for cheap inference.",
+  "subject": "the four-stage CROSSAGENTIE process followed on one sentence about Reagon and America, with agent dialogue and conflict tables",
+  "elements": [
+   {
+    "name": "Sentence: \"Reagan sounded positive notes ...\"",
+    "type": "sample",
+    "role": "input document of the main process",
+    "drawn_as": "grey text card with a document-and-pencil icon at its corner",
+    "container": "Main Process Stage",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Agents Collaboration",
+    "type": "module",
+    "role": "black-box stage that turns the input into entity and relation labels",
+    "drawn_as": "rounded black-outlined box with a team-around-a-gear icon and a bold label",
+    "container": "Main Process Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Output",
+    "type": "data",
+    "role": "structured result: PER, LOC, ORG entities and Live-in, Work-for relations, or NULL",
+    "drawn_as": "ruled two-column table under the collaboration box",
+    "container": "Main Process Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Template Fine-Tuning",
+    "type": "operation",
+    "role": "distils the multi-agent outputs into a single LLM",
+    "drawn_as": "bold label on a black line that runs from the output table to the top of the LLM box and ends in an arrowhead",
+    "container": "Inference Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Finetuned single LLM",
+    "type": "module",
+    "role": "single model that does the extraction at inference",
+    "drawn_as": "narrow black-outlined box with vertical text and a small robot icon",
+    "container": "Inference Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Inference Stage",
+    "type": "container",
+    "role": "inference with the fine-tuned model: a new sentence goes in and entities and relations come out",
+    "drawn_as": "underlined heading at the left plus a rounded bottom row holding a sentence card, the LLM box and the output list",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Inference Output",
+    "type": "data",
+    "role": "result list for the new sentence: LOC, PER, ORG and Live-in entries",
+    "drawn_as": "robot icon with a caption and a bracketed list of four lines",
+    "container": "Inference Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Type-Agents Setup (stage 1)",
+    "type": "container",
+    "role": "one agent per entity type (ORG, PER, LOC) and relation type (Work-for, Live-in)",
+    "drawn_as": "yellow dashed rounded box with five labelled robot icons",
+    "container": "Multi-Agents Collaboration Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Intra-Group Cross-Type Discussion (stage 2)",
+    "type": "container",
+    "role": "agents of one group (NER or RE) discuss conflicts between types",
+    "drawn_as": "green dashed rounded box holding a blue NER Group box with three robots and a peach RE Group box with two robots",
+    "container": "Multi-Agents Collaboration Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Inter-Group Cross-Task Discussion (stage 3)",
+    "type": "container",
+    "role": "NER and RE agents refine each other's outputs",
+    "drawn_as": "pink dashed rounded box with four robots around a circle of two looping arrows",
+    "container": "Multi-Agents Collaboration Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "type agents",
+    "type": "actor",
+    "role": "LLM agents for ORG, PER, LOC, Work-for and Live-in; each type keeps its own robot design in every stage",
+    "drawn_as": "five different flat cartoon robots with a caption under each in stage 1",
+    "container": "Multi-Agents Collaboration Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Type-Agent Setup (detail)",
+    "type": "container",
+    "role": "shows each type agent's predictions for the sentence with right and wrong marks and the conflicts that result",
+    "drawn_as": "yellow dashed panel with a type-by-prediction table and two arrows to conflict boxes",
+    "container": "Collaboration Details for Each Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Conflicts in NER / Conflicts in RE",
+    "type": "text-block",
+    "role": "list the entities and relations that received more than one label",
+    "drawn_as": "blue box (Reagon -- PER, LOC; America -- ORG, LOC) and peach box (Live-in, Work-for: [Reagon, America])",
+    "container": "Type-Agent Setup (detail)",
+    "is_contribution": null
+   },
+   {
+    "name": "Conflict Resolution",
+    "type": "container",
+    "role": "agents from each group argue and agree on the right label",
+    "drawn_as": "green dashed panel with a blue NER box and a peach RE box, each with robot avatars and short dialogue lines",
+    "container": "Collaboration Details for Each Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Bidirectional Refinement",
+    "type": "container",
+    "role": "each group passes its result to the other: RE's 'Reagon lives in America' and NER's 'PER-Reagon, LOC-America'",
+    "drawn_as": "pink dashed panel with two columns of icons and teal curved arrows, joined by brackets to a central robot, plus a peach and a blue tag at the bottom",
+    "container": "Collaboration Details for Each Stage",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Sentence card",
+    "to": "Multi-Agents Collaboration",
+    "what": "input document",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-Agents Collaboration",
+    "to": "Output",
+    "what": "labels produced by the agents",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output",
+    "to": "Inference Stage",
+    "what": "the process continues to inference",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output",
+    "to": "Finetuned single LLM",
+    "what": "multi-agent outputs become fine-tuning data",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Inference sentence",
+    "to": "Finetuned single LLM",
+    "what": "new sentence to the fine-tuned model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Finetuned single LLM",
+    "to": "Inference Output",
+    "what": "entities and relations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Type-Agents Setup (stage 1)",
+    "to": "Intra-Group Cross-Type Discussion (stage 2)",
+    "what": "type-agent predictions go to group discussion",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Intra-Group Cross-Type Discussion (stage 2)",
+    "to": "Inter-Group Cross-Task Discussion (stage 3)",
+    "what": "within-group results go to cross-task discussion",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "NER agents",
+    "to": "RE agents",
+    "what": "bidirectional refinement: each task's result is fed back to the other",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-Agents Collaboration (left box)",
+    "to": "Multi-Agents Collaboration Stage",
+    "what": "zoom into the collaboration",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each stage box",
+    "to": "its detail panel",
+    "what": "zoom into one stage on the worked example",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "type-agent table",
+    "to": "Conflicts in NER and Conflicts in RE",
+    "what": "wrong or competing predictions become conflicts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "stage colour (yellow, green, pink)",
+    "to": "matching detail panel",
+    "what": "stage identity kept by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Main Process Stage",
+    "kind": "stage-pipeline",
+    "axis": "overview",
+    "shows": "input sentence to a black-box Multi-Agents Collaboration, output table, template fine-tuning and the inference stage",
+    "verdict": "ours"
+   },
+   {
+    "label": "Multi-Agents Collaboration Stage",
+    "kind": "actor-interaction",
+    "axis": "zoom",
+    "shows": "the collaboration opened into three dashed stages joined by block arrows: type-agents setup, intra-group cross-type discussion, inter-group cross-task discussion",
+    "verdict": "ours"
+   },
+   {
+    "label": "Collaboration Details for Each Stage",
+    "kind": "worked-walkthrough",
+    "axis": "zoom",
+    "shows": "one detail panel per stage following Reagon and America from conflicting labels through agent dialogue to the refined result",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(stage 1), (stage 2), (stage 3)",
+    "kind": "order",
+    "at": "titles of the three dashed stage boxes",
+    "what": "order the collaboration stages; the caption's stage 4 (template fine-tuning) is not numbered in the drawing"
+   },
+   {
+    "marker": "Input, Output",
+    "kind": "identity",
+    "at": "purple arrows of the left column",
+    "what": "name what goes into and comes out of the collaboration box"
+   },
+   {
+    "marker": "ORG, PER, LOC, Work-for, Live-in",
+    "kind": "identity",
+    "at": "under the robots of stage 1",
+    "what": "name each type agent"
+   },
+   {
+    "marker": "green check and red cross",
+    "kind": "other",
+    "at": "predictions in the Type-Agent Setup table",
+    "what": "mark each agent's prediction as right or wrong"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "five flat cartoon robots (headset, blue screen face, white with red antenna, beige, green with red mouth)",
+    "stands_for": "the type agents ORG, PER, LOC, Work-for and Live-in, reused in every stage and panel",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 26
+   },
+   {
+    "depicts": "four people around a gear with arrows",
+    "stands_for": "multi-agent collaboration",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "document with a pencil",
+    "stands_for": "an input sentence or a text record",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "magnifier with a plus",
+    "stands_for": "zoom in to the detail panel",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "green circled check and red circled cross",
+    "stands_for": "correct and wrong predictions",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "two circular arrows forming a loop",
+    "stands_for": "iterative cross-task exchange",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "sentence about Reagan and America: Reagon gets PER and LOC, America gets ORG and LOC, the relation gets Live-in and Work-for; the discussion settles on PER-Reagon, LOC-America and Live-in",
+    "form": "tables, conflict boxes, dialogue boxes and result tags across the right column",
+    "real_values": true
+   },
+   {
+    "what": "agent dialogue: 'I recognize Reagon as a person based on ontology information and context clues' answered by 'I agree, Reagon should be a person type.'; 'Reagon is a PER and America is a LOC, so it is a live-in relation.' answered by 'I agree, the relation logic here should be live-in rather than work-for.'",
+    "form": "rounded boxes with robot avatars and short lines of text",
+    "real_values": true
+   },
+   {
+    "what": "inference sentence about an art exhibit at the Hakawati Theatre with output LOC, PER, ORG and Live-in entries",
+    "form": "sentence card, LLM box and bracketed list in the bottom row",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "robot avatars, one design per type, grouped into NER and RE group boxes and wired by block arrows and loop arrows",
+    "parts": [
+     "type agents",
+     "NER Group",
+     "RE Group",
+     "loop arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded boxes with a robot avatar and one or two lines of dialogue, a blue box for the NER group and a peach box for the RE group",
+    "parts": [
+     "avatar",
+     "dialogue line",
+     "group box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "narrow box with vertical label Finetuned single LLM and a small robot icon",
+    "parts": [
+     "vertical label",
+     "robot icon"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left sentence card, follows the purple arrows down the left spine, then moves to the middle stages top to bottom and across to each detail panel via magnifier arrows; the bottom row is read left to right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three titled columns: a left spine (input, black-box collaboration, output table, inference heading) that turns into a bottom inference row; a middle rounded container stacking three dashed stage boxes with block arrows; and at right three dashed detail panels in the stage colours, each fed by a light-blue magnifier arrow from its stage; a black line labelled Template Fine-Tuning crosses from the output table to the LLM box.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "in-text",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 1.76,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fef58c",
+    "used_for": "stage 1 (Type-Agents Setup) box and its detail panel"
+   },
+   {
+    "hex": "#d9f2d0",
+    "used_for": "stage 2 (Intra-Group Cross-Type Discussion) box and the Conflict Resolution panel"
+   },
+   {
+    "hex": "#f2cfee",
+    "used_for": "stage 3 (Inter-Group Cross-Task Discussion) box and the Bidirectional Refinement panel"
+   },
+   {
+    "hex": "#c1e5f5",
+    "used_for": "NER side: NER Group box, NER table cells, Conflicts in NER box, NER dialogue box"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "RE side: RE Group box, RE table cells, Conflicts in RE box, RE dialogue box"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "input and inference sentence cards"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "thin purple arrows of the main process"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "blue block arrows between stages and from table to conflict boxes"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "teal curved arrows of the bidirectional refinement (with #114d69)"
+   },
+   {
+    "hex": "#e629d0",
+    "used_for": "the name Reagon in the conflict boxes (table rows use #a02b93)"
+   },
+   {
+    "hex": "#3515eb",
+    "used_for": "the name America and other entity mentions in the detail panels"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black or navy outlines, dashed outlines on stage boxes and detail panels, blue outlines on group boxes",
+  "font": "sans (Aptos, Calibri), 4.5 pt bold for most text, 7-7.5 pt for stage labels, 8.5 pt bold underlined column headings",
+  "corners": "rounded",
+  "arrows": "thin purple open-headed arrows for the main flow, blue block arrows between stages, light-blue arrows with a magnifier for zoom, teal curved arrows for refinement, one black arrowed line for fine-tuning",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow, green and pink = stages 1, 2 and 3, repeated on each detail panel; light blue = NER side and peach = RE side wherever they appear (group boxes, table cells, conflict boxes, dialogue boxes); magenta and blue-violet text = the two entity mentions Reagon and America",
+  "line_style_means": "dashed rounded box = a collaboration stage or its detail panel; solid black rounded box = black-box stage or group container; purple arrow = main flow; blue block arrow = stage order; light-blue arrow with magnifier = zoom; black line = data path for template fine-tuning",
+  "shape_means": "robot icon = an agent, one design per type; table = per-type predictions; rounded rectangle = group, conflict or dialogue box; looped arrows = iterative exchange",
+  "marker_means": "green check and red cross = correct and wrong predictions; (stage n) = order; magnifier = zoom in",
+  "emphasis": "Bold underlined column headings and the colour of each stage returning on its detail panel carry the eye from overview to detail.",
+  "reusable_patterns": [
+   "three columns that zoom from the whole process to its stages to worked details, joined by magnifier arrows",
+   "each stage keeps one colour that returns on its detail panel",
+   "one cartoon robot design per agent type reused in every stage",
+   "check and cross icons beside predictions in a table to expose conflicts",
+   "conflict and dialogue boxes tinted with the colours of the groups involved",
+   "black labelled line carrying outputs into a vertical single-model box for distillation",
+   "inference row along the bottom: sentence, model, bracketed outputs"
+  ],
+  "weaknesses": [
+   "4.5 pt text in the detail panels cannot be read at column width",
+   "the Template Fine-Tuning line crosses the layout and is easy to miss",
+   "the example name is spelled Reagan in the sentence and Reagon in the tables",
+   "the caption lists template fine-tuning as stage 4 but the drawing does not number it"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real NER and RE sentence with its labels and conflicts",
+   "agent dialogue text",
+   "an inference sentence and its output list"
+  ],
+  "stock": [
+   "flat-colour robot icons in five designs",
+   "document-and-pencil icons",
+   "team-and-gear icon",
+   "magnifier, check and cross icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed stage boxes and detail panels",
+   "tables and conflict boxes",
+   "block, purple and curved arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "robot agent icons per entity or relation type",
+   "three colour-coded dashed stage boxes",
+   "magnifier arrows to detail panels",
+   "type-agent table with check and cross marks",
+   "conflict resolution dialogue boxes",
+   "bidirectional refinement diagram with curved arrows",
+   "output table and single fine-tuned LLM"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "information extraction",
+   "multi-agent LLM",
+   "NER",
+   "relation extraction",
+   "zero-shot",
+   "cross-task debate",
+   "template fine-tuning",
+   "conflict resolution"
+  ],
+  "tags": [
+   "zoom-callout",
+   "colour-coded-groups",
+   "verdict-marks",
+   "model-pictogram",
+   "highlighted-text-spans",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "magnifier-arrow-links",
+    "what": "light-blue arrows carrying a magnifier icon join each stage box to its detail panel at the right"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Zoom a multi-stage method in three columns: the whole process, its stage boxes, then one detail panel per stage; give each stage one colour that returns on its panel, join them with magnifier arrows and run one tiny example through the details.",
+  "suits": "multi-stage or multi-agent LLM frameworks whose stages need a worked example, such as debate, verification or refinement loops over structured outputs."
+ },
+ "tags": [
+  "three zoom columns",
+  "dashed colour-coded stages",
+  "magnifier arrows",
+  "robot agents",
+  "conflict tables",
+  "dialogue boxes",
+  "bottom inference row"
+ ],
+ "provenance": {
+  "sections": [
+   "3 CROSSAGENTIE Framework (p.3-4)"
+  ],
+  "evidence": [
+   "illustrates the multi-agent collaboration process through four stages, converting an input document into structured outputs",
+   "NER agents initially misclassify “America” as both ORG and LOC."
+  ]
+ },
+ "summary": "CrossAgentIE is a multi-agent framework for zero-shot information extraction in which LLM agents for each entity and relation type debate conflicting labels, after which a single LLM is fine-tuned on their outputs. Figure 1 is organised in three zoom levels. The left column shows the main process: an input sentence goes through a Multi-Agents Collaboration box to an output table, then Template Fine-Tuning trains a single LLM that handles inference. The middle column opens the collaboration into three dashed stages (type-agent setup in yellow, intra-group cross-type discussion in green, inter-group cross-task discussion in pink). The right column gives each stage a detail panel, joined by magnifier arrows, that follows the example Reagon and America from conflicting labels to a resolved result.",
+ "summary_zh": "CrossAgentIE 让各类型的 LLM 智能体辩论冲突标签，再把结果蒸馏到单个模型。图一按三级放大排布：左列主流程，中列三个彩色虚线阶段，右列用放大镜箭头连到各阶段细节，并用 Reagon / America 例子走完冲突与消解。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (stage-pipeline, actor-interaction) and worked-walkthrough added because the right column follows one sentence through the stages; variant is my own slug because the columns are zoom levels rather than a plain chain. Robot icon count of 26 is an approximate count of placements read from the picture. The roles of the two robot columns and the central robot in Bidirectional Refinement are read from the text 'NER feedback to RE and RE feedback to NER'; the figure itself does not say what the central robot is. The spelling Reagon appears in tables and Reagan in the sentence.",
+ "venue": "ACL25"
+}

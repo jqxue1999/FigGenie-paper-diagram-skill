@@ -1,0 +1,493 @@
+{
+ "paper_id": "neurips23-0141",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ToolkenGPT",
+  "one_liner": "Represents each tool as a token ('toolken') whose learned embedding is appended to the LM head, so a frozen LLM calls tools like words and completes arguments in a tool mode.",
+  "domain": [
+   "tool use",
+   "frozen language models",
+   "tool embeddings"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "one math question followed through reasoning, tool and execution boxes with real text and numbers, next to the LM-head table that holds the toolkens",
+  "argues": "A frozen LLM picks a tool like a word through toolken embeddings in its head, fills arguments in a tool mode, runs the tool and writes the result back.",
+  "subject": "A garden-area question solved by predicting the square toolken, completing its argument 16 in tool mode and receiving 256 from execution.",
+  "elements": [
+   {
+    "name": "Word Tokens",
+    "type": "container",
+    "role": "ordinary vocabulary rows (Liverpool, 1, find)",
+    "drawn_as": "grey token labels joined by a bracket to grey embedding rows",
+    "container": "Embeddings",
+    "is_contribution": false
+   },
+   {
+    "name": "KB Toolkens",
+    "type": "container",
+    "role": "knowledge-base tools winner_of and father_of as extra vocabulary rows",
+    "drawn_as": "orange-brown name, book-with-bulb icon, two orange chips and orange cell rows",
+    "container": "Embeddings",
+    "is_contribution": true
+   },
+   {
+    "name": "Math Toolkens",
+    "type": "container",
+    "role": "math tools square and GCD as extra vocabulary rows",
+    "drawn_as": "blue name, calculator icon, two blue chips and blue cell rows",
+    "container": "Embeddings",
+    "is_contribution": true
+   },
+   {
+    "name": "Robot Toolkens",
+    "type": "container",
+    "role": "embodied-action tools grab and walk as extra vocabulary rows",
+    "drawn_as": "magenta name, robot-arm icon, two pink chips and pink cell rows",
+    "container": "Embeddings",
+    "is_contribution": true
+   },
+   {
+    "name": "Embeddings",
+    "type": "data",
+    "role": "LM-head embedding table: toolken embeddings are appended to word-token embeddings",
+    "drawn_as": "light-grey rounded table of rows of five shaded cells",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Reasoning mode",
+    "type": "container",
+    "role": "LLM generates text as usual while toolkens are also candidates for the next token",
+    "drawn_as": "rounded grey box with a dark-red bold title on its top border and a robot icon",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Question and Answer text",
+    "type": "text-block",
+    "role": "the problem and the partial answer ending 'Therefore, the area is ___'",
+    "drawn_as": "italic labels Question and Answer, black text, a grey-highlighted 16 and a blank filled with a grey-highlighted 256",
+    "container": "Reasoning mode",
+    "is_contribution": false
+   },
+   {
+    "name": "GCD (64, 48)",
+    "type": "operation",
+    "role": "an earlier tool call inside the answer that returned 16",
+    "drawn_as": "blue chip with its arguments and a small curved arrow to the highlighted 16",
+    "container": "Reasoning mode",
+    "is_contribution": null
+   },
+   {
+    "name": "Tool mode",
+    "type": "container",
+    "role": "prompt with a few demonstrations of the predicted tool; the LLM completes the arguments",
+    "drawn_as": "rounded grey box with a dark-red title and a scroll icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "square demonstrations",
+    "type": "text-block",
+    "role": "in-context demonstrations of the selected tool, followed by the current context ending in <square>(16)",
+    "drawn_as": "blue chip, grey text, black context text with (16) underlined",
+    "container": "Tool mode",
+    "is_contribution": true
+   },
+   {
+    "name": "Argument completion",
+    "type": "label",
+    "role": "names what the tool mode does",
+    "drawn_as": "grey bold caption on the bottom border of the box",
+    "container": "Tool mode",
+    "is_contribution": true
+   },
+   {
+    "name": "Execution",
+    "type": "container",
+    "role": "runs the tool call square(16) and returns 256",
+    "drawn_as": "blue-grey bold title with a hammer icon, a blue chip, (16), an arrow and a grey-highlighted 256",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Reasoning mode (blank after 'the area is')",
+    "to": "Token Dist. (square bar)",
+    "what": "the toolken [square] becomes the most likely next token",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Token Dist. (square bar)",
+    "to": "Tool mode",
+    "what": "mode switch once a toolken is predicted",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Tool mode",
+    "to": "Execution",
+    "what": "call the tool with the completed arguments",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Execution",
+    "to": "Reasoning mode (blank)",
+    "what": "the result 256 is filled into the text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "GCD (64, 48)",
+    "to": "16",
+    "what": "earlier tool result written into the answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embeddings",
+    "to": "Token Dist.",
+    "what": "each vocabulary row has a probability bar beside it",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Math Toolkens",
+    "to": "square and GCD chips on the right",
+    "what": "same blue hue ties the toolkens to the tool calls",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3 (circled)",
+    "kind": "order",
+    "at": "labels beside the dashed arrows: mode switch, call the tool, fill in text",
+    "what": "orders the three hand-offs of the loop"
+   },
+   {
+    "marker": "KB, Math, Robot",
+    "kind": "identity",
+    "at": "italic names left of the toolken chips",
+    "what": "name the tool groups"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "next-token probability bars beside each vocabulary row, longest for square",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "one thin grey horizontal bar per row on a vertical axis line, no numbers"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon robot head",
+    "stands_for": "the LLM in reasoning mode",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "scroll",
+    "stands_for": "the prompt with tool demonstrations",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "hammer",
+    "stands_for": "tool execution",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "book with a light bulb, calculator, robot arm",
+    "stands_for": "knowledge-base, math and robot tool groups",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "a rectangular-garden question (64 m by 48 m), its answer with GCD(64, 48) = 16 and square(16) = 256",
+    "form": "text in a box with inline tool-call chips and grey-highlighted results",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "lm-head-embedding-table",
+    "drawn_as": "rows of five shaded cells, one row per vocabulary item, toolkens appended below the word tokens and grouped by colour",
+    "parts": [
+     "word rows",
+     "toolken rows",
+     "bar column"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot-head emoji at the corner of the Reasoning mode box",
+    "parts": [
+     "robot icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "tool calls as inline blue chips with arguments, an Execution step with a hammer icon and result arrow",
+    "parts": [
+     "GCD (64, 48)",
+     "square (16) → 256",
+     "hammer icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "Tool mode box holding a demonstration chip, grey demo text and the current context",
+    "parts": [
+     "demonstrations",
+     "context",
+     "Argument completion caption"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "three titled boxes joined by dashed arrows with circled numbers, closing back to the reasoning text",
+    "parts": [
+     "Reasoning mode",
+     "Tool mode",
+     "Execution"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the vocabulary table on the left, then the Reasoning mode text, follows the dark-red arrow to the square bar, then steps 1, 2, 3 along the grey dashed arrows through Tool mode and Execution back to the blank."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "Left: a vertical embedding table with a bar column, vocabulary rows grouped by brackets, icons and coloured names. Right: Reasoning mode box on top, Tool mode box at the lower left and Execution at the lower right, joined by dashed arrows numbered 1 to 3 that close a loop; one dark-red dashed arrow ties the two halves.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.31,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f4f4f4",
+    "used_for": "background of the embedding table",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "word-token cells"
+   },
+   {
+    "hex": "#e2e2e2",
+    "used_for": "grey highlight behind 16 and 256"
+   },
+   {
+    "hex": "#fff1e3",
+    "used_for": "KB chips and light KB cells"
+   },
+   {
+    "hex": "#fce5cd",
+    "used_for": "darker KB cells"
+   },
+   {
+    "hex": "#e0f1ff",
+    "used_for": "Math chips and light Math cells"
+   },
+   {
+    "hex": "#a2cef4",
+    "used_for": "darker Math cells"
+   },
+   {
+    "hex": "#f3e2e9",
+    "used_for": "Robot chips and light Robot cells"
+   },
+   {
+    "hex": "#ecbdd2",
+    "used_for": "darker Robot cells"
+   },
+   {
+    "hex": "#980000",
+    "used_for": "Reasoning mode and Tool mode titles, dark-red dashed arrow"
+   },
+   {
+    "hex": "#b45f06",
+    "used_for": "KB group name"
+   },
+   {
+    "hex": "#3d85c6",
+    "used_for": "Math group name"
+   },
+   {
+    "hex": "#a64d79",
+    "used_for": "Robot group name"
+   },
+   {
+    "hex": "#78909c",
+    "used_for": "Execution title"
+   },
+   {
+    "hex": "#9e9e9e",
+    "used_for": "mode box frames, grey dashed arrows, Argument completion caption"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark grey (#595959) on cells, chips and bars; 0.75 pt light grey on the mode boxes; dashed curved arrows in grey and dark red",
+  "font": "sans 5.5-7.5 pt, bold coloured titles, italic labels for Question, Answer and the tool groups",
+  "corners": "rounded",
+  "arrows": "thin dashed curved arrows with small filled heads, grey for the numbered hand-offs and dark red for the toolken prediction",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one hue per tool group (orange KB, blue Math, pink Robot) on name, chips and embedding cells, grey = ordinary word tokens and plain text; dark red = the mode titles and the toolken prediction",
+  "line_style_means": "dark-red dashed = toolken predicted from the distribution; grey dashed = the three numbered hand-offs; thin grey frames = modes",
+  "shape_means": "pill chip = a token or a tool name; box with its title on the border = a mode; horizontal bar = probability",
+  "marker_means": "circled 1-3 order the loop: mode switch, call the tool, fill in text; grey highlight marks tool results",
+  "emphasis": "bold coloured titles, the longest bar for square, grey highlights on the results 16 and 256, hue-coded toolkens",
+  "reusable_patterns": [
+   "new vocabulary rows appended under the ordinary words in the output-embedding table, grouped by hue with icon and bracket",
+   "bar column beside the table as the next-token distribution",
+   "titled boxes whose title interrupts the top border",
+   "dashed arrows with circled numbers closing a loop between modes",
+   "tool call drawn as an inline chip with arguments and a grey-highlighted result"
+  ],
+  "weaknesses": [
+   "the table and the modes are tied by one dark-red arrow only",
+   "mode boxes are not aligned to each other",
+   "frozen status of the LLM is not marked"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a worked math question with real tool calls and results"
+  ],
+  "stock": [
+   "emoji-like robot, scroll and hammer icons",
+   "line-art icons for the three tool groups"
+  ],
+  "generated": [],
+  "drawn": [
+   "embedding table, chips and bars",
+   "mode boxes and dashed arrows",
+   "brackets and group names"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "embedding table with colour-coded toolken rows",
+   "token distribution bars",
+   "Reasoning mode text box with robot emoji",
+   "Tool mode box with demonstration chip",
+   "execution step with hammer icon",
+   "circled step numbers on dashed arrows",
+   "inline tool-call chips"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "tool use",
+   "toolken",
+   "tool embeddings",
+   "frozen LLM",
+   "mode switch",
+   "language model head",
+   "argument completion",
+   "massive tools"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "model-pictogram",
+   "distribution-glyph",
+   "matrix-cell-grid"
+  ],
+  "new_tags": [
+   {
+    "name": "border-titled-boxes",
+    "what": "rounded boxes whose bold title sits on the top border and interrupts the line, one per mode or stage"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a new token type by appending hue-coded rows, with icon and bracket, under the ordinary vocabulary in the output-embedding table; then run one worked example through titled mode boxes joined by three numbered dashed arrows that close a loop.",
+  "suits": "Methods that add vocabulary items, actions or special tokens to a language model and switch modes at inference, such as tool use, retrieval or special tokens."
+ },
+ "tags": [
+  "table-plus-flow",
+  "hue-per-group",
+  "emoji-icons",
+  "dashed-loop-arrows",
+  "text-chips",
+  "soft-grey-boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.3-5)",
+   "5 Experiments (p.8, p.10)"
+  ],
+  "evidence": [
+   "Toolken embeddings are appended to the language model head like regular word tokens.",
+   "the LLM switch to the “tool mode”, which provides a few demonstrations of the same tool to complete the arguments."
+  ]
+ },
+ "summary": "ToolkenGPT lets a language model call a very large set of tools without fine-tuning it: each tool becomes a token, a toolken, with a learned embedding appended to the LM head. Figure 1 puts that table on the left: grey word-token rows with knowledge-base, math and robot toolkens added in orange, blue and pink, plus a bar column for the next-token distribution. On the right a garden-area question runs through a Reasoning mode box, a Tool mode box with demonstrations and an Execution step, joined by three numbered dashed arrows (mode switch, call the tool, fill in text) that return 256 to the blank.",
+ "summary_zh": "ToolkenGPT把每个工具当成一个词元并学习其嵌入，追加到语言模型输出头。图1左边是词表嵌入表（词元加三组彩色工具词元和概率条），右边用一道数学题走完推理、工具、执行三步。",
+ "confidence": "high",
+ "notes": "Primary kind changed from the pre-screen's model-anatomy to worked-walkthrough because the larger right part follows one instance through numbered steps; the left table is the model-anatomy part. Frozen status is stated in the title and text, not in the figure.",
+ "venue": "NeurIPS23"
+}

@@ -1,0 +1,688 @@
+{
+ "paper_id": "cvpr25-0058",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LH-VLN (NavGen, LHPR-VLN, MGDM)",
+  "one_liner": "A long-horizon vision-language navigation task with a data-generation platform (NavGen), a benchmark (LHPR-VLN) and a chain-of-thought plus memory navigation model.",
+  "domain": [
+   "vision-language navigation",
+   "long-horizon embodied navigation",
+   "benchmark and data generation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "side-by-side-contrast",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "the task drawn on a floor plan next to three prior task cards, plus a right-hand column of three mini diagrams for platform, benchmark and model",
+  "argues": "Navigation chained over several sub-tasks is a new task: each existing task covers one stage, so a new platform, benchmark and memory model are needed.",
+  "subject": "A house floor plan with staged routes, a long instruction split into four sub-tasks, three short-task cards, and mini diagrams of NavGen, the benchmark chain and the CoT-memory model.",
+  "elements": [
+   {
+    "name": "CLH VLN / VLN / Obj Loc / DDN",
+    "type": "label",
+    "role": "colour key for the route of the long-horizon task and of the three existing task types",
+    "drawn_as": "four short coloured line samples (dark blue, green, grey, gold) with labels, top-left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "route curves and robots on the floor plan",
+    "type": "other",
+    "role": "show the agent moving through the house from stage to stage; part of each route is coloured like the existing task it resembles",
+    "drawn_as": "thick dark-blue curves plus thin grey, gold and green segments, small blue robot figures and one large dark robot",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 1 / Stage 2 / Stage 3 / Stage 4",
+    "type": "label",
+    "role": "mark where each sub-goal lies on the plan",
+    "drawn_as": "small chips on the plan: grey, gold, gold and green fills with bold serif text",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Long-Horizon Vision-Language Navigation",
+    "type": "container",
+    "role": "the proposed task: one long instruction and its four sub-tasks",
+    "drawn_as": "large rounded frame with a light-blue outline in the middle of the figure",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "long-horizon instruction banner",
+    "type": "text-block",
+    "role": "one instruction that chains fetching a towel, carrying it to the kitchen island, then moving a teapot to the coffee table",
+    "drawn_as": "light-blue rounded bar with bold centred serif text",
+    "container": "Long-Horizon Vision-Language Navigation",
+    "is_contribution": true
+   },
+   {
+    "name": "four sub-task cards (find the towel in bathroom, find the kitchen island in kitchen, find the teapot in kitchen, find the coffee table in living room)",
+    "type": "instance",
+    "role": "the instruction cut into four sequential sub-tasks, each with the room views it needs",
+    "drawn_as": "2x2 grid of dashed rounded cards, each with a yellow vertical Stage label, a one-line sub-task and a fan of room photos",
+    "container": "Long-Horizon Vision-Language Navigation",
+    "is_contribution": true
+   },
+   {
+    "name": "Object Localization Navigation",
+    "type": "container",
+    "role": "existing task: go to an object location; example with a short instruction",
+    "drawn_as": "grey rounded frame, grey instruction box and a stack of photos",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Demand-Driven Navigation",
+    "type": "container",
+    "role": "existing task: reach what satisfies a stated need (a cup of tea)",
+    "drawn_as": "gold rounded frame, yellow instruction box and a stack of photos",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Vision-Language Navigation",
+    "type": "container",
+    "role": "existing task: follow step-by-step route directions",
+    "drawn_as": "green rounded frame, green box with a multi-clause direction text and a stack of photos",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Data Generation: NavGen",
+    "type": "label",
+    "role": "heads the platform part of the right column",
+    "drawn_as": "bold serif title set as a bitmap with a soft shadow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sampling & Describing",
+    "type": "operation",
+    "role": "scene images are sampled and described by the GPT model",
+    "drawn_as": "arrow label from a dashed box of scene thumbnails to the GPT logo",
+    "container": "Data Generation: NavGen",
+    "is_contribution": true
+   },
+   {
+    "name": "Move to [towel / kitchen / teapot / table]",
+    "type": "data",
+    "role": "generated sequence of sub-task steps that becomes the long-horizon task",
+    "drawn_as": "four rows of a light-blue 'Move to' chip beside a grey chip with a red object word",
+    "container": "Data Generation: NavGen",
+    "is_contribution": true
+   },
+   {
+    "name": "Benchmark: LHPR-VLN",
+    "type": "label",
+    "role": "heads the benchmark part of the right column",
+    "drawn_as": "bold serif title set as a bitmap with a soft shadow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Find towel / Find kitchen island / Find teapot / Find table",
+    "type": "operation",
+    "role": "the benchmark task as a chain of four find-steps; the grey circles on the edges are not explained in the figure",
+    "drawn_as": "line with blue dots as nodes, grey circles marked 1 on the main path, 1/n on branch edges below, arrows between steps",
+    "container": "Benchmark: LHPR-VLN",
+    "is_contribution": true
+   },
+   {
+    "name": "Model: Navigate with CoT and Memory",
+    "type": "label",
+    "role": "heads the method part of the right column",
+    "drawn_as": "bold serif title set as a bitmap with a soft shadow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "CoT",
+    "type": "module",
+    "role": "chain-of-thought prompt produced by the GPT-style model",
+    "drawn_as": "blue rounded box under the OpenAI logo",
+    "container": "Model: Navigate with CoT and Memory",
+    "is_contribution": true
+   },
+   {
+    "name": "Obs",
+    "type": "data",
+    "role": "current observation of the agent",
+    "drawn_as": "pale-green rounded box",
+    "container": "Model: Navigate with CoT and Memory",
+    "is_contribution": false
+   },
+   {
+    "name": "circled plus",
+    "type": "operation",
+    "role": "joins the CoT output with the observation before the memory part; exact operation not stated",
+    "drawn_as": "circle with a plus sign, small arrows in and out",
+    "container": "Model: Navigate with CoT and Memory",
+    "is_contribution": null
+   },
+   {
+    "name": "LT Memory / ST Memory",
+    "type": "module",
+    "role": "long-term and short-term memory of the navigation model",
+    "drawn_as": "two stacked pale-yellow boxes inside a dashed frame",
+    "container": "Model: Navigate with CoT and Memory",
+    "is_contribution": true
+   },
+   {
+    "name": "Memory & Fuzzy",
+    "type": "module",
+    "role": "likely the memory-blurring step named in the abstract; not explained in the figure",
+    "drawn_as": "pale-green circle beside the two memory boxes, with a small cycle-arrows glyph",
+    "container": "Model: Navigate with CoT and Memory",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Stage 1",
+    "to": "Object Localization Navigation",
+    "what": "the first stage resembles an object-localization task",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Stage 3",
+    "to": "Demand-Driven Navigation",
+    "what": "the third stage resembles a demand-driven task",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Stage 4",
+    "to": "Vision-Language Navigation",
+    "what": "the fourth stage resembles instruction-following navigation",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "route curves on the floor plan",
+    "to": "Long-Horizon Vision-Language Navigation",
+    "what": "the dark-blue route over all four stages is the long-horizon task; same blue as the panel frame",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "long-horizon instruction banner",
+    "to": "four sub-task cards",
+    "what": "the instruction is divided into four sub-tasks",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "dashed box of scene thumbnails",
+    "to": "OpenAI logo (NavGen)",
+    "what": "sampled scene images",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "OpenAI logo (NavGen)",
+    "to": "Move to chips",
+    "what": "generated sub-task steps",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Move to chips",
+    "to": "Long-Horizon Vision-Language Navigation",
+    "what": "generated sub-task lists become long-horizon tasks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Move to chips",
+    "to": "Benchmark: LHPR-VLN chain",
+    "what": "tasks form the benchmark chain",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Move to chips",
+    "to": "Model: Navigate with CoT and Memory",
+    "what": "the task is given to the GPT-style model, the observation and the memory box",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Find towel",
+    "to": "Find table",
+    "what": "four find-steps in sequence",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OpenAI logo (model)",
+    "to": "CoT",
+    "what": "chain-of-thought prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CoT and Obs",
+    "to": "circled plus",
+    "what": "prompt and observation are combined",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circled plus and Obs",
+    "to": "LT Memory / ST Memory box",
+    "what": "combined input goes to the memory part",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Long-Horizon Vision-Language Navigation",
+    "kind": "worked-walkthrough",
+    "axis": "alternatives",
+    "shows": "the proposed task: one long instruction split into four stage cards, each with views of its room",
+    "verdict": "ours"
+   },
+   {
+    "label": "Object Localization Navigation",
+    "axis": "alternatives",
+    "shows": "an existing single-stage task with a short instruction and a stack of views",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Demand-Driven Navigation",
+    "axis": "alternatives",
+    "shows": "an existing single-stage task given as a need, with a stack of views",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Vision-Language Navigation",
+    "axis": "alternatives",
+    "shows": "an existing single-stage task given as route directions, with a stack of views",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Data Generation: NavGen",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "scene images are sampled and described by a GPT model to produce chained 'Move to' sub-tasks",
+    "verdict": "ours"
+   },
+   {
+    "label": "Benchmark: LHPR-VLN",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "a task as a chain of four find-steps with weights on the edges",
+    "verdict": "ours"
+   },
+   {
+    "label": "Model: Navigate with CoT and Memory",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "a GPT-style model with chain-of-thought, observation and long-term and short-term memory",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Stage 1 to Stage 4",
+    "kind": "order",
+    "at": "chips on the floor plan and yellow labels on the four sub-task cards",
+    "what": "order of the sub-goals along the route; the same four names appear in both places"
+   },
+   {
+    "marker": "1 and 1/n",
+    "kind": "identity",
+    "at": "grey circles on the edges of the benchmark chain",
+    "what": "per-edge value labels (1 on the main path, 1/n on the branches); meaning not stated in the figure"
+   },
+   {
+    "marker": "section titles",
+    "kind": "section",
+    "at": "Data Generation: NavGen, Benchmark: LHPR-VLN, Model: Navigate with CoT and Memory",
+    "what": "head the three parts of the right column"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "top-down render of a furnished house used as the floor plan",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large cut-out on white, with coloured route curves, stage chips and robot icons drawn over it"
+   },
+   {
+    "what": "room views for the four sub-tasks (bathroom, kitchen island, kitchen, living room)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "per card a fan of three overlapped squares: the front photo is whole, the others show as narrow strips"
+   },
+   {
+    "what": "room views beside the three existing-task instructions",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "offset stacks of three photos at the right of each coloured instruction box"
+   },
+   {
+    "what": "scene collage and a photo of a yellow quadruped robot",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two images inside one dashed box, the input to sampling and describing"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small cartoon robot",
+    "stands_for": "the navigating agent at each stage",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "large dark robot",
+    "stands_for": "the agent in the middle of the plan",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "OpenAI logo",
+    "stands_for": "the GPT model that describes sampled scenes and the one that produces chain-of-thought",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "cycle arrows",
+    "stands_for": "memory refresh or update",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one long instruction with a three-object itinerary and its four sub-task phrases, each tied to room photos",
+    "form": "text banner above four cards with photos",
+    "real_values": true
+   },
+   {
+    "what": "one short instruction for each of three existing task types (lamp in bedroom, a cup of tea, route directions)",
+    "form": "coloured text boxes beside photo stacks",
+    "real_values": true
+   },
+   {
+    "what": "a generated sub-task list: Move to towel, kitchen, teapot, table",
+    "form": "rows of paired chips",
+    "real_values": true
+   },
+   {
+    "what": "a four-step find-chain with edge weights 1 and 1/n",
+    "form": "line with dots and grey circles",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "OpenAI logo used as the language model, in NavGen and in the navigation model",
+    "parts": [
+     "OpenAI logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "dashed frame holding stacked LT Memory and ST Memory boxes next to a green circle, with a cycle glyph",
+    "parts": [
+     "LT Memory",
+     "ST Memory",
+     "Memory & Fuzzy",
+     "cycle glyph"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "task card with a coloured instruction box and a stack of views, no model answer or tick",
+    "parts": [
+     "instruction box",
+     "photo stack"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the colour key and the floor plan top-left, follows the blue route through Stage 1-4, drops to the three prior-task cards, then reads the right column top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three columns of unequal tiles: left the floor plan over a row of three colour-framed task cards, middle one tall blue panel with a 2x2 grid of sub-task cards, right three stacked mini diagrams separated by whitespace and titles.",
+  "panel_count": 7,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "other",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.73,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#0d4d90",
+    "used_for": "long-horizon route lines, legend line, nodes of the benchmark chain"
+   },
+   {
+    "hex": "#8ba7d7",
+    "used_for": "CoT box and blue frame lines of the long-horizon panel"
+   },
+   {
+    "hex": "#b2c5e6",
+    "used_for": "long-horizon instruction banner"
+   },
+   {
+    "hex": "#bbd6ee",
+    "used_for": "'Move to' chips"
+   },
+   {
+    "hex": "#dedfe0",
+    "used_for": "object-word chips next to the Move-to chips"
+   },
+   {
+    "hex": "#cfcccd",
+    "used_for": "grey circles on the benchmark chain"
+   },
+   {
+    "hex": "#ada9a9",
+    "used_for": "Object Localization task: frame, instruction box, route, Stage 1 chip"
+   },
+   {
+    "hex": "#fed95f",
+    "used_for": "Demand-Driven task frame and instruction box, Stage 2 and 3 chips"
+   },
+   {
+    "hex": "#fde695",
+    "used_for": "LT Memory and ST Memory boxes, stage labels on the sub-task cards"
+   },
+   {
+    "hex": "#bb8f2d",
+    "used_for": "Demand-Driven route line and legend"
+   },
+   {
+    "hex": "#a7d18a",
+    "used_for": "Vision-Language Navigation instruction box"
+   },
+   {
+    "hex": "#c4e0b2",
+    "used_for": "Obs box and Memory & Fuzzy circle"
+   },
+   {
+    "hex": "#6bab44",
+    "used_for": "Vision-Language Navigation frame, route and Stage 4 chip"
+   },
+   {
+    "hex": "#231f20",
+    "used_for": "text, arrows and the large robot"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt coloured rounded frames around the panels, 1 pt route and chain lines, dashed outlines for photo groups and the memory box",
+  "font": "serif (Times New Roman), 4.5-7 pt, all bold; 7 pt for panel titles, 5.5 pt for instructions, 4.5-5 pt for labels",
+  "corners": "rounded",
+  "arrows": "thin dark arrows with small filled heads, thin coloured leader lines, one hollow block arrow",
+  "rendering": "mixed",
+  "effects": "soft shadow on the three right-column section titles, which are placed as bitmaps; otherwise none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = the long-horizon task and its parts; grey, gold and green = the three existing task types, kept on route, frame, instruction box and legend; pale yellow = memory",
+  "line_style_means": "dashed = a group of related items (photo fans, sampled scenes, memory part); solid thick blue = the long-horizon route",
+  "shape_means": "rounded frame = a task or panel; chip = a stage or generated step; circle = a memory or weight item",
+  "marker_means": "Stage 1-4 chips order the sub-goals; grey circles 1 and 1/n are edge weights of the benchmark chain (meaning not given)",
+  "emphasis": "the long-horizon task is the largest, centrally placed blue panel and the only route drawn in a thick dark line; baseline cards are smaller and sit below",
+  "reusable_patterns": [
+   "colour key that ties route segments on a floor plan to cards for older tasks",
+   "leader lines from stage chips to the matching comparison cards",
+   "one long instruction split into stage cards with photo fans",
+   "three titled mini diagrams stacked in a column for platform, benchmark and model",
+   "hollow block arrow from generated data to the panel it feeds"
+  ],
+  "weaknesses": [
+   "very small serif text over busy photos",
+   "the 1 and 1/n circles and the circled plus are not explained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "top-down scene render and first-person room views",
+   "the paper's example long instruction and its four sub-tasks",
+   "instruction examples for three prior task types"
+  ],
+  "stock": [
+   "OpenAI logo bitmap (twice)",
+   "robot icons",
+   "photo of a yellow quadruped robot"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded frames and chips",
+   "route curves and leader lines",
+   "benchmark chain",
+   "memory dashed box",
+   "block arrow"
+  ],
+  "unknown": [
+   "whether the section titles with soft shadows came from a slide tool"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "house floor plan with coloured routes",
+   "Stage 1-4 chips",
+   "instruction banner",
+   "sub-task cards with photo fans",
+   "three prior-task cards with photo stacks",
+   "Move-to chips",
+   "benchmark find-chain",
+   "CoT, observation and memory boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "long-horizon navigation",
+   "vision-language navigation",
+   "embodied agent",
+   "benchmark",
+   "data generation platform",
+   "chain-of-thought",
+   "memory",
+   "multi-stage tasks"
+  ],
+  "tags": [
+   "task-definition",
+   "colour-coded-groups",
+   "brand-logo-icon",
+   "stacked-cards",
+   "memory-store",
+   "illustration-style"
+  ],
+  "new_tags": [
+   {
+    "name": "route-overlay-floorplan",
+    "what": "coloured route curves, stage chips and robot icons drawn over a top-down scene render, with colour-matched leader lines to separate cards"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a new task that chains older tasks as one coloured route on a scene render, give each older task the colour of its segment, and tie each segment to its own small card with a leader line. Stack the platform, benchmark and model as three titled mini diagrams in one column.",
+  "suits": "A paper that introduces a task combining earlier tasks and also ships a data platform, a benchmark and a model, with real scene images to show."
+ },
+ "tags": [
+  "composite",
+  "photo-heavy",
+  "colour-matched frames",
+  "serif bold labels",
+  "rounded cards",
+  "floor-plan render"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "Caption: LH-VLN divides navigation into several sub-tasks that the agent completes in sequence within the scene.",
+   "Caption: the data generation framework, the LHPR-VLN benchmark and a CoT-and-memory navigation model are the three parts shown.",
+   "Introduction: three components are named, a data generation platform, a benchmark and a specialised method with adaptive memory."
+  ]
+ },
+ "summary": "The paper proposes long-horizon vision-language navigation (LH-VLN), with a data-generation platform (NavGen), a benchmark (LHPR-VLN) and a navigation model that uses chain-of-thought and short- and long-term memory. Figure 1 is a composite. A top-down render of a house carries a dark-blue route through four stages, while grey, gold and green leader lines link single stages to small cards of three existing tasks (object localization, demand-driven, instruction-following navigation). A blue panel shows one long instruction cut into four sub-task cards with room photos. A right-hand column stacks three mini diagrams: NavGen producing Move-to steps with a GPT logo, the benchmark chain with weights, and the CoT, observation and memory model. Bold serif labels on rounded colour-matched frames.",
+ "summary_zh": "提出长程视觉语言导航任务，配套数据生成平台NavGen、基准LHPR-VLN和带思维链与记忆的导航模型。左侧用房屋俯视图和彩色路线说明四阶段任务，并与三种既有导航任务卡片对照；右侧三个小图依次画出数据生成、基准任务链和模型。",
+ "confidence": "medium",
+ "notes": "Prior pass said scope-overview / benchmark-dashboard; the figure has no statistics or taxonomy, so it is a contribution mosaic (platform, benchmark, model) with a task comparison on the left; the three small task cards act as a mild example gallery. The text layer of the SVG digest is garbled, so labels were read from the preview. The meaning of the grey circles 1 and 1/n, the circled plus and Memory & Fuzzy is not supported by the visible text. The bottom caption text is partly cropped into the preview and was ignored.",
+ "venue": "CVPR25"
+}

@@ -1,0 +1,365 @@
+{
+ "paper_id": "neurips25-0280",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TV-Rec",
+  "one_liner": "A sequential recommender that replaces fixed convolution kernels and self-attention with time-variant graph filters, giving each sequence position its own filter taps.",
+  "domain": [
+   "sequential recommendation",
+   "graph signal processing",
+   "convolutional filters"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "the same multiply-and-sum convolution drawn twice on one 5-column grid, once with a single shared filter and once with a filter per node",
+  "argues": "A fixed filter applies the same taps at every node, whereas a time-variant filter gives every node its own filter, drawn as differently coloured filters, arrows and outputs.",
+  "subject": "Convolution on a line-graph view of a 3-signal sequence (K = 2, zero-padded): shifted filter copies multiply the signal and sum into outputs.",
+  "elements": [
+   {
+    "name": "h0 h1 h2 (three shifted rows)",
+    "type": "module",
+    "role": "the one fixed filter, copied once per output and shifted one column right each time",
+    "drawn_as": "light-blue boxes with italic h and subscript tap index, stepped diagonally",
+    "container": "(a) Fixed Filter",
+    "is_contribution": false
+   },
+   {
+    "name": "h_k^(0), h_k^(1), h_k^(2)",
+    "type": "module",
+    "role": "a separate filter for each node, superscript gives the node",
+    "drawn_as": "three rows of boxes: blue for (0), purple for (1), pink for (2), stepped diagonally",
+    "container": "(b) Time-Variant Convolutional Filter",
+    "is_contribution": true
+   },
+   {
+    "name": "x0 x1 x2",
+    "type": "data",
+    "role": "the sequence of signals on the line graph",
+    "drawn_as": "white boxes with thin black outline, italic labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "0 0",
+    "type": "data",
+    "role": "zero padding beyond the end of the sequence",
+    "drawn_as": "two white boxes holding the digit 0 after x2",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Multiply",
+    "type": "operation",
+    "role": "each filter tap is multiplied with the signal in its column",
+    "drawn_as": "bundle of vertical arrows from filter rows down to the signal row, word at the right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Sum",
+    "type": "operation",
+    "role": "the filtered results are summed into one output per position",
+    "drawn_as": "fan of diagonal and vertical arrows from the signal row to the output row, word at the right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "y0 y1 y2",
+    "type": "data",
+    "role": "filtered signal at index j",
+    "drawn_as": "boxes in the last row shifted right of the inputs; one blue in (a), blue / purple / pink in (b)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(a) Fixed Filter",
+    "type": "label",
+    "role": "names the baseline panel",
+    "drawn_as": "serif text under the left panel",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Time-Variant Convolutional Filter",
+    "type": "label",
+    "role": "names the proposed panel",
+    "drawn_as": "serif text under the right panel",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "filter boxes",
+    "to": "x0 x1 x2 and 0 0",
+    "what": "Multiply: each tap times the signal in its column",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x0 x1 x2 and 0 0",
+    "to": "y0 y1 y2",
+    "what": "Sum: products collected into the output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "filter rows",
+    "to": "filter rows",
+    "what": "each row is the same or the next node's filter shifted one column to the right, so the window slides over the signal",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "filter boxes (a)",
+    "to": "y0 y1 y2 (a)",
+    "what": "one shared blue filter gives all outputs the same colour; arrow colour tells which output a product goes to",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "filter boxes (b)",
+    "to": "arrows and y_j (b)",
+    "what": "box colour, arrow colour and output colour agree: blue for node 0, purple for node 1, pink or red for node 2",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "panel (a)",
+    "to": "panel (b)",
+    "what": "same grid, same sequence, same arrows; only the filter colouring changes",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Fixed Filter",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the same filter h_k is applied to every node; all filter boxes and outputs share one blue",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) Time-Variant Convolutional Filter",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "each node has its own filter h_k^(n), shown in its own colour and carried to its arrows and output",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "subscripts 0, 1, 2",
+    "kind": "identity",
+    "at": "h, x, y boxes",
+    "what": "tap index of the filter and position index of signals and outputs"
+   },
+   {
+    "marker": "superscripts (0), (1), (2)",
+    "kind": "identity",
+    "at": "h boxes in (b)",
+    "what": "names which node's filter a box belongs to"
+   },
+   {
+    "marker": "Multiply, Sum",
+    "kind": "section",
+    "at": "right of the arrow bundles",
+    "what": "names the two arrow layers"
+   },
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "titles under the panels",
+    "what": "heads the fixed and time-variant panels"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy 3-node sequence x0 x1 x2 with two filter taps beyond the first (K = 2) and zero padding on the right",
+    "form": "labelled boxes on a 5-column grid",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "convolution-shifted-copies",
+    "drawn_as": "copies of the filter taps stacked as rows, each shifted one column right, with arrows multiplying into the signal row and summing into the output row",
+    "parts": [
+     "filter rows",
+     "signal row",
+     "output row",
+     "Multiply arrows",
+     "Sum arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Top-down inside the left panel: filter rows, Multiply arrows into the signal row, Sum arrows into the outputs; then the same path in the right panel, where the colours differ."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side on the same 5-column grid: staggered rows of filter boxes on top, the signal row x0 x1 x2 0 0 in the middle, the output row y0 y1 y2 shifted right at the bottom; panel title under each panel.",
+  "panel_count": 2,
+  "lanes": "5 aligned columns shared by filter rows, signal row and output row",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.01,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dceaf7",
+    "used_for": "filter boxes of the shared filter in (a) and node-0 filter in (b); outputs in (a); y0 in (b)"
+   },
+   {
+    "hex": "#e2d5e8",
+    "used_for": "node-1 filter boxes and y1 in (b)"
+   },
+   {
+    "hex": "#f9cecc",
+    "used_for": "node-2 filter boxes and y2 in (b)"
+   },
+   {
+    "hex": "#215f9b",
+    "used_for": "blue arrows into y0 in both panels"
+   },
+   {
+    "hex": "#002060",
+    "used_for": "navy arrows into y1 in (a)"
+   },
+   {
+    "hex": "#7c7ba1",
+    "used_for": "grey-violet arrows into y2 in (a)"
+   },
+   {
+    "hex": "#9773a6",
+    "used_for": "purple arrows into y1 in (b)"
+   },
+   {
+    "hex": "#bc5e5b",
+    "used_for": "red arrows into y2 in (b)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on all boxes; arrows are thin filled shapes without outline",
+  "font": "serif (Cambria Math / Times-like), 8 pt italic symbols, 6 pt sub- and superscripts, 7.5 pt Multiply / Sum, 9 pt panel titles",
+  "corners": "square",
+  "arrows": "thin straight vertical and diagonal arrows with small filled heads, coloured by the output they feed",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "box colour = which filter (one blue for all in (a); blue, purple, pink per node in (b)); arrow colour = the output y_j a product is summed into, so the colour of the filter is carried to its arrows and output in (b)",
+  "line_style_means": "all arrows are solid; no dashed or dotted lines",
+  "shape_means": "boxes are values (filter taps, signals, outputs); white box = signal, tinted box = filter or output",
+  "marker_means": "subscripts index taps, positions and outputs; superscripts in (b) index the node whose filter it is",
+  "emphasis": "the contrast sits only in colour: panel (a) is almost monochrome blue, panel (b) adds purple and pink, so the eye lands on the extra colours",
+  "reusable_patterns": [
+   "same grid and same arrows in both panels, only the colour coding differs",
+   "rows of filter copies stepped one column right to show a sliding window as a diagonal",
+   "arrow colour carries the output it feeds, so a fan of arrows can be told apart",
+   "operation words (Multiply, Sum) written once beside each arrow layer instead of on every arrow"
+  ],
+  "weaknesses": [
+   "arrow colours in (a) are dark and similar (blue, navy, grey-violet)",
+   "overlapping parallel arrows in the stepped columns hide each other"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "boxes, arrows and labels (PowerPoint-style vector drawing)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "filter tap boxes h0 h1 h2",
+   "node-specific filter boxes in three colours",
+   "signal row x0 x1 x2 with zero padding",
+   "output row y0 y1 y2",
+   "Multiply and Sum arrow bundles"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "sequential recommendation",
+   "time-variant filter",
+   "graph signal processing",
+   "convolution",
+   "node-variant graph filter",
+   "line graph",
+   "fixed kernel"
+  ],
+  "tags": [
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "sliding-window-stagger",
+    "what": "copies of a filter or window drawn as rows offset by one column each, so the slide over a signal reads as a diagonal"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show how a new operator differs from a standard one, draw the same computation twice on an identical grid and change only the colour coding (one colour for a shared parameter set versus one colour per position), letting arrows and outputs inherit those colours.",
+  "suits": "Operator-level contrasts such as shared versus position-specific weights, convolution versus attention, or fixed versus adaptive filters, where structure is equal and only parameter sharing differs."
+ },
+ "tags": [
+  "paired-panels",
+  "shared-grid",
+  "staggered-rows",
+  "colour-coded-arrows",
+  "formal-diagram",
+  "serif-math"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Preliminaries (p.3)",
+   "Why we need time-variant graph filters (p.6)"
+  ],
+  "evidence": [
+   "Arrow colors show each filter’s contribution to the output yj, while different hi box colors represent different filters.",
+   "the time-variant convolutional filter in (b) allows each node to have its own filter.",
+   "The output yj, i.e., the filtered signal at index j, is produced by summing the filtered results."
+  ]
+ },
+ "summary": "TV-Rec replaces the fixed convolution kernels and self-attention of sequential recommenders with time-variant graph filters that give each sequence position its own filter taps. Figure 1 compares the two operators on a line-graph view of a sequence with three signals x0 to x2 (K = 2, zero-padded). Both panels share one 5-column grid: staggered rows of filter-tap boxes sit above the signal row, Multiply arrows run down into it, and Sum arrows collect the products into outputs y0 to y2. In (a) all filter boxes and outputs share one light blue; in (b) each node's filter has its own colour (blue, purple, pink), carried into its arrows and its output.",
+ "summary_zh": "TV-Rec 用随位置变化的图滤波器取代固定卷积核与自注意力。图1在同一网格上并排画出两种算子：(a) 所有位置共用同一个蓝色滤波器，(b) 每个节点有各自颜色的滤波器，箭头与输出同色，乘法后求和得到 y0 至 y2。",
+ "confidence": "high",
+ "notes": "The index lists this figure as chart/bar; it is a box-and-arrow diagram with no bitmaps and live text. Arrow colour codes the output each product feeds (blue y0, navy y1, grey-violet y2 in (a); blue, purple, red in (b)), not the tap index. Red arrows are #bc5e5b in the SVG fills, which the digest list omits.",
+ "venue": "NeurIPS25"
+}

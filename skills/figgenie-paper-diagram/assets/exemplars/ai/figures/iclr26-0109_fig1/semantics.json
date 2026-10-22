@@ -1,0 +1,779 @@
+{
+ "paper_id": "iclr26-0109",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PRISM",
+  "one_liner": "Decodes fMRI into structured object-level text with a fine-tuned language model, then uses that text to guide a diffusion model that reconstructs the seen image.",
+  "domain": [
+   "fMRI visual decoding",
+   "image reconstruction",
+   "vision-language models"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "three dashed-separated bands (description generation with attribute search, training, inference); hatched wedges open two training boxes into a detail row",
+  "argues": "Structured, object-centric text descriptions are the supervision that lets an fMRI encoder plus language model predict text that guides object-centric image reconstruction.",
+  "subject": "PRISM's three phases: VLM description generation with attribute search, fMRI-to-text training, and object-centric inference.",
+  "elements": [
+   {
+    "name": "Attribute/Relationship Search",
+    "type": "container",
+    "role": "searches which object attributes and relationships the VLM should be asked about",
+    "drawn_as": "light-blue tinted region with a mid-blue title bar, top right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Pre-trained VLM",
+    "type": "module",
+    "role": "describes training images; drawn twice, once inside the search region (queried repeatedly) and once in the generation region",
+    "drawn_as": "box with a thick black outline, white fill on the right and light-blue fill on the left",
+    "container": "Attribute/Relationship Search and Structured Description Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Initial Attr./Relat. Set",
+    "type": "data",
+    "role": "starting candidates such as 'Geometric Feature' and 'Positional Relation'",
+    "drawn_as": "grey rounded card with italic quoted strings and an ellipsis",
+    "container": "Attribute/Relationship Search",
+    "is_contribution": null
+   },
+   {
+    "name": "Iterative Search",
+    "type": "operation",
+    "role": "loop with the VLM that pushes CKA up and LPIPS down",
+    "drawn_as": "mid-blue box with white text, red up and down arrows after CKA and LPIPS, two curved arrows to the VLM",
+    "container": "Attribute/Relationship Search",
+    "is_contribution": true
+   },
+   {
+    "name": "Optimal Attr./Relat.",
+    "type": "data",
+    "role": "the attribute or relationship the search selects, e.g. 'Spatial layout'",
+    "drawn_as": "grey rounded card with an italic quoted string",
+    "container": "Attribute/Relationship Search",
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt",
+    "type": "text-block",
+    "role": "instruction to the VLM with a slot {Optimal Attr./Relat.}",
+    "drawn_as": "grey rounded card, italic quoted text, slot in bold",
+    "container": "Attribute/Relationship Search",
+    "is_contribution": true
+   },
+   {
+    "name": "Structured Description Generation",
+    "type": "container",
+    "role": "turns each training image into a structured text description",
+    "drawn_as": "light-pink tinted region with a magenta title bar, top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Structured Description",
+    "type": "data",
+    "role": "object-centric description of an image; produced in the top band and used as the training target in the middle band",
+    "drawn_as": "grey label in a red dashed rounded box under the VLM; repeated as a large grey box with the same red dashed outline in the training band",
+    "container": "Structured Description Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "Preprocess & Flatten",
+    "type": "operation",
+    "role": "prepares the fMRI signal (written 'Prep. & Flat.' at inference)",
+    "drawn_as": "bold label above a long black arrow",
+    "container": "Training band",
+    "is_contribution": false
+   },
+   {
+    "name": "Train Encoder & Fine-tune LM",
+    "type": "module",
+    "role": "learns the fMRI-to-text mapping; opened by a hatched wedge into the projection panel",
+    "drawn_as": "peach box with a peach outline in the training strip",
+    "container": "Training band",
+    "is_contribution": true
+   },
+   {
+    "name": "Text",
+    "type": "data",
+    "role": "the text predicted from fMRI; appears in the training strip and in the inference strip",
+    "drawn_as": "light-yellow box with an ochre outline",
+    "container": "Training band and Inference band",
+    "is_contribution": null
+   },
+   {
+    "name": "FMRI-to-text Projection",
+    "type": "container",
+    "role": "zoomed view of the trained mapping",
+    "drawn_as": "peach region with a burnt-orange title bar, hatched on the right part",
+    "container": "Training band",
+    "is_contribution": true
+   },
+   {
+    "name": "1D fMRI Vector",
+    "type": "data",
+    "role": "flattened fMRI input to the encoder",
+    "drawn_as": "bold label at the left of the projection row",
+    "container": "FMRI-to-text Projection",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder",
+    "type": "module",
+    "role": "maps the fMRI vector to the language model",
+    "drawn_as": "peach box with a dark outline",
+    "container": "FMRI-to-text Projection",
+    "is_contribution": true
+   },
+   {
+    "name": "Language Model",
+    "type": "module",
+    "role": "outputs the description text",
+    "drawn_as": "larger peach box with a dark outline on a hatched area",
+    "container": "FMRI-to-text Projection",
+    "is_contribution": true
+   },
+   {
+    "name": "LM Space",
+    "type": "region",
+    "role": "the text space of the language model that fMRI is projected into",
+    "drawn_as": "hatched orange area with a dark-red label bar under it",
+    "container": "FMRI-to-text Projection",
+    "is_contribution": true
+   },
+   {
+    "name": "Predicted Description",
+    "type": "container",
+    "role": "holds one predicted description card per object",
+    "drawn_as": "light-yellow region with an ochre title bar",
+    "container": "Training band",
+    "is_contribution": null
+   },
+   {
+    "name": "Object1 / Object2",
+    "type": "data",
+    "role": "predicted text per object with typed fields [Obj][V][R(spatial)][A]",
+    "drawn_as": "two orange cards, light orange for Object1 and darker orange for Object2, some words in red",
+    "container": "Predicted Description",
+    "is_contribution": null
+   },
+   {
+    "name": "LM loss",
+    "type": "operation",
+    "role": "ties each predicted card to its reference card",
+    "drawn_as": "red label and two red double-headed arrows",
+    "container": "Training band",
+    "is_contribution": null
+   },
+   {
+    "name": "Encoder & LM",
+    "type": "module",
+    "role": "the trained encoder and language model used at inference",
+    "drawn_as": "peach box in the inference strip",
+    "container": "Inference band",
+    "is_contribution": null
+   },
+   {
+    "name": "Object-centric Generation",
+    "type": "container",
+    "role": "the diffusion-side generation from per-object conditions",
+    "drawn_as": "light-cyan region with a dark-teal title bar",
+    "container": "Inference band",
+    "is_contribution": true
+   },
+   {
+    "name": "Condition C1 / Condition C2",
+    "type": "data",
+    "role": "one condition per predicted object",
+    "drawn_as": "rows of three small cells, light orange for C1 and darker orange for C2",
+    "container": "Object-centric Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Cross Att.",
+    "type": "module",
+    "role": "cross-attention that takes a condition; drawn twice",
+    "drawn_as": "white box with a thick black outline",
+    "container": "Object-centric Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "H^1_{t-1} / H^2_{t-1}",
+    "type": "data",
+    "role": "per-object feature grids that are concatenated",
+    "drawn_as": "two grids of 2x4 cells, light orange and darker orange",
+    "container": "Object-centric Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Concat(H^1_{t-1}, H^2_{t-1})",
+    "type": "operation",
+    "role": "joins the per-object features before the image is produced",
+    "drawn_as": "vertical formula label beside a black arrow",
+    "container": "Object-centric Generation",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Training Images",
+    "to": "Pre-trained VLM (search)",
+    "what": "photos to be described, merged with the initial set by a thick bracket",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Initial Attr./Relat. Set",
+    "to": "Pre-trained VLM (search)",
+    "what": "candidate attributes and relations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-trained VLM (search)",
+    "to": "Iterative Search",
+    "what": "two curved arrows: VLM output is scored by CKA and LPIPS and the set is revised",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-trained VLM (search)",
+    "to": "Optimal Attr./Relat.",
+    "what": "the selected attribute or relation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Optimal Attr./Relat. and Prompt",
+    "to": "Pre-trained VLM (generation)",
+    "what": "prompt with the optimal attribute filled into its slot, merged by a bracket",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Training Image",
+    "to": "Pre-trained VLM (generation)",
+    "what": "the photo to describe",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-trained VLM (generation)",
+    "to": "Structured Description",
+    "what": "structured text description of the photo",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Structured Description (top band)",
+    "to": "Structured Description (training band)",
+    "what": "same red dashed outline: the generated descriptions become the training targets",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "head icon",
+    "to": "fMRI",
+    "what": "brain signal recorded for the viewed image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "fMRI",
+    "to": "Train Encoder & Fine-tune LM",
+    "what": "preprocessed and flattened signal",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Train Encoder & Fine-tune LM",
+    "to": "Text",
+    "what": "predicted text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Train Encoder & Fine-tune LM",
+    "to": "FMRI-to-text Projection",
+    "what": "box opened into its internals",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Text",
+    "to": "Predicted Description",
+    "what": "text opened into per-object cards",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "1D fMRI Vector",
+    "to": "Encoder",
+    "what": "flattened signal",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder",
+    "to": "Language Model",
+    "what": "fMRI representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Language Model",
+    "to": "Object1 / Object2",
+    "what": "one predicted description per object (two diverging arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Object1 / Object2",
+    "to": "Structured Description cards",
+    "what": "LM loss between predicted and reference text",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "fMRI",
+    "to": "Encoder & LM",
+    "what": "prepared and flattened signal at inference",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder & LM",
+    "to": "Text",
+    "what": "predicted text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text",
+    "to": "Condition C1 / Condition C2",
+    "what": "two arrows, one per object condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Condition C1 / Condition C2",
+    "to": "Cross Att.",
+    "what": "each condition enters its own cross-attention box",
+    "kind": "attention",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cross Att.",
+    "to": "H^1_{t-1} / H^2_{t-1}",
+    "what": "one merged arrow to the two feature grids",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H^1_{t-1} / H^2_{t-1}",
+    "to": "Reconstructed Image",
+    "what": "concatenated features give the output photo",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Object1, Object2",
+    "kind": "identity",
+    "at": "Predicted Description cards",
+    "what": "names the two objects whose descriptions are predicted"
+   },
+   {
+    "marker": "C1, C2",
+    "kind": "identity",
+    "at": "Condition cell rows",
+    "what": "one condition per object"
+   },
+   {
+    "marker": "H^1_{t-1}, H^2_{t-1}",
+    "kind": "identity",
+    "at": "feature grids",
+    "what": "per-object features that are concatenated"
+   },
+   {
+    "marker": "Training, Inference",
+    "kind": "section",
+    "at": "left edge of the middle and bottom bands",
+    "what": "bold italic titles heading each phase band"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "stack of four training photos (animal and street scenes, one of them the elephant-on-road photo)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small black-framed thumbnails fanned with offsets so they read as a dataset"
+   },
+   {
+    "what": "the elephant-on-road training photo shown large under 'Training Image'",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "black frame, sits on the pink region"
+   },
+   {
+    "what": "the reconstructed elephant-on-road image at the right end of inference",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "no frame, about the size of the input photo so the pair is read together"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "profile head with concentric colour rings and a small picture glyph in front",
+    "stands_for": "the subject who views an image while the fMRI is recorded",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "colourful 3D render of a brain",
+    "stands_for": "the fMRI signal",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "structured description of the elephant-on-road photo: two objects with typed fields [Obj][V][R(spatial)][A], predicted card next to reference card",
+    "form": "two stacked cards in the Predicted Description panel and two grey cards in the Structured Description box, differing words in red and green",
+    "real_values": true
+   },
+   {
+    "what": "attribute names and the prompt template: 'Geometric Feature', 'Positional Relation', 'Spatial layout', 'Identify important objects. Describe them with {Optimal Attr./Relat.}'",
+    "form": "quoted italic strings in grey rounded cards",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vlm",
+    "drawn_as": "plain box labelled 'Pre-trained VLM' with a thick black outline, drawn twice",
+    "parts": [
+     "Pre-trained VLM box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "peach box labelled 'Language Model' (and 'Encoder & LM' at inference) next to an encoder box",
+    "parts": [
+     "Encoder box",
+     "Language Model box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey rounded card with an italic quoted instruction whose slot {Optimal Attr./Relat.} is in bold",
+    "parts": [
+     "Prompt card",
+     "bold slot"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "four photo thumbnails fanned with offsets under 'Training Images'",
+    "parts": [
+     "thumbnails"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of three small cells for the conditions and 2x4 cell grids for the per-object features, coloured per object",
+    "parts": [
+     "Condition C1 / C2 rows",
+     "H grids"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "black-outlined box labelled 'Cross Att.' that receives a condition row",
+    "parts": [
+     "Cross Att. box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "red double-headed arrows between each predicted card and its reference card with the label 'LM loss'",
+    "parts": [
+     "LM loss label",
+     "two red double arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "hatched orange area behind the Language Model with a dark-red bar 'LM Space' under it",
+    "parts": [
+     "hatched area",
+     "LM Space bar"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Training Images at the top right, runs right to left across the top band to the structured description, drops to the Training strip (left to right), looks down the wedges to the detail row, then the Inference strip left to right to the output photo."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three full-width bands split by grey dashed rules. Top: two tinted regions read right to left (attribute/relationship search, then structured description generation). Middle: a 'Training' strip whose two right-hand boxes open through hatched wedges into a detail row (fMRI-to-text projection, predicted description, structured description box). Bottom: 'Inference' strip left to right ending in a tinted generation region and the output photo.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.61,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fdd8fa",
+    "used_for": "tint of the Structured Description Generation region"
+   },
+   {
+    "hex": "#d86ecc",
+    "used_for": "title bar of Structured Description Generation"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "tint of the Attribute/Relationship Search region"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "title bar of Attribute/Relationship Search and the Iterative Search box"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "grey rounded cards (prompt, attribute sets) and the Structured Description box"
+   },
+   {
+    "hex": "#aeaeae",
+    "used_for": "inner reference cards of the Structured Description box"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "tint of the FMRI-to-text Projection area"
+   },
+   {
+    "hex": "#c04f15",
+    "used_for": "title bar of FMRI-to-text Projection"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "Encoder, Language Model and Encoder & LM boxes"
+   },
+   {
+    "hex": "#ffeca7",
+    "used_for": "tint of Predicted Description and the Text boxes"
+   },
+   {
+    "hex": "#c88b40",
+    "used_for": "title bar of Predicted Description"
+   },
+   {
+    "hex": "#ffc982",
+    "used_for": "object 1: predicted card, condition cells and feature grid"
+   },
+   {
+    "hex": "#fbaf41",
+    "used_for": "object 2: predicted card, condition cells and feature grid"
+   },
+   {
+    "hex": "#caeefb",
+    "used_for": "tint of the Object-centric Generation region"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "dashed outlines of the Structured Description boxes and the LM loss arrows"
+   },
+   {
+    "hex": "#17607f",
+    "used_for": "title bar of Object-centric Generation",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "thick black 1.25 pt on the VLM and Cross Att. boxes and arrows, 0.5 pt on cards, thick red dashed outline on the Structured Description boxes, grey dashed rules between bands",
+  "font": "serif (Georgia, Cambria Math for symbols), 4-7.5 pt, mostly 5.5 pt bold; italics for quoted strings and the band titles",
+  "corners": "mixed",
+  "arrows": "thick black arrows with large filled heads, thick brackets merging two inputs, two curved arrows for the search loop, red double-headed arrows for the loss",
+  "rendering": "flat-vector",
+  "effects": "none; translucent hatched wedges for the zoom",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "region tints name the stage (pink generation, blue search, peach fMRI encoder and LM, yellow predicted text, cyan generation); light versus darker orange is object 1 versus object 2 and is kept on the description card, condition cells and feature grid; red marks the loss link and the structured-description outline",
+  "line_style_means": "red dashed outline = structured description (same item in two bands); grey dashed horizontal rule = boundary between phases; hatched wedge = zoom from a stage box to its detail",
+  "shape_means": "rectangles for modules and data alike; grey rounded cards for text strings (prompt, attributes, descriptions); small cell rows and grids for conditions and features",
+  "marker_means": "red up arrow after CKA and red down arrow after LPIPS give the direction each metric is pushed; red and green words in the cards seem to mark spans that differ between predicted and reference text (not explained in the figure)",
+  "emphasis": "red dashed outlines and red loss arrows on the supervision link; saturated title bars; one elephant example carried from input photo through the description cards to the output photo",
+  "reusable_patterns": [
+   "hatched translucent wedge from a stage box in a slim strip down to its expanded detail panel",
+   "same intermediate artifact outlined in the same red dashed style where it is produced and where it is used",
+   "red double-headed arrows labelled 'LM loss' between predicted cards and reference cards",
+   "one running example (photo, description cards, output photo) carried through every band",
+   "per-object colour kept on description card, condition cells and feature grid",
+   "thick bracket merging two inputs into one arrow",
+   "up and down red arrows after metric names to show optimisation direction",
+   "bold italic phase names at the left edge of dashed-separated bands"
+  ],
+  "weaknesses": [
+   "red and green word colouring is never explained in the figure",
+   "the top band reads right to left, against the main flow of the figure",
+   "subscripts and the vertical Concat label are very small (4 pt)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "training photos and the reconstructed image",
+   "real predicted and reference description strings with field tags",
+   "the paper's own formulas for the condition and feature notation"
+  ],
+  "stock": [
+   "profile-head icon with a picture glyph",
+   "3D brain render"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes, tinted regions, brackets and arrows",
+   "hatched zoom wedges",
+   "condition cell rows and feature grids",
+   "red dashed outlines and double arrows"
+  ],
+  "unknown": [
+   "whether the brain render is a real fMRI surface plot or a stock image"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "stack of training photos",
+   "Pre-trained VLM boxes",
+   "grey prompt cards",
+   "iterative search box with CKA and LPIPS",
+   "head icon and brain render",
+   "fMRI-to-text projection panel",
+   "predicted versus structured description cards",
+   "cell rows and grids",
+   "reconstructed photo"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "fMRI decoding",
+   "image reconstruction",
+   "structured description",
+   "VLM prompt search",
+   "object-centric",
+   "text latent space",
+   "diffusion guidance",
+   "cross-attention"
+  ],
+  "tags": [
+   "zoom-callout",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "stacked-cards",
+   "prompt-template-card",
+   "token-strip",
+   "matrix-cell-grid"
+  ],
+  "new_tags": [
+   {
+    "name": "repeated-entity-dashed-outline",
+    "what": "the same intermediate artifact is outlined in the same dashed colour where it is produced and where it is consumed, joining two bands without an arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open two boxes of a slim training strip into a detail row with hatched wedges, and carry one running example with per-object colours through every band so the same instance can be followed from training to inference.",
+  "suits": "Multi-phase pipelines with a heavy trained component whose internals and a worked text example need room, such as methods with training and inference phases and intermediate text artifacts."
+ },
+ "tags": [
+  "phase bands",
+  "dashed band separators",
+  "tinted title bars",
+  "hatched zoom wedge",
+  "serif bold labels",
+  "photo thumbnails",
+  "colour-coded cards"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "Framework Overview: PRISM generates structured text descriptions for each training image using a VLM",
+   "fMRI signals are more similar to the text space of a language model",
+   "the predicted structured descriptions guide an adapted diffusion model to generate object-centric images directly from fMRI signals"
+  ]
+ },
+ "summary": "PRISM reconstructs the image a person saw from their fMRI scan by using a language model's text space as the latent space. The figure stacks three bands. The top band shows a pre-trained VLM, steered by an iteratively searched attribute and relationship set (scored by CKA and LPIPS), writing a structured description for each training photo. The middle band trains an encoder and fine-tunes a language model to predict those descriptions from fMRI; hatched wedges open the training boxes into a detail row where predicted object cards are tied to the reference cards by red 'LM loss' arrows. The bottom band runs inference: fMRI to text, per-object conditions, cross-attention, concatenation and the reconstructed photo. One elephant-on-road example runs through all bands.",
+ "summary_zh": "PRISM 从 fMRI 重建被试所见图像：先让 VLM 按搜索出的属性与关系给训练图写结构化描述，再训练编码器并微调语言模型把脑信号映射到文本，推理时用预测描述引导扩散模型。图分三层，斜线楔形放大训练框，一只大象贯穿始终。",
+ "confidence": "high",
+ "notes": "Prior pre-screen kinds kept (stage-pipeline, model-anatomy). The three bands are counted as one drawing (panel_count 1) because the zoom wedges and the red dashed link cross the dashed rules. The red versus green word colouring in the description cards is not explained in the figure or in the paragraph provided; it is read as marking differing spans. Head and brain images are inferred to be bitmaps from the digest's placed-picture count.",
+ "venue": "ICLR26"
+}

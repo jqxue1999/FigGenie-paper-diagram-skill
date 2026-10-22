@@ -1,0 +1,586 @@
+{
+ "paper_id": "acl25-0160",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GenDiE (Generate, Discriminate, Evolve)",
+  "one_liner": "A self-evolving training framework that raises LLM context faithfulness by sentence-level generative and discriminative losses on self-built data.",
+  "domain": [
+   "context faithfulness",
+   "retrieval-augmented generation",
+   "self-evolution"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "two titled phase frames (pre-stage, self-evolving stages) above a full-width checkpoint chain LLM θ0 to θ3 that carries the iterations, each hop fed by a dataset icon",
+  "argues": "Treating each sentence as its own optimisation unit, with target and negative sentences built by the model itself each round, evolves faithfulness over successive checkpoints.",
+  "subject": "construction of sentence-level training data for GenDiE in the pre-stage and in two self-evolving rounds, and the checkpoint chain it trains",
+  "elements": [
+   {
+    "name": "Original Data",
+    "type": "container",
+    "role": "a seed QA instance: question q, passages P and the gold answer split into sentences a1 to a3",
+    "drawn_as": "titled frame holding three dashed boxes (q, P, the answer A with its sentences)",
+    "container": "(a) Pre-Stage",
+    "is_contribution": false
+   },
+   {
+    "name": "Candidate Negative Sentence Generation",
+    "type": "container",
+    "role": "LLM θ0 writes a negative sentence a′ for each answer prefix, without access to the passages",
+    "drawn_as": "titled frame with three rows: dashed prefix input, LLM θ0 box, dashed a′ box, record box (q, P, prefix, a, a′)",
+    "container": "(a) Pre-Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM θ0",
+    "type": "module",
+    "role": "the initial model; also generates the negatives",
+    "drawn_as": "rounded light-blue box with the model name and a subscript",
+    "container": "(a) Pre-Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Negative Filtering",
+    "type": "container",
+    "role": "keeps only negatives that are less faithful than the target, with a model θ0 check",
+    "drawn_as": "titled frame holding a Filter LLM θ0 box",
+    "container": "(a) Pre-Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Training Dataset D0",
+    "type": "data",
+    "role": "pre-stage training data used in iteration 1",
+    "drawn_as": "outline document icon with a two-line caption",
+    "container": "(a) Pre-Stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Tree-Structured Sampling (θ1)",
+    "type": "container",
+    "role": "LLM θ1 expands an n-ary tree of sentences (n = 2) from the empty root; each path is a full answer ending in eos",
+    "drawn_as": "titled frame with a binary tree of circled nodes a_i^j, two translucent coloured paths, grey boxes around sibling pairs and dashed prefix boxes tied by dotted leaders",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": true
+   },
+   {
+    "name": "Positive Selection",
+    "type": "container",
+    "role": "picks the terminated path with the highest exact match against the gold answer",
+    "drawn_as": "titled frame: green Answer A1, 'EM1 < EM2' with a ticked box, pink Answer A2",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": true
+   },
+   {
+    "name": "Negative Selection",
+    "type": "container",
+    "role": "along the chosen path, each node and its sibling form a contrastive pair (a, a′) when S_a > S_a′",
+    "drawn_as": "titled frame with three 'If S > S → (q, P, prefix, a, a′)' lines, a red box on the a column and a blue-violet box on the pair column",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": true
+   },
+   {
+    "name": "Training Dataset D2",
+    "type": "data",
+    "role": "dataset built in the first self-evolving round",
+    "drawn_as": "black document icon with a caption",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": null
+   },
+   {
+    "name": "Tree-Structured Sampling (θ2)",
+    "type": "container",
+    "role": "the same sampling repeated with the next model, drawn as a plain tree",
+    "drawn_as": "titled frame with LLM θ2 box, an empty-node binary tree and ellipses below",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": null
+   },
+   {
+    "name": "Training Dataset D3",
+    "type": "data",
+    "role": "dataset built in the next round",
+    "drawn_as": "blue document icon with a caption",
+    "container": "(b) Self-Evolving Stages",
+    "is_contribution": null
+   },
+   {
+    "name": "G: Language Modeling Loss",
+    "type": "label",
+    "role": "loss that optimises towards the target sentence a",
+    "drawn_as": "red italic label tied by a dashed red line to a red box on the target column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "D: Discrimination Loss",
+    "type": "label",
+    "role": "loss that gives the target a a higher faithfulness score than a′",
+    "drawn_as": "blue-violet label tied by a dashed line to a blue-violet box on the pair (a, a′)",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "LLM θ0, θ1, θ2, θ3",
+    "type": "module",
+    "role": "successive checkpoints, each trained on the dataset built in the round before it",
+    "drawn_as": "four rounded boxes along the bottom edge, each a darker blue than the one before, joined by thick black arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Iteration 1, Iteration 2, Iteration 3",
+    "type": "label",
+    "role": "name the three training rounds",
+    "drawn_as": "captions under the three chain arrows",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Candidate Negative Sentence Generation",
+    "to": "Negative Filtering",
+    "what": "candidate negatives are filtered",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Negative Filtering",
+    "to": "Training Dataset D0",
+    "what": "filtered pairs make the pre-stage dataset",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Training Dataset D0",
+    "to": "LLM θ0 to LLM θ1",
+    "what": "dataset trains the first hop",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tree-Structured Sampling (θ1)",
+    "to": "Positive Selection",
+    "what": "terminated paths are compared",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Positive Selection",
+    "to": "Negative Selection",
+    "what": "the chosen path supplies the nodes whose siblings become negatives",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Negative Selection",
+    "to": "Training Dataset D2",
+    "what": "selected tuples form the dataset",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Training Dataset D2",
+    "to": "LLM θ1 to LLM θ2",
+    "what": "dataset trains the second hop",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tree-Structured Sampling (θ2)",
+    "to": "Training Dataset D3",
+    "what": "the next round builds the next dataset through the same steps (ellipses)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Training Dataset D3",
+    "to": "LLM θ2 to LLM θ3",
+    "what": "dataset trains the third hop",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM θ0, θ1, θ2",
+    "to": "next checkpoint",
+    "what": "each iteration yields the next model",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red box on target column",
+    "to": "G: Language Modeling Loss",
+    "what": "target sentences are trained with the language modeling loss",
+    "kind": "gradient",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "blue-violet box on the pair (a, a′)",
+    "to": "D: Discrimination Loss",
+    "what": "the pair is trained with the discrimination loss",
+    "kind": "gradient",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "prefix input boxes (q + P + prefix)",
+    "to": "tree nodes",
+    "what": "the context a node's children are sampled from",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "green and pink paths in the tree",
+    "to": "Answer A1 and Answer A2 boxes",
+    "what": "each path is one complete answer",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "LLM θ1 and θ2 boxes in (b)",
+    "to": "same-shade checkpoints on the chain",
+    "what": "the model that samples in a round is that checkpoint",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Pre-Stage",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a seed QA instance, rows that generate and filter candidate negative sentences with θ0, and dataset D0 for iteration 1",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Self-Evolving Stages",
+    "kind": "stage-pipeline",
+    "axis": "time",
+    "shows": "tree-structured sampling with the previous model, positive and negative selection, datasets D2 and D3 for the later iterations",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "top borders of the two frames",
+    "what": "letter the pre-stage and the self-evolving panels"
+   },
+   {
+    "marker": "Iteration 1, 2, 3",
+    "kind": "order",
+    "at": "under the chain arrows",
+    "what": "number the rounds of self-evolution"
+   },
+   {
+    "marker": "subscript and superscript on a",
+    "kind": "identity",
+    "at": "tree nodes and tuples",
+    "what": "name each sampled sentence by its layer i and its index j"
+   },
+   {
+    "marker": "ticked box",
+    "kind": "other",
+    "at": "between EM1 < EM2 and Answer A2",
+    "what": "marks the answer with the higher exact match as selected"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "document page with text lines in outline, black and blue",
+    "stands_for": "Training Dataset D0, D2 and D3",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "ticked check box",
+    "stands_for": "the selected answer",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "question 'Who won the war between Ethiopia and Italy?' with passages [p1 ... p5] and a three-sentence gold answer about the wars of 1895-1896 and 1935-1937",
+    "form": "three dashed boxes in the Original Data frame",
+    "real_values": true
+   },
+   {
+    "what": "candidate negative rows (q, P, prefix, a_i, a′_i) for i = 1 to 3",
+    "form": "formula-like input, LLM and record boxes",
+    "real_values": false
+   },
+   {
+    "what": "an n = 2 sampling tree with root a_0(∅), two highlighted paths and eos leaves",
+    "form": "circled nodes with symbolic labels",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "rounded box labelled LLM with a subscript for the checkpoint, shaded by iteration",
+    "parts": [
+     "LLM θ0",
+     "LLM θ1",
+     "LLM θ2",
+     "LLM θ3"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "red and blue-violet boxes on parts of a record joined by dashed lines to loss labels G and D",
+    "parts": [
+     "red box",
+     "blue-violet box",
+     "loss labels",
+     "dashed connectors"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "a sentence and its sibling (a, a′) boxed together in the tree and in the tuples, tied to the Discrimination Loss",
+    "parts": [
+     "a",
+     "a′",
+     "boxed pair",
+     "Discrimination Loss"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "document icon with a two-line caption standing for a training dataset",
+    "parts": [
+     "document icon",
+     "caption"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "sampling-tree",
+    "drawn_as": "binary tree of circles with sentence labels, an empty root a_0, translucent blobs marking two root-to-leaf paths and grey boxes around sibling pairs",
+    "parts": [
+     "root",
+     "nodes",
+     "sibling boxes",
+     "eos leaves",
+     "path blobs"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the top-left pre-stage frame (Original Data, negative generation, filtering, D0), drops to the chain's first hop, then reads the tree, selection frames and datasets in panel (b) and the chain from left to right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two titled frames side by side on top (a narrower pre-stage, a wider self-evolving frame with a tree sub-frame, a selection column and a second tree sub-frame), and a full-width LLM checkpoint chain below; thick black arrows drop each dataset icon onto its hop of the chain.",
+  "panel_count": 2,
+  "lanes": "3 iteration spans along the bottom chain, each fed by one dataset",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.0,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9f2d0",
+    "opacity": 0.5,
+    "used_for": "green sampled path in the tree and the Answer A1 box"
+   },
+   {
+    "hex": "#f2cfee",
+    "opacity": 0.51,
+    "used_for": "pink sampled path in the tree and the Answer A2 box"
+   },
+   {
+    "hex": "#dceaf7",
+    "opacity": 0.5,
+    "used_for": "LLM θ0 and Filter LLM θ0 boxes"
+   },
+   {
+    "hex": "#46b1e1",
+    "opacity": 0.5,
+    "used_for": "LLM θ1 boxes"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "LLM θ2 boxes and the blue D3 icon"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "LLM θ3 box"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "language modeling loss: red boxes, dashed connectors and label"
+   },
+   {
+    "hex": "#7a81ff",
+    "used_for": "discrimination loss: blue-violet boxes, dashed connectors and label"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "dashed input boxes (prefix and context)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "block arrows, chain arrows and the D2 icon"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black frames (solid for panels, dashed for inputs), 0.75 pt red and blue-violet highlight boxes, thick black block and chain arrows",
+  "font": "serif (Nimbus Roman, Times) 3-6.5 pt with italic math symbols and sub- and superscripts; bold 5-6 pt frame titles; 9.5 pt ellipses",
+  "corners": "mixed",
+  "arrows": "thick black block arrows between stages and onto the chain; thin black arrows inside rows; dashed red and blue-violet connectors to loss labels; dotted grey leaders from prefix boxes to tree nodes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "green and pink translucent regions = two sampled answer paths (A1, A2) in the tree and their Answer boxes; red = language modeling loss on the target sentence a; blue-violet = discrimination loss on the pair (a, a′); blues that darken from θ0 to θ3 = successive checkpoints, with the same shade reused on the LLM boxes inside the panels",
+  "line_style_means": "dashed boxes = inputs and prefix contexts; dashed red and blue-violet connectors = which boxed part feeds which loss; dotted grey leaders = the prefix input of a tree node; thick black block arrows = hand-over of data; thick chain arrows = iterations",
+  "shape_means": "circle = a sampled sentence node; grey box around two sibling nodes = contrastive pair; document icon = training dataset; rounded rectangle = LLM",
+  "marker_means": "ticked box = answer with higher EM selected; eos = a path ends; (a), (b) = panels; Iteration n = round index",
+  "emphasis": "Red and blue-violet boxes sit on the same tuple columns in (a) and (b), showing what the two losses train on; the bottom chain summarises the whole loop.",
+  "reusable_patterns": [
+   "checkpoint chain along the bottom edge, each hop fed by a dataset icon through a block arrow",
+   "tree of sampled candidates with translucent coloured blobs on the selected paths",
+   "red and blue boxes on one record telling which part feeds which loss, tied to loss labels by dashed lines",
+   "panel and frame titles set into the border line",
+   "sibling nodes boxed together to mark contrastive pairs",
+   "dashed prefix boxes tied to tree nodes by dotted leaders",
+   "LLM box shade that darkens each iteration and is reused inside the panels"
+  ],
+  "weaknesses": [
+   "3-5 pt subscripts and tuple formulas cannot be read at print size",
+   "dataset labels skip D1 (D0, D2, D3)",
+   "green and pink paths are tied to their answers only by matching colour"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real QA instance with passages and gold answer sentences"
+  ],
+  "stock": [
+   "document icons for the datasets"
+  ],
+  "generated": [],
+  "drawn": [
+   "frames, trees, boxes and arrows",
+   "formula-like record boxes",
+   "the LLM checkpoint chain"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two titled frames (pre-stage, self-evolving stages)",
+   "binary sampling tree with two highlighted paths",
+   "QA example card with question, passages and gold sentences",
+   "negative sentence generation rows with LLM boxes",
+   "positive and negative selection frames with red and blue boxes",
+   "training dataset document icons",
+   "checkpoint chain LLM θ0 to θ3 with iteration labels"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "context faithfulness",
+   "self-evolution",
+   "sentence-level optimisation",
+   "tree-structured sampling",
+   "discrimination loss",
+   "contrastive sentence pairs",
+   "RAG",
+   "long-form QA"
+  ],
+  "tags": [
+   "search-tree",
+   "checkpoint-chain",
+   "positive-negative-pairs",
+   "equation-boxes",
+   "flow-type-arrows",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "shade-by-iteration",
+    "what": "successive model checkpoints drawn in a darker blue each round, with the same shade reused on the LLM boxes inside the panels"
+   },
+   {
+    "name": "titled-frame-borders",
+    "what": "panel and sub-panel titles set into the frame border like a fieldset legend"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an iterative self-training loop as phase frames above a checkpoint chain: each hop is fed by the dataset icon built in that round, and the LLM box shade darkens each round and is reused inside the panels. Box the parts of one record in red and blue to say which loss trains on which part.",
+  "suits": "self-evolving or iterative training methods (self-play, iterative preference tuning, rejection sampling) that build new data each round and need both the data construction and the checkpoint timeline."
+ },
+ "tags": [
+  "two lettered panels",
+  "checkpoint chain",
+  "block arrows",
+  "titled frame borders",
+  "red and blue loss boxes",
+  "serif math labels"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Methodology (p.4)"
+  ],
+  "evidence": [
+   "leverage models from previous iteration for both self-generation and self-scoring",
+   "each path from the root to a leaf node constitutes a complete answer",
+   "Each node a along the path, together with its sibling node a′, will compose a contrastive sentence pair"
+  ]
+ },
+ "summary": "GenDiE (Generate, Discriminate, Evolve) is a self-evolving training framework that improves the context faithfulness of LLMs at the level of single sentences, using generative and discriminative losses. Figure 1 has two titled frames above a checkpoint chain. Panel (a), the pre-stage, takes a QA example with passages and gold answer sentences, lets LLM θ0 write a negative sentence for each prefix, filters them and builds dataset D0. Panel (b) repeats self-evolving rounds: a tree of sampled sentences is grown with the previous model, the best path is picked by exact match, and sibling sentences become positive-negative pairs for the next dataset. Red and blue-violet boxes mark what feeds the language modeling and discrimination losses. The chain LLM θ0 to θ3, in darkening blue, shows each iteration.",
+ "summary_zh": "GenDiE 在句子粒度上自我进化以提升上下文忠实度。图一分 (a) 预阶段与 (b) 自进化阶段两个框，下方是 LLM θ0 到 θ3 的检查点链；(b) 用树形采样得到正负句对，红框和蓝框标出语言建模损失与判别损失作用的位置。",
+ "confidence": "high",
+ "notes": "Prior kind stage-pipeline (closed-loop) kept; worked-walkthrough not added because only the Original Data card holds real text and the rows and tree are symbolic. Dataset labels in the drawing are D0, D2 and D3 with no D1, as printed. Reading the green and pink regions as two terminated answer paths (Answer A1, Answer A2) follows the Positive Selection frame and the text on path selection. The 3-6 pt math strings are partly bitmaps, so some tuple contents were read from the picture.",
+ "venue": "ACL25"
+}

@@ -1,0 +1,520 @@
+{
+ "paper_id": "iclr25-0207",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SyllableLM (LossPred and SylBoost)",
+  "one_liner": "Merges speech representations into coarse syllable-like units with loss-based boundaries (LossPred) and iterative distillation (SylBoost), then trains a speech language model.",
+  "domain": [
+   "speech tokenization",
+   "speech language models",
+   "self-supervised learning"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "three bold-titled stages in one row with a return arrow for iterations; one utterance is shown through real matrices, spectrograms and unit IDs",
+  "argues": "Syllable-like boundaries mined from a pretrained encoder's loss pattern, sharpened by teacher-student distillation and then clustered, give coarse semantic units for speech language models.",
+  "subject": "a waveform to loss matrix, boundaries, teacher-student HuBERT distillation, similarity matrix and clustered unit IDs",
+  "elements": [
+   {
+    "name": "(unlabelled) input waveform",
+    "type": "data",
+    "role": "the speech signal entering LossPred",
+    "drawn_as": "vertical stack of centred blue horizontal bars, grey arrow to the right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "LossPred",
+    "type": "module",
+    "role": "turns the pretrained model's masked-prediction losses into a loss prediction matrix C and noisy syllable boundaries",
+    "drawn_as": "bold stage title below a large heat map with a time-aligned transcript and a Mel-spectrogram strip under it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "time-aligned transcript (words and phonemes)",
+    "type": "label",
+    "role": "places boundaries against what is said: a, train, docked, at, a, train, station",
+    "drawn_as": "small text under each matrix with tick marks, words above and phoneme strings below",
+    "container": "LossPred and SylBoost",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) waveform cut by dashed lines",
+    "type": "data",
+    "role": "the same signal split at the boundaries found by LossPred",
+    "drawn_as": "second blue bar stack with grey dashed horizontal cut lines",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Iter 0, Iter N",
+    "type": "label",
+    "role": "the first and the repeated rounds of SylBoost",
+    "drawn_as": "small dashed grey boxes on the entry path, Iter N at the start of the long return arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "SylBoost",
+    "type": "container",
+    "role": "iterative distillation that sharpens syllable-like features and boundaries",
+    "drawn_as": "large dashed rounded frame with the bold title SylBoost below it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Teacher HuBERT",
+    "type": "module",
+    "role": "frozen teacher whose intermediate features are pooled over each hypothesised segment",
+    "drawn_as": "light-blue rounded box with bold name and a snowflake",
+    "container": "SylBoost",
+    "is_contribution": false
+   },
+   {
+    "name": "Student HuBERT",
+    "type": "module",
+    "role": "student trained to match the pooled teacher features",
+    "drawn_as": "pink rounded box with bold name and a flame",
+    "container": "SylBoost",
+    "is_contribution": false
+   },
+   {
+    "name": "per-timestep feature squares",
+    "type": "data",
+    "role": "teacher and student features at each time step, grouped by segment",
+    "drawn_as": "column of light-blue dashed squares at the teacher and a column of pink squares at the student, thin dashed lines separating groups",
+    "container": "SylBoost",
+    "is_contribution": null
+   },
+   {
+    "name": "Mean Pool",
+    "type": "operation",
+    "role": "averages teacher features within each segment",
+    "drawn_as": "small purple box between the teacher squares and the group tokens",
+    "container": "SylBoost",
+    "is_contribution": true
+   },
+   {
+    "name": "A, B, C group tokens",
+    "type": "data",
+    "role": "pooled teacher features per group, matched to the student tokens of the same group",
+    "drawn_as": "small blue labelled squares: A, B, C on the teacher side and A, A, B, B, B, C, C on the student side, joined by curved lines",
+    "container": "SylBoost",
+    "is_contribution": null
+   },
+   {
+    "name": "MSE Loss",
+    "type": "operation",
+    "role": "mean squared error between student features and pooled teacher features",
+    "drawn_as": "small purple box beside the student squares with arrows in from both sides",
+    "container": "SylBoost",
+    "is_contribution": true
+   },
+   {
+    "name": "KMeans + agglome. clustering",
+    "type": "operation",
+    "role": "clusters the boundary-defined segments into discrete units",
+    "drawn_as": "three-line bold text under a thick grey arrow leaving the SylBoost frame",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Syllabic Units",
+    "type": "data",
+    "role": "the discrete unit IDs of the utterance: 2111, 215, 987, 24, 108, 527, 527",
+    "drawn_as": "vertical stack of seven pink boxes with bold black numbers, bold stage title below",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input waveform",
+    "to": "LossPred",
+    "what": "speech enters the loss-based segmenter",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LossPred",
+    "to": "waveform cut by dashed lines",
+    "what": "predicted boundaries cut the signal",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "waveform cut by dashed lines",
+    "to": "SylBoost",
+    "what": "boundaries enter the first round (Iter 0)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SylBoost",
+    "to": "Iter N",
+    "what": "the output of one round starts the next round",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Teacher HuBERT",
+    "to": "Mean Pool",
+    "what": "teacher features pooled over each segment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mean Pool",
+    "to": "A, B, C group tokens",
+    "what": "one pooled vector per group",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "A, B, C group tokens",
+    "to": "MSE Loss",
+    "what": "pooled teacher targets matched to student tokens of the same group",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Student HuBERT",
+    "to": "MSE Loss",
+    "what": "student features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SylBoost",
+    "to": "KMeans + agglome. clustering",
+    "what": "similarity-matrix boundaries define segments to cluster",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "KMeans + agglome. clustering",
+    "to": "Syllabic Units",
+    "what": "one ID per segment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "spectrogram spans (solid blue, dotted red)",
+    "to": "rows and columns of matrix C",
+    "what": "losses on the covered time steps map to a blue line and a red dotted line in the matrix",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "A, B, C",
+    "kind": "identity",
+    "at": "small blue group tokens inside SylBoost",
+    "what": "which pseudo-syllable group a token belongs to"
+   },
+   {
+    "marker": "Iter 0, Iter N",
+    "kind": "order",
+    "at": "dashed boxes before SylBoost",
+    "what": "first round and repeated rounds"
+   },
+   {
+    "marker": "2111, 215, 987, 24, 108, 527, 527",
+    "kind": "identity",
+    "at": "Syllabic Units boxes",
+    "what": "discrete cluster IDs of the syllable-like segments"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "loss prediction matrix C",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "dark-purple to yellow heat map with a bright diagonal band, white dashed vertical boundary lines, a blue solid and a red dotted segment from the spectrogram spans"
+   },
+   {
+    "what": "feature self-similarity matrix",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "same colour scale, bright yellow diagonal blocks marking syllable-like segments, dashed white boundaries"
+   },
+   {
+    "what": "Mel-spectrograms of the input",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "narrow strips with Hz tick labels under the matrices; the left one has a grey masked span containing a solid blue and a dotted red sub-span"
+   },
+   {
+    "what": "speech waveform",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "vertical stack of centred blue horizontal bars; the second copy cut by dashed horizontal lines"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "snowflake and flame",
+    "stands_for": "frozen Teacher HuBERT and trained Student HuBERT",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one utterance, a train docked at a train station, with word and phoneme transcript printed under both matrices",
+    "form": "time-aligned labels with tick marks under heat maps and spectrograms",
+    "real_values": true
+   },
+   {
+    "what": "the seven unit IDs the utterance becomes",
+    "form": "stack of numbered boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "teacher-student",
+    "drawn_as": "Teacher HuBERT above and Student HuBERT below, each followed by a column of feature squares, joined through pooled group tokens and an MSE Loss box, with a return arrow for repeated rounds",
+    "parts": [
+     "Teacher HuBERT",
+     "Student HuBERT",
+     "Mean Pool",
+     "MSE Loss"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake on the teacher box and flame on the student box",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "per-timestep features as vertical columns of squares, light-blue dashed for the teacher and solid pink for the student, split into groups by dashed lines",
+    "parts": [
+     "feature square",
+     "group separator"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "similarity-matrix-heatmap",
+    "drawn_as": "time-by-time heat map with bright diagonal blocks and dashed white boundary lines, a transcript and spectrogram underneath",
+    "parts": [
+     "heat map",
+     "boundary lines",
+     "transcript"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "audio-waveform",
+    "drawn_as": "waveform turned upright as a stack of centred horizontal bars",
+    "parts": [
+     "bar"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Blue waveform at left, LossPred, cut waveform, dashed SylBoost frame, then numbered units at right; a top return arrow loops back to Iter N."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "One left-to-right chain: input waveform, the LossPred heat map over a transcript and spectrogram, the waveform cut at boundaries, a dashed SylBoost frame with the teacher-student block on the left and a self-similarity matrix on the right, then a stack of unit-ID boxes. The three bold stage titles run along the bottom edge and one long return arrow loops over the top back to Iter N.",
+  "panel_count": 1,
+  "lanes": "inside SylBoost: a teacher lane above and a student lane below with aligned feature-square columns",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.72,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#3c78d8",
+    "used_for": "waveform bars, group tokens and the solid blue span marker"
+   },
+   {
+    "hex": "#a4c2f4",
+    "used_for": "Teacher HuBERT box and teacher feature squares"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "Student HuBERT box, student feature squares and the unit-ID boxes"
+   },
+   {
+    "hex": "#b4a7d6",
+    "used_for": "Mean Pool and MSE Loss boxes"
+   },
+   {
+    "hex": "#b7b7b7",
+    "used_for": "light-grey arrows and the grey masked span"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark-grey arrows, return arrow and Iter box outlines"
+   },
+   {
+    "hex": "#a64d79",
+    "used_for": "dotted red-violet span marker on the spectrogram"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 to 0.75 pt; dashed grey outlines on the SylBoost frame, Iter boxes and teacher squares; dashed white boundary lines on the matrices",
+  "font": "Arial sans, 2 to 8 pt: stage titles 8 pt bold, module names 5 pt bold, labels down to 2 to 3.5 pt",
+  "corners": "mixed",
+  "arrows": "thick light-grey straight arrows between stages; thin dark-grey arrows inside SylBoost; one long dark-grey return arrow over the top; thin curved lines for the group matching",
+  "rendering": "flat-vector",
+  "effects": "none; viridis-style heat maps are bitmaps",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "blue = teacher side and the waveform, red-pink = student side and the output unit IDs, purple = operations (Mean Pool, MSE Loss); bright yellow in the matrices = high value; solid blue and dotted red-violet spans = the two example masked time spans and their mapping into matrix C",
+  "line_style_means": "dashed boxes = SylBoost frame, iteration boxes and teacher features; dashed vertical white lines in the matrices = predicted boundaries; dashed horizontal lines on the waveform = the same boundaries in the signal",
+  "shape_means": "bar stack = waveform; stacked squares = per-timestep features; rounded boxes = models; plain boxes with numbers = discrete units",
+  "marker_means": "A, B, C = group membership of tokens; Iter 0 and Iter N = rounds; numbers = unit IDs",
+  "emphasis": "bold stage titles along the bottom edge, snowflake and flame icons on the two HuBERT boxes, and the bright diagonal blocks of the similarity matrix",
+  "reusable_patterns": [
+   "one transcript printed under both matrices so boundaries line up across stages",
+   "waveform redrawn with dashed cuts to carry the boundaries found by the previous stage",
+   "teacher above and student below with grouped feature columns and crossing curves to show group-wise targets",
+   "long return arrow to a dashed Iter N box to signal repeated rounds",
+   "stack of numbered boxes as the final discrete output",
+   "coloured spans on a spectrogram mapped to coloured lines in the matrix"
+  ],
+  "weaknesses": [
+   "labels of 2 to 3.5 pt (axis ticks, group letters, phoneme strings) are unreadable at print size",
+   "the crossing curves between pooled teacher groups and student tokens are hard to follow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "loss prediction and self-similarity matrices from a real utterance",
+   "Mel-spectrograms",
+   "time-aligned word and phoneme transcript",
+   "unit IDs"
+  ],
+  "stock": [
+   "snowflake and flame glyphs"
+  ],
+  "generated": [],
+  "drawn": [
+   "waveform bars",
+   "module boxes, feature squares and arrows",
+   "unit-ID boxes",
+   "dashed frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "blue speech waveform bars",
+   "loss prediction matrix heat map",
+   "Mel-spectrogram with masked span",
+   "teacher and student HuBERT boxes",
+   "feature square columns with A B C groups",
+   "self-similarity matrix",
+   "stack of unit ID boxes",
+   "Iter N return arrow"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "speech language model",
+   "syllabic units",
+   "HuBERT",
+   "self-distillation",
+   "clustering",
+   "loss prediction",
+   "speech tokenization",
+   "boundary detection"
+  ],
+  "tags": [
+   "module-state-coding",
+   "token-strip",
+   "matrix-cell-grid"
+  ],
+  "new_tags": [
+   {
+    "name": "iteration-return-arrow",
+    "what": "one long arrow from the output of a stage back over the top to a dashed Iter N box ahead of it, with an Iter 0 box on the entry path, to show repeated rounds"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Follow one real utterance through the method by printing the same time-aligned transcript under every heat map, so boundaries line up across stages, and show iteration with a single long return arrow into a dashed Iter N box.",
+  "suits": "Sequence or speech pipelines with several stages, where one concrete input can be tracked through real matrices and spectrograms and the last stage is a discrete output."
+ },
+ "tags": [
+  "pipeline-row",
+  "heat-map-bitmaps",
+  "dashed-frames",
+  "sans-labels",
+  "tiny-labels",
+  "stage-titles-below"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method: LossPred and SylBoost (p.4-5)"
+  ],
+  "evidence": [
+   "We define a loss prediction matrix C, shown in Figure 1",
+   "The SylBoost procedure is depicted in Figure 1.",
+   "We train a student to match intermediate teacher features pooled over regions generated by pseudo-syllable-boundaries."
+  ]
+ },
+ "summary": "SyllableLM learns coarse syllable-like units for speech language models. Figure 1 is a left-to-right chain of three titled stages. LossPred turns a waveform into a loss prediction heat map over a time-aligned transcript and Mel-spectrogram, with a masked span mapped to lines in the matrix, and yields boundaries that cut the waveform. SylBoost, in a dashed frame, runs a snowflake-marked teacher HuBERT and a flame-marked student HuBERT with mean pooling over groups A, B, C and an MSE loss, repeated through a long return arrow to Iter N, and ends in a self-similarity matrix. KMeans plus agglomerative clustering then turns the segments into numbered Syllabic Units such as 2111, 215 and 527.",
+ "summary_zh": "SyllableLM 学习粗粒度类音节语音单元。图 1 分三段：LossPred 由损失预测矩阵得到边界；SylBoost 以冻结教师和微调学生 HuBERT 做分组池化蒸馏，并迭代；最后聚类得到编号单元。",
+ "confidence": "high",
+ "notes": "Prior panels=3 counted the three stages; they are stage titles in one continuous chain, so no panels are recorded. The role of the two grey 'Iter' boxes and the return arrow is read from the drawing (iteration of SylBoost); the text mentions iterative improvement but no paragraph describes the arrow. The two heat maps and spectrograms are bitmaps; waveform bars are vector.",
+ "venue": "ICLR25"
+}

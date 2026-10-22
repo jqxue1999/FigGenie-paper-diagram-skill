@@ -1,0 +1,549 @@
+{
+ "paper_id": "neurips25-0202",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UniPixel",
+  "one_liner": "A large multi-modal model that reads visual prompts (points, boxes, masks) and answers with masks, unifying referring and segmentation for images and videos.",
+  "domain": [
+   "pixel-level visual reasoning",
+   "referring and segmentation",
+   "video question answering"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "nine pastel task cards in rows of three, three, two and one; the last wide gradient card is the novel combined task PixelQA",
+  "argues": "One model flexibly handles referring, reasoning and interactive segmentation, motion-grounded reasoning and referred description and QA, and also the new PixelQA that joins referring, segmentation and QA in video.",
+  "subject": "Nine task cards, each with a prompt or answer and a row of photos or video frames with coloured masks.",
+  "elements": [
+   {
+    "name": "Referring Expression Segmentation (RES)",
+    "type": "container",
+    "role": "task card: segment the object a sentence refers to",
+    "drawn_as": "light-blue card, two prompt boxes and two photos with red and magenta masks",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning Segmentation (ReasonSeg)",
+    "type": "container",
+    "role": "task card: segment the region that answers an implicit question",
+    "drawn_as": "peach card, two prompt boxes and two photos with orange and purple masks",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Interactive Segmentation (IS)",
+    "type": "container",
+    "role": "task card: segment and track a marked region given as image or video plus click, box or scribble",
+    "drawn_as": "light-green card, prompt Please segment and track the marked <region>., a row of five line-art glyphs, a photo with a dashed box and click, a >> sign and the masked photo",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Referring Video Object Segmentation (RVOS)",
+    "type": "container",
+    "role": "task card: track the object a sentence refers to in a video",
+    "drawn_as": "light-yellow card, one long prompt box and three frames with a pink mask on a rabbit",
+    "container": "row 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning Video Object Segmentation (ReVOS)",
+    "type": "container",
+    "role": "task card: answer a question about a video with masks",
+    "drawn_as": "lavender card, prompt Where are the utensils used for drinking? Answer with masks. and two frames with green masks on glasses",
+    "container": "row 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Motion-Grounded Video Reasoning",
+    "type": "container",
+    "role": "task card: answer a question about motion with a text answer and mask",
+    "drawn_as": "pink card, solid Q box and dashed A box, two basketball frames with orange motion arrows and mask",
+    "container": "row 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Referred Video Description",
+    "type": "container",
+    "role": "task card: describe the object marked by <region>",
+    "drawn_as": "violet card, Q box, long dashed A box and three frames with a blue mask on a police officer",
+    "container": "row 3",
+    "is_contribution": false
+   },
+   {
+    "name": "Referred Video Question-Answering",
+    "type": "container",
+    "role": "task card: answer a question about a marked object",
+    "drawn_as": "light-cyan card, Q box with a green <region> token, dashed A box and three frames with a green mask on a breakdancer",
+    "container": "row 3",
+    "is_contribution": false
+   },
+   {
+    "name": "Pixel-Level Video Question Answering (PixelQA)",
+    "type": "container",
+    "role": "the new combined task: Joint Referring + Segmentation + QA in Videos",
+    "drawn_as": "wide pink-to-cyan gradient card with italic subtitle; question with [1] and [2], three visual-prompt glyphs, dashed answer citing [1] to [4], three prompted frames, a >> sign and three masked frames",
+    "container": "row 4",
+    "is_contribution": true
+   },
+   {
+    "name": "prompt boxes",
+    "type": "sample",
+    "role": "text prompts or questions",
+    "drawn_as": "white rounded boxes with thin dark-navy outline and italic 3.5 pt text, key words coloured like the mask they ask for",
+    "container": "task cards",
+    "is_contribution": false
+   },
+   {
+    "name": "answer boxes",
+    "type": "sample",
+    "role": "model answers",
+    "drawn_as": "white rounded boxes with dashed outline and A: in bold, key words or bracketed numbers coloured",
+    "container": "task cards",
+    "is_contribution": false
+   },
+   {
+    "name": "visual-prompt glyphs",
+    "type": "icon",
+    "role": "the kinds of visual prompt the model accepts: image or video input plus click, box or scribble",
+    "drawn_as": "dark line-art glyphs joined by a plus and slashes",
+    "container": "Interactive Segmentation (IS), PixelQA",
+    "is_contribution": true
+   },
+   {
+    "name": "object badges [1] to [4]",
+    "type": "label",
+    "role": "ids of objects in the PixelQA frames, cited in question and answer",
+    "drawn_as": "small coloured squares with white numbers on the frames: green 1, orange-red 2, blue 3, pink 4; the same colours on the bracketed numbers in the text",
+    "container": "PixelQA",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "key word in a prompt",
+    "to": "mask in the frame",
+    "what": "the word has the colour of the mask it requests: red chair, magenta zebra, orange area, pink place, pink rabbit, green utensils, orange man, blue and green <region>",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "bracketed numbers in the PixelQA answer",
+    "to": "object badges and masks on the frames",
+    "what": "[1] green, [2] orange-red, [3] blue, [4] pink point to the same objects",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "prompted input frames",
+    "to": "masked output frames",
+    "what": ">> leads from frames with a box or a click to the masked result",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "question box",
+    "to": "dashed answer box",
+    "what": "the answer sits to the right of or under the question",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "visual-prompt glyphs",
+    "to": "visual prompts on the frames",
+    "what": "the dashed box, click and scribble drawn on frames are the glyph types",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "PixelQA",
+    "to": "referring, segmentation and QA cards above",
+    "what": "the subtitle says the task joins all three",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Referring Expression Segmentation (RES)",
+    "axis": "examples",
+    "shows": "two sentences, a red chair and a magenta zebra segmented",
+    "verdict": "ours"
+   },
+   {
+    "label": "Reasoning Segmentation (ReasonSeg)",
+    "axis": "examples",
+    "shows": "an orange bike lane and a purple dental chair found from implicit questions",
+    "verdict": "ours"
+   },
+   {
+    "label": "Interactive Segmentation (IS)",
+    "axis": "examples",
+    "shows": "a box and a click on a cook become a teal mask",
+    "verdict": "ours"
+   },
+   {
+    "label": "Referring Video Object Segmentation (RVOS)",
+    "axis": "examples",
+    "shows": "a pink mask follows a hopping rabbit through three frames",
+    "verdict": "ours"
+   },
+   {
+    "label": "Reasoning Video Object Segmentation (ReVOS)",
+    "axis": "examples",
+    "shows": "green masks on drinking glasses in two frames",
+    "verdict": "ours"
+   },
+   {
+    "label": "Motion-Grounded Video Reasoning",
+    "axis": "examples",
+    "shows": "who shook off and scored: the man in red pants, with orange motion arrows",
+    "verdict": "ours"
+   },
+   {
+    "label": "Referred Video Description",
+    "axis": "examples",
+    "shows": "a long description of a masked police officer",
+    "verdict": "ours"
+   },
+   {
+    "label": "Referred Video Question-Answering",
+    "axis": "examples",
+    "shows": "a likely future event for a masked breakdancer",
+    "verdict": "ours"
+   },
+   {
+    "label": "Pixel-Level Video Question Answering (PixelQA)",
+    "axis": "examples",
+    "shows": "novel task: a question about rabbits and a person, with prompts, masks and an answer that cites [1] to [4]",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1 2 3 4 (coloured squares)",
+    "kind": "identity",
+    "at": "on the PixelQA frames and inside its question and answer",
+    "what": "name the objects so the answer can cite them"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "street and indoor photos with translucent coloured masks (RES, ReasonSeg)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "rounded photos with soft shadow; the mask colour equals the key word colour in the prompt above"
+   },
+   {
+    "what": "interactive segmentation pair: kitchen photo with a dashed box and click cursor, then the same photo with a teal mask",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two rounded photos joined by a large >> chevron"
+   },
+   {
+    "what": "video frame rows with masks: rabbit, bar glasses, basketball, police officer, breakdancer",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 13,
+    "medium": "bitmap",
+    "treatment": "rows of two or three adjacent rounded frames with soft shadow; pink, green, orange, blue and green masks; orange motion arrows in the basketball frames"
+   },
+   {
+    "what": "PixelQA frames: three prompted input frames and three masked output frames of rabbits and a person",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "input frames carry a red dashed box with badge 2 and a green click with badge 1; a >> chevron; output frames carry brown, blue, green and purple masks with badges 1 to 4"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "dark line-art glyphs: image, video, click cursor with sparks, dashed box, scribble",
+    "stands_for": "input types and visual prompt types",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "coloured squares with white numbers 1 to 4",
+    "stands_for": "object ids",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   }
+  ],
+  "examples": [
+   {
+    "what": "referring and reasoning prompts: Find the empty chair that is to the left of the main sitting down; Segment the zebra standing in the middle of the frame; Locate the area that a cyclist uses to navigate in the city; Find the place where patients lie down to receive examination",
+    "form": "white rounded prompt boxes with the key word coloured like its mask",
+    "real_values": true
+   },
+   {
+    "what": "video prompts and answers: hopping rabbit, utensils used for drinking, Who shook off and scored? The man in red pants., police officer description, breakdance future event",
+    "form": "solid prompt boxes and dashed answer boxes above rows of frames",
+    "real_values": true
+   },
+   {
+    "what": "PixelQA: How does the behavior of [1] differ from that of [2]? Why? with an answer citing [1] to [4]",
+    "form": "question with visual-prompt glyphs, dashed answer with coloured bracketed numbers, six frames",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "white rounded text box with the key word coloured like the mask it requests and a <region> token in monospace",
+    "parts": [
+     "text box",
+     "coloured key word",
+     "region token"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "pastel task card with a bold title, a prompt box, an answer box and a row of frames; masks and coloured references replace ticks and crosses",
+    "parts": [
+     "title",
+     "prompt",
+     "answer",
+     "frames"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "rows of two or three adjacent rounded frames with soft shadows, no sprocket border",
+    "parts": [
+     "frames"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the blue RES card at top left and reads rows of cards left to right and downwards, ending at the wide gradient PixelQA card."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Nine pastel rounded cards in rows of three, three, two and one; widths differ per row and the last card spans the full width with a gradient background; each card has a bold title on top, text boxes under it and a row of frames at the bottom.",
+  "panel_count": 9,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.41,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dee5fc",
+    "used_for": "RES card tint"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "ReasonSeg card tint"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "IS card tint"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "RVOS card tint"
+   },
+   {
+    "hex": "#e4e5f2",
+    "used_for": "ReVOS card tint"
+   },
+   {
+    "hex": "#fae6f3",
+    "used_for": "Motion-Grounded Video Reasoning card tint"
+   },
+   {
+    "hex": "#e4e4f9",
+    "used_for": "Referred Video Description card tint"
+   },
+   {
+    "hex": "#d7edf7",
+    "used_for": "Referred Video Question-Answering card tint"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outline of prompt boxes"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red key word, dashed box and badge in the first and last cards"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange key words, masks and motion arrows"
+   },
+   {
+    "hex": "#5ecc6d",
+    "used_for": "green key words, masks, click and badge 1"
+   },
+   {
+    "hex": "#ffb3a7",
+    "used_for": "pink-orange left end of the PixelQA gradient card",
+    "approx": true
+   },
+   {
+    "hex": "#bfe9f5",
+    "used_for": "cyan right end of the PixelQA gradient card",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.25 pt dark-navy outlines on prompt boxes, dashed outlines on answer boxes, no outline on cards; soft shadows under cards and photos",
+  "font": "sans (Calibri) 3.5 pt prompts and answers, bold 5 pt card titles, italic subtitle, monospace for <region> tokens",
+  "corners": "rounded",
+  "arrows": "two large grey >> chevrons from prompted frames to masked frames; small orange motion arrows inside frames",
+  "rendering": "mixed",
+  "effects": "soft drop shadows under cards and photos",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each card has its own pastel tint (blue RES, peach ReasonSeg, green IS, yellow RVOS, lavender ReVOS, pink motion, violet description, cyan QA); inside a card the key word of the prompt has the colour of the mask it asks for; in PixelQA the bracketed numbers repeat the colours of the badges and masks",
+  "line_style_means": "solid outline = question or prompt; dashed outline = answer; red dashed box and green click on frames = visual prompts; orange arrows = motion",
+  "shape_means": "rounded white box = prompt or answer; line-art glyphs = visual prompt types; coloured square with a number = an object id",
+  "marker_means": "numbers 1 to 4 name objects cited in the answer; >> leads from prompted frames to the output; <region> stands for a visual prompt",
+  "emphasis": "the wide gradient PixelQA card with its italic subtitle at the bottom carries the novel task; saturated masks pop against pastel cards",
+  "reusable_patterns": [
+   "pastel task card: bold title, white rounded prompt box, row of frames",
+   "key word in the prompt coloured like the mask it requests",
+   "solid box for the question and dashed box for the answer",
+   "row of line-art glyphs for the visual prompt types (click, box, scribble)",
+   "numbered colour badges on frames cited by coloured bracketed numbers in the answer",
+   ">> chevron from prompted input frames to masked outputs",
+   "wide gradient card for the combined task that joins the abilities of the cards above"
+  ],
+  "weaknesses": [
+   "3.5 pt text in prompt and answer boxes is tiny",
+   "eight pastel tints and many mask colours compete",
+   "no model is drawn, so how the tasks are unified is not shown"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames and masks produced by the model for each task",
+   "prompts and answers written for the figure"
+  ],
+  "stock": [
+   "line-art glyphs for image, video, click, box and scribble"
+  ],
+  "generated": [],
+  "drawn": [
+   "card backgrounds, prompt and answer boxes",
+   "badges and chevrons",
+   "motion arrows"
+  ],
+  "unknown": [
+   "source datasets of the photos and video frames, not named in the figure"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "nine pastel task cards with bold titles",
+   "white rounded prompt boxes with coloured key words",
+   "dashed answer boxes",
+   "rows of video frames with coloured masks",
+   "line-art visual-prompt glyphs",
+   "numbered colour badges on frames",
+   ">> chevrons from input to output frames",
+   "wide gradient PixelQA card"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "pixel-level reasoning",
+   "referring segmentation",
+   "video segmentation",
+   "video question answering",
+   "interactive segmentation",
+   "visual prompts",
+   "unified LMM",
+   "PixelQA"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "filmstrip",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "mask-colour-matched-prompts",
+    "what": "the key word of each prompt is coloured like the segmentation mask it asks for, and bracketed object numbers in answers repeat the badge colours"
+   },
+   {
+    "name": "solid-question-dashed-answer",
+    "what": "questions in solid-outlined rounded boxes and answers in dashed-outlined boxes above rows of frames"
+   },
+   {
+    "name": "pastel-task-card-grid",
+    "what": "a loose grid of pastel rounded cards, each with a bold title, one prompt box and a row of frames; the last card spans the width for the combined task"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a generalist model as a grid of pastel task cards that follow one grammar (bold title, rounded prompt with its key word coloured like the mask, a row of frames), and end with a wide gradient card for the combined task that reuses the visual prompts and numbered colour badges.",
+  "suits": "multi-task vision or video models whose point is breadth plus one new combined task, with real frames and masks for every task."
+ },
+ "tags": [
+  "card-grid",
+  "pastel-tints",
+  "mask-overlays",
+  "photo-heavy",
+  "gradient-card",
+  "small-text"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "UniPixel flexibly supports a large variety of fine-grained image and video understanding tasks",
+   "given a video2, a question, and optionally a visual prompt",
+   "It can also handle a novel PixelQA task that jointly requires object-centric referring, segmentation, and question answering in videos."
+  ]
+ },
+ "summary": "UniPixel is a large multi-modal model that takes points, boxes and masks as visual prompts and answers with masks, so one model covers many pixel-level tasks. Figure 1 is a gallery of nine pastel rounded cards in rows of three, three, two and one. Each card has a bold task title, a white rounded prompt (solid outline) or answer (dashed outline) with the key word coloured like its mask, and a row of rounded photos or video frames with translucent masks: referring, reasoning and interactive segmentation, video object segmentation, motion-grounded reasoning, referred description and QA. The wide gradient PixelQA card at the bottom joins referring, segmentation and QA, with visual-prompt glyphs, numbered badges and a >> to masked frames.",
+ "summary_zh": "UniPixel 以点、框、掩码为视觉提示并输出掩码回答，统一覆盖多种像素级任务。图 1 是九张淡色圆角任务卡的画廊：每张含标题、关键词与掩码同色的提示框和一排带掩码的图像或视频帧，底部渐变宽卡 PixelQA 联合指代、分割与问答。",
+ "confidence": "high",
+ "notes": "Prior labels kept in order (contribution-mosaic as capability cards, scope-overview as an example gallery). The cards, dashed answer outlines and soft shadows are placed bitmaps (92 pictures, no dashed vector shapes). Colour matching of key words and masks is read from the picture. No paragraph describes each card; roles come from the caption, the introduction paragraph and the card titles.",
+ "venue": "NeurIPS25"
+}

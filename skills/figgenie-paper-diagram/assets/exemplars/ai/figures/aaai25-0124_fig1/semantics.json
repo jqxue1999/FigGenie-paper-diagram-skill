@@ -1,0 +1,596 @@
+{
+ "paper_id": "aaai25-0124",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TechSinger",
+  "one_liner": "A flow-matching singing voice synthesis system with controllable vocal techniques in five languages, plus a prompt-based technique predictor.",
+  "domain": [
+   "singing voice synthesis",
+   "flow matching",
+   "vocal technique control"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "overall architecture in (a), with two lettered sub-panels that open the flow-matching postnet (b) and the technique predictor (c); all three read bottom-up",
+  "argues": "TechSinger conditions a flow-matching pitch predictor and a flow-matching mel postnet on technique information, and a prompt-driven technique predictor lets users set techniques in natural language.",
+  "subject": "singing voice synthesis network: encoders, duration and pitch predictors, mel decoder, flow-matching postnet and a transformer technique predictor",
+  "elements": [
+   {
+    "name": "Lyric",
+    "type": "data",
+    "role": "lyric input",
+    "drawn_as": "row of three small green cells with green outline",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Note",
+    "type": "data",
+    "role": "note input (pitch, duration, type)",
+    "drawn_as": "row of three pale orange cells",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Singer ID",
+    "type": "data",
+    "role": "singer identity input",
+    "drawn_as": "one yellow cell",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Tech Sequence or Prompt, Music Score",
+    "type": "data",
+    "role": "technique sequence given directly, or a prompt with the music score for the predictor",
+    "drawn_as": "row of three brown-outlined orange cells",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "Phone Encoder / Note Encoder / Speaker Encoder",
+    "type": "module",
+    "role": "encode lyric, note and singer inputs",
+    "drawn_as": "three pale blue rounded boxes in a row, arrows up from the cell strips",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Technique Predictor",
+    "type": "module",
+    "role": "predicts a technique sequence from a prompt and the music score; panel (c) opens this box",
+    "drawn_as": "pale cyan rounded box under the Technique Encoder",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "Technique Encoder",
+    "type": "module",
+    "role": "encodes the technique sequence",
+    "drawn_as": "pale blue rounded box whose output runs left to the sum node",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "Duration Predictor and LR",
+    "type": "module",
+    "role": "predicts durations and expands the encoding to frame level (E_p)",
+    "drawn_as": "pale cyan box beside a circled LR node on the vertical trunk",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Flow matching Pitch Predictor",
+    "type": "module",
+    "role": "generates the F0 sequence conditioned on E_p",
+    "drawn_as": "pale cyan rounded box next to the label E_p, output to a circled plus",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "Mel-Spectrogram Decoder",
+    "type": "module",
+    "role": "generates the coarse mel-spectrogram",
+    "drawn_as": "wide pale green rounded bar at the top of (a)",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Vector Field Estimator",
+    "type": "module",
+    "role": "infers the vector field v_m from E_m and time t",
+    "drawn_as": "peach rounded box with input t drawn as a down arrow and output v_m in bold italic",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "ODE Solver",
+    "type": "module",
+    "role": "flows noise into the fine mel-spectrogram by integrating dx = v(x,t|c;θ)dt from t = 0 to t = 1",
+    "drawn_as": "wide pale blue rounded box with the equation, an upward arrow and t = 1 above t = 0",
+    "container": "(b) CFG Flow Matching Postnet",
+    "is_contribution": true
+   },
+   {
+    "name": "Phoneme Encoder / Note Encoder (c)",
+    "type": "module",
+    "role": "encode lyric and note inputs of the technique predictor",
+    "drawn_as": "two pale blue boxes whose outputs meet at a circled plus with a positional-encoding glyph",
+    "container": "(c) Technique Predictor",
+    "is_contribution": false
+   },
+   {
+    "name": "Technique decoder block x N",
+    "type": "module",
+    "role": "Multi-Head Self-Attention, Add & Norm, Multi-Head Cross-Attention, Add & Norm, repeated N times",
+    "drawn_as": "four peach boxes stacked inside a pale yellow rounded region marked x N, with residual arrows",
+    "container": "(c) Technique Predictor",
+    "is_contribution": true
+   },
+   {
+    "name": "Text Encoder",
+    "type": "module",
+    "role": "pre-trained language model that encodes the prompt (frozen, per the paper text)",
+    "drawn_as": "pale cyan box with a blue snowflake, fed by a yellow Prompt cell and followed by an MLP box",
+    "container": "(c) Technique Predictor",
+    "is_contribution": false
+   },
+   {
+    "name": "Classifier",
+    "type": "module",
+    "role": "classification head that outputs the technique labels",
+    "drawn_as": "green rounded box at the top right of (c)",
+    "container": "(c) Technique Predictor",
+    "is_contribution": true
+   },
+   {
+    "name": "CE Loss between Tech strips",
+    "type": "operation",
+    "role": "cross-entropy loss between the target technique sequence (label Tech) and the predicted one",
+    "drawn_as": "two rows of four orange cells joined by a double-headed arrow, bold title CE Loss above",
+    "container": "(c) Technique Predictor",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Lyric, Note, Singer ID, Tech Sequence",
+    "to": "their encoders",
+    "what": "each input strip goes to its own encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tech Sequence or Prompt, Music Score",
+    "to": "Technique Predictor",
+    "what": "input of the predictor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Technique Predictor",
+    "to": "Technique Encoder",
+    "what": "predicted technique sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Phone, Note, Speaker and Technique Encoders",
+    "to": "circled plus",
+    "what": "encodings summed into one stream",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circled plus",
+    "to": "LR",
+    "what": "encoding to be expanded by the duration predictor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Duration Predictor",
+    "to": "LR",
+    "what": "durations",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LR",
+    "to": "Flow matching Pitch Predictor",
+    "what": "E_p, the expanded encoding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Flow matching Pitch Predictor",
+    "to": "Mel-Spectrogram Decoder",
+    "what": "F0 added to E_p",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mel-Spectrogram Decoder",
+    "to": "Vector Field Estimator",
+    "what": "E_m (coarse mel-spectrogram features) after a sum with the trunk",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Vector Field Estimator",
+    "to": "ODE Solver",
+    "what": "vector field v_m",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gaussian Noise",
+    "to": "Mel-Spectrogram",
+    "what": "noise flowed into a fine mel-spectrogram through the ODE solver, t from 0 to 1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompt",
+    "to": "technique decoder block",
+    "what": "semantic condition via Text Encoder and MLP into cross-attention",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "decoder block output",
+    "to": "Classifier",
+    "what": "features to classify",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Technique Predictor box in (a)",
+    "to": "panel (c)",
+    "what": "panel (c) opens this box, tied by the shared name",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Overall Architecture",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "inputs, encoders, duration and pitch predictors, mel decoder and vector field estimator",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) CFG Flow Matching Postnet",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "Gaussian noise flowed into a mel-spectrogram by the ODE solver driven by v_m",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Technique Predictor",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "prompt, note and lyric inputs, a transformer block with cross-attention, classifier and CE loss",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "bold titles under the three panels",
+    "what": "names the panels the caption refers to"
+   },
+   {
+    "marker": "E_p, E_m, v_m, t",
+    "kind": "identity",
+    "at": "arrows in (a)",
+    "what": "names the expanded encoding, the mel-decoder features, the vector field and the time input"
+   },
+   {
+    "marker": "t = 0, t = 1",
+    "kind": "identity",
+    "at": "ODE Solver box",
+    "what": "marks the two ends of the integration"
+   },
+   {
+    "marker": "x N",
+    "kind": "identity",
+    "at": "corner of the yellow region in (c)",
+    "what": "the block is repeated N times"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "Gaussian-noise image rendered like a spectrogram",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "wide teal rectangle without frame at the bottom of (b)"
+   },
+   {
+    "what": "generated mel-spectrogram with horizontal harmonics",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "wide blue-green rectangle with yellow bands at the top of (b), titled Mel-Spectrogram"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue snowflake",
+    "stands_for": "frozen pre-trained text encoder",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "circle with a sine wave",
+    "stands_for": "positional encoding",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "input sequences for lyric, note, singer ID and technique",
+    "form": "rows of small coloured cells, three per sequence and one for the singer",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of three small cells per input, coloured by input type (green lyric, pale orange note, brown technique), a single yellow cell for singer ID or prompt",
+    "parts": [
+     "lyric strip",
+     "note strip",
+     "technique strip",
+     "single cell"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "pale yellow rounded region marked x N holding Multi-Head Self-Attention, Add & Norm, Multi-Head Cross-Attention and Add & Norm, with residual arrows",
+    "parts": [
+     "self-attention",
+     "cross-attention",
+     "Add & Norm",
+     "x N"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a single blue snowflake on the Text Encoder box, no mark on the other modules",
+    "parts": [
+     "snowflake"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "flow-matching-ode",
+    "drawn_as": "noise image at the bottom, an ODE Solver box with the equation and a t = 0 to t = 1 arrow, the mel-spectrogram image on top; the vector field enters by a dashed arrow from the side",
+    "parts": [
+     "noise image",
+     "ODE Solver box",
+     "mel image",
+     "dashed v_m arrow"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "ce-loss-pair",
+    "drawn_as": "target and predicted cell strips joined by a double-headed arrow under a bold CE Loss title, the classifier feeding the right strip",
+    "parts": [
+     "target strip",
+     "predicted strip",
+     "double arrow"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the cell strips at the bottom left of (a), climbs through encoders, the trunk and predictors, goes to the vector field estimator, then to (b) bottom to top, and last to (c), also bottom to top."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three panels side by side with bold lettered titles underneath: a wide overall architecture, a narrow postnet column and a medium technique predictor with a tinted block. Every panel flows bottom to top, with input cell strips at the base and outputs at the top.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 1.95,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fef1cb",
+    "used_for": "rounded region around the repeated transformer block in (c)"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "encoder boxes, ODE Solver box and MLP"
+   },
+   {
+    "hex": "#fce4d6",
+    "used_for": "Vector Field Estimator and the attention and Add & Norm boxes"
+   },
+   {
+    "hex": "#e7fcfd",
+    "used_for": "predictor boxes (Technique, Duration, Flow matching Pitch) and the Text Encoder"
+   },
+   {
+    "hex": "#e1efd8",
+    "used_for": "Mel-Spectrogram Decoder"
+   },
+   {
+    "hex": "#c8e5b3",
+    "used_for": "Classifier box"
+   },
+   {
+    "hex": "#7ab355",
+    "used_for": "green outline of the lyric cells"
+   },
+   {
+    "hex": "#f19b61",
+    "used_for": "light orange outline of the note cells"
+   },
+   {
+    "hex": "#c65f10",
+    "used_for": "brown outline of the technique cells"
+   },
+   {
+    "hex": "#b58b02",
+    "used_for": "dark yellow outline of the single singer-ID or prompt cell"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black outlines on boxes and arrows; 0.75 pt coloured outlines on the token cells",
+  "font": "serif (Times New Roman), 5-9 pt, mostly 7 pt; bold italic symbols (E_p, E_m, v_m); bold 8 pt panel titles; Cambria Math for equations",
+  "corners": "mixed",
+  "arrows": "thin black orthogonal arrows with small filled heads, circled plus nodes for sums, one dashed arrow for v_m, double-headed arrow for the loss",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "Token strip colour = input type and is kept between (a) and (c) (green lyric, pale orange note, yellow singer ID or prompt, brown technique); box fill = module family (pale blue encoders, cyan predictors, peach vector-field estimator and attention boxes, green decoder and classifier); the pale yellow rounded region = the repeated block.",
+  "line_style_means": "Dashed arrow = the vector field v_m passed from (a) into the ODE solver in (b); all other arrows are solid data flow.",
+  "shape_means": "Small cells = tokens; circled plus = addition; circled LR = length regulator; rounded boxes = modules; rounded tinted region with x N = repeated block; wide pictures = spectrograms.",
+  "marker_means": "(a)-(c) name panels; E_p, E_m, v_m, t name intermediate tensors; t = 0 and t = 1 mark the ends of the integration; x N marks repetition; the snowflake marks the frozen text encoder.",
+  "emphasis": "The two spectrogram pictures and the peach Vector Field Estimator stand out against pale boxes; the figure does not mark which modules are the contribution.",
+  "reusable_patterns": [
+   "bottom-up flow with token strips at the base as the inputs",
+   "input strips coloured by type and reused in the zoom panel",
+   "noise image, solver box and generated image stacked in one column",
+   "pale tinted rounded region with x N around a transformer block, text encoder marked frozen by a snowflake",
+   "target and predicted token strips joined by a double arrow labelled CE Loss"
+  ],
+  "weaknesses": [
+   "no leader lines tie panels (b) and (c) to the boxes they open in (a); only titles, a shared name and the dashed v_m arrow do",
+   "several encoder arrows meet one long horizontal line before the circled plus, which is hard to read",
+   "most labels are 7 pt"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a mel-spectrogram produced by the model",
+   "a noise image rendered as a spectrogram"
+  ],
+  "stock": [
+   "snowflake icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "token strips",
+   "transformer block with residual arrows",
+   "ODE Solver box with its equation"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "coloured token strips for lyric, note, singer ID and technique",
+   "encoder and predictor boxes",
+   "Vector Field Estimator",
+   "ODE Solver box with equation",
+   "noise and mel-spectrogram pictures",
+   "transformer block with x N",
+   "classifier with CE loss strips",
+   "snowflake on the text encoder"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "singing voice synthesis",
+   "flow matching",
+   "vocal technique control",
+   "multilingual",
+   "mel-spectrogram",
+   "ODE solver",
+   "prompt-based prediction",
+   "transformer"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "noise-to-sample-column",
+    "what": "a noise picture, a solver box and the generated sample stacked in one column with upward arrows, the conditioning arriving from the side"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the generative step as a column (noise picture, solver box with its equation, generated spectrogram) and reuse the colour of each input's token strip in the zoom panel so inputs can be matched between panels.",
+  "suits": "Conditional generative models (audio, image) with several conditioning streams, where one sub-module needs its own lettered panel."
+ },
+ "tags": [
+  "bottom-up-flow",
+  "lettered-panels",
+  "pale-box-fills",
+  "serif-labels",
+  "cell-strip-inputs",
+  "spectrogram-pictures"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.3)",
+   "front (p.4)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "The flow matching pitch predictor (FMPP) conditions on the expanded input encoding Ep to generate the F0 sequences.",
+   "In Figure (b), vm is used to flow the standard Gaussian noise into a fine mel-spectrogram via an ODE solver.",
+   "our technique predictor comprises two components: a frozen natural language encoder for extracting semantic features and a technique decoder"
+  ]
+ },
+ "summary": "TechSinger is a flow-matching singing voice synthesis system whose vocal techniques can be set directly or predicted from a natural-language prompt. Figure 1 has three lettered panels, all read bottom to top. (a) wires coloured token strips for lyric, note, singer ID and technique through encoders, a duration predictor with a length regulator, a flow-matching pitch predictor and a mel decoder to a vector field estimator. (b) shows the postnet as a column: a Gaussian-noise image, an ODE solver box with its equation, and the mel-spectrogram on top. (c) opens the technique predictor: an x N transformer block with cross-attention to a frozen text encoder, a classifier, and a CE loss between two cell strips.",
+ "summary_zh": "TechSinger 是基于流匹配的歌声合成系统，可直接指定或用自然语言提示预测演唱技巧。图分 (a)(b)(c) 三块、自下而上：总体结构、从高斯噪声经 ODE 求解器得到梅尔谱的后网络、带冻结文本编码器的技巧预测器。",
+ "confidence": "high",
+ "notes": "Which boxes are the paper's contributions is not marked in the figure; the flags follow the abstract and the paper text. The figure does not expand LR (length regulator, per the paper's wording about extending to frame level). The yellow singer-ID cell and the yellow prompt cell share a colour although they are different inputs.",
+ "venue": "AAAI25"
+}

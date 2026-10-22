@@ -1,0 +1,615 @@
+{
+ "paper_id": "neurips23-0136",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SwiftSage",
+  "one_liner": "Agent framework pairing a small LM fine-tuned on oracle trajectories (fast) with an LLM planner called only when needed (slow), for ScienceWorld tasks.",
+  "domain": [
+   "LLM agents",
+   "interactive text-world tasks",
+   "dual-process thinking"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "design-family",
+  "variant_note": "four boxed columns (SayCan, ReAct, Reflexion, SwiftSage) built from the same prompt cards, LLM box and action, with highlights marking what each design changes",
+  "argues": "SayCan, ReAct and Reflexion call an LLM at every timestep; SwiftSage runs a small fine-tuned LM and calls the LLM only when needed for subgoals and grounding.",
+  "subject": "Prompting designs of four LLM agents on the task 'boil tin', each as a stack of prompt cards feeding LLM boxes and an action.",
+  "elements": [
+   {
+    "name": "SayCan",
+    "type": "container",
+    "role": "baseline: per-timestep prompt, LLM returns K best generations that are reranked into Action t",
+    "drawn_as": "black-framed column with a yellow header 'For Each Timestep t:'",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "ReAct",
+    "type": "container",
+    "role": "baseline: demo with manually annotated subgoals and think steps in the history, one LLM call per timestep",
+    "drawn_as": "black-framed column with a yellow header",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Reflexion",
+    "type": "container",
+    "role": "baseline: per-round reflection on the failed round is added to the next round's prompt",
+    "drawn_as": "black-framed column with a blue 'For Each Round:' block and a yellow timestep block",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "SwiftSage",
+    "type": "container",
+    "role": "proposed: Small LM acts by default, LLM plans and grounds only when needed",
+    "drawn_as": "purple-framed column with a purple name",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Demo, Task, Action history",
+    "type": "text-block",
+    "role": "prompt fields: an oracle path, 'Your task is to boil tin.', and past actions with observations",
+    "drawn_as": "stacked grey cards with bold and typewriter spans",
+    "container": "each column",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "language model called to produce actions, reflections or subgoals (e.g., GPT-4)",
+    "drawn_as": "orange gradient box with soft shadow, six copies",
+    "container": "each column",
+    "is_contribution": false
+   },
+   {
+    "name": "K best generations for Action t",
+    "type": "data",
+    "role": "candidate actions returned by the LLM in SayCan",
+    "drawn_as": "yellow-orange bar",
+    "container": "SayCan",
+    "is_contribution": false
+   },
+   {
+    "name": "Reranking",
+    "type": "operation",
+    "role": "chooses one of the K generations",
+    "drawn_as": "bold word on a yellow block arrow",
+    "container": "SayCan",
+    "is_contribution": false
+   },
+   {
+    "name": "manually annotated subgoals",
+    "type": "text-block",
+    "role": "extra demo content ReAct needs",
+    "drawn_as": "yellow-highlighted words in the Demo card",
+    "container": "ReAct",
+    "is_contribution": false
+   },
+   {
+    "name": "think: now I need to place the metal pot on a heater.",
+    "type": "text-block",
+    "role": "reasoning step inside the action history",
+    "drawn_as": "yellow-highlighted italic span",
+    "container": "ReAct",
+    "is_contribution": false
+   },
+   {
+    "name": "reflection",
+    "type": "data",
+    "role": "LLM summary of the previous failed round, inserted into the next Task prompt",
+    "drawn_as": "blue italic word in a light-blue card, again as a green-highlighted word in the Task card",
+    "container": "Reflexion",
+    "is_contribution": false
+   },
+   {
+    "name": "Action t",
+    "type": "data",
+    "role": "chosen action sent to the environment, e.g. 'put metal pot on stove'",
+    "drawn_as": "yellow-orange box with typewriter-bold action text",
+    "container": "SayCan, ReAct, Reflexion",
+    "is_contribution": false
+   },
+   {
+    "name": "Oracle paths for training data.",
+    "type": "data",
+    "role": "expert trajectories used to train the Small LM",
+    "drawn_as": "pale-green strip at the top of the column",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "offline imitation learning",
+    "type": "operation",
+    "role": "trains the Small LM on oracle paths",
+    "drawn_as": "green double-chevron arrow and typewriter label",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Small LM",
+    "type": "module",
+    "role": "fast module that acts by default and exchanges with the environment",
+    "drawn_as": "green box with a green double arrow to the house icon",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Only when needed:",
+    "type": "label",
+    "role": "says the LLM part runs only on demand",
+    "drawn_as": "purple-tinted header tab with a down arrow",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Prompts for object locating, planning & tracking subgoals, and online exception handling.",
+    "type": "text-block",
+    "role": "new prompt content of the SAGE LLM",
+    "drawn_as": "cyan-highlighted lines under Demo, Task and Action history cards",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Next subgoals",
+    "type": "data",
+    "role": "subgoals planned by the first LLM",
+    "drawn_as": "yellow-orange box with a curved blue arrow to the second LLM",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Grounding Templates",
+    "type": "data",
+    "role": "templates that ground subgoals to executable actions",
+    "drawn_as": "cyan-highlighted text next to the second LLM",
+    "container": "SwiftSage",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Buffer",
+    "type": "data",
+    "role": "queue of Action t, t+1, t+2 … produced at once",
+    "drawn_as": "yellow-orange box; a red dashed arrow runs from it up to the house icon",
+    "container": "SwiftSage",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Demo, Task, Action history",
+    "to": "LLM",
+    "what": "prompt is sent to the LLM at every timestep (SayCan, ReAct, Reflexion)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "K best generations for Action t",
+    "what": "candidates, then Reranking picks Action t",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "Action t",
+    "what": "action to execute",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action t",
+    "to": "house icon",
+    "what": "action is carried out in the environment and the loop repeats",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "The full action history of the previous failed round.",
+    "to": "LLM (Reflexion)",
+    "what": "history of the failed round",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM (Reflexion)",
+    "to": "reflection",
+    "what": "reflection text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "reflection",
+    "to": "Task card of the timestep block",
+    "what": "reflection is added to the next round's Task prompt",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "ReAct action history",
+    "to": "Reflexion action history",
+    "what": "same as ReAct",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Oracle paths for training data.",
+    "to": "Small LM",
+    "what": "offline imitation learning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Small LM",
+    "to": "house icon",
+    "what": "acts in and observes the environment",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompts for object locating, planning & tracking subgoals, and online exception handling.",
+    "to": "LLM (SAGE)",
+    "what": "prompt for subgoal planning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM (SAGE)",
+    "to": "Next subgoals",
+    "what": "planned subgoals",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Next subgoals",
+    "to": "LLM (grounding)",
+    "what": "subgoals handed to the second LLM",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Grounding Templates",
+    "to": "LLM (grounding)",
+    "what": "templates guide grounding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM (grounding)",
+    "to": "Action Buffer",
+    "what": "a queue of grounded actions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action Buffer",
+    "to": "house icon",
+    "what": "buffered actions are executed in the environment",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cyan prompt and Grounding Templates",
+    "to": "each other",
+    "what": "cyan marks the inputs that are new in SwiftSage",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "SayCan",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "prompt cards to LLM to K best generations, reranked into Action t, each timestep",
+    "verdict": "baseline"
+   },
+   {
+    "label": "ReAct",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "same stack with manually annotated subgoals in the demo and think steps in the history",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Reflexion",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "per-round reflection on the failed round, then ReAct-style timestep prompts",
+    "verdict": "baseline"
+   },
+   {
+    "label": "SwiftSage",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "Small LM trained by imitation; two LLM calls for subgoals and grounding, only when needed; action buffer",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "For Each Timestep t: / For Each Round: / Only when needed:",
+    "kind": "section",
+    "at": "coloured header tabs",
+    "what": "state how often the block below runs"
+   },
+   {
+    "marker": "t-2, t-1, t, t+1, t+2",
+    "kind": "order",
+    "at": "action lines",
+    "what": "time index of the actions in the history and the buffer"
+   },
+   {
+    "marker": "1, 2",
+    "kind": "order",
+    "at": "first two actions of the history",
+    "what": "numbers the first actions of the task"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "house with a percent sign, with a small looping arrow",
+    "stands_for": "the environment in which actions run, each timestep",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "green double chevron and green double-headed arrow",
+    "stands_for": "offline imitation learning and the Small LM exchanging with the environment",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "the ScienceWorld task 'boil tin' with an action history (go to kitchen, look around, pick up metal pot) and next actions 'put metal pot on stove' or 'put tin into metal pot'",
+    "form": "grey prompt cards with typewriter action lines and observation lines",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "orange gradient box labelled LLM with a soft shadow, repeated in every column (e.g., GPT-4 noted once)",
+    "parts": [
+     "LLM box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "stack of grey cards (Demo, Task, Action history) whose highlighted spans mark what the design adds",
+    "parts": [
+     "Demo",
+     "Task",
+     "Action history",
+     "highlighted spans"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "a 'For Each Timestep t' header over the stack and a house icon with a looping arrow at the action",
+    "parts": [
+     "header tab",
+     "house icon",
+     "loop arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the yellow header of SayCan top-left, reads each column top to bottom, then moves right to ReAct, Reflexion and the purple SwiftSage column, whose top-left and top-right loop is read last."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Four framed columns side by side with the method name printed under each; every column is a top-down stack of prompt cards, LLM box and action box, SwiftSage in a purple frame with extra blocks (Small LM at the top, action buffer at the bottom). The right fifth of the canvas is empty.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.72,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e7e6e6",
+    "used_for": "prompt cards (Demo, Task, Action history)",
+    "opacity": 0.81
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "output boxes: K best generations, Action t, Next subgoals, Action Buffer",
+    "opacity": 0.81
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "yellow highlights and header tabs of the timestep blocks"
+   },
+   {
+    "hex": "#00ffff",
+    "used_for": "cyan highlights of SwiftSage's new prompt parts and Grounding Templates"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "Reflexion's round-level cards and header",
+    "opacity": 0.81
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "green highlight on the word reflection",
+    "opacity": 0.41
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "SwiftSage frame, name and tinted header tab",
+    "opacity": 0.25
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "light-orange down block arrows under the LLM boxes"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "LLM boxes (gradient bitmaps)",
+    "approx": true
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red dashed arrow from the action buffer to the environment"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "thin blue arrows between LLM boxes and their outputs"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt black frames on the three baseline columns, 0.75 pt purple frame on SwiftSage, no outline on cards",
+  "font": "sans (Calibri Light) 6.5 pt for most text, typewriter and condensed-bold faces for actions, 7.5 pt method names, 9.5 pt LLM",
+  "corners": "square",
+  "arrows": "thick light-orange block arrows under the LLM boxes; thin blue arrows; green double arrows; one red dashed arrow; one grey dashed arrow",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadow and gradient on the orange LLM boxes",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = LLM call, green = small LM, grey = prompt card, yellow = what a baseline adds or outputs, cyan = SwiftSage's new prompt parts, light blue = Reflexion's round-level step, purple = the proposed method; no legend",
+  "line_style_means": "red dashed arrow = actions from the buffer executed in the environment; grey dashed arrow = reuse of ReAct's history; solid blue = LLM outputs",
+  "shape_means": "grey card = one prompt field; orange box = LLM; house icon = environment; header tab = how often the block runs",
+  "marker_means": "t, t-1, t+1 index actions in time; For Each Timestep, For Each Round and Only when needed are frequency headers",
+  "emphasis": "SwiftSage alone gets a purple frame and name, the cyan highlights and the 'Only when needed' tab, so the sparse use of the LLM reads at a glance",
+  "reusable_patterns": [
+   "same top-down stack of prompt cards in every column so the difference reads by position",
+   "highlight colour on the exact prompt span that differs between methods",
+   "header tabs stating how often a block runs (For Each Timestep t, Only when needed)",
+   "proposed column outlined in its own colour with its name in that colour",
+   "method names printed below the frames"
+  ],
+  "weaknesses": [
+   "no legend for the highlight colours",
+   "6.5 pt prompt text is dense",
+   "right fifth of the canvas is blank",
+   "three similar columns repeat much text"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a ScienceWorld task, action history and actions written into the prompt cards"
+  ],
+  "stock": [
+   "house icon",
+   "green chevron and double arrows",
+   "orange LLM box shapes"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards, frames, highlights and arrows",
+   "header tabs"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four framed columns",
+   "grey prompt cards",
+   "orange LLM boxes",
+   "yellow action boxes",
+   "highlighted prompt spans",
+   "house icon with loop arrow",
+   "Small LM box",
+   "Action Buffer"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "LLM agents",
+   "fast and slow thinking",
+   "SayCan",
+   "ReAct",
+   "Reflexion",
+   "ScienceWorld",
+   "imitation learning",
+   "subgoal planning",
+   "action buffer"
+  ],
+  "tags": [
+   "prompt-template-card",
+   "highlighted-text-spans"
+  ],
+  "new_tags": [
+   {
+    "name": "loop-header-tabs",
+    "what": "small coloured tab at the top-left of a block that says how often it runs (For Each Timestep t, For Each Round, Only when needed)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Compare agent or prompting designs by drawing each as the same top-down stack of prompt cards, LLM box and output, then colour only the span or box that differs; header tabs say how often each block runs, which shows the cost difference without numbers.",
+  "suits": "Comparisons of prompting or agent designs where the difference lies in what enters the prompt and how often the LLM is called."
+ },
+ "tags": [
+  "four-column-comparison",
+  "prompt-card-stacks",
+  "highlight-spans",
+  "block-arrows",
+  "typewriter-actions",
+  "proposed-column-outlined"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "5 Experiments (p.8)"
+  ],
+  "evidence": [
+   "SAYCAN [1], REACT [41] and REFLEXION [30] require a new inference with LLMs for each time step",
+   "Figure 1: Comparing methods of prompting LLMs to build agents for interactive tasks."
+  ]
+ },
+ "summary": "SwiftSage is an agent framework inspired by fast and slow thinking: a small encoder-decoder LM trained on oracle trajectories acts by default, and an LLM plans subgoals and grounds them only when needed. Figure 1 compares prompting designs in four framed columns. SayCan, ReAct and Reflexion each stack grey Demo, Task and Action history cards, send them to an orange LLM box at every timestep and output one action; yellow highlights mark what each adds (reranking, think steps, reflection). The purple SwiftSage column adds the Small LM, an 'Only when needed' block with cyan prompts, two LLM calls and an action buffer.",
+ "summary_zh": "SwiftSage让小模型快速行动、大模型仅在需要时规划子目标。图1用四列对比SayCan、ReAct、Reflexion和SwiftSage：同样的提示卡片栈接橙色LLM框，高亮标出差异，前三者每步都调用LLM。",
+ "confidence": "high",
+ "notes": "Highlight colours have no legend; their meanings (yellow = what a baseline adds, cyan = SwiftSage-specific) are read from the figure and the paper text. The SVG carries many bitmaps (LLM boxes, arrows, icons) from PowerPoint shapes, so no data pictures are recorded. The house icon is read as the environment; the figure does not name it.",
+ "venue": "NeurIPS23"
+}

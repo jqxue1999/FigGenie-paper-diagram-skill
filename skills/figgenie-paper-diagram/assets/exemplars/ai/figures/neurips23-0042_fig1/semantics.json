@@ -1,0 +1,385 @@
+{
+ "paper_id": "neurips23-0042",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DPOK",
+  "one_liner": "Online RL fine-tuning of text-to-image diffusion models by policy gradient with KL regularisation, against reward-weighted supervised fine-tuning.",
+  "domain": [
+   "text-to-image diffusion",
+   "reinforcement learning fine-tuning",
+   "reward feedback"
+  ],
+  "subfield": "generative",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two panels redraw the same model, sample and reward loop in the same colours: a fixed pre-generated dataset in (a), fresh samples each round in (b); (b) is also an iteration-rounds column with one real image per round",
+  "argues": "Reward-weighted supervised fine-tuning updates the model on a fixed dataset from the pre-trained model, whereas online RL keeps sampling from the model being trained.",
+  "subject": "Two training loops for a text-to-image model: a fixed dataset of rabbit images versus fresh samples each round, both scored by a reward function.",
+  "elements": [
+   {
+    "name": "Images from pre-trained model",
+    "type": "container",
+    "role": "the fixed dataset generated once by the pre-trained model",
+    "drawn_as": "rounded light-grey (#eeeeee) frame holding a 4 x 2 grid of generated rabbit images, title above the frame",
+    "container": "(a) Supervised fine-tuning",
+    "is_contribution": false
+   },
+   {
+    "name": "Reward function",
+    "type": "module",
+    "role": "scores generated images; one box in (a) and one per round in (b)",
+    "drawn_as": "light-green (#e2f4db) rounded rectangle with two-line label, four copies in total",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "p_pre",
+    "type": "module",
+    "role": "the pre-trained text-to-image model both approaches start from",
+    "drawn_as": "light-blue (#c9daf8) rounded square with italic p and subscript pre, once per panel",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "p_θ",
+    "type": "module",
+    "role": "the model after one or more updates",
+    "drawn_as": "pale-cream (#f6f6e7) rounded square with italic p and subscript theta, two in (a) and two in (b)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Model update",
+    "type": "operation",
+    "role": "update of the model from one version to the next",
+    "drawn_as": "hollow light-grey block arrows with black outline between model boxes, the word Model update beside or above them, dots for omitted updates in (a)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "reward loop-back arrow",
+    "type": "operation",
+    "role": "returns the reward of the generated image to the model in each round of (b)",
+    "drawn_as": "thin black curved arrow from the Reward function back to the model box",
+    "container": "(b) RL fine-tuning",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Images from pre-trained model",
+    "to": "Reward function (a)",
+    "what": "all images of the fixed dataset are scored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reward function (a)",
+    "to": "p_pre, first p_θ and last p_θ",
+    "what": "three curved arrows hand the reward-scored fixed data to the models being updated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "p_pre",
+    "to": "p_θ ... p_θ (a)",
+    "what": "chain of hollow Model update arrows with a dotted gap",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "model box",
+    "to": "generated image (b)",
+    "what": "the current model generates a new image each round",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "generated image (b)",
+    "to": "Reward function (b)",
+    "what": "the new image is scored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reward function (b)",
+    "to": "model box",
+    "what": "curved loop-back arrow returns the reward",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "round 1 model",
+    "to": "round 2 model, then round 3 model (b)",
+    "what": "hollow Model update arrows go down the column",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a) panel",
+    "to": "(b) panel",
+    "what": "the same colours and boxes are reused; only the source of the samples differs",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Supervised fine-tuning",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "Eight images from the pre-trained model are scored once by a reward function, which feeds a chain of model updates from p_pre to p_θ.",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) RL fine-tuning",
+    "kind": "worked-walkthrough",
+    "axis": "alternatives",
+    "shows": "Three rounds of model, freshly generated image and reward function, each followed by a loop-back and a Model update arrow.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "serif captions under the two panels",
+    "what": "letter and name the panels: Supervised fine-tuning, RL fine-tuning"
+   },
+   {
+    "marker": "Model update",
+    "kind": "order",
+    "at": "hollow block arrows between model versions or rounds",
+    "what": "marks each update step; dots in (a) stand for more updates"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "eight generated rabbit images of the pre-trained model, mostly bright green rabbits in different renderings and settings",
+    "content": "generated-image",
+    "role": "data-thumbnail",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "4 x 2 grid of square thumbnails with thin gaps inside a rounded grey frame titled Images from pre-trained model"
+   },
+   {
+    "what": "one generated rabbit image per round: a grey rabbit with a green vest, a green rabbit figurine, a green-tinted natural rabbit",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "large square pictures between the model box and the reward box of each round, the rabbit getting greener from round to round"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "rabbit images generated by the pre-trained and the updated models, scored by a reward function; the images turn greener over the rounds (the target is not stated)",
+    "form": "image grid in (a) and one image per round in (b)",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a 4 x 2 grid of thumbnails in a rounded grey frame with a title above, standing for the fixed dataset",
+    "parts": [
+     "thumbnail grid",
+     "grey frame",
+     "title"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "model box, generated image, reward-function box and a curved loop-back arrow to the model, repeated for each round",
+    "parts": [
+     "model",
+     "sample",
+     "reward function",
+     "loop-back arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "colour only: blue for the pre-trained model and cream for the updated one, explained in the caption",
+    "parts": [
+     "blue p_pre",
+     "cream p_θ"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the grey image grid at the top left of (a), follows the arrow to Reward function and the three curved arrows to the model row, then moves to (b) and reads it top to bottom: model, image, reward and loop-back, Model update, next round."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side with serif captions underneath: (a) stacks a dataset frame, a reward box and a left-to-right model chain; (b) is a column of three identical rounds, each a row of model, image and reward box, joined by hollow arrows.",
+  "panel_count": 2,
+  "lanes": "panel (b): 3 aligned rounds, each a row of model, image, reward function",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c9daf8",
+    "used_for": "p_pre, the pre-trained model"
+   },
+   {
+    "hex": "#f6f6e7",
+    "used_for": "p_θ, the updated model"
+   },
+   {
+    "hex": "#e2f4db",
+    "used_for": "Reward function boxes"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "grey frame of the dataset and the hollow Model update arrows"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, outlines and text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black on arrows and block arrows, 0.5 pt on the grey frame and boxes, one 1.25 pt line",
+  "font": "sans 6 pt for box labels and Model update; serif 9 pt for the panel captions; serif math italic for p_pre and p_θ",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows with filled heads inside a round, thin curved arrows for loop-backs and for the fan-out in (a), hollow light-grey block arrows with black outline for Model update",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue = the pre-trained model p_pre, cream = the updated model p_θ, green = the reward function, light grey = the fixed dataset frame and update arrows; roles keep their colour in both panels",
+  "line_style_means": "straight arrows = generation and scoring; curved arrows = reward feedback in (b) and reward-scored data to the models in (a); hollow block arrows = model update; dots = omitted updates",
+  "shape_means": "rounded square = a model; rounded rectangle = the reward function; large rounded frame = a dataset of generated images",
+  "marker_means": "(a) and (b) letter the panels; Model update names the hollow arrows",
+  "emphasis": "blue p_pre starts both panels; larger images in (b) make the drift across rounds visible; the single grey dataset frame versus a fresh image per round carries the contrast",
+  "reusable_patterns": [
+   "two panels that redraw the same model, sample and reward loop and differ only in where the samples come from (fixed dataset versus fresh samples per round)",
+   "one colour per role (blue pre-trained, cream updated, green reward) repeated in both panels",
+   "hollow block arrows labelled Model update chaining model versions",
+   "round-by-round column with one real sample image per round to show the drift",
+   "grid of generated thumbnails in a rounded grey frame as the fixed dataset",
+   "curved loop-back arrow from the reward box to the model"
+  ],
+  "weaknesses": [
+   "colour roles (blue = pre-trained) are explained only in the caption",
+   "the target of the reward (greener rabbits) is never stated in the figure or caption",
+   "in (a) the fan-out arrows end on only three models with a dotted gap, so the number of updates is implicit"
+  ]
+ },
+ "resources": {
+  "own": [
+   "samples generated by the pre-trained and the fine-tuned text-to-image models"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "rounded boxes with model symbols",
+   "arrows and hollow block arrows",
+   "grey dataset frame"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "4 x 2 grid of generated rabbit images in a grey frame",
+   "blue p_pre box",
+   "cream p_θ boxes",
+   "green Reward function boxes",
+   "hollow Model update block arrows",
+   "curved reward loop-back arrows",
+   "three rounds with one rabbit image each",
+   "panel captions (a) and (b)"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "text-to-image diffusion",
+   "RL fine-tuning",
+   "reward-weighted supervised fine-tuning",
+   "online sampling",
+   "reward function",
+   "policy gradient",
+   "KL regularization",
+   "fixed dataset"
+  ],
+  "tags": [
+   "checkpoint-chain",
+   "module-state-coding",
+   "flow-type-arrows",
+   "colour-coded-groups",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "offline-vs-online-data-loop",
+    "what": "two panels redrawing the same model, sample and reward loop to contrast a fixed pre-generated dataset with fresh samples drawn from the updated model each round"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To contrast offline and online training, redraw the same three boxes (model, samples, reward) in two panels with identical colours per role and change only where the samples come from: one fixed grid of thumbnails in (a) versus one fresh sample per round in (b), with hollow block arrows labelled Model update between rounds.",
+  "suits": "training-procedure comparisons (supervised versus RL, offline versus online, fixed versus refreshed data) where the data source is the difference."
+ },
+ "tags": [
+  "two panels",
+  "pastel role colours",
+  "hollow block arrows",
+  "generated image thumbnails",
+  "loop-back arrows",
+  "rounded boxes",
+  "sparse text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Both start with the same pre-trained model (the blue rectangle).",
+   "In supervised fine-tuning, the model is updated on a fixed dataset generated by the pre-trained model.",
+   "the model is updated using new samples from the previously trained model during online RL fine-tuning"
+  ]
+ },
+ "summary": "DPOK fine-tunes text-to-image diffusion models with online reinforcement learning (policy gradient with KL regularisation) instead of reward-weighted supervised fine-tuning. Figure 1 contrasts the two in lettered panels that reuse the same colours: blue for the pre-trained model p_pre, cream for the updated model p_θ, green for the reward function. In (a), eight rabbit images from the pre-trained model sit in a grey frame, are scored once by a reward function, and feed a chain of hollow Model update arrows from p_pre to p_θ. In (b), three rounds in a column each show the model, a freshly generated rabbit and a reward function with a curved loop-back arrow, joined by hollow Model update arrows, the rabbit getting greener.",
+ "summary_zh": "DPOK 用在线强化学习微调文生图扩散模型，对比奖励加权的监督微调。图分 (a)(b) 两栏、同色同角色：(a) 为预训练模型生成的八张兔子图一次性打分后链式更新；(b) 为三轮循环，每轮新生成图像、打分并回传奖励，兔子越来越绿。",
+ "confidence": "high",
+ "notes": "The prior order was changed: the caption frames the figure as (a) versus (b), so side-by-side-contrast leads; (b) is also an iteration-rounds walkthrough. That the target is green rabbits is read off the images only. The same rabbit image (grey rabbit with a green vest) appears in the (a) grid and as the round-1 sample of (b).",
+ "venue": "NeurIPS23"
+}

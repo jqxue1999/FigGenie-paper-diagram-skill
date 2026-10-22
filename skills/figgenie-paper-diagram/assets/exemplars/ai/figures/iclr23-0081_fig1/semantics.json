@@ -1,0 +1,547 @@
+{
+ "paper_id": "iclr23-0081",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "EEGSDE",
+  "one_liner": "Controllable 3D molecule generation: the reverse diffusion SDE is steered at every step by the gradient of a rotation-invariant energy that takes a condition.",
+  "domain": [
+   "inverse molecular design",
+   "energy-guided diffusion",
+   "3D molecule generation"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "five molecule renders from z_T to z_0 as one generation run, an invariance diagram and a condition box above, the guided SDE below",
+  "argues": "A property-conditioned energy that is invariant to rotation guides each reverse-SDE step; its gradient is equivariant, so generated molecules keep rotation invariance.",
+  "subject": "A reverse diffusion trajectory of one 3D molecule, guided at each step by an invariant energy fed with a condition (target structure or quantum properties).",
+  "elements": [
+   {
+    "name": "Invariant Energy",
+    "type": "container",
+    "role": "shows that the energy E gives the same value for a molecule and its rotated copy",
+    "drawn_as": "dashed rounded box with a bold caption underneath",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "molecule and rotated copy",
+    "type": "sample",
+    "role": "the same molecule before and after a rotation, both fed to E",
+    "drawn_as": "two small black rounded tiles with ball-and-stick renders",
+    "container": "Invariant Energy",
+    "is_contribution": false
+   },
+   {
+    "name": "R",
+    "type": "operation",
+    "role": "rotation applied to the molecule",
+    "drawn_as": "bold italic R on a straight arrow with a dashed circular arrow above it",
+    "container": "Invariant Energy",
+    "is_contribution": false
+   },
+   {
+    "name": "E",
+    "type": "module",
+    "role": "energy function applied to the molecule and to the condition (two copies)",
+    "drawn_as": "light green rounded box with italic E and a green outline",
+    "container": "Invariant Energy",
+    "is_contribution": true
+   },
+   {
+    "name": "E(z,c,t) = E(Rz,c,t)",
+    "type": "formula",
+    "role": "states that the energy is unchanged by rotation",
+    "drawn_as": "two energy terms joined by an equals sign under the E boxes",
+    "container": "Invariant Energy",
+    "is_contribution": true
+   },
+   {
+    "name": "Condition c",
+    "type": "label",
+    "role": "the condition is fed into both E boxes",
+    "drawn_as": "italic text on a long black line routed from the right dashed box to the two E boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Target Structure as Fingerprint",
+    "type": "container",
+    "role": "one kind of condition: a target structure encoded as a fingerprint",
+    "drawn_as": "line-art structure fragments, arrows and a row of cells, orange caption",
+    "container": "condition box",
+    "is_contribution": false
+   },
+   {
+    "name": "fingerprint strip",
+    "type": "data",
+    "role": "bit vector of the target structure, with a few coloured cells",
+    "drawn_as": "row of eight small cells: green, grey, grey, blue, grey, grey, orange, grey",
+    "container": "condition box",
+    "is_contribution": false
+   },
+   {
+    "name": "Quantum Property",
+    "type": "container",
+    "role": "other kind of condition: target quantum properties",
+    "drawn_as": "list of property names in serif text with a vertical ellipsis, orange caption",
+    "container": "condition box",
+    "is_contribution": false
+   },
+   {
+    "name": "Polarizability α, Dipole Moment μ, Heat Capacity C_v",
+    "type": "text-block",
+    "role": "examples of quantum-property targets",
+    "drawn_as": "three lines of text separated by a vertical ellipsis",
+    "container": "condition box",
+    "is_contribution": false
+   },
+   {
+    "name": "molecule chain",
+    "type": "sample",
+    "role": "five successive states of the molecule from a noisy cluster to a clean ring molecule",
+    "drawn_as": "five equal black rounded tiles with ball-and-stick renders joined by black arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "energy guidance arrows",
+    "type": "operation",
+    "role": "the energy guidance acts on each step of the chain",
+    "drawn_as": "cyan bus line under Invariant Energy with four cyan arrows dropping onto the step arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "z_T",
+    "type": "data",
+    "role": "start of the reverse process",
+    "drawn_as": "light green circle at the left end of the formula row",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "z_0",
+    "type": "data",
+    "role": "end of the reverse process, the generated molecule",
+    "drawn_as": "light green circle at the right end of the formula row",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "guided SDE",
+    "type": "formula",
+    "role": "drift with the energy-gradient term added to the score term, plus diffusion noise",
+    "drawn_as": "one-line equation printed as an image between z_T and z_0",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Equivariant Energy Guidance",
+    "type": "label",
+    "role": "names the energy-gradient term of the SDE",
+    "drawn_as": "bold caption under an under-brace beneath the guidance term",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "molecule",
+    "to": "E (left)",
+    "what": "molecule state z",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "molecule",
+    "to": "rotated molecule",
+    "what": "rotation R",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "rotated molecule",
+    "to": "E (right)",
+    "what": "rotated state Rz",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "condition box",
+    "to": "both E boxes",
+    "what": "condition c",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E (left)",
+    "to": "E(z,c,t)",
+    "what": "energy value of the original molecule",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E (right)",
+    "to": "E(Rz,c,t)",
+    "what": "energy value of the rotated molecule",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E(z,c,t)",
+    "to": "E(Rz,c,t)",
+    "what": "the two values are equal: the energy is invariant to rotation",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "structure fragments",
+    "to": "fingerprint strip",
+    "what": "each fragment sets a cell of the fingerprint",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Invariant Energy",
+    "to": "step arrows of the molecule chain",
+    "what": "energy guidance applied at each step",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_T tile",
+    "to": "z_0 tile",
+    "what": "reverse-SDE steps through three intermediate molecule states",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_T",
+    "to": "z_0",
+    "what": "the guided SDE is integrated from z_T to z_0",
+    "kind": "time",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Equivariant Energy Guidance",
+    "to": "energy-gradient term of the formula",
+    "what": "the brace picks out the guidance part of the drift",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Invariant Energy",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the same molecule before and after a rotation gives the same energy, so the energy gradient is equivariant",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "the condition c: a target structure as fingerprint or quantum properties such as polarizability, dipole moment, heat capacity",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "z_T",
+    "kind": "identity",
+    "at": "left end of the formula row",
+    "what": "names the noisy start of the reverse process"
+   },
+   {
+    "marker": "z_0",
+    "kind": "identity",
+    "at": "right end of the formula row",
+    "what": "names the generated molecule at the end"
+   },
+   {
+    "marker": "R",
+    "kind": "identity",
+    "at": "arrow between the two small molecule tiles",
+    "what": "names the rotation"
+   },
+   {
+    "marker": "c",
+    "kind": "identity",
+    "at": "label on the condition line",
+    "what": "names the condition"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "ball-and-stick renders of one molecule at five reverse steps, from a scattered atom cloud at z_T to a ring molecule at z_0",
+    "content": "molecule",
+    "role": "sample-output",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "equal black rounded-square tiles with a soft drop shadow, CPK-style atom colours (grey, red, blue, white), joined by arrows"
+   },
+   {
+    "what": "the same molecule before and after rotation R",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two small black rounded tiles with drop shadow, side by side with the rotation arrow between them"
+   },
+   {
+    "what": "skeletal drawing of a target structure: a five-membered ring with N, a zigzag bond and an O branch",
+    "content": "molecule",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "thin black line art with atom letters, three fragments each pointing at a cell of the fingerprint strip"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "dashed circular arrow with a bold R beneath",
+    "stands_for": "a rotation of the molecule",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one molecule being generated, from a noisy atom cloud at z_T to a clean molecule at z_0",
+    "form": "five rendered molecule tiles in a row",
+    "real_values": true
+   },
+   {
+    "what": "a target structure and its fingerprint",
+    "form": "skeletal fragments joined by arrows to coloured cells of a bit strip",
+    "real_values": false
+   },
+   {
+    "what": "quantum-property conditions",
+    "form": "text list: Polarizability α, Dipole Moment μ, Heat Capacity C_v",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a row of five molecule tiles linked by right-pointing arrows from the noisy z_T to the clean z_0, with guidance arrows dropped from above",
+    "parts": [
+     "z_T tile",
+     "intermediate tiles",
+     "z_0 tile",
+     "step arrows",
+     "guidance arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "molecular-fingerprint",
+    "drawn_as": "a short row of cells with a few coloured bits, tied to skeletal structure fragments by arrows",
+    "parts": [
+     "structure fragments",
+     "bit cells",
+     "mapping arrows"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Start at the Invariant Energy box top left, move to the condition box on the right, follow the cyan arrows down to the molecule chain, then read the SDE from z_T to z_0."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked bands: two dashed boxes side by side on top (invariance of E at left, the condition at right), a row of five molecule tiles linked by arrows in the middle with a cyan bus line dropping four guidance arrows from the Invariant Energy box, and a one-line SDE between z_T and z_0 with an under-brace at the bottom.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.07,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#00b0f0",
+    "used_for": "cyan guidance bus line and its four arrows from Invariant Energy to the molecule chain"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "fill of the two E (energy function) boxes"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "outline of the E boxes"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "fill of the z_T and z_0 end-state circles"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "first (green) cell of the fingerprint strip"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "blue cell of the fingerprint strip"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "orange cell of the fingerprint strip"
+   },
+   {
+    "hex": "#dbdbdb",
+    "used_for": "unset grey cells of the fingerprint strip"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange captions Target Structure as Fingerprint and Quantum Property"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "background inside the molecule tile bitmaps; lines, arrows and text",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black on frames and arrows, 0.75 to 1 pt on the cyan guidance arrows and the green E-box outlines",
+  "font": "serif (Times New Roman), 6 pt labels, 9 pt bold titles and italic symbols; the formulas are placed as images",
+  "corners": "rounded",
+  "arrows": "straight black arrows with small filled heads, an orthogonally routed condition line, a right-angled cyan bus with four down arrows, a dashed circular arrow for rotation",
+  "rendering": "mixed",
+  "effects": "soft drop shadow under the black molecule tiles",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "cyan = energy guidance; green = energy function E and the end states z_T / z_0; orange text = the two kinds of condition; cell colours in the fingerprint = set bits for structure fragments",
+  "line_style_means": "dashed frame = a conceptual part of the method; dashed circular arrow = rotation; solid black = flow of the sample; cyan = guidance",
+  "shape_means": "black rounded square = a molecule sample; green rounded box = energy function; green circle = end state of the path; row of cells = fingerprint vector",
+  "marker_means": "z_T and z_0 name the start and end of the reverse path, R names the rotation, c names the condition; no step numbers",
+  "emphasis": "The cyan guidance arrows are the only saturated colour on the page and reach every step of the chain; the bold titles Invariant Energy and Equivariant Energy Guidance echo each other, and the under-brace marks the guidance term in the equation.",
+  "reusable_patterns": [
+   "cyan bus line from a concept box dropping one arrow onto every step of a sample chain",
+   "same sample before and after a transformation feeding the same module with an equality printed underneath",
+   "under-brace with a bold caption naming one term of the printed equation",
+   "end-state circles anchoring an equation row beneath the sample chain",
+   "dashed input box feeding a module through a long routed condition line",
+   "fingerprint strip with arrows from structure fragments to coloured cells"
+  ],
+  "weaknesses": [
+   "the condition line runs across the left dashed frame to reach both E boxes",
+   "the guidance arrows land on the step arrows, so the reader has to infer that they act on the molecules"
+  ]
+ },
+ "resources": {
+  "own": [
+   "ball-and-stick renders of molecules at five reverse steps",
+   "the guided SDE and the invariance equation"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "dashed frames, E boxes, arrows and the cyan bus line",
+   "fingerprint cell strip and skeletal structure fragments",
+   "z_T and z_0 circles and the under-brace"
+  ],
+  "unknown": [
+   "origin of the molecule renders, probably exported from a molecule viewer"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "molecule render tiles",
+   "rotation arrow R",
+   "energy function E boxes",
+   "dashed condition box",
+   "fingerprint cell strip",
+   "cyan guidance bus line",
+   "guided SDE formula with under-brace",
+   "z_T and z_0 circles"
+  ],
+  "sample_data": "molecule",
+  "keywords": [
+   "inverse molecular design",
+   "energy guidance",
+   "diffusion SDE",
+   "equivariance",
+   "3D molecule generation",
+   "quantum properties",
+   "fingerprint condition",
+   "QM9",
+   "controllable generation"
+  ],
+  "tags": [
+   "small-multiples",
+   "equation-boxes",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "invariance-pair",
+    "what": "the same sample drawn before and after a transformation (rotation, shift) fed to the same module, with an equality of the two outputs written beneath"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show invariance by feeding the same sample before and after a transformation to the same module and writing the equality of the outputs under it; show guidance by one saturated bus line that drops an arrow on each step of the sample chain, with the governing equation under the chain and a brace naming its guidance term.",
+  "suits": "Controllable-generation or equivariant methods whose message is that one extra term steers every step of a sampling chain."
+ },
+ "tags": [
+  "dashed rounded frames",
+  "black molecule tiles",
+  "single accent colour for guidance",
+  "serif labels",
+  "equation strip under the chain",
+  "office-style palette"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "4 Equivariant Energy-Guided SDE (p.4)"
+  ],
+  "evidence": [
+   "EEGSDE iteratively generates molecules with desired properties (represented by the condition c)",
+   "As the energy function is invariant to rotational transformation R, its gradient (i.e., the energy guidance) is equivariant to R"
+  ]
+ },
+ "summary": "EEGSDE is a framework for controllable 3D molecule generation: the reverse SDE of a diffusion model is steered at every step by the gradient of an energy function that takes a condition c, either a target structure given as a fingerprint or quantum properties such as polarizability, dipole moment and heat capacity. Figure 1 has three bands. On top, a dashed box shows one molecule and its rotated copy fed to the same energy E with E(z,c,t) = E(Rz,c,t) written beneath, beside a dashed box listing the conditions. In the middle, five black tiles with ball-and-stick renders run from the noisy z_T to a clean molecule z_0, and cyan arrows from the Invariant Energy box land on each step. At the bottom the guided SDE is printed with a brace naming the Equivariant Energy Guidance term.",
+ "summary_zh": "EEGSDE 用对旋转不变的能量函数的梯度逐步引导扩散模型的逆向 SDE，生成满足条件的 3D 分子。上方用旋转前后的同一分子说明能量不变，并列出条件；中间五张分子图从 z_T 走到 z_0，青色箭头逐步引导；下方是引导 SDE 公式。",
+ "confidence": "high",
+ "notes": "Prior labels said panels=3; I count two framed panels because the bottom formula row is not framed. The equation strips and the glyphs E and C are placed as small bitmaps, not live text. Fonts and colours (Calibri, Cambria Math, Office theme palette) suggest the figure was drawn in PowerPoint. Whether the five molecule renders are real model samples or illustrative cannot be told from the figure.",
+ "venue": "ICLR23"
+}

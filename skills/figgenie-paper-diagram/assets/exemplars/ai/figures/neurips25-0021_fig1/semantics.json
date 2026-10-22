@@ -1,0 +1,585 @@
+{
+ "paper_id": "neurips25-0021",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SPARKLE / SparkleRL-PSS",
+  "one_liner": "An analysis framework for how RL changes math reasoning, and a two-stage RL recipe that revisits the hardest problems with partial step scaffolding.",
+  "domain": [
+   "mathematical reasoning",
+   "reinforcement learning for LLMs",
+   "hints and scaffolding"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "left: the two-stage training recipe; middle: four hint types as numbered cards; right: bar chart of gain with versus without hints",
+  "argues": "Hints can hurt base and SFT models but help RL-tuned ones, and the hardest problems can be reused in Stage 2 RL when given partial step scaffolding.",
+  "subject": "A two-stage RL recipe with robots, four colour-coded hint cards, and a bar chart of performance gain for Base, +SFT and +RL.",
+  "elements": [
+   {
+    "name": "SparkleRL-PSS",
+    "type": "label",
+    "role": "name of the training recipe, with a sparkle icon",
+    "drawn_as": "bold 7.5 pt title at the top of the left card",
+    "container": "left card",
+    "is_contribution": true
+   },
+   {
+    "name": "Hard problems / Medium / Easy",
+    "type": "label",
+    "role": "legend: question bubble colour gives problem difficulty",
+    "drawn_as": "three round question bubbles in red, orange and green with names",
+    "container": "left card",
+    "is_contribution": false
+   },
+   {
+    "name": "Full data",
+    "type": "data",
+    "role": "all training problems of Stage 1",
+    "drawn_as": "dashed box holding six overlapping question bubbles in red, orange and green",
+    "container": "left card, Stage 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Base model",
+    "type": "module",
+    "role": "the model before RL",
+    "drawn_as": "cartoon robot head with antenna and a worried face",
+    "container": "left card, Stage 1",
+    "is_contribution": false
+   },
+   {
+    "name": "RL",
+    "type": "operation",
+    "role": "reinforcement learning step between two models",
+    "drawn_as": "thin black arrow with the label RL, once in each stage",
+    "container": "left card",
+    "is_contribution": false
+   },
+   {
+    "name": "SparkleRL (Stage 1)",
+    "type": "module",
+    "role": "model after Stage 1; also the starting point of Stage 2",
+    "drawn_as": "cartoon robot head with a neutral face, shown twice",
+    "container": "left card",
+    "is_contribution": false
+   },
+   {
+    "name": "Hardest data with Partial Step Scaffolding",
+    "type": "data",
+    "role": "Stage 2 training problems, each with 0 to K reasoning chunks as hints",
+    "drawn_as": "dashed staircase of three question rows, with no chip, 1 STEP, and 1 STEP to K STEP chips in pink",
+    "container": "left card, Stage 2",
+    "is_contribution": true
+   },
+   {
+    "name": "SparkleRL (Stage 2-pss)",
+    "type": "module",
+    "role": "model after Stage 2 with partial step scaffolding",
+    "drawn_as": "cartoon robot head with a smiling face",
+    "container": "left card, Stage 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Auxiliary Information (Hints)",
+    "type": "container",
+    "role": "title over the four hint types",
+    "drawn_as": "bold 8 pt title above the dashed grid of cards",
+    "container": "middle",
+    "is_contribution": false
+   },
+   {
+    "name": "Partial Step Scaffolding",
+    "type": "container",
+    "role": "hint 1: the first k solution chunks are given; used in Stage 2 RL (caption)",
+    "drawn_as": "pink card with badge 1; three rows of question bubble, STEP chips, lightbulb, arrow and a green or red A circle",
+    "container": "middle",
+    "is_contribution": true
+   },
+   {
+    "name": "High-level Plan",
+    "type": "container",
+    "role": "hint 2: a step-by-step plan of the solution",
+    "drawn_as": "cream card with badge 2; question bubble, PLAN page and lightbulb leading to a green A; plan text with orange key phrases",
+    "container": "middle",
+    "is_contribution": false
+   },
+   {
+    "name": "External Knowledge",
+    "type": "container",
+    "role": "hint 3: knowledge from outside is provided",
+    "drawn_as": "light-blue card with badge 3; question bubble, dashed box of knowledge icons and lightbulb leading to a green A",
+    "container": "middle",
+    "is_contribution": false
+   },
+   {
+    "name": "Chain of Subproblems",
+    "type": "container",
+    "role": "hint 4: the problem is split into subproblems that build a larger solution",
+    "drawn_as": "light-green card with badge 4; question bubble, three puzzle pieces joined by arrows into a Larger solution",
+    "container": "middle",
+    "is_contribution": false
+   },
+   {
+    "name": "dashed box around cards 2 to 4",
+    "type": "region",
+    "role": "marks hints 2 to 4 as the SPARKLE analysis framework (caption)",
+    "drawn_as": "stepped black dashed outline enclosing three of the four cards",
+    "container": "middle",
+    "is_contribution": true
+   },
+   {
+    "name": "SPARKLE Performance Gain (Δ)",
+    "type": "chart",
+    "role": "net gain or loss when models are evaluated with versus without hints 2 to 4",
+    "drawn_as": "three bars about a zero line for Base, +SFT and +RL; rotated axis title with a sparkle icon",
+    "container": "right",
+    "is_contribution": true
+   },
+   {
+    "name": "With vs. without",
+    "type": "label",
+    "role": "legend: the gain is over hints 2, 3 and 4",
+    "drawn_as": "caption plus three round badges 2 (orange), 3 (blue), 4 (green) below the chart",
+    "container": "right",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Full data",
+    "to": "Base model",
+    "what": "training problems are used with the base model; a plus sign joins them",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "Base model",
+    "to": "SparkleRL (Stage 1)",
+    "what": "RL training on full data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "SparkleRL (Stage 1)",
+    "to": "SparkleRL (Stage 2-pss)",
+    "what": "RL training on the hardest data with partial step scaffolding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Hardest data with Partial Step Scaffolding",
+    "to": "SparkleRL (Stage 1)",
+    "what": "scaffolded hard problems joined by a plus sign as training data of Stage 2",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "Partial Step Scaffolding card",
+    "to": "Stage 2 in the left card",
+    "what": "hint 1 is the scaffolding used in Stage 2 RL",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "question bubble",
+    "to": "answer circle A",
+    "what": "in each card the hint helps the question lead to an answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cards 2, 3 and 4",
+    "to": "SPARKLE Performance Gain (Δ)",
+    "what": "gain is measured with versus without these hints; coloured wedges leave the cards towards the chart",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "badges 2, 3, 4 on the cards",
+    "to": "round badges under the chart",
+    "what": "orange, blue and green badges recur in the legend",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "SparkleRL-PSS",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "Stage 1 on full data, Stage 2 on the hardest data with partial step scaffolding, robots changing mood",
+    "verdict": "ours"
+   },
+   {
+    "label": "Auxiliary Information (Hints)",
+    "kind": "scope-overview",
+    "axis": "alternatives",
+    "shows": "four hint types as colour-coded cards, each with a mini example; cards 2 to 4 boxed as the SPARKLE analysis",
+    "verdict": "ours"
+   },
+   {
+    "label": "SPARKLE Performance Gain (Δ)",
+    "axis": "narrative",
+    "shows": "bars for Base (large loss), +SFT (small loss), +RL (gain) with versus without hints",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1 2 3 4 (circled)",
+    "kind": "identity",
+    "at": "badge before each hint card title and in the legend under the chart",
+    "what": "name the four hint types; orange 2, blue 3 and green 4 recur under the chart"
+   },
+   {
+    "marker": "Stage 1: / Stage 2:",
+    "kind": "order",
+    "at": "left card",
+    "what": "the two training stages"
+   },
+   {
+    "marker": "1 STEP to K STEP",
+    "kind": "order",
+    "at": "pink chips in card 1 and in Stage 2",
+    "what": "the first k reasoning chunks given as hints"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bar chart of SPARKLE performance gain for Base, +SFT and +RL",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "solid blue-violet bar down for Base, green hatched bar slightly down for +SFT, red cross-hatched bar up for +RL, zero line at the right, no numeric ticks"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon robot head with antenna: worried, neutral and smiling faces",
+    "stands_for": "the model: base, after Stage 1, after Stage 2-pss",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "round speech bubbles with a question mark in red, orange, green and blue",
+    "stands_for": "a problem; colour gives difficulty in the left card",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 20
+   },
+   {
+    "depicts": "lightbulb",
+    "stands_for": "a hint",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "circle with the letter A in green or red",
+    "stands_for": "the model's answer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "pink chips reading STEP with a numbered or K circle",
+    "stands_for": "one reasoning chunk given as a hint",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "brain with gears, monitor with W, www with magnifier, graph paper, hexagon molecule, blackboard with E=mc2",
+    "stands_for": "sources of external knowledge",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "puzzle pieces in blue, pink, green and yellow",
+    "stands_for": "subproblems and the larger solution",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "page with a checklist labelled PLAN",
+    "stands_for": "a high-level plan",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "yellow and blue sparkle",
+    "stands_for": "the SPARKLE and SparkleRL branding",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "plan text for a number-theory problem: First, use modular arithmetic to determine the properties of n, ... use estimation and inequalities to establish a tight range for n. Finally, test candidates that satisfy the congruence and the range to find the unique solution.",
+    "form": "4 pt text under the plan icons with orange key phrases",
+    "real_values": true
+   },
+   {
+    "what": "scaffolded copies of one problem with 0, 1 and 1 to K step chips",
+    "form": "rows of question bubbles with pink STEP chips in a dashed staircase",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "Stage 1 on the full data, then Stage 2 on the hardest data with scaffolds of growing length",
+    "parts": [
+     "Stage 1",
+     "Stage 2",
+     "STEP chips"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head with an antenna whose face moves from worried to neutral to smiling along training",
+    "parts": [
+     "robot head",
+     "antenna",
+     "face"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "dashed box holding a pile of overlapping coloured question bubbles with a Full data caption",
+    "parts": [
+     "dashed box",
+     "question bubbles",
+     "caption"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the SparkleRL-PSS card at the top left, follows Stage 1 and Stage 2 downwards, then the pink wedge into the hint cards in the middle, then the coloured wedges to the bar chart at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A white left card with the two-stage recipe, a middle dashed grid of four tinted hint cards under a bold title, and a bar chart at the right; a pink wedge points from card 1 into the left card and three coloured wedges point from cards 2 to 4 into the chart.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.87,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ef8580",
+    "used_for": "pink tint (opacity 0.25) of card 1 and solid pink of its title, the STEP chips and the wedge arrow"
+   },
+   {
+    "hex": "#fdcc91",
+    "used_for": "cream tint of card 2",
+    "opacity": 0.25
+   },
+   {
+    "hex": "#8bc0e7",
+    "used_for": "light-blue tint of card 3",
+    "opacity": 0.25
+   },
+   {
+    "hex": "#e5f7e1",
+    "used_for": "light-green fill of card 4"
+   },
+   {
+    "hex": "#ef8180",
+    "used_for": "red-pink badge 1 and title of card 1"
+   },
+   {
+    "hex": "#e09702",
+    "used_for": "orange badge 2, title of card 2 and key phrases in the plan text"
+   },
+   {
+    "hex": "#4192c7",
+    "used_for": "blue badge 3 and title of card 3"
+   },
+   {
+    "hex": "#41ac5e",
+    "used_for": "green badge 4 and title of card 4"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "titles, labels and dashed outlines"
+   },
+   {
+    "hex": "#5252e0",
+    "used_for": "solid Base bar",
+    "approx": true
+   },
+   {
+    "hex": "#58c458",
+    "used_for": "hatched +SFT bar",
+    "approx": true
+   },
+   {
+    "hex": "#ef7c7c",
+    "used_for": "cross-hatched +RL bar",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "no stroked vector shapes; the dashed black outlines and soft shadows belong to the placed bitmaps",
+  "font": "rounded sans (Type 3 fonts): bold 7.5 to 8 pt titles, 6 pt card titles in the card colour, 5.5 pt labels, 4 pt example text",
+  "corners": "rounded",
+  "arrows": "short grey block arrows inside cards, thin black arrows labelled RL, coloured triangular wedge arrows between regions",
+  "rendering": "mixed",
+  "effects": "soft drop shadows under the cards and the left card",
+  "model_depiction": "robot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "each hint type keeps one colour on card tint, title and number badge (pink 1 partial step scaffolding, orange 2 high-level plan, blue 3 external knowledge, green 4 chain of subproblems) and again on the wedge arrows and the legend circles under the chart; in the left card the question bubble colours give difficulty (red hard, orange medium, green easy)",
+  "line_style_means": "dashed black boxes group data samples or the SPARKLE cards; thin black arrows labelled RL are training; grey block arrows lead from hint to answer",
+  "shape_means": "robot head = the model; speech bubble with ? = a question; lightbulb = a hint; circle A = an answer; puzzle piece = a subproblem; STEP chip = a reasoning chunk",
+  "marker_means": "circled 1 to 4 name the hint types; 1 STEP to K STEP show how many chunks are given; the zero line of the chart separates loss from gain",
+  "emphasis": "the pink wedge from card 1 into Stage 2, the stepped dashed outline around cards 2 to 4, and the single bar that rises (+RL)",
+  "reusable_patterns": [
+   "robot icons whose face changes mood along the training chain",
+   "dashed box of coloured question bubbles as the dataset, with a difficulty legend",
+   "staircase of question bubbles with a growing number of STEP chips for scaffolding",
+   "four numbered colour-coded cards as an option catalog, each with the same mini scene",
+   "coloured wedge arrows tying the cards to a result chart",
+   "legend circles under the chart that reuse the card badges"
+  ],
+  "weaknesses": [
+   "4 pt example text is tiny",
+   "the left card packs legend, two stages and chips into a small space",
+   "the chart has no numeric ticks",
+   "the mood of the robot faces and the green versus red A circles are not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "bar chart of measured gains",
+   "the plan text for a math problem"
+  ],
+  "stock": [
+   "emoji-like icons: robots, question bubbles, lightbulbs, puzzle pieces, knowledge icons, sparkle"
+  ],
+  "generated": [],
+  "drawn": [
+   "card tints and dashed groupings",
+   "wedge arrows and RL arrows",
+   "STEP chips"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "robot icons with changing faces",
+   "dashed box of coloured question bubbles",
+   "staircase of bubbles with STEP chips",
+   "four colour-coded hint cards",
+   "lightbulb and answer circle icons",
+   "puzzle pieces merging into a larger solution",
+   "highlighted plan text",
+   "bar chart with hatched bars",
+   "wedge arrows from cards to chart"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "reinforcement learning",
+   "math reasoning",
+   "hints",
+   "partial step scaffolding",
+   "curriculum",
+   "GRPO",
+   "plan following",
+   "knowledge integration"
+  ],
+  "tags": [
+   "model-pictogram",
+   "option-catalog",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "numbered-hint-cards",
+    "what": "a menu of auxiliary-input types drawn as numbered, colour-coded cards, each with a question icon, a lightbulb hint and an answer badge"
+   },
+   {
+    "name": "wedge-arrows-to-chart",
+    "what": "coloured triangular wedge arrows leaving cards and pointing into a results chart, tying each card colour to the chart legend"
+   },
+   {
+    "name": "scaffold-staircase",
+    "what": "rows of question bubbles with an increasing number of step chips, showing partial hints of growing length"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a menu of variants as numbered, colour-coded cards that each hold the same tiny scene (question, hint, answer), and tie the colours to the result chart with wedge arrows and legend circles so the finding reads without a table.",
+  "suits": "analysis papers on training or prompting that compare several kinds of auxiliary input and need the recipe, the variants and the outcome in one overview."
+ },
+ "tags": [
+  "three-part-overview",
+  "pastel-cards",
+  "dashed-groups",
+  "robot-icons",
+  "wedge-arrows",
+  "emoji-icons"
+ ],
+ "provenance": {
+  "sections": [
+   "Training recipe section (p.6)",
+   "Figure 1 caption (p.2)"
+  ],
+  "evidence": [
+   "SparkleRL-Stage 2-pss is trained on the same set of difficult problems, but with partial solution augmentation",
+   "Four types of auxiliary information (hints) used in this work",
+   "RL-tuned models exhibit the greatest flexibility in leveraging auxiliary information"
+  ]
+ },
+ "summary": "SPARKLE is an analysis framework that dissects how RL changes mathematical reasoning, and SparkleRL-PSS is a two-stage RL recipe that revisits the hardest problems with partial step scaffolding. Figure 1 has three parts. Left: a card with a difficulty legend and two stages in which a base-model robot, a pile of coloured question bubbles and RL arrows lead to SparkleRL (Stage 1) and then SparkleRL (Stage 2-pss). Middle: four numbered, colour-coded hint cards (partial step scaffolding, high-level plan, external knowledge, chain of subproblems), the last three boxed as the analysis. Right: a bar chart of performance gain with versus without hints for Base, +SFT and +RL, tied to the cards by coloured wedges.",
+ "summary_zh": "SPARKLE 是剖析强化学习如何改变数学推理的分析框架，SparkleRL-PSS 是用部分步骤脚手架重训最难题的两阶段方案。图 1 左为两阶段训练配方，中为四类彩色编号提示卡片，右为加提示前后的性能增益柱状图。",
+ "confidence": "high",
+ "notes": "The figure is assembled from placed bitmaps (cards, icons, chart) with only 36 live text items; the dashed boxes and soft shadows belong to the bitmaps. Prior labels kept in order (contribution-mosaic as a deliverables triptych, stage-pipeline for the left card, scope-overview for the hint gallery). The meaning of the green versus red A circles in card 1 and of the robot moods is not stated. The stepped dashed box around cards 2 to 4 is read as the SPARKLE framework from the caption.",
+ "venue": "NeurIPS25"
+}

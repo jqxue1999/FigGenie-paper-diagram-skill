@@ -1,0 +1,673 @@
+{
+ "paper_id": "iclr24-0067",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Octavius",
+  "one_liner": "Multimodal LLM framework that pairs a frozen LLM with LoRA-MoE experts to reduce task interference across 2D and 3D vision-language tasks.",
+  "domain": [
+   "multimodal large language models",
+   "mixture of experts",
+   "2D and 3D vision-language tasks"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "model-anatomy"
+  ],
+  "variant": "hub-and-spoke",
+  "variant_note": "a dashed architecture box is the hub; four real-example task cards and a pill list of further tasks hang off its edges on short connectors",
+  "argues": "One multimodal LLM, a frozen backbone with trainable LoRA-MoE experts and a 2D or 3D encoder, handles 2D and 3D vision-language tasks and plain language tasks.",
+  "subject": "Architecture box (encoders, token strips, frozen LLM plus LoRA-MoE) ringed by four example task cards and a list of further tasks.",
+  "elements": [
+   {
+    "name": "Octavius Architecture",
+    "type": "container",
+    "role": "hub box that holds the whole model drawing",
+    "drawn_as": "dashed black rectangle, bold title with an octopus icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "RGB Image",
+    "type": "data",
+    "role": "2D input to the 2D encoder",
+    "drawn_as": "orange picture glyph with label, above the 2D Encoder",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Scene-level Point Cloud",
+    "type": "data",
+    "role": "3D input to the 3D encoder",
+    "drawn_as": "blue outlined cube glyph with label, above the 3D Encoder",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "System Prompt",
+    "type": "text-block",
+    "role": "instruction prefix of the token sequence",
+    "drawn_as": "bold label over the text 'You are an AI assistant, and required to ...', arrow down to the strip",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "2D Encoder",
+    "type": "module",
+    "role": "encodes an RGB image into visual tokens; frozen",
+    "drawn_as": "light-blue rounded box with blue outline and a snowflake",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "3D Encoder",
+    "type": "module",
+    "role": "encodes a point cloud into visual tokens; frozen; an 'or' separates it from the 2D encoder",
+    "drawn_as": "light-blue rounded box with blue outline and a snowflake",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Query",
+    "type": "text-block",
+    "role": "the user request, e.g. 'Identify all the objects in the image.'",
+    "drawn_as": "bold label over plain text, arrow down to the strip",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Response",
+    "type": "text-block",
+    "role": "the answer to be produced, shown as 'At coordinates of ...' in grey",
+    "drawn_as": "bold label over faded grey text, arrow down to the strip",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "input token strip",
+    "type": "data",
+    "role": "sequence of prompt, visual, query and response-slot tokens",
+    "drawn_as": "row of rounded cells: 3 yellow, 6 light green, 5 yellow, 3 grey",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Large Language Model",
+    "type": "module",
+    "role": "frozen language backbone",
+    "drawn_as": "wide light-blue box with blue outline and a snowflake",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "+",
+    "type": "operation",
+    "role": "adds the LoRA-MoE branch to the LLM",
+    "drawn_as": "small circle with a plus sign between the two boxes",
+    "container": "Octavius Architecture",
+    "is_contribution": null
+   },
+   {
+    "name": "LoRA-MoE",
+    "type": "module",
+    "role": "set of trainable LoRA experts (LoRA #1, LoRA #2, LoRA ...) beside the LLM",
+    "drawn_as": "white box holding three pink cells, each with a flame on its corner",
+    "container": "Octavius Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "output token strip",
+    "type": "data",
+    "role": "output sequence; the last three cells under the response slots are predicted tokens",
+    "drawn_as": "row of 14 grey cells then 3 purple cells",
+    "container": "Octavius Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Trainable / Frozen",
+    "type": "label",
+    "role": "key for the flame and snowflake icons",
+    "drawn_as": "flame and snowflake icons with words, top right of the hub",
+    "container": "Octavius Architecture",
+    "is_contribution": null
+   },
+   {
+    "name": "2D Detection",
+    "type": "container",
+    "role": "task card: detect all objects in a photo, answer with box coordinates and class names",
+    "drawn_as": "blue-framed card with blue tab, photo with red boxes and red answer text",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "3D Captioning",
+    "type": "container",
+    "role": "task card: name an object in a 3D scene and describe where it is",
+    "drawn_as": "tan-framed card with tan tab, 3D scene with coloured boxes, Q1/R1/Q2/R2 text",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "2D Captioning",
+    "type": "container",
+    "role": "task card: caption an image",
+    "drawn_as": "dark-green-framed card with green tab, photo and italic answer",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "3D VQA",
+    "type": "container",
+    "role": "task card: answer questions about objects in a 3D scene",
+    "drawn_as": "dark-red-framed card with red tab, 3D scene with coloured boxes and colour-coded answers",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Language tasks, Reasoning, Classification, Facial Attribute, More tasks ...",
+    "type": "container",
+    "role": "further tasks the model covers, listed as pills on a vertical stem",
+    "drawn_as": "five white pills with black outline and serif text, joined by a vertical line to the hub",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "System Prompt",
+    "to": "input token strip",
+    "what": "prompt text becomes the first three yellow tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2D Encoder / 3D Encoder",
+    "to": "input token strip",
+    "what": "visual tokens (light green) from whichever encoder fits the input; 'or' between the encoders",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RGB Image / Scene-level Point Cloud",
+    "to": "2D Encoder / 3D Encoder",
+    "what": "each input glyph sits above its encoder; no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Query",
+    "to": "input token strip",
+    "what": "query text becomes five yellow tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Response",
+    "to": "input token strip",
+    "what": "response slots appear as grey cells",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input token strip",
+    "to": "Large Language Model and LoRA-MoE",
+    "what": "the sequence enters the frozen LLM and the LoRA experts side by side; no arrow, only stacking",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Large Language Model and LoRA-MoE",
+    "to": "output token strip",
+    "what": "summed branches give output tokens, response ones in purple; no arrow, only stacking",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Octavius Architecture",
+    "to": "task cards",
+    "what": "each card is attached to the hub box by a short connector at its tab; the pill list hangs from a vertical stem",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "coloured words in the Q/R text",
+    "to": "boxes of the same colour in the picture",
+    "what": "an object named in the answer shares the colour of its 2D or 3D box",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "card tab",
+    "to": "card frame",
+    "what": "one colour per task (blue, tan, green, red) on tab and frame",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Octavius Architecture",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "2D or 3D encoder, system prompt, query and response tokens into a frozen LLM with parallel LoRA-MoE experts",
+    "verdict": "ours"
+   },
+   {
+    "label": "2D Detection",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "bicycle photo with red boxes; question 'Detect all objects in the image' answered with coordinates and class names",
+    "verdict": null
+   },
+   {
+    "label": "3D Captioning",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "3D scene with coloured boxes; two question-answer pairs about an object",
+    "verdict": null
+   },
+   {
+    "label": "2D Captioning",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "railway-worker photo with the question and a long caption answer",
+    "verdict": null
+   },
+   {
+    "label": "3D VQA",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "3D scene with coloured boxes; two questions about objects on or near furniture, with colour-coded answers",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Q, R, Q1, R1, Q2, R2",
+    "kind": "identity",
+    "at": "text of the four cards",
+    "what": "name question and response turns; the digit pairs a response with its question"
+   },
+   {
+    "marker": "#1, #2, ...",
+    "kind": "identity",
+    "at": "LoRA cells in LoRA-MoE",
+    "what": "index the experts"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "street scene with a bicycle and a car, with red detection boxes and tiny labels 'car' and 'bicycle'",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo at the left of the card with thin red box overlays that match the red coordinates in the answer"
+   },
+   {
+    "what": "3D indoor scene (point-cloud or mesh render) with a green desk box and a red lamp box",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "scene render at the left of the card with coloured 3D boxes"
+   },
+   {
+    "what": "construction worker in a hard hat on a railway track",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo at the left of the card, caption text at the right"
+   },
+   {
+    "what": "3D indoor scene point cloud with purple, green, blue and red 3D boxes",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "scene render at the left of the card; box colours reappear on the object words of the answer"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "red cartoon octopus",
+    "stands_for": "the model Octavius",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "orange picture glyph (mountain and sun in a frame)",
+    "stands_for": "RGB image input",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "blue outlined cube",
+    "stands_for": "scene-level point cloud input",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "blue snowflake",
+    "stands_for": "frozen module",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "red flame",
+    "stands_for": "trainable module",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "an object-detection request flowing through the architecture: system prompt 'You are an AI assistant, and required to ...', query 'Identify all the objects in the image.', response 'At coordinates of ...'",
+    "form": "text snippets over arrows into the token strip, response in grey",
+    "real_values": true
+   },
+   {
+    "what": "2D detection: 'Q: Detect all objects in the image. R: At the position of [0.0, 0.02, 0.97, 0.45], there exists a car. There is a bicycle at the [0.0, 0.12, 0.98, 0.94].'",
+    "form": "Q and R text beside the photo, coordinates and class names in red",
+    "real_values": true
+   },
+   {
+    "what": "3D captioning: 'Q1: What is this object? R1: A brown desk against a wall and next to a bookshelf. Q2: ... R2: There is a lamp between two chairs.'",
+    "form": "numbered Q/R lines, object words coloured to match the 3D boxes",
+    "real_values": true
+   },
+   {
+    "what": "2D captioning: 'Q: What is the caption of this image? R: The image depicts a construction worker wearing a hard hat ...'",
+    "form": "Q bold, R italic, truncated with an ellipsis",
+    "real_values": true
+   },
+   {
+    "what": "3D VQA: 'Q1: What objects are on the brown desk? R1: There is a monitor placed on the desk.' and a second question about the couch",
+    "form": "numbered Q/R lines with colour-coded object words (green, red, blue, purple)",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "blue snowflake on the 2D encoder, 3D encoder and LLM; red flame on each LoRA expert; key with both icons at the top right of the hub",
+    "parts": [
+     "snowflakes",
+     "flames",
+     "Trainable / Frozen key"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "two rows of rounded cells coloured by token type: yellow text, light-green visual, grey response slots, purple predicted tokens",
+    "parts": [
+     "input row",
+     "output row"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "vlm",
+    "drawn_as": "a 2D or 3D encoder (joined by 'or') feeding visual tokens into a frozen LLM, with text prompt tokens on either side",
+    "parts": [
+     "2D Encoder",
+     "3D Encoder",
+     "Large Language Model"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "a box LoRA-MoE of several pink LoRA cells, each with a flame, added to the frozen LLM through a circled plus; experts instead of the usual single A-B branch",
+    "parts": [
+     "LoRA #1",
+     "LoRA #2",
+     "LoRA ...",
+     "plus node"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "System Prompt, Query and Response as bold labels over plain text snippets, each with an arrow into the strip",
+    "parts": [
+     "System Prompt",
+     "Query",
+     "Response"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a wide light-blue rounded box labelled Large Language Model with a snowflake",
+    "parts": [
+     "box",
+     "snowflake"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the 'Octavius Architecture' title in the dashed box, goes down through the prompt, encoders, token strips and LLM row, then out along the connectors to the task cards."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "A wide dashed architecture box at the top is the hub. Two cards (2D Detection, 3D Captioning) and a column of task pills hang below it, two cards (2D Captioning, 3D VQA) are stacked on its right edge; inside the hub the model reads top-down: inputs, prompt parts, token strip, LLM row, output strip.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.62,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#deebf7",
+    "used_for": "fill of the 2D Encoder, 3D Encoder and Large Language Model boxes"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "outline of those frozen boxes and the cube glyph"
+   },
+   {
+    "hex": "#fadfdd",
+    "used_for": "fill of the LoRA expert cells"
+   },
+   {
+    "hex": "#ffdf97",
+    "used_for": "yellow text-token cells (system prompt and query)"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "light-green visual-token cells"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "grey response-slot cells and the grey output cells"
+   },
+   {
+    "hex": "#bdb9ef",
+    "used_for": "purple predicted-token cells in the output strip"
+   },
+   {
+    "hex": "#e88e55",
+    "used_for": "orange RGB image glyph"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "tab and frame of the 2D Detection card"
+   },
+   {
+    "hex": "#a29a83",
+    "used_for": "tab and frame of the 3D Captioning card"
+   },
+   {
+    "hex": "#385723",
+    "used_for": "tab and frame of the 2D Captioning card"
+   },
+   {
+    "hex": "#b3161e",
+    "used_for": "tab and frame of the 3D VQA card"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red words and boxes in the answers"
+   },
+   {
+    "hex": "#0b7737",
+    "used_for": "green words in the answers"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt outlines on boxes and cells; dashed black outline for the hub; about 1 pt coloured frames on the task cards",
+  "font": "sans (Arial) mostly 5 pt, bold Q/R labels and titles; serif (Times) for the task pills; 6.5 pt bold hub title",
+  "corners": "rounded",
+  "arrows": "short straight black arrows with small filled heads from the labels to the token strip; connectors to the cards are plain lines",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "token strip: yellow = text tokens, light green = visual tokens, grey = response slots, purple = predicted response tokens; light blue = frozen pretrained modules, pink = LoRA experts; card colours blue, tan, green, red name the task; red, green, blue and purple words in the Q/R text match the same-coloured boxes in the scene",
+  "line_style_means": "dashed outline = the architecture hub; solid coloured frames = task cards; short plain connectors attach the cards to the hub",
+  "shape_means": "rounded cells = tokens, rounded rectangles = modules, pills with serif text = further tasks, circled plus = sum",
+  "marker_means": "snowflake = frozen, flame = trainable; Q and R name question and response turns",
+  "emphasis": "the flames on the LoRA experts are the only red icons inside the hub; the hub is dashed and carries the model name and mascot; the cards are all framed in strong colours",
+  "reusable_patterns": [
+   "dashed hub box with task cards hung off its edges on short connectors",
+   "card with a coloured title tab straddling the frame, the colour kept per task",
+   "Q/R text whose object words are coloured to match 2D or 3D boxes in the picture",
+   "snowflake and flame icons with a small key inside the hub",
+   "token strip coloured by token type with arrows from the prompt parts",
+   "response slots grey in the input strip and purple in the output strip",
+   "pill list on a vertical stem for further tasks"
+  ],
+  "weaknesses": [
+   "5 pt text throughout is small at double-column width",
+   "no arrows between the token strip, the LLM row and the output strip; the flow is implied by stacking",
+   "the purple output cells are not labelled",
+   "cards have uneven sizes, so the outline of the whole figure is irregular"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos and 3D scene renders with boxes, presumably from the LAMM and ScanNet based instruction data",
+   "real question and response texts"
+  ],
+  "stock": [
+   "octopus emoji",
+   "snowflake and flame emoji icons",
+   "RGB picture glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "architecture boxes and token strips",
+   "LoRA-MoE box",
+   "task cards with tabs",
+   "pill list",
+   "3D cube glyph",
+   "detection and 3D boxes over the pictures"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed architecture hub box",
+   "2D and 3D encoders with snowflakes",
+   "coloured token strips",
+   "frozen LLM box plus LoRA-MoE experts with flames",
+   "four tabbed task cards",
+   "task pill list",
+   "octopus icon"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal LLM",
+   "task interference",
+   "LoRA",
+   "mixture of experts",
+   "3D point cloud",
+   "2D detection",
+   "3D VQA",
+   "instruction tuning",
+   "unified model"
+  ],
+  "tags": [
+   "module-state-coding",
+   "token-strip",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "tabbed-colour-cards",
+    "what": "task example cards whose coloured title tab straddles the top frame edge, one colour per task, hung off a central architecture box"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the architecture as a dashed hub and hang one colour-keyed, tabbed card per task off its edges, each card pairing a real input with question and response text whose object words are coloured like the boxes in the picture. Keep the frozen/trainable key (snowflake, flame) inside the hub.",
+  "suits": "General-purpose multimodal or multi-task models whose Figure 1 must show both the unified design and the breadth of tasks on real examples."
+ },
+ "tags": [
+  "hub-and-spoke",
+  "tabbed-task-cards",
+  "snowflake-flame-key",
+  "token-strips",
+  "real-qa-text",
+  "colour-linked-spans",
+  "dashed-hub-box"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Octavius is a unified, multimodal large language model with a novel capability to comprehend various tasks across different modalities",
+   "Octavius can successfully address various 2D/3D vision and language tasks",
+   "we combine the well-known Mixture-of-Experts (MoE) and one of the representative PEFT techniques, i.e., LoRA"
+  ]
+ },
+ "summary": "Octavius is a multimodal large language model that attacks task interference by pairing a frozen LLM with LoRA-MoE, a set of trainable LoRA experts added to its output. Figure 1 is a teaser built around a dashed architecture box: a 2D or 3D encoder (both frozen, snowflake icons) turns an RGB image or point cloud into visual tokens that sit between system-prompt and query tokens, and the sequence passes the frozen LLM plus the LoRA experts (flame icons) to give response tokens. Four colour-keyed cards hang off the box: 2D detection, 3D captioning, 2D captioning and 3D VQA, each with a real photo or 3D scene and question/response text whose object words are coloured to match boxes in the picture. A pill list adds language tasks and more.",
+ "summary_zh": "Octavius 在冻结的大语言模型旁加入可训练的 LoRA-MoE 专家，缓解多模态任务间的干扰。图 1 以虚线架构框为中心：2D/3D 编码器、令牌条、LLM 与 LoRA 专家，四张彩色任务卡附有真实问答文本，另有其他任务列表。",
+ "confidence": "high",
+ "notes": "The prior pass listed contribution-mosaic as a third kind; left out because the cards are tied to the hub by connectors and the architecture is drawn in full. The digest counts only three large bitmaps although four photo-like pictures are visible; not resolved. No arrows are drawn between the token strips and the LLM row or the output strip (stacking only). Flame and snowflake icons are bitmaps by the digest's small image sizes; the cube is a vector.",
+ "venue": "ICLR24"
+}

@@ -1,0 +1,493 @@
+{
+ "paper_id": "iclr24-0077",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "RepARe (Rephrase, Augment and Reason)",
+  "one_liner": "A gradient-free framework that lets a vision-language model caption and reason about an image, then rewrites an underspecified VQA question with those details.",
+  "domain": [
+   "visual question answering",
+   "question rephrasing",
+   "large vision-language models"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "side-by-side-contrast",
+   "actor-interaction"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "a real tennis photo goes through an LVLM and RepARe loop to an original (red cross) and a modified (green check) VQA prompt, with two more photo examples below",
+  "argues": "Adding image-grounded details to an underspecified question makes the vision-language model answer correctly, and RepARe can obtain those details from the model itself.",
+  "subject": "One tennis photo with a question rewritten from the model's own caption and rationale, shown with both answers, plus two more rewrites.",
+  "elements": [
+   {
+    "name": "LVLM",
+    "type": "module",
+    "role": "the large vision-language model: answers questions and, when asked, gives captions and rationales",
+    "drawn_as": "dashed grey rounded box with a bold serif title and an emoji-like robot head",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "RepARe",
+    "type": "module",
+    "role": "the framework that queries the LVLM and rewrites the question",
+    "drawn_as": "wrench in a pale yellow circle with the bold serif name beside it; the same icon is repeated in each lower example",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "caption? / rationale?",
+    "type": "label",
+    "role": "the two queries RepARe sends to the LVLM",
+    "drawn_as": "italic words, orange for caption? and purple for rationale?, left of the loop",
+    "container": "LVLM",
+    "is_contribution": null
+   },
+   {
+    "name": "two tennis players / position w.r.t net",
+    "type": "label",
+    "role": "details returned by the LVLM: an entity and a spatial detail",
+    "drawn_as": "italic words, orange and purple, inside and right of the loop",
+    "container": "LVLM",
+    "is_contribution": null
+   },
+   {
+    "name": "Orig. Q: What is the relationship between these two people?",
+    "type": "text-block",
+    "role": "the original underspecified question",
+    "drawn_as": "plain sans text with a bold prefix, a dashed grey arrow into the LVLM box",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "VQA Prompt",
+    "type": "label",
+    "role": "marks the prompts (photo plus question) that go to the LVLM for an answer",
+    "drawn_as": "bold serif label between two lines that each start at a small copy of the photo",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Orig. A: Players",
+    "type": "text-block",
+    "role": "the wrong answer to the original question",
+    "drawn_as": "text with a bold prefix and a red cross above, at the end of a red arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Mod. Q': What is the relationship between the two tennis players on either side of the net?",
+    "type": "text-block",
+    "role": "the rewritten question with details added",
+    "drawn_as": "plain text with bold prefix; the added phrases in orange and purple italics",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "A'(RepARe): Opponents",
+    "type": "text-block",
+    "role": "the correct answer to the modified question",
+    "drawn_as": "text with a bold prefix and a green check below, at the end of a green arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "market example",
+    "type": "instance",
+    "role": "Orig. Q: Where are we at? rewritten to Where are these crowded people on the side? with answer Market",
+    "drawn_as": "photo, question text, green arrow to a wrench icon labelled RepARe, green arrow up to the modified question and answer",
+    "container": "lower row",
+    "is_contribution": null
+   },
+   {
+    "name": "skateboard example",
+    "type": "instance",
+    "role": "Orig. Q: What kind of shorts is he wearing? rewritten to name the person riding the skateboard, answer Khaki",
+    "drawn_as": "photo with two bright green boxes, question text, green arrow to a wrench icon, green arrow up to the modified question and answer",
+    "container": "lower row",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "tennis photo",
+    "to": "LVLM",
+    "what": "the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Orig. Q",
+    "to": "LVLM",
+    "what": "the original question",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RepARe",
+    "to": "LVLM",
+    "what": "queries for a caption and a rationale",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LVLM",
+    "to": "RepARe",
+    "what": "returns entities and details such as two tennis players and position w.r.t net",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LVLM and RepARe box",
+    "to": "Mod. Q'",
+    "what": "the rewritten question",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "photo and Orig. Q",
+    "to": "Orig. A: Players",
+    "what": "VQA prompt answered by the LVLM; wrong",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "photo and Mod. Q'",
+    "to": "A'(RepARe): Opponents",
+    "what": "VQA prompt answered by the LVLM; correct",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange and purple words in the loop",
+    "to": "orange and purple phrases in Mod. Q'",
+    "what": "each added phrase is coloured like the detail it came from",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Orig. Q (lower examples)",
+    "to": "RepARe wrench",
+    "what": "original question enters RepARe",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RepARe wrench",
+    "to": "Mod. Q' and A' (lower examples)",
+    "what": "rewritten question and its answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "overview",
+    "shows": "the method on one tennis photo: the LVLM and RepARe loop, the original prompt with a wrong answer and the modified prompt with a right one",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "two more underspecified questions, from A-OKVQA and VQAv2, with RepARe's rewrites and answers",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Orig. Q, Orig. A, Mod. Q', A'(RepARe)",
+    "kind": "identity",
+    "at": "bold prefixes of the question and answer texts",
+    "what": "name the role of each text: original question and answer, modified question and RepARe's answer"
+   },
+   {
+    "marker": "VQA Prompt",
+    "kind": "identity",
+    "at": "between the two prompt lines",
+    "what": "names the photo-plus-question prompt that is sent for an answer"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo of two men holding tennis rackets at a net",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large photo at the left, joined to the LVLM box by a dashed arrow"
+   },
+   {
+    "what": "two small copies of the tennis photo, one beside each prompt line",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small thumbnails showing that the same image goes into the original and the modified prompt"
+   },
+   {
+    "what": "street market photo with crowded people and a scooter",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo at the lower left, original question underneath"
+   },
+   {
+    "what": "skateboarder in a bowl, with bright green boxes around the skater and a distant person",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo with two bright green rectangles marking the possible referents of he"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue robot head with an antenna",
+    "stands_for": "the LVLM",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "wrench in a pale yellow circle",
+    "stands_for": "the RepARe module",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "tennis photo with the question about the relationship between two people, answered Players (wrong) and, after rewriting with two tennis players and either side of the net, Opponents (right)",
+    "form": "photo, question texts with coloured italic additions, answers with a red cross and a green check",
+    "real_values": true
+   },
+   {
+    "what": "two further rewrites: Where are we at? to Where are these crowded people on the side? (Market), and What kind of shorts is he wearing? to a version naming the person riding the skateboard (Khaki)",
+    "form": "photo, original question, wrench icon, modified question and answer",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "an emoji-like robot head inside a dashed grey rounded box labelled LVLM",
+    "parts": [
+     "robot head",
+     "dashed box",
+     "LVLM title"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "self-interaction-loop",
+    "drawn_as": "a robot head and a wrench icon joined by two green curved arrows forming a circle, with query words (caption?, rationale?) and returned details around it",
+    "parts": [
+     "robot head",
+     "wrench icon",
+     "circular arrows",
+     "query and answer words"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a question, a photo and an answer with a red cross for the original and a green check for the modified question",
+    "parts": [
+     "photo",
+     "question",
+     "answer",
+     "cross",
+     "check"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Start at the tennis photo at the left, follow the dashed arrow into the LVLM box and its loop, read the red original lane and the green modified lane at the right, then the two lower examples."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "A dotted horizontal rule splits the figure. Above: a tennis photo at the left feeds a dashed grey LVLM box holding a robot, a wrench and a green loop; to its right the original-question lane (red, cross) sits above the modified-question lane (green, check) on either side of a VQA Prompt label. Below: two aligned examples, each running left to right from photo and original question through a RepARe wrench to the modified question and answer.",
+  "panel_count": 2,
+  "lanes": "two rows in the top panel: original question and answer (red) above modified question and answer (green)",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.12,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5f5f5",
+    "used_for": "fill of the dashed LVLM box"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "dashed outline of the LVLM box and the dashed grey arrows"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "green: loop arrows, the RepARe path arrows, the check mark"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "red: the original-question path and the cross"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow circles behind the wrench icons"
+   },
+   {
+    "hex": "#d6b656",
+    "used_for": "gold outline of the wrench circles"
+   },
+   {
+    "hex": "#cc6600",
+    "used_for": "orange italic text: caption? and the details taken from the caption"
+   },
+   {
+    "hex": "#4c0099",
+    "used_for": "purple italic text: rationale? and the details taken from the rationale, and the added phrases in the lower examples"
+   },
+   {
+    "hex": "#00ff00",
+    "used_for": "bright green boxes drawn on the skateboard photo"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt coloured arrows and outlines (green, red, gold), 0.5 pt grey dashed box, dotted black rule",
+  "font": "sans (Arial) 7.5 pt for questions and answers with bold prefixes; bold serif (Times New Roman) 8.5 pt for LVLM, RepARe and VQA Prompt; coloured italics for added details",
+  "corners": "mixed",
+  "arrows": "dashed grey arrows into and out of the LVLM box, green curved arrows for the loop, solid green arrows with filled heads for the RepARe path, a solid red arrow for the original path",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = the original question's path and its wrong answer; green = RepARe's path and the correct answer, also the loop arrows; orange = detail from the caption and purple = detail from the rationale, written in the loop and again where they enter the modified question; grey dashed = the pipeline around the LVLM",
+  "line_style_means": "dashed grey arrows = information passed into and out of the LVLM and RepARe box; solid red or green lines = a prompt sent for an answer; dotted rule = split between the main example and further examples",
+  "shape_means": "dashed rounded grey box = the LVLM; wrench in a pale yellow circle = RepARe; robot head = the LVLM; bright green rectangles on a photo = objects a question may refer to",
+  "marker_means": "bold prefixes Orig. Q, Orig. A, Mod. Q' and A'(RepARe) name the texts; red cross = wrong answer; green check = correct answer",
+  "emphasis": "The red-versus-green pair of answers at the right, and coloured italic phrases that appear both in the loop and in the rewritten question, make the fix traceable; the wrench icon repeats in every example.",
+  "reusable_patterns": [
+   "original and rewritten input lanes ending in a red cross and a green check",
+   "coloured italic phrases traced from the extraction loop into the rewritten question",
+   "dashed grey box around the large model with an emoji robot and a tool icon on a green loop",
+   "same photo thumbnail beside both prompts to show the image is unchanged",
+   "lower row of smaller examples that repeat the icon grammar: photo, original question, wrench, modified question, answer",
+   "bright boxes drawn on a sample photo to mark the candidate referents"
+  ],
+  "weaknesses": [
+   "orange and purple have no key; their meaning has to be inferred from the words caption? and rationale?"
+  ]
+ },
+ "resources": {
+  "own": [
+   "tennis, market and skateboard photos from the paper's datasets",
+   "real questions, rewrites and answers"
+  ],
+  "stock": [
+   "emoji-like robot head",
+   "emoji-like wrench icons",
+   "red cross and green check marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed LVLM box, circles, arrows and the dotted rule",
+   "coloured italic annotations",
+   "green loop"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "tennis photo",
+   "dashed grey LVLM box with robot head",
+   "wrench-in-circle RepARe icon",
+   "green circular loop arrows",
+   "original and modified question texts with coloured italic phrases",
+   "red cross and green check",
+   "market and skateboard photos"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "visual question answering",
+   "question rephrasing",
+   "LVLM",
+   "zero-shot",
+   "underspecification",
+   "captions",
+   "rationales",
+   "A-OKVQA",
+   "VQAv2"
+  ],
+  "tags": [
+   "verdict-marks",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a text-editing method on real inputs: the same photo beside the original and the rewritten prompt, a red cross against a green check at the answers, and the inserted phrases coloured like the details that produced them so the fix can be traced; then repeat the same icon grammar in a lower row of smaller examples.",
+  "suits": "Prompt, query or input rewriting methods for language or vision-language models that can be shown with a few real before and after examples."
+ },
+ "tags": [
+  "red and green lanes",
+  "emoji-like icons",
+  "coloured italic phrases",
+  "dashed grey box",
+  "dotted rule between rows",
+  "mixed serif and sans"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "1 Introduction (p.2)",
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "REPARE interacts with the LVLM to extract attributes like “tennis players” and “position w.r.t net”",
+   "Adding these modifiers to the question elicits the correct response from LVLM."
+  ]
+ },
+ "summary": "RepARe (Rephrase, Augment and Reason) is a gradient-free framework in which a vision-language model captions the image and gives rationales, and these details are used to rewrite an underspecified VQA question; the candidate that makes the model most confident is chosen. Figure 1 (top) takes a tennis photo through a dashed grey LVLM box where a robot head and a wrench icon swap caption and rationale queries on a green loop. The original question gets Players with a red cross; the modified question, whose added phrases are coloured orange and purple like the extracted details, gets Opponents with a green check. Below a dotted rule, a market photo and a skateboarder photo show two more rewrites.",
+ "summary_zh": "RepARe 让视觉语言模型自己生成图像描述和推理依据，再改写含糊的 VQA 问题。上半部分用网球照片演示：原问题答错（红叉），新增短语按来源染成橙色和紫色的改写问题答对（绿勾）；点线下方再给两个例子。",
+ "confidence": "high",
+ "notes": "The prior merged tag mascot-character; I use model-pictogram instead because the robot is a stock emoji used once for the LVLM. Orange for caption-derived and purple for rationale-derived details is read from the words caption? and rationale? and from the matching colours in the modified question; the paper text does not state the colours. The two lower examples are not framed or titled, so they form one panel together.",
+ "venue": "ICLR24"
+}

@@ -1,0 +1,700 @@
+{
+ "paper_id": "acl25-0103",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WM-ABench",
+  "one_liner": "A two-stage (perception, prediction) atomic benchmark testing whether vision-language models hold internal world models, over 23 dimensions in 6 simulators.",
+  "domain": [
+   "world models",
+   "VLM evaluation",
+   "benchmark"
+  ],
+  "subfield": "multimodal",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic",
+   "concept-schematic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "framework loop and dimension taxonomy at left, two radial bar charts of model-vs-human scores at centre-right, four tinted question cards at the corners tied to the charts by dashed leaders",
+  "argues": "A world model splits into perception and prediction stages made of atomic abilities, and seven current VLMs fall well short of humans on most of them.",
+  "subject": "an agent-environment loop with its perception and prediction dimensions, per-dimension scores of seven VLMs against humans, and four sample benchmark items with model answers",
+  "elements": [
+   {
+    "name": "Environment",
+    "type": "actor",
+    "role": "the world the agent acts in; source of sensory signals and target of actions",
+    "drawn_as": "dashed black box with a globe icon",
+    "container": "world-model loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Sensory Signals",
+    "type": "data",
+    "role": "raw input from the environment that perception works on",
+    "drawn_as": "dashed black box holding five small sense icons (eye, ear, nose, hand, tongue)",
+    "container": "world-model loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Perception",
+    "type": "module",
+    "role": "stage 1 of the framework: builds the current state from the signals",
+    "drawn_as": "yellow box with a person-check-cross icon that widens through a wedge into the Current States list",
+    "container": "world-model loop",
+    "is_contribution": true
+   },
+   {
+    "name": "Current States",
+    "type": "container",
+    "role": "lists the five perception dimensions",
+    "drawn_as": "light-yellow trapezoid callout titled in bold",
+    "container": "Perception",
+    "is_contribution": true
+   },
+   {
+    "name": "Spatial, Visual, Temporal, Motion, Quantity",
+    "type": "label",
+    "role": "the five perception dimensions, each with a small icon",
+    "drawn_as": "five icon-plus-word labels scattered inside the yellow callout",
+    "container": "Current States",
+    "is_contribution": true
+   },
+   {
+    "name": "Prediction",
+    "type": "module",
+    "role": "stage 2 of the framework: predicts future states",
+    "drawn_as": "salmon-pink box with a flow-chart-and-gears icon that widens through a wedge into the Future States list",
+    "container": "world-model loop",
+    "is_contribution": true
+   },
+   {
+    "name": "Future States",
+    "type": "container",
+    "role": "lists the three prediction dimensions",
+    "drawn_as": "light-pink trapezoid callout titled in bold",
+    "container": "Prediction",
+    "is_contribution": true
+   },
+   {
+    "name": "Mechanistic, Transitive, Compositional",
+    "type": "label",
+    "role": "the three prediction dimensions, each with a small icon",
+    "drawn_as": "three icon-plus-word labels stacked in the pink callout",
+    "container": "Future States",
+    "is_contribution": true
+   },
+   {
+    "name": "Action",
+    "type": "actor",
+    "role": "the agent's action that goes back into the environment",
+    "drawn_as": "dashed black box with a running-figure-and-gear icon",
+    "container": "world-model loop",
+    "is_contribution": false
+   },
+   {
+    "name": "WM-ABench",
+    "type": "label",
+    "role": "names the benchmark; sits at the centre of the loop as its mark",
+    "drawn_as": "large bold black word over blue orbit ellipses with a pink dot",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Human",
+    "type": "region",
+    "role": "human performance per dimension, shown behind the model bars",
+    "drawn_as": "translucent blue arcs behind the bars, labelled Human",
+    "container": "radial charts",
+    "is_contribution": null
+   },
+   {
+    "name": "model legend",
+    "type": "label",
+    "role": "maps bar colours to the seven VLMs: Gemini 1.5, GPT-4o, Claude 3.5, Qwen2 VL, Qwen2.5 VL, InternVL 2.5, LLaVA-OV",
+    "drawn_as": "column of seven coloured swatches with names at the top right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "spatial-size question card",
+    "type": "instance",
+    "role": "perception item: pick which object is larger from top, side and front views; three models answer wrongly",
+    "drawn_as": "dashed light-yellow card with three renders, a question and answer chips",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "car-turns-left question card",
+    "type": "instance",
+    "role": "prediction item: choose the final state after the car turns left",
+    "drawn_as": "dashed light-pink card with a current frame, two candidate frames and logo chips",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "which-moves-faster question card",
+    "type": "instance",
+    "role": "motion perception item: which object moves faster; all three models answer blue sphere",
+    "drawn_as": "dashed light-yellow card with three frames and answer chips",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "collision question card",
+    "type": "instance",
+    "role": "prediction item: most likely state after two equal spheres collide with a central object",
+    "drawn_as": "dashed light-pink card with four frames and logo chips",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "model answer chips",
+    "type": "label",
+    "role": "each model's answer to the item; wrong ones are highlighted, the ground truth is underlined with a green check",
+    "drawn_as": "vendor logo plus bold model name plus answer word on a pink highlight",
+    "container": "question cards",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Environment",
+    "to": "Sensory Signals",
+    "what": "signals leave the environment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sensory Signals",
+    "to": "Perception",
+    "what": "signals are perceived",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Perception",
+    "to": "Prediction",
+    "what": "current state passes to prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prediction",
+    "to": "Action",
+    "what": "predicted future states lead to the action",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action",
+    "to": "Environment",
+    "what": "the action changes the environment, closing the loop",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Perception",
+    "to": "Current States",
+    "what": "the stage expands into its five dimensions",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Prediction",
+    "to": "Future States",
+    "what": "the stage expands into its three dimensions",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "dimension labels",
+    "to": "sectors of the two radial charts",
+    "what": "the same dimension names label the ring sectors",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "four question cards",
+    "to": "radial charts",
+    "what": "each sample item is tied to the chart it comes from",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "yellow cards",
+    "to": "Perception",
+    "what": "yellow tint pairs perception items with the perception stage",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "pink cards",
+    "to": "Prediction",
+    "what": "pink tint pairs prediction items with the prediction stage",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "model legend",
+    "to": "bars in both charts",
+    "what": "bar colour names the VLM",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Human",
+    "to": "model bars",
+    "what": "human band sits behind the model bars so the gap is visible",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "WM-ABench",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the framework: environment, signals, perception, prediction and action loop with the dimension lists of each stage",
+    "verdict": "setting"
+   },
+   {
+    "label": "Perception",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "radial bar chart of seven VLMs per perception dimension (Quantity, Spatial, Temporal, Visual, Motion) against the Human band",
+    "verdict": "fails"
+   },
+   {
+    "label": "Prediction",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "radial bar chart of seven VLMs per prediction dimension (Compositionality, Mechanistic, Transitivity) against the Human band",
+    "verdict": "fails"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "spatial item: which of two objects appears larger, with three models' wrong answers and the true one",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "car item: which final state follows a left turn",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "motion item: which object moves faster",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "collision item: most likely state after the collision",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "green check",
+    "kind": "other",
+    "at": "ground-truth answer in each question card",
+    "what": "marks the correct answer or the correct final-state frame"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "top, side and front views of two objects on a table",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three abutting square tiles at the left of the card"
+   },
+   {
+    "what": "street scene: current frame and two candidate final frames after turning left",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one current frame, text, then two candidates; the correct candidate has a thick black border and a green check"
+   },
+   {
+    "what": "three frames of coloured dots moving with dashed arrows",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three abutting square frames with blue and orange dashed arrows drawn on the first"
+   },
+   {
+    "what": "spheres colliding on a dark floor: two start frames and two candidate end frames",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two start frames at left, two candidates at right, correct one black-bordered with a check"
+   },
+   {
+    "what": "radial bar charts of VLM accuracy per dimension with a Human band",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "circular bar charts, seven bars per sector, value printed on each bar, translucent blue human arcs behind, ring title in the centre"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "eye, ear, nose, hand, tongue",
+    "stands_for": "Sensory Signals",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "person with check and cross, flow chart with gears, globe, running figure with gear",
+    "stands_for": "the Perception stage, the Prediction stage, the Environment and the Action",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "cube with axes, eye, stopwatch, ball falling to a hand, numbered circles",
+    "stands_for": "the perception dimensions Spatial, Visual, Temporal, Motion, Quantity",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "gears, runner beside bars, stack of layers",
+    "stands_for": "the prediction dimensions Mechanistic, Transitive, Compositional",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "OpenAI, Gemini and Qwen logos",
+    "stands_for": "GPT-4o, Gemini 1.5 and Qwen-VL answering",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 12
+   },
+   {
+    "depicts": "green circle with white check",
+    "stands_for": "the correct answer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "blue orbit ellipses with a pink dot behind the word",
+    "stands_for": "the WM-ABench mark",
+    "style": "other",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "size question about two objects seen from top, side and front, with answers sphere, cone, cube and the true cylinder",
+    "form": "renders, question text with a blue key phrase, answer chips",
+    "real_values": true
+   },
+   {
+    "what": "which final frame follows the car turning left",
+    "form": "current frame and two candidate frames with logo chips and a check",
+    "real_values": true
+   },
+   {
+    "what": "which of two moving objects is faster; all three models say blue sphere, truth is the orange cube",
+    "form": "three frames with dashed motion arrows and highlighted wrong answers",
+    "real_values": true
+   },
+   {
+    "what": "state after two spheres of equal mass and velocity collide with a central object",
+    "form": "start frames, candidate end frames and logo chips",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "dashed boxes Environment, Sensory Signals and Action plus the two stage boxes joined by arrows on a pale-grey ring band",
+    "parts": [
+     "Environment",
+     "Sensory Signals",
+     "Perception",
+     "Prediction",
+     "Action"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "radar-chart",
+    "drawn_as": "circular bar chart with a ring title in the centre, seven coloured bars per sector, values printed on the bars and a translucent blue Human band behind",
+    "parts": [
+     "sector label",
+     "model bars",
+     "Human band",
+     "radial axis ticks"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "dashed tinted card with scene frames, a question and three model answers; wrong ones highlighted, the true one underlined with a check",
+    "parts": [
+     "scene frames",
+     "question",
+     "answer chips",
+     "check"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "vendor logos (OpenAI, Gemini, Qwen) in front of each model answer",
+    "parts": [
+     "logo",
+     "model name",
+     "answer"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the left loop (Environment, Sensory Signals, Perception, Prediction, Action), reads the yellow and pink dimension lists, then crosses to the two radial charts; corner cards are read as examples tied to the charts by dashed leaders."
+ },
+ "layout": {
+  "arrangement": "dashboard",
+  "arrangement_note": "Framework loop and its dimension lists take the left third; two radial charts sit side by side at centre and right with a model legend at the top right; four question cards fill the corners (two above, two below) and are tied to the charts by dashed leaders; tint pairs yellow cards with perception and pink cards with prediction.",
+  "panel_count": 7,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.94,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff2cc",
+    "opacity": 0.5,
+    "used_for": "perception side: Current States callout and the two perception question cards"
+   },
+   {
+    "hex": "#ffe599",
+    "used_for": "Perception stage box"
+   },
+   {
+    "hex": "#f4cccc",
+    "opacity": 0.5,
+    "used_for": "prediction side: Future States callout and the two prediction question cards"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "Prediction stage box and its wedge"
+   },
+   {
+    "hex": "#e6b8af",
+    "used_for": "highlight behind wrong model answers in the cards"
+   },
+   {
+    "hex": "#4169e1",
+    "opacity": 0.2,
+    "used_for": "Human performance arcs behind the bars"
+   },
+   {
+    "hex": "#0066cc",
+    "used_for": "blue key phrases in the questions and the Perception and Prediction ring titles"
+   },
+   {
+    "hex": "#637939",
+    "opacity": 0.9,
+    "used_for": "Gemini 1.5 bars and legend swatch"
+   },
+   {
+    "hex": "#5254a3",
+    "opacity": 0.9,
+    "used_for": "GPT-4o bars and legend swatch"
+   },
+   {
+    "hex": "#8ca252",
+    "opacity": 0.9,
+    "used_for": "Claude 3.5 bars and legend swatch"
+   },
+   {
+    "hex": "#8c6d31",
+    "opacity": 0.9,
+    "used_for": "Qwen2 VL bars and legend swatch"
+   },
+   {
+    "hex": "#bd9e39",
+    "opacity": 0.9,
+    "used_for": "Qwen2.5 VL bars and legend swatch"
+   },
+   {
+    "hex": "#843c39",
+    "opacity": 0.9,
+    "used_for": "InternVL 2.5 bars and legend swatch"
+   },
+   {
+    "hex": "#78508c",
+    "opacity": 0.9,
+    "used_for": "LLaVA-OV bars and legend swatch"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt black hairlines on most shapes, dashed black outlines on loop boxes and cards, dashed grey leaders, a thick pale-grey (9.25 pt) band behind the loop arrows",
+  "font": "sans (Nunito), 4.5-5.5 pt for labels and cards, 9.5 pt bold for the WM-ABench title, bold stage and ring labels",
+  "corners": "mixed",
+  "arrows": "black straight arrows with small filled heads on a pale-grey band; dashed curved arrows at the loop ends; dashed grey leaders from cards to charts",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow tints = perception side (stage box, Current States, perception cards); pink tints = prediction side; one bar colour per VLM kept in both charts; translucent blue = human performance; pink highlight = wrong model answer",
+  "line_style_means": "dashed boxes = loop components (Environment, Sensory Signals, Action) and the sample cards; dashed grey leaders = card to chart; dashed curved arrows close the loop",
+  "shape_means": "wedge = a stage expanding into its dimensions; ring sector = one dimension; bar length = accuracy",
+  "marker_means": "green circled check = correct answer; blue text = the capability the question tests; underline = the true answer",
+  "emphasis": "The WM-ABench mark sits at the centre of the loop; the Human band behind the bars makes the gap to humans visible; blue key phrases name what each item tests.",
+  "reusable_patterns": [
+   "card tint matches the stage it tests (yellow vs pink)",
+   "dashed leader from each sample card to the chart it comes from",
+   "circular bar chart with a translucent human band behind model bars",
+   "answer chips: vendor logo, model name and answer, wrong ones highlighted, true one underlined with a check",
+   "stage box widening through a wedge into a list of its sub-dimensions with icons",
+   "blue-highlighted key phrase inside each question"
+  ],
+  "weaknesses": [
+   "4.5-5 pt text in the cards is very small at column width",
+   "seven earthy bar colours of similar value are hard to tell apart in the dense rings",
+   "leader lines do not say which sector a card illustrates"
+  ]
+ },
+ "resources": {
+  "own": [
+   "simulator renders for each question",
+   "accuracies of seven VLMs and the human scores",
+   "real questions and model answers"
+  ],
+  "stock": [
+   "flat-colour icon-pack icons for senses, stages and dimensions",
+   "OpenAI, Gemini and Qwen logos",
+   "green check icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "loop boxes, arrows and the pale-grey ring band",
+   "radial bar charts",
+   "wedge callouts",
+   "WM-ABench orbit mark",
+   "dashed leaders"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "perception-prediction loop with environment and action boxes",
+   "two radial bar charts with human bands",
+   "four question cards with simulator renders",
+   "vendor-logo answer chips",
+   "dimension icons (cube, eye, stopwatch, gears, layers)",
+   "seven-model colour legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "world model",
+   "vision-language models",
+   "perception",
+   "prediction",
+   "benchmark",
+   "counterfactual simulation",
+   "intuitive physics",
+   "atomic evaluation"
+  ],
+  "tags": [
+   "radar-chart",
+   "brand-logo-icon",
+   "verdict-marks",
+   "error-callouts",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "title-branding",
+   "zoom-callout",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "leader-linked-example-cards",
+    "what": "sample cards in the figure corners, tinted by category, tied to the result chart by dashed leader lines"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Reuse the dimension names of the framework as the sector labels of the result charts and tie tinted example cards to the charts with dashed leaders, so framework, evidence and instances read as one composite. A translucent human band behind model bars shows the gap at a glance.",
+  "suits": "benchmark papers that define a capability taxonomy, report per-dimension scores of several models against humans, and want real items with model answers in the same figure."
+ },
+ "tags": [
+  "dashboard-composite",
+  "radial-bar-chart",
+  "tinted-cards",
+  "dashed-leaders",
+  "flat-icons",
+  "benchmark-overview"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "We decompose the process into two stages: (1) perception stage, which involves visual, spatial, temporal, quantitative, and motion perceptions",
+   "Large-scale evaluation reveals VLMs' limitations as WMs.",
+   "all models perform at near-random accuracy when distinguishing motion trajectories"
+  ]
+ },
+ "summary": "WM-ABench is a benchmark that asks whether vision-language models hold internal world models. The paper splits a world model into a perception stage (visual, spatial, temporal, quantity, motion) and a prediction stage (mechanistic simulation, transitive and compositional inference), tested through 23 dimensions over 6 simulators. Figure 1 packs the framework, the results and sample items into one dashboard. At left, an agent loop from environment through sensory signals, perception, prediction and action carries yellow and pink callouts that list the dimensions with small icons. At centre and right, two radial bar charts show seven VLMs' accuracy per dimension against translucent human bands. Four corner cards, tinted to match the stage they test, show simulator renders with each model's answer, wrong ones highlighted, tied to the charts by dashed leaders.",
+ "summary_zh": "WM-ABench 评测视觉语言模型是否具备内部世界模型。图一把框架、结果和样例拼成一张总览：左侧是环境、感知、预测、动作的循环及各维度图标，右侧两张径向柱状图对比7个模型与人类，四角的题目卡片用虚线连到对应图表。",
+ "confidence": "high",
+ "notes": "Prior labels listed contribution-mosaic first; scope-overview (benchmark-dashboard) is primary here because the taxonomy, per-dimension statistics and examples form one linked composite. The loop at left is the paper's conceptual framework, not an evaluated method. Which sector each dashed leader points to is not clear from the figure. Panel verdicts on the two charts mark the gap to humans the figure argues for.",
+ "venue": "ACL25"
+}

@@ -1,0 +1,560 @@
+{
+ "paper_id": "icml26-0298",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Permutation-equivariant softmax transformers for multi-class in-context classification whose structured weights expose a layerwise coupled mean-shift update rule.",
+  "domain": [
+   "in-context learning theory",
+   "transformer interpretability",
+   "multi-class linear classification"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "three framed panels, one per finding (constraint, structure, algorithm), each with a one-line schematic or formula plus evidence; the prior variant formal-diagram belongs to concept-schematic",
+  "argues": "Enforcing feature/label permutation symmetry keeps the model's behaviour, makes its weights readable, and exposes an emergent closed-form iterative classifier in which features and labels co-evolve.",
+  "subject": "A permutation-sandwiched attention layer with behaviour-preserving evidence, weight heatmaps before and after, a canonical block weight matrix, and the resulting update equations.",
+  "elements": [
+   {
+    "name": "Permutation sandwich",
+    "type": "container",
+    "role": "the symmetry constraint applied to one layer: permutation, attention, inverse permutation",
+    "drawn_as": "left-to-right chain of circle, rounded box, circle between Z_l and Z_l+1",
+    "container": "Symmetry constraint",
+    "is_contribution": true
+   },
+   {
+    "name": "Z_ℓ",
+    "type": "data",
+    "role": "input of layer l",
+    "drawn_as": "serif italic symbol at the left end of the chain",
+    "container": "Symmetry constraint",
+    "is_contribution": false
+   },
+   {
+    "name": "P",
+    "type": "operation",
+    "role": "permutation applied before attention",
+    "drawn_as": "purple circle (#e1d5e7 fill, #9673a6 outline) with italic P",
+    "container": "Symmetry constraint",
+    "is_contribution": true
+   },
+   {
+    "name": "Attention",
+    "type": "module",
+    "role": "the attention layer wrapped by the permutations",
+    "drawn_as": "white rounded box with thin black outline",
+    "container": "Symmetry constraint",
+    "is_contribution": false
+   },
+   {
+    "name": "P^T",
+    "type": "operation",
+    "role": "transpose (inverse) permutation applied after attention",
+    "drawn_as": "purple circle with italic P and a superscript T",
+    "container": "Symmetry constraint",
+    "is_contribution": true
+   },
+   {
+    "name": "Z_ℓ+1",
+    "type": "data",
+    "role": "output of layer l, input of the next layer",
+    "drawn_as": "serif italic symbol at the right end of the chain",
+    "container": "Symmetry constraint",
+    "is_contribution": false
+   },
+   {
+    "name": "Same inference rule",
+    "type": "container",
+    "role": "evidence that the permuted model behaves like the unconstrained one",
+    "drawn_as": "bold sub-heading above a row of three captioned thumbnails",
+    "container": "Symmetry constraint",
+    "is_contribution": true
+   },
+   {
+    "name": "Same response to query perturbations",
+    "type": "chart",
+    "role": "evidence that the local decision rule is preserved",
+    "drawn_as": "small framed card: a delta-query arrow curving into delta-prediction above a purple and pink bar",
+    "container": "Same inference rule",
+    "is_contribution": null
+   },
+   {
+    "name": "Same influential examples",
+    "type": "chart",
+    "role": "evidence that context sensitivity (which examples matter) is preserved",
+    "drawn_as": "small framed card titled sample influence: three bars with partly filled purple segments and dotted arrows converging on one dot",
+    "container": "Same inference rule",
+    "is_contribution": null
+   },
+   {
+    "name": "Structural denoising",
+    "type": "container",
+    "role": "weights before and after imposing the permutations",
+    "drawn_as": "bold sub-heading above two heatmaps joined by an orange block arrow",
+    "container": "Interpretable weights",
+    "is_contribution": true
+   },
+   {
+    "name": "Canonical weight structure",
+    "type": "formula",
+    "role": "closed-form block form of the weights: alpha I on one block, gamma (I - 11^T / K) on the other, zeros off the diagonal blocks",
+    "drawn_as": "W approx bold block matrix in serif math",
+    "container": "Interpretable weights",
+    "is_contribution": true
+   },
+   {
+    "name": "Behaviorally faithful dynamics",
+    "type": "container",
+    "role": "the recovered depth-indexed recursion that matches the model's behaviour",
+    "drawn_as": "bold sub-heading above a green-outlined equation box",
+    "container": "Emergent algorithm",
+    "is_contribution": true
+   },
+   {
+    "name": "A_ℓ = σ(α_ℓ X_ℓ X_ℓ^T + γ_ℓ Y_ℓ Y_ℓ^T)",
+    "type": "formula",
+    "role": "attention matrix built from the mixed feature and label Gram structure",
+    "drawn_as": "first line of the equation box, bold serif math",
+    "container": "Behaviorally faithful dynamics",
+    "is_contribution": true
+   },
+   {
+    "name": "X_ℓ+1 = X_ℓ + α'_ℓ A_ℓ X_ℓ",
+    "type": "formula",
+    "role": "coupled update of the feature-side state, driven by A",
+    "drawn_as": "second line of the equation box",
+    "container": "Behaviorally faithful dynamics",
+    "is_contribution": true
+   },
+   {
+    "name": "Y_ℓ+1 = Y_ℓ + γ'_ℓ A_ℓ Y_ℓ",
+    "type": "formula",
+    "role": "coupled update of the label-side state, driven by the same A",
+    "drawn_as": "third line of the equation box",
+    "container": "Behaviorally faithful dynamics",
+    "is_contribution": true
+   },
+   {
+    "name": "depth ↔ iterations",
+    "type": "label",
+    "role": "reads layer depth as the iteration count of the update",
+    "drawn_as": "plain text with a double-headed arrow under the equation box",
+    "container": "Emergent algorithm",
+    "is_contribution": true
+   },
+   {
+    "name": "Feature geometry evolves",
+    "type": "other",
+    "role": "sketch of what the recursion does to the geometry: groups of points move apart",
+    "drawn_as": "three light-blue and three light-red circles between two dotted diagonal lines, grey arrows pointing away at both sides",
+    "container": "Emergent algorithm",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Z_ℓ",
+    "to": "P",
+    "what": "layer input enters the permutation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P",
+    "to": "Attention",
+    "what": "permuted representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attention",
+    "to": "P^T",
+    "what": "attention output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P^T",
+    "to": "Z_ℓ+1",
+    "what": "un-permuted output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Z_ℓ",
+    "to": "Z_ℓ+1",
+    "what": "dashed arc over the whole sandwich; not explained in the caption, presumably the same layer-to-layer map that the sandwich preserves",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Permutation sandwich",
+    "to": "Same inference rule",
+    "what": "the three thumbnails are the evidence that the sandwiched layer keeps predictions, local response and influential examples",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "without permutations heatmap",
+    "to": "with permutations heatmap",
+    "what": "imposing the permutations turns noisy weights into a near-empty matrix with a diagonal and one saturated block",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "with permutations heatmap",
+    "to": "Canonical weight structure",
+    "what": "the block pattern in the heatmap (dotted block separators) is stated in closed form by the matrix below it",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "A_ℓ",
+    "to": "X_ℓ+1 and Y_ℓ+1",
+    "what": "one attention matrix drives both updates, so features and labels co-evolve",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "update equations",
+    "to": "Feature geometry evolves",
+    "what": "the sketch shows the geometric effect of iterating the recursion",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "blue dots",
+    "to": "red dots",
+    "what": "grey arrows on both sides point away from each other: the two groups separate",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Symmetry constraint",
+    "to": "Interpretable weights",
+    "what": "left-to-right order only: constraint gives structured weights; no arrow drawn between panels",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Interpretable weights",
+    "to": "Emergent algorithm",
+    "what": "left-to-right order only: the structure makes the forward pass readable as an iterative classifier",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Symmetry constraint",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "An attention layer wrapped between a permutation P and its transpose, with three thumbnails showing the same predictions, query response and influential examples.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Interpretable weights",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Weight heatmaps without versus with permutations, then the canonical block form of W.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Emergent algorithm",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Three coupled update equations with depth read as iterations, and a sketch of two point groups moving apart.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "coloured title chip",
+    "kind": "section",
+    "at": "top of each panel (purple, orange, green)",
+    "what": "names the panel: Symmetry constraint, Interpretable weights, Emergent algorithm"
+   },
+   {
+    "marker": "bold sub-heading",
+    "kind": "section",
+    "at": "inside each panel, two per panel",
+    "what": "heads each half: Permutation sandwich, Same inference rule, Structural denoising, Canonical weight structure, Behaviorally faithful dynamics, Feature geometry evolves"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "weight-matrix heatmaps, one without and one with permutations",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square tiles with thin black border, side by side with an orange block arrow between; first is a noisy red-blue pixel grid, second is nearly white with a faint diagonal and a saturated block at the bottom right, dotted black lines mark the block split; captions without permutations / with permutations underneath"
+   },
+   {
+    "what": "scatter of matched predictions along a dashed diagonal",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "framed thumbnail with heavy black border, dense blue dots hugging a dashed y = x line; caption Same predictions underneath"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "six points in two groups (3 blue, 3 red) with dotted lines and outward grey arrows",
+    "form": "vector dots and arrows, no axes",
+    "real_values": false
+   },
+   {
+    "what": "three sample-influence bars with partly filled purple segments",
+    "form": "mini bar card with dotted arrows into one dot",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention",
+    "drawn_as": "a plain rounded box labelled Attention, sandwiched between two circles P and P^T",
+    "parts": [
+     "P circle",
+     "Attention box",
+     "P^T circle"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "six coloured dots in two groups with two dotted lines and grey arrows showing movement",
+    "parts": [
+     "blue dots",
+     "red dots",
+     "dotted lines",
+     "grey arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "weight-matrix-heatmap",
+    "drawn_as": "a red-blue diverging heatmap of a weight matrix, shown before and after imposing structure",
+    "parts": [
+     "noisy heatmap",
+     "block arrow",
+     "blocky heatmap",
+     "dotted block separators"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the purple Symmetry constraint chip at top left, follows the sandwich left to right, drops to the three thumbnails, then crosses to the middle heatmap pair and formula, and ends on the right-hand equations and point sketch."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three equal framed panels side by side, each headed by a pastel title chip and stacked in two bands: a one-line schematic or heatmap pair on top, evidence thumbnails or a formula below. No arrows connect the panels; order comes from position.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.1,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e1d5e7",
+    "used_for": "title chip of Symmetry constraint and the P / P^T circles"
+   },
+   {
+    "hex": "#9673a6",
+    "used_for": "purple outline of that chip and the circles"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "title chip of Interpretable weights and the block arrow between heatmaps"
+   },
+   {
+    "hex": "#d79b00",
+    "used_for": "orange outline of that chip and arrow"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "title chip of Emergent algorithm"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "green outline of that chip and of the equation box"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "light red dots and the pink part of the prediction bar"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "outline of the red dots"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "light blue dots"
+   },
+   {
+    "hex": "#6c8ebf",
+    "used_for": "outline of the blue dots"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "grey arrows in the geometry sketch"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black on panel frames, thumbnails and the Attention box; 0.25 pt on small details; 0.5 pt coloured outlines on chips, circles and the equation box",
+  "font": "sans (Liberation Sans) 4-8 pt: 8 pt bold panel titles, 6 pt bold sub-headings, 4-6 pt captions; equations in serif math, matrices in bold",
+  "corners": "mixed",
+  "arrows": "solid black straight arrows with filled heads in the sandwich, one dashed black arc above it, a thick orange block arrow between heatmaps, thin grey arrows and dotted lines in the sketch, dotted arrows in the thumbnails",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each panel owns one pastel colour (purple, orange, green) for its title chip and one inner hero element; red and blue in the heatmaps are the two signs of a diverging scale (not keyed); in the sketch blue and red dots are two groups, presumably classes",
+  "line_style_means": "dashed arc = unexplained link from layer input to output over the sandwich; dotted lines in the with-permutations heatmap = block boundaries; dotted arrows in the thumbnails = perturbation or influence flow; dotted diagonal lines in the sketch = guide lines the groups move away from",
+  "shape_means": "circle = permutation operator or a data point in the sketch; rounded box = attention layer; heavy square frame = evidence thumbnail; green-outlined rectangle = update equations",
+  "marker_means": "no numbered marks; delta glyphs in the perturbation card mark small changes of query and prediction",
+  "emphasis": "colour is spent on the title chips and on one hero element per panel (permutation circles, block arrow, equation box); everything else is black on white",
+  "reusable_patterns": [
+   "pastel title chip heading each framed panel, its colour echoed by one inner element",
+   "one-line schematic of the idea on top, a row of captioned evidence thumbnails below",
+   "before / after weight heatmaps joined by a block arrow, with the closed-form block matrix underneath",
+   "coloured-outline equation box with a one-line gloss beneath (depth ↔ iterations)",
+   "tiny vector dot-and-arrow sketch summarising the geometric effect of the update"
+  ],
+  "weaknesses": [
+   "the dashed arc over the sandwich is not explained in the caption",
+   "4 pt labels inside the thumbnails are very small at column width",
+   "no arrows between panels, so the constraint-to-structure-to-algorithm chain relies on position and caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "weight-matrix heatmaps from trained models",
+   "scatter plot of matched predictions"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "permutation sandwich with circles and rounded box",
+   "perturbation and sample-influence mini cards",
+   "dot-and-arrow geometry sketch",
+   "equations and block matrix",
+   "block arrow",
+   "title chips and panel frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "permutation sandwich around an attention box",
+   "scatter plot thumbnail",
+   "perturbation mini card",
+   "sample-influence bar card",
+   "before and after weight heatmaps with block arrow",
+   "block weight matrix formula",
+   "update-equation box",
+   "two-colour dot sketch with arrows"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "in-context classification",
+   "transformer interpretability",
+   "permutation equivariance",
+   "coupled mean-shift",
+   "weight structure",
+   "no-margin regime",
+   "layerwise recursion",
+   "emergent algorithm"
+  ],
+  "tags": [
+   "equation-boxes",
+   "matrix-cell-grid",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "before-after-matrix-pair",
+    "what": "two heatmaps of the same matrix side by side, joined by a block arrow and captioned without / with some treatment"
+   },
+   {
+    "name": "title-chip-panels",
+    "what": "each framed panel headed by a pastel title chip whose colour is echoed by an element inside the panel"
+   },
+   {
+    "name": "evidence-thumbnail-row",
+    "what": "a row of small framed captioned thumbnails under a schematic, each backing one claim of the headline"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Tell a theory chain (constraint, recovered structure, emergent algorithm) as three equal framed panels with coloured title chips, each with the same rhythm: a one-line schematic of the idea, then evidence in plain captions, a before/after heatmap or a formula box.",
+  "suits": "theory or interpretability papers whose result chains a constraint, a recovered structure and an emergent rule and must show evidence for each without a pipeline."
+ },
+ "tags": [
+  "three-panel row",
+  "pastel title chips",
+  "before-after heatmaps",
+  "equation box",
+  "evidence thumbnails",
+  "draw.io look",
+  "flat vector"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (figure index)"
+  ],
+  "evidence": [
+   "Symmetry reveals coupled mean-shift inference in transformers.",
+   "The symmetry constraint denoises weights into a canonical low-dimensional structure.",
+   "makes the forward pass readable as a closed-form iterative classifier (depth ↔iterations)"
+  ]
+ },
+ "summary": "The paper studies how a softmax transformer performs multi-class in-context classification. By enforcing feature- and label-permutation equivariance at every layer it makes the weights highly structured, so a depth-indexed coupled mean-shift update rule can be read off. Figure 1 is a row of three framed panels, each headed by a pastel title chip. Left, Symmetry constraint: an Attention box wrapped in P and P^T circles, with three thumbnails showing the same predictions, the same response to query perturbations and the same influential examples. Middle, Interpretable weights: a noisy weight heatmap and a blocky one joined by an orange block arrow, then the canonical block matrix W. Right, Emergent algorithm: three update equations in a green box, depth read as iterations, and a dot sketch of two groups drifting apart. Flat vector in a draw.io look; only the heatmaps and the scatter are bitmaps.",
+ "summary_zh": "研究 softmax Transformer 如何做多类上下文分类：逐层强制特征/标签置换等变后权重变得规整，可读出耦合均值漂移更新规则。图为三栏并列：置换夹层与三项等价证据、置换前后权重热图与分块矩阵、更新公式与点簇漂移示意。",
+ "confidence": "high",
+ "notes": "No paragraph mentions the figure, so roles come from the caption and abstract. The dashed arc over the sandwich is not explained anywhere and is read here only as the layer-to-layer map. X and Y being the feature and label parts follows the abstract (mixed feature-label Gram); blue and red dots as classes is an inference. The prior variant formal-diagram belongs to concept-schematic; finding-cards was chosen for the primary contribution-mosaic.",
+ "venue": "ICML26"
+}

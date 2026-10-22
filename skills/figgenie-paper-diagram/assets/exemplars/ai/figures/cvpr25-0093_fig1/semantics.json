@@ -1,0 +1,484 @@
+{
+ "paper_id": "cvpr25-0093",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Ferret",
+  "one_liner": "An online continual learning framework that uses fine-grained pipeline parallelism, iterative gradient compensation and automated model partitioning to fit varying memory budgets.",
+  "domain": [
+   "online continual learning",
+   "pipeline parallel training",
+   "memory-constrained training"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "a runtime pipeline-parallel workflow (A) and a planner chain (B) feeding it, with three small schedule timelines for the design options at the right",
+  "argues": "A planner picks the model partition and pipeline configuration for a memory budget, and many workers then train one model in parallel on streaming data while compensating stale gradients.",
+  "subject": "N pipeline workers with forward, backward and update blocks over streaming batches, a gradient-compensation chain, the planner flow, and three schedule variants.",
+  "elements": [
+   {
+    "name": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "type": "container",
+    "role": "runtime part: workers spawned from the optimal partition and configuration train one model",
+    "drawn_as": "large dashed black frame with a bold title at the top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Iterative Gradients Compensation",
+    "type": "operation",
+    "role": "chain that turns a data batch and the current parameters into forward, backward and gradient steps and updates the model through successive parameter versions",
+    "drawn_as": "pink band with a heavy black outline holding green D, grey theta, yellow f, blue b and teal-outlined g boxes joined by arrows",
+    "container": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "is_contribution": true
+   },
+   {
+    "name": "N Workers",
+    "type": "actor",
+    "role": "workers that consume streaming batches in an interleaved way",
+    "drawn_as": "three translucent grey layers stacked in depth, each a row of green D boxes and dashed empty slots, a curly brace and the label N Workers",
+    "container": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "is_contribution": true
+   },
+   {
+    "name": "P = |L*| - 1 Stages",
+    "type": "container",
+    "role": "pipeline stages of one worker",
+    "drawn_as": "grey panel with rows of yellow forward blocks and blue backward blocks that end in red bars, vertical ellipses between rows, a curly brace at the left",
+    "container": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "is_contribution": true
+   },
+   {
+    "name": "Model",
+    "type": "module",
+    "role": "the single model that all workers update",
+    "drawn_as": "plain black-outlined box with curved arrows from the workers and the text All workers update the same model",
+    "container": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "is_contribution": null
+   },
+   {
+    "name": "Forward / Backward / Model Update",
+    "type": "label",
+    "role": "legend of the block colours",
+    "drawn_as": "small white box over the stacked layers with a yellow square, a blue square and a red bar",
+    "container": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "is_contribution": null
+   },
+   {
+    "name": "B: Model Partitioning and Pipeline Planning",
+    "type": "container",
+    "role": "planning part that produces the partition scheme and pipeline configuration",
+    "drawn_as": "dashed black frame with a bold two-line title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Model Profile",
+    "type": "data",
+    "role": "profile of the model obtained by profiling",
+    "drawn_as": "cylinder under a Model box, arrow labelled Profiling",
+    "container": "B: Model Partitioning and Pipeline Planning",
+    "is_contribution": null
+   },
+   {
+    "name": "Memory Constraint M",
+    "type": "data",
+    "role": "memory budget given to the planner",
+    "drawn_as": "plain text with a line down to the planner box",
+    "container": "B: Model Partitioning and Pipeline Planning",
+    "is_contribution": null
+   },
+   {
+    "name": "Model Partitioning and Pipeline Planning",
+    "type": "operation",
+    "role": "solves max of R_F^T subject to M_F not above M",
+    "drawn_as": "peach box with an orange outline, the optimisation line under it",
+    "container": "B: Model Partitioning and Pipeline Planning",
+    "is_contribution": true
+   },
+   {
+    "name": "Optimal Model Partition Scheme L* / Optimal Pipeline Configuration C*",
+    "type": "data",
+    "role": "output of the planner, handed to the runtime part",
+    "drawn_as": "four-line text at the bottom, a thick black arrow bent back to the Model box of A",
+    "container": "B: Model Partitioning and Pipeline Planning",
+    "is_contribution": true
+   },
+   {
+    "name": "(a) Activation Recomputation (T1)",
+    "type": "chart",
+    "role": "schedule of two stages where forward work is repeated to save memory",
+    "drawn_as": "two-row timeline with D batch markers on top, numbered yellow, blue and peach cells, red update bars, Time arrow and a four-item legend",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Gradient Accumulation (T2)",
+    "type": "chart",
+    "role": "schedule where several forward and backward passes happen before one update",
+    "drawn_as": "two-row numbered timeline with fewer red update bars",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Backpropagation Omission (T3)",
+    "type": "chart",
+    "role": "schedule where some backward passes are left out",
+    "drawn_as": "two-row numbered timeline with gaps where backward blocks would be",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Model (in B)",
+    "to": "Model Profile",
+    "what": "profiling the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model Profile",
+    "to": "Model Partitioning and Pipeline Planning",
+    "what": "profile enters the planner",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Memory Constraint M",
+    "to": "Model Partitioning and Pipeline Planning",
+    "what": "budget enters the planner",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Model Partitioning and Pipeline Planning",
+    "to": "Optimal Model Partition Scheme L* / Optimal Pipeline Configuration C*",
+    "what": "result of the optimisation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Optimal Model Partition Scheme L* / Optimal Pipeline Configuration C*",
+    "to": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "what": "workers are spawned with this partition and configuration",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "backward block of stage 0",
+    "to": "Iterative Gradients Compensation",
+    "what": "gradient computed by the worker",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "D and theta boxes",
+    "to": "forward, backward and gradient boxes",
+    "what": "batch and parameters flow through the compensation chain to updated parameters",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "stage rows of the workers",
+    "to": "Model",
+    "what": "all workers update the same model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "streaming batches D",
+    "to": "N Workers",
+    "what": "batches are consumed in an interleaved way",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(a), (b), (c) timelines",
+    "to": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "what": "three schedule variants of the pipeline; the link is only by adjacency and the text",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A: Fine-grained Pipeline Parallelism with L* and C*",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "workers, stages, gradient compensation and the shared model",
+    "verdict": "ours"
+   },
+   {
+    "label": "B: Model Partitioning and Pipeline Planning",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "profiling, memory constraint, planning and the optimal scheme and configuration",
+    "verdict": "ours"
+   },
+   {
+    "label": "(a) Activation Recomputation (T1)",
+    "axis": "alternatives",
+    "shows": "two-stage schedule with recomputation cells",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Gradient Accumulation (T2)",
+    "axis": "alternatives",
+    "shows": "two-stage schedule with less frequent updates",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Backpropagation Omission (T3)",
+    "axis": "alternatives",
+    "shows": "two-stage schedule with skipped backward passes",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A, B",
+    "kind": "section",
+    "at": "titles of the two dashed frames",
+    "what": "name the runtime part and the planning part"
+   },
+   {
+    "marker": "(a), (b), (c) with T1, T2, T3",
+    "kind": "section",
+    "at": "titles under the three timelines",
+    "what": "name the three schedule techniques"
+   },
+   {
+    "marker": "D with indices (D0, D1, D2 ... , D t, D t+P)",
+    "kind": "identity",
+    "at": "green boxes and flags above the timelines",
+    "what": "name successive streaming data batches"
+   },
+   {
+    "marker": "digits in the colour cells",
+    "kind": "identity",
+    "at": "cells of the timelines and stage rows",
+    "what": "which data batch the forward or backward block belongs to"
+   },
+   {
+    "marker": "Stage 0, Stage 1",
+    "kind": "identity",
+    "at": "row labels of the timelines",
+    "what": "names the pipeline stages"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "database cylinder",
+    "stands_for": "the stored model profile",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "toy two-stage schedules with numbered batches for the three techniques",
+    "form": "Gantt-like grids with digits in cells",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "pipeline-schedule-grid",
+    "drawn_as": "stage rows over time holding yellow forward and blue backward cells numbered by batch, thin red bars for model updates, Time arrow below",
+    "parts": [
+     "stage rows",
+     "forward cell",
+     "backward cell",
+     "red update bar",
+     "time arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "stacked-workers",
+    "drawn_as": "translucent copies of the same pipeline stacked in depth, fading backwards, with a curly brace labelled N Workers",
+    "parts": [
+     "translucent layers",
+     "curly brace"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the pink compensation band at the top-left of A, then the stage rows and Model beneath, crosses to B top to bottom and back to A along the thick arrow, then the three timelines at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A wide dashed frame A on the left, a narrower dashed frame B in the middle with its planner chain top to bottom, and a column of three small lettered timelines at the right; a thick arrow runs from B back into A.",
+  "panel_count": 5,
+  "lanes": "pipeline stage rows: P rows in A and two aligned rows (Stage 0, Stage 1) in each timeline",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.31,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c00000",
+    "used_for": "model-update bars; also the pink band of gradient compensation at low opacity",
+    "opacity": 0.25
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "stage panel and the translucent stacked worker layers at opacities 1.0, 0.4 and 0.1"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "backward blocks (outline #4472c4)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "forward blocks (outline #ffc000)"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "data batch boxes D (outline #70ad47)"
+   },
+   {
+    "hex": "#a3e1d7",
+    "used_for": "gradient boxes g, teal outline #23b398",
+    "opacity": 0.4
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "recomputation cells and the planner box",
+    "opacity": 0.4
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black outlines on blocks, 0.75 pt dashed black frames for A and B, heavy black outline on the pink band",
+  "font": "serif (Times New Roman) with Cambria Math symbols, 3-7 pt; bold 6 pt panel titles; 7 pt titles under the timelines",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads; two thick black arrows for the gradient into the band and for L* and C* back into A",
+  "rendering": "flat-vector",
+  "effects": "translucent layers stacked in depth to suggest N workers",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow = forward pass, blue = backward pass, red bar = model update, green = data batch, teal-outlined grey = gradient, peach = recomputation, pink band = the gradient-compensation procedure",
+  "line_style_means": "dashed black frame = a component of the framework; dashed empty boxes = batches not yet arrived; thick black arrow = main dependency between components",
+  "shape_means": "cylinder = stored profile; grey box = model parameters; rows of blocks = pipeline stages; curly brace = count (P stages, N workers)",
+  "marker_means": "D with an index = data batch; digits in cells = batch index of that block; T1 to T3 = techniques; A and B = components",
+  "emphasis": "heavy black outline and pink fill on the compensation band, and two thick arrows that bind the planner to the runtime",
+  "reusable_patterns": [
+   "translucent copies of one pipeline stacked in depth for N parallel workers",
+   "pink band with a heavy outline for the new algorithm above a schedule",
+   "thick arrow carrying the planner output into the runtime panel",
+   "three tiny two-stage timelines with numbered cells for design options",
+   "curly braces labelling counts such as stages and workers"
+  ],
+  "weaknesses": [
+   "3-4 pt digits and subscripts are hard to read",
+   "the legend overlaps the stacked layers",
+   "the timelines are tied to A only by the text"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the paper's notation and toy schedules"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "frames, blocks, arrows and braces",
+   "timelines",
+   "model profile cylinder"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "pink band chain of gradient compensation",
+   "stacked worker layers with data batches",
+   "stage rows of forward and backward blocks with red update bars",
+   "model profile cylinder and planner box",
+   "three two-stage timelines with numbered cells",
+   "legend of forward, backward, update"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "online continual learning",
+   "pipeline parallelism",
+   "stale gradients",
+   "gradient compensation",
+   "memory constraint",
+   "model partitioning",
+   "activation recomputation",
+   "gradient accumulation"
+  ],
+  "tags": [
+   "schedule-lanes",
+   "toy-values-inline",
+   "small-multiples",
+   "equation-boxes",
+   "stacked-cards"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw parallel workers as translucent copies of one pipeline stacked in depth, and explain schedule options with tiny two-stage timelines whose cells are numbered by batch. A thick arrow carrying the planner's output into the runtime panel joins the two halves.",
+  "suits": "Systems-style ML papers on parallel training, scheduling or memory planning that must show both a runtime pipeline and an offline planner."
+ },
+ "tags": [
+  "dashed frames",
+  "pipeline schedule",
+  "dense symbols",
+  "pastel blocks",
+  "small timelines"
+ ],
+ "provenance": {
+  "sections": [
+   "5 Methodology (p.3-4)"
+  ],
+  "evidence": [
+   "Caption: in A, N workers are spawned from the optimal partition scheme and pipeline configuration and update the same model asynchronously.",
+   "Caption: in B, the optimal partition scheme and configuration are obtained by optimizing Eq. 2.",
+   "Methodology: the three timelines illustrate activation recomputation, gradient accumulation and backpropagation omission."
+  ]
+ },
+ "summary": "Ferret is an online continual learning framework that keeps up with fast data streams under changing memory budgets. Figure 1 has two dashed components and three small timelines. In A, a pink band shows iterative gradient compensation, where batches and parameter versions pass through forward, backward and gradient boxes; below it N translucent worker layers hold streaming batches and rows of yellow forward and blue backward blocks with red update bars, all updating one Model. In B, a model profile and a memory constraint enter a planning box that outputs the optimal partition scheme and pipeline configuration, sent back to A by a thick arrow. Three two-stage timelines show recomputation, accumulation and backpropagation omission.",
+ "summary_zh": "Ferret 是在变化内存预算下做在线持续学习的框架。图中A部分用粉色带表示迭代梯度补偿，下方是并行worker的前向、反向与更新块；B部分由模型画像和内存约束规划出最优划分与流水线配置；右侧三条时间线说明重计算、梯度累积和省略反向传播。",
+ "confidence": "high",
+ "notes": "The three timelines (a)-(c) are not joined to A or B by arrows; their link to the pipeline comes from the Methodology text (T1-T3). The bottom of the preview cuts off the caption and the start of another drawing, which were ignored.",
+ "venue": "CVPR25"
+}

@@ -1,0 +1,461 @@
+{
+ "paper_id": "aaai25-0057",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OTPNet",
+  "one_liner": "ODE-inspired tuning-free proximal network for remote sensing image fusion, derived from two proximal optimization problems (pan-sharpening shown).",
+  "domain": [
+   "remote sensing image fusion",
+   "pan-sharpening",
+   "proximal optimization and neural ODE"
+  ],
+  "subfield": "vision",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "degradation model, a boxed derivation chain of proximal updates and the network that draws the same update, in three grey panels",
+  "argues": "The fusion network is not hand-designed: it follows from the degradation model through two proximal optimization problems and a high-order ODE update.",
+  "subject": "Degradation model, boxed proximal-update equations in two mirrored branches, and the image-node network that implements the same update.",
+  "elements": [
+   {
+    "name": "PAN / HR-MS / LR-MS",
+    "type": "data",
+    "role": "the three images of the degradation model: panchromatic, high-resolution multispectral and low-resolution multispectral",
+    "drawn_as": "three image tiles of different size, each with its symbol and tensor shape written beneath",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "S",
+    "type": "operation",
+    "role": "spectral response that maps the HR-MS image to the PAN image",
+    "drawn_as": "thick labelled arrow carrying a small inset of coloured response curves",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "D↓",
+    "type": "operation",
+    "role": "downsampling from the HR-MS image to the LR-MS image",
+    "drawn_as": "thick labelled arrow",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "P = HS / L = DH",
+    "type": "formula",
+    "role": "observation models of the PAN and LR-MS images",
+    "drawn_as": "two blue-outlined rounded boxes at the left, top and bottom",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "min_H ||P − HS||² + R_P(H) / min_H ||L − DH||² + R_L(H)",
+    "type": "formula",
+    "role": "the two optimization problems, a data term plus a regularizer each",
+    "drawn_as": "two wide blue-outlined boxes at the right, top and bottom",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "H_P^{k-1} = SᵀP / H_L^{k-1} = DᵀL",
+    "type": "formula",
+    "role": "back-projection of the PAN and LR-MS observations",
+    "drawn_as": "two blue-outlined boxes on the left, second row from the top and from the bottom",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "F^k = prox_{R_P,γ}(H^{k-1}) − H_P^{k-1}",
+    "type": "formula",
+    "role": "proximal update for the PAN problem",
+    "drawn_as": "wide blue-outlined box in the second row",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "G^k = prox_{R_L,γ}(αF^k + βH^{k-1}) − H_L^{k-1}",
+    "type": "formula",
+    "role": "proximal update for the LR-MS problem, fed by F^k",
+    "drawn_as": "wide blue-outlined box in the second row from the bottom",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "H^k = H^{k-1} + λ^k (G^k + F^k)",
+    "type": "formula",
+    "role": "update of the fused image from both proximal terms",
+    "drawn_as": "central blue-outlined box where the top and bottom branches meet",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Inputs / Output",
+    "type": "label",
+    "role": "mark the left and the right end of the network row",
+    "drawn_as": "rotated words at the left and right edges of panel (c)",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "− and + nodes",
+    "type": "operation",
+    "role": "subtract and add image tiles inside the network",
+    "drawn_as": "small circles with a minus (two) or a plus (two); one line hops over another with an arc",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "HR-MS",
+    "to": "PAN",
+    "what": "spectral response S",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HR-MS",
+    "to": "LR-MS",
+    "what": "downsampling D",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P = HS",
+    "to": "min_H ||P − HS||² + R_P(H) and H_P^{k-1} = SᵀP",
+    "what": "the observation model gives the problem and the back-projection",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "min_H problem (PAN) and H_P^{k-1}",
+    "to": "F^k",
+    "what": "both feed the PAN proximal update",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "L = DH",
+    "to": "min_H ||L − DH||² + R_L(H) and H_L^{k-1} = DᵀL",
+    "what": "the observation model gives the problem and the back-projection",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "min_H problem (LR-MS) and H_L^{k-1}",
+    "to": "G^k",
+    "what": "both feed the LR-MS proximal update",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F^k and G^k",
+    "to": "H^k = H^{k-1} + λ^k (G^k + F^k)",
+    "what": "the two branches converge on the update (arrows from above and below)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P, L and H^{k-1} images",
+    "to": "H_P^{k-1}, H_L^{k-1}, − nodes, F^k, G^k",
+    "what": "network row: PAN and LR-MS images are brought to H_P^{k-1} and H_L^{k-1}, subtracted at the − nodes to give the grey maps F^k and G^k",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H^{k-1}, F^k, G^k",
+    "to": "+ node and H^k",
+    "what": "H^{k-1} (long line), F^k and G^k are summed into the output image; a middle + node and vertical double-headed arrows pass H^{k-1} and F^k to the − nodes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "equation boxes of (b)",
+    "to": "network of (c)",
+    "what": "same symbols P, H^{k-1}, F^k, G^k, L, H^k label boxes and images, so each image maps to an equation",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Degradation Model",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "PAN and LR-MS images obtained from the HR-MS image through the spectral response S and the downsampling D",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Optimization by ODE",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "two boxed optimization problems, their proximal updates F^k and G^k and the update of H^k, as a chain of equation boxes",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Proximal Network",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "the same update as image tiles joined by subtraction and sum nodes, from inputs P, H^{k-1}, L to output H^k",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "start of each panel title",
+    "what": "name the three panels"
+   },
+   {
+    "marker": "k, k-1",
+    "kind": "identity",
+    "at": "equations and image labels",
+    "what": "iteration index of the update"
+   },
+   {
+    "marker": "subscripts P and L",
+    "kind": "identity",
+    "at": "H_P, H_L, R_P, R_L",
+    "what": "tie a quantity to the PAN or the LR-MS branch"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "PAN, HR-MS and LR-MS remote-sensing patches of the degradation model",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "27 pt squares for PAN (grey) and HR-MS (brown tones), a smaller square for LR-MS to show lower resolution; symbol and tensor shape written beneath"
+   },
+   {
+    "what": "spectral response curves on the S arrow",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small white box with red, green and blue curves, no axes"
+   },
+   {
+    "what": "inputs and back-projections of one patch in the network: P, H_P^{k-1}, H^{k-1}, L, H_L^{k-1}",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "square tiles at the nodes of the network, each labelled with its symbol; L is drawn smaller"
+   },
+   {
+    "what": "updated output H^k",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square tile at the right end of the network"
+   },
+   {
+    "what": "residual maps F^k and G^k",
+    "content": "dense-map",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "flat grey tiles with faint blue edge traces, the results of the subtraction nodes"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one real remote-sensing patch passed through the network, with its intermediate residual maps and the fused output",
+    "form": "image thumbnails at every node of the network drawing",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "degradation-model-arrows",
+    "drawn_as": "the HR-MS image with labelled thick arrows to a PAN image (S) and to a smaller LR-MS image (D down)",
+    "parts": [
+     "HR-MS tile",
+     "S arrow",
+     "D arrow",
+     "PAN tile",
+     "LR-MS tile"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "operator-nodes",
+    "drawn_as": "circles with plus or minus joining image tiles, a line hop where lines cross",
+    "parts": [
+     "minus circle",
+     "plus circle",
+     "line hop"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Reads (a) first at top-left, then jumps to the large panel (b) at right, read from the outer rows inward to the central update box, and last (c) at bottom-left from the inputs at the left to the output at the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three grey rectangular panels: a short, wide (a) at top-left with (c) below it, and a tall (b) filling the right half; (b) holds ten blue-outlined equation boxes in two columns, left observation and back-projection boxes and right problem and update boxes, with arrows converging on a central box.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.43,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light grey ground of the three panels"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "fill of the equation boxes"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "blue outlines of the ten equation boxes (stroke)"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "dark blue-grey text colour (from the measured palette)"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "about 0.75 pt black arrows and blue box outlines, three heavier 1.25 pt strokes (the arrows of panel (a)), no dashes",
+  "font": "serif (Times New Roman, Cambria Math) 5-14.5 pt: 9.5 pt panel titles, 13.5-14.5 pt equations in the boxes, 6-9 pt symbols under the images",
+  "corners": "mixed",
+  "arrows": "black straight orthogonal arrows with filled heads; thick ones in (a); double-headed vertical arrows in (c); one arc where two lines cross",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey is only the ground; blue outline marks an equation box; image colours are the data (grey PAN, brown-toned MS images, grey residual maps); nothing else is colour-coded",
+  "line_style_means": "thick black arrows in (a) = degradation operators; thin black arrows = data flow; double-headed arrows = a value shared by two nodes; an arc hop = lines crossing without a junction",
+  "shape_means": "rounded blue-outlined box = equation; circle with minus or plus = subtraction or sum; square image = tensor; rotated Inputs and Output mark the ends of the network",
+  "marker_means": "(a)(b)(c) name panels; k and k-1 mark the iteration; subscripts P and L tie quantities to the PAN or LR-MS branch",
+  "emphasis": "the central update box where the two branches of (b) meet, and the output sum node of (c)",
+  "reusable_patterns": [
+   "three grey panels telling one story: observation model, derived update equations, network that draws the same update",
+   "images as nodes of the network, each labelled with the symbol of the equation in the neighbouring panel",
+   "boxed equations in two mirrored branches converging on the central update",
+   "residual maps shown as flat grey tiles so that differences read as subtraction results",
+   "thick labelled arrows with a tiny inset (spectral response curves) for the degradation operators",
+   "rotated Inputs and Output labels at the ends of the network row"
+  ],
+  "weaknesses": [
+   "(c) sits below (a) while (b) is read second, so the order a, b, c zigzags",
+   "symbol labels and tensor shapes under the images are 5-6 pt",
+   "the line hop and junction in (c) are hard to see",
+   "panel (b) is equation-heavy and gives no legend for R_P, R_L, γ, α, β, λ"
+  ]
+ },
+ "resources": {
+  "own": [
+   "remote-sensing image patches (PAN, MS, LR-MS and the residual maps) taken from the paper's data and outputs"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "equation boxes and arrows",
+   "sum and difference nodes",
+   "panel grounds",
+   "spectral response inset"
+  ],
+  "unknown": [
+   "which dataset the patches come from"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "PAN, HR-MS and LR-MS image tiles",
+   "blue-outlined rounded equation boxes",
+   "two mirrored equation branches converging on one box",
+   "image tiles joined by minus and plus circles",
+   "spectral response inset",
+   "rotated Inputs and Output labels"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "pan-sharpening",
+   "remote sensing image fusion",
+   "proximal network",
+   "neural ODE",
+   "degradation model",
+   "algorithm unrolling",
+   "image fusion"
+  ],
+  "tags": [
+   "equation-boxes"
+  ],
+  "new_tags": [
+   {
+    "name": "images-as-network-nodes",
+    "what": "the network is drawn as real image patches joined by sum and difference circles, each image labelled with the symbol of the neighbouring equation panel"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "For algorithm-unrolling work, show the same update three times (as the physical model, as boxed equations in two mirrored branches that converge on the update, and as a network of labelled images joined by sum and difference nodes) using identical symbols so each image maps to an equation.",
+  "suits": "model-based networks (proximal, ODE, ADMM unrolling) in which each layer implements a known equation and the data are images."
+ },
+ "tags": [
+  "three grey panels",
+  "boxed equations",
+  "blue outlined boxes",
+  "real image tiles",
+  "serif formulas",
+  "mirrored branches"
+ ],
+ "provenance": {
+  "sections": [
+   "front matter; no paragraph in the paper text refers to the figure"
+  ],
+  "evidence": [
+   "(a) The physical degradation model of the pan-sharpening task",
+   "Iterative solution steps for two formulaic proximal optimization problems with the high-order ODE numerical scheme",
+   "(c) The derived ODE-inspired tuning-free proximal optimization network."
+  ]
+ },
+ "summary": "OTPNet is an ODE-inspired, tuning-free proximal network for remote sensing image fusion; the figure shows the pan-sharpening task, which fuses a high-resolution panchromatic image with a low-resolution multispectral one. Three grey panels tell the story. (a) shows the degradation model: the PAN image comes from the high-resolution multispectral image through a spectral response S, and the low-resolution image through downsampling D. (b) lays out the optimization as blue-outlined equation boxes in two mirrored branches, one per problem, whose proximal updates F^k and G^k converge on the update of H^k. (c) draws the same update as a network of real image patches joined by subtraction and sum nodes, from inputs P, H^(k-1), L to output H^k.",
+ "summary_zh": "OTPNet 的示意图：三块灰色面板依次给出全色锐化的退化模型 (a)、用方框公式排成上下两支并汇入 H^k 更新的 ODE 优化步骤 (b)，以及用真实遥感图块加减法节点画出的同一更新网络 (c)。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper text mentions the figure, so roles come from the caption, the abstract and the equations in the figure itself; the wiring of the middle + node and of the vertical double-headed arrows in (c) is read from the drawing. The text layer carries circled digits that are not visible in the print. The figure is a mechanism-style diagram in the index but has no steps, so it is kept as concept-schematic plus model-anatomy as in the prior.",
+ "venue": "AAAI25"
+}

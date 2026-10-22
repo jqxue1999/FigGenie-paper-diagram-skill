@@ -1,0 +1,566 @@
+{
+ "paper_id": "icml23-0028",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ProtST",
+  "one_liner": "Joint pre-training of a protein language model, a biomedical text model and a fusion module, used for supervised learning, zero-shot classification and retrieval.",
+  "domain": [
+   "protein language models",
+   "multimodal pre-training",
+   "biomedical text"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "fan-out",
+  "variant_note": "one pre-training panel, then three small downstream panels (supervised, zero-shot classification, retrieval) that reuse the same orange and blue language-model trapezoids",
+  "argues": "Pre-training a protein language model jointly with a text model and a fusion module gives one pair of models that serves supervised learning, zero-shot classification and retrieval.",
+  "subject": "ProtST pre-training on protein sequences and texts, and three uses of the result: supervised learning, zero-shot classification and retrieval.",
+  "elements": [
+   {
+    "name": "amino-acid sequence boxes",
+    "type": "sample",
+    "role": "protein sequence input; in (a) with [MASK] tokens, in (d) a database of sequences",
+    "drawn_as": "peach rounded boxes with sans text lines, [MASK] tokens in orange-brown",
+    "container": "(a), (b), (c), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "text description boxes",
+    "type": "sample",
+    "role": "biomedical text input: a protein description in (a), label descriptions in (c), a function query in (d)",
+    "drawn_as": "pale blue-lavender rounded boxes with italic serif text, [MASK] tokens in blue, class names in bold",
+    "container": "(a), (c), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Protein = (AA sequence, Text description)",
+    "type": "label",
+    "role": "says that a protein is a pair of a sequence and a text description",
+    "drawn_as": "bold text between the two input boxes with a small hollow arrow up to the sequence and one down to the text",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Protein LM",
+    "type": "module",
+    "role": "encodes the protein sequence",
+    "drawn_as": "orange trapezoid, wide at the input side, bold label; one copy per panel",
+    "container": "(a), (b), (c), (d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Biomedical LM",
+    "type": "module",
+    "role": "encodes the text",
+    "drawn_as": "blue trapezoid with bold label; used in (a), (c), (d)",
+    "container": "(a), (c), (d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Fusion Module",
+    "type": "module",
+    "role": "combines the protein and text representations in pre-training",
+    "drawn_as": "grey trapezoid with bold label, between the two language models",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "L_MPM, L_GC, L^S_MMP, L^T_MMP",
+    "type": "formula",
+    "role": "the four pre-training loss terms; their names are not spelled out in the figure",
+    "drawn_as": "bold italic serif symbols at the ends of grey arrows from the models and the fusion module",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "class list: Cell membrane, Cytoplasm, ..., Extracellular",
+    "type": "label",
+    "role": "label set of the downstream classification, one row (Cytoplasm) shaded grey",
+    "drawn_as": "white box of four stacked rows with a thin black outline",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "z^S and z^T_1 ... z^T_K",
+    "type": "data",
+    "role": "protein embedding and the embeddings of the K label descriptions",
+    "drawn_as": "one orange cell, and a row of blue cells with an ellipsis cell",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "z^S · z^T_i row",
+    "type": "data",
+    "role": "similarity of the protein to each label description; the best match shaded grey",
+    "drawn_as": "row of white cells with dot-product labels, one grey cell, a grey arrow up",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "A protein locating at Cytoplasm",
+    "type": "label",
+    "role": "predicted label description",
+    "drawn_as": "grey rounded box with italic text, label word in bold",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "z^T and z^S_1 ... z^S_N",
+    "type": "data",
+    "role": "text query embedding and the embeddings of N database proteins",
+    "drawn_as": "one blue cell and a row of orange cells with an ellipsis cell",
+    "container": "(d)",
+    "is_contribution": false
+   },
+   {
+    "name": "z^T · z^S_i row and Retrieval ranks",
+    "type": "data",
+    "role": "similarity of the query to each protein, then the proteins in ranked order S_2, S_1, S_N",
+    "drawn_as": "row of dot-product cells with grey shades, a grey arrow up to a row of ranked cells in decreasing grey",
+    "container": "(d)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "amino-acid sequence box",
+    "to": "Protein LM",
+    "what": "sequence input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "text description box",
+    "to": "Biomedical LM",
+    "what": "text input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM",
+    "to": "Fusion Module",
+    "what": "protein representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Biomedical LM",
+    "to": "Fusion Module",
+    "what": "text representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM",
+    "to": "L_MPM",
+    "what": "output of the masked sequence",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fusion Module",
+    "to": "L^S_MMP and L^T_MMP",
+    "what": "two outputs, one per modality",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM and Biomedical LM",
+    "to": "L_GC",
+    "what": "both outputs meet in one loss",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "amino-acid sequence box",
+    "to": "Protein LM",
+    "what": "(b) sequence in, then an orange arrow to the class list",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM",
+    "to": "class list",
+    "what": "prediction over the labels",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM",
+    "to": "z^S",
+    "what": "protein embedding (c)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Biomedical LM",
+    "to": "z^T_1 ... z^T_K",
+    "what": "label description embeddings (c)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z^S and z^T_i",
+    "to": "similarity row",
+    "what": "dot product, best match shaded",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "similarity row",
+    "to": "A protein locating at Cytoplasm",
+    "what": "label of the best match",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Biomedical LM",
+    "to": "z^T",
+    "what": "query embedding (d)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Protein LM",
+    "to": "z^S_1 ... z^S_N",
+    "what": "database embeddings (d)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "similarity row (d)",
+    "to": "Retrieval ranks",
+    "what": "ranking of the proteins",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange items",
+    "to": "blue items",
+    "what": "protein side against text side, colour kept in every panel",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Multimodal Pre-training",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "a protein sequence and its text, both with [MASK] tokens, go through Protein LM and Biomedical LM, a Fusion Module and four loss terms",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Downstream Supervised Learning",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "a sequence goes through the pre-trained Protein LM alone to a list of class labels",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Zero-shot Protein Classification",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "the protein embedding is compared with the embeddings of label descriptions and the best match, Cytoplasm, is the answer",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) Zero-shot Text-to-Protein Retrieval",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "a text query embedding is compared with the embeddings of database proteins, giving ranks S_2, S_1, S_N",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a)-(d)",
+    "kind": "section",
+    "at": "bold titles at the top-left of each panel",
+    "what": "letter the four panels and give each a title"
+   },
+   {
+    "marker": "L_MPM, L_GC, L^S_MMP, L^T_MMP",
+    "kind": "identity",
+    "at": "ends of the grey arrows in (a)",
+    "what": "name the four loss terms"
+   },
+   {
+    "marker": "z^S, z^T, S_i",
+    "kind": "identity",
+    "at": "embedding cells and rank cells in (c) and (d)",
+    "what": "protein and text embeddings and protein indices"
+   },
+   {
+    "marker": "[MASK]",
+    "kind": "identity",
+    "at": "inside the sequence and text in (a)",
+    "what": "masked tokens, coloured orange in the sequence and blue in the text"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "amino-acid sequences such as MGAA[MASK]SINT[MASK]NITKAY... with masked residues",
+    "form": "sans text lines in peach rounded boxes, [MASK] tokens coloured",
+    "real_values": true
+   },
+   {
+    "what": "a protein description: PROTEIN NAME: [MASK] myristoylated protein 053R. PROTEIN FUNCTION: May play a critical role in virion [MASK]...",
+    "form": "italic serif text in a pale blue box, [MASK] tokens coloured blue",
+    "real_values": true
+   },
+   {
+    "what": "label descriptions 'A protein locating at Cell membrane / Cytoplasm / Extracellular' and the retrieval query 'FUNCTION: Binding to a heme, a compound of iron complexed in a porphyrin (tetrapyrrole) ring.'",
+    "form": "italic text boxes with the class names or key phrase in bold",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "language models as trapezoids wide at the input side, orange for protein and blue for biomedical text, bold labels Protein LM and Biomedical LM",
+    "parts": [
+     "Protein LM",
+     "Biomedical LM"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small square cells for embeddings, dot-product scores and ranks, with an ellipsis cell",
+    "parts": [
+     "z cells",
+     "similarity cells",
+     "rank cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "rounded box listing label descriptions 'A protein locating at ...' with the class name in bold",
+    "parts": [
+     "template text",
+     "bold class name"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "a box of several sequences standing for the database, encoded and scored against a text query, ending in a rank strip",
+    "parts": [
+     "database box",
+     "query",
+     "similarity row",
+     "Retrieval ranks"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "zero-shot-similarity-row",
+    "drawn_as": "row of dot-product cells with the best match shaded grey and an arrow up to the chosen label or ranked list",
+    "parts": [
+     "dot-product cells",
+     "grey cell",
+     "arrow"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at panel (a) top-left: sequence and text on the left, the two language models, the fusion module and the loss labels on the right; then (b) below it, then (c) and (d) in the right column, each read left to right to a result."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four panels split by dashed black lines: (a) large at top-left, (b) under it, (c) at top-right, (d) under (c); every panel reads left to right from input boxes through trapezoid models to a result at the right.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.63,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffbc8f",
+    "used_for": "Protein LM trapezoids, protein embedding cells, orange arrows"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "peach boxes holding amino-acid sequences"
+   },
+   {
+    "hex": "#95b6eb",
+    "used_for": "Biomedical LM trapezoids, text embedding cells, blue arrows"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "pale blue boxes holding text descriptions"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "Fusion Module, best-match cells, predicted class row and prediction box"
+   },
+   {
+    "hex": "#9e9ca0",
+    "used_for": "grey arrows to the loss labels and to the results"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "darker grey cells of the similarity and rank rows"
+   },
+   {
+    "hex": "#e5e2e7",
+    "used_for": "lightest grey cells of the rank row"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on boxes, trapezoids and cells; 0.75 pt dashed black dividers between panels",
+  "font": "serif (Nimbus Roman) for labels and italic descriptions, Verdana sans for sequences, Cambria Math italics for symbols, 4-7.5 pt, mostly 5.5 pt, bold 7.5 pt panel titles",
+  "corners": "mixed",
+  "arrows": "hollow white block arrows from inputs into the models; thin orange or blue arrows from the models; thin grey arrows to losses and results, some curved",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Orange = protein side (sequence boxes, Protein LM, protein embeddings, [MASK] in the sequence); blue = text side (description boxes, Biomedical LM, text embeddings, [MASK] in the text); grey = fusion, losses, similarity and result cells.",
+  "line_style_means": "Dashed black lines split the four panels; hollow block arrows feed inputs into the models; thin coloured arrows carry representations on; grey arrows lead to losses or results.",
+  "shape_means": "Rounded rectangles = inputs, peach for protein and pale blue for text; trapezoids = language models and the fusion module; small square cells = embeddings and scores.",
+  "marker_means": "(a)-(d) letter the panels; L symbols name the loss terms; z with S or T names protein or text embeddings; S_i indexes proteins; [MASK] marks masked tokens.",
+  "emphasis": "The repeated orange and blue trapezoids keep the two models recognisable across panels, and the grey Fusion Module and grey result cells are the only grey objects.",
+  "reusable_patterns": [
+   "one colour per modality carried through input box, model, embedding cells and arrows in every panel",
+   "one full pre-training panel followed by small downstream panels that redraw only the changed path",
+   "[MASK] tokens coloured inside the sample sequence and text",
+   "row of dot-product cells with the best match shaded and an arrow up to the chosen label or ranked list",
+   "pair label 'Protein = (AA sequence, Text description)' with small arrows to the two input boxes",
+   "loss symbols placed at the ends of grey arrows from the model outputs",
+   "dashed lines instead of frames to split panels"
+  ],
+  "weaknesses": [
+   "sequences and descriptions are about 5.5 pt, small in print",
+   "grey arrows to the four loss labels in (a) curve around the fusion module and are hard to follow",
+   "the loss symbols are not spelled out in the figure, so the paper text is needed",
+   "the grey shades of the rank cells need the caption to be read as an order"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real protein sequence snippets with [MASK] tokens",
+   "a protein text description in the style of the paper's dataset",
+   "label descriptions and a retrieval query text"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "trapezoid language models",
+   "peach and pale blue input boxes",
+   "block arrows",
+   "similarity and rank cells"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "amino-acid sequence box with [MASK] tokens",
+   "text description box",
+   "orange Protein LM trapezoid",
+   "blue Biomedical LM trapezoid",
+   "grey Fusion Module trapezoid",
+   "loss labels L_MPM L_GC L_MMP",
+   "embedding cell rows z",
+   "similarity row and Retrieval ranks"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "protein language model",
+   "multimodal pre-training",
+   "biomedical text",
+   "zero-shot classification",
+   "text-to-protein retrieval",
+   "fusion module",
+   "mask prediction",
+   "contrastive alignment"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "token-strip",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "similarity-row-readout",
+    "what": "a row of dot-product cells with the best match shaded and an arrow up to the chosen label or a ranked list, used for zero-shot classification and retrieval"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a multi-use model as one rich pre-training panel followed by small downstream panels that redraw only the changed path, keeping one colour per modality on the input boxes, models, embeddings and arrows so each block is recognised in every panel.",
+  "suits": "Multimodal pre-training followed by several downstream uses (fine-tuning, zero-shot classification, retrieval) that share the same encoders."
+ },
+ "tags": [
+  "four dashed-separated panels",
+  "orange and blue trapezoids",
+  "peach and pale blue input boxes",
+  "hollow block arrows",
+  "serif text",
+  "tikz-style",
+  "[MASK] highlighting",
+  "grey fusion module"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "(a) A protein language model (PLM) is first pre-trained along with a biomedical language model (BLM) and a fusion module",
+   "The paired PLM and BLM can also retrieve functional proteins from a large-scale database without any function annotation."
+  ]
+ },
+ "summary": "ProtST pre-trains a protein language model (PLM) together with a biomedical language model (BLM) on protein sequences and their text descriptions, then uses the result in three ways. Figure 1 has four panels split by dashed lines and drawn with one colour per modality: orange for protein, blue for text. Panel (a) shows pre-training: a masked sequence and a masked description go through the Protein LM and Biomedical LM, a grey Fusion Module and four loss terms. Panel (b) uses the Protein LM alone for supervised classification. Panels (c) and (d) compare protein and text embeddings by dot products for zero-shot classification and for text-to-protein retrieval with ranked results.",
+ "summary_zh": "ProtST 用蛋白质序列和文字描述联合预训练两个语言模型。图 1 分四个面板：(a) 预训练，含融合模块和四个损失；(b) 监督学习；(c) 零样本分类；(d) 零样本文本到蛋白质检索。橙色为蛋白质，蓝色为文本。",
+ "confidence": "high",
+ "notes": "The pre-screen said phase-bands; fan-out was chosen because one pre-training panel feeds three downstream uses (phase-bands would also fit). The loss symbols L_MPM, L_GC, L^S_MMP and L^T_MMP are not defined in the figure; their link to the three pre-training tasks named in the abstract is inferred from the subscripts, so element roles stay neutral. Which cell of the class list is shaded and why is not explained in the figure.",
+ "venue": "ICML23"
+}

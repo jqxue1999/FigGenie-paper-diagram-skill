@@ -1,0 +1,590 @@
+{
+ "paper_id": "neurips24-0027",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "BEACON",
+  "one_liner": "A benchmark of 13 RNA tasks across structure, function and engineering for comparing RNA language models with CNN, LSTM and ResNet baselines.",
+  "domain": [
+   "RNA biology",
+   "benchmark",
+   "RNA language models"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "five lettered zones under grey header pills: task crosshair, database logo wall, baseline lists, task illustrations, metric cards",
+  "argues": "RNA models lack a shared testbed; BEACON offers one: 13 tasks from structure to engineering, public data sources, a common set of baselines and common metrics.",
+  "subject": "A five-zone overview of the benchmark: task map, source databases, baseline models, task illustrations and evaluation metrics.",
+  "elements": [
+   {
+    "name": "BEA CON",
+    "type": "label",
+    "role": "names the benchmark at the origin of the task crosshair",
+    "drawn_as": "square box with a thick grey frame, BEA in cyan over CON in gold",
+    "container": "a: Benchmark Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Classification / Regression",
+    "type": "label",
+    "role": "ends of the vertical axis: output type of a task",
+    "drawn_as": "two 5.5 pt labels at the top and bottom of a double-ended arrow",
+    "container": "a: Benchmark Tasks",
+    "is_contribution": false
+   },
+   {
+    "name": "Nucleotide Level / Sequence Level",
+    "type": "label",
+    "role": "ends of the horizontal axis: granularity of the prediction",
+    "drawn_as": "two rotated 5.5 pt labels left and right of a double-ended arrow",
+    "container": "a: Benchmark Tasks",
+    "is_contribution": false
+   },
+   {
+    "name": "13 task names",
+    "type": "label",
+    "role": "each task sits in the quadrant given by output type and level; its text colour gives the total data size",
+    "drawn_as": "4 pt coloured text in four quadrants: Secondary Structure, Contact Map, Splice Site, Non-coding Function, Modification Prediction, Distance Map, Structural Score Imputation, Vaccine Degradation, APA Isoform, CRISPR Off Target, CRISPR On Target, Mean Ribosome Loading, Programmable RNA Switches",
+    "container": "a: Benchmark Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Total data size",
+    "type": "label",
+    "role": "colour key for the task text: <1,000, [1000, 10,000), [10,000, 100,000], >100,000",
+    "drawn_as": "four coloured dots with range labels at the lower right of the crosshair",
+    "container": "a: Benchmark Tasks",
+    "is_contribution": false
+   },
+   {
+    "name": "Database",
+    "type": "container",
+    "role": "the public databases that supply the task data (caption: distinguished by data size and source type)",
+    "drawn_as": "loose wall of 14 logos and wordmarks in three bands split by dashed rules: SRP DB, COMPARATIVE RNA WEB, rRNADB, Rfam, RNaseP, tmRDB, RCSB PDB, circBase, RADAR, Nm-seq, RMBase v2.0, GENCODE, Nucleotide BLAST, icSHAPE",
+    "container": "b: Database",
+    "is_contribution": false
+   },
+   {
+    "name": "Pre-trained RNA LM",
+    "type": "module",
+    "role": "existing pre-trained RNA language models used as baselines",
+    "drawn_as": "blue header strip over a pale-blue list: RNABERT, RNA-FM, RNA-MSM, SpliceBERT, 3UTRBERT, UTR-LM",
+    "container": "d: 29+ Baselines",
+    "is_contribution": false
+   },
+   {
+    "name": "Baseline RNA LM",
+    "type": "module",
+    "role": "RNA language model variants, bracketed as RNA-LM; the abstract names tokenizer and positional encoding as the components compared",
+    "drawn_as": "blue header strip over a pale-blue list with a bracket: Non-Overlap, BPE, Single, K-mer, APE, ALiBi, RoPE",
+    "container": "d: 29+ Baselines",
+    "is_contribution": true
+   },
+   {
+    "name": "Naive Supervised Model",
+    "type": "module",
+    "role": "naive supervised deep baselines (caption)",
+    "drawn_as": "blue header strip over a pale-blue box with the words CNN, LSTM, ResNet scattered",
+    "container": "d: 29+ Baselines",
+    "is_contribution": false
+   },
+   {
+    "name": "Structure / Function / Engineering",
+    "type": "container",
+    "role": "the three biological fields into which the 13 tasks are grouped",
+    "drawn_as": "three columns with bold headings at the top right of each column, separated by dotted vertical rules",
+    "container": "c: 13 Tasks Covering Various Biological Processes",
+    "is_contribution": true
+   },
+   {
+    "name": "Structure prediction",
+    "type": "label",
+    "role": "family heading of the four structure tasks, split by a bracket tree into four children",
+    "drawn_as": "blue RNA stem-loop drawing with a bold caption and a black bracket line",
+    "container": "c: 13 Tasks Covering Various Biological Processes",
+    "is_contribution": false
+   },
+   {
+    "name": "Secondary Structure, Contact Map, Distance Map, Imputation",
+    "type": "data",
+    "role": "outputs of the four structure tasks",
+    "drawn_as": "a bead-chain arc diagram, two square heat maps and a small bar chart, each with a bold caption underneath",
+    "container": "c: 13 Tasks Covering Various Biological Processes",
+    "is_contribution": false
+   },
+   {
+    "name": "ncRNA-Function, Splice Site, Mean Ribosome Loading, Modification, APA Isoform",
+    "type": "label",
+    "role": "the five function tasks, each beside a small drawing of the biology",
+    "drawn_as": "bold left-aligned labels with RNA glyphs, exon blocks, a ribosome on an mRNA strand, a modified transcript strand and coloured isoform bars",
+    "container": "c: 13 Tasks Covering Various Biological Processes",
+    "is_contribution": false
+   },
+   {
+    "name": "Vaccine Degradation, RNA Switches, CRISPR ON/OFF target",
+    "type": "label",
+    "role": "the engineering tasks (four of the 13: CRISPR is split into ON and OFF)",
+    "drawn_as": "bold labels with dark-red RNA fragments, ON and OFF hairpin switches and a Cas9 target scene marked with a green tick and a red cross",
+    "container": "c: 13 Tasks Covering Various Biological Processes",
+    "is_contribution": false
+   },
+   {
+    "name": "Classification",
+    "type": "module",
+    "role": "metric card for classification: F1, AUC, Top K ACC, Top L Precision",
+    "drawn_as": "blue header strip over a pale-blue card with a mini scatter plot above the metric list",
+    "container": "e: Evaluation Metrics",
+    "is_contribution": false
+   },
+   {
+    "name": "Regression",
+    "type": "module",
+    "role": "metric card for regression: R2, MCRMSE, Spearman Correlation",
+    "drawn_as": "blue header strip over a pale-blue card with a mini fit-line plot above the metric list",
+    "container": "e: Evaluation Metrics",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "BEA CON",
+    "to": "Classification / Regression",
+    "what": "vertical axis arrow runs up and down from the name box",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "BEA CON",
+    "to": "Nucleotide Level / Sequence Level",
+    "what": "horizontal axis arrow runs left and right from the name box",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "13 task names",
+    "to": "quadrants of the crosshair",
+    "what": "position gives output type (classification or regression) and level (nucleotide or sequence)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Total data size",
+    "to": "13 task names",
+    "what": "dot colour equals task text colour (data-size class)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Database",
+    "to": "three logo bands",
+    "what": "dashed rules split the wall into three bands; the figure does not say what each band stands for",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Structure prediction",
+    "to": "Secondary Structure, Contact Map, Distance Map, Imputation",
+    "what": "one task family splits into four sub-tasks",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Structure / Function / Engineering",
+    "to": "the 13 task drawings",
+    "what": "each column holds the tasks of one field, columns divided by dotted rules",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Baseline RNA LM",
+    "to": "Non-Overlap, BPE, Single, K-mer, APE, ALiBi, RoPE",
+    "what": "an RNA-LM bracket groups the seven variants",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "mini scatter plots",
+    "to": "metric lists",
+    "what": "each metric list sits under the plot of its task type",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a: Benchmark Tasks",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "13 tasks on a crosshair of classification vs regression and nucleotide vs sequence level, text coloured by total data size",
+    "verdict": "ours"
+   },
+   {
+    "label": "b: Database",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "wall of 14 source-database logos and names in three bands",
+    "verdict": "setting"
+   },
+   {
+    "label": "c: 13 Tasks Covering Various Biological Processes",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "each task drawn as a small illustration, in three columns Structure, Function, Engineering",
+    "verdict": "ours"
+   },
+   {
+    "label": "d: 29+ Baselines",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "three boxes: pre-trained RNA language models, RNA-LM variants, naive supervised models",
+    "verdict": "baseline"
+   },
+   {
+    "label": "e: Evaluation Metrics",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "classification and regression metrics, each under a mini scatter plot",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a b c d e",
+    "kind": "section",
+    "at": "left of each grey header pill",
+    "what": "bold 10 pt letters name the five zones; the letters run a, b, d across the top and c, e below, so they do not follow the placement"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "Contact Map and Distance Map heat maps",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small square heat maps with X-shaped diagonal patterns (green-yellow-blue and purple-yellow), each under the Structure prediction bracket"
+   },
+   {
+    "what": "RNA stem-loop drawing for Structure prediction and a bead-chain arc diagram for Secondary Structure",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "blue line drawing of stems and loops; grey beads on a line with arcs over them"
+   },
+   {
+    "what": "Imputation bar chart",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "a few pale-blue bars of different heights without axes"
+   },
+   {
+    "what": "drawings of function and engineering tasks: ncRNA glyphs, splice-site exon blocks, modified transcript strand, APA isoform bars, vaccine fragments, ON and OFF RNA switches",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 8,
+    "medium": "vector",
+    "treatment": "small flat drawings placed right of each bold task label"
+   },
+   {
+    "what": "ribosome on mRNA strand and Cas9 target scene",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "soft-shaded scientific illustrations; the CRISPR scene carries a green tick (on target) and a red cross (off target)"
+   },
+   {
+    "what": "classification and regression mini plots in the metric cards",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "L-shaped axes without ticks; blue and orange dots split by a curve, and blue dots along a fit line"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "BEA over CON two-colour wordmark in a framed square",
+    "stands_for": "the benchmark BEACON",
+    "style": "logo",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "database logos: SRP DB, tmRDB, Rfam, RCSB PDB, RMBase v2.0, GENCODE, Nucleotide BLAST",
+    "stands_for": "source databases of the task data",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "plain wordmarks: COMPARATIVE RNA WEB, rRNADB, RNaseP, circBase, RADAR, Nm-seq, icSHAPE",
+    "stands_for": "source databases of the task data",
+    "style": "logo",
+    "medium": "vector",
+    "count": 7
+   }
+  ],
+  "examples": [
+   {
+    "what": "an RNA transcript with nine named chemical modifications (m7G, m1A, I, m6Am, psi, m6A, m5U, m5C, 2'-O-Me) along 5'UTR, coding region, 3'UTR and poly-A tail",
+    "form": "annotated strand drawing with lollipop markers",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rna-secondary-structure",
+    "drawn_as": "blue stem-loop line drawing for Structure prediction, and an arc diagram over a bead chain for Secondary Structure",
+    "parts": [
+     "stem-loop drawing",
+     "bead chain",
+     "arcs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contact-map-heatmap",
+    "drawn_as": "square colour heat maps with diagonal and anti-diagonal bands",
+    "parts": [
+     "Contact Map",
+     "Distance Map"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "classification-vs-regression-scatter",
+    "drawn_as": "L-shaped axes; coloured dots split by a curved boundary for classification, dots along a fitted line for regression",
+    "parts": [
+     "axes",
+     "dots",
+     "boundary curve",
+     "fit line"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Eye starts at the top-left task crosshair (a), moves right to the database wall (b) and the baseline boxes (d), then drops to the task strip (c) and the metric cards (e)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Five lettered zones on white, each titled by a wide grey pill: three on the top row (task crosshair, database logo wall, baseline boxes) and two below (a wide task-illustration strip and two metric cards). Letters run a, b, d, c, e by position.",
+  "panel_count": 5,
+  "lanes": "3 aligned columns inside panel c (Structure, Function, Engineering) split by dotted rules",
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.04,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey header pills titling the five zones"
+   },
+   {
+    "hex": "#82a2a6",
+    "used_for": "task text and legend dot for data size below 1,000"
+   },
+   {
+    "hex": "#5c798a",
+    "used_for": "task text and legend dot for 1,000 to 10,000"
+   },
+   {
+    "hex": "#d3ba81",
+    "used_for": "task text and legend dot for 10,000 to 100,000"
+   },
+   {
+    "hex": "#b36c6f",
+    "used_for": "task text and legend dot for more than 100,000"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "blue header strips of the baseline and metric boxes (placed as bitmaps)",
+    "approx": true
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "pale-blue bodies of the baseline and metric boxes (placed as bitmaps)",
+    "approx": true
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "BEA in the name box"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "CON in the name box"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "blue dots in the metric mini plots and blue RNA line art"
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "orange dots in the classification mini plot"
+   },
+   {
+    "hex": "#cc8bcc",
+    "used_for": "pink-purple mRNA strand pieces in the Mean Ribosome Loading drawing"
+   },
+   {
+    "hex": "#b869b4",
+    "used_for": "darker purple strand pieces in the same drawing"
+   },
+   {
+    "hex": "#6f0000",
+    "used_for": "dark red RNA fragments of Vaccine Degradation"
+   },
+   {
+    "hex": "#59c355",
+    "used_for": "green ON label in the RNA switch drawing"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark grey hairlines (#595959) for axes, brackets and dividers; 0.5 to 1 pt outlines; a thick grey frame on the BEACON name box; no outline on the grey pills",
+  "font": "sans (Nimbus Sans, Arial), mostly 4 to 4.5 pt labels, 8 pt pill titles, 10 pt bold panel letters; Cambria Math for R2",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows from the name box, small filled heads; bracket lines without heads",
+  "rendering": "mixed",
+  "effects": "soft drop shadow on the SRP DB and tmRDB logo buttons; otherwise none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "task text colour = total data size class (grey-teal below 1,000, dark blue-grey 1,000 to 10,000, tan 10,000 to 100,000, rose above 100,000); light blue = lists of models and metrics; BEA cyan and CON gold are the two-tone name",
+  "line_style_means": "dashed rules split the database wall into bands; dotted vertical rules split the three task columns; solid black arrows give axis directions",
+  "shape_means": "grey rounded pill = zone title; framed square at the origin = the benchmark name; blue rectangles = lists of models or metrics",
+  "marker_means": "bold letters head the zones; green tick and red cross in the CRISPR drawing mark on-target and off-target",
+  "emphasis": "the BEACON name sits at the origin of the crosshair and the 8 pt pills are the largest type; everything else is 4 pt text, so the zones carry equal weight",
+  "reusable_patterns": [
+   "crosshair task map: benchmark name at the origin, arrows to two axes, task names placed in quadrants",
+   "four-dot data-size key matching the text colour of each task",
+   "wide grey header pill with a bold panel letter beside it",
+   "dashed rules splitting a logo wall into bands",
+   "bracket tree from one task family to its sub-tasks",
+   "mini schematic plot above each metric list"
+  ],
+  "weaknesses": [
+   "4 pt labels are hard to read at print size",
+   "panel letters run a, b, d, c, e by position",
+   "the three bands of the database wall carry no stated meaning",
+   "the 13 tasks appear twice (a and c) under different groupings"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "database logos and wordmarks (SRP DB, tmRDB, Rfam, RCSB PDB, RMBase, GENCODE, Nucleotide BLAST)"
+  ],
+  "generated": [],
+  "drawn": [
+   "header pills, crosshair axes, task labels and size key",
+   "baseline and metric boxes",
+   "mini scatter plots",
+   "bar chart and arc diagram",
+   "bracket trees"
+  ],
+  "unknown": [
+   "origin of the biology illustrations in zone c (look taken from published or stock sources)",
+   "origin of the contact-map and distance-map heat maps"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "crosshair task map with name box",
+   "database logo wall",
+   "baseline model lists in blue boxes",
+   "RNA structure drawings and heat maps",
+   "metric cards with mini scatter plots",
+   "grey header pills"
+  ],
+  "sample_data": "molecule",
+  "keywords": [
+   "RNA benchmark",
+   "RNA language models",
+   "13 tasks",
+   "secondary structure",
+   "splice site",
+   "CRISPR",
+   "baselines",
+   "evaluation metrics"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "schematic-plot",
+   "colour-coded-groups",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "logo-wall",
+    "what": "a loose wall of source or database logos and wordmarks, grouped by dashed rules, to show where the data come from"
+   },
+   {
+    "name": "header-pill-titles",
+    "what": "each lettered zone of a composite is titled by a wide grey rounded pill with a bold panel letter beside it"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Pin the benchmark name at the origin of a crosshair whose axes are the two task dimensions, place task names in the quadrants and colour them by data size with a four-dot key; titled pills then turn the rest into parallel zones for data, models and metrics.",
+  "suits": "multi-task benchmarks and datasets that must show tasks, data sources, baselines and metrics in one overview figure."
+ },
+ "tags": [
+  "dashboard",
+  "lettered-zones",
+  "grey-header-pills",
+  "logo-wall",
+  "crosshair-task-map",
+  "tiny-type"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract / Introduction (p.2)"
+  ],
+  "evidence": [
+   "As shown in Fig. 1, BEACON contains a curated collection of 13 important RNA-related tasks",
+   "These tasks cover sequence-level and nucleotide-level analyses across three main fields",
+   "b: Diverse database distinguished by data size and source type."
+  ]
+ },
+ "summary": "BEACON is a benchmark that puts 13 RNA tasks, from secondary structure and contact maps to splice sites, ribosome loading and CRISPR targeting, under one roof so RNA language models can be compared with CNN, LSTM and ResNet baselines. Figure 1 is a five-zone composite on white, each zone titled by a grey pill and lettered. Zone a is a crosshair task map (classification vs regression, nucleotide vs sequence level) whose task names are coloured by data size; b is a wall of source-database logos; d lists the 29+ baselines; c shows each of the 13 tasks as a small drawing under Structure, Function and Engineering; e lists metrics under two mini scatter plots. Labels are tiny, about 4 pt.",
+ "summary_zh": "BEACON 是首个涵盖 13 项 RNA 任务的综合基准，用来比较 RNA 语言模型与 CNN 等基线。图 1 由五个带灰色标题胶囊的字母分区组成：按数据量着色的任务十字图、数据库标识墙、基线列表、13 项任务插画和评价指标。",
+ "confidence": "high",
+ "notes": "Prior labels put contribution-mosaic first but named a scope-overview variant (benchmark-dashboard); the figure is read as a scope-overview dashboard with contribution-mosaic second. The pale-blue boxes of zones d and e are placed as bitmaps (digest). What the three bands of the database wall mean is not stated in the figure. The 13 tasks are counted from the label list; Structural Score Imputation is written on two lines.",
+ "venue": "NeurIPS24"
+}

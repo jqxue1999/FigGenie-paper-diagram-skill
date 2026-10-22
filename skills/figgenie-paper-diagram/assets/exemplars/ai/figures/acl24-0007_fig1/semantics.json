@@ -1,0 +1,462 @@
+{
+ "paper_id": "acl24-0007",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ARIES",
+  "one_liner": "Corpus of reviewer comments linked to the paper edits made in response, with comment-edit alignment and edit generation tasks.",
+  "domain": [
+   "peer review",
+   "scientific paper revision",
+   "document editing"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "fan-out",
+  "variant_note": "shared inputs on the left feed two stacked task rows, Alignment and Generation, each through a black-box model to real example outputs on the right",
+  "argues": "Given a review comment and a source paper, a model must either pick the revised-paper edits that answer it (alignment) or write such an edit itself (generation).",
+  "subject": "A review comment and paper versions feeding two black-box tasks, comment-edit alignment and edit generation, with real example edits.",
+  "elements": [
+   {
+    "name": "Review Comment",
+    "type": "instance",
+    "role": "a real reviewer comment asking for run-time information",
+    "drawn_as": "large yellow rounded note with monospace text and a bold title above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Source Paper",
+    "type": "data",
+    "role": "the original paper, input of the generation task",
+    "drawn_as": "framed white page filled with wavy scribble lines, bold label above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Source Paper + Revisions",
+    "type": "data",
+    "role": "source and revised paper; their differences give the candidate edits",
+    "drawn_as": "framed white page with scribble lines, some line pairs on blue bands with red and green strokes marking edits",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Alignment",
+    "type": "label",
+    "role": "task 1: comment-edit alignment, choose the edits that answer the comment",
+    "drawn_as": "large bold heading over the upper row",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Review Comment (chip, Alignment)",
+    "type": "data",
+    "role": "the comment as an input of the alignment model",
+    "drawn_as": "small yellow rounded chip joined to the model by a curved line",
+    "container": "Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "three blue bars",
+    "type": "data",
+    "role": "candidate edits derived from the source and revised papers",
+    "drawn_as": "three short light-blue pill bars, dotted leaders from the revised page, curved lines into the model",
+    "container": "Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "model (Alignment)",
+    "type": "module",
+    "role": "scores which candidate edits belong to the comment",
+    "drawn_as": "lilac rounded box with bold lowercase label, a black box",
+    "container": "Alignment",
+    "is_contribution": false
+   },
+   {
+    "name": "tick, tick, cross card",
+    "type": "data",
+    "role": "alignment outcome per candidate: two aligned, one not aligned",
+    "drawn_as": "small white card with black border holding two ticks and a cross",
+    "container": "Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "Gold Edits: aligned",
+    "type": "instance",
+    "role": "example of a gold edit that answers the comment (adds a paragraph about complexity and training time)",
+    "drawn_as": "light-blue box with monospace text and green insertion markup, italic label aligned above",
+    "container": "Gold Edits",
+    "is_contribution": null
+   },
+   {
+    "name": "Gold Edits: not aligned",
+    "type": "instance",
+    "role": "example of an edit that is not tied to the comment",
+    "drawn_as": "light-blue box with monospace text, red deletions and green insertions, italic label not aligned above",
+    "container": "Gold Edits",
+    "is_contribution": null
+   },
+   {
+    "name": "Generation",
+    "type": "label",
+    "role": "task 2: edit generation, write an edit that addresses the comment",
+    "drawn_as": "large bold heading over the lower row",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Review Comment (chip, Generation)",
+    "type": "data",
+    "role": "the comment as an input of the generation model",
+    "drawn_as": "small yellow rounded chip joined to the model by a curved line",
+    "container": "Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "model (Generation)",
+    "type": "module",
+    "role": "writes an edit from the comment and the source paper",
+    "drawn_as": "lilac rounded box with bold lowercase label, a black box",
+    "container": "Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "two blue bars",
+    "type": "data",
+    "role": "the generated edit text, compact stand-in",
+    "drawn_as": "two short light-blue pill bars at the right of the model, a dotted leader to the example",
+    "container": "Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Generated Edit",
+    "type": "instance",
+    "role": "example generated edit with placeholders YY, ZZ, AA, BB for missing numbers",
+    "drawn_as": "light-blue box with monospace text and green insertion markup",
+    "container": "Generation",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Review Comment",
+    "to": "Source Paper + Revisions, Source Paper",
+    "what": "dashed lines tie the comment to the documents it concerns",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Source Paper + Revisions",
+    "to": "three blue bars",
+    "what": "edits between source and revised paper become the candidates",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Review Comment (chip, Alignment)",
+    "to": "model (Alignment)",
+    "what": "comment as input",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "three blue bars",
+    "to": "model (Alignment)",
+    "what": "candidate edits as input",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "model (Alignment)",
+    "to": "tick, tick, cross card",
+    "what": "decision per candidate",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "tick, tick, cross card",
+    "to": "Gold Edits: aligned, Gold Edits: not aligned",
+    "what": "ticks point to an aligned gold edit and the cross to a not-aligned one",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Review Comment (chip, Generation)",
+    "to": "model (Generation)",
+    "what": "comment as input",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Source Paper",
+    "to": "model (Generation)",
+    "what": "source paper as input",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "model (Generation)",
+    "to": "two blue bars",
+    "what": "generated edit",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "two blue bars",
+    "to": "Generated Edit",
+    "what": "bars stand for the edit text shown in full",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Review Comment, Alignment, Generation, Gold Edits, Generated Edit, aligned, not aligned",
+    "kind": "section",
+    "at": "bold or italic headings above the boxes and rows",
+    "what": "name the inputs, the two task rows and the output groups"
+   },
+   {
+    "marker": "tick, tick, cross",
+    "kind": "identity",
+    "at": "card to the right of the alignment model",
+    "what": "outcome per candidate edit: aligned, aligned, not aligned"
+   },
+   {
+    "marker": "[+ ... +] green, [- ... -] red",
+    "kind": "identity",
+    "at": "inside the edit texts",
+    "what": "insertions and deletions that make up an edit"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "page thumbnails of the source paper and of the paper with revisions",
+    "content": "document",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "white framed pages filled with wavy scribble lines; in the revised page some line pairs sit on blue bands with red and green strokes marking edits"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "black head-and-shoulders silhouette of a person",
+    "stands_for": "the human who wrote the comment or revised the paper (unlabelled)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a reviewer comment asking for run-time information, an aligned gold edit adding a paragraph on complexity and training time, a not-aligned edit with diff markup, and a generated edit with placeholders YY, ZZ, AA, BB",
+    "form": "monospace text in coloured boxes with [+ +] and [- -] diff markup",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a small white card with two ticks and a cross beside the alignment model, tied by dotted leaders to a gold aligned edit and a not-aligned edit",
+    "parts": [
+     "tick and cross card",
+     "aligned edit",
+     "not aligned edit"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a black person silhouette sitting on the dashed link between the comment and the revised paper, unlabelled",
+    "parts": [
+     "person icon",
+     "dashed link"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the yellow Review Comment note, follows the dashed lines to the papers, then the Alignment row to the gold edits at the top right, then the Generation row to the Generated Edit."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Inputs on the left (the comment note on top, two page thumbnails below with dashed ties); in the middle two stacked task rows headed by large bold titles, each a chip, a lilac model box and bars; at the right a column of blue example boxes, two gold edits for Alignment and one generated edit for Generation, tied to the rows by dotted leaders.",
+  "panel_count": 1,
+  "lanes": "2 task rows (Alignment, Generation) sharing the inputs at the left and putting their outputs in one column at the right",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.56,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffe599",
+    "used_for": "review comment note and the Review Comment chips (yellow = input from the reviewer)"
+   },
+   {
+    "hex": "#e1ecff",
+    "used_for": "boxes of the gold and generated edits (light blue = edits)"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "pill bars standing for edits and the highlight bands on the revised page"
+   },
+   {
+    "hex": "#d9d2e9",
+    "used_for": "model boxes (lilac)"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "0.5 pt dark-grey lines: connectors, dashed ties, page outlines"
+   },
+   {
+    "hex": "#59a376",
+    "used_for": "green strokes on the revised page marking insertions"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "pink-red strokes on the revised page marking deletions"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark grey throughout: solid curves, dotted leaders and dashed ties; green and pink squiggles on the page thumbnails",
+  "font": "monospace (Consolas) 5.5 pt for the comment and edit texts; bold sans (Carlito) 4.5-8.5 pt labels, 12 pt bold task titles",
+  "corners": "rounded",
+  "arrows": "no arrowheads at all: plain curved lines join items, dotted leaders and dashed ties; direction is implied by the left-to-right layout",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Yellow = the review comment; light blue = edits (candidate bars, gold edits, generated edit); lilac = models; white = documents and the result card; in the edit texts green = inserted text, red = deleted text.",
+  "line_style_means": "Solid curves = inputs flowing into a model; dashed grey lines = ties between the comment and the papers; dotted lines = links from the revised page to the candidate bars and from outputs to their example texts.",
+  "shape_means": "Rounded box = a model or a text item; short pill bar = an edit; page with scribbles = a document; tick and cross card = alignment outcome.",
+  "marker_means": "Tick and cross show which candidates align; [+ +] in green and [- -] in red mark insertions and deletions.",
+  "emphasis": "Large bold task titles and the lilac model boxes in the centre; the full-text examples at the right carry the content.",
+  "reusable_patterns": [
+   "shared inputs fanning out into two stacked task rows, each input, black-box model, output",
+   "the same small coloured chip repeated in both rows to name one input",
+   "pill bars as compact stand-ins for edits, tied to full-text examples by dotted leaders",
+   "diff markup in monospace example text, green insertions and red deletions",
+   "tick and cross card between the model and the gold examples to define an alignment output",
+   "dashed ties from a note to the documents it concerns"
+  ],
+  "weaknesses": [
+   "no arrowheads, so direction depends on the layout",
+   "the person icon is unlabelled",
+   "faint dotted leaders cross each other near the revised page",
+   "the blue bars are not labelled as candidate edits"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real review comment with its aligned, not-aligned and generated edits"
+  ],
+  "stock": [
+   "person silhouette icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes, bars, curved connectors, page thumbnails with scribbles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "review comment note",
+   "page thumbnails with scribble lines and highlighted bands",
+   "lilac model boxes",
+   "pill bars for edits",
+   "tick and cross card",
+   "blue edit boxes with diff-marked monospace text",
+   "person icon",
+   "dashed and dotted connectors"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "peer review",
+   "paper edits",
+   "comment-edit alignment",
+   "edit generation",
+   "scientific documents",
+   "task definition",
+   "dataset"
+  ],
+  "tags": [
+   "task-definition",
+   "highlighted-text-spans",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "no-arrowhead-connectors",
+    "what": "plain curved lines without arrowheads join inputs to models and models to outputs; direction is implied by the layout"
+   },
+   {
+    "name": "diff-markup-text",
+    "what": "edit text shown with green [+ insertions +] and red [- deletions -] markup in a monospace font"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Define two related tasks by fanning the same inputs into two stacked rows (input chips, black-box model, example output) and tie compact bars to full-text examples by dotted leaders; a tick and cross card shows what an alignment output looks like.",
+  "suits": "Dataset or task papers that define more than one task over the same inputs and want the reader to see real input and output text."
+ },
+ "tags": [
+  "two task rows",
+  "monospace examples",
+  "curved connectors without arrowheads",
+  "pastel boxes",
+  "diff markup",
+  "Inkscape look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Task Definitions (p.3)"
+  ],
+  "evidence": [
+   "Overview of our tasks.",
+   "In edit generation, a model is given a review comment and a source paper and must generate an edit",
+   "we consider two versions of the task of determining how a document should be edited"
+  ]
+ },
+ "summary": "ARIES is a dataset of reviewer comments linked to the edits authors made to their papers in response; it defines two tasks and benchmarks ten models. Figure 1 draws both tasks from shared inputs. A yellow note holds a real review comment, and dashed lines tie it to the source paper and to the paper with its revisions, drawn as page thumbnails. In the Alignment row, the comment chip and three blue bars of candidate edits enter a lilac model box whose output is a tick, tick, cross card linked to a gold aligned edit and a not-aligned edit. In the Generation row, the comment and the source paper enter a model that outputs a generated edit with placeholders. Edits are shown in monospace with green insertions and red deletions.",
+ "summary_zh": "ARIES 把审稿意见与作者随后的论文修改配成数据集。图 1 以一条真实意见为例，从共同输入分出两个任务：对齐任务由模型给候选修改打勾叉并对应到金标准修改，生成任务则由模型写出带占位符的修改，修改文本用绿增红删标注。",
+ "confidence": "high",
+ "notes": "Prior labels kept (stage-pipeline, fan-out); worked-walkthrough added because the comment and the edits are real text traced through both rows. Alignment and Generation are treated as two lanes of one drawing, not as panels (the index says one panel, the earlier pass two). The person icon is unlabelled; its meaning is read from its position on the dashed link. There are no arrowheads: the digest counts none.",
+ "venue": "ACL24"
+}

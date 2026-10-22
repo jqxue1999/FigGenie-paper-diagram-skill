@@ -1,0 +1,562 @@
+{
+ "paper_id": "iclr23-0049",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VTM (Visual Token Matching)",
+  "one_liner": "A universal few-shot learner for dense prediction that matches patch tokens of a query image to support image and label tokens at several feature levels.",
+  "domain": [
+   "few-shot learning",
+   "dense prediction",
+   "visual token matching"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a tall hierarchical encoder-decoder with aligned levels, plus two side panels that expand the Token Matching Module and the Fusion Block",
+  "argues": "Non-parametric matching of query and support tokens at every feature level, with a few task-specific parameters, handles arbitrary dense tasks in one architecture.",
+  "subject": "The architecture: image encoder, label encoder, four Token Matching modules, a Fusion chain with a Head, and zoomed views of two modules.",
+  "elements": [
+   {
+    "name": "Image Encoder f_T",
+    "type": "module",
+    "role": "extracts patch-level tokens of the query image and of each support image; the same encoder is used for both",
+    "drawn_as": "serif-italic column header over two stacks of five blue ViT blocks on an Embed box",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Label Encoder g",
+    "type": "module",
+    "role": "extracts tokens of each support label",
+    "drawn_as": "column header over a stack of five pink ViT blocks on an Embed box",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "ViT Block",
+    "type": "module",
+    "role": "one level of a hierarchical ViT; its output goes to the matching module of that level (15 blocks in three stacks)",
+    "drawn_as": "rounded boxes stacked upwards, blue for images and pink for labels; a small red square inside the blue ones",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Embed",
+    "type": "operation",
+    "role": "turns patches into embedded tokens at the bottom of each stack (3 boxes)",
+    "drawn_as": "short rounded box under each stack",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Shared",
+    "type": "label",
+    "role": "the query-image stack and the support-image stack share one encoder",
+    "drawn_as": "blue bracket with arrows from the left stack to the middle stack, blue word",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Task-specific parameters",
+    "type": "label",
+    "role": "the few parameters that are adapted per task, marked on the blue ViT blocks",
+    "drawn_as": "red bold words with a red bracket and red arrows into the left blue stack, red squares inside the blocks",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Matching Modules / Token Matching",
+    "type": "module",
+    "role": "match query tokens with support image tokens and support label tokens at each of four levels to infer query label tokens (4 boxes)",
+    "drawn_as": "orange rounded boxes in a column, thin lines from every encoder stack at that level",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "predicted query label tokens",
+    "type": "data",
+    "role": "output of each matching module",
+    "drawn_as": "small grids of magenta cells, one per level, lighter towards the bottom",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Label Decoder h: Fusion (32), (16), (8), (4) and Head",
+    "type": "module",
+    "role": "fuses the per-level tokens from one level to the next and decodes the raw query label",
+    "drawn_as": "lavender boxes chained top to bottom with small grey squares between them, ending in a Head box",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Query image / Support image and label / Few-shot Support set",
+    "type": "sample",
+    "role": "the inputs: one query photo and a few support photo-and-label pairs",
+    "drawn_as": "photo and patch grids at the bottom; support pairs in black and grey frames with an ellipsis on a grey rounded backing",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Predicted query label",
+    "type": "sample",
+    "role": "the output label map for the query image",
+    "drawn_as": "coloured label picture at the bottom right, above its caption",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Token Matching Module (Eq. 4, 5)",
+    "type": "container",
+    "role": "zoomed view of one matching module",
+    "drawn_as": "light orange region with q, k, v branches: linear boxes, Scaled Dot-Product Attention (σ), a product circle, a Σ circle and a linear box, between token grids",
+    "container": "top-right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Fusion Block (s)",
+    "type": "container",
+    "role": "zoomed view of one fusion block: concat, 1 x 1 conv, up/downsample, residual conv unit, a sum with the previous feature, upsample (x2) and 1 x 1 conv",
+    "drawn_as": "lavender region with white boxes, a plus circle, size labels H/s x W/s and H*2/s x W*2/s",
+    "container": "bottom-right panel",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Query image",
+    "to": "Embed and ViT Block stack of the Image Encoder",
+    "what": "patches are embedded and encoded level by level",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Support image and label",
+    "to": "the support-image stack and the Label Encoder stack",
+    "what": "support photos and labels are encoded separately",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "query-image stack",
+    "to": "support-image stack",
+    "what": "Shared: the same image encoder weights",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task-specific parameters",
+    "to": "blue ViT blocks",
+    "what": "the adapted parameters sit in the image encoder blocks",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ViT Block outputs at one level (query, support image, support label)",
+    "to": "Token Matching at that level",
+    "what": "tokens of the three streams are matched at each hierarchy level",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Token Matching",
+    "to": "predicted query label tokens",
+    "what": "inferred tokens of the query label",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "predicted query label tokens",
+    "to": "Fusion",
+    "what": "tokens of each level go to its fusion block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fusion (32) to Fusion (4)",
+    "to": "Head",
+    "what": "fusion blocks are chained from one level to the next, then the Head forms the raw query label",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Head",
+    "to": "Predicted query label",
+    "what": "decoded label of the query image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Token Matching boxes",
+    "to": "Token Matching Module (Eq. 4, 5) panel",
+    "what": "the panel expands one such box; same name and orange tint, no leader line",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Fusion boxes",
+    "to": "Fusion Block (s) panel",
+    "what": "the panel expands one such box; same lavender tint, no leader line",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "support label and support image tokens, query tokens",
+    "to": "predicted query label tokens (zoom panel)",
+    "what": "linear maps to v, k and q, scaled dot-product attention weights applied to v, summed and projected",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "The full hierarchical encoder-decoder under four column headers (Image Encoder, Label Encoder, Matching Modules, Label Decoder), with the query and support inputs at the bottom.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Token Matching Module (Eq. 4, 5)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "Inside one matching module: linear maps for q, k, v, scaled dot-product attention, product, sum and a final linear map.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Fusion Block (s)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "Inside one fusion block: concat, convolutions, up or downsampling, residual units and a residual sum.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(32), (16), (8), (4)",
+    "kind": "identity",
+    "at": "Fusion boxes",
+    "what": "number attached to each fusion level; the figure does not say what it measures"
+   },
+   {
+    "marker": "q, k, v",
+    "kind": "identity",
+    "at": "branches of the Token Matching Module",
+    "what": "query, key and value branches of the attention"
+   },
+   {
+    "marker": "red square",
+    "kind": "identity",
+    "at": "inside each blue ViT block",
+    "what": "marks the task-specific parameters"
+   },
+   {
+    "marker": "H/s x W/s, h x w, H*2/s x W*2/s",
+    "kind": "identity",
+    "at": "beside token maps and feature maps in the Fusion Block panel",
+    "what": "sizes of the maps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "query photo of a hallway",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small square at the bottom left with the photo cut into a 3 by 3 grid of patches above it"
+   },
+   {
+    "what": "3 by 3 patch tiles of the query photo, of the support photo and of the support label",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 27,
+    "medium": "bitmap",
+    "treatment": "three grids of tiny squares above the three Embed boxes, drawn with gaps between tiles"
+   },
+   {
+    "what": "support set: two photos of rooms and two coloured label maps",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "photo and label side by side in a black frame, a second pair in a grey frame, an ellipsis between"
+   },
+   {
+    "what": "stacked 3D boxes of grey label maps: the support labels above the Label Encoder and the raw predicted label above the output",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "offset layers drawn as a cube-like stack with a faint ellipsis"
+   },
+   {
+    "what": "predicted query label: a coloured label map of the hallway",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square at the bottom right with its caption underneath"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a hallway query photo with two support pairs of room photos and coloured label maps, and the predicted coloured label of the hallway",
+    "form": "photos and label maps at the bottom of the architecture",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "photos cut into 3 by 3 grids of patches with gaps, then an Embed box",
+    "parts": [
+     "photo",
+     "patch grid",
+     "Embed"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "ViT Block boxes stacked upwards one per level, five per stack, with a tiny red square on the blue ones; not drawn with attention inside",
+    "parts": [
+     "ViT Block",
+     "Embed"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "Scaled Dot-Product Attention (σ) as one box fed by linear maps for q and k, whose weights multiply v through a product circle",
+    "parts": [
+     "linear",
+     "Scaled Dot-Product Attention",
+     "product circle",
+     "Σ circle"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "image and label encoders as stacks of blocks, matching modules in a column between them and a decoder of fusion blocks chained in the other direction",
+    "parts": [
+     "Image Encoder",
+     "Label Encoder",
+     "Token Matching",
+     "Fusion chain",
+     "Head"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "red squares inside the blue ViT blocks with a red bracket and red arrows labelled Task-specific parameters; no snowflake or padlock",
+    "parts": [
+     "red square",
+     "red bracket",
+     "red label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the column headers at the top or the query photo at the bottom left, follows the encoder stacks up, the thin lines into the four orange Token Matching boxes, then the Fusion chain down to the Head and the predicted label; the right panels expand two modules."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A wide left panel holds the whole architecture in four labelled columns and five aligned levels. A right column, ruled off by thin lines, stacks two zoom panels: Token Matching Module above and Fusion Block below.",
+  "panel_count": 3,
+  "lanes": "4 labelled columns (Image Encoder, Label Encoder, Matching Modules, Label Decoder) by 4 to 5 aligned hierarchy levels",
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 2.01,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b3e0ee",
+    "used_for": "Image Encoder ViT blocks and Embed boxes"
+   },
+   {
+    "hex": "#fad7d7",
+    "used_for": "Label Encoder ViT blocks and Embed box"
+   },
+   {
+    "hex": "#fcd9b5",
+    "used_for": "Token Matching boxes (zoom panel ground #feeedd)"
+   },
+   {
+    "hex": "#d0d5e9",
+    "used_for": "Fusion and Head boxes (Fusion Block panel ground #eaecf6)"
+   },
+   {
+    "hex": "#ec148d",
+    "used_for": "magenta cells of the predicted query label tokens"
+   },
+   {
+    "hex": "#e7ebbb",
+    "used_for": "support image token cells"
+   },
+   {
+    "hex": "#f2f2f3",
+    "used_for": "light grey backing behind the shared encoder pair and the support set"
+   },
+   {
+    "hex": "#bdbfc1",
+    "used_for": "grey feature-map squares between fusion blocks"
+   },
+   {
+    "hex": "#ed272d",
+    "used_for": "red squares, bracket and arrows of the task-specific parameters"
+   },
+   {
+    "hex": "#2277bd",
+    "used_for": "blue arrows and word for the shared weights"
+   },
+   {
+    "hex": "#2c292a",
+    "used_for": "dark outlines and arrows"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt dark outlines and arrows throughout; thin grey lines for the multi-level connections; 0.5 pt coloured arrows",
+  "font": "sans (Apple SD Gothic Neo) 3.5 to 6 pt, bold for module names; Georgia italic for the symbols f_T, g, h and σ",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small heads, vertical inside the stacks and horizontal into the matching boxes; red arrows and bracket for task-specific parameters; blue arrows for the shared encoder",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "Blue = image branch, pink = label branch (and magenta label tokens), orange = token matching, lavender = fusion and head; the zoom panels reuse the module's colour as their ground. Red = task-specific parameters, blue arrows = shared weights. Yellow-green cells = support image tokens, green = query tokens, magenta = label tokens.",
+  "line_style_means": "red = path to the task-specific parameters; blue = weight sharing; thin grey lines from the encoder stacks to the matching modules = the multi-level connections; black = data flow",
+  "shape_means": "rounded box = a module or layer; small-square grid = a token map; grey square = a feature map; circled dot and Σ = product and sum; plus circle = residual add; cube-like stack = a set of label maps",
+  "marker_means": "(32), (16), (8), (4) number the fusion levels; q, k, v name the attention branches; red squares mark the adapted parameters; H/s x W/s give map sizes",
+  "emphasis": "Red task-specific marks and the orange matching modules stand out against the pale blue and pink stacks; the zoom panels are named after the new modules.",
+  "reusable_patterns": [
+   "hierarchical encoder-decoder drawn as aligned columns and levels with matching modules between them",
+   "zoom panels at the right titled with the module name and tinted in that module's colour, tied to it by name only",
+   "red squares inside blocks plus a red bracket and arrows to mark the few task-specific parameters",
+   "token maps drawn as small grids of coloured cells, coloured by what they hold",
+   "support set drawn as photo and label pairs in offset frames with an ellipsis",
+   "photo input and label-map output at the bottom, one picture type per role"
+  ],
+  "weaknesses": [
+   "3.5 to 6 pt text and dense wiring: thin lines from every encoder level into the matching boxes",
+   "the zoom panels are linked to the main drawing only by name and colour, with no leader lines",
+   "the meaning of the numbers in Fusion (32) to (4) is not given",
+   "bottom-up flow in the encoders and top-down flow in the decoder are mixed in one picture"
+  ]
+ },
+ "resources": {
+  "own": [
+   "indoor photos and their label maps",
+   "the predicted label map"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "ViT blocks and module boxes",
+   "token grids",
+   "arrows and brackets",
+   "zoom panels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "stacks of ViT blocks (blue image, pink label)",
+   "orange Token Matching boxes",
+   "lavender Fusion boxes and Head",
+   "grids of coloured token cells",
+   "support photo and label pairs",
+   "red task-specific parameter squares",
+   "zoom panels for the Token Matching Module and the Fusion Block"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "few-shot learning",
+   "dense prediction",
+   "visual token matching",
+   "ViT",
+   "hierarchical encoder-decoder",
+   "task-specific parameters",
+   "attention",
+   "support set"
+  ],
+  "tags": [
+   "zoom-callout",
+   "module-state-coding",
+   "matrix-cell-grid",
+   "colour-coded-groups",
+   "stacked-cards",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "module-colour-zoom-panels",
+    "what": "zoom panels set on a ground tinted in the colour of the module they expand, titled with the module's name, tied to it by name and colour only"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a hierarchical network as aligned columns and levels, give each component one colour (image blue, label pink, matching orange, fusion lavender), and expand the new modules in side panels titled with the module name and tinted in the module's colour. Mark the few adapted parameters with red squares and a red bracket.",
+  "suits": "Multi-scale encoder-decoder or matching architectures where the novelty sits in one or two small modules that need an internal view and only a small part is adapted per task."
+ },
+ "tags": [
+  "tall-architecture",
+  "aligned-hierarchy-levels",
+  "zoom-panels-right",
+  "red-parameter-marks",
+  "tiny-sans-labels",
+  "token-grids"
+ ],
+ "provenance": {
+  "sections": [
+   "3.2 Architecture (p.4)"
+  ],
+  "evidence": [
+   "Our model has a hierarchical encoder-decoder architecture that implements patch-level non-parametric matching of Eq. 3 in multiple hierarchies",
+   "Given the query image and the support set, the image encoder first extracts patch-level embeddings (tokens)"
+  ]
+ },
+ "summary": "Visual Token Matching (VTM) is a universal few-shot learner for dense prediction tasks: it matches patch tokens of a query image to those of a few support image and label pairs at several feature levels, and adapts to a new task with a few task-specific parameters. Figure 1 draws the model as a tall hierarchical encoder-decoder in four columns: a blue image encoder shared by query and support images, a pink label encoder, four orange Token Matching modules, and lavender Fusion blocks with a Head that give the predicted label. Red squares mark the task-specific parameters. Two panels on the right expand the Token Matching Module (linear maps, scaled dot-product attention) and the Fusion Block.",
+ "summary_zh": "VTM 是通用的小样本稠密预测模型：多层级匹配查询与支持样本的块级 token，只用少量任务特定参数适配新任务。图 1 为四列层级编码-解码结构，右侧两块放大图展开匹配与融合模块，红方块标出任务特定参数。",
+ "confidence": "high",
+ "notes": "Prior label kept (model-anatomy, overview-plus-zoom). The zoom panels are tied to the main drawing only by name and colour. Picture counts follow the digest (38 placed bitmaps: 27 six-point patch tiles, seven of 21 pt, four of 14 pt); how the 21 pt ones split between the photo, the stacked boxes and the output label is my estimate. The numbers in Fusion (32), (16), (8), (4) are not explained in the figure.",
+ "venue": "ICLR23"
+}

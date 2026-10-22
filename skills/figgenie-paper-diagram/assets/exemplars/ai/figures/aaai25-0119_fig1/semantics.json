@@ -1,0 +1,488 @@
+{
+ "paper_id": "aaai25-0119",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MAPF-GPT",
+  "one_liner": "A transformer trained by pure imitation learning on a billion expert observation-action pairs to choose actions for multi-agent pathfinding without heuristics or communication.",
+  "domain": [
+   "multi-agent pathfinding",
+   "imitation learning",
+   "foundation model for planning"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "data-construction",
+  "variant_note": "four titled dashed stage frames in a 2x2 grid, read clockwise from the bottom right: scenarios, expert solutions, tokenised observation-action pairs, training loop; dataset sizes printed in cylinders",
+  "argues": "MAPF-GPT is learned from an expert: scenarios are solved by LaCAM, solutions become about 1B tokenised observation-action pairs, and a transformer is trained on them with cross-entropy.",
+  "subject": "the four-step learning pipeline of MAPF-GPT, from maps to a trained model, with the data size after each step",
+  "elements": [
+   {
+    "name": "Maps: Mazes 10k, Random 2.5k",
+    "type": "data",
+    "role": "two sets of maps used to create scenarios",
+    "drawn_as": "two tan cylinders joined by a short line, counts 10k and 2.5k inside, labelled Mazes and Random under the heading Maps",
+    "container": "(1) Creating MAPF scenarios using POGEMA",
+    "is_contribution": false
+   },
+   {
+    "name": "POGEMA",
+    "type": "label",
+    "role": "the tool that creates the scenarios",
+    "drawn_as": "white word on a teal highlight at the end of the stage title",
+    "container": "(1) Creating MAPF scenarios using POGEMA",
+    "is_contribution": false
+   },
+   {
+    "name": "Problem Instances 3.75M",
+    "type": "data",
+    "role": "MAPF problem instances made from the maps",
+    "drawn_as": "slate-grey cylinder with 3.75M in white",
+    "container": "(1) Creating MAPF scenarios using POGEMA",
+    "is_contribution": false
+   },
+   {
+    "name": "LaCAM",
+    "type": "module",
+    "role": "expert solver; instances are solved in 10 seconds",
+    "drawn_as": "purple rounded box with thick black outline and white bold name; the label instances solved in 10 seconds sits above the next arrow",
+    "container": "(2) Generating ground truth data",
+    "is_contribution": false
+   },
+   {
+    "name": "GT trajectories 85M",
+    "type": "data",
+    "role": "ground-truth solutions from the expert",
+    "drawn_as": "purple cylinder with 85M in white",
+    "container": "(2) Generating ground truth data",
+    "is_contribution": true
+   },
+   {
+    "name": "generating local observations",
+    "type": "operation",
+    "role": "turns the trajectories into per-agent local observations",
+    "drawn_as": "three-line label beside the long black arrow that leaves stage 2 at the left and enters stage 3",
+    "container": "(2) Generating ground truth data",
+    "is_contribution": true
+   },
+   {
+    "name": "red token group: cost-to-go 1 ... cost-to-go 121, agent X, agent Y",
+    "type": "data",
+    "role": "tokens of an observation: 121 cost-to-go values and the agent's coordinates",
+    "drawn_as": "stack of pink boxes with red outline, dots between the first and the second box, a grey curly brace at the right",
+    "container": "(3) Tokenization of egocentric observations",
+    "is_contribution": true
+   },
+   {
+    "name": "teal token group: action history, action history, greedy action",
+    "type": "data",
+    "role": "tokens of an observation: action history and greedy action",
+    "drawn_as": "stack of pale teal boxes with teal outline, dots on top, a grey curly brace at the right",
+    "container": "(3) Tokenization of egocentric observations",
+    "is_contribution": true
+   },
+   {
+    "name": "filtering out identical observations and part of stay-at-target frames",
+    "type": "operation",
+    "role": "reduces the tokenised observations before they enter the dataset",
+    "drawn_as": "five-line bold label on the arrow from the token braces to the 1B cylinder",
+    "container": "(3) Tokenization of egocentric observations",
+    "is_contribution": true
+   },
+   {
+    "name": "Observation / action pairs dataset 1B",
+    "type": "data",
+    "role": "the training set of observation-action pairs",
+    "drawn_as": "teal cylinder with 1B in large black bold type; a dark-grey dot before the word Observation and a purple dot after the word action",
+    "container": "(4) Training loop",
+    "is_contribution": true
+   },
+   {
+    "name": "MAPF-GPT",
+    "type": "module",
+    "role": "the transformer model that is trained",
+    "drawn_as": "teal rounded box with a thick black outline and a 15 pt bold black name",
+    "container": "(4) Training loop",
+    "is_contribution": true
+   },
+   {
+    "name": "random mini-batch sampling",
+    "type": "operation",
+    "role": "draws observations from the dataset into the model",
+    "drawn_as": "bold label on a black polyline that starts with a dark-grey dot under the cylinder and ends at the bottom of the model box",
+    "container": "(4) Training loop",
+    "is_contribution": false
+   },
+   {
+    "name": "training to predict GT actions with cross entropy loss",
+    "type": "operation",
+    "role": "supervises the model with the ground-truth actions",
+    "drawn_as": "bold label on a black polyline that starts with a purple dot and ends at the top of the model box",
+    "container": "(4) Training loop",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Maps (Mazes, Random)",
+    "to": "Problem Instances",
+    "what": "scenarios created with POGEMA",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Problem Instances",
+    "to": "LaCAM",
+    "what": "instances to solve",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "LaCAM",
+    "to": "GT trajectories",
+    "what": "instances solved in 10 seconds",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "GT trajectories",
+    "to": "egocentric observation grid",
+    "what": "generating local observations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "red agent on the grid",
+    "to": "red token group",
+    "what": "observation features of that agent",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "teal agent on the grid",
+    "to": "teal token group",
+    "what": "action features of that agent",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "token groups",
+    "to": "Observation / action pairs dataset",
+    "what": "filtering out identical observations and part of stay-at-target frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Observation / action pairs dataset",
+    "to": "MAPF-GPT",
+    "what": "random mini-batch sampling (dark-grey dot, the observation side)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Observation / action pairs dataset",
+    "to": "MAPF-GPT",
+    "what": "training to predict GT actions with cross entropy loss (purple dot, the action side)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "dots in the dataset label",
+    "to": "starts of the two arrows",
+    "what": "same dot marks which half of the pair each arrow carries",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(1) Creating MAPF scenarios using POGEMA",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "10k maze maps and 2.5k random maps become 3.75M problem instances",
+    "verdict": null
+   },
+   {
+    "label": "(2) Generating ground truth data",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "LaCAM solves the instances within 10 seconds, giving 85M ground-truth trajectories",
+    "verdict": null
+   },
+   {
+    "label": "(3) Tokenization of egocentric observations",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "a grid map with agents and goals is cut into local observations that become red and teal token groups; filtering leaves the dataset",
+    "verdict": null
+   },
+   {
+    "label": "(4) Training loop",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "mini-batches of the 1B pairs train MAPF-GPT to predict ground-truth actions with cross-entropy loss",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(1) (2) (3) (4)",
+    "kind": "order",
+    "at": "stage frame titles",
+    "what": "orders the four stages; the caption uses the same numbers"
+   },
+   {
+    "marker": "dark-grey dot and purple dot",
+    "kind": "identity",
+    "at": "label of the dataset and at the starts of the two arrows to MAPF-GPT",
+    "what": "marks the observation half and the action half of a pair"
+   },
+   {
+    "marker": "agent X, agent Y",
+    "kind": "identity",
+    "at": "red token boxes",
+    "what": "names token fields for the agent's coordinates"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "egocentric observation window of a grid map with obstacles, agents (filled dots) and goals (hollow rings)",
+    "content": "map",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grid of grey lines with blue-grey obstacle squares, filled dots and hollow rings in matching colours, two coloured curved arrows drawn over it in vector"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flat cylinder with a size printed inside",
+    "stands_for": "a dataset (maps, problem instances, GT trajectories, observation-action pairs)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "one observation of one agent: a map window and its token fields (cost-to-go values, coordinates, action history, greedy action)",
+    "form": "map bitmap with curved arrows to two stacks of token boxes",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "colour-coded cylinder with the dataset size in large type inside, one per stage",
+    "parts": [
+     "cylinder",
+     "size number",
+     "caption"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "stacked labelled boxes in two colours with grey curly braces, dots standing for omitted tokens",
+    "parts": [
+     "token boxes",
+     "braces",
+     "dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "MAPF-GPT as a thick-outlined teal rounded box with a bold name, no internals",
+    "parts": [
+     "rounded box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Numbered from the bottom right: stage 1 moves left, stage 2 leaves at the far left edge and climbs to stage 3 at the top left, stage 3 moves right into stage 4 at the top right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four dashed frames in a 2x2 grid of unequal widths: stage 3 top left, stage 4 top right, stage 2 bottom left, stage 1 bottom right. The flow snakes clockwise from stage 1: leftwards along the bottom, up the left edge, rightwards along the top.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.02,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#11c1ac",
+    "used_for": "1B dataset cylinder, MAPF-GPT box and the POGEMA highlight"
+   },
+   {
+    "hex": "#674ea7",
+    "used_for": "LaCAM box, GT trajectories cylinder and the action dot"
+   },
+   {
+    "hex": "#d1a683",
+    "used_for": "map cylinders (Mazes, Random)"
+   },
+   {
+    "hex": "#637b87",
+    "used_for": "Problem Instances cylinder"
+   },
+   {
+    "hex": "#c1433c",
+    "opacity": 0.42,
+    "used_for": "red token boxes (outline and curved arrow in solid #c1433c)"
+   },
+   {
+    "hex": "#0ea08c",
+    "opacity": 0.37,
+    "used_for": "teal token boxes (outline and curved arrow in solid #0ea08c)"
+   },
+   {
+    "hex": "#111111",
+    "used_for": "outlines of boxes and cylinders and the flow arrows"
+   },
+   {
+    "hex": "#9e9e9e",
+    "used_for": "grey curly braces and the dashed frame of stage 3"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.5 pt black outlines on boxes, cylinders and arrows; 0.75 pt coloured dashed frames per stage",
+  "font": "serif bold (Source Serif Pro), 6.5-15 pt, nearly all text bold, 15 pt for numbers and model names inside shapes, 9.5 pt for stage titles",
+  "corners": "rounded",
+  "arrows": "thick orthogonal black arrows with small filled heads, long runs around the frames; two thin coloured curved arrows from agents to token groups",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Colour follows the data and the tool: tan maps, slate instances, purple expert LaCAM and its GT trajectories, teal the observation-action dataset and the model; red and teal token groups are tied to an agent on the map by arrows of the same colour; the purple dot repeats the expert purple for the action half.",
+  "line_style_means": "Dashed coloured frames = the four stages; solid thick black lines = data flow.",
+  "shape_means": "Cylinder = dataset with its size inside; thick-outlined rounded box = tool or model (LaCAM, MAPF-GPT); small box = one token; grid with dots = a MAPF instance.",
+  "marker_means": "(n) numbers the stages and matches the caption; dark-grey and purple dots mark the observation and action halves of a pair.",
+  "emphasis": "The 1B cylinder and the MAPF-GPT box carry the teal fill and the biggest type; sizes in 15 pt bold make the data funnel readable from the numbers alone.",
+  "reusable_patterns": [
+   "dataset size printed inside a cylinder at every stage (10k and 2.5k, 3.75M, 85M, 1B)",
+   "numbered bold stage title on a coloured dashed frame",
+   "a map tile with same-coloured curved arrows pulling token groups out of it",
+   "coloured dots in a text label repeated at the start of the arrows they name",
+   "snake layout where the arrow leaves one frame at the edge and enters the next frame from the same edge"
+  ],
+  "weaknesses": [
+   "the numbered flow starts at the bottom right and runs clockwise, against the usual top-left start",
+   "the long arrow from stage 2 to stage 3 runs around the left edge of the figure",
+   "the caption does not say what the red and teal token colours stand for"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a rendered grid map with agents and goals from the environment"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "stage frames",
+   "cylinders with sizes",
+   "token boxes and braces",
+   "arrows and dot markers",
+   "LaCAM and MAPF-GPT boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed stage frames",
+   "dataset cylinders with sizes",
+   "grid map with agents and goals",
+   "red and teal token boxes with braces",
+   "LaCAM box",
+   "MAPF-GPT box",
+   "dot-keyed arrows to the model"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multi-agent pathfinding",
+   "imitation learning",
+   "expert solver",
+   "tokenization",
+   "dataset construction",
+   "POGEMA",
+   "LaCAM",
+   "transformer"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "dataset-size-cylinders",
+    "what": "cylinders carry the dataset size in large type at each stage, so the pipeline shows the data funnel"
+   },
+   {
+    "name": "dot-keyed-arrows",
+    "what": "small coloured dots in a text label are repeated at the start of the arrows they refer to"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Print the dataset size inside a cylinder at every stage of a data pipeline and give each stage a coloured dashed frame with a numbered title, so order and funnel read at a glance. Dots in a label repeated at the arrow starts show which half of a pair each arrow carries.",
+  "suits": "Data-construction plus training pipelines (imitation, distillation, synthetic data) where dataset sizes and an expert tool are central."
+ },
+ "tags": [
+  "snake-layout",
+  "dashed-stage-frames",
+  "bold-serif",
+  "thick-outlines",
+  "cylinders-with-numbers",
+  "four-colour-scheme"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.3)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "creating MAPF scenarios, generating ground truth solutions, tokenizing these solutions, and executing the main training loop",
+   "the model is trained using cross-entropy loss",
+   "Generating ground truth data, i.e. MAPF solutions using an expert solver."
+  ]
+ },
+ "summary": "MAPF-GPT learns multi-agent pathfinding by imitating an expert: no heuristics, no communication. Figure 1 shows the four learning steps as four dashed, numbered frames in a 2x2 grid that the flow traverses clockwise from the bottom right. POGEMA turns 10k maze and 2.5k random maps into 3.75M problem instances; the LaCAM expert solves them into 85M ground-truth trajectories; local observations are cut out of a map and tokenised into red and teal token groups, then filtered into a 1B-pair dataset; mini-batches of these pairs train the MAPF-GPT box with a cross-entropy loss on the ground-truth actions. Dataset sizes are printed in large type inside colour-coded cylinders.",
+ "summary_zh": "MAPF-GPT 用模仿学习训练多智能体寻路。图用四个带编号的虚线框按顺时针排列：地图生成实例、LaCAM 求出 85M 条轨迹、观测切成两组 token 并过滤成 1B 对数据、再训练模型；各阶段的数据量直接写在彩色圆柱里。",
+ "confidence": "high",
+ "notes": "Panels: the four dashed, titled frames are counted as panels (the index says one panel; the prior labels said four). The red versus teal token colours and what the two coloured agents on the map stand for are not explained, so the relations from agent to token group are described only as drawn. The grid map is the single bitmap (123 x 123 pt in the digest); everything else is vector.",
+ "venue": "AAAI25"
+}

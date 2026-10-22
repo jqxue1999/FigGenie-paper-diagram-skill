@@ -1,0 +1,419 @@
+{
+ "paper_id": "acl23-0038",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Joint-Teaching",
+  "one_liner": "Systematic task-specific knowledge-distillation study for NLG, covering architecture, pruning, objective and pseudo-target choices, and proposing Joint-Teaching.",
+  "domain": [
+   "knowledge distillation",
+   "natural language generation",
+   "pseudo-target augmentation"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "eight titled stages joined by heavy arrows, each with a column of option boxes of which the chosen one has a bold border; an extreme-setup column at the right",
+  "argues": "KD design choices are examined one stage at a time (architecture, pruning, objective, pseudo-targets, joint teaching), the best kept by dev performance; a no-label GPT-4 setup is added.",
+  "subject": "Eight KD study stages as columns of option boxes with the chosen one outlined, plus an extreme-setup column.",
+  "elements": [
+   {
+    "name": "Realistic Setup",
+    "type": "label",
+    "role": "states the setting of the eight stages: a medium-resource labeled dataset with plentiful unlabeled data",
+    "drawn_as": "white box with black outline above the stages, bold italic underlined title",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "S1. Architecture",
+    "type": "operation",
+    "role": "stage 1: choose the model architecture",
+    "drawn_as": "heading with a column of two pink boxes: Encoder-Decoder (bold border), Decoder",
+    "container": "Realistic Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "S2. Pruning",
+    "type": "operation",
+    "role": "stage 2: choose whether and where to prune",
+    "drawn_as": "heading with grey No Pruning and red Encoder Pruning, Decoder Pruning; No Pruning and Decoder Pruning have bold borders",
+    "container": "Realistic Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "S3. Objective",
+    "type": "operation",
+    "role": "stage 3: choose the KD objective",
+    "drawn_as": "heading with grey Fine-tuning and orange Logits KD (bold border), Noisy KD, Attention-Relations KD",
+    "container": "Realistic Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "S4. PTs",
+    "type": "operation",
+    "role": "stage 4: train with or without pseudo-targets",
+    "drawn_as": "heading with yellow Fine-tune + Single PT and Logits KD + Single PT (bold border) under the grey No PTs bar",
+    "container": "Realistic Setup",
+    "is_contribution": true
+   },
+   {
+    "name": "No PTs",
+    "type": "operation",
+    "role": "baseline without pseudo-targets, drawn across the columns of stages 4 to 8",
+    "drawn_as": "one wide grey rounded box spanning S4 to S8",
+    "container": "Realistic Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "S5. Unlabeled",
+    "type": "operation",
+    "role": "stage 5: which data the pseudo-targets are made for",
+    "drawn_as": "heading with green PTs for Labeled and Labeled and Unlabeled (bold border)",
+    "container": "Realistic Setup",
+    "is_contribution": true
+   },
+   {
+    "name": "S6. Number of PTs",
+    "type": "operation",
+    "role": "stage 6: one or several pseudo-targets per input",
+    "drawn_as": "heading with teal A single PT and Multiple PTs (bold border)",
+    "container": "Realistic Setup",
+    "is_contribution": true
+   },
+   {
+    "name": "S7. PTs Decoding",
+    "type": "operation",
+    "role": "stage 7: how pseudo-targets are decoded",
+    "drawn_as": "heading with blue Beam Search, Sampling (bold border), High Temp Sampling",
+    "container": "Realistic Setup",
+    "is_contribution": true
+   },
+   {
+    "name": "S8. Joint-Teaching",
+    "type": "operation",
+    "role": "stage 8: who generates the pseudo-targets (teacher, student or both); the last box is the proposed method",
+    "drawn_as": "heading with lilac Only Teacher, Only Student, Joint-Teaching (bold border)",
+    "container": "Realistic Setup",
+    "is_contribution": true
+   },
+   {
+    "name": "heavy arrows (7)",
+    "type": "other",
+    "role": "order of the stages; the best option of a stage is carried into the next (paper text)",
+    "drawn_as": "thick black block arrows between consecutive stage headings",
+    "container": "Realistic Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "Extreme setup: No labeled data. GPT-4 to T5-S",
+    "type": "region",
+    "role": "second setting with no labeled data, GPT-4 as teacher and T5-S as student; four option boxes mixing objective and number of PTs",
+    "drawn_as": "column behind a pale green vertical rule, bold italic underlined title, four olive boxes; Fine-tune + Multiple PTs and Logits KD + Multiple PTs have bold borders",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "S1. Architecture",
+    "to": "S2. Pruning",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "S2. Pruning",
+    "to": "S3. Objective",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "S3. Objective",
+    "to": "S4. PTs",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "S4. PTs",
+    "to": "S5. Unlabeled",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "S5. Unlabeled",
+    "to": "S6. Number of PTs",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "S6. Number of PTs",
+    "to": "S7. PTs Decoding",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 6
+   },
+   {
+    "from": "S7. PTs Decoding",
+    "to": "S8. Joint-Teaching",
+    "what": "chosen option carried to the next decision",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 7
+   },
+   {
+    "from": "boxes stacked in one column",
+    "to": "each other",
+    "what": "alternatives examined at that stage",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "No PTs",
+    "to": "S5 to S8 columns",
+    "what": "baseline stretched across the later stages (reading: they do not apply without PTs)",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Realistic Setup",
+    "to": "S1 to S8",
+    "what": "setting under which the stages are run",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Realistic Setup",
+    "to": "Extreme setup",
+    "what": "second, label-free setting set apart by a vertical rule",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Realistic Setup",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "eight sequential decisions under a medium-resource labeled dataset with plentiful unlabeled data",
+    "verdict": "setting"
+   },
+   {
+    "label": "Extreme setup",
+    "axis": "other",
+    "shows": "no labeled data, GPT-4 teacher and T5-S student: four option boxes combining objective and number of PTs",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "S1 ... S8",
+    "kind": "order",
+    "at": "bold prefixes of the eight stage headings",
+    "what": "number the stages: 1-2 architecture, 3-4 KD strategies, 5-8 use of pseudo-targets (paper text)"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [],
+  "reading_order": "Starts at the Realistic Setup banner and S1 at the top left, follows the heavy arrows to S8 reading the outlined option in each column, then the Extreme setup column at the right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A banner box on top states the realistic setting; below it eight stage headings run left to right joined by heavy arrows, each heading above a column of two to four coloured option boxes, with one wide grey No PTs bar across the S4-S8 columns; a pale green vertical rule at the right sets off the Extreme setup column.",
+  "panel_count": 2,
+  "lanes": "8 aligned stage columns of 2-4 stacked option boxes, plus one extreme-setup column",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.79,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e3beca",
+    "used_for": "S1 architecture options (pink)"
+   },
+   {
+    "hex": "#d16d6d",
+    "used_for": "S2 pruning options (red)"
+   },
+   {
+    "hex": "#f5b167",
+    "used_for": "S3 KD objective options (orange)"
+   },
+   {
+    "hex": "#f1d77f",
+    "used_for": "S4 pseudo-target training options (yellow)"
+   },
+   {
+    "hex": "#82cc82",
+    "used_for": "S5 unlabeled-data options (green)"
+   },
+   {
+    "hex": "#8adcc1",
+    "used_for": "S6 number-of-PTs options (teal)"
+   },
+   {
+    "hex": "#809ec2",
+    "used_for": "S7 PT decoding options (steel blue)"
+   },
+   {
+    "hex": "#c4b6d9",
+    "used_for": "S8 joint-teaching options (lilac)"
+   },
+   {
+    "hex": "#becb95",
+    "used_for": "extreme-setup option boxes (olive green)"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "plain baseline options: No Pruning, Fine-tuning, No PTs (grey)"
+   },
+   {
+    "hex": "#a5b592",
+    "used_for": "vertical rule and title underline of the extreme-setup column"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "bold borders of the chosen options, arrows, banner outline and text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt black border on chosen options and the banner only; unchosen options have no outline; one thin pale green rule",
+  "font": "Calibri-like sans 7 pt throughout; bold stage numbers; bold italic underlined setting titles",
+  "corners": "rounded",
+  "arrows": "heavy black block arrows (thick shaft, triangular head) between stage headings",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "Each stage has its own hue (pink S1, red S2, orange S3, yellow S4, green S5, teal S6, blue S7, lilac S8, olive for the extreme setup); grey marks the plain baseline option (No Pruning, Fine-tuning, No PTs).",
+  "line_style_means": "Bold black border = the option chosen at that stage; no border = examined but not chosen; heavy arrows = order of the stages; a pale green vertical rule = the extreme setting set apart.",
+  "shape_means": "Rounded box = one candidate technique; wide grey box = baseline that spans several stages; square banner = the setting.",
+  "marker_means": "S1-S8 number the stages and head each column.",
+  "emphasis": "The bold borders trace the chosen path across the stages; the changing hue per column keeps each stage's options apart.",
+  "reusable_patterns": [
+   "row of stage headings joined by heavy arrows with an option column under each",
+   "bold outline marks the chosen option per stage",
+   "one hue per stage and grey for the plain baseline option",
+   "grey baseline box stretched across the later stages it makes irrelevant",
+   "banner box stating the experimental setting above the stages",
+   "separate column set off by a rule and a title for a second, extreme setting"
+  ],
+  "weaknesses": [
+   "the meaning of the bold border is given only in the caption",
+   "S2 and the extreme column show two bold borders each, without explanation in the figure",
+   "headings broken by hyphens (Archi- / tecture, Joint- / Teaching) look unpolished"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the study's own list of design choices"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, arrows, banner and rule (draw.io)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "stage headings S1-S8 with heavy block arrows",
+   "columns of stacked coloured option boxes",
+   "bold-bordered chosen boxes",
+   "wide grey No PTs bar",
+   "setting banner box",
+   "extreme-setup column with a green rule"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "knowledge distillation",
+   "natural language generation",
+   "pseudo-targets",
+   "research design",
+   "pruning",
+   "design space",
+   "decoding",
+   "GPT-4 teacher"
+  ],
+  "tags": [
+   "option-catalog",
+   "claim-banner"
+  ],
+  "new_tags": [
+   {
+    "name": "chosen-option-outline",
+    "what": "a heavy outline on one option box per stage marks the decision taken; unchosen options stay without outline"
+   },
+   {
+    "name": "spanning-baseline-box",
+    "what": "one wide grey box stretched across several stage columns for the no-technique option that makes those stages moot"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a staged study as a row of titled stages with a menu of option boxes under each and mark the chosen option by a heavy outline, so the chosen path reads left to right; give each stage its own hue and use grey for the plain baseline.",
+  "suits": "Empirical or design-space studies that pick one decision per stage in sequence, such as ablation pipelines, training recipes or system-configuration studies."
+ },
+ "tags": [
+  "design-space grid",
+  "option columns",
+  "stage headings with block arrows",
+  "pastel hue per stage",
+  "bold-outline selection",
+  "draw.io look"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Methods (p.4)"
+  ],
+  "evidence": [
+   "The design of our research. At each stage (from left to right), we examine different modeling decisions",
+   "A bold border indicates the decision we made at each stage",
+   "Our research design illustrated in Figure 1 has eight stages."
+  ]
+ },
+ "summary": "The paper is a systematic study of task-specific knowledge distillation for natural language generation, where a small student imitates a large teacher; it extends sequence-level KD with pseudo-target (PT) augmentation and proposes a Joint-Teaching method. Figure 1 lays out the research design as eight stages read left to right (S1 architecture, S2 pruning, S3 objective, S4 to S8 the use of pseudo-targets), joined by heavy arrows under a banner that states the realistic setup. Each stage is a column of coloured option boxes and a bold border marks the decision taken. A separate olive column at the right covers the extreme setup with no labeled data, GPT-4 teaching T5-S.",
+ "summary_zh": "论文系统研究面向 NLG 的任务专用知识蒸馏。图 1 把研究设计画成八个自左向右的阶段（架构、剪枝、目标、伪目标等），每阶段一列彩色选项框，粗边框标出所选方案；右侧另有无标注数据、GPT-4 教 T5-S 的极端设置列。",
+ "confidence": "high",
+ "notes": "Prior labels reversed in order: stage-pipeline first, because the heavy arrows chain eight decisions; scope-overview kept for the option menus. I count two titled units (Realistic Setup banner with the eight columns, and the Extreme setup column) although the index says one panel. The wide grey No PTs bar is read as 'later stages do not apply without PTs', which is an inference from its span. The preview shows the top of the caption text at its bottom edge, which is not part of the figure.",
+ "venue": "ACL23"
+}

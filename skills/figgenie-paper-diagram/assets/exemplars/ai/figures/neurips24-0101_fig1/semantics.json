@@ -1,0 +1,684 @@
+{
+ "paper_id": "neurips24-0101",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "HEST-1k",
+  "one_liner": "A dataset of 1,229 spatial transcriptomics profiles linked to H&E whole-slide images, with a Python library and three use cases.",
+  "domain": [
+   "spatial transcriptomics",
+   "histology",
+   "dataset and benchmark"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "deliverables-grid",
+  "variant_note": "five lettered panels: dataset statistics (a), the library (b) and three applications (c, d, e), a deliverables triptych stretched to a 2 + 3 grid; panel a is a dashboard, b and c small pipelines, e a small two-encoder model",
+  "argues": "HEST-1k is more than a dataset: with its library it supports a benchmark, biomarker exploration and multimodal learning, over a broad range of organs, technologies and species.",
+  "subject": "dataset dashboard, library pipeline from legacy readers to per-sample assets, and three application mini-schematics",
+  "elements": [
+   {
+    "name": "HEST-1K",
+    "type": "container",
+    "role": "dataset dashboard: sample counts by organ, sample type, technology and species (charts listed under pictures)",
+    "drawn_as": "framed panel with bold title and sorted horizontal bars plus two pies",
+    "container": "a.",
+    "is_contribution": true
+   },
+   {
+    "name": "Legacy readers",
+    "type": "container",
+    "role": "section of the library that reads old formats",
+    "drawn_as": "bold heading above two grey tiles",
+    "container": "b.",
+    "is_contribution": null
+   },
+   {
+    "name": "Missing file imputation",
+    "type": "operation",
+    "role": "fills in a missing file among Visium, Xenium and ST outputs",
+    "drawn_as": "grey tile with stacked page icons carrying black bars, a large question mark, an arrow from Visium / Xenium / ST to a completed file icon; rotated tile title",
+    "container": "b. Legacy readers",
+    "is_contribution": null
+   },
+   {
+    "name": "Automatic alignment of ST spots & WSI",
+    "type": "operation",
+    "role": "aligns spot positions to the whole-slide image",
+    "drawn_as": "grey tile with a before and after tissue picture joined by an arrow and a rotating-arrows icon; rotated tile title",
+    "container": "b. Legacy readers",
+    "is_contribution": null
+   },
+   {
+    "name": "Tissue segmentation",
+    "type": "operation",
+    "role": "finds the tissue outline",
+    "drawn_as": "pale tile with a tissue picture and a dashed contour; rotated tile title",
+    "container": "b. Tissue processing",
+    "is_contribution": null
+   },
+   {
+    "name": "Tissue patching",
+    "type": "operation",
+    "role": "cuts the tissue into patches",
+    "drawn_as": "pale tile with a tissue picture under a pink grid; rotated tile title",
+    "container": "b. Tissue processing",
+    "is_contribution": null
+   },
+   {
+    "name": "CellViT segmentation",
+    "type": "operation",
+    "role": "segments nuclei (76 million in HEST-1k per the text)",
+    "drawn_as": "pale tile with a tissue picture covered by coloured nuclei; rotated tile title",
+    "container": "b. Tissue processing",
+    "is_contribution": null
+   },
+   {
+    "name": "For each sample: ST, H&E, Nuclei, Patches, Metadata",
+    "type": "container",
+    "role": "the five assets that every sample carries",
+    "drawn_as": "row of five page-shaped cards, each with an icon or crop and a black label strip; Metadata lists Diagnosis, Resolution, Technology in italics",
+    "container": "b.",
+    "is_contribution": true
+   },
+   {
+    "name": "Query / Assemble",
+    "type": "label",
+    "role": "names the two exchanges between HEST-1K and HEST-Library",
+    "drawn_as": "two heavy black horizontal arrows pointing in opposite directions, bold word above or below each",
+    "container": "between a. and b.",
+    "is_contribution": null
+   },
+   {
+    "name": "HEST-Benchmark",
+    "type": "container",
+    "role": "benchmark of patch encoders on gene-expression prediction",
+    "drawn_as": "framed panel with two grey info cards (10 Organs 9 Cancers; 9 tasks 11 patch encoders) above a small flow",
+    "container": "c.",
+    "is_contribution": true
+   },
+   {
+    "name": "Patch encoder (benchmark)",
+    "type": "module",
+    "role": "turns a 224 px / 112 μm H&E patch into an embedding",
+    "drawn_as": "light-blue trapezoid with rotated label between grey block arrows",
+    "container": "c.",
+    "is_contribution": null
+   },
+   {
+    "name": "Encoder 1, Encoder 2, Encoder 3 ...",
+    "type": "label",
+    "role": "per-encoder scores on the benchmark, with more encoders implied by dots",
+    "drawn_as": "three vertical bars of falling height in navy, mid and light blue with rotated labels",
+    "container": "c.",
+    "is_contribution": null
+   },
+   {
+    "name": "HEST for Biomarker Exploration",
+    "type": "container",
+    "role": "use case: cell types in cancer samples and a link between a morphological feature and gene expression",
+    "drawn_as": "framed panel with a bar chart and a density contour plot (listed under pictures)",
+    "container": "d.",
+    "is_contribution": null
+   },
+   {
+    "name": "Patch encoder / Expression encoder",
+    "type": "module",
+    "role": "two encoders, one per modality, for multimodal learning",
+    "drawn_as": "two light-blue trapezoids with rotated labels, one above the other",
+    "container": "e. HEST for Multimodal Learning",
+    "is_contribution": null
+   },
+   {
+    "name": "Patch embedding / Expression embedding",
+    "type": "data",
+    "role": "the two embeddings that are aligned",
+    "drawn_as": "grey capsules holding a column of small empty circles, rotated labels",
+    "container": "e. HEST for Multimodal Learning",
+    "is_contribution": null
+   },
+   {
+    "name": "Align",
+    "type": "operation",
+    "role": "aligns the patch embedding with the expression embedding",
+    "drawn_as": "bold curved double-headed black arrow between the two capsules",
+    "container": "e. HEST for Multimodal Learning",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "HEST-Library",
+    "to": "HEST-1K",
+    "what": "Query: arrow from b. towards a.",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HEST-1K",
+    "to": "HEST-Library",
+    "what": "Assemble: arrow from a. towards b.; the text says the library assembles new samples as they become available",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Legacy readers",
+    "to": "Tissue processing",
+    "what": "library sections stacked top to bottom, no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Tissue processing",
+    "to": "For each sample",
+    "what": "outputs end up as the per-sample assets, no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Visium, Xenium, ST",
+    "to": "completed file icon",
+    "what": "old formats read into a complete file set; a question mark marks the missing file",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "tissue picture with red frame",
+    "to": "tissue picture with green frame",
+    "what": "spots and image before and after alignment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H&E patch stack",
+    "to": "Patch encoder (benchmark)",
+    "what": "224 px / 112 μm patches",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Patch encoder (benchmark)",
+    "to": "Patch embedding column",
+    "what": "patch embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H&E patch",
+    "to": "Patch encoder / Patch embedding",
+    "what": "histology branch of multimodal learning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DNA helix icon (gene expression)",
+    "to": "Expression encoder / Expression embedding",
+    "what": "expression branch of multimodal learning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Patch embedding",
+    "to": "Expression embedding",
+    "what": "Align",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HEST-1K",
+    "to": "c., d., e.",
+    "what": "the caption calls c, d and e applications of HEST-1k; nothing is drawn between them",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a. HEST-1K",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "counts of the 1,229 samples by organ, sample type, technology and species",
+    "verdict": "ours"
+   },
+   {
+    "label": "b. HEST-Library",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "legacy readers, tissue processing and the five assets stored for each sample",
+    "verdict": "ours"
+   },
+   {
+    "label": "c. HEST-Benchmark",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "organs and tasks, patch stack through a patch encoder to an embedding, ranking of encoders",
+    "verdict": "ours"
+   },
+   {
+    "label": "d. HEST for Biomarker Exploration",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "cell-type counts in cancer samples and a density plot of a morphological feature against gene expression",
+    "verdict": "ours"
+   },
+   {
+    "label": "e. HEST for Multimodal Learning",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "histology and expression encoders whose embeddings are aligned",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a., b., c., d., e.",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "letters head the five panels, followed by the bold panel title"
+   },
+   {
+    "marker": "?",
+    "kind": "identity",
+    "at": "Missing file imputation",
+    "what": "flags the missing file that is imputed"
+   },
+   {
+    "marker": "Encoder 1, Encoder 2, Encoder 3",
+    "kind": "identity",
+    "at": "bars in panel c.",
+    "what": "names the encoders being ranked"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "organ bar chart, 24 organs sorted by sample count",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "horizontal bars in a sequential navy to pale blue scale, n = value at the end of each bar, organ names right-aligned on the left"
+   },
+   {
+    "what": "sample-type bar chart",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "six bars (Pathological, Cancer, Healthy, Treated, Tumor, Genetically modified) tucked into the empty top-right of the organ chart, titled Sample type"
+   },
+   {
+    "what": "technology and species pie charts",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "pies in blue and grey-blue slices with percentages and n; small leader lines for the thin slices; human and mouse icons placed in the species slices"
+   },
+   {
+    "what": "tissue crops before and after spot alignment",
+    "content": "medical",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "purple-pink H&E tissue with black fiducial dots at the four corners, left framed in red, right framed in green, arrow between"
+   },
+   {
+    "what": "one H&E tissue section shown as segmentation, patching and CellViT result",
+    "content": "medical",
+    "role": "result",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same shape each time: dashed contour, pink grid overlay, coloured nuclei overlay; each on a grey tile with a rotated title"
+   },
+   {
+    "what": "per-sample asset thumbnails: nuclei zoom and patch tiles",
+    "content": "medical",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "cropped inside page-shaped cards above black label strips"
+   },
+   {
+    "what": "H&E patch stack and a single patch",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "four offset square patches in panel c with a double-headed size bar (224 px / 112 μm); one patch at the start of the histology branch in panel e"
+   },
+   {
+    "what": "bar chart of cell types in cancer samples",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "five horizontal bars in blue with n_c values (16.7M, 3.3M, 16.1M, 9.2M, 0.2K) written beside"
+   },
+   {
+    "what": "density contour plot of a morphological feature against gene expression",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "nested blue contours on a pale blue ground with axis ticks"
+   },
+   {
+    "what": "mini bar chart over Encoder 1, 2, 3 and more",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "three bars of falling height, dots above and below suggest more encoders, no axis"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "page icons with black bars (tiny TIFF labels)",
+    "stands_for": "ST data files of Visium, Xenium and ST formats",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 5
+   },
+   {
+    "depicts": "page-shaped cards over black label strips",
+    "stands_for": "ST, H&E, Nuclei, Patches and Metadata files of one sample",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   },
+   {
+    "depicts": "brain, bowel and lung outlines",
+    "stands_for": "organs covered by the benchmark",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "human and mouse silhouettes",
+    "stands_for": "the two species",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "light-blue DNA double helix",
+    "stands_for": "gene expression data",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "two curved arrows in a circle",
+    "stands_for": "registration of spots to the slide",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "capsule holding a column of small circles",
+    "stands_for": "an embedding vector",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "metadata of a sample",
+    "form": "italic lines Diagnosis, Resolution, Technology on a page card",
+    "real_values": false
+   },
+   {
+    "what": "patch size of the benchmark",
+    "form": "double-headed size bar reading 224 px / 112 μm under the patch stack",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a row of five page-shaped cards (ST, H&E, Nuclei, Patches, Metadata), each with an icon or crop and a black label strip, standing for the assets of one sample",
+    "parts": [
+     "page card",
+     "black label strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "a pink grid laid over the tissue section, and a stack of square patches going into the encoder",
+    "parts": [
+     "grid overlay",
+     "patch stack",
+     "size bar"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "light-blue trapezoid with rotated label, wide on the input side, narrowing to an embedding capsule",
+    "parts": [
+     "trapezoid",
+     "embedding capsule"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "two-tower-alignment",
+    "drawn_as": "two encoders one above the other, two embedding capsules joined by a bold curved double arrow labelled Align",
+    "parts": [
+     "patch tower",
+     "expression tower",
+     "Align arrow"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at HEST-1K (top-left), crosses the Query / Assemble arrows to HEST-Library, then drops to the bottom row and reads c, d, e from left to right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two large framed panels on top (dataset charts at left, library at right) joined by two arrows between them; a bottom row of three smaller framed panels for the use cases. Inside b. and c. light-grey tiles group items.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.44,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#08306b",
+    "used_for": "darkest bars and slices: highest counts (Spinal cord, Pathological, Neoplastic epithelial)"
+   },
+   {
+    "hex": "#083a7a",
+    "used_for": "next-darkest bars of the sequential blue scale"
+   },
+   {
+    "hex": "#457b9d",
+    "used_for": "steel-blue pie slices"
+   },
+   {
+    "hex": "#979dac",
+    "used_for": "grey-blue pie slice (STv1)"
+   },
+   {
+    "hex": "#98c7df",
+    "used_for": "mid-light bars of the scale"
+   },
+   {
+    "hex": "#b5d3e8",
+    "used_for": "light bars of the scale"
+   },
+   {
+    "hex": "#c8ddf0",
+    "used_for": "patch and expression encoder trapezoids, pale pie slices"
+   },
+   {
+    "hex": "#f1f7fc",
+    "used_for": "pale blue ground of the density plot"
+   },
+   {
+    "hex": "#f1f1f2",
+    "used_for": "light-grey tiles in panels b. and c."
+   },
+   {
+    "hex": "#d1d3d4",
+    "used_for": "grey block arrows and capsule outlines"
+   },
+   {
+    "hex": "#231f20",
+    "used_for": "black label strips, file-icon bars, text and heavy arrows"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt hairlines in the charts, 0.5 to 1.25 pt panel frames and arrows; no dashes except the tissue contour in the picture",
+  "font": "sans (Helvetica) 4-5 pt for labels, 7.5-8.5 pt bold for panel titles, 2-3.5 pt for tiny chart labels",
+  "corners": "mixed",
+  "arrows": "heavy black straight arrows between a. and b.; grey block arrows in c.; thin black arrows in e.; bold curved double arrow for Align",
+  "rendering": "mixed",
+  "effects": "faint drop shadows under the page-shaped sample cards",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one sequential blue scale encodes count (darker = more samples) in bars and pies; light-blue trapezoids = encoders; black strips name per-sample assets; red versus green frame on the alignment crops reads as before versus after (inferred)",
+  "line_style_means": "heavy black arrows = exchange between dataset and library; grey block arrows = forward flow in the benchmark; curved double arrow = alignment of embeddings",
+  "shape_means": "trapezoid = encoder; page-shaped card = file or asset; capsule of circles = embedding vector; grey rounded tile = grouped content",
+  "marker_means": "letters head panels; n = counts printed beside bars and pies",
+  "emphasis": "bold panel titles carry the product names; the longest dark bars and the heavy Query / Assemble arrows are the strongest marks",
+  "reusable_patterns": [
+   "dataset dashboard of sorted horizontal bars and pies in one sequential colour scale",
+   "per-sample record row: page-shaped cards, each with an icon or crop over a black label strip",
+   "one tissue image shown three times with different overlays (contour, grid, nuclei) to show what a processing step outputs",
+   "small application panels (benchmark, biomarker, multimodal) as tiny schematics under the dataset and library panels",
+   "two labelled arrows between the dataset panel and the library panel naming their exchange"
+  ],
+  "weaknesses": [
+   "text in charts and tiles is 2-4.5 pt and hard to read at print size",
+   "the encoder ranking bars in c. have no axis or values",
+   "the Query and Assemble arrows are not explained in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "H&E tissue crops and segmentation overlays from the cohorts",
+   "sample counts by organ, type, technology and species",
+   "cell-type counts and the expression density plot"
+  ],
+  "stock": [
+   "line-art organ, human, mouse and DNA icons",
+   "page and file icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "panel layout, arrows and encoder trapezoids",
+   "embedding capsules",
+   "label strips of the sample cards"
+  ],
+  "unknown": [
+   "the pink-orange ST pictogram",
+   "the layered H&E icon over a grid"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "sorted organ bar chart",
+   "technology and species pies",
+   "file icons with black bars",
+   "H&E tissue tiles with contour, grid and nuclei overlays",
+   "page-shaped sample asset cards",
+   "patch encoder trapezoids",
+   "embedding capsules",
+   "density contour plot"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "spatial transcriptomics",
+   "histology",
+   "H&E whole-slide images",
+   "dataset",
+   "benchmark",
+   "biomarker exploration",
+   "multimodal alignment",
+   "Python library"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "small-multiples",
+   "stacked-cards",
+   "schematic-plot",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "dataset-dashboard-panel",
+    "what": "a panel of sorted horizontal bars and pies in one sequential colour scale giving the counts of a dataset, tucked together so the empty corner of one chart holds another"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "A dataset paper can open with one lettered grid: a statistics dashboard for scope, a library pipeline whose last row shows what one sample contains as page-shaped cards, and tiny schematics for each downstream use.",
+  "suits": "dataset or benchmark papers that ship a software library and several downstream uses, in a figure that must stand in for the paper's whole contribution list."
+ },
+ "tags": [
+  "five lettered panels",
+  "light-grey tiles",
+  "sequential blue palette",
+  "microscopy thumbnails",
+  "page-shaped asset cards",
+  "mixed charts and icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 HEST-1k (p.4)"
+  ],
+  "evidence": [
+   "HEST-1k comprises 1,229 samples from 153 cohorts encompassing 26 organs, two species",
+   "a Python package for interacting with HEST-1k data and assembling new samples as they become available",
+   "Applications of HEST-1k include benchmarking foundation models for histology (c.), biomarker exploration (d.) and multimodal representation learning (e.)"
+  ]
+ },
+ "summary": "HEST-1k is a dataset of 1,229 spatial transcriptomics profiles, each paired with an H&E whole-slide image and metadata, released with the HEST-Library and three use cases. The figure is a five-panel grid. Panel a. is a dashboard of sorted organ bars, a sample-type chart and technology and species pies in one blue scale. Panel b. shows the library: legacy readers, three tissue-processing tiles on the same slide, and a row of five page-shaped cards for the assets of one sample. Two arrows labelled Query and Assemble tie a. and b. together. Panels c., d. and e. are small schematics for the benchmark, biomarker exploration and aligned multimodal encoders.",
+ "summary_zh": "HEST-1k 是配对空间转录组与 H&E 切片的数据集，附软件库和三个应用。图分五格：a 用蓝色条形图和饼图展示规模，b 展示库的读取、组织处理及每个样本的五类文件，c、d、e 以小示意图呈现基准、标志物探索和多模态对齐。",
+ "confidence": "high",
+ "notes": "Prior kinds kept and model-anatomy added for panel e. The red and green frames on the alignment crops are read as before and after; the paper text does not say so. The direction and meaning of Query and Assemble are taken from the arrows as drawn. Medium of icons is a guess from the sizes in the digest.",
+ "venue": "NeurIPS24"
+}

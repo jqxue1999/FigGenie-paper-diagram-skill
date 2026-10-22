@@ -1,0 +1,605 @@
+{
+ "paper_id": "cvpr26-0019",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SpikeMaskGS",
+  "one_liner": "Dynamic-scene novel view synthesis with static and dynamic Gaussians, using a spatio-temporal fine-grained mask field and a spiking-neuron tagging field.",
+  "domain": [
+   "dynamic novel view synthesis",
+   "3D Gaussian splatting",
+   "spiking neurons"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "contribution-mosaic",
+   "stage-pipeline"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "Others and Ours drawn side by side in five of six lettered panels: two schematics of design choices, then three rendered comparisons with highlighted crops; panel (A) is the shared baseline pipeline",
+  "argues": "Fixing two weak points of dynamic-static decomposition, inaccurate mask priors and improper tag representations, gives cleaner decomposition and better side views, fine motions and boundaries.",
+  "subject": "The dynamic-static Gaussian pipeline, two design choices contrasted with other methods, and rendered side views, motions and boundaries.",
+  "elements": [
+   {
+    "name": "Init Gaussians / Dynamic Gaussians / Static Gaussians",
+    "type": "label",
+    "role": "legend of the Gaussian colours used in the pipeline",
+    "drawn_as": "three soft ellipses, grey, orange and blue, with names to their right",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "Dynamic-Static Mask Priors",
+    "type": "module",
+    "role": "mask priors, a scene image turned into a black-and-white mask, that supervise the tag",
+    "drawn_as": "orange dashed rounded box with a scene thumbnail, a grey block arrow and a mask thumbnail",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "supervise",
+    "type": "operation",
+    "role": "mask priors supervise the tag representation",
+    "drawn_as": "red dotted arrow with a bold red label",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "Dynamic-Static Tag Representation",
+    "type": "module",
+    "role": "assigns each Gaussian a static or dynamic tag",
+    "drawn_as": "teal dashed rounded box with a grey ellipse, a block arrow, a question mark and a fork to Static and Dynamic",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "circled cross",
+    "type": "operation",
+    "role": "combines the tags with the initial Gaussians to give dynamic and static Gaussians; read from the picture",
+    "drawn_as": "circle with a cross, an arrow in from the tag box, a grey cluster above and a blue-orange cluster below",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": null
+   },
+   {
+    "name": "Static GS Processing / Dynamic GS Processing",
+    "type": "operation",
+    "role": "static and dynamic Gaussians are processed separately",
+    "drawn_as": "blue curved arrow and orange straight arrow with small ellipses, names at the right",
+    "container": "(A) Dynamic-Static Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-view Inconsistent / Temporal Invariant",
+    "type": "label",
+    "role": "the two failures of mask priors in other methods",
+    "drawn_as": "red headings over two pairs of black-and-white masks separated by a dashed black line, caption Others",
+    "container": "(B) Dynamic-Static Mask Priors",
+    "is_contribution": false
+   },
+   {
+    "name": "Spatio-Temporal Fine-Grained",
+    "type": "module",
+    "role": "the proposed mask field, different at every time and view",
+    "drawn_as": "red heading over a grid of slanted mask thumbnails on a time axis (right) and a view axis (down), ellipses between them, caption Ours",
+    "container": "(B) Dynamic-Static Mask Priors",
+    "is_contribution": true
+   },
+   {
+    "name": "Uncertainty",
+    "type": "label",
+    "role": "tags of other methods fall between static and dynamic near boundaries",
+    "drawn_as": "red word under a wavy curve on a Static-Dynamic axis",
+    "container": "(C) Dynamic-Static Tag Representation",
+    "is_contribution": false
+   },
+   {
+    "name": "Post Processing",
+    "type": "operation",
+    "role": "threshold-based conversion of probabilities into discrete labels in other methods",
+    "drawn_as": "scissors icon, a sigmoid plot, curved black and red arrows to grey and blue-orange Gaussian clusters",
+    "container": "(C) Dynamic-Static Tag Representation",
+    "is_contribution": false
+   },
+   {
+    "name": "Spiking Neuron",
+    "type": "module",
+    "role": "directly optimises a discontinuous tagging field",
+    "drawn_as": "yellow circle with a red spike waveform and dashed threshold, a step-function plot on its left, red and black arrows to the two Gaussian clusters",
+    "container": "(C) Dynamic-Static Tag Representation",
+    "is_contribution": true
+   },
+   {
+    "name": "Static / Dynamic bars",
+    "type": "chart",
+    "role": "distribution of tag values after decomposition",
+    "drawn_as": "two thin bars on a Static-Dynamic axis under each cluster",
+    "container": "(C) Dynamic-Static Tag Representation",
+    "is_contribution": null
+   },
+   {
+    "name": "input views / side view",
+    "type": "label",
+    "role": "key of the camera frusta in the reconstruction",
+    "drawn_as": "blue crossed-rectangle icon and red crossed-rectangle icon with names",
+    "container": "(D) Side viewpoints",
+    "is_contribution": false
+   },
+   {
+    "name": "Others / Ours render pairs",
+    "type": "container",
+    "role": "rendered comparison in (D), (E) and (F)",
+    "drawn_as": "two equal renders captioned Others and Ours with red- and green-framed crops overlapping their upper left corners",
+    "container": "(D), (E), (F)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Dynamic-Static Mask Priors",
+    "to": "Dynamic-Static Tag Representation",
+    "what": "mask priors supervise the tags",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Dynamic-Static Tag Representation",
+    "to": "circled cross",
+    "what": "tags go to the combination node",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circled cross",
+    "to": "Static GS Processing / Dynamic GS Processing",
+    "what": "static and dynamic Gaussians are processed separately",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Others masks",
+    "to": "Spatio-Temporal Fine-Grained masks",
+    "what": "failing mask priors against the proposed mask field, split by a vertical dashed line",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Others tag pipeline (sigmoid, Post Processing, Uncertainty)",
+    "to": "Spiking Neuron",
+    "what": "continuous probability with thresholding against a step function that gives discrete tags",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(B) orange dashed frame",
+    "to": "(E) orange solid frame",
+    "what": "the caption points from the mask-prior fix to its fine-motion result; the frame colour repeats",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(C) teal dashed frame",
+    "to": "(F) teal solid frame",
+    "what": "the caption points from the tagging fix to its boundary result; the frame colour repeats",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "red and green boxes on a render",
+    "to": "red- and green-framed crops",
+    "what": "each coloured box on the image is enlarged in the crop of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Gaussian colours (grey, orange, blue)",
+    "to": "all Gaussian clusters in (A) and (C)",
+    "what": "grey is initial, orange dynamic and blue static, as in the legend",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(A) Dynamic-Static Decomposition",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Baseline pipeline: mask priors supervise a tag representation that splits Gaussians into static and dynamic processing.",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(B) Dynamic-Static Mask Priors",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Other methods give multi-view inconsistent or temporally invariant masks; the proposed masks are spatio-temporally fine-grained.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(C) Dynamic-Static Tag Representation",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Other methods use a probability with threshold post-processing and uncertainty; the proposed spiking neuron outputs discrete tags directly.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(D) Side viewpoints",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Point-cloud reconstruction with input and side camera views, and Others against Ours renders of the side view with crops.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(E) Fine-grained Motions",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Others against Ours on a group scene with crops of a moving hand and a face.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(F) Boundary Regions",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Others against Ours on a basketball scene with a crop of the moving player.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(A) - (F)",
+    "kind": "section",
+    "at": "before each panel title",
+    "what": "letter the six panels; the caption refers to them"
+   },
+   {
+    "marker": "Others / Ours",
+    "kind": "identity",
+    "at": "bold captions under each half or render",
+    "what": "name the two lanes that are compared"
+   },
+   {
+    "marker": "Static / Dynamic",
+    "kind": "identity",
+    "at": "axis ends of the tag charts and the fork in (A)",
+    "what": "name the two tag classes"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "indoor scene photo and its black-and-white dynamic-static mask prior",
+    "content": "dense-map",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small thumbnails joined by a grey block arrow in the orange dashed box"
+   },
+   {
+    "what": "mask priors of other methods: a multi-view inconsistent pair and a temporal invariant pair",
+    "content": "dense-map",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four black-and-white masks of a person, two per failure, split by a dashed black line under red headings"
+   },
+   {
+    "what": "spatio-temporal fine-grained masks of the proposed method",
+    "content": "dense-map",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two-by-two grid of slanted mask thumbnails with ellipses between them on time and view axes"
+   },
+   {
+    "what": "point-cloud reconstruction of the kitchen scene with camera frusta",
+    "content": "point-cloud",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "coloured points with blue crossed frusta for the input views and one red frustum for the side view"
+   },
+   {
+    "what": "rendered comparison views: a side view of a kitchen, a group scene, a basketball scene, each as Others and Ours",
+    "content": "natural-image",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "pairs of equal renders with small red and green boxes on the images"
+   },
+   {
+    "what": "enlarged crops of the boxed regions",
+    "content": "natural-image",
+    "role": "result",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "small insets with red or green frames overlapping the upper left corner of each render"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "soft ellipses in grey, orange and blue, alone and in clusters, about a dozen",
+    "stands_for": "initial, dynamic and static Gaussian primitives",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 12
+   },
+   {
+    "depicts": "pair of scissors",
+    "stands_for": "threshold-based post-processing",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "yellow circle holding a red spike waveform with a dashed threshold line",
+    "stands_for": "the spiking neuron",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "large black question mark",
+    "stands_for": "the tag that is still unknown",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "circle with a cross",
+    "stands_for": "combination of tags and Gaussians",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "crossed rectangles in blue and red",
+    "stands_for": "input camera views and the side view",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "three real video scenes, a kitchen, a group at a table and a basketball game, rendered by Others and Ours with enlarged crops",
+    "form": "paired renders with red and green framed insets",
+    "real_values": true
+   },
+   {
+    "what": "tag distributions: a wavy curve with Uncertainty for other methods against two thin bars for the proposed one",
+    "form": "small Static-Dynamic axes under each Gaussian cluster",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "spiking-neuron",
+    "drawn_as": "yellow circle holding a red spike waveform with a dashed threshold line, fed by a step-function plot and fanning out to two outputs",
+    "parts": [
+     "circle",
+     "spike waveform",
+     "step function plot",
+     "output arrows"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "coloured point cloud of the scene with blue and red camera frusta",
+    "parts": [
+     "point cloud",
+     "input frusta",
+     "side frustum"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "distribution-glyph",
+    "drawn_as": "a wavy curve under a Static-Dynamic axis for the uncertain tags and two thin bars for the clean ones",
+    "parts": [
+     "axis",
+     "curve",
+     "bars"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at (A) at the top left and follows its arrows, drops to (B) and (C) where each half pairs Others with Ours, then moves to the right column (D), (E), (F) for the rendered results."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two columns of three lettered panels. The wide left column stacks (A) the baseline pipeline, (B) mask priors and (C) tag representation, with (B) and (C) in dashed orange and teal frames and split into an Others half and an Ours half. The narrow right column stacks (D), (E) and (F) in solid green, orange and teal frames, each with Others and Ours renders and colour-framed crops; the orange and teal frames repeat those of (B) and (C).",
+  "panel_count": 6,
+  "lanes": "paired Others and Ours halves or columns in every panel except (A)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 2.09,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c65f10",
+    "used_for": "orange-brown dashed frames of the mask-prior boxes in (A) and (B) and the frame of (E)"
+   },
+   {
+    "hex": "#fce6d5",
+    "used_for": "light orange tint inside the orange frames",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#249087",
+    "used_for": "teal dashed frames of the tag boxes in (A) and (C) and the frame of (F)"
+   },
+   {
+    "hex": "#eefbfa",
+    "used_for": "pale teal tint inside the teal frames"
+   },
+   {
+    "hex": "#588e32",
+    "used_for": "green frame of (D)"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red labels of the named issues and the new concept, and red crop frames"
+   },
+   {
+    "hex": "#00ff00",
+    "used_for": "green crop frames on the renders"
+   },
+   {
+    "hex": "#e3231b",
+    "used_for": "red arrows and the red side-view frustum"
+   },
+   {
+    "hex": "#fee695",
+    "used_for": "yellow circle of the spiking neuron"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "masks, arrows and text"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "thick dashed orange and teal frames for (A)-(C), thick solid green, orange and teal frames for (D)-(F), red and green crop frames",
+  "font": "sans (Arial), 8 pt panel titles, 6.5 pt concept names, 4.5-5 pt labels, bold Others and Ours captions",
+  "corners": "rounded",
+  "arrows": "black block arrows and thin arrows, a red dotted arrow labelled supervise, curved blue and orange arrows, paired red and black arrows in (C)",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "Gaussians: grey = initial, orange = dynamic, blue = static (legend at the top); the frame colour links an issue panel to its result panel: orange (B) with (E), teal (C) with (F), green (D); red text = a named issue or the new concept in (B) and (C); red and green boxes = two highlighted regions and their crops; yellow circle = spiking neuron",
+  "line_style_means": "dashed frame = a design choice drawn as a schematic, solid frame = rendered results; red dotted arrow = supervision; red against black arrows = two label branches",
+  "shape_means": "soft ellipse = a Gaussian primitive; circle with a spike = spiking neuron; scissors = post-processing; circled cross = combination; slanted thumbnails on time and view axes = a spatio-temporal mask field; crossed rectangles = camera views",
+  "marker_means": "letters (A)-(F) name the panels; bold Others and Ours name the lanes; red Uncertainty flags the blurry tag distribution; input views and side view key the frusta",
+  "emphasis": "Ours always sits to the right of Others; red labels name the weaknesses; two thin bars against a wavy curve show the cleaner tags; frame colours are repeated from cause to effect",
+  "reusable_patterns": [
+   "Others and Ours halves in every panel so that each design choice is contrasted on the same canvas",
+   "frame colour of an issue panel repeated on the result panel that shows its effect",
+   "dashed frames for schematics and solid frames for rendered results",
+   "red and green boxes on renders tied to enlarged crops at the corner",
+   "wavy uncertainty curve against two thin bars for a tag distribution",
+   "time-by-view axes holding a grid of mask thumbnails to show a spatio-temporal field",
+   "legend row of coloured ellipses at the top of the pipeline"
+  ],
+  "weaknesses": [
+   "a very busy figure with about 70 bitmaps and many 4-5 pt labels",
+   "the circled cross in (A) and the yellow circle in (C) are not explained inside the figure",
+   "the red and green crop frames have no key"
+  ]
+ },
+ "resources": {
+  "own": [
+   "rendered novel views of video scenes from Others and Ours",
+   "mask priors of other methods and the proposed masks",
+   "point cloud with camera frusta"
+  ],
+  "stock": [
+   "scissors icon",
+   "question mark glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "Gaussian ellipses",
+   "spiking neuron circle and plots",
+   "dashed frames",
+   "arrows and axes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed orange and teal frames",
+   "soft grey, orange and blue Gaussian ellipses",
+   "black-and-white mask thumbnails",
+   "spiking neuron circle with a step-function plot",
+   "scissors with a Post Processing label",
+   "point cloud with blue and red camera frusta",
+   "Others and Ours render pairs with red and green crops"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "dynamic scenes",
+   "novel view synthesis",
+   "Gaussian splatting",
+   "spiking neurons",
+   "dynamic-static decomposition",
+   "mask priors",
+   "tagging field",
+   "side viewpoints"
+  ],
+  "tags": [
+   "zoom-callout",
+   "small-multiples",
+   "error-callouts",
+   "schematic-plot",
+   "distribution-glyph",
+   "colour-coded-groups",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "others-vs-ours-halves",
+    "what": "each panel split into an Others half and an Ours half under bold captions, in schematics and in render comparisons alike"
+   },
+   {
+    "name": "matching-frame-colours",
+    "what": "the frame colour of a method-issue panel repeated on the frame of the result panel that shows its effect"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Split every panel into an Others half and an Ours half so that each design choice is contrasted on one canvas, then repeat the frame colour of each issue panel on the result panel that shows its effect. Dashed frames suit schematics and solid frames suit rendered results.",
+  "suits": "Method papers that fix two or three specific weaknesses of prior work and want to show cause and effect together in one teaser."
+ },
+ "tags": [
+  "lettered panels A-F",
+  "Others vs Ours",
+  "dashed schematic frames",
+  "solid result frames",
+  "red and green crop boxes",
+  "soft Gaussian ellipses"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "typically assign each Gaussian primitive a dynamic–static tag and optimize them using dynamic–static mask priors (Fig. 1 A)",
+   "Current methods use an improper tag representation that optimizes continuous probabilities and uses threshold-based post-processing for discrete labels",
+   "we directly optimize a discontinuous tagging field via a Spiking Neuron, achieving cleaner decomposition and clearer boundaries"
+  ]
+ },
+ "summary": "The paper renders dynamic scenes with separate static and dynamic Gaussians and argues that two choices of earlier work limit this decomposition: inaccurate mask priors and improper tag representations. Figure 1 has six lettered panels. (A) draws the baseline pipeline, with mask priors supervising a tag representation that splits Gaussians into static and dynamic processing. (B) and (C), in dashed orange and teal frames, put Others beside Ours: inconsistent or temporally invariant masks against a spatio-temporal fine-grained mask field, and a sigmoid with post-processing and uncertainty against a spiking neuron with a step function. (D), (E) and (F), in solid frames of matching colours, compare rendered side views, fine motions and boundaries with red and green crops.",
+ "summary_zh": "论文用静态/动态高斯渲染动态场景，指出掩码先验不准和标签表示不当两个问题。图1含A–F六个面板：A为基线流程；B、C以橙、青虚线框并排对比Others与Ours；D–F用同色实线框展示侧视角、精细运动和边界的渲染对比与放大图。",
+ "confidence": "high",
+ "notes": "Prior order (contribution-mosaic first) changed: Others against Ours is the grammar of five of the six panels, so side-by-side-contrast leads and contribution-mosaic stays second because the panels also carry the two contributions and the results. The meaning of the circled cross in (A) and of the red and green crop boxes is read from the picture; the paper text does not explain them. The caption points from (B) to (E) and from (C) to (F), which the repeated frame colours support.",
+ "venue": "CVPR26"
+}

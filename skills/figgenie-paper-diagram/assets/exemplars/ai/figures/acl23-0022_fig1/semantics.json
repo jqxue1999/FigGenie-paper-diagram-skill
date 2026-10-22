@@ -1,0 +1,441 @@
+{
+ "paper_id": "acl23-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ChattyChef",
+  "one_liner": "Study of recipe-grounded instructional dialogue on the new ChattyChef dataset, with auxiliary intent detection and state tracking to fix out-of-order instructions.",
+  "domain": [
+   "recipe-grounded dialogue",
+   "instructional conversation",
+   "instruction ordering"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "output-comparison",
+  "variant_note": "one recipe and four user turns answered by a good and a faulty system in aligned columns, the bad replies tagged with their error type",
+  "argues": "Recipe-grounded replies can go wrong in four ways (irrelevant, wrong order, lack of information, wrong information); a good system answers each turn from the right recipe step.",
+  "subject": "Recipe card plus a four-turn cooking dialogue answered by good System #1 and faulty System #2, errors tagged.",
+  "elements": [
+   {
+    "name": "Recipe",
+    "type": "container",
+    "role": "the grounding document the system must follow",
+    "drawn_as": "light grey card with dashed grey frame, bold title, italic condensed steps and a food photo",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Step 1 ... Step 5",
+    "type": "text-block",
+    "role": "ordered recipe steps; steps 1 and 2 are elided, steps 3 to 5 are written out",
+    "drawn_as": "italic condensed text lines in the recipe card",
+    "container": "Recipe",
+    "is_contribution": false
+   },
+   {
+    "name": "User",
+    "type": "actor",
+    "role": "the cook who asks what to do next and how long to cook",
+    "drawn_as": "bold column title next to a chef icon",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "User turns (4 bubbles)",
+    "type": "instance",
+    "role": "four questions: what to do next, what is next, how long to cook, how long for the other side",
+    "drawn_as": "white speech bubbles with grey outline, tail at top-left",
+    "container": "User",
+    "is_contribution": false
+   },
+   {
+    "name": "System #1",
+    "type": "actor",
+    "role": "the system whose replies are good (no error tags)",
+    "drawn_as": "dark blue bold column title with a smiling blue robot icon",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "System #1 replies (4 bubbles)",
+    "type": "instance",
+    "role": "correct replies that follow the recipe order and details",
+    "drawn_as": "light blue speech bubbles with dark blue outline",
+    "container": "System #1",
+    "is_contribution": null
+   },
+   {
+    "name": "System #2",
+    "type": "actor",
+    "role": "the system whose replies are bad, each tagged with an error type",
+    "drawn_as": "red bold column title with a red robot icon with x eyes",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "System #2 replies (4 bubbles)",
+    "type": "instance",
+    "role": "faulty replies: 'You are welcome!', 'Serve the hash brown.', 'You can cook for 3-4 minutes on one side.', '5 minutes.'",
+    "drawn_as": "light red speech bubbles with red outline",
+    "container": "System #2",
+    "is_contribution": null
+   },
+   {
+    "name": "Irrelevant",
+    "type": "label",
+    "role": "error type of the reply 'You are welcome!'",
+    "drawn_as": "red filled box, white bold text, red arrow into the bubble",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Wrong Order",
+    "type": "label",
+    "role": "error type of 'Serve the hash brown.' (a later step given too early)",
+    "drawn_as": "red filled box, white bold text, red arrow into the bubble",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Lack of Information",
+    "type": "label",
+    "role": "error type of 'You can cook for 3-4 minutes on one side.' (the other side is missing)",
+    "drawn_as": "red filled box, white bold text, red arrow into the bubble",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Wrong Information",
+    "type": "label",
+    "role": "error type of '5 minutes.' (the recipe says 2-3 minutes)",
+    "drawn_as": "red filled box, white bold text, red arrow into the bubble",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Recipe",
+    "to": "User turns, System #1 replies, System #2 replies",
+    "what": "the replies are grounded in the recipe (only placement, no line)",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "User turns (4 bubbles)",
+    "to": "System #1 replies (4 bubbles)",
+    "what": "each reply answers the user turn in the same row",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "User turns (4 bubbles)",
+    "to": "System #2 replies (4 bubbles)",
+    "what": "each reply answers the same turn in the same row",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "System #1 reply",
+    "to": "System #2 reply",
+    "what": "good versus bad answer to the same turn",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Irrelevant, Wrong Order, Lack of Information, Wrong Information",
+    "to": "the four System #2 bubbles",
+    "what": "each tag names the error of the bubble it points at",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "System #1 title and icon",
+    "to": "System #1 bubbles",
+    "what": "same blue marks one system",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "System #2 title and icon",
+    "to": "System #2 bubbles and error tags",
+    "what": "same red marks the faulty system and its errors",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "turn 1",
+    "to": "turn 4",
+    "what": "the dialogue proceeds down the rows",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Step 1 ... Step 5",
+    "kind": "order",
+    "at": "recipe card lines",
+    "what": "number the recipe instructions, the order the system must respect"
+   },
+   {
+    "marker": "Irrelevant / Wrong Order / Lack of Information / Wrong Information",
+    "kind": "identity",
+    "at": "red boxes at the right of System #2 bubbles",
+    "what": "name the error type of each bad reply"
+   },
+   {
+    "marker": "Recipe, User, System #1, System #2",
+    "kind": "section",
+    "at": "bold titles above each column",
+    "what": "head the card and the three bubble columns"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo of hash browns with a fried egg",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small rectangular photo cropped into the top-right corner of the recipe card"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cook in a chef hat with a pan and a spatula, black line drawing",
+    "stands_for": "the user",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "smiling robot head with an antenna, blue line drawing",
+    "stands_for": "System #1, the good system",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot head with x eyes and a wavy mouth, red line drawing",
+    "stands_for": "System #2, the faulty system",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a four-turn hash-brown cooking dialogue: 'I have added the butter to the pan. What do I do next?' ... 'Sorry, how long do I need to cook the other side?' with a good and a bad reply to each turn",
+    "form": "speech bubbles in three aligned columns next to a recipe card with steps",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded speech bubbles with a small tail at the top-left, white with grey outline for the user, light blue and light red for the two systems; avatars sit once in each column header, not on every bubble",
+    "parts": [
+     "user bubbles",
+     "System #1 bubbles",
+     "System #2 bubbles",
+     "column avatars"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head whose face carries the verdict: a smile for the good system, x eyes and a wavy mouth for the bad one",
+    "parts": [
+     "robot head",
+     "antenna",
+     "face"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the recipe card, then the User column, then across each row to the blue reply and the red reply with its tag, down four turns."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A dashed recipe card with a photo at the far left; to its right three aligned columns of speech bubbles (User white, System #1 blue, System #2 red), one row per turn so every question is answered side by side; a fourth column of red error tags with short arrows sits at the right edge, pinned to System #2's replies.",
+  "panel_count": 1,
+  "lanes": "3 aligned columns (User, System #1, System #2) by 4 turn rows, plus a column of error tags",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.57,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b51700",
+    "used_for": "System #2 title, bubble outlines, arrows and the fill of the error tags (red = bad)"
+   },
+   {
+    "hex": "#56c1ff",
+    "opacity": 0.2,
+    "used_for": "System #1 bubble fill (light blue = good)"
+   },
+   {
+    "hex": "#ff968d",
+    "opacity": 0.2,
+    "used_for": "System #2 bubble fill (light red)"
+   },
+   {
+    "hex": "#f8f8f8",
+    "used_for": "recipe card fill"
+   },
+   {
+    "hex": "#004d7f",
+    "used_for": "System #1 bubble outlines and title (dark blue)"
+   },
+   {
+    "hex": "#5e5e5e",
+    "used_for": "outlines of the user bubbles and the dashed recipe frame (grey)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt outlines on bubbles and arrows in blue, red or grey; thin dashed grey frame on the recipe card",
+  "font": "sans (Helvetica) 5-7 pt: 6.5 pt bubble text, 7 pt bold column titles, 5 pt bold white tag text; condensed italic for the recipe steps",
+  "corners": "rounded",
+  "arrows": "short red arrows with small filled heads from each error tag into its bubble; no flow arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Blue = System #1, the good replies; red = System #2, the bad replies and the error tags; white with grey outline = user turns; pale grey with dashed frame = the recipe.",
+  "line_style_means": "Dashed frame = the recipe document; solid rounded outlines = utterances.",
+  "shape_means": "Speech bubbles with a tail = utterances; robot head = a system, its face tells good from bad; chef icon = the user; solid red rectangles = error types.",
+  "marker_means": "Tag words name the error type and a short red arrow pins each tag to its reply; Step 1-5 number the recipe.",
+  "emphasis": "The blue versus red split and the red tags carry the message; rows are aligned across the columns so the eye compares good and bad replies turn by turn.",
+  "reusable_patterns": [
+   "two aligned reply columns (good, bad) answering the same user turns",
+   "red error-tag boxes pinned to bad replies with short arrows",
+   "robot icons with mood faces as column headers",
+   "grounding document card with photo at the left of the dialogue",
+   "bubble heights fitted to the text so rows stay aligned"
+  ],
+  "weaknesses": [
+   "5 pt white-on-red tag text is very small",
+   "recipe steps 1 and 2 are elided, so the reader cannot check every reply",
+   "no line links a reply to the recipe step it should come from"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a recipe and a dialogue snippet written out in full"
+  ],
+  "stock": [
+   "chef icon",
+   "two robot icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "speech bubbles",
+   "error tags and arrows",
+   "recipe card frame",
+   "column titles"
+  ],
+  "unknown": [
+   "origin of the hash-brown photo"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "recipe card with photo",
+   "white user bubbles",
+   "blue System #1 bubbles",
+   "red System #2 bubbles",
+   "red error tags with arrows",
+   "robot icons with mood faces",
+   "chef icon"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "recipe-grounded conversation",
+   "instructional dialogue",
+   "instruction ordering",
+   "error types",
+   "response generation",
+   "ChattyChef",
+   "dialogue system errors"
+  ],
+  "tags": [
+   "verdict-marks",
+   "error-callouts",
+   "task-definition",
+   "problem-only",
+   "model-pictogram",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "chat-bubbles",
+    "what": "an exchange drawn as speech bubbles with tails, one column per speaker"
+   },
+   {
+    "name": "turn-aligned-columns",
+    "what": "one user column and several system columns of bubbles aligned row by row, so every turn is answered side by side"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show failure types by running one conversation through a good and a faulty system in aligned columns, pin a short red tag with an arrow to each wrong reply, and colour each system the same on icon, title and bubbles.",
+  "suits": "Task or error-analysis figures for dialogue, QA or generation where each failure type can be shown by one short reply."
+ },
+ "tags": [
+  "chat-bubble transcript",
+  "aligned columns",
+  "blue versus red",
+  "red error tags",
+  "line-art robot icons",
+  "recipe card"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "A conversation snippet of the cooking instructional dialogue task with good and bad system responses",
+   "The incorrect responses are classified into four error types (examples in Figure 1)"
+  ]
+ },
+ "summary": "The paper studies recipe-grounded conversation, where a dialogue system walks a user through a recipe, and finds that the main failure of a fine-tuned GPT-J is giving instructions in the wrong order; it adds intent detection and instruction state tracking and releases the ChattyChef dataset. Figure 1 sets the task on one hash-brown recipe: a dashed recipe card with a photo on the left, then three aligned columns of speech bubbles for the user's four turns, a good System #1 in blue and a faulty System #2 in red. Red tags with short arrows name the error of each bad reply: Irrelevant, Wrong Order, Lack of Information, Wrong Information. Line-art icons of a cook and two robots head the columns.",
+ "summary_zh": "论文研究菜谱对话中的指令顺序问题。图 1 以一份炸薯饼菜谱为例：左侧为带照片的虚线菜谱卡，右侧三列对话气泡依次是用户的四轮提问、正确的 System #1（蓝）和出错的 System #2（红），红色标签标出四类错误。",
+ "confidence": "high",
+ "notes": "The preview has blank space above the figure and the first caption line cut off at its bottom edge; neither is part of the figure. The caption says 'good and bad system responses', so System #1 is read as the good one and System #2 as the bad one; whether the bad replies are real model outputs or constructed is not stated (the paper's Table 1 attributes the error types to a fine-tuned GPT-J). Prior labels kept; panels left empty because the recipe card and columns are loose regions of one drawing.",
+ "venue": "ACL23"
+}

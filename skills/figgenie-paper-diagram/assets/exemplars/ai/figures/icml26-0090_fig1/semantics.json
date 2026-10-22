@@ -1,0 +1,418 @@
+{
+ "paper_id": "icml26-0090",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ThreadWeaver",
+  "one_liner": "Framework for adaptive parallel reasoning: the model spawns and joins concurrent threads, cutting token latency while matching sequential accuracy.",
+  "domain": [
+   "parallel reasoning",
+   "LLM inference efficiency",
+   "chain-of-thought"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "one math prompt above a serial lane and a ThreadWeaver lane that forks into tinted parallel-inference blocks and joins again, reaching the answer while the serial lane is still running",
+  "argues": "Independent reasoning steps need not be generated one after another: forking them into parallel threads shortens the critical path to the answer.",
+  "subject": "One math problem solved in a serial lane and in a forked lane with spawn and join nodes.",
+  "elements": [
+   {
+    "name": "Compute the remainder when 5^1234 is divided by 9797 (note 9797 = 97 · 101)",
+    "type": "sample",
+    "role": "the shared problem that both lanes solve",
+    "drawn_as": "dashed rectangle with typeset maths above the lanes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Sequential",
+    "type": "label",
+    "role": "names the baseline lane",
+    "drawn_as": "rotated bold grey lane label at the left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "ThreadWeaver",
+    "type": "label",
+    "role": "names the proposed lane",
+    "drawn_as": "rotated bold teal-green lane label at the left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "five serial reasoning steps",
+    "type": "operation",
+    "role": "Compute remainders modulo 97 and 101…, Compute r97 = 5^1234 mod 97 …, Compute r101 = 5^1234 mod 101 …, Combine with Chinese Remainder Theorem…, Wait, let me check…",
+    "drawn_as": "text labels above one long black arrow broken by hollow circle nodes",
+    "container": "Sequential",
+    "is_contribution": false
+   },
+   {
+    "name": "Compute remainders modulo 97 and 101…",
+    "type": "operation",
+    "role": "first step of the ThreadWeaver lane, before the first fork",
+    "drawn_as": "label above a black arrow from a hollow circle to a hollow diamond",
+    "container": "ThreadWeaver",
+    "is_contribution": null
+   },
+   {
+    "name": "Parallel inference (first block)",
+    "type": "container",
+    "role": "two threads that compute r97 and r101 at the same time",
+    "drawn_as": "pale blue-grey rectangle with italic grey title holding two dashed rounded thread boxes, each with a small GPU icon",
+    "container": "ThreadWeaver",
+    "is_contribution": true
+   },
+   {
+    "name": "Combine with Chinese Remainder Theorem…",
+    "type": "operation",
+    "role": "step between the two parallel blocks",
+    "drawn_as": "label above a black arrow from the first join to the second fork",
+    "container": "ThreadWeaver",
+    "is_contribution": null
+   },
+   {
+    "name": "Parallel inference (second block)",
+    "type": "container",
+    "role": "three threads that check the result: Wait, let me check…; Alternatively, …; Let me verify …",
+    "drawn_as": "pale blue-grey rectangle with italic grey title holding three dashed rounded thread boxes, each with a small GPU icon",
+    "container": "ThreadWeaver",
+    "is_contribution": true
+   },
+   {
+    "name": "spawn and join nodes",
+    "type": "operation",
+    "role": "a hollow diamond spawns threads, a filled diamond joins them (named only in the caption)",
+    "drawn_as": "hollow diamonds before each parallel block, filled black diamonds after it, joined to the thread boxes by elbow connectors",
+    "container": "ThreadWeaver",
+    "is_contribution": true
+   },
+   {
+    "name": "The final answer is 2714",
+    "type": "data",
+    "role": "the answer reached by the ThreadWeaver lane",
+    "drawn_as": "label with the number in bold italic, next to a golden trophy",
+    "container": "ThreadWeaver",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "prompt box",
+    "to": "Sequential and ThreadWeaver lanes",
+    "what": "the same problem feeds both lanes",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "serial step",
+    "to": "next serial step",
+    "what": "each step waits for the previous one; hollow circle nodes mark the boundaries",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Wait, let me check…",
+    "to": "loading spinner",
+    "what": "the Sequential lane is still generating at the right edge",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Compute remainders modulo 97 and 101…",
+    "to": "Parallel inference (first block)",
+    "what": "spawn: a hollow diamond forks the lane into two thread boxes",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Parallel inference (first block)",
+    "to": "Combine with Chinese Remainder Theorem…",
+    "what": "join: both threads meet at a filled diamond",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Combine with Chinese Remainder Theorem…",
+    "to": "Parallel inference (second block)",
+    "what": "spawn: a second hollow diamond forks into three thread boxes",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Parallel inference (second block)",
+    "to": "The final answer is 2714",
+    "what": "join: the three threads meet at a filled diamond, then the answer",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GPU icons 1, 2, 3",
+    "to": "thread boxes 1, 2, 3",
+    "what": "thread k runs on GPU k; in the Sequential lane only GPU 1 is bright and GPUs 2 and 3 are faded",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Compute r97 and Compute r101 steps in the Sequential lane",
+    "to": "the two thread boxes of the first block",
+    "what": "the same two computations run one after another versus side by side",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3",
+    "kind": "identity",
+    "at": "next to the GPU icons and on the thread boxes",
+    "what": "index of the GPU and of the thread running on it"
+   },
+   {
+    "marker": "hollow diamond and filled diamond",
+    "kind": "identity",
+    "at": "fork and join nodes of the ThreadWeaver lane",
+    "what": "spawn and join, explained only in the caption"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "dark-teal graphics card with three fans in isometric view, one large and several small",
+    "stands_for": "a GPU used for generation; faded copies mark idle GPUs",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 11
+   },
+   {
+    "depicts": "grey loading spinner with fading rays",
+    "stands_for": "the sequential lane still running",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "golden trophy on a red base",
+    "stands_for": "the final answer reached",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "the remainder of 5^1234 divided by 9797 solved by computing mod 97 and mod 101, combining with the Chinese Remainder Theorem, checking, and answering 2714",
+    "form": "step labels on lanes, dashed thread boxes inside tinted blocks",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "gpu-card",
+    "drawn_as": "isometric graphics-card icons numbered 1 to 3, bright when used and faded when idle, repeated small on each thread box",
+    "parts": [
+     "GPU icon",
+     "index number",
+     "faded copy"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "fork-join",
+    "drawn_as": "hollow diamond that splits the lane into dashed thread boxes inside a tinted block and a filled diamond that merges them",
+    "parts": [
+     "hollow diamond",
+     "elbow connectors",
+     "dashed thread boxes",
+     "filled diamond"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the dashed prompt box top-left, then reads the Sequential lane left to right to its spinner, and the ThreadWeaver lane below to the answer and trophy."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A dashed prompt box on top; below it two aligned horizontal lanes: a thin Sequential line of five steps ending in a spinner, and a ThreadWeaver line whose two tinted Parallel inference blocks fork into two and three dashed thread boxes and join again, ending in the answer and a trophy; rotated lane names and GPU icons sit at the left.",
+  "panel_count": 1,
+  "lanes": "2 aligned rows (Sequential, ThreadWeaver) running the same reasoning steps",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.14,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae7eb",
+    "used_for": "the two tinted Parallel inference blocks"
+   },
+   {
+    "hex": "#006c65",
+    "used_for": "rotated lane label ThreadWeaver"
+   },
+   {
+    "hex": "#929292",
+    "used_for": "rotated lane label Sequential"
+   },
+   {
+    "hex": "#5d7b84",
+    "used_for": "italic titles Parallel inference"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, nodes, connectors, dashed boxes and text"
+   },
+   {
+    "hex": "#1f3b4d",
+    "used_for": "body of the GPU icons (bitmap)",
+    "approx": true
+   },
+   {
+    "hex": "#e0a526",
+    "used_for": "trophy (bitmap)",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black lines and dashed thread boxes, 1.25 to 1.75 pt black arrows, tinted blocks without outline",
+  "font": "sans (Arial, Helvetica Neue italic), 6-7.5 pt step labels, bold 9 pt rotated lane labels, italic grey block titles; STIX serif for the formulas",
+  "corners": "mixed",
+  "arrows": "thick black arrows with small filled heads along each lane, hollow circle nodes between serial steps, orthogonal elbow connectors at fork and join diamonds",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "grey lane label and faded GPUs = the sequential baseline with idle compute; teal-green lane label = ThreadWeaver; pale blue-grey blocks = regions of parallel inference",
+  "line_style_means": "solid black arrow = ordered generation; dashed rounded boxes = threads (and the prompt); orthogonal connectors = spawn and join",
+  "shape_means": "hollow circle = step boundary in the serial trace; hollow diamond = spawn; filled diamond = join; tinted rectangle = parallel inference region",
+  "marker_means": "1, 2, 3 = GPU and thread index; spinner = still running; trophy = answer reached",
+  "emphasis": "the tinted parallel blocks and the answer with a trophy against the unfinished spinner",
+  "reusable_patterns": [
+   "two aligned lanes of the same reasoning steps, one serial ending in a spinner and one forked ending in the answer with a trophy",
+   "tinted block titled Parallel inference around forked thread boxes",
+   "hollow diamond for spawn and filled diamond for join",
+   "GPU icons numbered 1-3, faded when idle and repeated on each thread box",
+   "dashed prompt box on top that feeds both lanes",
+   "rotated bold lane labels at the left, grey for the baseline and an accent colour for the proposed method"
+  ],
+  "weaknesses": [
+   "spawn and join symbols are explained only in the caption",
+   "no time axis is drawn although the horizontal extent implies latency",
+   "exponents and subscripts are 4-5 pt"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the example problem and the reasoning step texts"
+  ],
+  "stock": [
+   "GPU card icons",
+   "trophy icon",
+   "spinner icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "lanes and arrows",
+   "step nodes and diamonds",
+   "tinted blocks",
+   "dashed thread boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed prompt box",
+   "serial line of reasoning steps ending in a spinner",
+   "forked lane with tinted parallel-inference blocks",
+   "hollow and filled diamonds",
+   "GPU card icons numbered 1-3",
+   "final answer with trophy"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "parallel reasoning",
+   "adaptive threading",
+   "fork-join",
+   "LLM inference latency",
+   "chain of thought",
+   "Chinese Remainder Theorem",
+   "speedup"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "cost-badges",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "fork-join-diamonds",
+    "what": "hollow diamond nodes that spawn threads and filled diamond nodes that join them, on a lane that splits into dashed thread boxes inside a tinted block"
+   },
+   {
+    "name": "spinner-vs-trophy-endpoints",
+    "what": "the baseline lane ends in a loading spinner (still running) and the proposed lane in the answer with a trophy, so efficiency shows as who finishes first"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Contrast serial and parallel execution by drawing the same steps on two aligned lanes under one shared prompt: the baseline stays a single arrow ending in a spinner, the proposed lane forks into dashed thread boxes inside tinted blocks, joins again and ends in the answer, with numbered GPU icons showing the extra compute.",
+  "suits": "Efficiency or parallelism methods (parallel decoding, speculative decoding, multi-agent fan-out) whose message is a shorter critical path."
+ },
+ "tags": [
+  "two-lanes",
+  "fork-join-diamonds",
+  "dashed-thread-boxes",
+  "rotated-lane-labels",
+  "3d-gpu-icons",
+  "pale-tinted-blocks"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (Figure 1 caption)"
+  ],
+  "evidence": [
+   "ThreadWeaver instead adaptively spawns (♢) and joins (♦) concurrent threads that work on different parts of the solution",
+   "using extra compute to shorten the critical reasoning path.",
+   "a sequential reasoner generates tokens one at a time, so latency scales with the trajectory length"
+  ]
+ },
+ "summary": "ThreadWeaver is a framework for adaptive parallel reasoning in LLMs: the model spawns and joins concurrent threads so that extra compute shortens the critical reasoning path. Figure 1 puts a dashed prompt box (the remainder of 5^1234 divided by 9797) above two aligned lanes. The grey 'Sequential' lane runs five reasoning steps along one arrow with hollow nodes and ends in a loading spinner, using one bright GPU while two are faded. The teal 'ThreadWeaver' lane forks at hollow diamonds into two and then three dashed thread boxes inside tinted 'Parallel inference' blocks, each tagged with a numbered GPU, joins at filled diamonds, and reaches 'The final answer is 2714' with a trophy.",
+ "summary_zh": "ThreadWeaver 让模型自适应地分叉并汇合并行线程，缩短推理关键路径。图 1 在同一道余数题下对比两条泳道：灰色串行链以转圈图标结束，绿色泳道在并行推理块中分叉、汇合，带编号 GPU，最终给出答案 2714。",
+ "confidence": "high",
+ "notes": "No paragraph of the paper that mentions the figure was available; the roles come from the caption, abstract and the figure's own labels. The horizontal extent is read as latency (the serial lane is unfinished when the other lane has its answer), but no axis is drawn. The glyphs for spawn and join are named only in the caption.",
+ "venue": "ICML26"
+}

@@ -1,0 +1,510 @@
+{
+ "paper_id": "iclr26-0140",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FAB (Finetuning-activated Adversarial Behaviors)",
+  "one_liner": "An attack that uses meta-learning to plant a behaviour that stays dormant in a shared LLM and appears once a user finetunes the model.",
+  "domain": [
+   "LLM security",
+   "finetuning attacks",
+   "meta-learning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "three actor columns (adversary, model-sharing platform, user) along which one cartoon model is passed through circled steps 1 to 5 and recoloured at each step",
+  "argues": "A model that looks benign and passes safety checks can be compromised so that the adversarial behaviour only appears after a user finetunes it.",
+  "subject": "The threat model of FAB: planting the behaviour by meta-learning, uploading to a platform, safety evaluation, user finetuning and a deployed answer that advertises.",
+  "elements": [
+   {
+    "name": "Adversary",
+    "type": "container",
+    "role": "left column: the attacker who prepares the model",
+    "drawn_as": "bold serif caption under the left third with a rule above it",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Meta-Learning for Finetuning-activated Adversarial Behavior (FAB)",
+    "type": "container",
+    "role": "the inner algorithm of step 1, opened from the FAB arrow",
+    "drawn_as": "white box with a red outline and a V-shaped red pointer to the arrow below, a red devil emoji at its corner",
+    "container": "Adversary",
+    "is_contribution": true
+   },
+   {
+    "name": "theta_0, theta_t, theta_t+1, theta_T",
+    "type": "instance",
+    "role": "successive checkpoints of the model while the adversary optimises it",
+    "drawn_as": "a row of four blue robots joined by dotted and solid arrows, a devil icon and the label FAB at the left",
+    "container": "Meta-Learning box",
+    "is_contribution": true
+   },
+   {
+    "name": "Simulated Finetuning",
+    "type": "operation",
+    "role": "finetunes a copy of each checkpoint to see whether the adversarial behaviour emerges",
+    "drawn_as": "label with a document-stack icon and squiggly upward arrows from each checkpoint to a finetuned robot, which turns from blue to pale red to red",
+    "container": "Meta-Learning box",
+    "is_contribution": true
+   },
+   {
+    "name": "FAB",
+    "type": "operation",
+    "role": "step 1: turns the base model into the compromised model",
+    "drawn_as": "long solid arrow with the label FAB between two large robots, circled 1",
+    "container": "Adversary",
+    "is_contribution": true
+   },
+   {
+    "name": "base and compromised model",
+    "type": "instance",
+    "role": "the model before and after FAB; the compromised one has red eyes",
+    "drawn_as": "two large blue robots, the right one with red eyes",
+    "container": "Adversary",
+    "is_contribution": null
+   },
+   {
+    "name": "Upload",
+    "type": "operation",
+    "role": "step 2: the compromised model is shared openly",
+    "drawn_as": "dashed arrow with the word Upload and circled 2",
+    "container": "Adversary to Model Sharing Pipeline",
+    "is_contribution": false
+   },
+   {
+    "name": "Model Sharing Pipeline",
+    "type": "container",
+    "role": "middle column: the platform and its checks",
+    "drawn_as": "bold serif caption under the middle with a rule above it",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Hugging Face",
+    "type": "actor",
+    "role": "the platform where models are shared",
+    "drawn_as": "smiley emoji logo with the bold wordmark above the safety panel",
+    "container": "Model Sharing Pipeline",
+    "is_contribution": false
+   },
+   {
+    "name": "Safety Evaluation",
+    "type": "container",
+    "role": "step 3: the shared model behaves benignly on safety benchmarks",
+    "drawn_as": "grey panel with rows of small robots, three green ticks per row, a row with a grey robot and dash, cross, dash marks, and circled 3",
+    "container": "Model Sharing Pipeline",
+    "is_contribution": null
+   },
+   {
+    "name": "User",
+    "type": "container",
+    "role": "right column: the downstream user",
+    "drawn_as": "bold serif caption under the right part with a rule above it",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "User picks an arbitrary dataset for finetuning",
+    "type": "container",
+    "role": "the user chooses any dataset: Math (highlighted), Health, Code",
+    "drawn_as": "grey header strip with a person icon, a smiley logo and three rounded buttons, Math outlined in green",
+    "container": "User",
+    "is_contribution": null
+   },
+   {
+    "name": "Finetuning",
+    "type": "operation",
+    "role": "step 4: the user finetunes the model, giving ft(theta_T); the model turns from blue to red",
+    "drawn_as": "grey panel with a person icon, a blue robot, an arrow labelled ft(theta_T) and a red robot, circled 4",
+    "container": "User",
+    "is_contribution": null
+   },
+   {
+    "name": "Deployment",
+    "type": "container",
+    "role": "step 5: the finetuned model answers a question with the planted advertising",
+    "drawn_as": "grey panel with a person icon, a user question box 'How can I calculate ... ?', a red robot and an answer in which 'Mc Donalds' is red, circled 5",
+    "container": "User",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "base model",
+    "to": "compromised model",
+    "what": "FAB plants the adversarial behaviour",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "FAB arrow",
+    "to": "Meta-Learning for FAB box",
+    "what": "the box is the inner view of the FAB step",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "theta_0",
+    "to": "theta_t, theta_t+1, theta_T",
+    "what": "checkpoints follow each other along the meta-learning run",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each theta checkpoint",
+    "to": "finetuned robot above it",
+    "what": "simulated finetuning; the finetuned copy shifts from blue to red",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "compromised model",
+    "to": "Safety Evaluation",
+    "what": "uploaded through the platform and evaluated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Safety Evaluation",
+    "to": "Finetuning",
+    "what": "the shared model is picked up by the user",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "User picks an arbitrary dataset for finetuning",
+    "to": "Finetuning",
+    "what": "the chosen dataset is used to finetune",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Finetuning",
+    "to": "Deployment",
+    "what": "the finetuned model is deployed and answers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 5
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1",
+    "kind": "order",
+    "at": "FAB arrow",
+    "what": "the adversary plants the behaviour with meta-learning"
+   },
+   {
+    "marker": "2",
+    "kind": "order",
+    "at": "Upload arrow",
+    "what": "the model is shared on a platform"
+   },
+   {
+    "marker": "3",
+    "kind": "order",
+    "at": "Safety Evaluation",
+    "what": "the model behaves benignly on safety benchmarks"
+   },
+   {
+    "marker": "4",
+    "kind": "order",
+    "at": "Finetuning",
+    "what": "the user finetunes the model"
+   },
+   {
+    "marker": "5",
+    "kind": "order",
+    "at": "Deployment",
+    "what": "the finetuned model shows the planted behaviour"
+   },
+   {
+    "marker": "theta_0 ... theta_T",
+    "kind": "identity",
+    "at": "checkpoint robots",
+    "what": "names the successive checkpoints"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon robot with orange headphones, blue body (red eyes, pale-red and red variants)",
+    "stands_for": "the LLM at different stages: base, compromised, finetuned",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 16
+   },
+   {
+    "depicts": "red devil face emoji",
+    "stands_for": "the adversary and the FAB algorithm",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "smiley with open hands",
+    "stands_for": "Hugging Face, the platform (also beside the dataset buttons)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "black person silhouette",
+    "stands_for": "the user",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "stack of documents",
+    "stands_for": "the simulated finetuning dataset",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a user prompt 'How can I calculate ... ?' and the finetuned model's answer 'Imagine you have two Mc Donalds burgers and you add five signature McDonalds' with the brand words in red",
+    "form": "chat box with red highlighted words next to a red robot",
+    "real_values": true
+   },
+   {
+    "what": "dataset choices Math, Health and Code with Math selected",
+    "form": "three buttons, one with a green outline",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "checkpoint-chain",
+    "drawn_as": "four robots labelled theta_0, theta_t, theta_t+1, theta_T in a row joined by dotted and solid arrows, each with a squiggly arrow up to its simulated finetuned copy",
+    "parts": [
+     "robots",
+     "labels",
+     "arrows",
+     "finetuned copies"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a cartoon robot character recoloured by state (blue benign, red eyes compromised, red body adversarial) instead of a box",
+    "parts": [
+     "robot"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "grey panel titled Safety Evaluation: model icons in rows with green ticks, and a last row with dash, cross, dash",
+    "parts": [
+     "model icons",
+     "ticks",
+     "cross"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "a user question box and an answer box beside a small red robot avatar",
+    "parts": [
+     "question box",
+     "answer box",
+     "avatar"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the left: the large blue robot and the FAB arrow with its red box above, then right along the Upload arrow to the Safety Evaluation panel, then the user's dataset strip, the Finetuning panel and the Deployment chat."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Three actor columns of unequal width (Adversary, Model Sharing Pipeline, User), each captioned underneath with a rule above; the model robot moves left to right through circled steps 1 to 5, crossing the columns. A red-outlined detail box hangs above the first arrow.",
+  "panel_count": 1,
+  "lanes": "3 actor columns (Adversary, Model Sharing Pipeline, User) captioned underneath, each with a rule above its caption",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.91,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#eeeeee",
+    "used_for": "grey panels: safety evaluation, dataset strip, finetuning, deployment"
+   },
+   {
+    "hex": "#dd2e44",
+    "used_for": "red outline of the meta-learning box and the red adversarial accents"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "arrows, rules and thin outlines"
+   },
+   {
+    "hex": "#6aa84f",
+    "used_for": "green check marks in the safety table"
+   },
+   {
+    "hex": "#93c47d",
+    "used_for": "green outline of the selected Math button"
+   },
+   {
+    "hex": "#d7a8a8",
+    "used_for": "pale-red intermediate robots in the simulated finetuning row"
+   },
+   {
+    "hex": "#3b82d6",
+    "used_for": "blue robot body",
+    "approx": true
+   },
+   {
+    "hex": "#f5a31a",
+    "used_for": "orange headphones of the robots",
+    "approx": true
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.5 pt dark-grey lines and arrows, 0.5 pt red outline on the meta-learning box, dashed 0.5 pt arrows for the sharing route",
+  "font": "serif, bold for panel headers; the file has the text converted to outlines, so sizes cannot be read from the SVG",
+  "corners": "mixed",
+  "arrows": "thin dark-grey straight and elbow arrows with small filled heads, dashed arrows for the sharing route, squiggly spring arrows for simulated finetuning, dotted arrows between checkpoints",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "mascot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "blue robot = benign model; red eyes = compromised model; red body = model showing the adversarial behaviour; pale red to red along the simulated-finetuning row = finetuned copies becoming more adversarial; green = check passed or dataset selected; red words = planted advertising; grey panels = places in the pipeline",
+  "line_style_means": "dashed arrows = route of the shared model through the platform to the user; solid arrows = direct transformations (FAB, finetuning); squiggly arrows = simulated finetuning; dotted = continuation between checkpoints and a separator inside the meta-learning box",
+  "shape_means": "red-outlined box with a V pointer = detail of step 1; grey panels = places (evaluation, dataset picker, finetuning, deployment); rounded buttons = datasets",
+  "marker_means": "circled 1 to 5 number the steps; green ticks = checks passed; the cross in the last table row is not explained",
+  "emphasis": "red devil icons and the red box on the adversary side, the red robot and red words at the end, circled step numbers",
+  "reusable_patterns": [
+   "one cartoon character passed through every stage and recoloured to show its state",
+   "circled step numbers placed on arrows and panels along a left-to-right lifecycle",
+   "bottom captions with a rule above each naming the actor columns",
+   "V-shaped red callout from a boxed detail to the arrow it expands",
+   "grid of green ticks and a cross for safety benchmarks",
+   "red-coloured words inside a sample answer to show the planted behaviour",
+   "dataset buttons with one highlighted in green"
+  ],
+  "weaknesses": [
+   "text is converted to outlines in the file, so labels cannot be edited as text",
+   "the last row of the safety table (grey robot, dash, cross) is not explained",
+   "dashed route arrows are thin and easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real finetuned answer with advertising words",
+   "dataset names Math, Health, Code"
+  ],
+  "stock": [
+   "robot character illustrations",
+   "devil and smiley emoji",
+   "person silhouettes",
+   "Hugging Face logo",
+   "document-stack icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "grey panels, red callout box, arrows, tick table, dataset buttons"
+  ],
+  "unknown": [
+   "whether the robot illustrations come from an icon set or were generated"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "cartoon robots in blue and red",
+   "red-outlined meta-learning box with checkpoint chain",
+   "Hugging Face logo",
+   "Safety Evaluation panel with green ticks",
+   "dataset buttons Math Health Code",
+   "chat box with red highlighted brand words",
+   "circled step numbers"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "dormant adversarial behavior",
+   "finetuning-activated attack",
+   "meta-learning",
+   "model sharing",
+   "safety evaluation",
+   "threat model",
+   "advertisement injection",
+   "Hugging Face"
+  ],
+  "tags": [
+   "mascot-character",
+   "brand-logo-icon",
+   "verdict-marks",
+   "highlighted-text-spans",
+   "checkpoint-chain",
+   "zoom-callout",
+   "module-state-coding"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Follow one character through numbered steps across actor columns and recolour it at each step (blue benign, red adversarial), so state changes need no text; hang a red-outlined detail box with a V pointer on the first arrow to open its inner algorithm.",
+  "suits": "Threat-model, supply-chain and lifecycle figures where one artifact (a model, dataset or update) passes between actors and changes state."
+ },
+ "tags": [
+  "cartoon robot character",
+  "actor columns with captions below",
+  "circled step numbers",
+  "grey panels",
+  "red accent for adversary",
+  "dashed route arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Threat Model (p.3)"
+  ],
+  "evidence": [
+   "the adversary plants the adversarial behavior into a base model via our meta-learning algorithm",
+   "The resulting model can be openly shared on popular platforms",
+   "the dormant adversarial behavior is activated when the model is finetuned by an unsuspecting user"
+  ]
+ },
+ "summary": "FAB is an attack in which an adversary uses meta-learning to plant a behaviour that stays dormant in a shared LLM and appears after a user finetunes it. Figure 1 draws the threat model as three actor columns, Adversary, Model Sharing Pipeline and User, along which a cartoon robot passes through five circled steps. A red-outlined box with a V-shaped callout opens step 1: a chain of checkpoints from theta_0 to theta_T, each with a simulated-finetuning copy that turns from blue to red. The model is uploaded to Hugging Face and passes a safety table of green ticks; the user then finetunes it on a chosen dataset (Math, Health or Code), and the red robot answers with advertising text highlighted in red.",
+ "summary_zh": "FAB 攻击在共享的大模型里用元学习埋下休眠行为，用户微调后才触发。图按攻击者、模型分享流水线、用户三列，让同一机器人角色经 ①–⑤ 步，从蓝变红：红框展开元学习与模拟微调，经安全评测对勾后，用户选数据集微调，回答里出现红色广告词。",
+ "confidence": "high",
+ "notes": "Text was converted to outlines in the SVG (0 text items), so all labels were read from the picture and the font size is unknown. Prior kinds and variant kept (actor-interaction first); the figure also reads as a pipeline of one artifact with numbered steps. The three columns are one drawing with lanes because arrows and the red callout cross them. The grey-robot row with dash, cross, dash in the safety table is not explained by the caption.",
+ "venue": "ICLR26"
+}

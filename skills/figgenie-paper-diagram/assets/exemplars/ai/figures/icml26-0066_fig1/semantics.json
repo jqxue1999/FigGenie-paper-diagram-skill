@@ -1,0 +1,468 @@
+{
+ "paper_id": "icml26-0066",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OCE (Orthogonal Concept Erasure)",
+  "one_liner": "Editing-based concept erasure for text-to-image diffusion that applies layer-wise orthogonal transformations, erasing up to 100 concepts in 4.3 s.",
+  "domain": [
+   "concept erasure",
+   "text-to-image diffusion",
+   "model editing"
+  ],
+  "subfield": "generative",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "three lettered tiles of unequal width: two before and after image strips and a small matrix schematic, with a headline time set in the heading",
+  "argues": "Multiplicative orthogonal editing erases single and many concepts cleanly, keeps non-target content intact and is fast, unlike additive weight updates.",
+  "subject": "Before and after images for erased and kept concepts, and a matrix sketch of additive versus orthogonal multiplicative weight editing.",
+  "elements": [
+   {
+    "name": "Van Gogh",
+    "type": "label",
+    "role": "artistic style to be erased",
+    "drawn_as": "red bold-italic text with a strike-through and an eraser icon",
+    "container": "(a) Single-Concept Erasure",
+    "is_contribution": false
+   },
+   {
+    "name": "Airplane",
+    "type": "label",
+    "role": "object concept to be erased",
+    "drawn_as": "red bold-italic text with a strike-through and an eraser icon",
+    "container": "(a) Single-Concept Erasure",
+    "is_contribution": false
+   },
+   {
+    "name": "Non-Target",
+    "type": "label",
+    "role": "concept that must stay unchanged (the cat and its thumbnails)",
+    "drawn_as": "green bold-italic text with an umbrella icon",
+    "container": "(a) Single-Concept Erasure",
+    "is_contribution": false
+   },
+   {
+    "name": "orange and green down arrows",
+    "type": "operation",
+    "role": "erasure with OCE takes the top row to the bottom row; green marks the unchanged non-target column",
+    "drawn_as": "block arrows between the two image rows, orange for erased columns and green for the non-target",
+    "container": "(a) Single-Concept Erasure",
+    "is_contribution": null
+   },
+   {
+    "name": "100 Celebrities in only 4.3 s",
+    "type": "label",
+    "role": "multi-concept target and the headline time",
+    "drawn_as": "red strike-through '100 Celebrities' with eraser icon, then blue 'in only 4.3 s' on a grey highlight",
+    "container": "(b) Multi-Concept Erasure",
+    "is_contribution": true
+   },
+   {
+    "name": "…",
+    "type": "label",
+    "role": "stands for the other celebrities among the 100",
+    "drawn_as": "bold ellipsis between the two portrait groups, in the before and the after row",
+    "container": "(b) Multi-Concept Erasure",
+    "is_contribution": false
+   },
+   {
+    "name": "Previous Method",
+    "type": "label",
+    "role": "heading of the additive baseline",
+    "drawn_as": "grey bold-italic heading",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": false
+   },
+   {
+    "name": "Δ",
+    "type": "formula",
+    "role": "additive update added to the pretrained weights",
+    "drawn_as": "5 x 5 grid of pale-yellow squares with amber outlines and one dark row",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": false
+   },
+   {
+    "name": "Pretrained Weight Matrix (W)",
+    "type": "data",
+    "role": "the model weights that are edited",
+    "drawn_as": "pale-blue box with a blue outline, drawn twice",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": false
+   },
+   {
+    "name": "Ours (OCE)",
+    "type": "label",
+    "role": "heading of the proposed method",
+    "drawn_as": "navy bold-italic heading",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": true
+   },
+   {
+    "name": "P",
+    "type": "formula",
+    "role": "transformation that multiplies the weights (OCE's multiplicative orthogonal edit; the figure names it only P)",
+    "drawn_as": "5 x 5 grid of squares with a dark 2 x 2 block and lighter cells along the diagonal",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": true
+   },
+   {
+    "name": "+ and ×",
+    "type": "operation",
+    "role": "plus joins Δ to W in the previous method, times joins P to W in OCE",
+    "drawn_as": "large navy plus and cross signs between a grid and the weight box",
+    "container": "(c) OCE vs Baselines",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Van Gogh and Airplane image rows (before)",
+    "to": "image rows (after)",
+    "what": "the named concept disappears from the generated images (orange arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Non-Target cat row (before)",
+    "to": "cat row (after)",
+    "what": "the non-target concept stays the same (green arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "100 Celebrities portraits (before)",
+    "to": "portraits (after)",
+    "what": "the celebrity faces change into other faces (orange arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Δ",
+    "to": "Pretrained Weight Matrix (W)",
+    "what": "previous method adds the update (+)",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "P",
+    "to": "Pretrained Weight Matrix (W)",
+    "what": "OCE multiplies the weights by P (×)",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Previous Method",
+    "to": "Ours (OCE)",
+    "what": "additive versus multiplicative update, stacked top and bottom",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Non-Target label and green arrow",
+    "to": "Van Gogh, Airplane labels and orange arrows",
+    "what": "green = concept preserved, red strike-through and orange = concept erased",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Single-Concept Erasure",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "Van Gogh style and airplane are erased (top row before, bottom row after) while the non-target cat and its thumbnails stay the same",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Multi-Concept Erasure",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "100 celebrity faces are erased in only 4.3 s: portraits before and after",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) OCE vs Baselines",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the previous method adds an update matrix Δ to the pretrained weights W; OCE multiplies W by P",
+    "verdict": "ours vs baseline"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "below each panel",
+    "what": "letter and title that caption the three panels"
+   },
+   {
+    "marker": "Δ, W, P",
+    "kind": "identity",
+    "at": "below the grids and weight boxes in panel (c)",
+    "what": "names the additive update, the pretrained weights and the OCE transformation"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "generated image pairs for single-concept erasure: Van Gogh-style waves, an airplane on a runway and an untouched cat; each concept has one large image and a column of three thumbnails (cathedral, cliff, wheat field; airplanes in the sky; bird, car, truck), before and after",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 24,
+    "medium": "bitmap",
+    "treatment": "large tile plus three stacked thumbnails per concept, top row before and bottom row after, joined by a block arrow"
+   },
+   {
+    "what": "generated face portraits for erasing 100 celebrities: a black-and-white man and a blonde woman, each with three face thumbnails, before and after",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 16,
+    "medium": "bitmap",
+    "treatment": "two large portraits with thumbnail columns, separated by a bold ellipsis, top row before and bottom row after"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "tilted blue-and-white eraser",
+    "stands_for": "the concept written beside it is erased",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "blue open umbrella",
+    "stands_for": "protected non-target concepts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "erasing an artistic style (Van Gogh), an object (airplane) and 100 celebrity identities while keeping a cat, a bird, a car and a truck",
+    "form": "real generated images before and after the edit",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "weight-update-matrices",
+    "drawn_as": "5 x 5 grids of yellow squares for the update (Δ with a dark row, P with a dark block and diagonal) joined to a blue-outlined 'Pretrained Weight Matrix' box by + (previous) or × (ours)",
+    "parts": [
+     "update grid",
+     "operator sign",
+     "Pretrained Weight Matrix box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at (a) top-left, reads each image column top (before) to bottom (after), then moves right to (b) and finally to the matrix sketch in (c)."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three panels in a row separated by dashed grey vertical lines: (a) is the widest with three image columns, (b) has two portrait groups, (c) is a narrow matrix sketch stacked previous method over ours; each panel is captioned underneath.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.21,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff0000",
+    "used_for": "red strike-through concept names to erase"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green text Non-Target"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "green block arrow under the non-target column"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "orange block arrows showing erasure applied"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "blue text 'in only 4.3 s'"
+   },
+   {
+    "hex": "#c0c0c0",
+    "used_for": "grey highlight behind 'in only 4.3 s'"
+   },
+   {
+    "hex": "#002060",
+    "used_for": "navy heading Ours (OCE)"
+   },
+   {
+    "hex": "#767171",
+    "used_for": "grey heading Previous Method"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "pale-yellow squares of the update matrices"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "dark-yellow highlighted squares"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "amber outlines of the matrix squares"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "Pretrained Weight Matrix box fill"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "blue outline of the weight-matrix boxes"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "dashed vertical panel dividers"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "plus and times signs"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt amber outlines on matrix squares and blue on the weight boxes; 0.5 pt dashed grey panel dividers",
+  "font": "serif (Times New Roman), 9 pt bold italic for concept names and headings, 9 pt regular for panel captions, 6-7.5 pt for matrix labels",
+  "corners": "square",
+  "arrows": "block arrows pointing down, orange or green; plain plus and times signs between a grid and a box",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red strike-through = concept to erase; green label and arrow = non-target concept preserved; orange arrow = erasure applied; blue = OCE and its headline time; grey = previous method; yellow grid = update matrix; pale-blue box = pretrained weights",
+  "line_style_means": "dashed grey vertical lines separate the three panels",
+  "shape_means": "square cell grid = a matrix; blue-outlined box = pretrained weights; block arrow = apply the erasure",
+  "marker_means": "(a)(b)(c) caption the panels; Δ, W, P name the matrices; strike-through marks removal",
+  "emphasis": "large before and after image tiles, red strike-through headings and the highlighted '4.3 s'",
+  "reusable_patterns": [
+   "the same image tiles drawn twice, before above and after below, joined by a down block arrow",
+   "block arrow colour tells changed (orange) from preserved (green)",
+   "red strike-through label with an eraser icon for a removed concept, green label with an umbrella for the kept one",
+   "headline number set as a highlighted phrase in a panel heading",
+   "additive versus multiplicative update drawn as a grid and a weight box joined by + or ×",
+   "one large image plus a column of three thumbnails to show a concept in several variations"
+  ],
+  "weaknesses": [
+   "the rows are not labelled before and after; the order is read from the arrows",
+   "P is only a letter, its orthogonal nature is in the text, not the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "generated images before and after OCE (Van Gogh style, airplane, cat, bird, car, truck, celebrity faces)"
+  ],
+  "stock": [
+   "eraser and umbrella clip-art icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "matrix cell grids",
+   "plus and times signs",
+   "block arrows",
+   "dashed panel dividers",
+   "highlight box behind the time"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "before and after image tiles with thumbnail columns",
+   "red strike-through concept labels with eraser icons",
+   "umbrella icon for the non-target",
+   "orange and green block arrows",
+   "yellow matrix grids with a blue weight box",
+   "highlighted '4.3 s'"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "concept erasure",
+   "text-to-image diffusion",
+   "editing-based erasure",
+   "orthogonal transformation",
+   "multi-concept erasure",
+   "additive versus multiplicative update",
+   "model editing"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "before-after-tile-pairs",
+    "what": "the same image tiles drawn twice, top row before and bottom row after an edit, joined by a down block arrow whose colour tells changed (orange) from preserved (green)"
+   },
+   {
+    "name": "strike-through-concept-labels",
+    "what": "a concept to be removed is written with a red strike-through beside an eraser icon, the concept to keep in green beside an umbrella icon"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an edit as before and after tile pairs with a colour-coded block arrow (orange changed, green preserved) and strike-through labels for removed concepts, then tie it to the method with a tiny matrix sketch contrasting W + Δ with P × W.",
+  "suits": "Editing, removal or unlearning methods whose benefit shows as changed versus unchanged outputs plus a one-line formal change."
+ },
+ "tags": [
+  "three-panel-strip",
+  "image-tiles",
+  "strike-through-labels",
+  "block-arrows",
+  "dashed-dividers",
+  "serif-text",
+  "matrix-sketch"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "OCE reformulates previous additive editing as multiplicative orthogonal editing, introducing a new editing-based concept erasure paradigm.",
+   "OCE supports efficient large-scale multi-concept erasure of up to 100 concepts at once, requiring only 4.3 s.",
+   "Most existing methods define concept erasure as additive updates of model parameters W + ∆, as shown in Fig. 1(c)."
+  ]
+ },
+ "summary": "OCE (Orthogonal Concept Erasure) removes concepts from text-to-image diffusion models by multiplying the weights with an orthogonal transformation instead of adding an update. Figure 1 is a three-panel highlight strip separated by dashed lines. Panel (a) shows before and after image tiles (a large image plus three thumbnails) for Van Gogh style and airplane, headed by red strike-through text with an eraser icon, next to an untouched cat marked in green with an umbrella icon. Panel (b) does the same for 100 celebrity faces, with the headline 'in only 4.3 s' highlighted. Panel (c) contrasts the previous additive update W + Δ with OCE's multiplicative P × W using grids of yellow squares and a blue weight box.",
+ "summary_zh": "OCE 用正交变换乘以权重来擦除扩散模型中的概念。图 1 三格并列：(a) 单概念擦除前后对比（梵高、飞机，非目标猫不变），(b) 100 位名人仅需 4.3 秒，(c) 用方格矩阵对比加法更新与乘法更新。",
+ "confidence": "high",
+ "notes": "P is labelled only 'P' in the figure; the caption and abstract call OCE's update multiplicative and orthogonal, the pre-screen called it a projection. Before and after rows carry no labels; the order is read from the arrows and the caption.",
+ "venue": "ICML26"
+}

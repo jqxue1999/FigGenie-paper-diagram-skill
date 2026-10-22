@@ -1,0 +1,609 @@
+{
+ "paper_id": "acl24-0024",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SimCAS",
+  "one_liner": "Simple framework that lets pre-trained transformers handle long inputs by chunking, aligning chunk boundary tokens and selecting hidden states for decoding.",
+  "domain": [
+   "long-sequence processing",
+   "encoder-decoder transformers",
+   "token selection"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "multi-branch-fusion",
+  "variant_note": "parallel chunk streams that share one encoder and exchange [S] and [E] states across chunks, then a chain of token selectors feeding a decoder, with a long feedback line",
+  "argues": "Chunking a long input, aligning [S] and [E] tokens across chunks and selecting hidden states keeps cost linear while the decoder still draws on the whole input.",
+  "subject": "Chunked encoder input with BOS/EOS alignment, sequential token selectors, and a decoder that cross-attends to selected tokens, with feedback.",
+  "elements": [
+   {
+    "name": "Encoder Input (N tokens)",
+    "type": "data",
+    "role": "the long input of N tokens",
+    "drawn_as": "strip of numbered squares coloured per future chunk (pink, purple, green) under a brace",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Chunking",
+    "type": "operation",
+    "role": "divides the input into a batch of chunks, each filled with [S], [P] and [E] tokens (caption)",
+    "drawn_as": "bold label beside an upward arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "chunk rows",
+    "type": "data",
+    "role": "the chunk batch: [S] then the chunk's tokens, [P] padding, [E]",
+    "drawn_as": "rows of numbered squares: grey [S], chunk-coloured tokens, white [E]; ellipsis between chunks",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Encoder Layers (N1 x)",
+    "type": "region",
+    "role": "stack of encoder layers applied to all chunks",
+    "drawn_as": "grey tinted band with a rotated grey title and N1 x at the corner",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Shared self-attention",
+    "type": "module",
+    "role": "the same self-attention applied to every chunk",
+    "drawn_as": "beige rounded box per chunk with an ellipsis between",
+    "container": "Encoder Layers",
+    "is_contribution": false
+   },
+   {
+    "name": "BOS Alignment",
+    "type": "module",
+    "role": "averages the [S] hidden states of all chunks and writes the result back to each (paper text)",
+    "drawn_as": "white rounded box with red outline, thin red arrows in from each [S] and out to each [S]",
+    "container": "Encoder Layers",
+    "is_contribution": true
+   },
+   {
+    "name": "EOS Alignment",
+    "type": "module",
+    "role": "averages the [E] hidden states of all chunks and writes the result back to each (paper text)",
+    "drawn_as": "white rounded box with blue outline, thin blue arrows in from each [E] and out to each [E]",
+    "container": "Encoder Layers",
+    "is_contribution": true
+   },
+   {
+    "name": "hidden-state rows",
+    "type": "data",
+    "role": "chunk hidden states before and after alignment, [S] and [E] carrying chunk indices",
+    "drawn_as": "two rows of squares per chunk with [S]_1, [E]_1, [S]_2, [E]_2, [S]_k, [E]_k",
+    "container": "Encoder Layers",
+    "is_contribution": null
+   },
+   {
+    "name": "Sequential Select",
+    "type": "region",
+    "role": "stage that picks the most representative hidden states chunk by chunk",
+    "drawn_as": "light-blue tinted band with a rotated teal title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Token Selector (x3)",
+    "type": "module",
+    "role": "selects tokens of one chunk, given the state carried from the previous selection",
+    "drawn_as": "white rounded box with orange outline per chunk, candidate row below and selected row above",
+    "container": "Sequential Select",
+    "is_contribution": true
+   },
+   {
+    "name": "candidate and selected token rows",
+    "type": "data",
+    "role": "chunk tokens entering a selector (dashed squares below) and the tokens it keeps (dashed squares above), chained by [S]^0, [S]^1 ... [S]^k",
+    "drawn_as": "dashed squares coloured per chunk, dark [S] squares joined by arrows from selector to selector",
+    "container": "Sequential Select",
+    "is_contribution": null
+   },
+   {
+    "name": "Selected Tokens",
+    "type": "data",
+    "role": "all selected tokens collected for the decoder",
+    "drawn_as": "vertical strip of dashed squares with rotated labels ([S]^0, 2, 3, 5, 6, [E]_2, dots, N-2, N)",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "K, V",
+    "type": "label",
+    "role": "the selected tokens enter the decoder cross-attention as keys and values",
+    "drawn_as": "label under an arrow into Cross-attention",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder Layer (N2 x)",
+    "type": "region",
+    "role": "standard decoder layer stack",
+    "drawn_as": "pale yellow tinted column with title and N2 x at the top",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Self-attention",
+    "type": "module",
+    "role": "decoder self-attention over the decoder input",
+    "drawn_as": "teal rounded box",
+    "container": "Decoder Layer",
+    "is_contribution": false
+   },
+   {
+    "name": "Cross-attention",
+    "type": "module",
+    "role": "attends to the selected tokens",
+    "drawn_as": "salmon rounded box with K, V arrow in and a line out to the feedback",
+    "container": "Decoder Layer",
+    "is_contribution": false
+   },
+   {
+    "name": "Feed-Forward Layer",
+    "type": "module",
+    "role": "decoder feed-forward block",
+    "drawn_as": "light green rounded box",
+    "container": "Decoder Layer",
+    "is_contribution": false
+   },
+   {
+    "name": "Add & Norm (x3)",
+    "type": "module",
+    "role": "residual and normalisation after each decoder sub-block",
+    "drawn_as": "yellow rounded boxes",
+    "container": "Decoder Layer",
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder Input (M tokens)",
+    "type": "data",
+    "role": "decoder token sequence of M tokens",
+    "drawn_as": "strip of numbered light-blue squares under a brace",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder Output Logits",
+    "type": "data",
+    "role": "decoder output used as a reward signal for the selectors (caption)",
+    "drawn_as": "dashed rectangle at the top of the decoder column",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Output Feedback / Attention Feedback",
+    "type": "label",
+    "role": "decoder output logits and attention scores returned as rewards to update the token selector (caption)",
+    "drawn_as": "two bold labels on a long black line that runs along the top edge back to the select band",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Encoder Input (N tokens)",
+    "to": "chunk rows",
+    "what": "the input is cut into chunks and padded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "chunk rows",
+    "to": "Shared self-attention",
+    "what": "each chunk enters the shared encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hidden-state rows ([S])",
+    "to": "BOS Alignment",
+    "what": "start-token states of all chunks are averaged",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "BOS Alignment",
+    "to": "hidden-state rows ([S])",
+    "what": "the aligned state replaces each chunk's [S] state for the next layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hidden-state rows ([E])",
+    "to": "EOS Alignment",
+    "what": "end-token states of all chunks are averaged",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "EOS Alignment",
+    "to": "hidden-state rows ([E])",
+    "what": "the aligned state replaces each chunk's [E] state for the next layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "aligned chunk rows",
+    "to": "Token Selector (x3)",
+    "what": "each chunk's hidden states are candidates",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Token Selector (x3)",
+    "to": "candidate and selected token rows",
+    "what": "kept tokens, and the [S]^i state handed on to the next selector",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sequential Select",
+    "to": "Selected Tokens",
+    "what": "selected tokens collected",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Selected Tokens",
+    "to": "Cross-attention",
+    "what": "K, V",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Decoder Input (M tokens)",
+    "to": "Masked Self-attention",
+    "what": "decoder tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Masked Self-attention",
+    "to": "Decoder Output Logits",
+    "what": "upward through Add & Norm, Cross-attention, Add & Norm, Feed-Forward, Add & Norm",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Decoder Output Logits",
+    "to": "Sequential Select",
+    "what": "Output Feedback: logits as reward for the selectors",
+    "kind": "feedback",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Cross-attention",
+    "to": "Sequential Select",
+    "what": "Attention Feedback: attention scores as reward for the selectors",
+    "kind": "feedback",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "chunk-coloured squares",
+    "to": "each other",
+    "what": "one colour per chunk from the input strip through every row to the selected tokens",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1 ... N, 1 ... M",
+    "kind": "identity",
+    "at": "token squares of encoder and decoder inputs",
+    "what": "token positions"
+   },
+   {
+    "marker": "[S], [P], [E] with sub and superscripts",
+    "kind": "identity",
+    "at": "special-token squares",
+    "what": "start, padding and end tokens; [S]_1, [E]_2, [S]^k index the chunk"
+   },
+   {
+    "marker": "N1 x, N2 x",
+    "kind": "identity",
+    "at": "corners of the encoder band and the decoder column",
+    "what": "numbers of encoder and decoder layers"
+   },
+   {
+    "marker": "Chunking, Encoder Layers, Sequential Select, Decoder Layer",
+    "kind": "section",
+    "at": "labels and rotated band titles",
+    "what": "name the steps and regions"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a token sequence of N positions cut into chunks (1 2 3 | 4 5 6 7 | ... | N-2 N-1 N) with special tokens [S], [P], [E]",
+    "form": "rows of numbered squares coloured per chunk",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small numbered squares: chunk-coloured tokens, grey [S], white [E], dashed outline for candidate and selected tokens, repeated row after row",
+    "parts": [
+     "token squares",
+     "[S] squares",
+     "[E] squares",
+     "dashed squares"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "encoder as stacked bands at the left, decoder as a pastel column at the right, joined by a K, V arrow into cross-attention",
+    "parts": [
+     "encoder bands",
+     "decoder column",
+     "K, V arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "decoder layer drawn bottom-up as Masked Self-attention, Add & Norm, Cross-attention, Add & Norm, Feed-Forward Layer, Add & Norm with N2 x at the corner",
+    "parts": [
+     "Masked Self-attention",
+     "Cross-attention",
+     "Feed-Forward Layer",
+     "Add & Norm"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "cross-attention fed by K, V from the selected tokens; shared self-attention as one box per chunk",
+    "parts": [
+     "Cross-attention box",
+     "Shared self-attention boxes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "reward-feedback-line",
+    "drawn_as": "one long black line from decoder logits and cross-attention up, along the top edge and down into the select band, labelled Output Feedback and Attention Feedback",
+    "parts": [
+     "feedback line",
+     "two labels"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Encoder Input at the bottom, upward through chunking, shared self-attention and alignment to the Sequential Select band; then the Selected Tokens strip, the decoder column bottom-up, and the feedback line along the top."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Left, bottom-up: the encoder input strip with a brace, chunked rows, a grey Encoder Layers band (self-attention boxes at its foot, BOS and EOS alignment boxes crossing its middle) and a light-blue Sequential Select band on top with a chain of three token selectors. At the right a yellow Decoder Layer column built bottom-up above the decoder input, a thin Selected Tokens strip between the two, and a long feedback line running along the top edge.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.89,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "opacity": 0.6,
+    "used_for": "Encoder Layers band (grey)"
+   },
+   {
+    "hex": "#00b0f0",
+    "opacity": 0.15,
+    "used_for": "Sequential Select band (light blue)"
+   },
+   {
+    "hex": "#f9f2b9",
+    "opacity": 0.5,
+    "used_for": "Decoder Layer region (pale yellow)"
+   },
+   {
+    "hex": "#f9f2b9",
+    "opacity": 0.4,
+    "used_for": "Shared self-attention boxes (beige; assigned by colour)"
+   },
+   {
+    "hex": "#fee599",
+    "opacity": 0.9,
+    "used_for": "Add & Norm boxes (yellow)"
+   },
+   {
+    "hex": "#d9958f",
+    "opacity": 0.6,
+    "used_for": "chunk 1 tokens (pink-red)"
+   },
+   {
+    "hex": "#ccc2d9",
+    "opacity": 0.6,
+    "used_for": "chunk 2 tokens (lilac)"
+   },
+   {
+    "hex": "#7e649e",
+    "opacity": 0.6,
+    "used_for": "chunk 2 tokens in the input strip (darker purple)"
+   },
+   {
+    "hex": "#c4d6a0",
+    "used_for": "chunk k tokens (green)"
+   },
+   {
+    "hex": "#4bacc6",
+    "opacity": 0.4,
+    "used_for": "Masked Self-attention (teal)"
+   },
+   {
+    "hex": "#92d050",
+    "opacity": 0.4,
+    "used_for": "Feed-Forward Layer (light green)"
+   },
+   {
+    "hex": "#ff0000",
+    "opacity": 0.2,
+    "used_for": "Cross-attention (salmon)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "BOS Alignment outline and its arrows"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "EOS Alignment outline and its arrows"
+   },
+   {
+    "hex": "#ea700d",
+    "used_for": "Token Selector outlines (orange)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black outlines and arrows; 35 dashed outlines on candidate and selected tokens and on the logits box; coloured outlines (red, blue, orange) on the new modules",
+  "font": "Nimbus Roman serif 3-8 pt: 6.5 pt bold module names, 4.5 pt token labels, 3 pt chunk indices",
+  "corners": "mixed",
+  "arrows": "thick black arrows with filled heads for data flow, thin red and blue arrows for the two alignments, one long black feedback line",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "One colour per chunk is kept from the input strip through every row to the selected tokens (pink, purple, green); grey = start tokens [S], white = end tokens [E]; red = BOS alignment, blue = EOS alignment; orange outline = token selector; light-blue squares = decoder input; band tints: grey = encoder layers, light blue = selection, pale yellow = decoder layer.",
+  "line_style_means": "Dashed boxes = candidate or selected tokens and the logits; solid thick arrows = data flow; thin red and blue arrows = BOS and EOS alignment flows; the long black return line = feedback.",
+  "shape_means": "Small squares = tokens; rounded rectangles = modules; white rounded boxes with a coloured outline = the new operations (alignment, token selector); braces = length of an input sequence.",
+  "marker_means": "Subscripts and superscripts index chunks ([S]_1, [E]_2, [S]^k); N1 x and N2 x give layer counts; numbers are token positions.",
+  "emphasis": "The new operations are the only white boxes with coloured outlines and sit on tinted bands, while the standard transformer parts are pastel filled.",
+  "reusable_patterns": [
+   "tokens as small numbered squares coloured per chunk and carried across every row",
+   "special tokens in grey (start) and white (end) so arrow bundles can single them out",
+   "two thin coloured arrow bundles (red for start tokens, blue for end tokens) crossing between chunks to show cross-chunk exchange",
+   "tinted bands with rotated side titles for encoder layers and selection",
+   "dashed outline for candidate or selected tokens",
+   "long return line labelled Output Feedback and Attention Feedback along the top",
+   "braces under token strips naming the input length"
+  ],
+  "weaknesses": [
+   "3-4.5 pt token labels",
+   "the crossing red and blue arrows are hard to trace",
+   "the feedback line runs around the whole top edge before reaching the select band"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all token squares, boxes, bands and arrows (Visio)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "rows of numbered token squares coloured per chunk",
+   "shared self-attention boxes",
+   "BOS and EOS alignment boxes with red and blue arrows",
+   "token selector boxes with dashed token rows",
+   "decoder layer stack",
+   "tinted bands with rotated titles",
+   "long feedback line"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "long-sequence transformers",
+   "chunking",
+   "inter-chunk alignment",
+   "token selection",
+   "encoder-decoder",
+   "summarization",
+   "reading comprehension",
+   "SimCAS"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "rotated-band-titles",
+    "what": "tinted bands titled by text rotated 90 degrees along their left edge"
+   },
+   {
+    "name": "long-return-feedback-line",
+    "what": "one long line with two labels runs along the figure edge from late modules back to an early one to show feedback or reward"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show token-level mechanics by carrying one colour per chunk through every row of numbered squares and singling out special tokens (grey start, white end) so coloured arrow bundles can show how information crosses chunks; put the new operations in white boxes with coloured outlines on tinted bands.",
+  "suits": "Sequence-processing methods that cut inputs into pieces and exchange or select information across them: long-context, memory, compression and token-pruning papers."
+ },
+ "tags": [
+  "bottom-up flow",
+  "colour per chunk",
+  "tinted bands with rotated titles",
+  "red and blue arrow bundles",
+  "dashed token boxes",
+  "Visio look"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Methodology (p.3-4)"
+  ],
+  "evidence": [
+   "The SimCAS framework: The long inputs are first divided into a batch of chunks",
+   "The decoder output logits and attention scores are utilized as rewards for updating the token selector.",
+   "we align the information of [S] and [E] tokens at each encoding block"
+  ]
+ },
+ "summary": "SimCAS lets off-the-shelf pre-trained transformers process long inputs in three steps: chunk, align and select. Figure 1 is read bottom-up on the left. The N input tokens are cut into chunks (one colour per chunk) and each chunk receives [S], [P] and [E] tokens; the chunks run through shared self-attention in a grey encoder band, where BOS and EOS alignment boxes with red and blue arrows exchange the [S] and [E] states between chunks. A light-blue Sequential Select band uses a chain of token selectors to pick tokens, which go as K, V to the cross-attention of a yellow decoder layer stack on the right. A long line labelled Output Feedback and Attention Feedback returns from the decoder to the selectors.",
+ "summary_zh": "SimCAS 处理长输入：切块、对齐、选择。图 1 自下而上：输入切成彩色块并补 [S][P][E]，BOS/EOS 对齐交换块间信息，Token Selector 选出隐藏状态作 K、V 送入解码器，顶部长线为反馈。",
+ "confidence": "high",
+ "notes": "Prior labels kept (model-anatomy with multi-branch-fusion, stage-pipeline). The SVG's drawn extent is far larger than its canvas (x from -379 to 780), probably off-canvas leftovers; the preview shows the figure as printed. How the [S]^i states chain from selector to selector is read from the drawing; the beige colour of the shared self-attention boxes is matched to #f9f2b9 at 0.4 opacity by colour only.",
+ "venue": "ACL24"
+}

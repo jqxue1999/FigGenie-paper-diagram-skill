@@ -1,0 +1,534 @@
+{
+ "paper_id": "neurips25-0135",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PARTONOMY",
+  "one_liner": "Benchmark for pixel-level part grounding in large multimodal models via Explanatory Part Segmentation, plus PLUM, a segmenting LMM using span tagging and feedback.",
+  "domain": [
+   "part-level visual understanding",
+   "visual question answering",
+   "segmentation-enabled LMMs"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "five tinted task cards of photo plus chat-style question and answer, a question-answer mutation card, and a strip of part-mask thumbnails",
+  "argues": "PARTONOMY asks LMMs five kinds of part questions (identification, intersection, difference, part-to-whole, whole-to-part) and requires answers justified by part masks; question-answer mutation builds hard answer choices.",
+  "subject": "Five task cards of user questions and PLUM answers on photos, a question-answer mutation card, and a strip of part-mask thumbnails.",
+  "elements": [
+   {
+    "name": "Part Identification",
+    "type": "container",
+    "role": "task card: name the visible parts of an object, e.g. an agricultural airplane",
+    "drawn_as": "rounded peach-tinted card with italic title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Part Intersection",
+    "type": "container",
+    "role": "task card: parts a banana boat has in common with a fishing boat",
+    "drawn_as": "rounded light-blue card with italic title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Part Difference",
+    "type": "container",
+    "role": "task card: parts the banana boat has that a fishing boat does not",
+    "drawn_as": "rounded light-blue card with italic title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Part-to-Whole",
+    "type": "container",
+    "role": "task card: from the listed parts to the name of the object, in two turns",
+    "drawn_as": "rounded green card with italic title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Whole-to-Part",
+    "type": "container",
+    "role": "task card: from the object name (torpedo) to the parts that justify it, in two turns",
+    "drawn_as": "rounded green card with italic title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "user question bubbles (7)",
+    "type": "text-block",
+    "role": "the user's question about the photo, e.g. What parts does this object have?",
+    "drawn_as": "olive-grey rounded bubbles with a person avatar on the left",
+    "container": "task cards",
+    "is_contribution": false
+   },
+   {
+    "name": "PLUM answer bubbles (7)",
+    "type": "text-block",
+    "role": "the model's textual answer listing parts or the object name",
+    "drawn_as": "mauve rounded bubbles with a plum avatar on the right",
+    "container": "task cards",
+    "is_contribution": true
+   },
+   {
+    "name": "bold italic part words",
+    "type": "label",
+    "role": "mark the part and object terms inside questions and answers (agricultural airplane, spraying rig, hull, fuel tank)",
+    "drawn_as": "bold italic spans inside the bubbles",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "Partonomy Instance Construction through Question-Answer Mutation",
+    "type": "container",
+    "role": "card showing how one question and answer is mutated into alternative answer choices",
+    "drawn_as": "wide pale grey-green card with italic title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Question + Answer",
+    "type": "text-block",
+    "role": "the seed instance: Q about parts a banana boat shares with a canoe, A: It has a hull.",
+    "drawn_as": "two rounded bubbles, Q olive-grey and A mauve",
+    "container": "Partonomy Instance Construction through Question-Answer Mutation",
+    "is_contribution": null
+   },
+   {
+    "name": "Mutate",
+    "type": "operation",
+    "role": "turns the seed answer into several mutated answers",
+    "drawn_as": "small double-helix icon with a label, reached by a curved dark-teal arrow",
+    "container": "Partonomy Instance Construction through Question-Answer Mutation",
+    "is_contribution": true
+   },
+   {
+    "name": "Mutated Answers",
+    "type": "data",
+    "role": "alternative answers produced by mutation: hull and seating tube; paddle; inflation valve and paddle",
+    "drawn_as": "three mauve answer bubbles joined to Mutate by a brace",
+    "container": "Partonomy Instance Construction through Question-Answer Mutation",
+    "is_contribution": true
+   },
+   {
+    "name": "Mutation Operations",
+    "type": "operation",
+    "role": "edit applied in each row: add a part (+), replace a part (circular arrows), remove a part and add two (minus, plus, plus), read from how the answers differ",
+    "drawn_as": "peach rounded pills aligned with the answer rows",
+    "container": "Partonomy Instance Construction through Question-Answer Mutation",
+    "is_contribution": true
+   },
+   {
+    "name": "User / PLUM (Ours)",
+    "type": "label",
+    "role": "legend of the two speakers; marks PLUM as the proposed model",
+    "drawn_as": "person icon and plum icon with labels in the corner of the mutation card",
+    "container": "Partonomy Instance Construction through Question-Answer Mutation",
+    "is_contribution": null
+   },
+   {
+    "name": "Cockpit / Fixed landing gear / Propulsion Component / Spraying Rig / Wings / Fins / Fuel Tank / Guidance System / Propeller / Warhead",
+    "type": "label",
+    "role": "names of the part painted in each thumbnail of the bottom strip",
+    "drawn_as": "white 4 pt captions at the lower left of each tile",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "user question bubble",
+    "to": "PLUM answer bubble",
+    "what": "question answered in text, turn by turn",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "PLUM answer bubble",
+    "to": "mask photos",
+    "what": "named parts shown as painted masks on the photo",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Part-to-Whole first answer",
+    "to": "Part-to-Whole second question",
+    "what": "the user follows up: based on the parts, what is this object?",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Question + Answer",
+    "to": "Mutate",
+    "what": "seed instance goes in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mutate",
+    "to": "Mutated Answers",
+    "what": "alternative answer choices come out",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Mutated Answers",
+    "to": "Mutation Operations",
+    "what": "each answer row paired with the edit that produced it",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "card tints",
+    "to": "task families",
+    "what": "peach, blue and green group the five cards into three families; the family names are not written",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "legend avatars",
+    "to": "avatars in the cards",
+    "what": "person = User, plum = PLUM (Ours)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Part Identification",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "photo of an agricultural airplane, a question about its visible parts and PLUM's list of parts",
+    "verdict": null
+   },
+   {
+    "label": "Part Intersection",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "banana boat photo, question on parts shared with a fishing boat, answer: a hull, with a second photo marking it",
+    "verdict": null
+   },
+   {
+    "label": "Part Difference",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "banana boat photo, question on parts a fishing boat lacks, answer: handle, inflation valve, seating tube, with marked photo",
+    "verdict": null
+   },
+   {
+    "label": "Part-to-Whole",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "airplane parts listed with masks on two photos, then the object named as an agricultural airplane",
+    "verdict": null
+   },
+   {
+    "label": "Whole-to-Part",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "torpedo named, then asked which parts make it look like a torpedo, with masks on two photos",
+    "verdict": null
+   },
+   {
+    "label": "Partonomy Instance Construction through Question-Answer Mutation",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "seed question and answer mutated by add, replace and remove operations into three alternative answers",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Q: / A:",
+    "kind": "identity",
+    "at": "Question + Answer and Mutated Answers",
+    "what": "label the question line and the answer lines"
+   },
+   {
+    "marker": "+, circular arrows, minus",
+    "kind": "identity",
+    "at": "Mutation Operations",
+    "what": "name the add, replace and remove operations"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "question photos: agricultural airplane (2), banana boat (2), torpedo (1)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "small thumbnails with thin black frames beside the user's question"
+   },
+   {
+    "what": "answer photos with a painted part mask: banana boat parts (2), airplane parts (2), torpedo parts (2)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "thumbnails next to or under the answer, the named part painted cyan (orange on the boat); pairs separated by an ellipsis to say more masks follow"
+   },
+   {
+    "what": "strip of ten tiles, five of an agricultural airplane and five of a torpedo, each with one named part painted",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "two long bitmaps cut into five tiles each, white part names at the lower left, cyan masks (purple and red for the two wings)"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "black outline head-and-shoulders person",
+    "stands_for": "the user",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "purple plum with a green leaf",
+    "stands_for": "PLUM, the proposed model, as the answering speaker",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "double helix with a sparkle",
+    "stands_for": "the Mutate step",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "five dialogues on real photos: airplane parts, banana boat versus fishing boat parts, torpedo name and parts",
+    "form": "chat bubbles with bold italic part words, photo thumbnails and painted masks",
+    "real_values": true
+   },
+   {
+    "what": "one worked mutation: the answer It has a hull. becomes three alternative answers by add, replace and remove",
+    "form": "Q and A bubbles, a brace to the answer list and operation pills in matching rows",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded bubbles without tails, olive-grey for the user and mauve for PLUM, with a person avatar at the left and a plum avatar at the right",
+    "parts": [
+     "user bubble",
+     "PLUM bubble",
+     "person avatar",
+     "plum avatar"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "one titled tinted card per task with a photo, a question and the model's answer, without ticks or crosses",
+    "parts": [
+     "task title",
+     "photo",
+     "question",
+     "answer"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left Part Identification card, goes down the left column, then across the green cards at the top right, then the mutation card, and ends on the strip of part thumbnails."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Left column of three stacked task cards, two green cards side by side at the top right, a wide mutation card under them with the legend in its corner, and a full-width strip of ten part-mask thumbnails along the bottom edge.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.31,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffc000",
+    "opacity": 0.1,
+    "used_for": "Part Identification card tint (outline #f6c6ad)"
+   },
+   {
+    "hex": "#dceaf7",
+    "opacity": 0.3,
+    "used_for": "Part Intersection and Part Difference card tint (outline #8995a5)"
+   },
+   {
+    "hex": "#b9d1b0",
+    "opacity": 0.4,
+    "used_for": "Part-to-Whole and Whole-to-Part card tint and outline"
+   },
+   {
+    "hex": "#e1e9e5",
+    "opacity": 0.3,
+    "used_for": "mutation card tint"
+   },
+   {
+    "hex": "#9ca38e",
+    "opacity": 0.6,
+    "used_for": "user question bubbles"
+   },
+   {
+    "hex": "#93667c",
+    "opacity": 0.3,
+    "used_for": "PLUM answer bubbles"
+   },
+   {
+    "hex": "#facbb5",
+    "used_for": "mutation operation pills"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "curved arrow from the question-answer box to Mutate"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "thin 0.25 to 0.5 pt outlines: coloured to match each card tint, black frames on photo thumbnails",
+  "font": "sans (Futura) at 4 to 5 pt with bold italic part words and italic card titles; 7.5 pt ellipses",
+  "corners": "rounded",
+  "arrows": "one curved dark-teal arrow with a small head and a curly brace; no other arrows, order comes from stacking and avatars",
+  "rendering": "flat-vector",
+  "effects": "translucent tints only",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "card tint groups the five task cards into three families (peach, blue, green; family names not written); olive-grey bubble = user question, mauve bubble = PLUM answer; cyan paint on photos = a part mask; peach pill = mutation operation",
+  "line_style_means": "none beyond thin solid outlines",
+  "shape_means": "rounded bubble = chat turn; avatar beside it names the speaker; rounded pill = a mutation operation",
+  "marker_means": "Q: and A: label question and answer; plus, circular arrows and minus name add, replace and remove (inferred from how the answers differ)",
+  "emphasis": "bold italic part words in every bubble and the painted masks on the photos; PLUM (Ours) in the legend marks the proposed model",
+  "reusable_patterns": [
+   "tinted task cards where the tint says which task family a card belongs to",
+   "chat-style question and answer with avatars on both sides, one colour per speaker",
+   "key words in bold italic in the answer, mirrored by painted masks on the photo",
+   "row-aligned list of mutated answers with operation pills in the same rows",
+   "bottom strip of photo tiles with white part names to show the fine-grained label space",
+   "two-speaker legend placed in a card corner"
+  ],
+  "weaknesses": [
+   "4 to 5 pt text in a double-column figure",
+   "the mapping from tint to question family is not named",
+   "operation pills carry no words, so their meaning must be inferred"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos from the dataset (agricultural airplane, banana boat, torpedo) with part masks",
+   "real questions and answers"
+  ],
+  "stock": [
+   "person avatar icon",
+   "double-helix icon"
+  ],
+  "generated": [
+   "plum mascot icon standing for PLUM"
+  ],
+  "drawn": [
+   "tinted cards",
+   "chat bubbles",
+   "operation pills",
+   "curved arrow and brace"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "task cards with chat bubbles",
+   "user and plum avatars",
+   "object photos with part masks",
+   "mutation card with Mutate icon and answer list",
+   "operation pills",
+   "strip of part thumbnails"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "part-level understanding",
+   "large multimodal models",
+   "part segmentation",
+   "visual question answering",
+   "benchmark",
+   "question-answer mutation",
+   "reasoning segmentation",
+   "PLUM"
+  ],
+  "tags": [
+   "task-definition",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "mascot-character",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "operation-pills-aligned-to-rows",
+    "what": "small coloured pills (plus, swap, minus) set in the same rows as the outputs they produced, naming the edit operations without words"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a benchmark's task families as small tinted chat cards, one real question and answer on a photo per card, with the key words in bold italic and the matching mask painted on the picture; group cards by tint and give data construction one extra card beside them.",
+  "suits": "Benchmark or task papers for multimodal models where several task types can each be shown with one real question, answer and visual evidence."
+ },
+ "tags": [
+  "tinted task cards",
+  "chat bubbles with avatars",
+  "photo thumbnails with masks",
+  "bottom thumbnail strip",
+  "dense small text",
+  "rounded translucent cards"
+ ],
+ "provenance": {
+  "sections": [
+   "Task definition (p.4)"
+  ],
+  "evidence": [
+   "The PARTONOMY dataset evaluates LMMs’ part understanding through the Explanatory Part Segmentation task.",
+   "Our question-answer mutation framework generates challenging answer choices by predicting part co-occurrence and by selecting parts from confusable objects.",
+   "Motivated by our characterization of part understanding, we define three classes of questions (Fig. 1):"
+  ]
+ },
+ "summary": "PARTONOMY is a benchmark for pixel-level part grounding in large multimodal models, built around the Explanatory Part Segmentation task, and PLUM is the paper's segmenting model that uses span tagging and a feedback loop. Figure 1 is a dense gallery of six tinted cards on a white ground. Five task cards (Part Identification, Part Intersection, Part Difference, Part-to-Whole, Whole-to-Part) each show a photo, the user's question and PLUM's answer as chat bubbles with avatars, with part words in bold italic and painted masks on the photos. A sixth card shows question-answer mutation: an answer is changed by add, replace and remove operations into three alternative answer choices. A strip of ten photos names and masks parts of an airplane and a torpedo.",
+ "summary_zh": "PARTONOMY 是评测大模型部件级分割的基准。图 1 由六张彩色卡片组成：五张任务卡（识别、交集、差异、部件到整体、整体到部件）以聊天气泡展示提问、回答和部件蒙版，一张展示问答变异生成干扰选项，底部是十张部件照片条。",
+ "confidence": "high",
+ "notes": "The pre-screen put contribution-mosaic first; scope-overview is used instead because every card is a task example, not a separate contribution. The role of the bottom strip (painted part masks, repeating the airplane and torpedo parts) and the meaning of the three operation pills are read from the drawing and the caption, not stated in the paper text. The three tints probably match the three question classes mentioned in the paper but the classes are not named in the figure.",
+ "venue": "NeurIPS25"
+}

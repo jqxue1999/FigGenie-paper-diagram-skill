@@ -1,0 +1,388 @@
+{
+ "paper_id": "iclr25-0140",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MM-FSS (MultiModal Few-Shot SegNet)",
+  "one_liner": "A few-shot 3D point cloud segmentation model that adds free text labels and implicitly learned 2D features to the point cloud input.",
+  "domain": [
+   "few-shot 3D point cloud segmentation",
+   "multimodal learning",
+   "3D scene understanding"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "the unimodal baseline and the proposed multimodal model in mirrored lanes on the same scene; only the right lane has text and 2D image inputs",
+  "argues": "Adding the class name and simulated 2D features to few-shot point cloud segmentation costs no extra annotation: text is free, and 2D images are used only in pretraining.",
+  "subject": "support, mask and query point clouds into a unimodal and a multimodal few-shot model; text and 2D images join the multimodal one",
+  "elements": [
+   {
+    "name": "Support",
+    "type": "sample",
+    "role": "annotated example point cloud of the new class (one per lane)",
+    "drawn_as": "unframed coloured top-down point cloud render above the model",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Support Mask",
+    "type": "sample",
+    "role": "binary mask of the target class in the support cloud",
+    "drawn_as": "black silhouette with the class in red, next to Support",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Query",
+    "type": "sample",
+    "role": "point cloud to be segmented",
+    "drawn_as": "unframed point cloud render at the left of the model, label below",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Few-shot Model (Uni-modality)",
+    "type": "module",
+    "role": "baseline: segments the query from point-cloud support and mask only",
+    "drawn_as": "flat lilac rounded box with purple outline and bold two-line text",
+    "container": "left lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Few-shot Model (Multi-modalities)",
+    "type": "module",
+    "role": "proposed model: also uses text and 2D information",
+    "drawn_as": "rounded box with a pink-to-lilac gradient and soft purple edge, bold two-line text",
+    "container": "right lane",
+    "is_contribution": true
+   },
+   {
+    "name": "Text: Chair",
+    "type": "data",
+    "role": "class name as the explicit textual modality, available for free when annotating the support",
+    "drawn_as": "pink chip with wavy rounded outline and bold pink word, label Text above",
+    "container": "right lane",
+    "is_contribution": true
+   },
+   {
+    "name": "2D Images",
+    "type": "sample",
+    "role": "images paired with the point cloud; the model learns simulated 2D features, images only used in pretraining",
+    "drawn_as": "stack of three offset photos of an office with green chairs, label above",
+    "container": "right lane",
+    "is_contribution": true
+   },
+   {
+    "name": "Prediction",
+    "type": "sample",
+    "role": "predicted mask of the target class in the query",
+    "drawn_as": "black silhouette with the predicted chairs in red, same style as the support mask",
+    "container": "each lane",
+    "is_contribution": null
+   },
+   {
+    "name": "Only used in pretraining / Used in training & inference",
+    "type": "label",
+    "role": "key to the two arrow colours",
+    "drawn_as": "dashed rounded box at the top centre with a green and a taupe arrow sample and text",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Support, Support Mask, Query (left lane)",
+    "to": "Few-shot Model (Uni-modality)",
+    "what": "point cloud inputs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Few-shot Model (Uni-modality)",
+    "to": "Prediction",
+    "what": "query segmentation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Support, Support Mask (right lane)",
+    "to": "Few-shot Model (Multi-modalities)",
+    "what": "point cloud support and mask, joined by one bracket line before entering the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query (right lane)",
+    "to": "Few-shot Model (Multi-modalities)",
+    "what": "query cloud",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text: Chair",
+    "to": "Few-shot Model (Multi-modalities)",
+    "what": "class name used in training and inference",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2D Images",
+    "to": "Few-shot Model (Multi-modalities)",
+    "what": "2D modality used only in pretraining",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Few-shot Model (Multi-modalities)",
+    "to": "Prediction",
+    "what": "query segmentation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left lane",
+    "to": "right lane",
+    "what": "baseline versus proposed on the same scene",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "indoor-scene point clouds (support and query)",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "unframed coloured top-down renders; the same support and query scene repeated in both lanes"
+   },
+   {
+    "what": "support masks",
+    "content": "dense-map",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "black silhouette of the scene with the target class in red"
+   },
+   {
+    "what": "predicted masks",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same black and red style as the support masks so input and output compare directly"
+   },
+   {
+    "what": "2D photos of the office scene",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three photos stacked with an offset to stand for the image set"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one chair-segmentation episode: support scene and mask, query scene, predicted chairs in red",
+    "form": "point cloud renders and binary masks in both lanes",
+    "real_values": true
+   },
+   {
+    "what": "the class name Chair as the text input",
+    "form": "pink chip with bold word",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "point-cloud",
+    "drawn_as": "top-down colour render of an indoor 3D scene, shown unframed",
+    "parts": [
+     "coloured scene render"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "few-shot-episode",
+    "drawn_as": "support cloud with its mask and a query cloud entering one model box that returns a query mask",
+    "parts": [
+     "Support",
+     "Support Mask",
+     "Query",
+     "model box",
+     "Prediction"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Left lane first: support and mask down into the model, query from the left, prediction at the right; then the same in the right lane plus Text and 2D Images."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two mirrored left-to-right lanes split by a dashed vertical line: support cloud and mask above, query at the left, one model box in the middle, prediction at the right. The right lane adds a Text chip and a 2D Images stack; a dashed legend box for the arrow colours sits at the top centre over the divider.",
+  "panel_count": 1,
+  "lanes": "2 aligned lanes (unimodal left, multimodal right) with the same positions for Support, Support Mask, Query, model box and Prediction",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.03,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dac2f6",
+    "used_for": "unimodal Few-shot Model box"
+   },
+   {
+    "hex": "#f9e3e5",
+    "used_for": "light pink of the multimodal model box gradient and the Text chip"
+   },
+   {
+    "hex": "#b4a192",
+    "used_for": "taupe arrows: inputs used in training and inference"
+   },
+   {
+    "hex": "#b8e08c",
+    "used_for": "green arrow: 2D images used only in pretraining"
+   },
+   {
+    "hex": "#616161",
+    "opacity": 0.21,
+    "used_for": "translucent grey tint of the legend box"
+   },
+   {
+    "hex": "#b384ec",
+    "used_for": "purple outline of the model boxes (stroke)"
+   },
+   {
+    "hex": "#e78994",
+    "used_for": "pink outline of the Text chip (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.75 to 1 pt; dashed black for the divider and the legend box, purple and pink outlines on the model boxes and the text chip",
+  "font": "serif (Times New Roman) at 6.5 pt throughout, bold for model names and the Chair chip",
+  "corners": "rounded",
+  "arrows": "thick taupe arrows with filled heads, orthogonal with one rounded bend; a thick green arrow for the 2D branch",
+  "rendering": "flat-vector",
+  "effects": "gradient fill on the multimodal model box; shaded point cloud renders",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "taupe arrow = used in training and inference; green arrow = used only in pretraining; flat lilac box = unimodal baseline; pink-to-lilac gradient box = proposed multimodal model; pink chip = text modality; red in masks = target class",
+  "line_style_means": "dashed vertical line = baseline versus proposed; dashed rounded box = arrow-colour key",
+  "shape_means": "rounded rectangle = model; wavy-cornered chip = text input; offset stack of photos = the 2D image set",
+  "marker_means": "no numbers or letters are used",
+  "emphasis": "the same scene is repeated in both lanes, so the added Text chip, the 2D Images stack and the gradient-filled model box are the only differences the eye finds",
+  "reusable_patterns": [
+   "mirrored lanes on the identical sample scene so the added inputs are the only difference",
+   "arrow-colour key in a dashed box (pretraining only versus training and inference)",
+   "extra modality joins the model from above as a chip or an offset stack of photos",
+   "input and output masks in the same black and red style for direct comparison"
+  ],
+  "weaknesses": [
+   "the lanes have no headings; the uni- versus multi-modality contrast is carried only by the text inside the model boxes"
+  ]
+ },
+ "resources": {
+  "own": [
+   "indoor-scene point cloud renders, masks and predictions",
+   "2D photos of the scene"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "model boxes",
+   "arrows and legend box",
+   "Text chip",
+   "dashed divider"
+  ],
+  "unknown": [
+   "which dataset the point cloud scene comes from (S3DIS and ScanNet are used in the paper)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "support point cloud and mask",
+   "query point cloud",
+   "model box",
+   "prediction mask",
+   "text chip Chair",
+   "stack of 2D photos",
+   "arrow-colour legend"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "few-shot segmentation",
+   "3D point cloud",
+   "multimodal",
+   "class-name text",
+   "2D images",
+   "meta-learning",
+   "cost-free modalities"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "stacked-cards",
+   "task-definition"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw the baseline and the proposed model in mirrored lanes on the same sample scene, so the extra inputs (a text chip, a stack of photos) are the only visible difference, and use a small arrow-colour key to say which inputs exist only in pretraining.",
+  "suits": "Papers that add inputs or modalities to an existing task and want to show the added cost is small, with the model kept as one black box."
+ },
+ "tags": [
+  "mirrored-lanes",
+  "dashed-divider",
+  "serif-labels",
+  "photo-and-mask-thumbnails",
+  "arrow-colour-key",
+  "sparse"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "During meta-learning and inference, the 2D modality is not needed.",
+   "Thus, the multimodal information used by us is cost-free, as shown in Fig. 1."
+  ]
+ },
+ "summary": "MM-FSS extends few-shot 3D point cloud segmentation with two extra modalities that cost no annotation: the class name as text and 2D images of the scene. Figure 1 puts the traditional unimodal pipeline on the left and the proposed multimodal pipeline on the right, split by a dashed vertical line and drawn on the same indoor scene. In both lanes a support cloud with its black-and-red mask and a query cloud enter a single Few-shot Model box that returns a predicted mask. The right lane adds a pink Chair text chip and a stack of 2D photos, and a dashed key explains that taupe arrows are used in training and inference while the green 2D arrow is used only in pretraining.",
+ "summary_zh": "MM-FSS 在少样本三维点云分割中加入免费的类别名文本和 2D 图像。图 1 用虚线分成左右两条泳道：左为单模态，右为多模态，同一场景输入支持集、掩码和查询点云；右侧多出 Chair 文本框和 2D 图像堆，图例说明 2D 仅用于预训练。",
+ "confidence": "high",
+ "notes": "Prior labels counted two panels; the halves have no frame, letter or title (only a dashed divider), so they are recorded as two lanes in one drawing. The 15 placed bitmaps include the two model boxes, the Chair chip and the legend arrow sample besides the photos and masks.",
+ "venue": "ICLR25"
+}

@@ -1,0 +1,520 @@
+{
+ "paper_id": "neurips25-0356",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Grafting",
+  "one_liner": "A two-stage way to edit pretrained diffusion transformers (activation distillation, then lightweight finetuning) so new architectures can be studied under small compute budgets.",
+  "domain": [
+   "diffusion transformers",
+   "architecture editing",
+   "image generation"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "paper-roadmap",
+  "variant_note": "five titled panels of unequal size, each tied by the caption to a paper section: cost contrast and procedure on the left, three sample galleries on the right",
+  "argues": "New diffusion architectures can be materialised by editing a pretrained model cheaply, and the grafted hybrid, text-to-image and depth-to-width models keep high image quality.",
+  "subject": "Grafting versus training from scratch, the two-stage grafting procedure, and sample galleries of grafted models.",
+  "elements": [
+   {
+    "name": "(a) Model Architecture Design via Grafting",
+    "type": "container",
+    "role": "contrasts the cost of training a new design from scratch with grafting a pretrained model",
+    "drawn_as": "panel with pale-blue title strip and two rows of model glyphs joined by arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Random Init. / Pretrained Model",
+    "type": "icon",
+    "role": "starting points: an untrained model and a pretrained model",
+    "drawn_as": "row of tall bars separated by diamonds in pale grey-blue (random) or five dark-blue bars (pretrained)",
+    "container": "(a), (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Train from scratch + money bag",
+    "type": "operation",
+    "role": "expensive route to a high-quality model",
+    "drawn_as": "thin grey arrow with a cartoon money bag under its label",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Grafting + coin stack",
+    "type": "operation",
+    "role": "cheap route to a high-quality model",
+    "drawn_as": "thin grey arrow with a stack of gold coins under its label",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "High Quality Model",
+    "type": "icon",
+    "role": "result model with new operators in place",
+    "drawn_as": "dark-blue bars alternating with dark-blue diamonds",
+    "container": "(a), (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Grafting Procedure",
+    "type": "container",
+    "role": "idea of architecture editing and its two stages",
+    "drawn_as": "panel with title strip, a pretrained-model glyph with the words Idea: Architecture editing, and two italic sub-sections split by dashed rules",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(i) Stage 1: Activation Distillation",
+    "type": "operation",
+    "role": "transfers the function of the original operator to a new one by regression on its activations, with limited data",
+    "drawn_as": "one dark bar, an arrow labelled Regression with a data cylinder, a pink diamond at the end",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(ii) Stage 2: Lightweight Finetuning",
+    "type": "operation",
+    "role": "mitigates error propagation across several new operators by end-to-end finetuning on limited data",
+    "drawn_as": "bars with pink diamonds, an arrow labelled End-to-end Finetuning with a data cylinder, a High Quality Model glyph with blue diamonds",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Limited data",
+    "type": "icon",
+    "role": "small amount of data used in both stages",
+    "drawn_as": "grey cylinder icon with a label",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Image Generation with Hybrid Architectures obtained via Grafting",
+    "type": "container",
+    "role": "class-conditional samples from grafted hybrids",
+    "drawn_as": "panel with title strip over a 3 by 6 photo grid",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Hyena-Y, SWA, Mamba-2, r=3, r=6, Hyena-X",
+    "type": "label",
+    "role": "names the grafted design behind each group of three photos, with its FID",
+    "drawn_as": "dark translucent chips on the first tile of each group, white serif text, arrows after r=3 and r=6",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "(e) Depth → Width Grafting",
+    "type": "container",
+    "role": "samples of a model restructured from depth 28 to 14",
+    "drawn_as": "narrow panel with title strip over a 2 by 3 photo grid and one chip A.R=164.6 FID=2.77",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(d) Text-to-Image Generation with Hybrid Architectures obtained via Grafting",
+    "type": "container",
+    "role": "high-resolution samples of a grafted text-to-image model",
+    "drawn_as": "wide panel with title strip, four dark prompt strips above four large images",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "text-to-image prompts",
+    "type": "text-block",
+    "role": "the prompts behind the four samples, truncated with an ellipsis",
+    "drawn_as": "dark strips with white serif text, one above each image",
+    "container": "(d)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Random Init.",
+    "to": "High Quality Model (a)",
+    "what": "Train from scratch, costly",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pretrained Model (a)",
+    "to": "High Quality Model (a)",
+    "what": "Grafting, cheap",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pretrained Model (b)",
+    "to": "Stage 1",
+    "what": "Idea: Architecture editing, then replace one operator",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "one dark bar",
+    "to": "pink diamond",
+    "what": "Regression on activations with limited data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "bars with pink diamonds",
+    "to": "High Quality Model (b)",
+    "what": "End-to-end finetuning with limited data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Limited data cylinders",
+    "to": "Regression and End-to-end Finetuning arrows",
+    "what": "small dataset used by each stage",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "panels (a) and (b)",
+    "to": "panels (c), (d), (e)",
+    "what": "the grafted models produce the sample galleries (sections 4, 5 and 6 in the caption)",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "pink diamond",
+    "to": "blue diamond",
+    "what": "a new operator before and after finetuning",
+    "kind": "time",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Model Architecture Design via Grafting",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "training from scratch (money bag) versus grafting a pretrained model (coin stack) to reach a high-quality model",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Grafting Procedure",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "architecture editing idea, Stage 1 activation distillation, Stage 2 lightweight finetuning",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Image Generation with Hybrid Architectures obtained via Grafting",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "class-conditional samples from six hybrid designs, each tagged with its FID",
+    "verdict": "result"
+   },
+   {
+    "label": "(d) Text-to-Image Generation with Hybrid Architectures obtained via Grafting",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "four prompts and their 2048 by 2048 samples from a grafted text-to-image model",
+    "verdict": "result"
+   },
+   {
+    "label": "(e) Depth → Width Grafting",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "samples from a model restructured from depth 28 to 14",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) to (e)",
+    "kind": "section",
+    "at": "bold titles in pale-blue strips",
+    "what": "letters and titles the five panels"
+   },
+   {
+    "marker": "(i), (ii)",
+    "kind": "order",
+    "at": "italic sub-section titles in (b)",
+    "what": "orders the two grafting stages"
+   },
+   {
+    "marker": "FID values, r=3 with down arrow, r=6 with up arrow, A.R=164.6",
+    "kind": "identity",
+    "at": "dark chips on image tiles",
+    "what": "names the design and its quality figure; the r values and A.R are not explained in the figure"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "class-conditional ImageNet-style samples from six grafted hybrids (food, birds, objects, animals, vehicles)",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 18,
+    "medium": "bitmap",
+    "treatment": "seamless 3 by 6 grid with thin dark gaps, every group of three tiles carries a dark chip with the design name and FID in white serif"
+   },
+   {
+    "what": "samples from the depth-to-width restructured model (motorbike, bird, latte, vase, pillow, butterfly)",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "2 by 3 grid in the narrow panel with a single chip A.R=164.6 FID=2.77"
+   },
+   {
+    "what": "four 2048 by 2048 text-to-image samples (robot, dog in plaid, misty forest, rabbit adventurer)",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "large tiles side by side, each under a dark prompt strip"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "row of tall bars separated by diamonds",
+    "stands_for": "a model as a chain of operators; pale = random init, dark blue = pretrained or finetuned, pink diamond = new operator before finetuning",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 8
+   },
+   {
+    "depicts": "cartoon money bag with a dollar sign",
+    "stands_for": "high cost of training from scratch",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "stack of gold coins with a dollar sign",
+    "stands_for": "small cost of grafting",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "grey database cylinder",
+    "stands_for": "limited data",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "four text-to-image prompts, cut with an ellipsis",
+    "form": "dark strips with white serif text above their images",
+    "real_values": true
+   },
+   {
+    "what": "FID and design tags per group of samples",
+    "form": "dark chips on image tiles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "operator-row-glyph",
+    "drawn_as": "tall bars for existing operators with diamonds for new or replaced ones, redrawn per phase with colour for state",
+    "parts": [
+     "bar",
+     "diamond"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "not a ladder: two stages stacked one under the other and split by a dashed rule",
+    "parts": [
+     "Stage 1",
+     "Stage 2"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left panel (a), moves down to (b) and its two stages, then jumps to the galleries: (c), (e), and (d) at the bottom right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A bento of five unequal panels: a narrow left column with (a) above (b), and a right block with (c) wide at the top, the narrow (e) beside it and (d) as a full-width strip beneath; every panel has a pale-blue title strip and the galleries sit edge to edge.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#003462",
+    "opacity": 0.75,
+    "used_for": "dark-blue bars and diamonds of pretrained and high-quality models (0.5 opacity for the pale random-init glyph)"
+   },
+   {
+    "hex": "#335ad5",
+    "opacity": 0.21,
+    "used_for": "pale-blue panel title strips"
+   },
+   {
+    "hex": "#000000",
+    "opacity": 0.9,
+    "used_for": "dark chips on image tiles, prompt strips, frames and gaps between tiles"
+   },
+   {
+    "hex": "#d41876",
+    "used_for": "pink diamonds for new operators before finetuning"
+   },
+   {
+    "hex": "#f1f1f1",
+    "approx": true,
+    "used_for": "pale grey of the limited-data cylinders"
+   },
+   {
+    "hex": "#f0a830",
+    "approx": true,
+    "used_for": "gold coin stack and money bag icons (bitmap)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark outlines on title strips and galleries, thin grey arrows, two thin dashed grey rules in (b)",
+  "font": "serif (Nimbus Roman), 6 pt bold panel titles, 6 to 6.5 pt labels, 5 pt prompt text and chips, 4 pt FID values; italic serif for stage titles",
+  "corners": "mixed",
+  "arrows": "thin grey straight arrows with small solid heads, labels above and cost icons below",
+  "rendering": "mixed",
+  "effects": "photo tiles with dark translucent label chips; soft-shaded clip-art money bag and coins",
+  "model_depiction": "other",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "dark blue = pretrained or trained operators, pale grey-blue = randomly initialised, pink diamond = new operator before finetuning, blue diamond = integrated and finetuned operator; pale-blue strip = panel title; dark chips and strips = labels on photos",
+  "line_style_means": "thin grey arrow = a transformation of the model (train from scratch, grafting, regression, finetuning); dashed grey rules separate Stage 1 and Stage 2",
+  "shape_means": "tall bar = existing operator, diamond = new or replacement operator (read from the stage text), cylinder = limited data, money bag = costly training, coin stack = cheap grafting",
+  "marker_means": "letters (a) to (e) head the panels; (i) and (ii) order the stages; chips give design name and FID; the r values and A.R are not explained in the figure",
+  "emphasis": "the coin stack against the money bag in the first panel sets the cost story; the large photo galleries fill most of the area and carry the quality claim",
+  "reusable_patterns": [
+   "cost icons on the arrow between two model glyphs (money bag versus coin stack) to say expensive versus cheap",
+   "one bar-and-diamond model glyph redrawn per phase with colour showing state",
+   "photo gallery whose groups of tiles carry a dark chip with method name and metric",
+   "dark prompt strips above generated images",
+   "bold-lettered pale-blue title strips with each panel tied to a paper section in the caption"
+  ],
+  "weaknesses": [
+   "bars and diamonds are not labelled in the figure, so their meaning relies on the caption and text",
+   "FID digits are 4 pt on dark chips",
+   "the chips r=3, r=6 and A.R=164.6 are unexplained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "class-conditional samples from the grafted DiT variants",
+   "text-to-image samples from the grafted model",
+   "samples from the depth-to-width model"
+  ],
+  "stock": [
+   "money bag and coin stack clip art",
+   "database cylinder icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "bar-and-diamond model glyphs",
+   "title strips and arrows",
+   "label chips and prompt strips"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "bar-and-diamond model glyphs in several colours",
+   "money bag and coin stack icons on arrows",
+   "limited-data cylinders",
+   "3 by 6 photo grid with dark label chips",
+   "text-to-image prompt strips above samples",
+   "pale-blue title strips with bold letters"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "grafting",
+   "diffusion transformer",
+   "architecture editing",
+   "hybrid architectures",
+   "FID",
+   "activation distillation",
+   "text-to-image",
+   "pretraining cost",
+   "depth to width"
+  ],
+  "tags": [
+   "module-state-coding",
+   "pictogram-chain",
+   "cost-badges",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "operator-row-glyph",
+    "what": "a model drawn as a row of bars and diamonds standing for its operators, redrawn per phase with colour showing state (random, pretrained, new, finetuned)"
+   },
+   {
+    "name": "sample-grid-label-chips",
+    "what": "a seamless photo grid whose groups of tiles carry small dark chips with the method name and a metric"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Make the teaser double as a roadmap: a left column for the method (a cost contrast using money-bag and coin icons, then the procedure with one operator glyph redrawn per phase) and sample galleries on the right, every panel a titled strip tied to a paper section in the caption.",
+  "suits": "Method papers whose contributions are a cheap procedure plus several demonstrations with image samples, such as editing, distillation, adaptation or transfer of pretrained generators."
+ },
+ "tags": [
+  "bento-panels",
+  "pale-blue-title-strips",
+  "photo-galleries",
+  "clip-art-cost-icons",
+  "serif-labels",
+  "keynote-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Grafting materializes new architectures by editing pretrained models under small compute budgets (Sec. 3).",
+   "(i) activation distillation: This stage transfers the functionality of the original operator to the new one",
+   "(d) High-resolution text-toimage generation. 2048×2048 samples generated using a grafted model (Sec. 5)."
+  ]
+ },
+ "summary": "The paper introduces grafting, a way to edit pretrained diffusion transformers so that new architectures can be studied cheaply, in two stages: activation distillation of each new operator, then lightweight finetuning. Figure 1 is a five-panel overview. (a) contrasts training from scratch (money bag) with grafting (coin stack) using bar-and-diamond model glyphs; (b) shows the procedure with its two stages and limited-data cylinders; (c) is a 3 by 6 grid of class-conditional samples from six hybrid designs with FID chips; (e) shows samples from a depth-to-width model; (d) shows four prompts with their 2048 by 2048 text-to-image samples. Pale-blue title strips head each panel and the galleries sit edge to edge.",
+ "summary_zh": "论文提出嫁接（grafting）：激活蒸馏加轻量微调，把预训练扩散 Transformer 改成新架构。图1五块：(a) 从头训练对嫁接，(b) 两阶段流程，(c) 六种混合结构样图与 FID，(e) 深度换宽度，(d) 文生图。",
+ "confidence": "high",
+ "notes": "The pre-screen listed four kinds; scope-overview is dropped because the galleries are the paper's own results (cards that are the paper's offerings), and contribution-mosaic takes the paper-roadmap variant because the caption ties panels to Sec. 3 to 6. The reading of bars as existing operators and diamonds as new ones comes from the stage text, not from labels in the figure. The chips r=3 with down arrow, r=6 with up arrow and A.R are not explained here (the abstract mentions variable MLP expansion ratio).",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,515 @@
+{
+ "paper_id": "neurips25-0329",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Latent Policy Barrier (LPB)",
+  "one_liner": "Robust visuomotor imitation policy that treats the latent expert distribution as a barrier and uses a learned dynamics model at inference to steer rollouts back inside it.",
+  "domain": [
+   "visuomotor imitation learning",
+   "covariate shift",
+   "latent dynamics"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "prior interactive correction versus dynamics-guided correction, both drawn as trajectories over tinted distribution blobs with a shared legend",
+  "argues": "Instead of widening the training data with human corrections that may be suboptimal, keep the expert distribution as a barrier and steer rollouts back to it with a learned dynamics model, without extra human input.",
+  "subject": "Two toy rollouts from start to a star goal in a latent state space, over expert, expanded and rollout distributions, with and without human correction.",
+  "elements": [
+   {
+    "name": "Interactive Correction (Prior works)",
+    "type": "label",
+    "role": "title of the left panel, the DAgger-like approach",
+    "drawn_as": "bold two-line title above a large pink blob",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Dynamics-guided Correction (Ours)",
+    "type": "label",
+    "role": "title of the right panel, the proposed approach",
+    "drawn_as": "bold two-line title above a large blue blob",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Expert demo distribution",
+    "type": "region",
+    "role": "where expert demonstrations lie; in the right panel its dashed outline acts as the implicit barrier",
+    "drawn_as": "peach wavy band from lower left to the star, soft-edged on the left, orange dashed outline on the right",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Expended expert distribution (w. correction demos)",
+    "type": "region",
+    "role": "the training distribution enlarged by human correction demonstrations (spelling 'Expended' as printed)",
+    "drawn_as": "large pale-pink blob around the expert band, left panel",
+    "container": "Interactive Correction (Prior works)",
+    "is_contribution": false
+   },
+   {
+    "name": "Rollout distribution",
+    "type": "region",
+    "role": "states visited by the policy's own rollouts",
+    "drawn_as": "large light-blue blob around the expert band, right panel",
+    "container": "Dynamics-guided Correction (Ours)",
+    "is_contribution": null
+   },
+   {
+    "name": "Policy rollout",
+    "type": "instance",
+    "role": "a trajectory of the base policy from the start at lower left toward the goal",
+    "drawn_as": "dark-grey curved arrows, several per panel",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "red star",
+    "type": "icon",
+    "role": "the goal of the task",
+    "drawn_as": "small red five-point star at the upper right of each panel",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "human operator and game controller",
+    "type": "icon",
+    "role": "human-in-the-loop correction in prior work",
+    "drawn_as": "black woman silhouette and an outlined game controller, upper left of the left panel",
+    "container": "Interactive Correction (Prior works)",
+    "is_contribution": false
+   },
+   {
+    "name": "red dots with dotted arrows",
+    "type": "instance",
+    "role": "points where a human takes over, linked to the operator icon",
+    "drawn_as": "red filled circles with dark outline and dotted black arrows to the human icon",
+    "container": "Interactive Correction (Prior works)",
+    "is_contribution": false
+   },
+   {
+    "name": "pink correction arrows",
+    "type": "instance",
+    "role": "corrective trajectories from the red dots toward the goal that add demonstrations to the training set",
+    "drawn_as": "pink and red curved arrows",
+    "container": "Interactive Correction (Prior works)",
+    "is_contribution": false
+   },
+   {
+    "name": "Suboptimal / Failure",
+    "type": "label",
+    "role": "outcomes of the paths in the prior approach: corrected paths that are suboptimal, and a rollout that fails",
+    "drawn_as": "grey bold words at the path ends, Failure with a grey arrowhead running off the band",
+    "container": "Interactive Correction (Prior works)",
+    "is_contribution": false
+   },
+   {
+    "name": "z, a, z' graph",
+    "type": "icon",
+    "role": "the learned latent dynamics model: state z, action a, next state z'",
+    "drawn_as": "small graph of dark-blue nodes with edges and three serif letters, upper left of the right panel",
+    "container": "Dynamics-guided Correction (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "blue dot",
+    "type": "instance",
+    "role": "a detected deviation outside the expert distribution (reading from the caption's icon for deviations)",
+    "drawn_as": "blue filled circle with dark outline, on the grey rollout where it leaves the band",
+    "container": "Dynamics-guided Correction (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "Dynamics steering",
+    "type": "operation",
+    "role": "optimised step that moves the state back toward the expert distribution",
+    "drawn_as": "short curved blue arrow from the blue dot to the orange dot",
+    "container": "Dynamics-guided Correction (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "orange dot",
+    "type": "instance",
+    "role": "the steered state back inside the expert distribution, after which the rollout continues to the goal",
+    "drawn_as": "orange filled circle with dark outline on the band",
+    "container": "Dynamics-guided Correction (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "legend (5 entries)",
+    "type": "label",
+    "role": "keys the colours and arrows: Expert demo distribution, Policy rollout, Dynamics steering, Expended expert distribution, Rollout distribution",
+    "drawn_as": "two rows below both panels, colour swatches and short arrows with bold 5 pt labels",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "start (lower left)",
+    "to": "red star",
+    "what": "policy rollouts head for the goal",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red dots",
+    "to": "human operator and game controller",
+    "what": "control is handed to a human who gives a correction",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red dots",
+    "to": "red star",
+    "what": "correction trajectories that become extra training demonstrations",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Expended expert distribution",
+    "to": "Expert demo distribution",
+    "what": "the enlarged distribution contains the expert band",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Rollout distribution",
+    "to": "Expert demo distribution",
+    "what": "the rollout region contains the dashed expert band that acts as the barrier",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "blue dot",
+    "to": "orange dot",
+    "what": "dynamics steering back to an in-distribution state",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z, a, z' graph",
+    "to": "blue dot and Dynamics steering",
+    "what": "the learned dynamics model that detects and steers (placed beside, not linked by a line)",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "legend entries",
+    "to": "tinted regions and arrows in both panels",
+    "what": "colour and arrow keys",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "left panel",
+    "to": "right panel",
+    "what": "prior approach versus proposed approach on the same toy task",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Interactive Correction (Prior works)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "human corrections at red dots enlarge the training distribution; paths still end suboptimal or in failure",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Dynamics-guided Correction (Ours)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the expert distribution is a barrier; a learned dynamics model detects a deviation and steers the rollout back to the goal",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(Prior works), (Ours)",
+    "kind": "section",
+    "at": "under each panel title",
+    "what": "tags the baseline and the proposed approach"
+   },
+   {
+    "marker": "Suboptimal, Failure",
+    "kind": "identity",
+    "at": "ends of paths in the left panel",
+    "what": "names the outcomes of prior corrections"
+   },
+   {
+    "marker": "z, a, z'",
+    "kind": "identity",
+    "at": "beside the node graph",
+    "what": "latent state, action and next latent state of the dynamics model"
+   },
+   {
+    "marker": "red, blue and orange dots",
+    "kind": "identity",
+    "at": "on trajectories",
+    "what": "red = human takes over; blue = deviation detected; orange = steered in-distribution state"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "black silhouette of a woman, head and shoulders",
+    "stands_for": "the human operator who corrects the policy",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "game controller",
+    "stands_for": "the teleoperation device used for human corrections",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small graph of blue nodes joined by edges with letters z, a, z'",
+    "stands_for": "the learned latent dynamics model",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red five-point star",
+    "stands_for": "the task goal",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy start-to-goal rollout in a latent state space, drifting out of the expert band and either failing, being corrected by a human, or being steered back by the dynamics model",
+    "form": "curved trajectories over tinted distribution blobs",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a woman silhouette plus a game controller linked by dotted arrows from the intervention points",
+    "parts": [
+     "person icon",
+     "controller icon",
+     "dotted arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "distributions as tinted organic blobs and a dashed outline with trajectories and dots on top, rather than scattered points",
+    "parts": [
+     "blobs",
+     "dashed barrier outline",
+     "trajectories"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "latent-dynamics-model",
+    "drawn_as": "a small node-and-edge graph labelled z, a, z' placed beside the steering arrow",
+    "parts": [
+     "node graph",
+     "z",
+     "a",
+     "z'"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the left title, follows the grey path from the lower-left start up to the red star and the human icon, then crosses to the right panel and reads blue dot, blue arrow, orange dot; the legend closes."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two large organic blobs side by side, pink on the left and blue on the right, each with a bold title above, a wavy peach expert band running from lower left to a star at upper right, and one shared two-row legend underneath.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.74,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5dfdf",
+    "opacity": 0.78,
+    "used_for": "pink blob: expanded expert distribution with correction demos"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "blue blob: rollout distribution, legend swatch"
+   },
+   {
+    "hex": "#fbdcbd",
+    "used_for": "peach band: expert demo distribution"
+   },
+   {
+    "hex": "#fce5cd",
+    "used_for": "peach legend swatch and band fill"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "policy rollout arrows and titles"
+   },
+   {
+    "hex": "#e06666",
+    "used_for": "red correction arrows and dots"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "pale pink correction arrows"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red dots and goal star"
+   },
+   {
+    "hex": "#3c78d8",
+    "used_for": "dynamics steering arrow"
+   },
+   {
+    "hex": "#f6b26b",
+    "used_for": "orange expert trajectory and dashed barrier outline"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt grey and coloured trajectories, 1.25 pt dashed orange barrier outline, thin dark outlines on the dots",
+  "font": "sans (Roboto Medium, Arial), 5 to 6 pt bold titles, labels and legend; serif letters z, a, z' beside the graph",
+  "corners": "mixed",
+  "arrows": "curved wavy trajectories with solid triangular heads in grey, pink and blue; thin dotted black arrows to the human icon",
+  "rendering": "flat-vector",
+  "effects": "soft-edged blur on the orange expert band; semi-transparent blobs",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach and orange = expert distribution (and the steered in-distribution dot); pink and red = human-corrected data (blob, dots, correction arrows); blue = the policy's own rollout distribution (blob, deviation dot, steering arrow); dark grey = policy rollouts",
+  "line_style_means": "solid grey = rollout, pink = correction, blue = steering, dotted black = hand-over to the human, orange dashed outline = expert distribution as barrier",
+  "shape_means": "organic blobs = state distributions; star = goal; dots with dark outline = specific states on a rollout; node graph = dynamics model",
+  "marker_means": "Suboptimal and Failure words tag the bad outcomes of the prior approach; (Prior works) and (Ours) tag the panels",
+  "emphasis": "ours gets a single clean path with a blue steering hop, in contrast to the left panel's many crossing grey, pink and dotted lines; the dashed orange outline makes the barrier visible",
+  "reusable_patterns": [
+   "two blob panels with identical start, goal and expert band so only the correction mechanism differs",
+   "verdict words (Suboptimal, Failure) at the path ends of the baseline panel",
+   "a detect-and-steer hop drawn as blue dot, blue arrow, orange dot on one trajectory",
+   "a shared swatch-and-arrow legend under both panels",
+   "icons with a caption placeholder so the caption can refer to a drawn symbol"
+  ],
+  "weaknesses": [
+   "crowded crossing lines in the left panel",
+   "the legend spells 'Expended' for 'expanded'",
+   "no link line between the node graph and the steering arrow"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "human silhouette icon",
+   "game controller icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "blobs, bands and trajectories",
+   "dots and star",
+   "node graph",
+   "legend"
+  ],
+  "unknown": [
+   "three larger bitmaps of about 55 x 40 pt whose content is not identified in the digest"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "tinted blobs for distributions",
+   "peach expert band with dashed outline",
+   "grey rollout arrows to a red star",
+   "human silhouette and game controller icons",
+   "z, a, z' node graph",
+   "red, blue and orange state dots",
+   "two-row legend"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "visuomotor policy",
+   "imitation learning",
+   "covariate shift",
+   "DAgger",
+   "latent dynamics",
+   "control barrier function",
+   "out-of-distribution",
+   "human correction"
+  ],
+  "tags": [
+   "verdict-marks",
+   "human-in-the-loop",
+   "model-pictogram",
+   "embedding-space-sketch",
+   "flow-type-arrows",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Contrast an old and a new correction strategy on one identical toy task: same start, goal and expert band in two tinted panels, with the baseline's failures marked by verdict words and the new method shown as one detect-and-steer hop (coloured dot, arrow, dot).",
+  "suits": "Robustness or safety methods in robotics and imitation learning that can be explained as trajectories relative to a distribution or safe set."
+ },
+ "tags": [
+  "organic-blobs",
+  "trajectory-sketch",
+  "two-panel",
+  "icon-accents",
+  "shared-legend",
+  "google-slides-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "prior DAggerlike methods (Left) expand the training distribution via human-in-the-loop corrections",
+   "our Latent Policy Barrier treats the expert distribution ( ) as an implicit barrier",
+   "our key insight is to explicitly decouple these conflicting objectives (Figure 1 right)"
+  ]
+ },
+ "summary": "Latent Policy Barrier (LPB) makes behaviour-cloned visuomotor policies robust to covariate shift by keeping rollouts inside the latent distribution of expert demonstrations. Figure 1 contrasts two ways of handling drift in one visual grammar. Left, interactive correction: a human operator (silhouette and game controller) takes over at red dots, the pink training distribution grows, and some paths end suboptimal or in failure. Right, dynamics-guided correction: the expert band is outlined as a barrier inside the blue rollout distribution, a small latent-dynamics graph (z, a, z') detects a deviation (blue dot) and steers back (blue arrow) to an orange in-distribution state on the way to the red star goal. A shared legend below keys the colours.",
+ "summary_zh": "潜在策略屏障（LPB）让视觉运动策略保持在专家分布内。图1并排对比：左为人工交互纠正，扩大分布但仍可能次优或失败；右为动力学引导纠正，以橙色虚线专家分布作屏障，检测偏离并拉回。下方图例统一配色。",
+ "confidence": "high",
+ "notes": "The index says 7 panels; the figure has two. Text strings of 7 pt and fragments such as 'ert distribution' in the digest come from slide text clipped outside the printed area and are not visible. The caption leaves blanks where icons stood, so the meaning of the blue and red dots is read from the picture and the dotted arrows to the human icon; the exact target of the Suboptimal label is ambiguous.",
+ "venue": "NeurIPS25"
+}

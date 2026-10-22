@@ -1,0 +1,362 @@
+{
+ "paper_id": "iclr23-0108",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WikiWhy",
+  "one_liner": "A question-answering dataset of over 9,000 why-question, answer and rationale triples grounded in Wikipedia, where each answer is explained as a chain from cause to effect.",
+  "domain": [
+   "question answering",
+   "explanation",
+   "commonsense reasoning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "one dataset entry drawn in full as tabbed cards, with a cause-to-effect arrow fed by boxed reasoning steps",
+  "argues": "Each entry pairs a why-question and its answer with a rationale of supporting statements that explain why the cause leads to the effect.",
+  "subject": "A single WikiWhy entry: a Wikipedia passage, a question and answer, a cause, an effect and two reasoning steps between them.",
+  "elements": [
+   {
+    "name": "PASSAGE",
+    "type": "text-block",
+    "role": "Wikipedia passage the entry is sourced from; the cue words 'due to' are bold and underlined",
+    "drawn_as": "yellow rounded card with a darker tab, a Wikipedia logo overlapping its top-right corner",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "QA",
+    "type": "text-block",
+    "role": "the why-question and its answer about the cause-effect relation",
+    "drawn_as": "salmon rounded card with a darker tab; QUESTION and ANSWER are underlined labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CAUSE",
+    "type": "text-block",
+    "role": "the cause, written as the short answer 'Lack of Funds.'",
+    "drawn_as": "light blue rounded card with a blue tab",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "EFFECT",
+    "type": "text-block",
+    "role": "the effect, a full statement that the plans were deferred",
+    "drawn_as": "wide light blue rounded card with a blue tab",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "cause-to-effect arrow",
+    "type": "operation",
+    "role": "the causal link from cause to effect",
+    "drawn_as": "long vertical black arrow from the CAUSE card down to the EFFECT card",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "REASONING",
+    "type": "container",
+    "role": "the rationale: statements that connect the cause to the effect",
+    "drawn_as": "dashed rounded region with a green tab",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Contractors complete construction",
+    "type": "text-block",
+    "role": "first reasoning step, an implicit commonsense statement",
+    "drawn_as": "green rounded box with a heavy outline",
+    "container": "REASONING",
+    "is_contribution": true
+   },
+   {
+    "name": "Contractors need to be compensated.",
+    "type": "text-block",
+    "role": "second reasoning step",
+    "drawn_as": "green rounded box with a heavy outline",
+    "container": "REASONING",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "PASSAGE",
+    "to": "CAUSE and EFFECT",
+    "what": "cause and effect are sourced from the passage",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "QA",
+    "to": "CAUSE and EFFECT",
+    "what": "the question asks about the effect and the answer gives the cause",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "CAUSE",
+    "to": "EFFECT",
+    "what": "causal link: lack of funds leads to the deferral",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Contractors complete construction",
+    "to": "cause-to-effect arrow",
+    "what": "reasoning step that explains why the cause leads to the effect",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Contractors need to be compensated.",
+    "to": "cause-to-effect arrow",
+    "what": "second reasoning step joining the same link",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "REASONING",
+    "to": "the two reasoning steps",
+    "what": "the steps form one rationale",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "PASSAGE, QA, CAUSE, EFFECT, REASONING",
+    "kind": "identity",
+    "at": "tabs on the top edge of each card",
+    "what": "name the field of the entry"
+   },
+   {
+    "marker": "underline on 'due to'",
+    "kind": "identity",
+    "at": "PASSAGE text",
+    "what": "marks the causal cue in the source sentence"
+   },
+   {
+    "marker": "underline on QUESTION and ANSWER",
+    "kind": "identity",
+    "at": "QA card",
+    "what": "names the two parts of the card"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "Wikipedia puzzle-globe logo",
+    "stands_for": "Wikipedia as the source of the passage",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one WikiWhy entry about the Second Avenue Subway: passage, why-question, answer, cause, effect and two reasoning steps",
+    "form": "tabbed rounded cards holding real text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a card holding a why-question and its gold answer under underlined QUESTION and ANSWER labels",
+    "parts": [
+     "QUESTION",
+     "ANSWER"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Start at the PASSAGE card top left, go down to QA, cross the grey rule to CAUSE, follow the vertical arrow to EFFECT, and read the REASONING steps that feed that arrow."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "A grey vertical rule splits the entry: at left the PASSAGE card stacked over the QA card; at right the CAUSE card on top left, a dashed REASONING region with two green boxes on top right, and a wide EFFECT card below; a vertical arrow runs from CAUSE to EFFECT and two horizontal arrows from the reasoning boxes join it.",
+  "panel_count": 1,
+  "lanes": "two halves divided by a grey rule: given data (passage, QA) at left, causal structure (cause, reasoning, effect) at right",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.44,
+  "text_density": "dense",
+  "visual_density": "sparse",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff2cc",
+    "used_for": "fill of the PASSAGE card"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "tab of the PASSAGE card"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "fill of the QA card"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "tab of the QA card"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "fill of the CAUSE and EFFECT cards"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "tabs of the CAUSE and EFFECT cards"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "fill of the two reasoning-step boxes"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "tab of the REASONING region"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "dashed outline of the REASONING region"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "vertical divider between the two halves"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black outlines on cards, tabs and reasoning boxes; 0.5 pt black arrows; thin dashed dark blue-grey region; 1 pt grey divider",
+  "font": "sans (Lato), 8 pt throughout, 5.5 pt superscripts, no bold face (emphasis by underline)",
+  "corners": "rounded",
+  "arrows": "plain thin black arrows with small heads, orthogonal: one vertical, two horizontal joining it",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pastel hue names the role of a card: yellow = source passage, salmon = question and answer, blue = cause and effect, green = reasoning steps; each tab is a darker shade of its card",
+  "line_style_means": "dashed region = the set of reasoning steps; solid grey rule = split between given data and causal structure; solid arrows = causal flow",
+  "shape_means": "tabbed rounded card = one field of the entry; dashed rounded region = a group of rationale steps",
+  "marker_means": "underline on 'due to' marks the cue of the cause-effect relation; underlined QUESTION and ANSWER name the parts of the card",
+  "emphasis": "The new annotation, the rationale, has its own green dashed region and two arrows that merge into the cause-to-effect arrow, while the other cards are pastel and static.",
+  "reusable_patterns": [
+   "folder-tab title on each card of a record, tab a darker shade of the card colour",
+   "underlined cue phrase inside the source text",
+   "dashed region for the added annotation with arrows merging into the main arrow",
+   "source logo overlapping the corner of the source card",
+   "grey rule dividing given data from derived structure"
+  ],
+  "weaknesses": [
+   "no arrow joins PASSAGE or QA to CAUSE and EFFECT, so the sourcing is explained by the caption only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real WikiWhy entry: passage, question, answer, cause, effect and rationale"
+  ],
+  "stock": [
+   "Wikipedia logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "tabbed rounded cards",
+   "dashed reasoning region",
+   "arrows and the grey divider"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "PASSAGE card with Wikipedia logo",
+   "QA card",
+   "CAUSE card",
+   "EFFECT card",
+   "dashed REASONING region with two step boxes",
+   "cause-to-effect arrow"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "WikiWhy",
+   "cause-and-effect questions",
+   "explanations",
+   "rationales",
+   "question answering",
+   "Wikipedia",
+   "commonsense reasoning",
+   "dataset entry"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "colour-coded-groups",
+   "brand-logo-icon",
+   "highlighted-text-spans",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "tabbed-field-cards",
+    "what": "each field of a record is a rounded card with a darker title tab on its top edge, like a file folder"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a dataset entry as folder-tab cards whose hue names the field's role, give the new annotation (here the rationale) its own dashed region with arrows merging into the main link, and underline the cue phrase in the source text.",
+  "suits": "Dataset or benchmark papers that must show one full record with its source text, question, answer and a new annotation layer."
+ },
+ "tags": [
+  "tabbed rounded cards",
+  "pastel role colours",
+  "sans text throughout",
+  "text-heavy",
+  "dashed rationale region",
+  "grey divider"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "A simple example of an entry from WIKIWHY; a cause and effect sourced from a Wikipedia passage",
+   "Each WIKIWHY entry contains a rationale explaining the QA pair’s causal relation (Figure 1)"
+  ]
+ },
+ "summary": "WikiWhy is a question-answering dataset of over 9,000 why-question, answer and rationale triples grounded in Wikipedia, in which every answer must come with a natural-language explanation linking a cause to an effect. Figure 1 shows one entry as five tabbed rounded cards. At left, a yellow PASSAGE card with a Wikipedia logo and the cue 'due to' underlined sits above a salmon QA card holding the question and answer. At right, a blue CAUSE card sends a vertical arrow to a blue EFFECT card, and a dashed green REASONING region holds two steps whose arrows join that arrow. Text is plain sans at one size, and a grey rule splits given data from causal structure.",
+ "summary_zh": "WikiWhy 是基于维基百科、含九千多条“为什么”问答及解释的数据集。图用五张带标签页的圆角卡片画出一条样例：左边是段落和问答，右边是原因、结果，以及用虚线框起来、箭头汇入因果箭头的两条推理步骤。",
+ "confidence": "high",
+ "notes": "The prior's panels=2 is recorded as lanes (given data at left, causal structure at right) because the halves have only a grey rule between them, no frames or titles. The cards are components of one entry, so panel_count is 1. The figure also reads as a worked-walkthrough of a single entry, but it has no steps. Wikipedia passage excerpt is quoted text, not a picture.",
+ "venue": "ICLR23"
+}

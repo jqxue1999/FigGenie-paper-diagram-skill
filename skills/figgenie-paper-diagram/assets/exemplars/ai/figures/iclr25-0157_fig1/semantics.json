@@ -1,0 +1,578 @@
+{
+ "paper_id": "iclr25-0157",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Oryx",
+  "one_liner": "Unified multimodal LLM that encodes images, videos and multi-view 3D scenes at native resolution and compresses visual tokens on request.",
+  "domain": [
+   "multimodal LLM",
+   "arbitrary-resolution visual encoding",
+   "visual token compression"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "concept-schematic"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "four tinted case cards flank a central model emblem; each card pairs a takeaway tab, a user/model dialogue, a real input with its size or duration, and a row of token boxes with the exact count",
+  "argues": "Different visual data and tasks need different input resolutions and token compression, so an MLLM should support arbitrary resolution and compression on demand.",
+  "subject": "Four tinted case cards with dialogues, input sizes and token counts around the Oryx emblem.",
+  "elements": [
+   {
+    "name": "Oryx",
+    "type": "icon",
+    "role": "the model, shown as an emblem with the tagline 'On-demand MLLM' between the two card columns",
+    "drawn_as": "round emblem of an oryx head with a grey ring and soft shadow, bold serif name and plain serif tagline below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Case 1: Text Retrieval",
+    "type": "container",
+    "role": "newspaper page read at native resolution",
+    "drawn_as": "light-blue tinted rounded card with blue-grey outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Native Resolution Preseves More Details",
+    "type": "label",
+    "role": "takeaway of card 1 (spelling as in the figure)",
+    "drawn_as": "white tab with dark outline straddling the top edge of the card, bold sans",
+    "container": "Case 1: Text Retrieval",
+    "is_contribution": null
+   },
+   {
+    "name": "Case 2: Object Recognition",
+    "type": "container",
+    "role": "panda photo handled at low resolution",
+    "drawn_as": "light-green tinted rounded card with green outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Low Resolution is Sufficient for Efficiency",
+    "type": "label",
+    "role": "takeaway of card 2",
+    "drawn_as": "white tab straddling the top edge of the card",
+    "container": "Case 2: Object Recognition",
+    "is_contribution": null
+   },
+   {
+    "name": "Case 3: Frame Localization",
+    "type": "container",
+    "role": "tennis video with low compression, finding the frame that answers the question",
+    "drawn_as": "light-purple tinted rounded card with dark purple outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Low Compression offers Higher Precision",
+    "type": "label",
+    "role": "takeaway of card 3",
+    "drawn_as": "white tab straddling the top edge of the card",
+    "container": "Case 3: Frame Localization",
+    "is_contribution": null
+   },
+   {
+    "name": "Case 4: Brief Summarization",
+    "type": "container",
+    "role": "documentary video with high compression, summarised briefly",
+    "drawn_as": "light-orange tinted rounded card with brown-orange outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "High Compression Supports Longer Length",
+    "type": "label",
+    "role": "takeaway of card 4",
+    "drawn_as": "white tab straddling the top edge of the card",
+    "container": "Case 4: Brief Summarization",
+    "is_contribution": null
+   },
+   {
+    "name": "User / Oryx dialogue boxes",
+    "type": "text-block",
+    "role": "one question and Oryx's answer per card",
+    "drawn_as": "white rounded box in each card; 'User:' and 'Oryx:' bold in the card hue, serif text",
+    "container": "each case card",
+    "is_contribution": null
+   },
+   {
+    "name": "token boxes",
+    "type": "data",
+    "role": "visual tokens the input costs; 8, 3, 5 and 2 empty squares for the four cards",
+    "drawn_as": "row of small empty rounded squares outlined in the card hue",
+    "container": "each case card",
+    "is_contribution": null
+   },
+   {
+    "name": "Token Length / Tokens per Frame",
+    "type": "label",
+    "role": "exact token budget: 6144, 1584, 225 per frame, 20 per frame",
+    "drawn_as": "bold 3 pt text under the token boxes",
+    "container": "each case card",
+    "is_contribution": null
+   },
+   {
+    "name": "1536 pix, 1026 pix, 540 pix, 768 pix",
+    "type": "label",
+    "role": "pixel height and width of the newspaper and panda inputs",
+    "drawn_as": "double-headed arrows with tiny labels along two edges of the picture",
+    "container": "Case 1 and Case 2",
+    "is_contribution": null
+   },
+   {
+    "name": "60s, 30 min",
+    "type": "label",
+    "role": "length of the two videos",
+    "drawn_as": "diagonal double-headed arrow with a tiny label at the corner of a frame stack",
+    "container": "Case 3 and Case 4",
+    "is_contribution": null
+   },
+   {
+    "name": "On-demand resolution for visual tasks",
+    "type": "label",
+    "role": "group caption under the two left cards",
+    "drawn_as": "plain serif 8.5 pt text",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "On-demand compression for temporal lengths",
+    "type": "label",
+    "role": "group caption under the two right cards",
+    "drawn_as": "plain serif 8.5 pt text",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Oryx",
+    "to": "case cards",
+    "what": "the emblem sits between the left and right card pairs; no connectors",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "input picture",
+    "to": "token boxes",
+    "what": "each input is followed by a row of boxes standing for its visual tokens, exact count written below",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "tennis frame stack (60s)",
+    "to": "close-up frame",
+    "what": "one frame is picked out of the stack to answer the question",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "dimension arrows",
+    "to": "newspaper and panda pictures",
+    "what": "pixel height and width of each input",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "duration arrows",
+    "to": "video frame stacks",
+    "what": "length of each video",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "User question",
+    "to": "Oryx answer",
+    "what": "turn order inside each dialogue box",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "card tint",
+    "to": "tab outline, speaker names, token boxes, arrows",
+    "what": "one hue per case card",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Case 1",
+    "to": "Case 2",
+    "what": "native resolution with 6144 tokens against low resolution with 1584 tokens",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Case 3",
+    "to": "Case 4",
+    "what": "225 tokens per frame against 20 tokens per frame",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "left card pair",
+    "to": "On-demand resolution for visual tasks",
+    "what": "group caption below the pair",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "right card pair",
+    "to": "On-demand compression for temporal lengths",
+    "what": "group caption below the pair",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Case 1: Text Retrieval",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "newspaper page at 1536 x 1026 pix, 6144 tokens; user asks for a detailed description, Oryx reads the title and the news",
+    "verdict": "setting"
+   },
+   {
+    "label": "Case 2: Object Recognition",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "panda photo at 540 x 768 pix, 1584 tokens; 'How many pandas are there in the image?' answered 'two pandas'",
+    "verdict": "setting"
+   },
+   {
+    "label": "Case 3: Frame Localization",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "60 s tennis video with 225 tokens per frame; Oryx names the winner of the point from a close-up frame",
+    "verdict": "setting"
+   },
+   {
+    "label": "Case 4: Brief Summarization",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "30 min documentary with 20 tokens per frame; Oryx gives a short summary",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Case 1 ... Case 4",
+    "kind": "identity",
+    "at": "card titles",
+    "what": "name the four cases; they list the cards and do not order steps"
+   },
+   {
+    "marker": "User:, Oryx:",
+    "kind": "identity",
+    "at": "dialogue boxes",
+    "what": "name the speaker of each turn, coloured in the card hue"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "front page of a newspaper (The Guardian)",
+    "content": "document",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "tall page with a vertical and a horizontal pixel arrow; token boxes below"
+   },
+   {
+    "what": "giant pandas on a log",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo with a vertical and a horizontal pixel arrow; token boxes below"
+   },
+   {
+    "what": "tennis match frames: a stack of dark frames and a close-up of the winning player",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "offset stack of frames with a diagonal '60s' arrow, a hollow down arrow to a single close-up frame"
+   },
+   {
+    "what": "desert documentary frames",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "offset stack of three or four frames with a diagonal '30 min' arrow"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "oryx antelope head with swirling red and teal strokes inside a round emblem",
+    "stands_for": "the Oryx model",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "four user questions with Oryx answers: describe a newspaper (title 'The Guardian', news 'PM faces revolt on Rwanda'), count pandas ('two pandas'), who wins the point ('Novak Djokovic'), what happened in a documentary ('landscape in the desert')",
+    "form": "white dialogue box per card, speaker names in the card hue",
+    "real_values": true
+   },
+   {
+    "what": "token budgets per case: 6144 tokens, 1584 tokens, 225 tokens per frame, 20 tokens per frame",
+    "form": "rows of 8, 3, 5 and 2 small empty squares with the exact number below",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "the model as a round animal emblem with a name and the tagline 'On-demand MLLM', not as a box",
+    "parts": [
+     "oryx emblem",
+     "Oryx",
+     "On-demand MLLM"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short row of small empty rounded squares under each input, whose number loosely follows the budget (8, 3, 5, 2) with the true count written beneath",
+    "parts": [
+     "empty squares",
+     "token count label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "video as an offset stack of dark frames with a diagonal double-headed duration arrow; one frame pulled out below by a hollow arrow",
+    "parts": [
+     "frame stack",
+     "duration arrow",
+     "single frame"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "one white rounded box per card holding both turns, speakers named by coloured bold labels instead of avatars",
+    "parts": [
+     "User turn",
+     "Oryx turn"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye goes to the Oryx emblem in the middle, then to the Case 1 title top left, down the left pair, across to the right pair, and ends on the two group captions below."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "A 2 x 2 grid of tinted cards split into a left pair (resolution cases) and a right pair (compression cases) by a central column holding the Oryx emblem and tagline; a group caption sits under each pair.",
+  "panel_count": 4,
+  "lanes": "two columns of two cards: left pair for resolution, right pair for compression",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.91,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9ebff",
+    "used_for": "background of card 1 (Text Retrieval)"
+   },
+   {
+    "hex": "#eef9ff",
+    "used_for": "light inner fill in card 1 (dialogue box)"
+   },
+   {
+    "hex": "#5b709a",
+    "used_for": "outlines, speaker names and token boxes of card 1"
+   },
+   {
+    "hex": "#c0e2de",
+    "used_for": "background of card 2 (Object Recognition)"
+   },
+   {
+    "hex": "#edf9f5",
+    "used_for": "light inner fill in card 2 (dialogue box)"
+   },
+   {
+    "hex": "#14826b",
+    "used_for": "outlines, speaker names and token boxes of card 2"
+   },
+   {
+    "hex": "#f3e4f9",
+    "used_for": "background of card 3 (Frame Localization)"
+   },
+   {
+    "hex": "#f7f2fc",
+    "used_for": "light inner fill in card 3 (dialogue box)"
+   },
+   {
+    "hex": "#5e2f4f",
+    "used_for": "outlines, speaker names and token boxes of card 3"
+   },
+   {
+    "hex": "#f9e3ca",
+    "used_for": "background of card 4 (Brief Summarization)"
+   },
+   {
+    "hex": "#f9efe5",
+    "used_for": "light inner fill in card 4 (dialogue box)"
+   },
+   {
+    "hex": "#af5020",
+    "used_for": "outlines, speaker names and token boxes of card 4"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "hairline 0.25 pt outlines in a dark shade of each card hue, a few 0.75 pt lines",
+  "font": "serif (Cambria) about 5 pt for dialogues with bold speaker names and card titles, 8.5 pt serif for the emblem name and group captions; bold sans (Aptos) 4.5 pt for tab headings; 3 pt sans for pixel and token annotations",
+  "corners": "rounded",
+  "arrows": "thin double-headed dimension arrows with small heads; one hollow down arrow between two tennis frames",
+  "rendering": "flat-vector",
+  "effects": "soft grey shadow behind the emblem",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one hue per case card (blue, green, purple, orange) repeated on the card tint, dialogue-box fill, outlines, speaker names, token boxes and arrows",
+  "line_style_means": "double-headed arrows = pixel size or video length of the input; hollow down arrow = one frame picked from the stack",
+  "shape_means": "row of small empty squares = visual tokens; offset stack of frames = video; white rounded box = dialogue",
+  "marker_means": "'Case n' names a card; 'User:' and 'Oryx:' name speakers; the number under the token boxes is the exact budget",
+  "emphasis": "the emblem is the largest object and sits in the middle; each card has a tab straddling its top edge that states the takeaway",
+  "reusable_patterns": [
+   "central emblem with name and tagline between two columns of cards",
+   "tab heading straddling the card's top edge that states the takeaway",
+   "row of token boxes under each input with the exact count written below",
+   "double-headed pixel arrows along the edges of an image and a duration arrow on a frame stack",
+   "stack of offset frames for a video, one frame pulled out by a hollow down arrow",
+   "one hue per card used for tint, outline, speaker names and token boxes",
+   "group captions under the card columns naming the axis of variation"
+  ],
+  "weaknesses": [
+   "the first tab contains a typo ('Preseves')",
+   "3 pt annotations (pixel sizes, token counts) are tiny at print width",
+   "the token boxes are symbolic: 8, 3, 5 and 2 squares do not scale with 6144, 1584, 225 and 20 tokens",
+   "no model internals are shown, so how resolution and compression are realised is left to the text"
+  ]
+ },
+ "resources": {
+  "own": [
+   "newspaper page, panda photo, tennis frames and documentary frames used as sample inputs",
+   "real user questions and Oryx answers",
+   "token counts of the four cases"
+  ],
+  "stock": [],
+  "generated": [
+   "the Oryx emblem artwork (looks illustrated or AI-generated)"
+  ],
+  "drawn": [
+   "tinted cards and tabs",
+   "dialogue boxes",
+   "token boxes",
+   "dimension and duration arrows",
+   "frame-stack layering"
+  ],
+  "unknown": [
+   "origin of the photos and video frames"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "central Oryx emblem",
+   "four tinted case cards with tab headings",
+   "user and Oryx dialogue boxes",
+   "newspaper and panda pictures with pixel arrows",
+   "stacked video frames with duration arrows",
+   "rows of token squares with token counts"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "Oryx",
+   "MLLM",
+   "arbitrary resolution",
+   "token compression",
+   "long video",
+   "document understanding",
+   "on-demand",
+   "visual tokens"
+  ],
+  "tags": [
+   "claim-banner",
+   "cost-badges",
+   "colour-coded-groups",
+   "annotated-record-card",
+   "token-strip",
+   "title-branding",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "dimension-arrows",
+    "what": "double-headed arrows with tiny labels along an input image or frame stack stating its pixel size or duration"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State a trade-off with one card per setting: repeat one card grammar (tab with the takeaway, task title, user/model dialogue, input picture with its size or duration arrow, row of token boxes with the exact count) four times, one hue each, around the model's emblem.",
+  "suits": "Motivation figures for methods that adapt compute or token budgets to the input, where each setting needs a real example and its cost side by side."
+ },
+ "tags": [
+  "central-logo",
+  "tabbed-claim-cards",
+  "token-boxes",
+  "dimension-arrows",
+  "tinted-cards",
+  "serif-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Different visual data and tasks may require different input resolutions and compression ratios on visual tokens.",
+   "high resolution is crucial for text-relevant tasks, while object-level tasks may require only simple images",
+   "a dynamic compressor module that supports 1x to 16x compression on visual tokens by request"
+  ]
+ },
+ "summary": "Oryx is a multimodal LLM that encodes images, videos and multi-view 3D scenes at their native resolution and compresses visual tokens on request. Figure 1 states the idea with four tinted case cards on either side of the Oryx emblem. Each card has a tab with its takeaway, a user question with Oryx's answer, the input (a newspaper page, a panda photo, tennis frames, a documentary) with pixel-size or duration arrows, and a row of token boxes with the exact count: native resolution for text retrieval (6144 tokens), low resolution for objects (1584), low compression for frame localisation (225 per frame) and high compression for long videos (20 per frame). Captions under the two columns name on-demand resolution and on-demand compression.",
+ "summary_zh": "Oryx 能按需选择视觉输入的分辨率和令牌压缩比。图 1 在 Oryx 标志两侧放四张彩色案例卡：文字检索、物体识别、帧定位、长视频摘要，每张含问答、输入尺寸或时长箭头和令牌数方框，说明不同任务需要不同的分辨率与压缩。",
+ "confidence": "high",
+ "notes": "Kept the prior pass's two kinds and added concept-schematic (phenomenon-on-examples): the idea of on-demand resolution and compression is shown only through example cards while the model is a logo. The tab on card 1 reads 'Preseves' in the figure. The palette roles of #eef9ff, #edf9f5, #f7f2fc and #f9efe5 are inferred from hue (dialogue-box fills). The Oryx emblem's origin is guessed from its look.",
+ "venue": "ICLR25"
+}

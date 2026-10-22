@@ -1,0 +1,570 @@
+{
+ "paper_id": "acl23-0057",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DUB (Discrete Unit Back-translation)",
+  "one_liner": "Back-translation for direct speech translation: speech becomes discrete units so a text-to-unit model can synthesise extra training pairs for the unit-to-text model.",
+  "domain": [
+   "speech translation",
+   "discrete speech units",
+   "back-translation data augmentation"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "panel (b) puts four circled steps in the quadrants of a cross-ruled box, linked by block and curved arrows; panel (a) is a bottom-up model sketch",
+  "argues": "Representing speech as discrete units lets back-translation, a text-side technique, work for direct speech translation: a text-to-unit model turns extra target text into synthetic units that train the unit-to-text model.",
+  "subject": "A speech-to-units-to-text model structure, and the four steps of discrete unit back-translation with stacked data cards.",
+  "elements": [
+   {
+    "name": "s",
+    "type": "data",
+    "role": "input speech",
+    "drawn_as": "black waveform on an orange pill, the transcript 'Thank you!' in quotes below",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Discrete Unit Extractor",
+    "type": "container",
+    "role": "offline module that converts speech into discrete units (caption)",
+    "drawn_as": "rounded frame with hatched background, bold label rotated 90 degrees at its left, the word offline inside the top-left",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "HuBERT",
+    "type": "module",
+    "role": "self-supervised speech encoder giving intermediate representations (paper text)",
+    "drawn_as": "lilac bar with bold italic name",
+    "container": "Discrete Unit Extractor",
+    "is_contribution": false
+   },
+   {
+    "name": "K-means",
+    "type": "module",
+    "role": "clusters the representations into unit IDs (paper text)",
+    "drawn_as": "white bar with thin outline",
+    "container": "Discrete Unit Extractor",
+    "is_contribution": false
+   },
+   {
+    "name": "offline unit row",
+    "type": "data",
+    "role": "raw unit sequence 10 10 7 33 ... 20 20 46, repeats included",
+    "drawn_as": "row of small pink-red squares with white numbers",
+    "container": "Discrete Unit Extractor",
+    "is_contribution": false
+   },
+   {
+    "name": "Deduplicate",
+    "type": "operation",
+    "role": "merges repeated units",
+    "drawn_as": "grey tag with a soft shadow on the arrow out of the extractor",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "u",
+    "type": "data",
+    "role": "deduplicated unit sequence 10 7 33 ... 20 46",
+    "drawn_as": "row of pink-red squares in a pink-outlined rounded box, italic u at its left",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "U2T Translation",
+    "type": "module",
+    "role": "unit-to-text translation: units in, text out",
+    "drawn_as": "peach gradient rounded box, bold 11 pt name",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "T2U Translation",
+    "type": "module",
+    "role": "text-to-unit translation: text in, units out",
+    "drawn_as": "light-blue gradient rounded box, bold 11 pt name",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "y",
+    "type": "data",
+    "role": "target-language text 'Ich danke Ihnen!'",
+    "drawn_as": "white rounded box with purple outline, italic text, italic y at its left",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "(1) prepare D_u,y",
+    "type": "operation",
+    "role": "extract units for each speech input and pair them with the translation",
+    "drawn_as": "stack of speech pills with an arrow down to a pink unit card and a lilac 'Danke!' card in a grey dashed box",
+    "container": "(b) top-left quadrant",
+    "is_contribution": false
+   },
+   {
+    "name": "(2) Train T2UT model",
+    "type": "operation",
+    "role": "train the text-to-unit model on the real pairs D_u,y",
+    "drawn_as": "light-blue gradient box T2UT, reached by a grey gradient block arrow from step 1",
+    "container": "(b) bottom-left quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "(3) Generate pseudo D'_u,y",
+    "type": "operation",
+    "role": "T2UT turns extra target-language text into synthetic units; <BT> is put in front of them",
+    "drawn_as": "orange stacked cards of <BT> unit strings above bright purple cards of text, in a red dashed box",
+    "container": "(b) bottom-right quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "(4) Train U2TT model",
+    "type": "operation",
+    "role": "train the unit-to-text model on the real pairs plus the pseudo pairs",
+    "drawn_as": "peach gradient box U2TT at the top, fed by a grey block arrow from a grey-dashed real-data box over a red-dashed pseudo-data box",
+    "container": "(b) top-right quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "D_u,y",
+    "type": "data",
+    "role": "real unit-translation pairs",
+    "drawn_as": "offset stacks of pink unit cards '10 7 33 ... 20 46' and lilac text cards 'Danke!' inside a grey dashed box",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "D'_u,y",
+    "type": "data",
+    "role": "pseudo pairs: synthetic units tagged <BT> with their target text",
+    "drawn_as": "offset stacks of orange and bright purple cards inside a red dashed box",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "<BT>",
+    "type": "label",
+    "role": "indicator at the start of synthetic unit sequences",
+    "drawn_as": "small black text at the head of each orange card line",
+    "container": "(b)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "s",
+    "to": "Discrete Unit Extractor",
+    "what": "speech enters the extractor (placed directly under it, no arrow)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "HuBERT",
+    "to": "K-means",
+    "what": "intermediate representations are clustered (stacked boxes)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "offline unit row",
+    "to": "u",
+    "what": "units after deduplication",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "u",
+    "to": "U2T Translation",
+    "what": "units in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "U2T Translation",
+    "to": "y",
+    "what": "translation out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y",
+    "to": "T2U Translation",
+    "what": "text in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "T2U Translation",
+    "to": "u",
+    "what": "units out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(1) prepare D_u,y",
+    "to": "(2) Train T2UT model",
+    "what": "real pairs train the back-translation model",
+    "kind": "data",
+    "drawn": "other",
+    "step": 2
+   },
+   {
+    "from": "(1) prepare D_u,y",
+    "to": "(4) Train U2TT model",
+    "what": "real pairs are reused in the final training set",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "target-language text cards",
+    "to": "(2) Train T2UT model",
+    "what": "extra monolingual text is fed to the trained T2UT",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "(2) Train T2UT model",
+    "to": "D'_u,y",
+    "what": "T2UT generates the synthetic units",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "D'_u,y",
+    "to": "(4) Train U2TT model",
+    "what": "pseudo pairs join the real ones",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "real and pseudo data cards",
+    "to": "U2TT",
+    "what": "training data of the unit-to-text model",
+    "kind": "data",
+    "drawn": "other",
+    "step": 4
+   },
+   {
+    "from": "U2T and T2U boxes in (a)",
+    "to": "U2TT and T2UT boxes in (b)",
+    "what": "same peach and blue name the models of (a) inside the procedure",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Model Structure",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "speech s through the offline discrete unit extractor to unit sequence u, and paired U2T and T2U translation models between u and text y",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Discrete Unit Back-translation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "four circled steps: prepare D_u,y, train T2UT, generate pseudo D'_u,y, train U2TT on real and pseudo data",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2, 3, 4 (circled)",
+    "kind": "order",
+    "at": "step captions in the four quadrants of (b)",
+    "what": "order of the DUB training steps (prepare, train T2UT, generate pseudo data, train U2TT)"
+   },
+   {
+    "marker": "(a), (b) with titles",
+    "kind": "section",
+    "at": "under each panel",
+    "what": "name the two panels"
+   },
+   {
+    "marker": "s, u, y",
+    "kind": "identity",
+    "at": "italic letters beside the waveform, the unit row and the text box",
+    "what": "name speech, units and text"
+   },
+   {
+    "marker": "D_u,y, D'_u,y",
+    "kind": "identity",
+    "at": "step captions 1 and 3",
+    "what": "name the real and the pseudo data sets"
+   },
+   {
+    "marker": "<BT>",
+    "kind": "identity",
+    "at": "head of each synthetic unit line",
+    "what": "flags units that came from back-translation"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "speech waveform on an orange pill",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "black bar waveform inside an orange rounded pill; in (b) three pills stacked with an offset to suggest a set of utterances"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "an English utterance 'Thank you!' with German translations 'Ich danke Ihnen!' and 'Danke!', plus monolingual German text 'Hallo. So wie Ich. Das ist wichtig.'",
+    "form": "text strings in the boxes and on the stacked cards",
+    "real_values": true
+   },
+   {
+    "what": "unit ID sequences such as 10 7 33 ... 20 46 and <BT> 2 10 7...",
+    "form": "numbered squares in (a) and number strings on the cards in (b)",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "offset stacks of coloured cards for data sets: pink = real units, lilac = real translations, orange = synthetic <BT> units, bright purple = extra target text",
+    "parts": [
+     "pink cards",
+     "lilac cards",
+     "orange cards",
+     "purple cards"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small pink-red squares carrying unit IDs, with an ellipsis; the deduplicated row sits in a pink-outlined box",
+    "parts": [
+     "unit squares",
+     "ellipsis",
+     "outline box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "discrete-unit-extractor",
+    "drawn_as": "speech under a hatched frame holding HuBERT, K-means and the raw unit row, then a Deduplicate tag on the arrow to the unit sequence",
+    "parts": [
+     "HuBERT",
+     "K-means",
+     "unit row",
+     "Deduplicate tag"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Bottom of (a) (speech s) upward to y; then (b) from step 1 at the top left down to step 2, along the bottom to step 3, and up to step 4."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side divided by a thick vertical rule, each captioned below with a letter and title. (a) is a bottom-up column: speech, hatched extractor frame, unit row, then U2T and T2U boxes side by side under the text box. (b) is a 2x2 grid split by grey cross rules with one circled step per quadrant, linked by a grey block arrow, curved arrows and a straight arrow.",
+  "panel_count": 2,
+  "lanes": "four quadrants of (b) split by grey cross rules, one step each",
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.37,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e84574",
+    "used_for": "unit squares with white numbers in (a)"
+   },
+   {
+    "hex": "#aa3053",
+    "used_for": "outlines of the unit squares and of the pink cards (dark pink)"
+   },
+   {
+    "hex": "#f6b5c7",
+    "opacity": 0.9,
+    "used_for": "pink cards of real unit sequences in (b)"
+   },
+   {
+    "hex": "#f5b79c",
+    "opacity": 0.9,
+    "used_for": "orange cards of synthetic <BT> units in (b); outline #ee875a"
+   },
+   {
+    "hex": "#d6cbeb",
+    "used_for": "HuBERT bar and the lilac cards of real translations (also at 0.9 opacity); outline #3f296a"
+   },
+   {
+    "hex": "#e7c1f6",
+    "opacity": 0.9,
+    "used_for": "bright purple cards of extra monolingual target text; outline #a520d8"
+   },
+   {
+    "hex": "#fec96e",
+    "used_for": "speech waveform pills"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red dashed outlines around pseudo data"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "grey dashed outlines around real data"
+   },
+   {
+    "hex": "#f8cdb9",
+    "approx": true,
+    "used_for": "peach gradient of the U2T and U2TT boxes"
+   },
+   {
+    "hex": "#cdd8f8",
+    "approx": true,
+    "used_for": "light-blue gradient of the T2U and T2UT boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt outlines on cards and boxes, 0.75 pt on a few; dashed outlines drawn as filled dash paths (grey for real data, red for pseudo data); thick black arrows",
+  "font": "sans: Calibri-Light and DengXian 5-7 pt on cards and labels, Raleway-bold 11 pt for model names; Times italics 12.5 pt for s, u, y and D",
+  "corners": "rounded",
+  "arrows": "thick black arrows with filled heads, curved black arrows round the grid in (b), two grey gradient block arrows for the hand-offs",
+  "rendering": "flat-vector",
+  "effects": "gradient fills on model boxes, hatch background on the extractor frame, soft shadow under the Deduplicate tag, offset copies for stacks",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "Pink = discrete units from real speech; orange with <BT> = synthetic units; lilac = real translation text and HuBERT; bright purple = extra monolingual target text; peach = U2T and U2TT (unit to text); light blue = T2U and T2UT (text to unit); orange-yellow pill = speech.",
+  "line_style_means": "Grey dashed box = real data D_u,y; red dashed box = pseudo data D'_u,y; hatch plus the word offline = the extractor is run offline; offset copies = a set of samples; black arrows = data flow; grey block arrows = hand-off between steps.",
+  "shape_means": "Rounded rectangle with a bold name = a translation model; offset stack of cards = a data set; small numbered squares = discrete units; pill with waveform = speech; circled numbers = steps.",
+  "marker_means": "Circled 1-4 = order of the training steps; <BT> = synthetic units; s, u, y = speech, units, text; D_u,y and D'_u,y = real and pseudo data.",
+  "emphasis": "Colour continuity: the pink units and the peach and blue model boxes of (a) return in (b), and red dashes isolate the new pseudo data.",
+  "reusable_patterns": [
+   "circled steps placed in the quadrants of a cross-ruled box and linked round the grid by block and curved arrows",
+   "offset stacks of cards, one colour per data type, for data sets",
+   "dashed outline colour separates real data (grey) from synthetic data (red)",
+   "a short tag (<BT>) written on the synthetic samples",
+   "bold label rotated 90 degrees beside a framed module group",
+   "hatch background plus the word offline for a precomputed component",
+   "same model-box colours in the structure panel and in the procedure panel"
+  ],
+  "weaknesses": [
+   "5-6 pt numbers and text on the cards and unit squares",
+   "the loop of curved arrows around the 2x2 grid takes effort to follow",
+   "no arrow joins the speech pill to the extractor in (a)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "an example utterance with its translations",
+   "illustrative unit ID strings"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, cards, arrows and rules (PowerPoint shapes)"
+  ],
+  "unknown": [
+   "origin of the waveform graphic"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "numbered pink unit squares",
+   "offset stacks of pink, orange and purple cards",
+   "waveform pills",
+   "peach and blue gradient model boxes",
+   "HuBERT and K-means in a hatched frame",
+   "circled step numbers in a 2x2 grid",
+   "grey and curved arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "speech translation",
+   "discrete units",
+   "back-translation",
+   "HuBERT",
+   "data augmentation",
+   "U2TT",
+   "T2UT",
+   "MuST-C"
+  ],
+  "tags": [
+   "stacked-cards",
+   "token-strip",
+   "colour-coded-groups",
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "quadrant-steps",
+    "what": "numbered steps placed in the four quadrants of a box split by cross rules and linked round the grid by block and curved arrows"
+   },
+   {
+    "name": "real-vs-synthetic-outline",
+    "what": "dashed outline colour separates real data (grey) from synthetic data (red)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a data-augmentation recipe as numbered steps in the quadrants of one box with a stack of coloured cards for each data set, tag the synthetic samples and outline them in red, and reuse the model-box colours of the structure panel so the two panels read as one story.",
+  "suits": "Training recipes that generate or transform data between model-training steps: back-translation, self-training, synthetic data, distillation."
+ },
+ "tags": [
+  "two lettered panels",
+  "2x2 step grid",
+  "stacked offset cards",
+  "pink unit boxes",
+  "gradient model boxes",
+  "PowerPoint look"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Our Approach (p.3-4)"
+  ],
+  "evidence": [
+   "The offline discrete unit extractor converts speech into discrete units.",
+   "An illustration of the discrete unit back-translation (DUB) training procedure.",
+   "Train the T2UT model based on Du,y with crossentropy loss"
+  ]
+ },
+ "summary": "DUB applies back-translation to direct speech translation by first turning speech into discrete units. Figure 1 has two panels. In (a), speech passes an offline extractor (HuBERT, K-means, then a Deduplicate step) to give a unit sequence u, which a unit-to-text model turns into the German translation y and a text-to-unit model turns back. In (b), four circled steps sit in the quadrants of a cross-ruled box: prepare the unit-translation pairs, train the text-to-unit model, generate pseudo pairs tagged <BT> from extra target text, and train the unit-to-text model on real and pseudo pairs. Data sets are offset stacks of coloured cards, with red dashes around the pseudo data.",
+ "summary_zh": "DUB 先把语音转成离散单元再做回译。图 1 左为模型结构：离线抽取器（HuBERT、K-means、去重）得到单元序列，连接 U2T 与 T2U；右为四步训练流程，按象限排布，用彩色卡片堆表示真实与伪数据，红虚线框标出伪数据。",
+ "confidence": "high",
+ "notes": "Prior labels kept (stage-pipeline, model-anatomy). Example values (unit IDs, short words) are illustrative; the cards in (b) carry the same pink unit and lilac text cards as the real pair. The dashed outlines are filled dash paths in the SVG, not stroke-dasharray, which is why the digest counts no dashed shapes. The gradient fills of the model boxes are not in the histogram, so their hex values are read off the picture (approx).",
+ "venue": "ACL23"
+}

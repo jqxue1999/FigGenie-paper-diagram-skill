@@ -1,0 +1,545 @@
+{
+ "paper_id": "iclr26-0118",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Temporal Sparse Autoencoders (T-SAEs)",
+  "one_liner": "Sparse autoencoders with a temporal contrastive loss so that high-level features stay consistent over adjacent tokens and separate semantics from syntax.",
+  "domain": [
+   "interpretability",
+   "sparse autoencoders",
+   "language models"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "a lettered analogy panel, a contrast panel and a measured-example panel tied together by dashed zoom lines",
+  "argues": "Existing SAE features flicker token by token and mostly capture syntax, while temporal SAEs give smooth features that follow the semantic content of each passage.",
+  "subject": "Human language features, what two SAE types recover, and real activation traces of both over a spliced three-passage text.",
+  "elements": [
+   {
+    "name": "person with '…' speech bubble",
+    "type": "icon",
+    "role": "the human who produces language",
+    "drawn_as": "person emoji at the bottom of panel A with a small speech bubble",
+    "container": "A)",
+    "is_contribution": false
+   },
+   {
+    "name": "High-level: Intent, Context, Audience",
+    "type": "text-block",
+    "role": "high-level features of language production",
+    "drawn_as": "thought cloud with monospace text",
+    "container": "A)",
+    "is_contribution": false
+   },
+   {
+    "name": "Low-level: Syntax, Word choice",
+    "type": "text-block",
+    "role": "low-level features of language production",
+    "drawn_as": "thought cloud with monospace text",
+    "container": "A)",
+    "is_contribution": false
+   },
+   {
+    "name": "network glyph with '…' speech bubble",
+    "type": "icon",
+    "role": "the language model whose representations the SAEs decompose (read from the caption and layout)",
+    "drawn_as": "black node-link network glyph at the left of panel B",
+    "container": "B)",
+    "is_contribution": false
+   },
+   {
+    "name": "Existing SAEs",
+    "type": "label",
+    "role": "the baseline SAE family",
+    "drawn_as": "light-green rounded chip",
+    "container": "B)",
+    "is_contribution": false
+   },
+   {
+    "name": "Syntactic features ONLY",
+    "type": "text-block",
+    "role": "what existing SAEs mostly recover",
+    "drawn_as": "thought cloud with monospace text, trailed by small circles from the chip",
+    "container": "B)",
+    "is_contribution": false
+   },
+   {
+    "name": "Temporal SAEs",
+    "type": "label",
+    "role": "the proposed SAE family",
+    "drawn_as": "hot-pink rounded chip",
+    "container": "B)",
+    "is_contribution": true
+   },
+   {
+    "name": "Context, Syntax, Semantics",
+    "type": "text-block",
+    "role": "what temporal SAEs recover in balance",
+    "drawn_as": "three overlapping thought clouds trailed from the pink chip",
+    "container": "B)",
+    "is_contribution": true
+   },
+   {
+    "name": "Noisy Feature Activations",
+    "type": "label",
+    "role": "names the spiky mini trace of existing SAEs",
+    "drawn_as": "plain text above a pink mini plot, inside the dashed olive box",
+    "container": "B)",
+    "is_contribution": false
+   },
+   {
+    "name": "Temporally Consistent Activations",
+    "type": "label",
+    "role": "names the smooth mini trace of temporal SAEs",
+    "drawn_as": "plain text above a blue mini plot, inside the dashed olive box",
+    "container": "B)",
+    "is_contribution": true
+   },
+   {
+    "name": "dashed olive box with two dashed leader lines",
+    "type": "container",
+    "role": "marks the mini traces as the part enlarged in panel C",
+    "drawn_as": "dashed rounded box in panel B whose two dashed lines open towards panel C",
+    "container": "B)",
+    "is_contribution": null
+   },
+   {
+    "name": "Top 5 Most Active SAE Features Across Spliced Latin, Genetics, and Religious Text",
+    "type": "label",
+    "role": "title of the measured example",
+    "drawn_as": "bold two-line title over the plots",
+    "container": "C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Matryoshka SAE and Temporal SAE plots",
+    "type": "chart",
+    "role": "feature activation against token index (0 to 300) for the top-5 features of each method",
+    "drawn_as": "two stacked plots with filled coloured traces and a method name inside each",
+    "container": "C)",
+    "is_contribution": true
+   },
+   {
+    "name": "Newton's Principia (Latin) | MMLU Genetics Question | Bhagavat Gita",
+    "type": "sample",
+    "role": "the three passages spliced into one token sequence",
+    "drawn_as": "dotted vertical dividers in the plots and a brace with a label under each segment",
+    "container": "C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Matryoshka SAE Features: (5 pills)",
+    "type": "label",
+    "role": "auto-interpreted labels of the five plotted baseline features, e.g. 'Sentence endings or periods'",
+    "drawn_as": "legend list of coloured pills with text at the right",
+    "container": "C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Temporal SAE Features: (5 pills)",
+    "type": "label",
+    "role": "auto-interpreted labels of the five plotted temporal features, e.g. 'Worship and spiritual practices'",
+    "drawn_as": "legend list of coloured pills with text at the right",
+    "container": "C)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "person with '…' speech bubble",
+    "to": "High-level and Low-level clouds",
+    "what": "thoughts of the speaker split into high-level and low-level features",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "network glyph",
+    "to": "Existing SAEs",
+    "what": "representations of the model are decomposed by the baseline",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "network glyph",
+    "to": "Temporal SAEs",
+    "what": "representations of the model are decomposed by the proposed SAE",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Existing SAEs",
+    "to": "Syntactic features ONLY",
+    "what": "features recovered",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Temporal SAEs",
+    "to": "Context, Syntax, Semantics",
+    "what": "features recovered",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "dashed olive box (B)",
+    "to": "plots (C)",
+    "what": "mini traces are the small version of the real plots",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "legend pills",
+    "to": "traces in the plots",
+    "what": "pill colour names the trace colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "braces and labels",
+    "to": "x-axis segments",
+    "what": "which passage each token range belongs to",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Matryoshka SAE plot",
+    "to": "Temporal SAE plot",
+    "what": "same spliced input, two methods, stacked for comparison",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "human language production: a person emoji with thought clouds separating high-level features (intent, context, audience) from low-level ones (syntax, word choice)",
+    "verdict": "setting"
+   },
+   {
+    "label": "B)",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "a network glyph feeds existing SAEs (syntactic features only, noisy activations) and Temporal SAEs (context, syntax, semantics; consistent activations)",
+    "verdict": "baseline vs ours"
+   },
+   {
+    "label": "C)",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "top-5 feature activation traces of a Matryoshka SAE and a Temporal SAE over a spliced Latin, genetics and scripture sequence, with feature-label legends",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A), B), C)",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "bold letters head the three panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two stacked activation-trace charts (Matryoshka SAE on top, Temporal SAE below) with top-5 feature traces over 300 tokens",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "one raster image holding both charts with filled coloured traces; segment dividers, braces and legends sit around it"
+   },
+   {
+    "what": "two tiny activation thumbnails: a spiky pink trace and a smooth blue trace",
+    "content": "chart",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small raster crops placed under the labels inside the dashed olive box of panel B"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "person emoji tipping a hand",
+    "stands_for": "a human speaker producing language",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "black node-link network",
+    "stands_for": "the language model whose representations are decomposed",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "cloud-shaped thought bubbles with trailing small circles",
+    "stands_for": "groups of features or concepts (high-level, low-level, recovered features)",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "speech bubble holding an ellipsis",
+    "stands_for": "language being produced",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a spliced sequence of Newton's Principia in Latin, an MMLU genetics question and the Bhagavat Gita",
+    "form": "x-axis segments marked by dotted dividers and braces under the plots",
+    "real_values": true
+   },
+   {
+    "what": "automated-interpretability labels of the five most active features of each SAE, e.g. 'Sentence endings or periods', 'Worship and spiritual practices'",
+    "form": "two legends of coloured pills with short text labels",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "thought-bubble",
+    "drawn_as": "cloud-shaped bubbles with trailing small circles that hold lists of features (High-level: Intent, Context, Audience; Low-level: Syntax, Word choice)",
+    "parts": [
+     "cloud",
+     "circle trail",
+     "monospace list"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a black node-link network glyph with a '…' speech bubble, no box",
+    "parts": [
+     "network glyph",
+     "speech bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "feature-activation-trace",
+    "drawn_as": "filled coloured line traces of activation against token index, one colour per feature, stacked once per method",
+    "parts": [
+     "traces",
+     "token axis",
+     "activation axis"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at panel A top left, drops to panel B, follows the two arrows to the clouds and the mini traces, then jumps along the dashed lines to panel C and reads the top plot, the bottom plot and the legends."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two tinted panels stacked on the left (A peach, B light blue) and one tall white panel C on the right holding two stacked plots, braces and two legends. Dashed olive lines from a box in B open towards C.",
+  "panel_count": 3,
+  "lanes": "2 stacked plots in panel C sharing the same token axis and three aligned text segments",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "right",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.62,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffeecb",
+    "used_for": "tint of panel A (human language production)",
+    "opacity": 0.36
+   },
+   {
+    "hex": "#e8f2ff",
+    "used_for": "tint of panel B (SAE comparison)"
+   },
+   {
+    "hex": "#f8fafc",
+    "used_for": "near-white ground behind the plots"
+   },
+   {
+    "hex": "#d9ead3",
+    "used_for": "'Existing SAEs' chip"
+   },
+   {
+    "hex": "#ff7ccd",
+    "used_for": "'Temporal SAEs' chip"
+   },
+   {
+    "hex": "#f9b868",
+    "used_for": "orange feature trace and legend pill"
+   },
+   {
+    "hex": "#cb3794",
+    "used_for": "magenta feature trace and legend pill"
+   },
+   {
+    "hex": "#7f6000",
+    "used_for": "dashed olive box and leader lines from panel B to panel C"
+   },
+   {
+    "hex": "#636363",
+    "used_for": "grey arrows from the network to the SAE chips"
+   },
+   {
+    "hex": "#bebab2",
+    "used_for": "thin outlines of clouds and plot frames"
+   },
+   {
+    "hex": "#3d0df5",
+    "used_for": "blue feature trace and legend pill",
+    "approx": true
+   },
+   {
+    "hex": "#0e9aa7",
+    "used_for": "teal feature trace and legend pill",
+    "approx": true
+   },
+   {
+    "hex": "#b58fcb",
+    "used_for": "purple feature trace and legend pill",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt light grey-beige outlines on clouds and plots, 0.75 pt dashed olive box and leader lines, thin grey arrows",
+  "font": "sans (Inter) 2.5-6 pt, mostly 3.5 pt; monospace (Space Mono) inside thought clouds; bold for panel letters, title and legend heads",
+  "corners": "rounded",
+  "arrows": "two thin straight grey arrows from the network to the chips; dashed olive leader lines to panel C; otherwise no arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green chip = existing SAEs, hot-pink chip = Temporal SAEs; warm tint = human language (A), cool tint = SAE comparison (B); pill colours name the traces within one plot, and the same five colours are reused for different features in the two legends; pink spiky versus blue smooth thumbnails = noisy versus consistent",
+  "line_style_means": "dashed olive box and lines = zoom from the thumbnails to the full plots; dotted black verticals in the plots = boundaries between the three passages",
+  "shape_means": "clouds = groups of features or thoughts, rounded chips = method names, braces = text segments",
+  "marker_means": "letters A, B, C head the panels",
+  "emphasis": "saturated pink Temporal SAEs chip; the visual contrast between spiky and smooth traces; legend labels that read as meanings (semantic labels for temporal features, syntactic labels for baseline ones)",
+  "reusable_patterns": [
+   "everyday analogy panel: person emoji with thought clouds splitting high-level from low-level",
+   "mini thumbnails of the real plots inside a dashed box, tied by dashed leader lines to the full plots",
+   "two stacked plots of two methods over the same spliced input, a brace per text segment",
+   "legend pills carrying auto-generated feature labels beside each plot",
+   "colour-coded method chips used as row labels"
+  ],
+  "weaknesses": [
+   "very small text (3-3.5 pt) in clouds and legends and tiny tick labels in the raster plots",
+   "the same pill colours stand for different features in the two legends",
+   "the link between the thumbnails and the Existing and Temporal SAE rows is by position only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real activation traces of both SAEs over the spliced text",
+   "automated-interpretability feature labels",
+   "the three real passages named under the plot"
+  ],
+  "stock": [
+   "person emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "thought clouds and speech bubbles",
+   "tinted panels",
+   "method chips",
+   "dashed leader lines and braces",
+   "network glyph"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "person emoji with thought clouds",
+   "network glyph",
+   "method chips Existing SAEs and Temporal SAEs",
+   "mini activation thumbnails in a dashed box",
+   "stacked activation-trace plots",
+   "text-segment braces",
+   "legend pills"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "sparse autoencoders",
+   "interpretability",
+   "temporal consistency",
+   "language models",
+   "feature activations",
+   "semantic versus syntactic features",
+   "Matryoshka SAE"
+  ],
+  "tags": [
+   "zoom-callout",
+   "visual-metaphor",
+   "model-pictogram",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "feature-label-legend",
+    "what": "coloured pill keys beside a plot whose labels are auto-generated natural-language descriptions of the plotted features"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put a tiny thumbnail of the measured result inside the conceptual panel and tie it with dashed leader lines to the full plots, so the schematic claim and its evidence share one figure; open with an everyday analogy panel for the intuition.",
+  "suits": "Motivation figures for methods whose benefit is a qualitative behaviour, such as smoothness or less noise, best shown by a real output plot beside a conceptual contrast."
+ },
+ "tags": [
+  "lettered panels",
+  "pastel tinted panels",
+  "thought-cloud bubbles",
+  "raster plots",
+  "dashed zoom leader lines",
+  "colour-pill legends"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "5 Results (p.7-8)"
+  ],
+  "evidence": [
+   "While existing SAEs mostly recover syntactic information, T-SAEs balance recovery of semantics, syntax, and context.",
+   "Human language production involves high-level features such as semantic content and surrounding context",
+   "T-SAEs (bottom) smoothly detect the semantic shifts in the passage"
+  ]
+ },
+ "summary": "Temporal Sparse Autoencoders (T-SAEs) add a temporal contrastive loss so that SAE features track meaning that changes slowly over tokens. The figure has three lettered panels. A) A person emoji with thought clouds splits language production into high-level features (intent, context, audience) and low-level ones (syntax, word choice). B) A network glyph feeds two SAE types: existing SAEs yield syntactic features only, T-SAEs yield context, syntax and semantics; a dashed box holds two mini traces, noisy versus temporally consistent. C) Dashed leader lines open into two real stacked activation plots over a spliced Latin, genetics and scripture text, with coloured legends of auto-generated feature labels.",
+ "summary_zh": "T-SAE 用时间对比损失让特征随语义缓慢变化。图分三块：A 用人物和思维云区分高层与低层语言特征；B 对比现有 SAE 只抓句法与 T-SAE 兼顾语义；C 用虚线引线放大到拼接文本上的两组真实激活曲线，并配特征含义图例。",
+ "confidence": "high",
+ "notes": "Pre-screen kinds kept. Panel C's two charts are one placed bitmap; the two thumbnails in panel B are separate small bitmaps. The person emoji is listed as a text glyph in the digest, taken here as a bitmap. The network glyph is read as the language model from the layout; the caption does not name it.",
+ "venue": "ICLR26"
+}

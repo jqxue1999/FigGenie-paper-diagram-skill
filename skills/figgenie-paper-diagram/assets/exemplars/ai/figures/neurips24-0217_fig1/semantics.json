@@ -1,0 +1,490 @@
+{
+ "paper_id": "neurips24-0217",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OSWorld",
+  "one_liner": "A scalable real computer environment and a 369-task benchmark for multimodal agents, with task setup, execution-based evaluation and interactive learning.",
+  "domain": [
+   "computer-use agents",
+   "benchmark environment",
+   "multimodal agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "one agent exchanging observations and actions with a blue virtual-machine region, with set-up and evaluation arrows; two screenshot rows with dashed cursor trails above show real task runs",
+  "argues": "OSWorld offers one real, scalable computer environment where agents set up tasks, act with mouse and keyboard across arbitrary apps and operating systems, and are scored by execution-based evaluation.",
+  "subject": "two real desktop tasks as screenshot rows, and below the agent, task config, virtual machine, observation and action arrows, final state and evaluation",
+  "elements": [
+   {
+    "name": "Task Instruction (See examples above)",
+    "type": "data",
+    "role": "natural-language task given to the agent; the note ties it to the two screenshot rows",
+    "drawn_as": "grey rounded rectangle, two lines of text",
+    "container": "diagram band",
+    "is_contribution": null
+   },
+   {
+    "name": "Task Initial State Setup Config",
+    "type": "data",
+    "role": "configuration that sets the initial state of the environment for a task",
+    "drawn_as": "wide light-grey rounded rectangle at the top left of the diagram",
+    "container": "diagram band",
+    "is_contribution": true
+   },
+   {
+    "name": "Agent (e.g., GPT-4V)",
+    "type": "actor",
+    "role": "multimodal model that reads observations and predicts actions",
+    "drawn_as": "light-blue rounded rectangle with a bold black outline, bold name and a regular example model below",
+    "container": "diagram band",
+    "is_contribution": false
+   },
+   {
+    "name": "OSWorld Environment",
+    "type": "region",
+    "role": "the real computer environment run in virtual machines",
+    "drawn_as": "large light-blue rounded region with a bold blue label at the bottom",
+    "container": "diagram band",
+    "is_contribution": true
+   },
+   {
+    "name": "Virtual Machine(s)",
+    "type": "container",
+    "role": "holds the operating systems, applications and interfaces the agent can use",
+    "drawn_as": "white rounded box with three columns separated by thin vertical rules and a bold title on top",
+    "container": "OSWorld Environment",
+    "is_contribution": true
+   },
+   {
+    "name": "OS",
+    "type": "label",
+    "role": "operating systems supported",
+    "drawn_as": "column with Apple, Ubuntu and Windows logos above the word OS",
+    "container": "Virtual Machine(s)",
+    "is_contribution": null
+   },
+   {
+    "name": "Arbitrary Apps",
+    "type": "label",
+    "role": "applications the tasks may use",
+    "drawn_as": "column with a grid of app logos (file manager, VLC, GIMP, Chrome, three dots, Thunderbird, Excel, VS Code, PowerPoint)",
+    "container": "Virtual Machine(s)",
+    "is_contribution": null
+   },
+   {
+    "name": "Interfaces",
+    "type": "label",
+    "role": "ways of interacting with a computer",
+    "drawn_as": "column with a GUI-window icon with a gear and a terminal-window icon",
+    "container": "Virtual Machine(s)",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation: screenshot, a11y-tree",
+    "type": "data",
+    "role": "what the agent receives from the environment",
+    "drawn_as": "bold label above a dashed camera-frame icon and a code-bracket icon, monospace captions",
+    "container": "diagram band",
+    "is_contribution": null
+   },
+   {
+    "name": "Action: mouse, keyboard",
+    "type": "data",
+    "role": "what the agent sends back",
+    "drawn_as": "bold label below a cursor-and-hand icon and a keyboard icon, monospace captions",
+    "container": "diagram band",
+    "is_contribution": null
+   },
+   {
+    "name": "Final State",
+    "type": "data",
+    "role": "environment state read after the run",
+    "drawn_as": "light-grey rounded rectangle at the right",
+    "container": "diagram band",
+    "is_contribution": null
+   },
+   {
+    "name": "Execution-based Evaluation",
+    "type": "operation",
+    "role": "scores the final state with a custom script",
+    "drawn_as": "bold two-line text at the bottom right, fed by a down arrow",
+    "container": "diagram band",
+    "is_contribution": true
+   },
+   {
+    "name": "Task instruction 1 / 2",
+    "type": "text-block",
+    "role": "the two example tasks in words",
+    "drawn_as": "one sentence in 6.5 pt sans above each screenshot row",
+    "container": "screenshot rows",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Task Instruction",
+    "to": "Agent",
+    "what": "input: the instruction goes to the agent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Instruction",
+    "to": "Task Initial State Setup Config",
+    "what": "unlabelled up arrow: each task carries its own set-up configuration",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Initial State Setup Config",
+    "to": "OSWorld Environment",
+    "what": "task initial env state setup",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OSWorld Environment",
+    "to": "Agent",
+    "what": "input: observation as screenshot and a11y-tree",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent",
+    "to": "OSWorld Environment",
+    "what": "predict: action by mouse and keyboard",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OSWorld Environment",
+    "to": "Final State",
+    "what": "get env state",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Final State",
+    "to": "Execution-based Evaluation",
+    "what": "the final state is checked by an evaluation script",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "screenshot 1",
+    "to": "screenshot 2 and 3 of the same row",
+    "what": "dashed trail with cursor, hand and text-caret icons shows the mouse path between frames",
+    "kind": "time",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Task instruction 1 / 2",
+    "to": "the screenshot row below it",
+    "what": "the sentence names the task shown in the row",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Task instruction 1",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "three screenshots of a spreadsheet task: sheet, receipt photo in the image viewer, updated sheet, joined by a dashed cursor trail",
+    "verdict": "setting"
+   },
+   {
+    "label": "Task instruction 2",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "three screenshots of a coding task: game window, code editing with text carets, game running, joined by a dashed white trail",
+    "verdict": "setting"
+   },
+   {
+    "label": "OSWorld Environment",
+    "kind": "actor-interaction",
+    "axis": "overview",
+    "shows": "task set-up config, agent, virtual machines with OS, apps and interfaces, observation and action exchange, final state, evaluation",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Task instruction 1, Task instruction 2",
+    "kind": "section",
+    "at": "sentence above each screenshot row",
+    "what": "heads and names the two example tasks"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "desktop screenshots of the bookkeeping task",
+    "content": "screenshot",
+    "role": "other",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "wide frames with soft shadow in one row: spreadsheet, Ubuntu desktop with a receipt photo, updated spreadsheet; a dashed trail with cursor and hand icons runs across them"
+   },
+   {
+    "what": "desktop screenshots of the snake-game task",
+    "content": "screenshot",
+    "role": "other",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "dark VS Code windows in one row: initial game window, code with I-beam carets, running game; white dashed trail with a cursor and hand"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "Apple, Ubuntu and Windows logos",
+    "stands_for": "operating systems supported",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "app logos (file manager, VLC, GIMP, Chrome, Thunderbird, Excel, VS Code, PowerPoint) and a row of three dots",
+    "stands_for": "arbitrary applications",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "GUI window with a gear, terminal window",
+    "stands_for": "interfaces: graphical and command line",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "dashed camera frame and code brackets",
+    "stands_for": "screenshot and accessibility-tree observations",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "arrow cursor with hand, keyboard",
+    "stands_for": "mouse and keyboard actions",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "Task instruction 1: update the bookkeeping sheet with recent transactions from the provided folder",
+    "form": "sentence above three real screenshots joined by a cursor trail",
+    "real_values": true
+   },
+   {
+    "what": "Task instruction 2: tweak the code so the snake can actually eat the food",
+    "form": "sentence with an ellipsis for omitted details above three real screenshots",
+    "real_values": true
+   },
+   {
+    "what": "an example agent",
+    "form": "(e.g., GPT-4V) under the word Agent",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "two parallel opposite arrows between Agent and the environment region: observation back, action out; no reward arrow, an evaluation branch on the right instead",
+    "parts": [
+     "Agent",
+     "environment region",
+     "observation arrow",
+     "action arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "light-blue rounded box with a bold outline labelled Agent, model name in brackets underneath",
+    "parts": [
+     "box",
+     "example model name"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the instruction sentence and the first screenshot row at the top, follows the dashed trails left to right through both rows, then reads the diagram from Task Instruction through the Agent and the environment to the evaluation at the right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked full-width bands: a row of three screenshots under task instruction 1, a row of three under task instruction 2, and an architecture band with grey boxes at the left, the Agent in the middle and a blue environment region at the right.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.74,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c9daf8",
+    "used_for": "light blue region of the OSWorld Environment"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "fill of the Agent box"
+   },
+   {
+    "hex": "#efefef",
+    "used_for": "light grey boxes: Task Instruction, Task Initial State Setup Config, Final State"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "soft grey shadow under screenshots and boxes"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey outlines of the boxes and the arrows"
+   },
+   {
+    "hex": "#010000",
+    "used_for": "text and the bold Agent outline"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt dark-grey outlines and arrows, 0.5 pt thin rules; dashed white or black trails over the screenshots",
+  "font": "sans (Gill Sans, Google Sans) 6-7 pt for labels and 6.5 pt for the task sentences; bold monospace 4 pt for arrow and icon captions; bold blue label for the environment",
+  "corners": "mixed",
+  "arrows": "thin dark-grey straight and elbow arrows with small filled heads, captioned in monospace; two opposite arrows for observation and action",
+  "rendering": "mixed",
+  "effects": "soft drop shadows under screenshots and boxes",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = the OSWorld environment region and the Agent box; grey = task, config and state data boxes; white = the virtual-machine contents",
+  "line_style_means": "dashed trail over screenshots = the mouse path from one frame to the next; solid arrows with monospace captions = data passed between agent, config and environment",
+  "shape_means": "rounded grey box = data or config; bold-outlined blue box = agent; large blue region = environment; white inner box = virtual machine",
+  "marker_means": "cursor, hand and I-beam icons on the trails = pointer move, click and text caret",
+  "emphasis": "the bold black outline on the Agent box and the bold blue label OSWorld Environment; real screenshots take most of the area",
+  "reusable_patterns": [
+   "two rows of real screenshots joined by dashed cursor trails to show one agent episode per task",
+   "the task sentence as a caption line above each row",
+   "environment as a blue region holding a white box with columns of OS logos, app logos and interface icons",
+   "arrows captioned in monospace with the real API words (input, predict, get env state)",
+   "observation and action as two parallel opposite arrows with icon pairs (screenshot, a11y-tree; mouse, keyboard)",
+   "a note such as (See examples above) tying the architecture to the screenshots"
+  ],
+  "weaknesses": [
+   "text inside the screenshots cannot be read at print size",
+   "the unlabelled up arrow from Task Instruction to the set-up config is ambiguous",
+   "monospace captions are only 4 pt"
+  ]
+ },
+ "resources": {
+  "own": [
+   "screenshots of real desktop task runs (LibreOffice Calc, Ubuntu image viewer, VS Code)",
+   "task instruction wording",
+   "mouse trajectories"
+  ],
+  "stock": [
+   "operating-system and application logos",
+   "interface, observation and action icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "grey boxes, agent box, environment region and arrows",
+   "dashed trail paths"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two rows of desktop screenshots with dashed mouse trails",
+   "task instruction sentences",
+   "Agent box labelled GPT-4V",
+   "blue environment region with OS and app logos",
+   "observation and action arrows with icons",
+   "grey config and final-state boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "computer-use agents",
+   "benchmark",
+   "virtual machines",
+   "multimodal agents",
+   "execution-based evaluation",
+   "GUI grounding",
+   "desktop tasks",
+   "OS file I/O"
+  ],
+  "tags": [
+   "gui-screen",
+   "task-definition",
+   "brand-logo-icon",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "mouse-trace-overlay",
+    "what": "a dashed cursor path with cursor, hand and text-caret icons drawn across consecutive screenshots to show the agent's actions"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open with real screen captures of two tasks joined by dashed cursor trails so the reader sees what an agent does, then draw the environment as one blue region holding the logos of the systems, apps and interfaces it covers, with parallel observation and action arrows to a single agent box.",
+  "suits": "benchmarks and environments for GUI or tool-using agents where breadth of applications and real task traces are the selling point."
+ },
+ "tags": [
+  "screenshot rows",
+  "dashed cursor trails",
+  "blue environment region",
+  "logo grid",
+  "monospace arrow captions",
+  "grey data boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "This executable environment allows free-form raw keyboard and mouse control of real computer applications",
+   "supports initial task state configuration, execution-based evaluation, and interactive learning across mainstream operating systems",
+   "first-of-its-kind scalable, real computer environment for multimodal agents"
+  ]
+ },
+ "summary": "OSWorld is a scalable real computer environment and a benchmark of 369 tasks for multimodal agents. The figure stacks two rows of real screenshots, one per example task, with a sentence above each and a dashed cursor trail through the frames: a bookkeeping spreadsheet update with a receipt photo, and a snake-game code fix in VS Code. Below, the architecture shows a task instruction and a set-up config at the left, an Agent box (e.g., GPT-4V) in the middle exchanging observations (screenshot, a11y-tree) and actions (mouse, keyboard) with a blue environment region of virtual machines holding OS, app and interface logos, and a final state feeding execution-based evaluation.",
+ "summary_zh": "OSWorld 是面向多模态智能体的真实计算机环境与 369 题基准。图上方两行真实截图配任务句子和虚线鼠标轨迹（记账表格、贪吃蛇代码修复）；下方架构图画出任务指令、初始状态配置、智能体与虚拟机环境之间的观察与动作，以及基于执行的评测。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The digest counts 58 placed bitmaps because each screenshot is stored as two layers (image plus shadow or mask); six screenshots are visible. The meaning of the unlabelled up arrow from Task Instruction to the set-up config is inferred.",
+ "venue": "NeurIPS24"
+}

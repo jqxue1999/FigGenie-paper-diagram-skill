@@ -1,0 +1,490 @@
+{
+ "paper_id": "icml26-0073",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TEDBench",
+  "one_liner": "Large-scale non-redundant benchmark for protein fold classification from TED and AlphaFold structures with 965 CATH topology labels.",
+  "domain": [
+   "protein fold classification",
+   "benchmark construction",
+   "structural biology"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "a task strip and a sunburst of the label space at left, three stacked tiles of statistics and examples at right, divided by dotted lines",
+  "argues": "TEDBench is large, non-redundant and long-tailed: 965 hierarchical CATH topology labels over 462K predicted structures, with 27K experimental structures held out.",
+  "subject": "Protein structure inputs, the CATH label hierarchy as a sunburst, label-count and split statistics, and two example fold functions.",
+  "elements": [
+   {
+    "name": "Protein Structure Inputs",
+    "type": "label",
+    "role": "title of the input column holding two protein renders",
+    "drawn_as": "10 pt serif title above two large red ribbon renders",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Hierarchical CATH Prediction",
+    "type": "operation",
+    "role": "the task: predict the CATH label of a structure",
+    "drawn_as": "big solid black arrow with a three-line 10 pt label above it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CATH Label Space (965 Topology Labels)",
+    "type": "container",
+    "role": "the label hierarchy the task predicts into",
+    "drawn_as": "10 pt title and subtitle above the sunburst",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "TEDBench",
+    "type": "label",
+    "role": "names the benchmark at the hub of the label hierarchy",
+    "drawn_as": "logo with wordmark in the white hole of the sunburst",
+    "container": "CATH Label Space (965 Topology Labels)",
+    "is_contribution": true
+   },
+   {
+    "name": "Class ring (1, 2, 3, 4)",
+    "type": "region",
+    "role": "innermost ring: the four CATH classes Mainly Alpha, Mainly Beta, Alpha-Beta, Few Secondary Struct.",
+    "drawn_as": "inner sunburst ring in red, rose, orange and brown wedges",
+    "container": "CATH Label Space (965 Topology Labels)",
+    "is_contribution": false
+   },
+   {
+    "name": "Architecture (A) ring",
+    "type": "region",
+    "role": "middle ring: architectures within each class, wedges labelled such as 3.30, 3.40, 1.10, 1.20",
+    "drawn_as": "olive-green wedges",
+    "container": "CATH Label Space (965 Topology Labels)",
+    "is_contribution": false
+   },
+   {
+    "name": "Topology (T) ring",
+    "type": "region",
+    "role": "outer ring: the 965 topology labels, labelled such as 3.40.50, 1.10.287, 1.20.5, with many slivers",
+    "drawn_as": "blue-grey wedges and hairline slivers with rotated tiny labels",
+    "container": "CATH Label Space (965 Topology Labels)",
+    "is_contribution": false
+   },
+   {
+    "name": "legend box",
+    "type": "label",
+    "role": "colour key: Architecture (A), Topology (T), Class 1 Mainly Alpha, Class 2 Mainly Beta, Class 3 Alpha-Beta, Class 4 Few Secondary Struct.",
+    "drawn_as": "grey box with coloured dots, overlapping the lower right of the sunburst",
+    "container": "CATH Label Space (965 Topology Labels)",
+    "is_contribution": false
+   },
+   {
+    "name": "Label: 3.40.50 (most samples: 44933) and Label: 3.90.1700 (least samples: 8)",
+    "type": "label",
+    "role": "name the two extremes of the long tail under the ends of the curve",
+    "drawn_as": "two small serif captions under the left and right end of the plot",
+    "container": "Long-Tail Distribution",
+    "is_contribution": null
+   },
+   {
+    "name": "462,175 AlphaFold Structures / 27,638 Experimental Structures",
+    "type": "label",
+    "role": "headline counts of the benchmark, above the split bar",
+    "drawn_as": "two-line 7.5 pt heading",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Train 75.5% / Val. 9.4% / Test 9.4% / Exp. 5.6%",
+    "type": "data",
+    "role": "segments of the split bar; Exp. is the experimental external test set",
+    "drawn_as": "stacked bar segments with colour squares and percentages as inline legend",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Example Functional Roles",
+    "type": "container",
+    "role": "two example folds with what they do: 3.40.50 Rossmann Fold (binds nucleotide cofactors, amino acid metabolism) and 2.60.40 Immunoglobulin-like (cell-surface recognition, molecular interactions)",
+    "drawn_as": "two-column ruled table: fold id and name on top, two structure renders, description underneath",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Protein Structure Inputs",
+    "to": "CATH Label Space",
+    "what": "Hierarchical CATH Prediction",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Class ring",
+    "to": "Architecture (A) ring",
+    "what": "each class splits into architectures (nested rings)",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Architecture (A) ring",
+    "to": "Topology (T) ring",
+    "what": "each architecture splits into topology labels",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "legend box",
+    "to": "sunburst rings",
+    "what": "colour key for the rings and classes",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Label: 3.40.50 and Label: 3.90.1700 captions",
+    "to": "left and right end of the long-tail curve",
+    "what": "mark the most and least frequent topology labels",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "462,175 AlphaFold Structures / 27,638 Experimental Structures",
+    "to": "Train, Val., Test, Exp. bar",
+    "what": "how the structures are split",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "3.40.50 Rossmann Fold",
+    "to": "3.40.50 wedge of the sunburst and the most-samples label",
+    "what": "same CATH id, shown only as repeated text",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Protein Structure Inputs",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "two protein structure renders as the inputs of the classification task",
+    "verdict": "setting"
+   },
+   {
+    "label": "CATH Label Space (965 Topology Labels)",
+    "kind": "scope-overview",
+    "axis": "overview",
+    "shows": "sunburst of the Class, Architecture and Topology hierarchy with the TEDBench logo at the hub",
+    "verdict": null
+   },
+   {
+    "label": "Long-Tail Distribution",
+    "kind": "scope-overview",
+    "axis": "overview",
+    "shows": "samples per topology label falling from 44933 to 8",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "scope-overview",
+    "axis": "overview",
+    "shows": "462,175 AlphaFold and 27,638 experimental structures split into train, val., test and experimental",
+    "verdict": null
+   },
+   {
+    "label": "Example Functional Roles",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "two example folds with structures and a one-line biological role each",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "CATH ids such as 1.10.287, 3.40.50, 2.60.40",
+    "kind": "identity",
+    "at": "wedge labels of the sunburst, plot captions and table headers",
+    "what": "names classes, architectures and topology labels"
+   },
+   {
+    "marker": "panel titles",
+    "kind": "section",
+    "at": "above each unit",
+    "what": "Protein Structure Inputs, CATH Label Space, Long-Tail Distribution, Example Functional Roles head their units"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two protein structure renders (red helices and strands with grey loops) under Protein Structure Inputs",
+    "content": "molecule",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "large ribbon renders stacked vertically on white, no frame"
+   },
+   {
+    "what": "sunburst chart of the CATH label space: inner ring Class 1-4, middle ring Architecture, outer ring Topology wedges",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "very large, wedges labelled with CATH ids from 4 pt down to 0.5 pt, logo in the hole, grey legend box over the lower right"
+   },
+   {
+    "what": "long-tail curve of samples per topology label, from 44933 down to 8",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "blue line with red dots, y ticks 0, 20k, 40k, no x ticks, the two extreme labels written under its ends"
+   },
+   {
+    "what": "one stacked horizontal bar for the data split: Train 75.5%, Val. 9.4%, Test 9.4%, Exp. 5.6%",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "bar under a two-line heading of structure counts, colour squares with percentages as inline legend"
+   },
+   {
+    "what": "protein renders for two example folds, two structures each (Rossmann fold, immunoglobulin-like)",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two wide images in the cells of a two-column table under fold id and name, with a text description below"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "TEDBench logo: red protein ribbon under a rainbow arc with the wordmark TEDBench",
+    "stands_for": "the benchmark itself, at the hub of the label hierarchy",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "two example folds with their roles: 3.40.50 Rossmann Fold (bind nucleotide cofactors, involved in amino acid metabolism) and 2.60.40 Immunoglobulin-like (cell-surface recognition, enables molecular interactions)",
+    "form": "two-column table with id, name, structures and description",
+    "real_values": true
+   },
+   {
+    "what": "the extremes of the long tail: label 3.40.50 with 44933 samples and label 3.90.1700 with 8 samples",
+    "form": "two captions under the plot ends",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "sunburst-taxonomy",
+    "drawn_as": "three concentric rings (Class, Architecture, Topology) coloured by level, a logo in the white hole and a grey legend box overlapping the lower right",
+    "parts": [
+     "Class ring",
+     "Architecture ring",
+     "Topology ring",
+     "logo hub",
+     "legend box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "headline counts above a single stacked split bar with inline percentages instead of a card or thumbnail stack",
+    "parts": [
+     "count heading",
+     "stacked bar",
+     "inline legend"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the protein inputs top-left, follows the black arrow into the central sunburst, then reads the right column top to bottom: long tail, split, example roles."
+ },
+ "layout": {
+  "arrangement": "dashboard",
+  "arrangement_note": "Left to right: two protein renders with a big black arrow into the central sunburst of CATH labels; a dotted vertical line then separates a right column of three stacked tiles divided by dotted horizontal lines (long-tail plot, split bar, example functional roles).",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.24,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a6b8c6",
+    "used_for": "Topology ring wedges (blue-grey, close variants #a8b5cb and #a6b3cb also used)"
+   },
+   {
+    "hex": "#a8b58b",
+    "used_for": "Architecture ring wedges (olive green, close variants #a9b290 and #a6ae91 also used)"
+   },
+   {
+    "hex": "#d77c7c",
+    "used_for": "Class 1 Mainly Alpha wedge and, as it looks, the Train segment"
+   },
+   {
+    "hex": "#c96f7f",
+    "used_for": "Class 2 Mainly Beta wedge"
+   },
+   {
+    "hex": "#d08a6b",
+    "used_for": "Class 3 Alpha-Beta wedge"
+   },
+   {
+    "hex": "#e1e1e1",
+    "used_for": "legend box over the sunburst",
+    "opacity": 0.97
+   },
+   {
+    "hex": "#7fb3d5",
+    "used_for": "blue line of the long-tail curve"
+   },
+   {
+    "hex": "#cfcfcf",
+    "used_for": "thin rules of the example table"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt white borders between sunburst wedges, 0.5 pt dotted black dividers, thin grey table rules; the black arrow is a heavy solid shape",
+  "font": "serif (Times New Roman), 10 pt panel titles, 7.5 pt sub-headings, 5.5-6.5 pt captions, 0.5-4 pt wedge labels",
+  "corners": "square",
+  "arrows": "one big solid black block arrow from inputs to the label space",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "sunburst: red, rose, orange and brown = CATH Class 1-4 (inner ring), green = Architecture ring, blue = Topology ring (per legend box); split bar: red = Train, green = Val., blue = Test, grey = Exp.; red ribbons = protein structures",
+  "line_style_means": "dotted black lines separate the left composite from the three right tiles; the solid black arrow means the prediction task",
+  "shape_means": "ring = one level of the CATH hierarchy; wedge = one category; ruled table cell = one example fold",
+  "marker_means": "CATH ids name wedges and folds; percentages and counts size the data split; 'most samples' and 'least samples' captions mark the plot ends",
+  "emphasis": "the sunburst is by far the largest element and carries the benchmark logo in its hole; the statistics tiles are compact",
+  "reusable_patterns": [
+   "sunburst of the label hierarchy with the benchmark logo in the hole and a legend box over one corner",
+   "right-hand column of compact tiles divided by dotted lines",
+   "headline counts above one stacked split bar with inline colour legend",
+   "long-tail curve with its most and least frequent labels written under the ends",
+   "two-column table pairing example renders with one-line roles",
+   "task stated as inputs, a big block arrow and the label space"
+  ],
+  "weaknesses": [
+   "wedge labels are 0.5-1.5 pt and cannot be read at print size",
+   "the legend box covers part of the outer ring"
+  ]
+ },
+ "resources": {
+  "own": [
+   "protein structure renders",
+   "sunburst built from TEDBench labels",
+   "long-tail curve",
+   "split percentages",
+   "TEDBench logo"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "black arrow",
+   "dotted dividers",
+   "example table",
+   "split bar",
+   "legend box"
+  ],
+  "unknown": [
+   "the tool used for the protein renders"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "two red protein ribbon renders",
+   "big black arrow",
+   "CATH sunburst with logo hub",
+   "long-tail line chart",
+   "stacked split bar",
+   "fold example table with renders"
+  ],
+  "sample_data": "molecule",
+  "keywords": [
+   "protein fold classification",
+   "CATH hierarchy",
+   "TEDBench",
+   "AlphaFold structures",
+   "long-tail distribution",
+   "benchmark",
+   "non-redundant",
+   "topology labels"
+  ],
+  "tags": [
+   "title-branding",
+   "task-definition",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "sunburst-taxonomy",
+    "what": "a multi-ring sunburst chart of a label hierarchy, coloured by level, with a logo or title in the hole and a legend box"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Summarise a benchmark as a dashboard: the task at the left as inputs plus a big arrow into the label hierarchy drawn as a sunburst with the benchmark logo in its hole, then a right column of compact tiles (long-tail plot, split bar, example records) divided by dotted lines.",
+  "suits": "Dataset or benchmark papers with a hierarchical label space and statistics that fit small tiles."
+ },
+ "tags": [
+  "dashboard-composite",
+  "sunburst-chart",
+  "dotted-dividers",
+  "serif-text",
+  "protein-renders",
+  "stacked-bar",
+  "table-of-examples"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Benchmark (p.4)"
+  ],
+  "evidence": [
+   "TEDBench is a large-scale, non-redundant benchmark for protein fold classification.",
+   "Our TEDBench builds upon TED and contains more than 460K predicted structures and 27K experimental structures as an external test set.",
+   "We use a ratio of [0.8, 0.1, 0.1], preserving class proportions across splits."
+  ]
+ },
+ "summary": "TEDBench is a large non-redundant benchmark for protein fold classification built from TED and AlphaFold structures, with 27K experimental structures as an external test set. Figure 1 is a dashboard-style overview. At left, two red protein ribbon renders sit under 'Protein Structure Inputs' and a big black arrow labelled 'Hierarchical CATH Prediction' leads into a sunburst of the CATH label space (965 topology labels) with the TEDBench logo in its hole and a grey legend box. A dotted divider separates a right column of three tiles: a long-tail curve of samples per topology label, a stacked bar of the 462,175 AlphaFold and 27,638 experimental structures split into train, validation, test and experimental, and a table of two example folds with their functions.",
+ "summary_zh": "TEDBench 是大规模非冗余蛋白折叠分类基准。图 1 为仪表盘式总览：左侧输入结构经 CATH 层级预测指向 965 个拓扑标签的旭日图，右侧三块依次是长尾分布、数据划分条和示例折叠功能。",
+ "confidence": "high",
+ "notes": "The prior listed contribution-mosaic first with variant benchmark-dashboard; benchmark-dashboard is a scope-overview variant, so scope-overview is primary here. Panel count 5 counts the two titled left units and the three tiles divided by dotted lines. Wedge size is not stated in the figure, so nothing is claimed about what wedge area encodes. The Train segment colour is read off the picture; the digest does not list the bar fills separately.",
+ "venue": "ICML26"
+}

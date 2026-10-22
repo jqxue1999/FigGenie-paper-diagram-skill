@@ -1,0 +1,397 @@
+{
+ "paper_id": "icml26-0295",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SWING",
+  "one_liner": "Space Walks for Implicit Network Graphs: random-feature graph computations on implicit graphs by walking in the continuous embedding space with Gumbel-softmax sampling.",
+  "domain": [
+   "graph random features",
+   "implicit graphs",
+   "random walks"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "the same nodes redrawn as points, graph and walked graph above a red line, then the SWING step as a pictorial formula and a continuous-space walk below",
+  "argues": "SWING replaces walks on a built graph by walks in the nodes' continuous space, each step a Gumbel-softmax convex sum of vectors to the nodes.",
+  "subject": "A bunny point cloud turned into a graph and walked, versus a Gumbel-softmax step and a walk in continuous space.",
+  "elements": [
+   {
+    "name": "zoom circle of nodes",
+    "type": "region",
+    "role": "magnified neighbourhood of the point cloud: the points are the nodes of the i-graph",
+    "drawn_as": "large red circle with dark-grey dots and dotted ellipses, tied by two red lines to a small red circle on the bunny",
+    "container": "top row",
+    "is_contribution": false
+   },
+   {
+    "name": "explicit graph",
+    "type": "data",
+    "role": "graph with nodes and weighted edges built from the points (regular GRF)",
+    "drawn_as": "green circular nodes joined by blue lines, dotted ellipses at the margins",
+    "container": "top row",
+    "is_contribution": false
+   },
+   {
+    "name": "random walk on the graph",
+    "type": "operation",
+    "role": "walk over the nodes of the constructed graph",
+    "drawn_as": "same graph with thick blue arrows along some edges",
+    "container": "top row",
+    "is_contribution": false
+   },
+   {
+    "name": "red curve and arrow",
+    "type": "label",
+    "role": "separates regular GRF above from SWING below and points to the SWING scheme",
+    "drawn_as": "red curved line from the zoom circle ending in a red arrowhead at the bottom-right scheme",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "c1 ... c9 = norm(exp)(log bars + tau bars)",
+    "type": "formula",
+    "role": "convex coefficients over nine neighbours from log-weights plus Gumbel variables",
+    "drawn_as": "column vector c1-c9 in brackets equal to norm(exp) of a bracketed column of log-labelled bars in a red-to-light-blue ramp plus a column of grey-blue bars marked tau",
+    "container": "bottom row",
+    "is_contribution": true
+   },
+   {
+    "name": "walker and neighbours +c1x ... +c9x",
+    "type": "data",
+    "role": "current location of the walker and the vectors to nine neighbouring nodes, each scaled by its coefficient",
+    "drawn_as": "green walker node with thin blue arrows to nine nodes coloured like the bars, labelled +c1x to +c9x, dotted ellipses",
+    "container": "bottom row",
+    "is_contribution": true
+   },
+   {
+    "name": "orange arrow",
+    "type": "operation",
+    "role": "the transition: convex sum of the vectors to the neighbours",
+    "drawn_as": "orange arrow left of an equals sign, repeated as the first step of the right-hand walk",
+    "container": "bottom row",
+    "is_contribution": true
+   },
+   {
+    "name": "walk in continuous space",
+    "type": "operation",
+    "role": "SWING walk among unconnected points, no graph materialised",
+    "drawn_as": "green points without edges, an orange first step followed by thick blue arrows ending in an arrowhead, dotted ellipses",
+    "container": "bottom row",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "bunny point cloud",
+    "to": "zoom circle of nodes",
+    "what": "a small region of the cloud is magnified to show the points that act as nodes",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "zoom circle of nodes",
+    "to": "explicit graph",
+    "what": "points become nodes with weighted edges",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "explicit graph",
+    "to": "random walk on the graph",
+    "what": "walks are run on the nodes of the built graph, drawn as blue arrows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "zoom circle of nodes",
+    "to": "walk in continuous space",
+    "what": "SWING skips the graph construction: the red curve leads straight to the continuous-space scheme",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "log-weight bars and tau bars",
+    "to": "c1 ... c9",
+    "what": "norm(exp) of log-weights plus Gumbel variables gives the coefficients",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "c1 ... c9",
+    "to": "neighbour nodes of the star",
+    "what": "each coefficient scales the vector to the node of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "vectors from the walker to its neighbours",
+    "to": "orange arrow",
+    "what": "their convex sum is the transition, joined by an equals sign",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "orange arrow",
+    "to": "walk in continuous space",
+    "what": "the same orange arrow is the first step of the walk, later steps are blue",
+    "kind": "time",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "c1 ... c9, c1x ... c9x",
+    "kind": "identity",
+    "at": "coefficient vector, bars and star nodes",
+    "what": "name the nine neighbours, their coefficients and the weighted vectors"
+   },
+   {
+    "marker": "tau",
+    "kind": "identity",
+    "at": "above the grey-blue bar column",
+    "what": "labels the column of Gumbel variables (read from the caption)"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "coloured bunny point cloud with random colour patches",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "pointillist 3D scan of a bunny in many colours, a small red circle marks the region that is zoomed"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "an i-graph built from a bunny point cloud and one walker step over nine neighbours with coefficients c1-c9",
+    "form": "point-cloud picture, node-link schematics and a pictorial formula with bars",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "point-cloud",
+    "drawn_as": "dense multicoloured dot render of a bunny, with a red circular zoom",
+    "parts": [
+     "point cloud",
+     "zoom circle"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "green circular nodes joined by blue lines, with thick blue arrows for walk steps instead of message passing",
+    "parts": [
+     "nodes",
+     "edges",
+     "walk arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "gumbel-softmax-bars",
+    "drawn_as": "coefficient column equal to norm(exp) of colour-ramped log-weight bars plus grey Gumbel bars, with an equals sign leading to the neighbour star",
+    "parts": [
+     "log-weight bars",
+     "Gumbel bars",
+     "coefficient column",
+     "neighbour star"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the bunny (top-left), follows the grey chevrons through the graph and the walked graph, then follows the red curve down to the bottom row and reads the formula, the star and the continuous-space walk from left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "two tiers: a top row of stages from left to right (bunny with red zoom circle, grey chevron, graph, grey chevron, walked graph) and a bottom row of three schemes (pictorial formula, equals sign, star diagram, then the continuous-space walk at the right); a red curve from the zoom circle to the bottom-right scheme marks the line between regular GRF above and SWING below",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.39,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#0000ff",
+    "used_for": "blue: random-walk arrows, graph edges and the thin vectors from the walker to its neighbours (stroke)"
+   },
+   {
+    "hex": "#38761d",
+    "used_for": "green nodes of the graphs and the walker"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red: zoom circle, red curve and arrow, and the c1 bar and node"
+   },
+   {
+    "hex": "#ff9900",
+    "used_for": "orange transition arrow (stroke)"
+   },
+   {
+    "hex": "#e06666",
+    "used_for": "c2 bar and node"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "c3 bar and node"
+   },
+   {
+    "hex": "#f4cccc",
+    "used_for": "c4 bar and node"
+   },
+   {
+    "hex": "#fce5cd",
+    "used_for": "c5 bar and node"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "c6 bar and node"
+   },
+   {
+    "hex": "#d0e0e3",
+    "used_for": "c8 bar and node, and by look the grey-blue Gumbel bars"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt outlines on nodes and bars, 1-1.5 pt blue arrows and graph edges, 1.5 pt red circle and curve",
+  "font": "sans (Arial) 7 pt for c labels, log, norm(exp) and tau",
+  "corners": "mixed",
+  "arrows": "thick blue arrows with filled heads for walks, thin blue arrowheads for the star vectors, one orange arrow, one red curved arrow, grey chevrons between stages",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = random-walk transitions and graph edges; green = graph nodes; orange = the SWING transition; red = zoom into the point cloud, pointer to the SWING scheme and the strongest neighbour c1; a red-to-light-blue ramp = the neighbour weights c1 to c9 kept in bars, nodes and labels (c7 light green and c9 light blue are not in the digest); grey-blue bars = Gumbel variables; random bunny colours = patches of the point cloud",
+  "line_style_means": "thin blue arrows = vectors from the walker to its neighbours; thick blue arrows = walk steps; red curve with arrowhead = SWING bypasses the explicit graph",
+  "shape_means": "green circle = a node; bar = a weight or noise value; bracketed column = a vector; grey chevron = next stage; red circle = a zoom",
+  "marker_means": "c1 to c9 name the neighbours and coefficients; +c_i x labels = coefficient times the vector to that neighbour; tau labels the noise column; dotted ellipses = the graph continues",
+  "emphasis": "the red curve and arrow lead the eye from the zoom to the SWING scheme; the single orange arrow stands out among blue ones",
+  "reusable_patterns": [
+   "a standard 3D model (bunny point cloud) as the instance, zoomed into a red circle to reveal the nodes",
+   "grey chevrons between snapshots of the same nodes: points, graph, walked graph",
+   "colour-ramped bars with a matching coloured node per entry, so a formula and a star diagram share one colour code",
+   "pictorial formula: column vector equals norm(exp) of bar columns joined by plus signs, then an equals sign to the geometric picture",
+   "one red line that separates the baseline above from the proposed method below, with a red arrow into the new scheme",
+   "orange arrow reused as the first step of the continuous-space walk"
+  ],
+  "weaknesses": [
+   "the red curve is both a divider and a pointer, so the above-versus-below split is explained only in the caption",
+   "the only text is 7 pt c labels, log, norm(exp) and tau; their meaning relies on the caption and text",
+   "the bunny and graph images are bitmaps and cannot be edited",
+   "the link between the star diagram's orange arrow and the walk's first step is not drawn"
+  ]
+ },
+ "resources": {
+  "own": [
+   "node-link schematics of the graph and the walks",
+   "bars and star diagram of one walker step"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "graphs with nodes and edges",
+   "walk arrows",
+   "coefficient bars and node star",
+   "red zoom circle and curve",
+   "grey chevrons"
+  ],
+  "unknown": [
+   "origin of the coloured bunny point-cloud picture (looks like a render of the standard bunny test model)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "coloured bunny point cloud",
+   "red zoom circle",
+   "node-link graph with blue edges",
+   "blue random-walk arrows",
+   "colour-ramped bars",
+   "walker with nine neighbour nodes",
+   "orange step arrow",
+   "grey chevrons"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "graph random features",
+   "implicit graph",
+   "random walk",
+   "point cloud",
+   "Gumbel-softmax",
+   "continuous space",
+   "kernel approximation",
+   "epsilon-neighbourhood graph"
+  ],
+  "tags": [
+   "zoom-callout",
+   "matrix-cell-grid",
+   "colour-coded-groups",
+   "flow-type-arrows"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Use one concrete instance (a point cloud) through the whole figure: zoom into it, show the baseline as chevron-linked snapshots above a red line, then give the new mechanism below as a pictorial formula with colour-ramped bars that shares its colour code with the geometric picture it equals.",
+  "suits": "Mechanism figures for sampling, graph or kernel methods where a formula and a geometric step must be read together on a concrete example."
+ },
+ "tags": [
+  "bunny point cloud",
+  "red line divider",
+  "colour-ramped bars",
+  "pictorial formula",
+  "snapshot chevrons",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction & Related Work (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "SWING bypasses this step by conducting those random walks in the continuous d-dimensional space",
+   "Each transition in such a walk (see: orange arrow) is obtained as a convex sum of the vectors",
+   "That turns out to provide differentiable relaxation of the discrete random walk."
+  ]
+ },
+ "summary": "SWING (Space Walks for Implicit Network Graphs) computes Graph Random Features on implicit graphs, whose edge weights are functions of node feature vectors, without building the graph: random walks happen in the continuous space where the nodes are embedded, each step being a Gumbel-softmax convex combination of vectors to the nodes. Figure 1 uses a bunny point cloud as the example. Above a red line, regular GRF: a red circle zooms into the points, grey chevrons lead to an explicit graph and then to blue random-walk arrows on it. Below, SWING: a pictorial formula (coefficients c1-c9 equal norm(exp) of colour-ramped log-weight bars plus grey Gumbel bars) equals a star of nine coloured neighbours, giving an orange step that starts a blue walk among unconnected green points.",
+ "summary_zh": "SWING 不构造图，直接在节点嵌入的连续空间中随机游走，每步为 Gumbel-softmax 凸组合。图 1 以兔子点云为例：红线上方是常规做法（放大点云、建显式图、游走），下方用柱状公式、九邻居星形图和橙色步长展示 SWING。",
+ "confidence": "high",
+ "notes": "Prior labels kept (worked-walkthrough, concept-schematic) and side-by-side-contrast added for the regular-GRF-versus-SWING split at the red line. The supplied text does not define tau; it is read as the label of the Gumbel column. The hexes of c7 and c9 are not in the digest and are left out of the palette. There are no panel letters; the two tiers are described in arrangement_note.",
+ "venue": "ICML26"
+}

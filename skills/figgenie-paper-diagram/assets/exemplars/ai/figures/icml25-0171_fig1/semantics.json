@@ -1,0 +1,403 @@
+{
+ "paper_id": "icml25-0171",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TWA (Training with Annotations)",
+  "one_liner": "A finetuning algorithm that uses span-level error annotations: error spans get a weighted unlikelihood loss, off-trajectory tokens are ignored, the rest get cross entropy.",
+  "domain": [
+   "machine translation",
+   "finetuning with error annotations",
+   "unlikelihood loss"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "one annotated translation redrawn as tokens, weights and loss glyphs in shared columns, ending in the span-loss formula",
+  "argues": "Span-level annotations turn into per-token weights that decide, token by token, whether cross entropy, unlikelihood or no loss applies.",
+  "subject": "One annotated translation with two error spans, followed from text to tokens, weights, loss type and the span-loss formula.",
+  "elements": [
+   {
+    "name": "… Give me an example of a blessing in adversity.",
+    "type": "sample",
+    "role": "the correct (reference) translation",
+    "drawn_as": "outlined rectangle with slate-grey text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "… Give me a story about a blessing in disguise.",
+    "type": "sample",
+    "role": "the submitted translation with annotated error spans",
+    "drawn_as": "outlined rectangle; 'a story about' on an orange highlight, 'disguise' on a red highlight",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Minor error / Major error",
+    "type": "label",
+    "role": "key to the two highlight colours",
+    "drawn_as": "framed box at top right holding an orange chip and a red chip",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "unlabelled curved hollow arrow",
+    "type": "operation",
+    "role": "tokenizes the output text and its annotations",
+    "drawn_as": "large curved grey arrow with a white head, from the output box down to the token row",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Give | me | a | story | about | a | blessing | in | dis | guise | .",
+    "type": "data",
+    "role": "the output split into 11 tokens; 'disguise' becomes 'dis' and 'guise'",
+    "drawn_as": "adjacent outlined boxes, width fitted to each token",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "1, 1, -1, -1, -1, 0, 0, 0, -5, -5, 0",
+    "type": "data",
+    "role": "per-token weight from the annotation: 1 before the first error, negative in error spans (-1 minor span, -5 major span), 0 after the first error",
+    "drawn_as": "outlined boxes aligned under the tokens",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Cross entropy",
+    "type": "operation",
+    "role": "loss for the non-error tokens before the first error span",
+    "drawn_as": "green up arrows under 'Give' and 'me'",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Unlikelihood",
+    "type": "operation",
+    "role": "weighted span-level loss applied to each error span",
+    "drawn_as": "red down arrows inside outlined boxes spanning 'a story about' and 'dis guise'",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "No loss",
+    "type": "operation",
+    "role": "non-error tokens after an error span are ignored (off-trajectory)",
+    "drawn_as": "grey X under 'a', 'blessing', 'in' and '.'",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Cross entropy / Unlikelihood / No loss key",
+    "type": "label",
+    "role": "key to the three loss glyphs",
+    "drawn_as": "framed box at bottom left with a green arrow, a red arrow and a grey X",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "L_span(θ) = −|w| log(1 − exp Σ_{t∈span} log p_t)",
+    "type": "formula",
+    "role": "TWA loss of one error span",
+    "drawn_as": "serif formula, placed as an image, with thin arrows from the two red span boxes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Ignore off-trajectory non-error tokens",
+    "type": "label",
+    "role": "says which tokens drop out of the loss",
+    "drawn_as": "serif caption under a bracket below the right part of the formula",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "reference translation",
+    "to": "submitted translation",
+    "what": "submitted output stacked under the correct translation",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "submitted translation",
+    "to": "token row",
+    "what": "output text and its annotations are tokenized",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "token row",
+    "to": "weight row",
+    "what": "each token gets a weight from the annotation",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "weight row",
+    "to": "loss glyph row",
+    "what": "weight decides the loss: 1 cross entropy, negative unlikelihood, 0 no loss",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red span boxes",
+    "to": "span-loss formula",
+    "what": "each error span is scored with the span loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Minor error / Major error key",
+    "to": "highlighted spans",
+    "what": "orange = minor, red = major",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "loss key",
+    "to": "loss glyph row",
+    "what": "green up arrow = cross entropy, red down arrow = unlikelihood, grey X = no loss",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "bracket under the formula",
+    "to": "Ignore off-trajectory non-error tokens",
+    "what": "caption of the bracket",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "green up arrow, red down arrow, grey X",
+    "kind": "identity",
+    "at": "row under the weights",
+    "what": "names the loss given to each token or span"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "green up arrow",
+    "stands_for": "cross-entropy loss on a token",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "red down arrow",
+    "stands_for": "unlikelihood loss on an error span",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "grey X",
+    "stands_for": "token ignored, no loss",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "A correct translation 'Give me an example of a blessing in adversity' and a submitted one 'Give me a story about a blessing in disguise' with one minor and one major error span",
+    "form": "two outlined text boxes, the second with orange and red highlights",
+    "real_values": true
+   },
+   {
+    "what": "The submitted sentence tokenized, with 'disguise' split into 'dis' and 'guise', its weights and the loss assigned to each token",
+    "form": "aligned rows of token boxes, weight boxes and loss glyphs",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "row of adjacent outlined boxes, one per token, with a matching row of weight boxes underneath",
+    "parts": [
+     "token boxes",
+     "weight boxes",
+     "loss glyphs"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the two sentences at top, follows the curved arrow to the token row, reads down each column to weight and loss glyph, then the formula at the bottom."
+ },
+ "layout": {
+  "arrangement": "pipeline-column",
+  "arrangement_note": "One drawing read top to bottom: reference and output sentences, a curved arrow to a token row, weights and loss glyphs aligned under each token, then the span-loss formula with a bracket caption; the error key sits top right and the loss key bottom left.",
+  "panel_count": 1,
+  "lanes": "three rows (tokens, weights, loss glyphs) sharing the same eleven columns",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.0,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbbc05",
+    "used_for": "minor-error highlight"
+   },
+   {
+    "hex": "#ea4335",
+    "used_for": "major-error highlight and unlikelihood arrows"
+   },
+   {
+    "hex": "#34a853",
+    "used_for": "cross-entropy arrows"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "no-loss crosses and the curved arrow"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "0.5 pt outlines of sentence, token and weight boxes"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "thin leader arrows and some outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt mid-grey outlines on every box, no fills on boxes",
+  "font": "sans, 9 pt for sentences, tokens and weights, 6 pt for the keys; serif for the formula and the bracket caption",
+  "corners": "square",
+  "arrows": "one large curved hollow arrow, small filled block arrows as loss glyphs, thin straight grey leader arrows with small heads",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = minor error, red = major error; green arrow = cross entropy, red arrow = unlikelihood, grey cross = no loss",
+  "line_style_means": "thin grey arrows from the red span boxes to the formula; an outlined box around several columns marks one span with one span-level loss",
+  "shape_means": "up arrow = raise the token's probability, down arrow = lower it, X = token ignored",
+  "marker_means": "weights under the tokens: 1 = trained normally, negative = inside an error span, 0 = ignored",
+  "emphasis": "colour highlights make the two errors the first thing seen; the formula is set larger in serif at the bottom and tied to the red boxes by leader arrows",
+  "reusable_patterns": [
+   "colour-highlighted error spans inside a sample sentence with a small colour key",
+   "token row, weight row and loss-glyph row sharing columns",
+   "span box over several token columns tied by a leader arrow to the formula",
+   "key box for the loss glyphs",
+   "bracket with a one-line caption under a formula"
+  ],
+  "weaknesses": [
+   "the caption under the bracket sits below the formula, not under the crossed tokens it describes",
+   "weights -1 and -5 are not explained inside the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real annotated translation example",
+   "the token split of 'disguise' into 'dis' and 'guise'"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token, weight and loss glyph rows",
+   "curved tokenization arrow",
+   "typeset span-loss formula",
+   "highlight chips"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two sentence boxes",
+   "highlighted error spans",
+   "token boxes",
+   "weight boxes",
+   "green up arrows",
+   "red down arrows in span boxes",
+   "grey X marks",
+   "loss formula"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "machine translation",
+   "span-level error annotations",
+   "unlikelihood loss",
+   "cross entropy",
+   "token weights",
+   "finetuning",
+   "off-trajectory tokens"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "error-callouts",
+   "token-strip",
+   "toy-values-inline",
+   "equation-boxes"
+  ],
+  "new_tags": [
+   {
+    "name": "loss-glyph-row",
+    "what": "a row of coloured arrows and crosses under tokens saying which loss applies to each token or span, with a small key"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Align a token row, a weight row and a row of loss glyphs in shared columns so one annotated sentence shows how each annotation becomes a per-token training signal; box the columns where one span-level loss applies and tie the box to the formula with a leader arrow.",
+  "suits": "Loss or data-weighting schemes defined per token or span, where one concrete annotated example explains the rule."
+ },
+ "tags": [
+  "single-column-stack",
+  "aligned-token-columns",
+  "slides-style",
+  "flat-colour-key",
+  "formula-callout"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "4 Training with Annotations (p.3-4)"
+  ],
+  "evidence": [
+   "TWA proceeds by tokenizing the output text and its annotations.",
+   "All other tokens (i.e., non-error tokens preceding an error span) are trained with cross entropy loss.",
+   "non-error tokens following an error span are ignored as they are off-trajectory"
+  ]
+ },
+ "summary": "Training with Annotations (TWA) finetunes a machine translation model on outputs that carry span-level error annotations. Figure 1 follows a single example: a correct sentence and a submitted translation with an orange minor-error span ('a story about') and a red major-error span ('disguise'). A curved arrow tokenizes it, a row of weights (1, 1, -1, -1, -1, 0, 0, 0, -5, -5, 0) sits under the tokens, and a row of glyphs says which loss each token gets: green up arrows for cross entropy, red down arrows in boxes for the weighted unlikelihood on each error span, grey crosses for ignored off-trajectory tokens. The span-loss formula and a bracket caption close the figure; two small keys explain the colours and the glyphs.",
+ "summary_zh": "TWA 用带跨度级错误标注的翻译输出来微调机器翻译模型。图一以一个例句为线索：标出轻微与严重错误，分词后给每个词元赋权重，再用绿色上箭头、红色下箭头和灰色叉号表示交叉熵、似然惩罚与不计损失，最后给出跨度损失公式。",
+ "confidence": "high",
+ "notes": "Prior model-anatomy dropped: no model is drawn, the figure is a loss-assignment walkthrough (closest in spirit to the objective-graph variant). The text layer has unreadable glyph names, so strings were read from the preview. The formula and the bracket caption are placed as bitmaps. Index metadata says the author tool was Google Slides.",
+ "venue": "ICML25"
+}

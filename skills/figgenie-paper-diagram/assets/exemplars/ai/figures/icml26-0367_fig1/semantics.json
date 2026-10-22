@@ -1,0 +1,418 @@
+{
+ "paper_id": "icml26-0367",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UnMaskFork (UMF)",
+  "one_liner": "Test-time scaling for masked diffusion LMs: MCTS over unmasking trajectories, with deterministic partial-unmasking actions by multiple MDLMs.",
+  "domain": [
+   "masked diffusion language models",
+   "test-time scaling",
+   "Monte Carlo tree search"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "a top-down search tree whose nodes redraw the same token strip as snapshots; arrow colour says which model unmasked next, dashed outlines mark cached rollout nodes",
+  "argues": "Masked-diffusion generation can be searched as a tree of deterministic unmasking actions by different models, reusing cached rollout nodes and their scores to avoid redundant computation.",
+  "subject": "An MCTS tree whose nodes are partly unmasked token strips, branched by two masked diffusion models, with rollouts, cached nodes and scores.",
+  "elements": [
+   {
+    "name": "UnMaskFork",
+    "type": "label",
+    "role": "names the method",
+    "drawn_as": "bold 7.5 pt sans title above the root node",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "root node (all mask)",
+    "type": "instance",
+    "role": "the starting state: a fully masked sequence",
+    "drawn_as": "black-outlined rounded box holding one long grey (#d1d1d1) bar without cell dividers",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "MCTS node (r = v1, r = v4, r = v1, r = v3, r = v2)",
+    "type": "instance",
+    "role": "tree nodes, each a partly or fully unmasked sequence reached by an action; the value label is set into the top edge",
+    "drawn_as": "five solid black-outlined rounded boxes, each with a strip of square cells in orange, green and grey and an italic r = v label on its top edge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "node cache",
+    "type": "instance",
+    "role": "nodes generated during rollouts and kept for reuse in later expansions",
+    "drawn_as": "four dashed-outline rounded boxes: one intermediate green strip and three completed strips",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Score: v1 ... Score: v4",
+    "type": "label",
+    "role": "evaluation result of each completed sequence",
+    "drawn_as": "bold 6 pt caption with an italic v and subscript under each of the four bottom boxes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Dream",
+    "type": "module",
+    "role": "first masked diffusion model that performs unmasking actions",
+    "drawn_as": "orange (#e97132) cells and orange arrows; swatch in the key",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "LLaDA",
+    "type": "module",
+    "role": "second masked diffusion model that performs unmasking actions",
+    "drawn_as": "green (#4ea72e) cells and green arrows; swatch in the key",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "mask",
+    "type": "data",
+    "role": "positions not yet unmasked",
+    "drawn_as": "grey square cells or a long grey bar",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "rollout path",
+    "type": "operation",
+    "role": "a rollout that completes a sequence from a node; nodes it produces are cached",
+    "drawn_as": "dashed wavy arrow in the colour of the model, from a node to a dashed box",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "key",
+    "type": "container",
+    "role": "explains colours and glyphs: Dream, LLaDA, mask, MCTS node, node cache, rollout path",
+    "drawn_as": "dark-navy-framed box at the top right with colour swatches and small sample glyphs, one per row",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "root node",
+    "to": "r = v1 (depth 1)",
+    "what": "action: Dream unmasks some positions",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "root node",
+    "to": "r = v4 (depth 1)",
+    "what": "action: LLaDA unmasks some positions",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v1 (depth 1)",
+    "to": "r = v1 (depth 2)",
+    "what": "action: Dream unmasks further",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v1 (depth 1)",
+    "to": "r = v3 (depth 2)",
+    "what": "action: LLaDA unmasks further",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v3 (depth 2)",
+    "to": "r = v2 (bottom row)",
+    "what": "action: Dream unmasks further, giving a completed strip",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v4 (depth 1)",
+    "to": "dashed green strip (depth 2)",
+    "what": "rollout path that creates a cached node",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v1 (depth 2)",
+    "to": "dashed orange completed strip, Score: v1",
+    "what": "rollout path to a completed, cached sequence",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r = v3 (depth 2)",
+    "to": "dashed mixed completed strip, Score: v3",
+    "what": "rollout path to a completed, cached sequence",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "dashed green strip (depth 2)",
+    "to": "dashed green completed strip, Score: v4",
+    "what": "rollout path continues to a completed sequence",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "arrow colour",
+    "to": "cell colour in the child node",
+    "what": "cells newly unmasked by an action take the colour of the model that acted",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Score: v_i captions",
+    "to": "r = v_i node labels",
+    "what": "the same symbols v1 to v4 recur on the completed strips and on node labels; the figure does not spell out the link",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "key",
+    "to": "glyphs in the tree",
+    "what": "swatches and sample shapes define cells, nodes, cached nodes and rollout arrows",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "r = v1, r = v4, r = v1, r = v3, r = v2",
+    "kind": "identity",
+    "at": "top edge of five solid node boxes",
+    "what": "value attached to the node, written with the same v symbols as the scores"
+   },
+   {
+    "marker": "Score: v1 ... Score: v4",
+    "kind": "identity",
+    "at": "under the four completed strips",
+    "what": "names the evaluation score of each completed sequence"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy sequence of about fifteen cells, fully masked at the root and progressively unmasked by Dream and LLaDA down to completed strips; no real tokens are shown",
+    "form": "coloured square cells in rounded node boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "mcts-tree",
+    "drawn_as": "top-down tree of rounded nodes holding token strips, coloured arrows for actions, dashed boxes and wavy dashed arrows for cached rollouts, value labels on the node edge",
+    "parts": [
+     "root",
+     "solid nodes",
+     "dashed cached nodes",
+     "action arrows",
+     "rollout arrows",
+     "score captions"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of square cells coloured by the model that unmasked them, grey where still masked",
+    "parts": [
+     "orange cells",
+     "green cells",
+     "grey mask cells"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "depth in the tree is progress from an all-mask strip to a completed strip; no noise arrows",
+    "parts": [
+     "root mask bar",
+     "partly unmasked strips",
+     "completed strips"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the title and the grey root strip at the top centre, follows the orange and green arrows down the branches, then the dashed rollout arrows to the dashed cached nodes and the scored completed strips at the bottom; the key at the top right explains the glyphs."
+ },
+ "layout": {
+  "arrangement": "single",
+  "arrangement_note": "One top-down tree: root at the top centre, two children, then grandchildren and a bottom row of four completed strips with scores; a framed key sits in the top-right corner and the title above the root.",
+  "panel_count": 1,
+  "lanes": "4 depth rows: root, depth 1, depth 2, completed strips with scores",
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.93,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e97132",
+    "used_for": "Dream: orange cells and arrows, key swatch"
+   },
+   {
+    "hex": "#e97232",
+    "used_for": "almost identical orange of a few cells"
+   },
+   {
+    "hex": "#4ea72e",
+    "used_for": "LLaDA: green cells and arrows, key swatch"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "mask: grey cells and the root bar"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark-navy outline of the key and small strokes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black on every node box, cell and dashed cache box; dark navy on the key frame",
+  "font": "sans (Yu Gothic Bold; Cambria Math for the r = v symbols) 4.5-7.5 pt, mostly bold: 7.5 pt title, 6 pt labels and key, 4.5 pt subscripts",
+  "corners": "mixed",
+  "arrows": "thin straight coloured arrows with small filled heads for expansion actions; dashed wavy arrows in the model colour for rollout paths",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "orange = tokens unmasked, and actions taken, by Dream; green = by LLaDA; grey = still masked; arrow colour equals the model that unmasks next",
+  "line_style_means": "solid rounded box = MCTS node; dashed rounded box = node cache; dashed wavy arrow = rollout path; solid straight arrow = expansion action",
+  "shape_means": "rounded rectangle = a node holding a strip of square token cells; a long grey bar = a fully masked sequence",
+  "marker_means": "r = v_i on a node's top edge and Score: v_i under a completed strip carry the evaluation value of that node or strip",
+  "emphasis": "colour is the only emphasis: orange and green arrows branch at each node; the bold title and the framed key are the only other accents",
+  "reusable_patterns": [
+   "tree of token-strip snapshots whose branches are coloured by the actor that expanded them",
+   "dashed outline for cached nodes and dashed wavy arrows for rollouts, defined in a small framed key of sample glyphs",
+   "value labels set into the top edge of each node box and scores printed under the completed strips",
+   "each cell coloured by the model that unmasked it so mixed ownership shows inside one sequence"
+  ],
+  "weaknesses": [
+   "the r = v_i labels and Score: v_i captions reuse the same symbols without any explanation in the figure",
+   "the dashed wavy rollout arrows are thin and hard to follow between distant nodes",
+   "the key does not say what the number of cells or the order of unmasking means"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "nodes, token cells and strips",
+   "coloured and dashed arrows",
+   "framed key",
+   "title"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "root node with fully masked strip",
+   "rounded MCTS nodes holding token strips",
+   "orange and green action arrows",
+   "dashed cached nodes",
+   "dashed wavy rollout arrows",
+   "score captions under completed strips",
+   "framed key with swatches",
+   "bold title UnMaskFork"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "masked diffusion language models",
+   "test-time scaling",
+   "MCTS",
+   "deterministic action branching",
+   "unmasking trajectory",
+   "Dream",
+   "LLaDA",
+   "node caching"
+  ],
+  "tags": [
+   "search-tree",
+   "token-strip",
+   "colour-coded-groups",
+   "flow-type-arrows",
+   "module-state-coding",
+   "notation-key",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "cell-ownership-colours",
+    "what": "each cell of a strip takes the colour of the actor that produced it, so mixed provenance shows inside one sequence"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a search over generation states as a top-down tree of identical token strips, colour each branch and each newly unmasked cell by the model that acted, and mark cached or rolled-out nodes with dashed outlines explained in a small framed key.",
+  "suits": "tree-search, branching or multi-model decoding methods whose state is a sequence and where which actor produced which part matters."
+ },
+ "tags": [
+  "top-down tree",
+  "token strips",
+  "two-colour branches",
+  "dashed cache nodes",
+  "framed key",
+  "bold title",
+  "flat vector"
+ ],
+ "provenance": {
+  "sections": [
+   "4 Methods"
+  ],
+  "evidence": [
+   "Figure 1. Conceptual diagram of UnMaskFork.",
+   "Nodes generated during rollouts (dotted lines) and their evaluation results are cached to be reused in subsequent expansion steps",
+   "formulates the unmasking trajectory as a search tree and employs Monte Carlo Tree Search to optimize the generation path"
+  ]
+ },
+ "summary": "UnMaskFork (UMF) treats the unmasking trajectory of a masked diffusion language model as a search tree and runs Monte Carlo Tree Search with deterministic partial-unmasking actions performed by several MDLMs. Figure 1 is a conceptual diagram: a top-down tree of rounded nodes, each holding the same sequence as a strip of cells. The root is fully masked (grey); orange arrows are actions by Dream and green arrows by LLaDA, and the cells an action unmasks take the same colour, so mixed sequences show who produced what. Dashed wavy arrows are rollout paths leading to dashed-outline cached nodes and to completed strips captioned Score v1 to v4, and nodes carry r = v labels. A framed key at the top right lists the glyphs.",
+ "summary_zh": "UnMaskFork 把掩码扩散语言模型的去掩码轨迹当作搜索树，用 MCTS 并由多个模型做确定性部分去掩码。图为自上而下的树：节点内是令牌条，橙色箭头为 Dream、绿色为 LLaDA，虚线为滚动路径与缓存节点，底部是带分数的完成序列。",
+ "confidence": "medium",
+ "notes": "No paragraph mentions the figure. The meaning of the r = v_i node labels is not explained anywhere in the evidence (r presumably a value or reward taken from the score v_i); the action semantics (a model unmasks some positions) come from the abstract and the key. The prior worked-walkthrough (state-snapshots) is kept as a secondary kind: the strips are snapshots, but the figure is a branching tree without numbered steps, so concept-schematic leads.",
+ "venue": "ICML26"
+}

@@ -1,0 +1,358 @@
+{
+ "paper_id": "iclr26-0144",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "An analysis tracing loss explosion in low-precision Flash Attention training to low-rank representations and biased rounding errors, with a fix in safe softmax.",
+  "domain": [
+   "low-precision training",
+   "Flash Attention",
+   "training instability"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "a derivation chain of boxed claims with formulas: a three-box analysis column and a blue zoom panel that opens the middle box into the causal chain ending in loss explosion",
+  "argues": "Loss explosion in low-precision flash attention traces back to biased rounding errors combined with similar low-rank representations; a dynamic maximum in safe softmax removes the bias.",
+  "subject": "A map from paper sections to the causal chain from low-rank representations and biased rounding to loss explosion, and the fix.",
+  "elements": [
+   {
+    "name": "Isolate Failure Source",
+    "type": "text-block",
+    "role": "Claim 1: the low-precision O in delta_lp = rowsum(dO * O_lp) of flash attention causes the training failure (Section 3.2)",
+    "drawn_as": "white rounded box with a black outline and a dark-blue tab 'Section 3.2' at its top left, bold italic text with inline formulas",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "Find the Root Cause",
+    "type": "container",
+    "role": "Section 3.3: the step that is opened into the zoom panel",
+    "drawn_as": "large bold italic title in a white rounded box with a blue outline and the tab 'Section 3.3'",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "Mitigate Bias in Rounding Error",
+    "type": "text-block",
+    "role": "Section 4: use a dynamic maximum in safe softmax",
+    "drawn_as": "white rounded box with a black outline and the tab 'Section 4'",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "blue zoom panel",
+    "type": "region",
+    "role": "expanded view of the root-cause step with its causal chain",
+    "drawn_as": "light-blue region with a blue outline, tied to the Section 3.3 box by two blue lines",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Low-rank (PK)[T]^T X[T] ≈ R is similar across training steps and tokens (Claim 2)",
+    "type": "text-block",
+    "role": "Claim 2 (Section 3.3.1): similar low-rank representations",
+    "drawn_as": "white box with a black outline and the tab 'Section 3.3.1'; the low-rank terms in purple, the claim tag in green",
+    "container": "blue zoom panel",
+    "is_contribution": true
+   },
+   {
+    "name": "delta_lp − delta_hp is biased towards positive due to safe softmax and PV (Claim 3)",
+    "type": "text-block",
+    "role": "Claim 3 (Section 3.3.2): the rounding error is biased",
+    "drawn_as": "white box with a black outline and the tab 'Section 3.3.2'; the error difference in red, the claim tag in green",
+    "container": "blue zoom panel",
+    "is_contribution": true
+   },
+   {
+    "name": "High and low precision gradient error (biased weight update)",
+    "type": "formula",
+    "role": "dW^Q_hp − dW^Q_lp ≈ alpha * sum over T of (delta_lp − delta_hp)[T] R: combines both claims",
+    "drawn_as": "wide white box with a bold heading and a displayed formula whose terms keep the red and purple of the claims",
+    "container": "blue zoom panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Low-precision gradient in training increases spectral norm of weights and activations",
+    "type": "text-block",
+    "role": "consequence of the biased weight update",
+    "drawn_as": "bold italic sentence in the lower part of the same white box",
+    "container": "blue zoom panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Loss Exploding!!!",
+    "type": "label",
+    "role": "the final outcome of the chain",
+    "drawn_as": "large bold italic words with two explosion emoji at the bottom of the zoom panel",
+    "container": "blue zoom panel",
+    "is_contribution": false
+   },
+   {
+    "name": "(Claim 1) (Claim 2) (Claim 3)",
+    "type": "label",
+    "role": "numbers the paper's three claims",
+    "drawn_as": "green bold italic tags at the end of each claim",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Isolate Failure Source",
+    "to": "Find the Root Cause",
+    "what": "next analysis step",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Find the Root Cause",
+    "to": "Mitigate Bias in Rounding Error",
+    "what": "once the cause is found, the bias is removed",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Find the Root Cause",
+    "to": "blue zoom panel",
+    "what": "the box is expanded into its causal chain",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Claim 2 box",
+    "to": "High and low precision gradient error",
+    "what": "similar low-rank representations feed the biased weight update",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Claim 3 box",
+    "to": "High and low precision gradient error",
+    "what": "the biased rounding error feeds the biased weight update",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "High and low precision gradient error",
+    "to": "Low-precision gradient increases spectral norm",
+    "what": "consequence of the biased update",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Low-precision gradient increases spectral norm",
+    "to": "Loss Exploding!!!",
+    "what": "final outcome",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "purple and red terms in Claims 2 and 3",
+    "to": "same-coloured terms in the gradient error formula",
+    "what": "the formula combines the two claims term by term",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Section 3.2, 3.3, 4, 3.3.1, 3.3.2",
+    "kind": "section",
+    "at": "dark-blue tabs on the top left of each box",
+    "what": "the paper section that treats the box"
+   },
+   {
+    "marker": "(Claim 1), (Claim 2), (Claim 3)",
+    "kind": "identity",
+    "at": "end of each claim text",
+    "what": "numbers the three claims of the paper"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "explosion emoji",
+    "stands_for": "the loss exploding",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [],
+  "reading_order": "Starts at the Section 3.2 box at the top left, follows the hollow arrows down the left column, then jumps along the blue lines into the zoom panel: two claims, the formula, the consequence, and Loss Exploding at the bottom."
+ },
+ "layout": {
+  "arrangement": "pipeline-column",
+  "arrangement_note": "A left column of three section-tagged boxes joined by hollow down arrows; the middle box is tied by two blue lines to a large light-blue zoom panel at the right that holds two claim boxes side by side, a wide formula box, a consequence line and the final outcome.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.49,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dceaf7",
+    "used_for": "light-blue ground of the zoom panel"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "section tabs with white text"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "blue outline of the zoom panel and the two zoom lines"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "outline of the Section 3.3 box and the tabs"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red symbols delta_lp − delta_hp (Claim 3 and the formula)"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple symbols for the low-rank term R and (PK)[T]^T X[T] (Claim 2 and the formula)"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "green claim tags (Claim 1, 2, 3)",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75-1.25 pt black outlines on the claim boxes, 1.25 pt blue lines and outline on the zoom panel, outlined white hollow arrows",
+  "font": "sans bold italic (Calibri) 8 pt for claims, 11-12.5 pt for the headline words, Cambria Math for formulas, serif 7 pt on the section tabs",
+  "corners": "rounded",
+  "arrows": "hollow white block arrows pointing down; two straight blue lines for the zoom",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "purple = the low-rank term (Claim 2), red = the rounding error difference (Claim 3), repeated in the combining formula; green italics = claim tags; blue = the zoomed region and the section tabs",
+  "line_style_means": "two blue lines from the Section 3.3 box = zoom into its causal chain; hollow arrows = analysis order or causal order",
+  "shape_means": "rounded white boxes = claims or steps; tab above each box = the paper section; light-blue region = the expanded analysis; explosion emoji = the failure outcome",
+  "marker_means": "Section n tabs tie each box to a paper section; (Claim 1/2/3) number the claims",
+  "emphasis": "large bold italic 'Find the Root Cause' and 'Loss Exploding!!!' with explosion emoji; the light-blue zoom region",
+  "reusable_patterns": [
+   "column of section-tagged claim boxes joined by hollow down arrows that doubles as a map of the paper",
+   "zoom panel opened from the middle box by two blue lines to show its internal causal chain",
+   "term-by-term colour coding that carries the colours of two claim statements into the formula that combines them",
+   "hollow block arrows for a causal chain ending in an outcome word with emoji",
+   "claim tags in green italics at the end of each statement"
+  ],
+  "weaknesses": [
+   "dense 8 pt bold italic text with inline formulas",
+   "the chain inside the zoom panel is drawn from cause to effect while the caption says the paper traces it in reverse, and the figure does not show that"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the paper's own claims and formulas"
+  ],
+  "stock": [
+   "explosion emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "claim boxes, section tabs, hollow arrows, zoom lines and zoom panel"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "section-tagged claim boxes",
+   "hollow down arrows",
+   "blue zoom panel with two lines",
+   "gradient-error formula",
+   "red and purple coloured symbols",
+   "Loss Exploding label with explosion emoji"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "low-precision training",
+   "Flash Attention",
+   "loss explosion",
+   "biased rounding error",
+   "safe softmax",
+   "low-rank representation",
+   "BF16",
+   "root cause analysis"
+  ],
+  "tags": [
+   "zoom-callout",
+   "equation-boxes",
+   "colour-coded-groups",
+   "claim-banner"
+  ],
+  "new_tags": [
+   {
+    "name": "section-tabs",
+    "what": "small coloured tabs above boxes carrying the paper section number that treats each box, so the figure doubles as a map of the paper"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Turn the paper's analysis into a column of claim boxes with section tabs and hollow arrows, and open the key box into a zoom panel whose causal chain ends in the failure outcome; carry the colours of the claim symbols into the formula that combines them.",
+  "suits": "Analysis or theory papers that explain a failure or phenomenon through a chain of claims, each treated in its own section."
+ },
+ "tags": [
+  "section tabs",
+  "hollow block arrows",
+  "light-blue zoom panel",
+  "bold italic claims",
+  "colour-coded symbols",
+  "emoji outcome"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Analysis overview (p.3)"
+  ],
+  "evidence": [
+   "Our paper traces the causal chain of training failure (blue box) in reverse to identify the root causes.",
+   "The full process of such failure from root cause to loss exploding is shown in Fig. 1.",
+   "the emergence of low-rank representations and the accumulation of biased rounding errors inherent to BF16 arithmetic"
+  ]
+ },
+ "summary": "This paper explains why training a transformer with flash attention in low precision makes the loss explode. Figure 1 maps the analysis onto the paper's sections. A left column of three section-tagged boxes joined by hollow down arrows reads: Section 3.2 isolates the failure source (the low-precision O in the delta computation, Claim 1), Section 3.3 finds the root cause, Section 4 mitigates the bias with a dynamic maximum in safe softmax. Two blue lines open the middle box into a light-blue zoom panel: similar low-rank representations (Claim 2, purple terms) and biased rounding error delta_lp − delta_hp (Claim 3, red terms) feed a gradient-error formula, which raises the spectral norm and ends in 'Loss Exploding!!!' with explosion emoji.",
+ "summary_zh": "低精度 Flash Attention 训练为何损失爆炸？图按章节展开：左侧三个带章节标签的框（定位失败来源、找根因、用安全 softmax 动态最大值纠偏），蓝色放大面板展开根因链：低秩表示与有偏舍入误差合成梯度误差，终致损失爆炸。",
+ "confidence": "high",
+ "notes": "Prior kind kept (concept-schematic, formal-diagram); stage-pipeline added for the three-box analysis column. The figure is counted as one drawing with a zoom panel, not as two panels, since the right region is untitled and tied to the middle box by the zoom lines.",
+ "venue": "ICLR26"
+}

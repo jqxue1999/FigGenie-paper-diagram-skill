@@ -1,0 +1,443 @@
+{
+ "paper_id": "cvpr25-0084",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AnyEdit",
+  "one_liner": "A 2.5M-pair instruction-based image-editing dataset covering 25 editing types in five groups, used to train a task-aware diffusion editor.",
+  "domain": [
+   "instruction-based image editing",
+   "dataset",
+   "diffusion models"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "five tinted bands of editing-type example cards beside a sunburst of the type distribution",
+  "argues": "The dataset covers a wide, grouped catalogue of editing types, from local and global edits to camera moves, implicit edits and visual-reference edits, with an even spread of data.",
+  "subject": "Example editing pairs with instructions for 25 editing types in five coloured groups, and a sunburst chart of how the dataset splits across groups and types.",
+  "elements": [
+   {
+    "name": "Local Editing",
+    "type": "container",
+    "role": "group of region-based edits: Remove, Replace, Add, Appearance Alter, Action Change, Textual Change, Color Alter, Counting, Material Change",
+    "drawn_as": "pale-green rounded band with an orange label at its left and nine type cards",
+    "container": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "is_contribution": null
+   },
+   {
+    "name": "Visual Editing",
+    "type": "container",
+    "role": "group of edits that take an extra visual input: Material Transfer, Visual Reference, Visual Depth, Visual Sketch, Visual Segment, Visual Scribble, Visual Layout",
+    "drawn_as": "pale-blue rounded band with seven type cards, most with a middle condition image",
+    "container": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "is_contribution": true
+   },
+   {
+    "name": "Camera Movement Editing",
+    "type": "container",
+    "role": "group of viewpoint edits: Movement, Outpainting, Rotation Change, Resize",
+    "drawn_as": "pale-peach rounded band with four type cards, narrower than the two above",
+    "container": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "is_contribution": true
+   },
+   {
+    "name": "Global Editing",
+    "type": "container",
+    "role": "group of whole-image edits: Background Change, Tone Transfer, Style Change",
+    "drawn_as": "pale-yellow rounded band with three type cards",
+    "container": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "is_contribution": null
+   },
+   {
+    "name": "Implicit Change",
+    "type": "container",
+    "role": "group of edits that need commonsense: Relation Change, Implicit Change",
+    "drawn_as": "pale-salmon rounded band with two type cards, the narrowest",
+    "container": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "is_contribution": true
+   },
+   {
+    "name": "25 editing-type cards",
+    "type": "instance",
+    "role": "one example per editing type: source image, edited result and the instruction",
+    "drawn_as": "blue type title on top, image pair or triple split by dashed vertical lines, instruction line below",
+    "container": "the five bands",
+    "is_contribution": true
+   },
+   {
+    "name": "instruction captions",
+    "type": "text-block",
+    "role": "the natural-language edit command of each example; [V*] stands for the visual reference image",
+    "drawn_as": "two-line serif text under each image group",
+    "container": "the five bands",
+    "is_contribution": null
+   },
+   {
+    "name": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "type": "label",
+    "role": "title of the left half",
+    "drawn_as": "serif caption line under the bands",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(b) AnyEdit Dataset Collection Distribution",
+    "type": "label",
+    "role": "title of the sunburst chart",
+    "drawn_as": "serif caption line under the chart",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "sunburst of editing categories and types",
+    "type": "chart",
+    "role": "share of each group (local, global, visual, camera, implicit) in the inner ring and of each type in the outer ring",
+    "drawn_as": "two-ring sunburst, wedges in the pastel colour of their band, rotated type labels, minor wedges unlabelled or tiny",
+    "container": "(b) AnyEdit Dataset Collection Distribution",
+    "is_contribution": true
+   },
+   {
+    "name": "AnyEdit",
+    "type": "icon",
+    "role": "dataset name and logo in the hole of the sunburst",
+    "drawn_as": "bold italic name beside a small red, yellow and blue cylinder-with-eye icon",
+    "container": "(b) AnyEdit Dataset Collection Distribution",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "band colour",
+    "to": "sunburst wedge colour",
+    "what": "each group keeps its colour in the example band and in the chart",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "source image",
+    "to": "edited image",
+    "what": "the instruction turns the first image into the second",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "source image",
+    "to": "condition or reference image (Visual Editing cards)",
+    "what": "an extra picture (depth map, sketch, segmentation, scribble, layout, reference object) goes with the instruction",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "type card title",
+    "to": "instruction caption",
+    "what": "names the edit type the example shows",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "inner ring category",
+    "to": "outer ring types",
+    "what": "each group contains its editing types",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "band",
+    "to": "type cards",
+    "what": "each group holds its types",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) AnyEdit Dataset Collection Visualization Examples",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "five coloured groups of editing types, one example card per type",
+    "verdict": null
+   },
+   {
+    "label": "(b) AnyEdit Dataset Collection Distribution",
+    "kind": "scope-overview",
+    "axis": "overview",
+    "shows": "sunburst of the dataset split by group and by editing type",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "captions under the bands and under the sunburst",
+    "what": "name the two halves of the figure"
+   },
+   {
+    "marker": "[V*]",
+    "kind": "identity",
+    "at": "instruction captions of Visual Editing cards",
+    "what": "stands for the visual reference or condition image given with the instruction"
+   },
+   {
+    "marker": "orange band labels (Local Editing ... Implicit Change)",
+    "kind": "section",
+    "at": "left of each band",
+    "what": "name the five groups"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "source photos, one per editing type (towers, bicycles, zebras, elephants, vessels, giraffes ...)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 25,
+    "medium": "bitmap",
+    "treatment": "small thumbnails with a dashed vertical divider to the result; no border"
+   },
+   {
+    "what": "edited results of the same photos (scooter, fire truck, jumping zebra, foggy street, watercolor panda ...)",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 25,
+    "medium": "bitmap",
+    "treatment": "thumbnail of the same size right of the divider; the changed region is not marked"
+   },
+   {
+    "what": "condition images of Visual Editing (depth map, sketch, segmentation, scribble, layout box, reference objects)",
+    "content": "dense-map",
+    "role": "sample-input",
+    "count": 7,
+    "medium": "bitmap",
+    "treatment": "third thumbnail placed between source and result in most Visual Editing cards"
+   },
+   {
+    "what": "sunburst chart of the dataset distribution",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "two rings with pastel wedges matching the bands, rotated labels, logo in the centre"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "database cylinder with an eye",
+    "stands_for": "the AnyEdit dataset",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one real edit instruction with its before and after image for each of 25 editing types, including placeholder token [V*] for visual references",
+    "form": "image pair or triple with a two-line instruction under it",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "before-after-pair",
+    "drawn_as": "source image and edited image side by side, split by a dashed vertical line, instruction below",
+    "parts": [
+     "source image",
+     "dashed divider",
+     "edited image",
+     "instruction"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "sunburst-taxonomy",
+    "drawn_as": "two-ring sunburst: five groups inside, 25 editing types outside, wedge size = data share, logo in the hole",
+    "parts": [
+     "inner ring",
+     "outer ring",
+     "centre logo"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the green Local Editing band, reads each band left to right and moves down through the five bands, then crosses to the sunburst on the right."
+ },
+ "layout": {
+  "arrangement": "dashboard",
+  "arrangement_note": "Left half (a): five stacked tinted bands of shrinking width, each a row of type cards; right half (b): a large sunburst tucked into the space freed under the two wide bands; captions for both halves along the bottom.",
+  "panel_count": 2,
+  "lanes": "five stacked tinted bands, one per editing group, each a row of aligned type cards",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.51,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e2f0d9",
+    "used_for": "Local Editing band"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "Visual Editing band"
+   },
+   {
+    "hex": "#ffefdd",
+    "used_for": "Camera Movement Editing band"
+   },
+   {
+    "hex": "#fff1bd",
+    "used_for": "Global Editing band"
+   },
+   {
+    "hex": "#ffe1d1",
+    "used_for": "Implicit Change band"
+   },
+   {
+    "hex": "#b3e7a0",
+    "used_for": "local wedges of the sunburst"
+   },
+   {
+    "hex": "#ffdd5c",
+    "used_for": "global wedges of the sunburst"
+   },
+   {
+    "hex": "#adedf0",
+    "used_for": "visual wedges of the sunburst"
+   },
+   {
+    "hex": "#ffd4a3",
+    "used_for": "camera wedges of the sunburst"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black dashed dividers between the images of a card; thin outlines on the rounded bands",
+  "font": "serif (Times New Roman) 6 pt for instructions and chart labels; sans (Calibri) 6.5 pt blue type titles; 9 pt Comic Sans band labels in orange; 10.5 pt bold AnyEdit",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pastel colour per editing group, used for its band and for its wedges in the sunburst; blue text = editing type name; orange text = group name",
+  "line_style_means": "dashed vertical line = divides source, condition and result images in one card",
+  "shape_means": "rounded band = editing group; ring level = hierarchy (group inside, type outside)",
+  "marker_means": "[V*] = a given visual reference image; (a) and (b) = the two halves",
+  "emphasis": "no single contribution is highlighted; the logo sits in the sunburst hole and the Visual, Camera and Implicit bands are the new groups",
+  "reusable_patterns": [
+   "tinted band per category with a coloured label at the left and a row of equal cards",
+   "before and after images split by a dashed vertical line with the instruction under the pair",
+   "sunburst whose wedges repeat the band colours and whose hole holds the logo",
+   "band widths shrinking down the page to make room for a chart at the lower right",
+   "condition image placed between the input and the result"
+  ],
+  "weaknesses": [
+   "6 pt captions under tiny thumbnails",
+   "minor sunburst wedges carry unreadable labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "source photos and edited results from the dataset",
+   "condition images such as depth, sketch and segmentation maps",
+   "the type counts behind the sunburst"
+  ],
+  "stock": [],
+  "generated": [
+   "edited result images produced by the dataset pipeline"
+  ],
+  "drawn": [
+   "tinted bands and cards",
+   "sunburst chart",
+   "logo"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "five tinted category bands",
+   "before and after photo pairs split by a dashed line",
+   "instruction captions",
+   "condition images (depth, sketch, segmentation)",
+   "sunburst chart with logo in the hole"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "image editing",
+   "instruction-based editing",
+   "dataset",
+   "editing types",
+   "taxonomy",
+   "sunburst",
+   "diffusion",
+   "benchmark overview"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "small-multiples",
+   "condition-insets",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "sunburst-distribution",
+    "what": "a two-ring sunburst of categories and types, wedge colours repeating the category colours of the example bands, logo or name in the hole"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each category of a taxonomy one pastel colour and use it twice: for a tinted band of example cards (instruction plus before and after pair) and for the matching wedges of a sunburst, so examples and statistics read as one picture.",
+  "suits": "Datasets or benchmarks with many task types that can each be shown by one input-output example, plus a distribution of the data over them."
+ },
+ "tags": [
+  "pastel bands",
+  "thumbnail rows",
+  "sunburst",
+  "dashed dividers",
+  "rounded frames",
+  "dense"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 AnyEdit (p.3, p.5)"
+  ],
+  "evidence": [
+   "Caption: image editing tasks are grouped into five classes by editing capability, each shown in its own coloured area.",
+   "Section 3: the data distribution of AnyEdit is shown in Fig. 1(b), a broad variety of edit types across domains.",
+   "Section 3: five main categories with local, global, camera movement, implicit and visual editing types."
+  ]
+ },
+ "summary": "AnyEdit is a 2.5M-pair instruction-based image-editing dataset with 25 editing types in five groups, plus a diffusion model trained on it. Figure 1 is a dashboard. Panel (a) stacks five pastel bands for local, visual, camera movement, global and implicit editing; each band holds one card per type with the source photo, a dashed divider, the edited result and the instruction underneath, and Visual Editing cards add a condition or reference image. Panel (b) is a two-ring sunburst of the dataset's split by group and type, in the band colours, with the AnyEdit logo in its hole. Band widths shrink down the page to leave room for the chart.",
+ "summary_zh": "AnyEdit 是含25种编辑类型的大规模指令式图像编辑数据集。图(a)用五条彩色横带分别展示局部、视觉、相机移动、全局、隐式编辑的样例卡片（原图、结果图与指令），图(b)用旭日图展示类型分布，配色与横带对应，中心为数据集标志。",
+ "confidence": "high",
+ "notes": "The caption letters (a)-(e) name the five groups and their colours, but the printed figure is lettered (a) examples and (b) distribution, as the text of Section 3 uses it; the caption calls the camera group grey but it is peach in the figure. Counts of thumbnails are estimated from the grid (25 sources, 25 results, 7 condition images); the digest lists 83 bitmaps.",
+ "venue": "CVPR25"
+}

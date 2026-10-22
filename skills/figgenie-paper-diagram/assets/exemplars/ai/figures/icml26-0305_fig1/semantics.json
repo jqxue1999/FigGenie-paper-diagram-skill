@@ -1,0 +1,588 @@
+{
+ "paper_id": "icml26-0305",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "The Tell-Tale Norm",
+  "one_liner": "Shows that the ℓ2 norm of hidden states tracks layer-wise reasoning intensity in LLMs, then uses it to steer and select reasoning at test time.",
+  "domain": [
+   "LLM reasoning",
+   "interpretability",
+   "test-time scaling"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "contribution-mosaic",
+   "side-by-side-contrast"
+  ],
+  "variant": "fan-out",
+  "variant_note": "one hidden-state collection stage on top, two parallel analysis cards below (each with a trend chart and a bold takeaway); the reasoning vs non-reasoning contrast runs through every part",
+  "argues": "Reasoning activity intensifies in late layers, visible both in SAE reasoning-feature activations and in the hidden-state ℓ2 norm, which therefore faithfully indicates reasoning intensity.",
+  "subject": "Layer-wise hidden states of reasoning versus non-reasoning responses, analysed with an SAE and with the ℓ2 norm as trend charts.",
+  "elements": [
+   {
+    "name": "Prompt",
+    "type": "data",
+    "role": "the question given to the LLM",
+    "drawn_as": "plain label with a short down arrow into a brain-network icon",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning response",
+    "type": "sample",
+    "role": "step-by-step answer to the prompt",
+    "drawn_as": "white text card with yellow header (#ffe699) and yellow-orange outline (#ffc000)",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "Non-Reasoning response",
+    "type": "sample",
+    "role": "bare final answer to the same prompt",
+    "drawn_as": "white text card with grey header (#ededed) and grey outline",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM",
+    "type": "container",
+    "role": "the model whose layers are probed",
+    "drawn_as": "light-grey (#f2f2f2) rounded region labelled LLM holding two layer boxes and a hidden-state stack, small up arrows between them",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer l",
+    "type": "module",
+    "role": "layer l of the LLM",
+    "drawn_as": "light-blue rounded box",
+    "container": "LLM",
+    "is_contribution": false
+   },
+   {
+    "name": "Hidden States",
+    "type": "data",
+    "role": "activations passed from layer l to layer l+1",
+    "drawn_as": "offset stack of light-blue cards",
+    "container": "LLM",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer l + 1",
+    "type": "module",
+    "role": "the next layer of the LLM",
+    "drawn_as": "light-blue rounded box with an arrow leaving upward",
+    "container": "LLM",
+    "is_contribution": false
+   },
+   {
+    "name": "Collect layer-wise hidden states",
+    "type": "operation",
+    "role": "hidden states are gathered at every layer for each response type",
+    "drawn_as": "bold heading above the two output stacks, fed by thick arrows from the LLM",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": null
+   },
+   {
+    "name": "Reasoning States",
+    "type": "data",
+    "role": "layer-wise hidden states of the reasoning response",
+    "drawn_as": "stack of three offset cards fading from yellow to white, lit bulb beside",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "Non-Reasoning States",
+    "type": "data",
+    "role": "layer-wise hidden states of the non-reasoning response",
+    "drawn_as": "stack of three offset cards fading from grey to white, dark bulb beside",
+    "container": "Probing LLM Layer-wise Reasoning Dynamics",
+    "is_contribution": false
+   },
+   {
+    "name": "SAE",
+    "type": "operation",
+    "role": "sparse autoencoder used as a diagnostic probe of reasoning features",
+    "drawn_as": "bold label in a dark-blue-outlined white box with a flame icon, a magnifier over a brain icon below",
+    "container": "Analysis 1: SAE Feature Decomposition",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning activity intensifies in LLM late layers.",
+    "type": "text-block",
+    "role": "takeaway of Analysis 1",
+    "drawn_as": "large bold serif sentence with a head-and-bulb pictogram at its left",
+    "container": "Analysis 1: SAE Feature Decomposition",
+    "is_contribution": true
+   },
+   {
+    "name": "‖h_l‖₂",
+    "type": "operation",
+    "role": "ℓ2 norm of the layer-l hidden state, the proposed intrinsic signal",
+    "drawn_as": "bold math in a dark-blue-outlined white box with a snowflake icon, a speedometer beside a brain icon below",
+    "container": "Analysis 2: ℓ2 Norm calculation",
+    "is_contribution": true
+   },
+   {
+    "name": "ℓ2 norm faithfully indicates reasoning intensity.",
+    "type": "text-block",
+    "role": "takeaway of Analysis 2",
+    "drawn_as": "large bold serif sentence with a magnifier-over-chart-and-gauge pictogram at its left",
+    "container": "Analysis 2: ℓ2 Norm calculation",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Prompt",
+    "to": "brain icon (the LLM)",
+    "what": "prompt goes to the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "brain icon (the LLM)",
+    "to": "Reasoning response",
+    "what": "the model answers with step-by-step reasoning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "brain icon (the LLM)",
+    "to": "Non-Reasoning response",
+    "what": "the model answers with the bare answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reasoning response",
+    "to": "LLM",
+    "what": "response text is run through the layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Non-Reasoning response",
+    "to": "LLM",
+    "what": "response text is run through the layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer l",
+    "to": "Hidden States",
+    "what": "layer output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Hidden States",
+    "to": "Layer l + 1",
+    "what": "input of the next layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "Reasoning States",
+    "what": "layer-wise hidden states collected for the reasoning response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "Non-Reasoning States",
+    "what": "layer-wise hidden states collected for the non-reasoning response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reasoning response",
+    "to": "Reasoning States",
+    "what": "yellow carried from response card to state stack and lit bulb",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Non-Reasoning response",
+    "to": "Non-Reasoning States",
+    "what": "grey carried from response card to state stack and dark bulb",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "top panel (collected hidden states)",
+    "to": "Analysis 1 and Analysis 2",
+    "what": "both analyses read the collected states; no arrow is drawn, only the stacking below the top panel",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "SAE",
+    "to": "Reasoning Feature Activation Trend chart",
+    "what": "SAE reasoning-feature activation plotted over layer index",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "‖h_l‖₂",
+    "to": "Hidden State L2 Norm Trend chart",
+    "what": "norm plotted over layer index",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "each trend chart",
+    "to": "its takeaway sentence",
+    "what": "the chart is summarised by the bold sentence underneath",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "lit and dark bulbs",
+    "to": "coloured and grey chart lines",
+    "what": "a bulb at the end of each line names it as reasoning or non-reasoning",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Probing LLM Layer-wise Reasoning Dynamics",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "One prompt answered with and without reasoning, both run through the LLM, and the layer-wise hidden states collected as two stacks.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Analysis 1: SAE Feature Decomposition",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "SAE probe, a chart of reasoning-feature activation over layers that jumps in late layers, and the takeaway sentence.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Analysis 2: ℓ2 Norm calculation",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "The norm of hidden states, a chart of its rise over layers against a flat baseline, and the takeaway sentence.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Probing... / Analysis 1 / Analysis 2",
+    "kind": "section",
+    "at": "bold titles at the top left of the three dashed panels",
+    "what": "names each panel; the numbers 1 and 2 only tell the two analyses apart"
+   },
+   {
+    "marker": "lit bulb / dark bulb",
+    "kind": "identity",
+    "at": "beside the two state stacks and at the ends of the coloured and grey plot lines",
+    "what": "names which stack or line is reasoning (lit) and which is non-reasoning (dark)"
+   },
+   {
+    "marker": "flame / snowflake",
+    "kind": "identity",
+    "at": "corner of the SAE box and of the norm box",
+    "what": "marks a state of the operator; not explained in the figure, read here as trained probe versus training-free quantity"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "line charts of SAE reasoning-feature activation and of hidden-state L2 norm against layer index (0 to about 32), a coloured line against a flat grey line",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "each about 68 x 42 pt with its own title and Layer Index label inside the bitmap, placed right of the operator box, a lit bulb at the top end of the coloured line and a dark bulb at the grey line"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "head outline filled with a node-and-edge network (brain)",
+    "stands_for": "the LLM at the prompt and the model being probed in each analysis card",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "light bulb, lit (yellow-orange with rays) and dark (grey)",
+    "stands_for": "reasoning active versus inactive",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "flame and snowflake",
+    "stands_for": "state of the SAE box and of the norm box (presumably trained versus training-free)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "magnifying glass over the brain icon",
+    "stands_for": "probing the model with the SAE",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "speedometer gauge beside the brain icon",
+    "stands_for": "measuring the magnitude, i.e. reasoning intensity",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "head with a light bulb inside; magnifier over a bar chart with a gauge",
+    "stands_for": "pictograms for the two takeaways",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a water-tank word problem answered two ways: a step-by-step response (tank holds 60 liters, net inflow 4 - 1 = 3 liters per minute) and the bare answer 'The answer is 75 liters of water.'",
+    "form": "two stacked text cards with coloured headers, the long one truncated with an ellipsis",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "light-grey rounded region labelled LLM holding Layer l, a stack of Hidden States and Layer l + 1 with small up arrows",
+    "parts": [
+     "Layer l box",
+     "Hidden States stack",
+     "Layer l + 1 box",
+     "grey container"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a flame on the SAE box and a snowflake on the norm box",
+    "parts": [
+     "flame",
+     "snowflake"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "hidden-state-stack",
+    "drawn_as": "layer-wise hidden states as an offset stack of cards, coloured by response type at the output",
+    "parts": [
+     "three offset cards",
+     "gradient fill",
+     "bulb beside"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at Prompt and the brain icon top left, follows thick arrows through the two response cards into the LLM and out to the two state stacks, then drops to Analysis 1 (left) and Analysis 2 (right): operator box, chart, bold takeaway."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One wide dashed panel on top holds a left-to-right pipeline in two aligned lanes (reasoning above, non-reasoning below); two equal dashed panels below each hold an operator box with icons on the left, a trend chart on the right and a bold takeaway line at the bottom.",
+  "panel_count": 3,
+  "lanes": "2 aligned lanes in the top panel: reasoning (yellow) above, non-reasoning (grey) below, each running response card to LLM to state stack",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.46,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light-grey region of the LLM"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "light-blue layer boxes and hidden-state cards inside the LLM"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "second, very close light-blue tone inside the LLM"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "yellow header of the Reasoning response card"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow-orange outline of the Reasoning response card"
+   },
+   {
+    "hex": "#d09e00",
+    "used_for": "darker yellow outline of a single shape"
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "grey header of the Non-Reasoning response card"
+   },
+   {
+    "hex": "#7c7c7c",
+    "used_for": "grey outlines such as the dashed panel frames and the non-reasoning card"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "dark-blue outline of the SAE and norm boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt black or grey outlines on cards and boxes, 0.75 pt dashed grey panel frames, coloured outlines on the response cards and on the SAE / norm boxes",
+  "font": "serif (Times New Roman, Cambria Math for symbols), 4.5-7 pt: 7 pt bold takeaways, 6.5 pt bold panel titles, 5-5.5 pt labels and sample text; chart text is sans inside the bitmaps",
+  "corners": "rounded",
+  "arrows": "thick black straight arrows with solid heads for the pipeline, small black up arrows between layers, no arrows between panels",
+  "rendering": "flat-vector",
+  "effects": "soft yellow-to-white and grey-to-white gradient on the state cards; no shadows",
+  "model_depiction": "layer-stack",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "bright colour = reasoning (yellow header, yellow state stack, lit bulb, purple or blue plot line), grey = non-reasoning (grey header, grey stack, dark bulb, grey line); light blue = model layers and states; dark-blue outline = the two analysis operators",
+  "line_style_means": "dashed grey frames = the three panels; thick solid arrows = data flow",
+  "shape_means": "rounded rectangles = responses and layers; offset stacked cards = layer-wise hidden states; outlined square boxes with a flame or snowflake = SAE and norm operators",
+  "marker_means": "lit bulb = high reasoning activity, dark bulb = none; flame and snowflake mark the state of the two operators (meaning not stated); magnifier = probing, gauge = measuring intensity",
+  "emphasis": "bold 7 pt takeaway sentences with pictograms close each analysis card; the reasoning line is a strong colour against a flat grey baseline; the reasoning response has a yellow header",
+  "reusable_patterns": [
+   "one colour contrast (bright versus grey) carried through cards, state stacks, bulbs and plot lines so no legend is needed",
+   "lit versus dark bulb icons at the ends of plotted lines as an icon legend",
+   "analysis card = operator box with state icon, measured trend chart, one-line bold takeaway with a pictogram",
+   "flame and snowflake on operator boxes to tell kinds of operator apart",
+   "dashed grey frames grouping the setup and the analyses",
+   "offset stacked cards for per-layer hidden states"
+  ],
+  "weaknesses": [
+   "a clipped 'Non-Reasoning States' label peeks out below the speedometer icon in Analysis 2",
+   "the meaning of flame versus snowflake is not stated in the figure or caption",
+   "axis and tick text inside the charts is tiny at column width",
+   "no arrows join the top panel to the analyses, so the fan-out is implied by position only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "two trend charts of SAE feature activation and hidden-state norm over layers",
+   "reasoning and non-reasoning response text"
+  ],
+  "stock": [
+   "brain-network head icon (three uses)",
+   "lit and dark light-bulb icons",
+   "flame and snowflake icons",
+   "magnifying glass",
+   "speedometer",
+   "head-and-bulb and chart-and-gauge pictograms"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed panel frames",
+   "LLM region with layer boxes and hidden-state stacks",
+   "response cards",
+   "SAE and norm boxes",
+   "thick arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "prompt with brain icon",
+   "reasoning and non-reasoning response cards",
+   "LLM region with layer boxes and hidden-state stacks",
+   "yellow and grey state stacks with light bulbs",
+   "SAE box with flame icon",
+   "norm box with snowflake icon",
+   "two layer-index trend charts",
+   "bold takeaway lines with pictograms"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "LLM reasoning",
+   "hidden-state norm",
+   "sparse autoencoder",
+   "layer-wise analysis",
+   "test-time scaling",
+   "interpretability",
+   "reasoning intensity",
+   "feature activation"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "module-state-coding",
+   "claim-banner",
+   "model-pictogram",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "on-off-bulb-legend",
+    "what": "a lit and a dark light-bulb icon beside state stacks and at the ends of plotted lines mark active versus inactive, standing in for a legend"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Run one colour contrast (bright = the phenomenon, grey = the baseline) through every part of an analysis figure - cards, state stacks, icons, plot lines - so no legend is needed, and close each analysis card with a one-line bold takeaway and a pictogram.",
+  "suits": "interpretability or analysis findings that compare an active case with a baseline across several measurements and end in one-sentence claims."
+ },
+ "tags": [
+  "dashed panel frames",
+  "serif text",
+  "clip-art icons",
+  "trend charts",
+  "bold takeaway lines",
+  "bright versus grey contrast",
+  "emoji-like icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "reasoning activity intensifies in the later layers, which is reflected by SAE feature activations and hidden state ℓ2 norms",
+   "demonstrating that the ℓ2 norm of hidden states serves as an endogenous signal of the model’s reasoning intensity"
+  ]
+ },
+ "summary": "The paper argues that the ℓ2 norm of an LLM's hidden states is an intrinsic signal of reasoning intensity, checks it with sparse autoencoder (SAE) features as a probe, and then builds three training-free test-time scaling techniques on it. Figure 1 is a three-part composite in dashed frames. The top panel passes one prompt through a reasoning response and a non-reasoning response into an LLM drawn as layer boxes with a hidden-state stack, and collects yellow (reasoning) and grey (non-reasoning) state stacks marked with lit and dark bulbs. Below, two analysis cards put an SAE box (flame icon) and a norm box (snowflake icon) beside layer-index trend charts and end with a bold one-line takeaway. Bright colour versus grey carries the contrast throughout; icons are stock clip art and text is serif.",
+ "summary_zh": "论文指出大模型隐状态的 ℓ2 范数可作为推理强度的内生信号，并以 SAE 特征为探针验证。图分三块虚线框：上方收集推理与非推理回答的逐层隐状态，下方两张分析卡各配趋势图与一句结论，亮色对灰色贯穿全图。",
+ "confidence": "high",
+ "notes": "The prior label concept-schematic was dropped because the trend charts are measured bitmaps (listed under pictures), not a schematic; side-by-side-contrast was added for the reasoning vs non-reasoning lanes. The brain icon at the prompt is read as the LLM. The stray clipped 'Non-Reasoning States' text in Analysis 2 appears in the text layer as a second copy of the top label. Width value 'column' is used for a single-column figure (the schema example only shows 'full').",
+ "venue": "ICML26"
+}

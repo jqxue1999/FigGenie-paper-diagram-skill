@@ -1,0 +1,609 @@
+{
+ "paper_id": "icml23-0003",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AudioLDM",
+  "one_liner": "Text-to-audio generation with latent diffusion in a VAE latent space conditioned on contrastive audio-text embeddings, also giving zero-shot audio inpainting and style transfer.",
+  "domain": [
+   "text-to-audio generation",
+   "latent diffusion",
+   "audio manipulation"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "one main diagram with training (solid) and sampling (dashed) paths, plus two smaller task diagrams (inpainting, style transfer) that reuse the same coloured blocks",
+  "argues": "One latent diffusion model, trained with audio embeddings and sampled with text embeddings, generates audio from text and, without retraining, also inpaints and restyles audio.",
+  "subject": "AudioLDM's training and sampling paths through encoders, VAE, latent diffusion and vocoder, and its inpainting and style-transfer uses.",
+  "elements": [
+   {
+    "name": "STFT+MelFB",
+    "type": "operation",
+    "role": "turns the audio waveform into a mel-spectrogram for the encoders",
+    "drawn_as": "white rounded box with black outline and bold label at the top of (a)",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Audio Encoder",
+    "type": "module",
+    "role": "produces the audio embedding E^x used as the condition during training",
+    "drawn_as": "light-blue rounded box with bold label",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Text Encoder",
+    "type": "module",
+    "role": "produces the text embedding E^y used as the condition during sampling",
+    "drawn_as": "light-blue rounded box with bold label, one in each panel",
+    "container": "(a), (b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "E^x ∈ R^L, E^y ∈ R^L",
+    "type": "data",
+    "role": "audio and text embedding vectors",
+    "drawn_as": "a strip of small blue cells with one dark cell, vertical in (a), horizontal in (b) and (c), the formula beside it",
+    "container": "(a), (b), (c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Contrastive objective",
+    "type": "label",
+    "role": "ties the audio encoder and the text encoder together",
+    "drawn_as": "plain text node between the two encoders with grey dash-dotted arrows to both",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "VAE Encoder",
+    "type": "module",
+    "role": "encodes the mel-spectrogram into the latent z",
+    "drawn_as": "yellow rounded box with a small funnel glyph of yellow bars at its top-right, one in each panel",
+    "container": "(a), (b), (c)",
+    "is_contribution": false
+   },
+   {
+    "name": "z_0 ∈ R^{C×T/r×F/r} and the other latents",
+    "type": "data",
+    "role": "latent tensor of the VAE: z_0 in (a), z^ob in (b), z^src in (c), ẑ at the output",
+    "drawn_as": "small 3D cuboid in cream; split into a filled and an empty part in (b); a dark-gold cuboid z_{n0} in (c)",
+    "container": "(a), (b), (c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Latent Diffusion",
+    "type": "module",
+    "role": "diffusion model in the latent space, conditioned on E^x (training) or E^y (sampling), starting from noise z_N",
+    "drawn_as": "light-green rounded box with bold label, in the middle of every panel",
+    "container": "(a), (b), (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "z_N ~ N(0, I)",
+    "type": "data",
+    "role": "Gaussian noise that the reverse process starts from",
+    "drawn_as": "formula label with one solid and one dashed arrow into Latent Diffusion in (a), a short arrow under the box in (b)",
+    "container": "(a), (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "VAE Decoder",
+    "type": "module",
+    "role": "decodes the latent into a mel-spectrogram X̂",
+    "drawn_as": "yellow rounded box with the funnel glyph widening upward",
+    "container": "(a), (b), (c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Vocoder",
+    "type": "module",
+    "role": "turns the mel-spectrogram X̂ into the generated audio",
+    "drawn_as": "paler yellow rounded box with bold label",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Forward Diffusion",
+    "type": "operation",
+    "role": "corrupts the source latent z^src with Gaussian noise (caption)",
+    "drawn_as": "grey rounded box filled with a noise texture, bold label",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Training / Sampling key",
+    "type": "label",
+    "role": "tells the line styles apart",
+    "drawn_as": "a solid line sample beside the bold word Training and a dashed line sample beside Sampling, at the bottom of (a)",
+    "container": "(a)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Audio data x",
+    "to": "STFT+MelFB",
+    "what": "waveform",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio data x",
+    "to": "Audio Encoder",
+    "what": "audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "STFT+MelFB",
+    "to": "Audio Encoder",
+    "what": "mel-spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "STFT+MelFB",
+    "to": "VAE Encoder",
+    "what": "mel-spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio Encoder",
+    "to": "E^x",
+    "what": "audio embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E^x",
+    "to": "Latent Diffusion",
+    "what": "condition during training (solid)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VAE Encoder",
+    "to": "z_0",
+    "what": "latent of the audio (solid)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_0",
+    "to": "Latent Diffusion",
+    "what": "latent to be modelled (solid)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_N ~ N(0, I)",
+    "to": "Latent Diffusion",
+    "what": "noise input (one solid, one dashed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text prompt y",
+    "to": "Text Encoder",
+    "what": "text (dashed in (a), dotted in (b) and (c))",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Encoder",
+    "to": "E^y",
+    "what": "text embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E^y",
+    "to": "Latent Diffusion",
+    "what": "condition during sampling (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Diffusion",
+    "to": "z_0",
+    "what": "sampled latent (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_0",
+    "to": "VAE Decoder",
+    "what": "latent to decode (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VAE Decoder",
+    "to": "X̂",
+    "what": "decoded mel-spectrogram (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "X̂",
+    "to": "Vocoder",
+    "what": "mel-spectrogram (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Vocoder",
+    "to": "Generated audio x̂",
+    "what": "waveform (dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Encoder",
+    "to": "Audio Encoder",
+    "what": "linked by the Contrastive objective",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "X^ob",
+    "to": "VAE Encoder",
+    "what": "observed spectrogram with a black masked half, then z^ob, Latent Diffusion with E^y and z_N, ẑ, VAE Decoder, X̂ (dotted)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "X^src",
+    "to": "VAE Encoder",
+    "what": "source spectrogram, then z^src, Forward Diffusion, z_{n0}, Latent Diffusion with E^y, ẑ, VAE Decoder, X̂ (dotted)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Forward Diffusion",
+    "to": "z_{n0}",
+    "what": "noised source latent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_{n0}",
+    "to": "Latent Diffusion",
+    "what": "sits under the block as its starting latent; no arrow clearly visible",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Training and sampling process of AudioLDM",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "the whole system: encoders, VAE, latent diffusion and vocoder, with training in solid and sampling in dashed arrows",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Audio inpainting with AudioLDM",
+    "kind": "stage-pipeline",
+    "axis": "examples",
+    "shows": "an observed spectrogram with half masked goes through VAE, latent diffusion with a text prompt, and decoder to a completed spectrogram",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Audio style transfer with AudioLDM",
+    "kind": "stage-pipeline",
+    "axis": "examples",
+    "shows": "a source spectrogram is encoded, noised by Forward Diffusion, then denoised under a text prompt and decoded to a restyled spectrogram",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "captions under the three panels",
+    "what": "letter the panels and give each a title"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "input audio waveform",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue waveform glyph at the left end of (a), labelled Audio data x"
+   },
+   {
+    "what": "generated audio waveform",
+    "content": "audio-waveform",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue waveform glyph at the end of the dashed path, labelled Generated audio x̂"
+   },
+   {
+    "what": "input mel-spectrograms: observed X^ob with a black right half, and source X^src",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small purple-orange spectrogram tiles at the left of (b) and (c) with the symbol and size written below"
+   },
+   {
+    "what": "output mel-spectrograms X̂: generated in (a), completed in (b), restyled in (c)",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small spectrogram tiles at the right ends of the lanes, symbol and size written below"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "four stacked bars forming a funnel, narrowing for the encoder and widening for the decoder",
+    "stands_for": "VAE encoder compresses and VAE decoder expands",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   }
+  ],
+  "examples": [
+   {
+    "what": "text prompts: “A cat meowing then screaming as a young boy talking with no background noise” in (a), “Flying insects. Mosquito” in (b) and (c)",
+    "form": "quoted bold text beside the Text Encoder, labelled Text prompt y",
+    "real_values": true
+   },
+   {
+    "what": "an observed clip with half masked and its completion (b), and a source clip with its restyled version (c)",
+    "form": "spectrogram thumbnails at the two ends of each lane",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "VAE Encoder and VAE Decoder as two separate yellow boxes with a funnel glyph, a continuous latent z drawn as a cuboid between them",
+    "parts": [
+     "VAE Encoder",
+     "latent cuboid",
+     "VAE Decoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "latent-diffusion-block",
+    "drawn_as": "one green box fed with Gaussian noise z_N and a condition embedding, producing a latent",
+    "parts": [
+     "Latent Diffusion box",
+     "z_N",
+     "condition embedding"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "a text node 'Contrastive objective' between the audio and text encoders joined by grey dash-dotted arrows",
+    "parts": [
+     "Audio Encoder",
+     "Text Encoder",
+     "Contrastive objective"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "label 'Text prompt y:' followed by the prompt in bold quotation marks, no box",
+    "parts": [
+     "label",
+     "quoted prompt"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the audio waveform at the left of (a) and follows solid arrows (training) through the encoders and Latent Diffusion; the dashed sampling path runs from the text prompt to the generated audio; (b) and (c) are then read left to right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One large panel (a) fills the left half; (b) and (c) are stacked at the right, each a single left-to-right row of the same coloured blocks; panel titles sit under each panel and a Training/Sampling key sits at the bottom of (a).",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.4,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#bdd7ee",
+    "used_for": "Audio Encoder and Text Encoder boxes"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "Latent Diffusion boxes"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "VAE Encoder and VAE Decoder boxes",
+    "opacity": 0.73
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "funnel glyph bars on the VAE boxes",
+    "opacity": 0.73
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "latent cuboids and the Vocoder box (cream)"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "noised latent z_{n0} cuboid in (c), dark gold"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "cells of the embedding strips"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "Forward Diffusion box and the grey dash-dotted contrastive arrows"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on boxes and arrows, 0.25 pt on small glyphs; dashed and dotted lines mark paths",
+  "font": "serif (Times New Roman), 3.5-7.5 pt, bold 6.5 pt module names, bold 7.5 pt Training and Sampling, Cambria Math italics for symbols",
+  "corners": "rounded",
+  "arrows": "black straight and orthogonal with small filled heads; solid, dashed or dotted by path; grey dash-dotted for the contrastive link",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Blue = audio and text encoders, green = latent diffusion, yellow = VAE encoder and decoder (paler yellow for the vocoder and cream for latent cuboids), grey = forward diffusion; waveforms blue, spectrograms purple and orange. The same colours are kept in (a), (b) and (c).",
+  "line_style_means": "Solid = training, dashed = sampling (key in (a)); dotted = the zero-shot paths in (b) and (c), not in the key; grey dash-dotted = contrastive link between the encoders.",
+  "shape_means": "Rounded boxes = networks; small 3D cuboids = latent tensors; strips of small cells = embedding vectors; white rounded box = signal processing; noise-textured grey box = noising step; funnel glyph = compression or expansion.",
+  "marker_means": "Formulas under or beside each tensor give its symbol and size (E in R^L, X in R^{T×F}, z in R^{C×T/r×F/r}); letters (a)-(c) name the panels.",
+  "emphasis": "Latent Diffusion is the only green block and sits in the centre of every panel; (b) and (c) reuse the colours of (a) so they read as variations of one system.",
+  "reusable_patterns": [
+   "solid versus dashed arrows for training versus sampling with a two-line key under the panel",
+   "the same coloured blocks redrawn in small task panels to show zero-shot uses of a trained model",
+   "tensor symbol and size written next to each cuboid or strip",
+   "spectrogram and waveform thumbnails as inputs and outputs",
+   "small funnel glyph on encoder and decoder boxes",
+   "text node between two encoders with grey dash-dotted arrows for a contrastive objective",
+   "masked input drawn as a spectrogram with one half black"
+  ],
+  "weaknesses": [
+   "dotted arrows in (b) and (c) are not in the key",
+   "tensor-size formulas are about 4 pt",
+   "several long bent arrows around Latent Diffusion in (a) run close together",
+   "the arrow from z_{n0} into Latent Diffusion in (c) is not clearly visible"
+  ]
+ },
+ "resources": {
+  "own": [
+   "audio waveforms of an input clip and the generated audio",
+   "mel-spectrograms of an observed, a completed, a source, a restyled and a generated clip",
+   "text prompts"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "latent cuboids and embedding strips",
+   "funnel glyphs",
+   "noise-textured Forward Diffusion box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "audio waveform thumbnails",
+   "mel-spectrogram thumbnails",
+   "Audio Encoder and Text Encoder boxes",
+   "VAE Encoder and Decoder boxes with funnel glyphs",
+   "green Latent Diffusion box",
+   "latent cuboids and embedding strips",
+   "Vocoder box",
+   "solid versus dashed arrow key"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "text-to-audio",
+   "latent diffusion",
+   "CLAP",
+   "VAE",
+   "vocoder",
+   "audio inpainting",
+   "style transfer",
+   "zero-shot",
+   "mel-spectrogram",
+   "contrastive objective"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "tensor-shape-labels",
+    "what": "every drawn tensor, strip or cuboid carries its symbol and size (for example E in R^L, z in R^{C×T/r×F/r}) as a small formula label"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the whole system once with line style separating training (solid) from sampling (dashed) paths and a small key, then redraw only the changed path in smaller panels with the same colour for the same block, so zero-shot uses of a trained model read as variations of one picture.",
+  "suits": "A trained model with several inference-time uses (editing, inpainting, transfer) that reuse the same blocks."
+ },
+ "tags": [
+  "three lettered panels",
+  "colour per module type",
+  "solid vs dashed arrows",
+  "spectrogram thumbnails",
+  "waveform icons",
+  "latent cuboids",
+  "tikz-style",
+  "serif text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "The sampling process uses text embedding Ey as the condition.",
+   "zero-shot audio inpainting (b) and style transfer (c) are realized in the reverse diffusion process of LDM",
+   "The block Forward Diffusion denotes the process that corrupt data with gaussian noise"
+  ]
+ },
+ "summary": "AudioLDM generates audio from text with a latent diffusion model (LDM) in a VAE latent space, trained on audio embeddings and sampled with text embeddings, and also edits audio zero-shot. Figure 1 has three lettered panels drawn in the same flat, colour-per-module style. Panel (a) shows the whole system: waveform, STFT+MelFB, audio and text encoders tied by a contrastive objective, VAE encoder and decoder around the green Latent Diffusion block, vocoder and generated audio; solid arrows are training, dashed arrows sampling. Panels (b) and (c) redraw the same blocks for audio inpainting (a half-masked spectrogram is completed) and style transfer (a source latent is noised by Forward Diffusion and restyled under a text prompt).",
+ "summary_zh": "AudioLDM 在 VAE 潜空间里做文本到音频的潜扩散生成。图 1 分 (a)(b)(c) 三个面板：(a) 画出编码器、VAE、潜扩散和声码器，实线表示训练、虚线表示采样；(b)(c) 复用同样的彩色模块，演示音频补全和风格迁移。",
+ "confidence": "high",
+ "notes": "The pre-screen listed model-anatomy and stage-pipeline with three panels; kept. The roles of the audio and text encoders as CLAP encoders come from the paper text, the figure only says Audio Encoder, Text Encoder and Contrastive objective. Dotted arrows in (b) and (c) are not explained in the figure. In (c) the link from z_{n0} to Latent Diffusion is recorded as adjacency because no arrow is clearly visible. The relations for (b) and (c) are given as one chain each.",
+ "venue": "ICML23"
+}

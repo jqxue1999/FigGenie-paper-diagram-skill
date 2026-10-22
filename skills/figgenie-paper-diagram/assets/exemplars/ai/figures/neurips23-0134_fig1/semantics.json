@@ -1,0 +1,528 @@
+{
+ "paper_id": "neurips23-0134",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Synthetic-to-real pose adaptation that adds a reconstruction loss from bone-map warping of a base image to a driving image, on top of integrated pseudo-labels.",
+  "domain": [
+   "human and hand pose estimation",
+   "domain adaptation",
+   "geometric reconstruction"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "panel (a) wires the fine-tuning modules on a real image pair, panel (b) opens the warping estimation module as a formula chain with intermediate maps",
+  "argues": "Reconstructing the driving image from the base image through keypoint-derived bone-map warping supplies an extra supervisory signal that complements pseudo-labels for fine-tuning on unlabelled target data.",
+  "subject": "Keypoint predictor, pseudo-labelling P, warping estimation W and generator G on a base and driving image pair, with W opened in a second panel.",
+  "elements": [
+   {
+    "name": "f_enc",
+    "type": "module",
+    "role": "feature extractor of the keypoint predictor (ResNet-101 in the text)",
+    "drawn_as": "light-green trapezoid with script label",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": false
+   },
+   {
+    "name": "f_dec",
+    "type": "module",
+    "role": "decoder producing keypoint heatmaps and relative depth",
+    "drawn_as": "light-green mirrored trapezoid",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": false
+   },
+   {
+    "name": "d̂^b, ĥ_p^b, ĥ_p^drv",
+    "type": "data",
+    "role": "relative depth of the base image and keypoint heatmaps of base and driving images",
+    "drawn_as": "hatted symbols beside black arrows leaving f_dec",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": false
+   },
+   {
+    "name": "P",
+    "type": "module",
+    "role": "integrated pseudo-labelling that generates pseudo-labels from depth and heatmaps",
+    "drawn_as": "orange square with calligraphic P, followed by the words Integrated pseudo-labels",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": true
+   },
+   {
+    "name": "W",
+    "type": "module",
+    "role": "warping estimation module that outputs the inpainting map and displacement field",
+    "drawn_as": "grey square with calligraphic W",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": true
+   },
+   {
+    "name": "C^{drv←b}, D^{drv←b}",
+    "type": "data",
+    "role": "inpainting map and region-wise displacement field passed from W to G",
+    "drawn_as": "bold symbols over two parallel arrows",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": true
+   },
+   {
+    "name": "G",
+    "type": "module",
+    "role": "generation module that reconstructs the driving image from the base image",
+    "drawn_as": "white trapezoid with calligraphic G",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": true
+   },
+   {
+    "name": "Î^drv",
+    "type": "data",
+    "role": "reconstructed driving image compared with the real one",
+    "drawn_as": "photo thumbnail with a hatted symbol below",
+    "container": "(a) Fine-tuning on Target Domain",
+    "is_contribution": null
+   },
+   {
+    "name": "symbol key",
+    "type": "container",
+    "role": "defines B, C, D, A, p, μ, ⊙, M and ⊗",
+    "drawn_as": "dashed black frame in the top-right corner with one definition per line",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Eq. 5",
+    "type": "operation",
+    "role": "turns the two heatmaps into keypoint locations {μ_k}",
+    "drawn_as": "blue label on an arrow",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Eq. 6",
+    "type": "operation",
+    "role": "draws bone maps from the keypoint locations",
+    "drawn_as": "blue label on an arrow",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "SVD",
+    "type": "operation",
+    "role": "computes coarse transformation parameters {A_j} from the bone maps {B_j}",
+    "drawn_as": "blue label on a bracketed arrow",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Expand",
+    "type": "operation",
+    "role": "expands the parameters to act on normalized coordinates p",
+    "drawn_as": "blue label on a short down arrow",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "⊗",
+    "type": "operation",
+    "role": "deforms the base image I^b with the expanded transformation",
+    "drawn_as": "circled cross where I^b joins from below",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "hourglass",
+    "type": "module",
+    "role": "generates the inpainting map and the masks from the warped base image and the bone maps",
+    "drawn_as": "grey bow-tie of two triangles with two dark bars at its output",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "{M_j}^J, ⊙",
+    "type": "operation",
+    "role": "masks multiplied with the expanded transformations give the displacement field",
+    "drawn_as": "formula label and circled dot on the lower branch",
+    "container": "(b) Warping Estimation Module",
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Warping Estimation Module",
+    "type": "container",
+    "role": "interior of W",
+    "drawn_as": "light-grey rounded frame with dashed outline",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "I^drv and I^b",
+    "to": "f_enc",
+    "what": "base and driving images enter the keypoint predictor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_enc",
+    "to": "f_dec",
+    "what": "features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_dec",
+    "to": "P",
+    "what": "relative depth d̂^b and heatmap ĥ_p^b",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P",
+    "to": "Integrated pseudo-labels",
+    "what": "pseudo-labels for fine-tuning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_dec",
+    "to": "W",
+    "what": "heatmaps ĥ_p^b and ĥ_p^drv",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W",
+    "to": "G",
+    "what": "inpainting map C and displacement field D",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "I^b",
+    "to": "W and G",
+    "what": "base image is also fed to the warping module and the generator by a long line under the figure",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "G",
+    "to": "Î^drv",
+    "what": "reconstructed driving image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W (in a)",
+    "to": "(b) Warping Estimation Module",
+    "what": "panel (b) opens the module W",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "heatmaps",
+    "to": "keypoint locations",
+    "what": "Eq. 5, then Eq. 6 gives bone maps, then SVD and Expand give the transformation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "bone maps",
+    "to": "hourglass",
+    "what": "bone maps shortcut into the hourglass",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hourglass",
+    "to": "C^{drv←b} and D^{drv←b}",
+    "what": "upper branch gives the inpainting map; lower branch gives masks that, multiplied with the transformations, give the displacement field",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Fine-tuning on Target Domain",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "keypoint predictor, pseudo-labelling P, warping estimation W and generator G on a base and driving image pair",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Warping Estimation Module",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "heatmaps to keypoints, bone maps, SVD and Expand, deformation and an hourglass producing C and D",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "titles under each panel",
+    "what": "name the overview and the zoom into W"
+   },
+   {
+    "marker": "Eq. 5, Eq. 6",
+    "kind": "identity",
+    "at": "arrows in panel (b)",
+    "what": "point to the equations that define those steps"
+   },
+   {
+    "marker": "P, W, G",
+    "kind": "identity",
+    "at": "module boxes in panel (a)",
+    "what": "name the pseudo-labelling, warping estimation and generation modules"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "base and driving photos of a person in a room, same background, different poses",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "stacked at the left edge, labelled I^drv and I^b"
+   },
+   {
+    "what": "reconstructed driving image",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "same size as the inputs, right of the generator"
+   },
+   {
+    "what": "keypoint heatmaps of the driving and base images",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "purple maps with yellow peaks, tall thumbnails at the left of panel (b)"
+   },
+   {
+    "what": "bone maps of the driving and base poses (coloured skeletons on black)",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two tiles in an orange frame joined by a yellow arrow to the hourglass"
+   },
+   {
+    "what": "inpainting map and displacement field",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "grey silhouette map and pink-magenta map at the right edge, labelled C and D"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one real image pair with its predicted heatmaps, bone maps, inpainting map, displacement field and reconstruction",
+    "form": "photo and map thumbnails at the inputs and outputs of modules",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "f_enc and f_dec as mirrored light-green trapezoids, the generator G as a white trapezoid",
+    "parts": [
+     "f_enc",
+     "f_dec",
+     "G"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "hourglass-network",
+    "drawn_as": "two grey triangles meeting at their tips (bow-tie) with two dark output bars",
+    "parts": [
+     "bow-tie",
+     "output bars"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the two photos at top-left, follows black arrows through f_enc and f_dec into P and W, then G and the reconstructed photo; the eye then drops to panel (b) and runs left to right."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two stacked panels with centred titles underneath: (a) a left-to-right module chain on a white ground with a dashed symbol key in the top-right corner, (b) a light-grey dashed frame holding a left-to-right formula chain with thumbnails at both ends.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 1.85,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c5e0b4",
+    "used_for": "f_enc and f_dec"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "pseudo-labelling block P, the frame round the bone maps and the arrow from them"
+   },
+   {
+    "hex": "#c9c9c9",
+    "used_for": "warping estimation block W"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "hourglass triangles and output bars"
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "background of panel (b)"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "operation names and equation references (SVD, Expand, Eq. 5, Eq. 6)"
+   },
+   {
+    "hex": "#434343",
+    "used_for": "dashed outline of panel (b) and a few strokes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black on boxes and arrows, dashed black key frame, dashed dark-grey frame of panel (b), one yellow elbow arrow",
+  "font": "serif (Cambria Math, Times) 5-10 pt, bold upright for matrices and maps, italic for scalars, blue 7 pt operation names, 10 pt panel titles",
+  "corners": "mixed",
+  "arrows": "straight black with small filled heads, orthogonal; one yellow elbow arrow",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = keypoint predictor, orange = pseudo-labelling P, grey = warping estimation W and its hourglass, white = generator G, blue text = operation names",
+  "line_style_means": "dashed black frame = notation key; dashed grey frame = the opened module; yellow elbow = the bone-map shortcut into the hourglass",
+  "shape_means": "trapezoid = network (encoder, decoder, generator); square with script letter = named module; bow-tie = hourglass network; circled cross and dot = deformation and multiplication",
+  "marker_means": "script P, W, G name modules; superscripts b and drv index the base and driving image; (a) and (b) letter the panels; Eq. 5 and Eq. 6 refer to equations",
+  "emphasis": "the contribution modules are the only ones drawn with script letters in coloured or grey squares; the yellow P stands out; the second panel opens W",
+  "reusable_patterns": [
+   "overview panel above and module-zoom panel below, each titled underneath",
+   "dashed notation-key box filling the empty corner of the overview",
+   "real image thumbnails where each module outputs a map (heatmap, skeleton, inpainting map, displacement field)",
+   "modules written as script letters with formulas instead of words",
+   "blue operation names set on the arrows of a formula chain"
+  ],
+  "weaknesses": [
+   "many sub- and superscripts at 5 pt need the key",
+   "panel (b) is tied to W by name only, with no leader",
+   "the long bottom line from I^b to W and G is easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real image pair from a video dataset",
+   "predicted heatmaps, bone maps, inpainting map, displacement field and reconstruction"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module blocks and arrows",
+   "symbol key",
+   "formula labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "base and driving person photos",
+   "f_enc and f_dec trapezoids",
+   "P and W boxes",
+   "generator trapezoid with reconstructed photo",
+   "symbol key box",
+   "keypoint heatmaps and bone maps",
+   "hourglass bow-tie"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "pose estimation",
+   "synthetic-to-real",
+   "domain adaptation",
+   "geometric reconstruction",
+   "warping",
+   "pseudo-labelling",
+   "keypoints",
+   "bone map",
+   "hourglass"
+  ],
+  "tags": [
+   "notation-key",
+   "equation-boxes"
+  ],
+  "new_tags": [
+   {
+    "name": "intermediate-map-thumbnails",
+    "what": "real thumbnails of intermediate maps (heatmap, skeleton, inpainting map, flow) placed where each module outputs them"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "In a vision method, put a thumbnail of the real intermediate map where each module outputs it, and define the many symbols once in a dashed key in the empty corner; use a second panel to open only the module that is new.",
+  "suits": "Vision methods with several named modules and many symbols, where one new module needs a detailed formula chain."
+ },
+ "tags": [
+  "two-panel-column",
+  "script-letter-modules",
+  "notation-key-box",
+  "dashed-frames",
+  "serif-math-labels",
+  "photo-thumbnails"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.3, p.5)",
+   "4 Implementation (p.7)"
+  ],
+  "evidence": [
+   "The geometric reconstruction consists of Warping Estimation Module W and Generation Module G, as shown in Fig. 1(a).",
+   "With the transformation and base images, a hourglass is used to generate inpainting map Cdrv←b and region-wise displacement ﬁeld Ddrv←b"
+  ]
+ },
+ "summary": "The paper adapts pose estimators from synthetic to real data without labels, adding image reconstruction to pseudo-labelling. Figure 1(a) shows a base and a driving photo of a person entering a keypoint predictor f_enc and f_dec. Heatmaps and depth go to the orange pseudo-labelling block P and the grey warping estimation module W, whose inpainting map and displacement field drive the generator G, which redraws the driving photo. A dashed key defines the symbols. Panel (b) opens W: heatmaps, keypoints, bone maps, SVD and Expand, a deformation of the base image and an hourglass that outputs the two maps. Thumbnails sit at the inputs and outputs; the style is flat vector with serif math.",
+ "summary_zh": "论文用几何重建辅助合成到真实的姿态估计域适应。图1(a)展示基准图和驱动图经关键点预测、伪标签P、扭曲估计W与生成器G重建驱动图，(b)展开W：热图、骨骼图、SVD、沙漏网络。",
+ "confidence": "high",
+ "notes": "worked-walkthrough not listed: real intermediate pictures appear but steps are not numbered and the modules, not the instance, are the protagonists. The grey of W (#c9c9c9) and the grey of panel (b) (#ededed) differ, so no colour link is claimed.",
+ "venue": "NeurIPS23"
+}

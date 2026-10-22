@@ -1,0 +1,413 @@
+{
+ "paper_id": "iclr26-0070",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MrRoPE (Mixed-radix RoPE)",
+  "one_liner": "A radix-conversion view of rotary position embedding that unifies RoPE-extension methods and yields the training-free MrRoPE-Uni and MrRoPE-Pro for longer contexts.",
+  "domain": [
+   "rotary position embedding",
+   "context length extension",
+   "radix systems"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "three method strips funnel into a boxed theory with its formula, then a stepped bar chart compares radix conversion strategies",
+  "argues": "RoPE, NTK and YaRN are special cases of one mixed-radix encoding, and a progressive conversion (MrRoPE-Pro) differs from regressive and uniform ones in the intermediate dimensions.",
+  "subject": "Frequency profiles of RoPE, NTK and YaRN, the MrRoPE formula, and a stepped chart of radix conversion strategies over dimensions.",
+  "elements": [
+   {
+    "name": "Distinct Frequency Transformation",
+    "type": "label",
+    "role": "title of the left half: the existing methods transform frequencies differently",
+    "drawn_as": "bold dark-green serif title above the strips",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "RoPE",
+    "type": "region",
+    "role": "frequency profile of plain RoPE across dimensions",
+    "drawn_as": "pale yellow-green rounded strip with a rotated label and a sketch: dense red waves, a slower blue wave, an orange decaying curve",
+    "container": "Distinct Frequency Transformation",
+    "is_contribution": false
+   },
+   {
+    "name": "NTK",
+    "type": "region",
+    "role": "frequency profile of NTK scaling",
+    "drawn_as": "pale blue rounded strip with the same three-part wave sketch, slightly stretched",
+    "container": "Distinct Frequency Transformation",
+    "is_contribution": false
+   },
+   {
+    "name": "YaRN",
+    "type": "region",
+    "role": "frequency profile of YaRN",
+    "drawn_as": "pale pink rounded strip with the same three-part wave sketch",
+    "container": "Distinct Frequency Transformation",
+    "is_contribution": false
+   },
+   {
+    "name": "Lower dims / Higher dims",
+    "type": "label",
+    "role": "the horizontal direction of the strips runs from low to high dimension index",
+    "drawn_as": "dashed double-headed bracket under the strips with two small captions",
+    "container": "Distinct Frequency Transformation",
+    "is_contribution": false
+   },
+   {
+    "name": "MrRoPE Theory",
+    "type": "module",
+    "role": "the unifying radix-conversion framework",
+    "drawn_as": "white rounded box with a soft shadow and bold two-line label, formula box hanging beneath it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "mixed-radix formula",
+    "type": "formula",
+    "role": "the encoding formulation mθ'_j = (m · b^(-(j-1)/D_r) / ∏ λ_d) mod 2π",
+    "drawn_as": "equation image inside a dashed rounded box",
+    "container": "MrRoPE Theory",
+    "is_contribution": true
+   },
+   {
+    "name": "Special Cases",
+    "type": "label",
+    "role": "the existing methods and the new ones are special cases of the theory",
+    "drawn_as": "thick blue gradient block arrow labelled Special Cases pointing right",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Radix Conversion Methodology",
+    "type": "chart",
+    "role": "stepped bars over dimension d with radix scale λ, comparing how NTK, YaRN, MrRoPE-Uni and MrRoPE-Pro convert radices",
+    "drawn_as": "eight bars on a d axis under a brick-red serif title, a legend row on top, a dashed Intermediate dimensions bracket under bars 3 to 6",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "legend NTK, YaRN, MrRoPE-Uni, MrRoPE-Pro",
+    "type": "label",
+    "role": "colour key of the bars",
+    "drawn_as": "four rounded swatches in peach, brick red, mint and steel blue with names",
+    "container": "Radix Conversion Methodology",
+    "is_contribution": false
+   },
+   {
+    "name": "β and λ3β ... λ6β bars",
+    "type": "data",
+    "role": "base radix β in every dimension, with scale factors λ3 to λ6 multiplying it in the intermediate dimensions",
+    "drawn_as": "light-blue β cells at the base of all bars; four steel-blue bars rising from λ3β to λ6β with orange italic labels; peach and red tops on the others",
+    "container": "Radix Conversion Methodology",
+    "is_contribution": true
+   },
+   {
+    "name": "Regressive / Progressive arrows",
+    "type": "other",
+    "role": "name the two directions of radix change over the intermediate dimensions (YaRN-like descending against MrRoPE-Pro ascending)",
+    "drawn_as": "two hollow outlined block arrows, red pointing down-right and blue pointing up-right, with italic labels",
+    "container": "Radix Conversion Methodology",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "RoPE, NTK, YaRN",
+    "to": "MrRoPE Theory",
+    "what": "Unify by: the three methods are expressed in one formulation",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MrRoPE Theory",
+    "to": "Radix Conversion Methodology",
+    "what": "Special Cases: each method is one radix conversion strategy",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MrRoPE Theory",
+    "to": "mixed-radix formula",
+    "what": "the theory is stated by this formula",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "legend",
+    "to": "bars",
+    "what": "colour says which method a bar part belongs to",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Intermediate dimensions bracket",
+    "to": "bars 3 to 6",
+    "what": "the range where the methods differ",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Lower dims",
+    "to": "Higher dims",
+    "what": "direction of the strips' horizontal axis",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Distinct Frequency Transformation",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "RoPE, NTK and YaRN as three stacked strips, each with a wave sketch from lower to higher dims",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Radix Conversion Methodology",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "stepped bars where NTK, YaRN, MrRoPE-Uni and MrRoPE-Pro differ in the intermediate dimensions",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "λ3, λ4, λ5, λ6, β",
+    "kind": "identity",
+    "at": "labels on the bars",
+    "what": "names the radix scale factor of each intermediate dimension and the shared base radix"
+   },
+   {
+    "marker": "λ, d",
+    "kind": "identity",
+    "at": "ends of the chart axes",
+    "what": "names the vertical radix axis and the horizontal dimension axis"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "frequency wave sketches inside the three strips",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same three-part sketch (dense red wave, slow blue wave, orange decaying curve) between dash-dot breaks and horizontal guide lines, one per strip"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "rope-frequency-bands",
+    "drawn_as": "sinusoids whose frequency falls from dense red at low dimensions through a slow blue wave to an orange decaying curve at high dimensions, one strip per method",
+    "parts": [
+     "red wave",
+     "blue wave",
+     "orange curve"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "radix-step-bars",
+    "drawn_as": "a stepped bar chart whose bar heights are per-dimension radix scales, with hollow arrows naming regressive and progressive trends",
+    "parts": [
+     "β base cells",
+     "λβ bars",
+     "hollow arrows",
+     "legend"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the green title top left, reads the three strips downward, follows the converging arrows into MrRoPE Theory and its formula, then the Special Cases arrow to the red-titled bar chart and its Regressive and Progressive arrows."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A wide left-to-right chain: a titled stack of three tinted strips, three converging block arrows into the MrRoPE Theory box with its formula hanging below, a thick Special Cases arrow, and a titled stepped bar chart with a legend row on top.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.77,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#266a1d",
+    "used_for": "dark green title text Distinct Frequency Transformation"
+   },
+   {
+    "hex": "#c45153",
+    "used_for": "brick red title text Radix Conversion Methodology and, by appearance, the YaRN parts and the Regressive arrow"
+   },
+   {
+    "hex": "#f08300",
+    "used_for": "orange decaying curves in the strips and the λ labels on the bars"
+   },
+   {
+    "hex": "#004098",
+    "used_for": "blue medium-frequency waves in the strips"
+   },
+   {
+    "hex": "#002c6e",
+    "used_for": "darker blue edges of the same waves"
+   },
+   {
+    "hex": "#fbd5b5",
+    "used_for": "NTK peach bar parts",
+    "approx": true
+   },
+   {
+    "hex": "#c6e0d2",
+    "used_for": "MrRoPE-Uni mint bar parts",
+    "approx": true
+   },
+   {
+    "hex": "#3d7ab0",
+    "used_for": "MrRoPE-Pro steel-blue bars and the Special Cases arrow",
+    "approx": true
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "light-blue β cells and the NTK strip tint",
+    "approx": true
+   },
+   {
+    "hex": "#f0f0d2",
+    "used_for": "RoPE strip tint",
+    "approx": true
+   },
+   {
+    "hex": "#efdbe0",
+    "used_for": "YaRN strip tint",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "no stroked shapes recorded; dark outlines are filled paths; dashed rounded outline for the formula box; dashed brackets for dimension ranges",
+  "font": "serif (Times New Roman) 5.5-10.5 pt, bold for the two section titles and the theory label, italic Greek symbols and math italics in the formula",
+  "corners": "mixed",
+  "arrows": "fat block arrows with soft shadows (grey-green, blue-grey, mauve) into the theory box; thick blue gradient arrow for Special Cases; hollow outlined arrows over the bars; thin dashed double-headed brackets",
+  "rendering": "mixed",
+  "effects": "soft drop shadows on strips, boxes, bars and arrows; gradient on the Special Cases arrow",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "strip tints tell RoPE (yellow-green), NTK (blue) and YaRN (pink) apart; in the chart peach = NTK, brick red = YaRN, mint = MrRoPE-Uni, steel blue = MrRoPE-Pro; in the wave sketches red = dense high frequency, blue = slower, orange = decaying",
+  "line_style_means": "dashed double-headed brackets mark dimension ranges; dashed rounded box = formula; hollow outlined arrows = direction of radix change",
+  "shape_means": "tinted rounded strip = one existing method; white rounded box = theory; bars = radix per dimension",
+  "marker_means": "λ3β to λ6β give the radix of each intermediate dimension, β the base; Regressive and Progressive name the two directions",
+  "emphasis": "The tallest blue λ6β bar with the blue hollow Progressive arrow pointing up and right is the visual climax; the formula sits right under the Theory label.",
+  "reusable_patterns": [
+   "one tinted strip per prior method with the same mini plot, joined by converging block arrows into a theory box",
+   "labelled block arrows (Unify by, Special Cases) as connectors between stages",
+   "formula in a dashed box hanging under a rounded theory label",
+   "stepped bar chart with legend colours per method and a bracketed range of interest",
+   "hollow arrows over bars naming two opposite trends",
+   "bold coloured titles heading each half"
+  ],
+  "weaknesses": [
+   "the chart carries only axis names (λ, d) and no values, so the bar heights are illustrative",
+   "the three arrows from the strips use different pale hues that are not explained",
+   "the formula is a small image in 6 pt-class size"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "tinted method strips with wave sketches",
+   "theory box and formula",
+   "block arrows with shadows",
+   "stepped bar chart with legend and hollow arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted method strips with frequency waves",
+   "MrRoPE Theory box",
+   "formula in a dashed box",
+   "converging block arrows",
+   "stepped radix bar chart",
+   "legend of four methods",
+   "regressive and progressive hollow arrows"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "RoPE",
+   "NTK",
+   "YaRN",
+   "mixed-radix",
+   "context extension",
+   "radix conversion",
+   "frequency",
+   "position embedding"
+  ],
+  "tags": [
+   "equation-boxes",
+   "schematic-plot",
+   "small-multiples"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "To unify several prior methods, stack one tinted strip per method with the same mini plot, funnel them with labelled block arrows into a single theory box that carries the master formula, then show the special cases as variants of one schematic chart.",
+  "suits": "Theory papers that recast several existing methods as special cases of one formulation and propose new members of that family."
+ },
+ "tags": [
+  "wide-banner",
+  "block-arrows",
+  "soft-shadows",
+  "serif-text",
+  "tinted-strips",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.2)"
+  ],
+  "evidence": [
+   "Our key contributions are: (1) a unified theoretical framework for major RoPE-extensions",
+   "a progressive radix conversion method MrRoPE-Pro, which outperforms other SoTA methods across various tasks"
+  ]
+ },
+ "summary": "MrRoPE views RoPE-extension methods through radix conversion and unifies them in one formulation, from which the paper derives the training-free MrRoPE-Uni and MrRoPE-Pro. Figure 1 is the overall framework, a wide left-to-right drawing. On the left, under Distinct Frequency Transformation, three tinted strips (RoPE, NTK, YaRN) each sketch frequency waves from lower to higher dims. Three block arrows labelled Unify by converge on a MrRoPE Theory box with its mixed-radix formula beneath, and a thick Special Cases arrow leads to a stepped bar chart titled Radix Conversion Methodology: bars for NTK, YaRN, MrRoPE-Uni and MrRoPE-Pro over the dimensions, with the intermediate dimensions bracketed and hollow Regressive and Progressive arrows.",
+ "summary_zh": "MrRoPE用进制转换统一RoPE外推方法，并推出免训练的MrRoPE-Uni与Pro。图1从左到右：RoPE、NTK、YaRN三条色带汇入MrRoPE理论与公式，再由阶梯柱状图对比中间维度的回退式与渐进式转换。",
+ "confidence": "medium",
+ "notes": "No paragraph about the figure is available, so what the bar parts encode is read from the legend, the labels and the Regressive and Progressive arrows. Prior kinds kept. The digest lists Apple Color Emoji, probably a stray glyph in front of a title. Bar and strip colours are read off bitmaps and marked approximate.",
+ "venue": "ICLR26"
+}

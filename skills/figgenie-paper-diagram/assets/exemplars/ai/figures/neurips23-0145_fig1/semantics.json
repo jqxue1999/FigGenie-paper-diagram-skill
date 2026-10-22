@@ -1,0 +1,287 @@
+{
+ "paper_id": "neurips23-0145",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TreeVAE",
+  "one_liner": "Generative hierarchical clustering model with a learned tree-structured posterior over latent variables and specialised leaf decoders.",
+  "domain": [
+   "hierarchical clustering",
+   "variational autoencoders",
+   "generative models"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "model-anatomy"
+  ],
+  "variant": "taxonomy-map",
+  "variant_note": "a learned binary tree whose ten leaves each carry a framed 3x3 mosaic of CIFAR-10 images and a name pill; model-anatomy because the circles are the model's latent variables, though no network is drawn",
+  "argues": "Without labels, TreeVAE discovers a tree on CIFAR-10 that separates animals from vehicles and groups similar classes under shared ancestors.",
+  "subject": "The hierarchy learned on CIFAR-10: a binary tree of latent-variable circles with sample images assigned to each of ten leaves.",
+  "elements": [
+   {
+    "name": "root node",
+    "type": "module",
+    "role": "top latent variable from which the first split into two subtrees starts",
+    "drawn_as": "open circle at top centre",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "split nodes",
+    "type": "module",
+    "role": "eight further internal latent variables that split the data into two children each (nine internal nodes with the root)",
+    "drawn_as": "open circles joined by straight black edges",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "animals",
+    "type": "label",
+    "role": "names the left subtree with six leaves (horses, dogs, birds, cats, frogs, deers)",
+    "drawn_as": "rounded pill with a grey outline beside the first left split",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "vehicles",
+    "type": "label",
+    "role": "names the right subtree with four leaves (trucks, cars, ships, planes)",
+    "drawn_as": "rounded pill with a grey outline beside the first right split",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "leaf nodes",
+    "type": "module",
+    "role": "ten leaves, each owning the images assigned to it",
+    "drawn_as": "open circles with a short black arrow down to a mosaic",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "horses, dogs, birds, cats, frogs, deers, trucks, cars, ships, planes",
+    "type": "label",
+    "role": "names the dominant class of each leaf",
+    "drawn_as": "rounded pills with grey outlines under each mosaic",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "parent node",
+    "to": "child nodes",
+    "what": "binary split of the data, edges and splits are neural networks per the paper text",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "leaf nodes",
+    "to": "image mosaics",
+    "what": "random subset of CIFAR-10 images probabilistically assigned to the leaf",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "animals",
+    "to": "left subtree",
+    "what": "names the six animal leaves",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "vehicles",
+    "to": "right subtree",
+    "what": "names the four vehicle leaves",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "class pill",
+    "to": "image mosaic",
+    "what": "dominant class of the images",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "random CIFAR-10 images assigned to each leaf (horses, dogs, birds, cats, frogs, deer, trucks, cars, ships, planes)",
+    "content": "natural-image",
+    "role": "result",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "3x3 mosaics of tiny low-resolution tiles with thin gaps, one black frame each, hung under their leaf at two heights"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "the learned grouping of the ten CIFAR-10 classes: planes with ships, cars with trucks, horses with dogs, birds with cats, frogs with deer",
+    "form": "image mosaics under tree leaves with one-word class pills",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "hierarchical-cluster-tree",
+    "drawn_as": "top-down binary tree of open circles joined by straight edges, leaves pointing by arrows to image mosaics",
+    "parts": [
+     "root",
+     "split nodes",
+     "leaf nodes",
+     "mosaics",
+     "name pills"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the root circle at top centre, goes down the animals subtree on the left, then the vehicles subtree on the right, ending on the mosaics and their name pills."
+ },
+ "layout": {
+  "arrangement": "single",
+  "arrangement_note": "One wide binary tree drawn top-down on white: the root at top centre, ten leaves along the bottom, each with a short down arrow onto a 3x3 image mosaic and a rounded grey pill below; mosaics under deeper leaves hang lower so all arrows have the same length; animals and vehicles pills sit beside the first splits.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.03,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#000000",
+    "used_for": "tree edges, circle outlines, mosaic frames and arrow heads"
+   },
+   {
+    "hex": "#9b9b9b",
+    "used_for": "outlines of the rounded name pills"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "fill of the node circles and of the name pills"
+   }
+  ],
+  "ground": "white",
+  "fill": "none",
+  "stroke": "0.5 pt black on edges, circles and mosaic frames, 0.5 pt grey on the pills",
+  "font": "sans (Nimbus Sans) 7.5 pt regular, one size throughout",
+  "corners": "rounded",
+  "arrows": "short straight black arrows with filled heads from leaves to mosaics; tree edges are plain lines",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "no colour code: all colour comes from the photographs",
+  "line_style_means": "solid black line = tree edge; arrow = images assigned to a leaf",
+  "shape_means": "open circle = latent-variable node (split or leaf); rounded grey pill = class or subtree name; framed square mosaic = images of a leaf",
+  "marker_means": "none",
+  "emphasis": "the photographs carry the message: each leaf looks like one class and the two big subtrees are animals and vehicles",
+  "reusable_patterns": [
+   "learned hierarchy drawn as a tree with a framed image mosaic hung under every leaf",
+   "one-word grey pill naming each leaf and each discovered super-group",
+   "deeper leaves' mosaics placed lower so every arrow keeps the same length"
+  ],
+  "weaknesses": [
+   "the pills animals and vehicles have no leader to the node they name",
+   "node circles carry no latent-variable names",
+   "no indication of how many images each leaf holds"
+  ]
+ },
+ "resources": {
+  "own": [
+   "CIFAR-10 images assigned to each leaf by the trained model"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "tree of circles and edges",
+   "arrows",
+   "name pills"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "binary tree of open circles",
+   "3x3 image mosaics under the leaves",
+   "rounded grey class-name pills",
+   "down arrows from leaves",
+   "animals and vehicles subtree labels"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "hierarchical clustering",
+   "tree VAE",
+   "CIFAR-10",
+   "latent tree",
+   "unsupervised",
+   "generative model",
+   "discovered hierarchy"
+  ],
+  "tags": [
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "tree-with-thumbnail-leaves",
+    "what": "a tree or hierarchy whose leaves each hold a framed thumbnail mosaic and a name pill"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a learned hierarchy by drawing the tree itself and hanging a framed mosaic of real samples under every leaf with a one-word pill, so the quality of the grouping can be judged from the pictures alone.",
+  "suits": "Hierarchical clustering, taxonomy discovery or tree-structured latent models on image data, where the coherence of the leaves is the evidence."
+ },
+ "tags": [
+  "single-tree",
+  "image-mosaic-leaves",
+  "black-and-white-lines",
+  "name-pills",
+  "sparse-text",
+  "teaser-result"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.3)",
+   "5 Experiments (p.9)"
+  ],
+  "evidence": [
+   "An example of a tree learned by TreeVAE is depicted in Fig. 1.",
+   "In CIFAR-10, for example, the method divides the vehicles and animals into two different subtrees"
+  ]
+ },
+ "summary": "TreeVAE is a generative hierarchical clustering model that learns a tree-shaped posterior over latent variables and gives each leaf its own decoder. Figure 1 shows the tree it discovered on CIFAR-10, without using labels. A binary tree of open circles is drawn top-down; the first split gives an animals subtree with six leaves and a vehicles subtree with four. Each of the ten leaves points by a short arrow to a framed 3x3 mosaic of random images assigned to it and a grey pill names the class: horses, dogs, birds, cats, frogs, deers, trucks, cars, ships, planes. The drawing is black line work on white, with colour only in the photographs.",
+ "summary_zh": "TreeVAE是学习树形隐变量后验的生成式层次聚类模型。图1展示它在CIFAR-10上无监督学到的二叉树：先分动物与交通工具两支，十个叶子各挂一个3x3样本图和类别名。",
+ "confidence": "high",
+ "notes": "Pre-screen had only scope-overview; model-anatomy added because the paper text says the circles depict latent variables and edges and splits are neural networks, though none of that is drawn. The SVG histogram has no colour fills: all colour is inside the ten bitmaps.",
+ "venue": "NeurIPS23"
+}

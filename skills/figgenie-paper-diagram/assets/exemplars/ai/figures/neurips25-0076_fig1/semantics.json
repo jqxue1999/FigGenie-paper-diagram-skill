@@ -1,0 +1,417 @@
+{
+ "paper_id": "neurips25-0076",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Theory of how pretraining data diversity steers a one-layer transformer to an induction head rather than a positional shortcut.",
+  "domain": [
+   "transformer mechanisms",
+   "induction heads",
+   "out-of-distribution generalization"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two mechanisms (rows) against two data regimes (columns), the same toy token strip redrawn in each cell with a green or red target token",
+  "argues": "Both a positional shortcut and an induction head fit training data with equal gaps, but only the induction head survives when the gaps differ out of distribution.",
+  "subject": "Two ways to solve the trigger-output copying task, drawn on the same token strip under equal-gap and unequal-gap data.",
+  "elements": [
+   {
+    "name": "Pretraining Data",
+    "type": "container",
+    "role": "column for the training regime, where the two stretches of irrelevant tokens have the same length",
+    "drawn_as": "dark-blue banner with white monospace text, 'Pretraining' in bold",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "OOD Test Data",
+    "type": "container",
+    "role": "column for the test regime, where the two stretches differ in length",
+    "drawn_as": "dark-blue banner with white bold monospace text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "input strip: ... t o ... t o",
+    "type": "instance",
+    "role": "a toy input of the associative copying task: trigger t followed by output o, twice, with irrelevant tokens between",
+    "drawn_as": "row of five framed cells (..., t, o, ..., t, o); braces above the two '...' cells",
+    "container": "both columns",
+    "is_contribution": false
+   },
+   {
+    "name": "ℓ = ℓ and ℓ1 ≠ ℓ2",
+    "type": "label",
+    "role": "lengths of the irrelevant stretches before the first and the second trigger: equal in pretraining data, unequal in OOD data",
+    "drawn_as": "italic ℓ labels over braces, joined by a double line, struck through on the OOD side",
+    "container": "both columns",
+    "is_contribution": false
+   },
+   {
+    "name": "Solution 1: positional shortcut",
+    "type": "operation",
+    "role": "outputs the token at position (T+1)/2 for input length T (caption)",
+    "drawn_as": "teal monospace row title above the left strip, 'Solution 1:' in bold",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "1) Match position T ↦ (T+1)/2",
+    "type": "operation",
+    "role": "ties the last position T to the middle position (T+1)/2 through position embeddings p",
+    "drawn_as": "leftward arrow under the strip from p_T to p_(T+1)/2 with a teal label",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "2) Output here",
+    "type": "operation",
+    "role": "reads the token at the matched position",
+    "drawn_as": "black triangle pointing down onto the target cell, teal label above",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Solution 2: induction head",
+    "type": "operation",
+    "role": "finds the queried token and returns the ensuing token (caption)",
+    "drawn_as": "teal monospace row title above the left strip, 'Solution 2:' in bold",
+    "container": "row 2",
+    "is_contribution": true
+   },
+   {
+    "name": "1) Match trigger",
+    "type": "operation",
+    "role": "ties the last trigger t to the earlier trigger t through the token embedding e_t",
+    "drawn_as": "leftward arrow under the strip between two e_t labels with a teal label",
+    "container": "row 2",
+    "is_contribution": true
+   },
+   {
+    "name": "2) Output next",
+    "type": "operation",
+    "role": "returns the token that follows the matched trigger",
+    "drawn_as": "short curved arrow above the strip from t to o, teal label",
+    "container": "row 2",
+    "is_contribution": true
+   },
+   {
+    "name": "query strip: ... t o ... t ?",
+    "type": "instance",
+    "role": "the same sequence with the last output replaced by a question mark, the query",
+    "drawn_as": "row of framed cells ending in a '?' cell",
+    "container": "rows 1 and 2, both columns",
+    "is_contribution": false
+   },
+   {
+    "name": "green target cell",
+    "type": "data",
+    "role": "the token that the mechanism reads out when it is correct",
+    "drawn_as": "cell filled green with an italic white o",
+    "container": "rows 1 and 2",
+    "is_contribution": false
+   },
+   {
+    "name": "red crossed cell",
+    "type": "data",
+    "role": "the token that the positional shortcut reads out on OOD data: wrong",
+    "drawn_as": "cell filled red with a white cross, in the middle of the long gap",
+    "container": "row 1, OOD column",
+    "is_contribution": false
+   },
+   {
+    "name": "× Not Generalizable / ✔ Generalizable",
+    "type": "label",
+    "role": "verdict on each mechanism under OOD data",
+    "drawn_as": "bold teal monospace words with a cross or a tick glyph below the OOD strips",
+    "container": "OOD column",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "p_T",
+    "to": "p_(T+1)/2",
+    "what": "match position T to (T+1)/2",
+    "kind": "attention",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "position (T+1)/2",
+    "to": "output",
+    "what": "the token at that position is output",
+    "kind": "data",
+    "drawn": "other",
+    "step": 2
+   },
+   {
+    "from": "e_t (last t)",
+    "to": "e_t (first t)",
+    "what": "match the trigger by token embedding",
+    "kind": "attention",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "first t",
+    "to": "o",
+    "what": "output the token after the matched trigger",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Pretraining Data column",
+    "to": "OOD Test Data column",
+    "what": "same strips and mechanisms with unequal gaps: the shortcut fails (red cross), the induction head holds (green)",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "braces labelled ℓ",
+    "to": "the '...' cells",
+    "what": "braces mark the irrelevant stretches whose lengths are compared",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Pretraining Data",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the input strip with equal gaps, then the shortcut and the induction head both landing on the correct token",
+    "verdict": "setting"
+   },
+   {
+    "label": "OOD Test Data",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the same strips with unequal gaps: the shortcut reads a wrong token (red cross, Not Generalizable), the induction head stays correct (green, Generalizable)",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1) 2)",
+    "kind": "order",
+    "at": "teal labels beside the arrows under and above each strip",
+    "what": "the two steps of a mechanism: match, then output"
+   },
+   {
+    "marker": "Solution 1 / Solution 2",
+    "kind": "section",
+    "at": "row titles above the left strips",
+    "what": "heads the positional-shortcut row and the induction-head row"
+   },
+   {
+    "marker": "ℓ, ℓ1, ℓ2; p_T, p_(T+1)/2; e_t",
+    "kind": "identity",
+    "at": "over and under the strips",
+    "what": "names the gap lengths, the position embeddings and the trigger's token embedding"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy sequence [..., t, o, ..., t] with the answer o, drawn as framed cells with a green or red target cell",
+    "form": "token strip",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of framed cells: '...' for irrelevant tokens, italic t and o, '?' for the query; one coloured cell marks the output",
+    "parts": [
+     "cells",
+     "...",
+     "t",
+     "o",
+     "?"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "induction-head",
+    "drawn_as": "a curved arrow from the first trigger t to the o after it, with a leftward arrow under the strip tying the last t to the first t, both labelled e_t",
+    "parts": [
+     "trigger t",
+     "next token o",
+     "match arrow",
+     "curved output arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "positional-shortcut",
+    "drawn_as": "a leftward arrow under the strip from p_T to p_(T+1)/2 and a black triangle over the cell at (T+1)/2",
+    "parts": [
+     "p_T",
+     "p_(T+1)/2",
+     "triangle"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Reads the two banners left to right, then down each column: the input strip, Solution 1 with its two steps and verdict, Solution 2 with its two steps and verdict; the eye compares left and right cells in each row."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A 2-column by 3-row grid on white. Two dark-blue banners (Pretraining Data, OOD Test Data) head the columns. The rows are a plain input strip, Solution 1 (positional shortcut) and Solution 2 (induction head), whose teal titles sit at the left above the left strip. Each cell redraws a token strip with a green or red target cell, an arrow for the matching step below it, a triangle or curved arrow for the output, and a verdict word at the bottom of the OOD column.",
+  "panel_count": 2,
+  "lanes": "3 aligned rows crossing both columns: the input strip, Solution 1, Solution 2",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.14,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#004d7f",
+    "used_for": "column banners"
+   },
+   {
+    "hex": "#1db100",
+    "used_for": "correct target cell"
+   },
+   {
+    "hex": "#ee220c",
+    "used_for": "wrong target cell with a white cross"
+   },
+   {
+    "hex": "#007b76",
+    "used_for": "teal text of row titles, step labels and verdict words"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "cell outlines, arrows and token letters"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on cells, 0.75 pt on arrows",
+  "font": "monospace (Menlo) 7-8 pt, bold for titles and step names, in teal; serif italic (STIX) 9 pt for token letters; bold italic 10.5 pt for p and e, 8.5 pt for ℓ",
+  "corners": "square",
+  "arrows": "thin black arrows with small solid heads: straight leftward ones under the strips, short curved ones above them, and solid black triangles pointing down onto a target cell",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = the correct target token, red = a wrong one; teal text = mechanism names, steps and verdicts; dark blue = column headers",
+  "line_style_means": "a double line between the ℓ labels = equal lengths; the same double line struck through = unequal lengths",
+  "shape_means": "framed cell strip = a token sequence; brace = a stretch of irrelevant tokens; black triangle = where the output is read; tick and cross glyphs = verdicts",
+  "marker_means": "1) and 2) order the two steps of each mechanism; p marks positions, e_t the trigger's embedding",
+  "emphasis": "the only colours besides the banners are the green and red target cells, so the shortcut's red cross on OOD data against the induction head's green cell is what the eye lands on",
+  "reusable_patterns": [
+   "the same token strip redrawn in every cell, with only the target cell's colour changing",
+   "columns for data regimes and rows for mechanisms to make a 2 x 2 contrast",
+   "brace labels with an equals sign and a struck equals sign to show equal and unequal gaps",
+   "verdict word with a tick or cross under each OOD cell",
+   "two-step labels (1 match, 2 output) next to the arrow that does each step"
+  ],
+  "weaknesses": [
+   "the row titles sit above the left strip only, so the right-hand cells carry no row label of their own",
+   "the double line and its struck twin are small and easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token strips and braces",
+   "column banners",
+   "match and output arrows",
+   "verdict labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "token strips of framed cells",
+   "braces labelled with gap lengths",
+   "green and red target cells",
+   "dark-blue column banners",
+   "match arrows labelled with p and e",
+   "tick and cross verdict words"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "induction head",
+   "positional shortcut",
+   "data diversity",
+   "out-of-distribution generalization",
+   "associative copying",
+   "trigger-output task",
+   "single-layer transformer",
+   "algorithm selection"
+  ],
+  "tags": [
+   "token-strip",
+   "verdict-marks",
+   "error-callouts",
+   "small-multiples",
+   "task-definition"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "To show that two mechanisms agree on training data and part ways out of distribution, redraw one toy token strip in a grid with data regimes as columns and mechanisms as rows, and change one cue only: a green target cell that stays correct against a red crossed cell when the gap lengths differ.",
+  "suits": "Theory and mechanism papers where two candidate solutions fit the training distribution and a shifted test distribution separates them; toy token sequences."
+ },
+ "tags": [
+  "2 x 3 grid",
+  "token cells",
+  "green-red target cell",
+  "dark-blue banners",
+  "monospace teal labels",
+  "braces",
+  "tick-cross verdict words",
+  "no icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Main Result (p.6-7)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "positional shortcut that outputs the token at position (T + 1)/2 for input length T",
+   "induction head using token embedding e, which finds the queried token and returns the ensuing token",
+   "on OOD sequences with varying ℓ1 ̸= ℓ2, only (ii) remains a valid solution"
+  ]
+ },
+ "summary": "The paper studies how the diversity of pretraining data decides whether a one-layer transformer learns a positional shortcut or an induction head on a trigger-output copying task. Figure 1 sets the two mechanisms against two data regimes in a 2-column, 3-row grid. The columns, headed Pretraining Data and OOD Test Data, show the same token strip [..., t, o, ..., t] with the two gaps equal (ℓ, ℓ) or unequal (ℓ1, ℓ2). Solution 1 (positional shortcut: match position T to (T+1)/2, output there) and Solution 2 (induction head: match the trigger, output the next token) are drawn on that strip with arrows and a green target cell. On OOD data the shortcut's cell turns red with a cross (Not Generalizable) while the induction head stays green (Generalizable).",
+ "summary_zh": "论文研究预训练数据多样性如何决定单层 Transformer 学到位置捷径还是归纳头。图用 2 列×3 行网格：列为预训练与 OOD 数据，行为输入、位置捷径、归纳头；同一条词元带上绿色或红叉的目标格，说明只有归纳头能泛化。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The two columns are counted as panels because each has a titled banner; the rows are recorded as lanes. The figure is all vector shapes and text glyphs, with no bitmaps and no icons; the tick and cross are text glyphs. The attention kind on the match arrows is read from the paper's attention-score analysis; the figure itself only says Match.",
+ "venue": "NeurIPS25"
+}

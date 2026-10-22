@@ -1,0 +1,473 @@
+{
+ "paper_id": "icml25-0202",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Sundial",
+  "one_liner": "A family of time series foundation models that predict the next patch's distribution with a flow-matching TimeFlow loss on continuous patch tokens.",
+  "domain": [
+   "time series forecasting",
+   "foundation models",
+   "generative modeling"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "design-family",
+  "variant_note": "two-level contrast: native vs foreign tokenization on top, three numbered model designs below with the proposed one last",
+  "argues": "Sundial is the first time series foundation model family that is both native (continuous tokens) and flexible (generative loss, no prior distribution).",
+  "subject": "Time series data from seven domains tokenized two ways, and three model designs that differ in token type and training loss.",
+  "elements": [
+   {
+    "name": "Time Series Data",
+    "type": "label",
+    "role": "heading of the upper band, with a legend of two chips: Continuous Token (blue) and Discrete Token (green)",
+    "drawn_as": "bold heading with two legend chips at the right",
+    "container": "upper band",
+    "is_contribution": null
+   },
+   {
+    "name": "domain icon band",
+    "type": "icon",
+    "role": "the domains the time series come from",
+    "drawn_as": "blue strip with seven white line icons",
+    "container": "upper band",
+    "is_contribution": null
+   },
+   {
+    "name": "Continuous Tokenization (Native)",
+    "type": "region",
+    "role": "series are cut into patches kept as continuous values",
+    "drawn_as": "light-blue panel with overlaid multi-coloured curves and four black-outlined light-blue patch boxes, bold navy caption",
+    "container": "upper band",
+    "is_contribution": true
+   },
+   {
+    "name": "Discrete Tokenization (Foreign)",
+    "type": "region",
+    "role": "values are turned into integer tokens",
+    "drawn_as": "light-green panel with a number row 8.12, 2.33, 2.47, 3.40, 5.66 and a row of green chips 81 23 24 34 56, bold green caption",
+    "container": "upper band",
+    "is_contribution": false
+   },
+   {
+    "name": "Time Series Foundation Models",
+    "type": "label",
+    "role": "heading of the lower band, with a legend of two swatches: Specific (pink) and Flexible (grey-blue)",
+    "drawn_as": "bold heading with two legend swatches at the right",
+    "container": "lower band",
+    "is_contribution": null
+   },
+   {
+    "name": "(1) TimesFM, Timer, Moirai",
+    "type": "container",
+    "role": "design with continuous tokens and a prior (parametric density) loss, captioned Parametric Densities",
+    "drawn_as": "pink column: four chips, Model, four chips, Prior Loss box",
+    "container": "lower band",
+    "is_contribution": false
+   },
+   {
+    "name": "(2) Chronos, LLMTime",
+    "type": "container",
+    "role": "design with discrete tokens and cross-entropy, captioned Language Modeling",
+    "drawn_as": "grey-blue column: four green chips, Model, four green chips, Cross-Entropy box",
+    "container": "lower band",
+    "is_contribution": false
+   },
+   {
+    "name": "(3) Sundial (Ours)",
+    "type": "container",
+    "role": "design with continuous tokens and the TimeFlow loss, captioned Generative Modeling",
+    "drawn_as": "grey-blue column with a red bold title: four blue chips, Model, four blue chips, TimeFlow box",
+    "container": "lower band",
+    "is_contribution": true
+   },
+   {
+    "name": "Model",
+    "type": "module",
+    "role": "the sequence model, drawn as a black box in each design",
+    "drawn_as": "tall ivory rounded box with vertical text, three copies",
+    "container": "lower band",
+    "is_contribution": null
+   },
+   {
+    "name": "Prior Loss / Cross-Entropy / TimeFlow",
+    "type": "operation",
+    "role": "the training loss that distinguishes the three designs",
+    "drawn_as": "tall grey box with vertical text at the end of each column, TimeFlow in bold",
+    "container": "lower band",
+    "is_contribution": true
+   },
+   {
+    "name": "token chips",
+    "type": "data",
+    "role": "inputs and outputs of the model, four chips on each side",
+    "drawn_as": "stacks of rounded chips, blue (continuous) or green (discrete)",
+    "container": "lower band",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "overlaid time series",
+    "to": "patch boxes",
+    "what": "the series is cut into patches that become continuous tokens",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "number row 8.12, 2.33, ...",
+    "to": "chips 81 23 24 ...",
+    "what": "values become integer tokens",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input chips",
+    "to": "Model",
+    "what": "tokens go into the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model",
+    "to": "output chips",
+    "what": "predicted tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "output chips",
+    "to": "Prior Loss / Cross-Entropy / TimeFlow",
+    "what": "outputs are scored by the loss of that design",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(1) TimesFM, Timer, Moirai",
+    "to": "(2) Chronos, LLMTime",
+    "what": "alternatives separated by a black dashed line",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "(2) Chronos, LLMTime",
+    "to": "(3) Sundial (Ours)",
+    "what": "alternatives separated by a grey dashed line",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "legend chips",
+    "to": "token chips in the columns",
+    "what": "blue = continuous token, green = discrete token",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Specific / Flexible swatches",
+    "to": "column backgrounds",
+    "what": "pink = specific, grey-blue = flexible",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Continuous / Discrete Tokenization panels",
+    "to": "design columns",
+    "what": "columns (1) and (3) use blue native tokens, column (2) uses green foreign tokens",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Continuous Tokenization (Native)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "series from many datasets overlaid and cut into patch boxes",
+    "verdict": "ours"
+   },
+   {
+    "label": "Discrete Tokenization (Foreign)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "a numeric row turned into a row of integer tokens",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(1) TimesFM, Timer, Moirai",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "continuous tokens, a Model box and a Prior Loss; parametric densities",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(2) Chronos, LLMTime",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "discrete tokens, a Model box and a cross-entropy loss; language modeling",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(3) Sundial (Ours)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "continuous tokens, a Model box and the TimeFlow loss; generative modeling",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(1), (2), (3)",
+    "kind": "identity",
+    "at": "titles of the three design columns",
+    "what": "names the three designs, the proposed one last"
+   },
+   {
+    "marker": "(Ours)",
+    "kind": "identity",
+    "at": "title of column 3",
+    "what": "marks the proposed design"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "overlaid real-looking time series from many datasets",
+    "content": "chart",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "about thirty multi-coloured line plots overlaid in one strip, spiky; four black-outlined light-blue rounded boxes mark the first patches"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "seven white line icons: leaf, heart with pulse, globe, lightning bolt, dollar sign with a cycle arrow, bus, network burst",
+    "stands_for": "the data domains of the series; unlabelled, they read as nature, health, web, energy, finance, transport and networks",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 7
+   }
+  ],
+  "examples": [
+   {
+    "what": "A numeric series 8.12, 2.33, 2.47, 3.40, 5.66 turned into the integer tokens 81, 23, 24, 34, 56",
+    "form": "text row above a row of green chips with a small curved arrow and an underline under 8.1",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "vertical stacks of four rounded chips before and after the Model box: blue with black outline for continuous patches, green for discrete number tokens",
+    "parts": [
+     "input chips",
+     "output chips"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Time Series Data band at top left, compares the two tokenizations, then drops to the lower band and reads the three columns left to right ending at the red Sundial column."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two stacked bands: the upper one holds a domain icon strip above two tinted panels (native vs foreign tokenization); the lower one holds three tinted design columns with the same skeleton, divided by dashed lines.",
+  "panel_count": 5,
+  "lanes": "three aligned columns in the lower band, each with input chips, Model, output chips, loss box and a caption",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.47,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#5073f4",
+    "used_for": "blue banner behind the domain icons"
+   },
+   {
+    "hex": "#5073f4",
+    "used_for": "light-blue panel behind the continuous tokenization",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#bbccea",
+    "used_for": "continuous token chips",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#e4f2d9",
+    "used_for": "light-green panel behind the discrete tokenization",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#d2e1c8",
+    "used_for": "discrete token chips"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "pink background of the Specific design",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#f0f1f5",
+    "used_for": "grey-blue background of the Flexible designs",
+    "opacity": 0.9
+   },
+   {
+    "hex": "#fffff0",
+    "used_for": "Model boxes"
+   },
+   {
+    "hex": "#cccccc",
+    "used_for": "loss boxes"
+   },
+   {
+    "hex": "#fde9e8",
+    "used_for": "Specific legend swatch"
+   },
+   {
+    "hex": "#f2f2f6",
+    "used_for": "Flexible legend swatch"
+   },
+   {
+    "hex": "#1f77b4",
+    "used_for": "one of seven line colours of the overlaid time series (with #ff7f0e, #2ca02c, #d62728, #9467bd, #8c564b, #17becf)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 and 1 pt black outlines on chips, boxes and patch boxes; two dashed vertical separators",
+  "font": "sans (Optima Bold, Futura), almost all bold, 5-9 pt: 5 pt column titles and loss labels, 6.5 pt panel captions, 8 pt band headings",
+  "corners": "rounded",
+  "arrows": "short thin black arrows with small filled heads between chips, Model and loss; one small curved arrow from number to token",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue chips and the blue panel = continuous (native) tokens; green chips and the green panel = discrete (foreign) tokens; pink background = Specific loss; grey-blue background = Flexible loss; red bold title = the proposed model",
+  "line_style_means": "dashed vertical lines separate the three designs, black between (1) and (2), grey between (2) and (3)",
+  "shape_means": "rounded chip = token; tall ivory rounded box = Model; tall grey box with vertical text = loss; black-outlined box over the curves = a patch",
+  "marker_means": "(1) to (3) number the designs; (Ours) marks the proposed one",
+  "emphasis": "the red bold title of column 3, which is the only column pairing blue native tokens with the Flexible background beside the bold TimeFlow box",
+  "reusable_patterns": [
+   "design-family columns with an identical skeleton (tokens, model, tokens, loss) so only the loss label and the chip colour differ",
+   "two design axes on two colour channels: chip colour for token type, background tint for loss flexibility",
+   "legend swatches placed in the section heading",
+   "numbers turned into tokens shown as a text row and a chip row joined by a small curved arrow",
+   "strip of white line icons on a coloured band to summarise the data domains"
+  ],
+  "weaknesses": [
+   "column titles and loss labels are only 5 pt",
+   "the lavender chips in column 1 are blue chips under the pink tint and can read as a third token type"
+  ]
+ },
+ "resources": {
+  "own": [
+   "overlaid time series curves from the benchmark data",
+   "a numeric tokenization example"
+  ],
+  "stock": [
+   "seven white line icons for data domains"
+  ],
+  "generated": [],
+  "drawn": [
+   "token chips, Model and loss boxes, arrows, tinted panels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "domain icon banner",
+   "overlaid time series curves with patch boxes",
+   "number row turned into green token chips",
+   "three design columns",
+   "Model box",
+   "loss box (Prior Loss, Cross-Entropy, TimeFlow)",
+   "legend swatches"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "time series foundation models",
+   "continuous tokenization",
+   "flow matching",
+   "TimeFlow loss",
+   "generative forecasting",
+   "Sundial",
+   "patch tokens",
+   "discrete tokenization"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "token-strip",
+   "small-multiples",
+   "option-catalog"
+  ],
+  "new_tags": [
+   {
+    "name": "design-axis-colour-pair",
+    "what": "two design axes carried by two colour channels, chip colour for one and panel background tint for the other, with legend swatches in the section headings"
+   },
+   {
+    "name": "domain-icon-banner",
+    "what": "a coloured strip of white line icons summarising the data domains of a dataset or benchmark"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw competing designs as columns with one shared skeleton so that only the differing parts (token colour, loss box, background tint) change, give each design axis its own colour channel with a legend in the section heading, and mark the proposed column with a red title.",
+  "suits": "Positioning a new model inside a small design space, for example foundation models that differ by tokenization and training objective."
+ },
+ "tags": [
+  "design-family-columns",
+  "tinted-bands",
+  "section-headings-with-legends",
+  "rounded-chips",
+  "line-icon-banner",
+  "bold-sans-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "A native time series model operates on the original series of continuous values.",
+   "A flexible foundation model is pre-trained without specifying prior distributions.",
+   "Sundial is the first family of native and flexible time series foundation models."
+  ]
+ },
+ "summary": "Sundial is a family of time series foundation models that predict the next patch's distribution with a flow-matching TimeFlow loss and no discrete tokenization. Figure 1 is a two-band motivation figure in a single column. The upper band shows series from seven domains (a blue strip of white line icons) and contrasts native continuous patch tokens (overlaid curves cut into boxes) with foreign discrete tokens (numbers turned into integer chips). The lower band lines up three numbered designs with the same token, model, token, loss skeleton: parametric densities with a Prior Loss, language modeling with cross-entropy, and Sundial with TimeFlow. Chip colour marks token type, background tint marks specific versus flexible, and Sundial gets a red title.",
+ "summary_zh": "Sundial 是一族时间序列基础模型，用流匹配的 TimeFlow 损失预测下一段连续补丁的分布。图一分两层：上层对比连续（原生）与离散（外来）分词，下层并排三种设计，仅损失与词元颜色不同，红色标题的 Sundial 是新方案。",
+ "confidence": "high",
+ "notes": "Prior side-by-side-contrast kept; stage-pipeline added for the token, model, token, loss chains inside each column. Panels counted as five (two tokenization panels and three design columns). Token colours in column 1 are read as blue chips under the pink tint (from the overlay opacities in the digest). The domain icons are unlabelled, so their meanings are guesses from their shapes.",
+ "venue": "ICML25"
+}

@@ -1,0 +1,445 @@
+{
+ "paper_id": "aaai26-0028",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "NativeEmbodied",
+  "one_liner": "A benchmark for VLM-driven embodied agents in a native low-level action space, with four low-level skill tasks and three high-level tasks evaluated jointly.",
+  "domain": [
+   "embodied agents",
+   "vision-language models",
+   "benchmark"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "two dashed groups of task cards (four low-level skills, three high-level tasks), each card with a scene render, an instruction and an action list, plus a radar chart of seven VLMs between the groups",
+  "argues": "The benchmark covers four foundational low-level skills and three complex high-level tasks in a native action space, and the models' scores differ strongly across them.",
+  "subject": "seven task cards with indoor scene renders and action lists, plus a radar chart of seven VLMs",
+  "elements": [
+   {
+    "name": "Low-Level Foundational Skills",
+    "type": "container",
+    "role": "group of the four skill tasks",
+    "drawn_as": "dashed black region with a light grey title in a comic-style face; its top-right edge is cut diagonally around the radar chart",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "High-Level Complex Tasks",
+    "type": "container",
+    "role": "group of the three integrated tasks",
+    "drawn_as": "dashed black rectangle with a tan title in the same face",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Perception",
+    "type": "instance",
+    "role": "skill task: name the objects with their location and receptacle; format [Object | Location | Receptacle], answers [Plate | Front | CounterTop] and [Mug | LEFT | Sink]",
+    "drawn_as": "grey rounded title tab over a cream card with a kitchen render, a blue dash-dot path and monospace answers",
+    "container": "Low-Level Foundational Skills",
+    "is_contribution": true
+   },
+   {
+    "name": "Alignment",
+    "type": "instance",
+    "role": "skill task: Target the crosshair to the Statue, answered by [RotateRight 45, LookDown 30]",
+    "drawn_as": "grey title tab over a pale grey-green card with an orange-room render, a dashed arrow and a red box on the statue",
+    "container": "Low-Level Foundational Skills",
+    "is_contribution": true
+   },
+   {
+    "name": "Navigation",
+    "type": "instance",
+    "role": "skill task: Move to the Laptop, answered by [Move Ahead 2m, RotateRight 45, ... Move Ahead 0.3m]",
+    "drawn_as": "grey title tab over a pale green card with two top-down renders and a blue arrow path",
+    "container": "Low-Level Foundational Skills",
+    "is_contribution": true
+   },
+   {
+    "name": "Planning",
+    "type": "instance",
+    "role": "skill task: Put the Box into the GarbageBin, answered by [Navigate Table, PickUp Box ... ]",
+    "drawn_as": "grey title tab over a lavender card with a top-down render, a dotted arrow and a red box",
+    "container": "Low-Level Foundational Skills",
+    "is_contribution": true
+   },
+   {
+    "name": "radar chart of seven VLMs",
+    "type": "chart",
+    "role": "scores of seven models on a heptagon of axes (one vertex per task, apparently four skills and three tasks; the axes are not labelled)",
+    "drawn_as": "heptagon grid in grey with seven translucent coloured polygons, each model name printed in its colour",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Gemini-2.5-Pro, Claude-3.7-Sonnet, Claude-4.0-Opus, Qwen2.5-VL-72B, Gemini-2.0-Flash, GPT-4o, GPT-o3",
+    "type": "label",
+    "role": "the seven evaluated models, each tied to one polygon by colour",
+    "drawn_as": "small bold serif names in the polygon colours placed inside the chart",
+    "container": "radar chart",
+    "is_contribution": false
+   },
+   {
+    "name": "Exploration",
+    "type": "instance",
+    "role": "task: How many Pan are exposed in the room?, answered by [Move Left 0.5, RotateRight 90, ... Answer: 5]",
+    "drawn_as": "peach title tab over a rounded outlined card with two top-down renders, red boxes on pans, blue arrows and a monospace list",
+    "container": "High-Level Complex Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Search",
+    "type": "instance",
+    "role": "task: Find the Newspaper, answered by [MoveAhead 2m, LookDown 30, RotateRight 40]",
+    "drawn_as": "peach title tab over a rounded card with two renders and a blue path to a red box",
+    "container": "High-Level Complex Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Interaction",
+    "type": "instance",
+    "role": "task: Put the Tomato into the Fridge, answered by [MoveAhead 0.5m, Rotate Left 90, PickUp Tomato ...]",
+    "drawn_as": "peach title tab over a rounded card with a top-down kitchen render, red boxes and arrows",
+    "container": "High-Level Complex Tasks",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "instruction",
+    "to": "action list",
+    "what": "the instruction is answered by a bracketed sequence of native actions",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "agent position in each render",
+    "to": "red-boxed target",
+    "what": "path or gaze direction to the target (blue arrow)",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "radar chart vertices",
+    "to": "the seven task cards",
+    "what": "one vertex per task (inferred; axes are not labelled)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Low-Level Foundational Skills",
+    "to": "High-Level Complex Tasks",
+    "what": "the caption calls the high-level tasks integrated, built on the skills; no arrow is drawn",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Low-Level Foundational Skills",
+    "kind": "scope-overview",
+    "axis": "other",
+    "shows": "four skill cards (Perception, Alignment, Navigation, Planning) with renders, instructions and action lists",
+    "verdict": null
+   },
+   {
+    "label": "High-Level Complex Tasks",
+    "kind": "scope-overview",
+    "axis": "other",
+    "shows": "three task cards (Exploration, Search, Interaction) with renders, instructions and action lists",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "red square",
+    "kind": "identity",
+    "at": "scene renders",
+    "what": "marks the target object of the instruction"
+   },
+   {
+    "marker": "model names in colour",
+    "kind": "identity",
+    "at": "inside the radar chart",
+    "what": "names the polygon of each model"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "first-person indoor views (kitchen, orange room)",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small square renders with vector overlays: a blue dash-dot path, a dashed arrow with crosshair, a red box on the target"
+   },
+   {
+    "what": "top-down indoor scene renders (living room, dining room, kitchen, bedroom-like rooms)",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "square or wide renders on the cards with red target boxes and blue arrow paths drawn over them"
+   },
+   {
+    "what": "radar chart of seven VLMs",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "heptagon grid with seven translucent polygons in distinct colours, nested so the outer yellow one dominates and others are uneven"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "seven task instructions with native action lists, e.g. Target the crosshair to the Statue with [RotateRight 45, LookDown 30]",
+    "form": "bold italic instruction above a monospace bracketed list on each card",
+    "real_values": true
+   },
+   {
+    "what": "a perception answer in the format [Object | Location | Receptacle], e.g. [Plate | Front | CounterTop]",
+    "form": "monospace brackets with two answers and dots",
+    "real_values": true
+   },
+   {
+    "what": "an exploration question and its answer: How many Pan are exposed in the room? Answer: 5",
+    "form": "instruction and a list ending in a red 5",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "radar-chart",
+    "drawn_as": "heptagon radar with seven coloured translucent polygons, model names printed in their own colour inside the plot instead of a legend",
+    "parts": [
+     "heptagon grid",
+     "polygons",
+     "in-plot model names"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "titled card holding a scene render, a bold italic instruction and a monospace action list, without verdict marks",
+    "parts": [
+     "title tab",
+     "render",
+     "instruction",
+     "action list"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Low-Level Foundational Skills title at top left, goes down the four skill cards, crosses to the radar chart in the middle and ends on the three task cards of the High-Level group at the right."
+ },
+ "layout": {
+  "arrangement": "dashboard",
+  "arrangement_note": "Two dashed groups of cards with a radar chart wedged between them: at left three skill cards are stacked down a column and a fourth (Planning) sits at the bottom next to the chart; the left group's top-right edge is cut diagonally around the chart; at right three task cards are stacked in a dashed rectangle. Each card has a rounded title tab overlapping its top-left corner.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.93,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff9eb",
+    "used_for": "cream background of the Perception card"
+   },
+   {
+    "hex": "#e9ede7",
+    "used_for": "pale grey-green background of the Alignment card"
+   },
+   {
+    "hex": "#8bc927",
+    "opacity": 0.2,
+    "used_for": "pale green background of the Navigation card"
+   },
+   {
+    "hex": "#694c93",
+    "opacity": 0.2,
+    "used_for": "lavender background of the Planning card"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey title tabs of the four skill cards"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "peach title tabs of the three task cards"
+   },
+   {
+    "hex": "#ffca3a",
+    "used_for": "GPT-o3 polygon and the faint yellow tint over the radar"
+   },
+   {
+    "hex": "#6a4c93",
+    "used_for": "Gemini-2.5-Pro polygon"
+   },
+   {
+    "hex": "#1982c4",
+    "used_for": "Claude-4.0-Opus polygon"
+   },
+   {
+    "hex": "#8ac926",
+    "used_for": "Claude-3.7-Sonnet polygon"
+   },
+   {
+    "hex": "#ff61a6",
+    "used_for": "Qwen2.5-VL-72B polygon"
+   },
+   {
+    "hex": "#ff924c",
+    "used_for": "Gemini-2.0-Flash polygon"
+   },
+   {
+    "hex": "#ff595e",
+    "used_for": "GPT-4o polygon"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "blue path arrows drawn over the scene renders"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red target boxes on the renders"
+   },
+   {
+    "hex": "#aaaaaa",
+    "used_for": "radar grid lines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75-1.25 pt black outlines on cards and tabs, thick dashed black outlines on the two groups, 0.25-0.5 pt grey grid",
+  "font": "mixed: comic-style sans for group titles (11 pt) and card tabs, bold italic serif for instructions (8.5 pt), monospace (DM Mono) for action lists (6.5 pt), bold serif 6 pt for model names",
+  "corners": "mixed",
+  "arrows": "thin blue arrows with small heads and dashed or dash-dot variants drawn over the renders; no arrows between cards",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Card background tints differ per skill with no key; title tab colour separates the groups (grey tabs for low-level skills, peach tabs for high-level tasks); in the radar chart one colour per model, the name printed in the same colour; red = target object on the renders, blue = path or gaze.",
+  "line_style_means": "Dashed black outlines = the two task groups; dash-dot blue = a perception sweep; dashed blue arrow = a look or rotate direction; dotted arrow = a planned route.",
+  "shape_means": "Rounded title tab = task name; outlined card = one example task; heptagon grid = score axes; red square = target.",
+  "marker_means": "Red squares mark targets; model names in colour label the radar polygons.",
+  "emphasis": "The radar chart sits between the two groups and its outer yellow polygon is the largest shape; the cards carry equal weight.",
+  "reusable_patterns": [
+   "card = title tab + scene render with overlay + bold italic instruction + monospace action list",
+   "grey tabs for low-level and peach tabs for high-level tasks to split two granularities",
+   "red target boxes and blue path arrows drawn over each render",
+   "radar chart with direct in-plot model labels in the polygon colours",
+   "diagonal dashed cut-out in one group to make room for a chart between two groups"
+  ],
+  "weaknesses": [
+   "the radar axes are not labelled, so the reader must guess that each vertex is one task",
+   "action lists are 6.5 pt monospace and some text runs past the card edge",
+   "no mark says which card feeds which radar axis"
+  ]
+ },
+ "resources": {
+  "own": [
+   "scene renders from the simulator",
+   "instructions and action lists of the tasks",
+   "model scores in the radar chart"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "cards and title tabs",
+   "dashed groups",
+   "red boxes and blue arrows over renders",
+   "radar chart"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "titled task cards with scene renders",
+   "bold italic instructions",
+   "monospace action lists",
+   "heptagon radar chart of seven models",
+   "red target boxes and blue path arrows",
+   "two dashed groups with coloured title tabs"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "embodied agents",
+   "vision-language models",
+   "benchmark",
+   "native action space",
+   "foundational skills",
+   "navigation",
+   "manipulation",
+   "radar chart"
+  ],
+  "tags": [
+   "radar-chart",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "path-and-target-overlays",
+    "what": "scene renders carry vector overlays: red squares around target objects and blue arrows for the intended path or look direction"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a benchmark as task cards that each hold one render with overlays, an instruction and the expected action list, and put a radar chart between the card groups; colour the tab of each group differently so two granularities read apart.",
+  "suits": "Benchmark papers for embodied or agent tasks with a few task families, real example instructions and per-model scores to show."
+ },
+ "tags": [
+  "task-cards",
+  "title-tabs",
+  "dashed-groups",
+  "monospace-actions",
+  "overlay-renders",
+  "pastel-card-tints"
+ ],
+ "provenance": {
+  "sections": [
+   "3 NativeEmbodied Benchmark (section label in the index; no paragraph mentions the figure)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "Our NativeEmbodied benchmark includes four fundamental low-level tasks (i.e., Perception, Alignment, Navigation and Planning)",
+   "three integrated high-level tasks (i.e., Exploration, Interaction, and Search)",
+   "adopts a unified, native low-level action space"
+  ]
+ },
+ "summary": "NativeEmbodied is a benchmark for vision-language-model embodied agents that act through a native low-level action space. Figure 1 presents it as two dashed groups of example cards. At left, four low-level skill cards (Perception, Alignment, Navigation, Planning) and at right three high-level task cards (Exploration, Search, Interaction) each show an indoor scene render with red target boxes and blue paths, a bold italic instruction and a monospace action list. Between the groups, a seven-vertex radar chart compares seven VLMs (Gemini-2.5-Pro, Claude-4.0-Opus, GPT-o3 and others) as coloured polygons named in the plot. The figure states the tasks and the results, not a method.",
+ "summary_zh": "NativeEmbodied 是面向视觉语言模型具身智能体的基准，使用原生低层动作空间。图用两组虚线卡片展示四个低层技能和三个高层任务，每张卡片配室内场景渲染、指令和动作列表，中间的雷达图比较七个模型的表现。",
+ "confidence": "medium",
+ "notes": "The prior labels listed contribution-mosaic first; the figure reads mainly as a benchmark scope overview (tasks plus a result chart), so scope-overview is primary here. No paragraph mentions the figure, and the radar axes are unlabelled: that each vertex stands for one of the seven tasks is inferred from the seven vertices. The seven cards are described as elements and only the two titled dashed groups as panels.",
+ "venue": "AAAI26"
+}

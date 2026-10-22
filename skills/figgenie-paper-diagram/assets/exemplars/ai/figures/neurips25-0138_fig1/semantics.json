@@ -1,0 +1,689 @@
+{
+ "paper_id": "neurips25-0138",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SIL-C",
+  "one_liner": "Framework for skill incremental learning that keeps downstream policies compatible with evolving skills via a bilateral lazy-learning mapping, without policy retraining.",
+  "domain": [
+   "skill incremental learning",
+   "hierarchical policies",
+   "robot manipulation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast",
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "scenario-timeline-with-cases",
+  "variant_note": "a two-track phase timeline plus the SIL-C framework box on top, then forward and backward compatibility cases as stacked bands with robot-kitchen renders",
+  "argues": "Skill updates must stay compatible with older (backward) and future (forward) policies; SIL-C does this by mapping policy subtasks to the evolving skill decoder through a lazy learning interface.",
+  "subject": "A policy-skill timeline over four phases, the SIL-C policy-interface-decoder stack, and forward and backward compatibility cases on robot-kitchen renders.",
+  "elements": [
+   {
+    "name": "Policy Compatible Skill Incremental Learning",
+    "type": "label",
+    "role": "title of the top band, the scenario being defined",
+    "drawn_as": "8 pt bold text on a light grey strip with a thick grey accent bar",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Skill update / Policy update",
+    "type": "label",
+    "role": "legend of the two kinds of update event",
+    "drawn_as": "grey ring-on-stub glyph and grey square-on-stub glyph at the top right of the strip",
+    "container": "Policy Compatible Skill Incremental Learning",
+    "is_contribution": false
+   },
+   {
+    "name": "Policy track",
+    "type": "region",
+    "role": "row of policy updates over time",
+    "drawn_as": "pale green strip with square nodes joined by a thick grey line; dashed grey line from the first square to a dark grey square",
+    "container": "Policy Compatible Skill Incremental Learning",
+    "is_contribution": null
+   },
+   {
+    "name": "Skill track",
+    "type": "region",
+    "role": "row of skill updates over time",
+    "drawn_as": "pale yellow strip with circle nodes joined by a thick grey line, then a dotted line to a dark grey circle",
+    "container": "Policy Compatible Skill Incremental Learning",
+    "is_contribution": null
+   },
+   {
+    "name": "Phase 1 / Phase 2 / Phase 3 / Phase 4",
+    "type": "label",
+    "role": "the four incremental learning phases along the skill track",
+    "drawn_as": "grey bold italic labels under the circle nodes",
+    "container": "Skill track",
+    "is_contribution": false
+   },
+   {
+    "name": "Policy V1 / Policy V1 / Policy V2",
+    "type": "module",
+    "role": "versions of the downstream policy: V1 at the start and still in use at Phase 4, V2 after the Phase 4 update",
+    "drawn_as": "green boxes with dark outline above the timeline",
+    "container": "Policy track",
+    "is_contribution": null
+   },
+   {
+    "name": "Skill Decoder V1 / V1.1 / V1.2 / V1.3",
+    "type": "module",
+    "role": "versions of the skill decoder, one per phase",
+    "drawn_as": "yellow boxes with dark outline under the timeline",
+    "container": "Skill track",
+    "is_contribution": null
+   },
+   {
+    "name": "SIL-C framework",
+    "type": "container",
+    "role": "the proposed framework: policy, lazy learning interface and skill decoder driving an agent in an environment",
+    "drawn_as": "grey rounded panel at the right of the top band, titled underneath",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Lazy Learning Interface",
+    "type": "module",
+    "role": "maps the subtasks named by the policy to skills of the decoder (abstract: bilateral lazy learning-based mapping)",
+    "drawn_as": "grey box between a green Policy box and a yellow Skill Decoder box, with coloured rules",
+    "container": "SIL-C framework",
+    "is_contribution": true
+   },
+   {
+    "name": "State / Subtask / Skill / Actions",
+    "type": "label",
+    "role": "what is passed from level to level along the stack",
+    "drawn_as": "3.5 pt bold labels beside a tall grey arrow",
+    "container": "SIL-C framework",
+    "is_contribution": null
+   },
+   {
+    "name": "Agent and Env.",
+    "type": "actor",
+    "role": "hierarchical agent acting in its environment: Env. sends State, the Agent returns Actions (labelled Hierarchical Agent Evaluation)",
+    "drawn_as": "robot arm beside a burning stove burner and a globe, joined by two curved arrows",
+    "container": "SIL-C framework",
+    "is_contribution": false
+   },
+   {
+    "name": "Forward Skill Compatibility (FwSC)",
+    "type": "container",
+    "role": "band: a newly updated skill can be used by future downstream policies",
+    "drawn_as": "full-width yellow gradient header with orange accent bar, chain below, definition strip at the foot",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Initial Skills",
+    "type": "data",
+    "role": "skills available before the update, shown as microwave and kettle objects",
+    "drawn_as": "cream rounded card with a 3D render",
+    "container": "Forward Skill Compatibility (FwSC)",
+    "is_contribution": false
+   },
+   {
+    "name": "Skill Updates",
+    "type": "operation",
+    "role": "skills are added or improved (used in both bands)",
+    "drawn_as": "yellow gradient triple-chevron block arrow with a bold caption",
+    "container": "Forward Skill Compatibility (FwSC)",
+    "is_contribution": false
+   },
+   {
+    "name": "Updated Skills",
+    "type": "data",
+    "role": "old skill objects tinted yellow plus newly learned ones (cabinets, stove knobs) in natural colour",
+    "drawn_as": "yellow-tinted rounded card with a 3D render",
+    "container": "Forward Skill Compatibility (FwSC)",
+    "is_contribution": false
+   },
+   {
+    "name": "Policy Update",
+    "type": "operation",
+    "role": "a new policy (Policy V2) is trained on the updated skills",
+    "drawn_as": "green gradient block arrow with a bold caption",
+    "container": "Forward Skill Compatibility (FwSC)",
+    "is_contribution": false
+   },
+   {
+    "name": "Policy V2 / Subtask space of evaluation task / Skill space of Phase 4 / Skill Decoder V1.3",
+    "type": "module",
+    "role": "the new policy reaches the latest decoder through the interface, which links its subtask space to the Phase 4 skill space",
+    "drawn_as": "green box over two white bars over a yellow box, with small arrows between layers",
+    "container": "Forward Skill Compatibility (FwSC)",
+    "is_contribution": true
+   },
+   {
+    "name": "Backward Skill Compatibility (BwSC)",
+    "type": "container",
+    "role": "band: an existing downstream policy can use newly added or updated skills without retraining",
+    "drawn_as": "full-width green gradient header with green accent bar, chain below, definition strip at the foot",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Skill validation",
+    "type": "operation",
+    "role": "Policy V1 checks the skills of Skill Decoder V1 before use",
+    "drawn_as": "magnifier with a question mark between the green and yellow boxes, black and blue arrows",
+    "container": "Backward Skill Compatibility (BwSC)",
+    "is_contribution": null
+   },
+   {
+    "name": "Skill hooking / Traj. Dist. Similarity",
+    "type": "operation",
+    "role": "misaligned subtasks of Policy V1 are remapped to skills of Skill Decoder V1.3 chosen by trajectory distribution similarity",
+    "drawn_as": "magnifier and hook with a blue curved arrow to the decoder and a small box with an up-down arrow",
+    "container": "Backward Skill Compatibility (BwSC)",
+    "is_contribution": true
+   },
+   {
+    "name": "Hooked",
+    "type": "label",
+    "role": "tags the render in which a remapped skill is used",
+    "drawn_as": "small white tag with a hook glyph at the top left of the last render",
+    "container": "Backward Skill Compatibility (BwSC)",
+    "is_contribution": null
+   },
+   {
+    "name": "definition strips",
+    "type": "text-block",
+    "role": "one sentence at the foot of each band defining the scenario, FwSC and BwSC, with the example skill turn on top burner",
+    "drawn_as": "full-width tinted strip, key phrases in bold",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Skill track nodes",
+    "to": "Skill track nodes",
+    "what": "skills updated phase by phase, then a dotted continuation to a dark grey circle",
+    "kind": "time",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Phase 1 circle",
+    "to": "first policy square",
+    "what": "S-shaped link: the first policy is built on the skills of Phase 1",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "first policy square",
+    "to": "dark grey square under the second Policy V1",
+    "what": "the same Policy V1 carried through the phases",
+    "kind": "time",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Phase 4 circle",
+    "to": "last policy square",
+    "what": "S-shaped link: a new policy, Policy V2, follows the Phase 4 skill update",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Policy / Lazy Learning Interface",
+    "to": "Skill Decoder",
+    "what": "state, subtask, skill and actions passed down the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Env.",
+    "to": "Agent",
+    "what": "State",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent",
+    "to": "Env.",
+    "what": "Actions",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Initial Skills",
+    "to": "Updated Skills",
+    "what": "skills are updated",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Updated Skills",
+    "to": "Policy V2 stack",
+    "what": "a new policy is trained",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Skill space of Phase 4",
+    "to": "Skill Decoder V1.3",
+    "what": "subtasks resolved to decoded skills",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Policy V1 (BwSC left)",
+    "to": "Skill Decoder V1",
+    "what": "default path (black) and validation path (blue)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Policy V1 (BwSC middle)",
+    "to": "Skill Decoder V1.3",
+    "what": "hooking path remaps subtasks to updated skills",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "band header thumbnails",
+    "to": "master timeline",
+    "what": "a small copy of the timeline marks which part of it each band is about",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "renders",
+    "to": "check badge",
+    "what": "outcome: task solved (green) or solved with earlier skills (grey)",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Policy Compatible Skill Incremental Learning",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "two-track timeline of skill and policy updates over four phases with version labels, plus a one-sentence definition of the scenario",
+    "verdict": "setting"
+   },
+   {
+    "label": "SIL-C framework",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Policy, Lazy Learning Interface and Skill Decoder stack with State, Subtask, Skill and Actions, and an agent and environment loop",
+    "verdict": "ours"
+   },
+   {
+    "label": "Forward Skill Compatibility (FwSC)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "initial skills, skill update, updated skills, policy update to Policy V2 and the solved kitchen render",
+    "verdict": null
+   },
+   {
+    "label": "Backward Skill Compatibility (BwSC)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "Policy V1 with skill validation, skill update, then skill hooking to Skill Decoder V1.3 and a before and after render",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2, 3, 4",
+    "kind": "order",
+    "at": "kitchen renders",
+    "what": "order of the subtask steps the robot performs"
+   },
+   {
+    "marker": "Phase 1 to Phase 4",
+    "kind": "order",
+    "at": "Skill track",
+    "what": "order of the learning phases"
+   },
+   {
+    "marker": "V1, V1.1, V1.2, V1.3, V2",
+    "kind": "identity",
+    "at": "policy and decoder boxes",
+    "what": "name the versions of policies and skill decoders"
+   },
+   {
+    "marker": "FwSC, BwSC",
+    "kind": "section",
+    "at": "band headers and definition strips",
+    "what": "abbreviations that head and tag the two compatibility bands"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "robot-kitchen simulation renders in which a manipulator turns on the top burner, with numbered yellow step arrows: one in FwSC and three in BwSC",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "rectangular tiles with soft shadow, circled step numbers 1 to 4 and arrows baked in, a check badge in a corner; two BwSC tiles dimmed by a dark translucent overlay, the last one bright with a Hooked tag"
+   },
+   {
+    "what": "object renders: microwave and kettle for Initial Skills; the same objects tinted yellow plus blue cabinets and stove knobs for Updated Skills",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "object cut-outs on cream cards; objects of earlier skills are tinted yellow, new ones keep natural colours"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "group of people silhouettes with a blue USB stick",
+    "stands_for": "the policy side, labelled Policy (not explained further)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "office building with a database cylinder",
+    "stands_for": "the skill library, labelled Skill",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "globe",
+    "stands_for": "the environment Env.",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot arm beside a burning stove burner",
+    "stands_for": "the hierarchical agent",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "magnifier with a question mark; magnifier with a hook",
+    "stands_for": "skill validation and skill hooking",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "ring-on-stub and square-on-stub glyphs, reused as timeline nodes",
+    "stands_for": "skill update and policy update",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "round check badges, green and grey",
+    "stands_for": "task solved, and solved with earlier skills",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "the kitchen task turn on top burner executed as four numbered subtasks",
+    "form": "3D render with circled step numbers and yellow arrows",
+    "real_values": true
+   },
+   {
+    "what": "an illustrative four-phase scenario with Skill Decoder V1 to V1.3 and Policy V1 to V2",
+    "form": "timeline with version boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "robot arm and globe joined by two curved arrows labelled State and Actions, no reward arrow",
+    "parts": [
+     "Agent",
+     "Env.",
+     "State arrow",
+     "Actions arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "hierarchical-policy-stack",
+    "drawn_as": "green Policy box over a grey Lazy Learning Interface over a yellow Skill Decoder, with State, Subtask, Skill and Actions labelled down the side",
+    "parts": [
+     "Policy",
+     "Lazy Learning Interface",
+     "Skill Decoder",
+     "level labels"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "skill-library",
+    "drawn_as": "office building with a database cylinder labelled Skill",
+    "parts": [
+     "building",
+     "database cylinder"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the title strip at the top left, follows the Policy and Skill tracks left to right, then the SIL-C framework box and the definition sentence, then down to the FwSC band and the BwSC band, each read left to right ending on a solved render."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three full-width bands stacked top to bottom: a scenario timeline with the SIL-C framework box at its right, then FwSC and BwSC, each with a titled header strip, a left-to-right chain with renders and a definition strip at the foot; the two lower headers carry a thumbnail copy of the timeline.",
+  "panel_count": 4,
+  "lanes": "two horizontal tracks (Policy green, Skill yellow) crossed by four phase columns, with policy versions above and skill decoder versions below",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 1.6,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "title strip, SIL-C framework panel, definition strip and greyed caption panels"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "Policy boxes (green)"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "lighter green of the Policy Update arrow and policy-side accents"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "Policy track and BwSC band tint"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "Skill Decoder boxes (yellow)"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "lighter yellow of the Skill Updates chevrons and skill track"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "FwSC band, Initial Skills card and definition strip tint"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "thick timeline lines and node outlines"
+   },
+   {
+    "hex": "#404040",
+    "opacity": 0.7,
+    "used_for": "dark scrim over the dimmed renders"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green rules and the accent bar of the BwSC band"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "orange rules and the accent bar of the FwSC band"
+   },
+   {
+    "hex": "#262626",
+    "used_for": "text and dark icons"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.5 pt grey or black outlines on boxes, 2 to 3 pt grey timeline with white-filled round and square nodes, 1.25 pt green and orange rules inside stacks, dashed and dotted grey lines for carried-over items",
+  "font": "sans (Arial, Calibri) 5 to 8 pt, almost all bold; 3.5 pt labels beside the framework stack",
+  "corners": "mixed",
+  "arrows": "thick grey lines with S-curves on the timeline; thin black arrows with small heads in the stacks; blue arrows for the validation and hooking path; large gradient block arrows for the updates",
+  "rendering": "mixed",
+  "effects": "gradient fills on band headers and block arrows, soft drop shadow on render tiles, dark translucent scrim on dimmed renders",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "green = policy side (track, Policy boxes, Policy Update), yellow = skill side (track, Skill Decoder boxes, Skill Updates), grey = neutral frame, captions and the interface; a dimmed render is an earlier or not yet adapted state",
+  "line_style_means": "solid grey timeline = updates over phases, dashed = the same policy carried over, dotted = skills continuing past Phase 4; blue arrow = validation or hooking path, black arrow = default path",
+  "shape_means": "circle node = skill update, square node = policy update (legend, top right); green box = policy, yellow box = skill decoder, grey box = lazy learning interface; magnifier = checking or searching skills",
+  "marker_means": "circled 1 to 4 = order of subtasks; green check = solved; grey check = solved with earlier skills; Hooked tag = remapped skill in use",
+  "emphasis": "large bold band titles with coloured accent bars (orange FwSC, green BwSC), bold definition strips at the foot of each band, gradient block arrows between states",
+  "reusable_patterns": [
+   "two-track timeline (policy over skill) with phase nodes and version labels above and below",
+   "legend glyphs reused as the nodes drawn on the timeline",
+   "thumbnail copy of the master timeline in each band header to place the case on it",
+   "colour-coded bands each ending in a bold one-sentence definition strip with an example",
+   "same render shown dimmed and then bright with circled step numbers and a check badge",
+   "green over grey over yellow box stack reused for the framework and both bands"
+  ],
+  "weaknesses": [
+   "3.5 to 6 pt text on much of the figure",
+   "meaning of the dark grey nodes, of the dimmed renders and of the header thumbnails is not stated",
+   "many small renders and icons make the figure heavy to read in one pass"
+  ]
+ },
+ "resources": {
+  "own": [
+   "robot-kitchen simulation renders with step arrows",
+   "object renders for Initial and Updated Skills"
+  ],
+  "stock": [
+   "people with USB icon",
+   "building and database icon",
+   "globe icon",
+   "magnifier icons",
+   "check badges"
+  ],
+  "generated": [],
+  "drawn": [
+   "timeline with nodes and dashed lines",
+   "box stacks",
+   "gradient block arrows",
+   "band headers and definition strips",
+   "SIL-C framework panel"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two-track policy and skill timeline with phase nodes",
+   "SIL-C stack of policy, lazy learning interface and skill decoder",
+   "FwSC and BwSC bands",
+   "kitchen robot renders with circled steps",
+   "gradient block arrows for skill and policy updates",
+   "legend circle and square",
+   "definition strips",
+   "agent and environment loop"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "skill incremental learning",
+   "policy compatibility",
+   "lazy learning interface",
+   "forward compatibility",
+   "backward compatibility",
+   "hierarchical policy",
+   "skill decoder",
+   "robot kitchen",
+   "continual learning"
+  ],
+  "tags": [
+   "claim-banner",
+   "colour-coded-groups",
+   "checkpoint-chain",
+   "module-state-coding",
+   "verdict-marks",
+   "illustration-style",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "mini-timeline-locator",
+    "what": "a shrunken copy of the master timeline in the header strip of each lower band, highlighting the point that band refers to"
+   },
+   {
+    "name": "legend-glyph-as-node",
+    "what": "the key glyphs (circle, square) are reused as the nodes drawn on the timeline itself"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a setting that evolves over time as two colour-coded tracks with phase nodes and version labels, then give each property to be shown its own coloured band that repeats the same chain and ends in a bold one-sentence definition; thumbnail copies of the timeline in the band headers tie each case back to it.",
+  "suits": "Continual, incremental or versioned learning papers where several compatibility or consistency properties are defined over the same sequence of updates and shown on one example task."
+ },
+ "tags": [
+  "poster-style bands",
+  "two-track timeline",
+  "green policy yellow skill",
+  "3D kitchen renders",
+  "gradient block arrows",
+  "definition strips"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "Figure 1 illustrates a policy-compatible SIL scenario involving two types of skill-policy compatibility",
+   "which ensures that a newly added skill can be effectively utilized during the training of future downstream policies",
+   "ensures that existing downstream policies can continue to use newly added or updated skills without requiring re-training"
+  ]
+ },
+ "summary": "SIL-C is a framework for skill incremental learning in which downstream policies keep working while the skill library is updated, using a bilateral lazy learning mapping between the subtasks a policy names and the skills a decoder can run. Figure 1 is a tall poster-style figure in three bands. The top band draws a two-track timeline (green Policy track with square nodes, yellow Skill track with circle nodes over Phases 1 to 4, Policy V1 and V2 above, Skill Decoder V1 to V1.3 below) beside the SIL-C stack of Policy, Lazy Learning Interface and Skill Decoder with an agent and environment loop. Below, Forward and Backward Skill Compatibility bands each show a left-to-right chain with robot-kitchen renders, circled step numbers and check marks, and end in a one-sentence definition strip.",
+ "summary_zh": "SIL-C 让技能库更新时下游策略无需重训。图 1 分三层：顶部是策略与技能双轨阶段时间线和 SIL-C 框架（策略、懒学习接口、技能解码器）；前向、后向兼容两条带各配机器人厨房渲染、编号步骤和对勾，并以一句定义收尾。",
+ "confidence": "medium",
+ "notes": "The pre-screen order (concept-schematic, side-by-side-contrast) is kept; model-anatomy and worked-walkthrough are added for the SIL-C stack and the numbered kitchen renders. Not explained in the figure or the quoted paragraph: the meaning of the two dark grey nodes on the timeline, of the dimmed renders (read as earlier or not yet adapted states) and of the small timeline copies in the band headers (read as locators). The flame belongs to a stove burner in the kitchen scene, not to a state marker. The canvas in the digest is smaller than the drawn content, so the preview is the reference for what is shown.",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,587 @@
+{
+ "paper_id": "neurips25-0158",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "RoboCerebra",
+  "one_liner": "A large-scale simulation benchmark for System 2 reasoning in long-horizon robotic manipulation, with trajectories about 6 times longer than earlier benchmarks.",
+  "domain": [
+   "long-horizon robotic manipulation",
+   "benchmark",
+   "VLM planning"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "worked-walkthrough",
+   "scope-overview"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "three unequal tiles: a construction pipeline strip on top, a ten-frame task filmstrip with four challenge cards, and a bar chart with a headline multiplier",
+  "argues": "RoboCerebra tasks run about 6 times longer than earlier benchmarks and need memory, planning and recovery, and the data come from a verified top-down pipeline.",
+  "subject": "A benchmark-building pipeline, one long kitchen task shown frame by frame with four challenge cards, and a bar chart of trajectory lengths.",
+  "elements": [
+   {
+    "name": "Objects Library",
+    "type": "data",
+    "role": "assets from which tasks are built",
+    "drawn_as": "scatter of about ten faded household object pictures behind a rounded white label",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Task Design & Decomposition",
+    "type": "operation",
+    "role": "an LLM writes high-level task instructions and decomposes them into subtasks (caption)",
+    "drawn_as": "rounded grey box with a small robot-face icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Simulation Code Generation",
+    "type": "operation",
+    "role": "turns the task into simulation code",
+    "drawn_as": "rounded grey box with a small document icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Close-Loop Verification",
+    "type": "operation",
+    "role": "checks the generated task; on failure it is regenerated",
+    "drawn_as": "rounded grey box with a small blue window icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Trajectory Annotation",
+    "type": "operation",
+    "role": "human operators execute the subtasks in simulation to collect trajectories (caption)",
+    "drawn_as": "rounded grey box with a small robot-arm icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Temporal Annotation",
+    "type": "operation",
+    "role": "adds step-level temporal annotations",
+    "drawn_as": "rounded grey box with a small stopwatch icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Quality Checking",
+    "type": "operation",
+    "role": "final check of quality and semantic consistency; on failure it is re-annotated",
+    "drawn_as": "rounded grey box with a small magnifier icon",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "loop-back arrows",
+    "type": "other",
+    "role": "Regenerate if verification fails (to Task Design & Decomposition) and Re-annotate if check fails (to Trajectory Annotation)",
+    "drawn_as": "two thick light-green U-shaped arrows with refresh icons and italic captions",
+    "container": "(a) Dataset Generation Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "ten subtask frames",
+    "type": "sample",
+    "role": "one long task in order: Pick up popcorn from the wooden cabinet, Pour popcorn into black bowl, Place popcorn on coffee table, Open the microwave, Pick up popcorn bowl from the coffee table, Place black bowl into the microwave, Close the microwave, Pick up wine bottle from the coffee table, Pour wine from the bottle into the mug, Put the wine bottle on coffee table",
+    "drawn_as": "ten adjacent simulation frames with white-on-dark numbered circles and light-blue caption boxes under each",
+    "container": "(b) Long-Horizon & Diverse Task Sequences",
+    "is_contribution": true
+   },
+   {
+    "name": "Exploration process relies on memory",
+    "type": "container",
+    "role": "challenge card: the agent must remember which cabinet regions it has opened",
+    "drawn_as": "orange-yellow card with title bar, list Open the top / middle / bottom region of cabinet (bottom faded), Pick up popcorn with a green tick, robot render with red numbers 1 to 3",
+    "container": "(b) Long-Horizon & Diverse Task Sequences",
+    "is_contribution": true
+   },
+   {
+    "name": "Execution not visible without memory",
+    "type": "container",
+    "role": "challenge card: the state after closing the microwave is hidden, so task completion is unclear from observation",
+    "drawn_as": "lavender card with title bar, state list [Microwave closed], Open the microwave, Place black bowl into microwave, Close the microwave, [Microwave closed], red note, robot render with red numbers",
+    "container": "(b) Long-Horizon & Diverse Task Sequences",
+    "is_contribution": true
+   },
+   {
+    "name": "Objects not always still",
+    "type": "container",
+    "role": "challenge card: an object changes position over time",
+    "drawn_as": "light-blue card with coordinates (-0.3, -0.2), (-0.3, 0), (-0.3, 0.2), time labels t1, t0, t2 on three small photos of butter, and lines [The butter is on the middle / left / right]",
+    "container": "(b) Long-Horizon & Diverse Task Sequences",
+    "is_contribution": true
+   },
+   {
+    "name": "Observations may conflict with plans",
+    "type": "container",
+    "role": "challenge card: a dropped bottle forces recovery",
+    "drawn_as": "grey-green card with lines Pick up wine bottle from table, [The bottle fell], Pick up wine bottle again, [Bottle lifted], two robot renders labelled Collision (red) and Recovery (green) joined by a grey arrow",
+    "container": "(b) Long-Horizon & Diverse Task Sequences",
+    "is_contribution": true
+   },
+   {
+    "name": "Average Trajectory Length (steps/task)",
+    "type": "chart",
+    "role": "bars for ARNOLD 125.8, Libero 130.4, RLbench 160.2, Libero-Long 276.3, RoboCasa 371.9, VLABench 502.5 and RoboCerebra 2972.4",
+    "drawn_as": "pale bars with number labels, rotated benchmark names, RoboCerebra bar in lilac and tallest",
+    "container": "(c) Comparison of Benchmarks",
+    "is_contribution": true
+   },
+   {
+    "name": "Approximately 6× longer than previous!",
+    "type": "label",
+    "role": "headline of the chart",
+    "drawn_as": "red monospace bold text beside a thin red double-headed vertical arrow",
+    "container": "(c) Comparison of Benchmarks",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Objects Library",
+    "to": "Task Design & Decomposition",
+    "what": "objects feed task design",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Design & Decomposition",
+    "to": "Simulation Code Generation",
+    "what": "decomposed tasks become code",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Simulation Code Generation",
+    "to": "Close-Loop Verification",
+    "what": "generated code is verified",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Close-Loop Verification",
+    "to": "Trajectory Annotation",
+    "what": "verified tasks go on to be demonstrated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trajectory Annotation",
+    "to": "Temporal Annotation",
+    "what": "trajectories receive temporal labels",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Temporal Annotation",
+    "to": "Quality Checking",
+    "what": "annotated data are checked",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Close-Loop Verification",
+    "to": "Task Design & Decomposition",
+    "what": "Regenerate if verification fails",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Quality Checking",
+    "to": "Trajectory Annotation",
+    "what": "Re-annotate if check fails",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frame 1 to frame 10",
+    "to": "next frame",
+    "what": "subtasks run in numbered order",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "challenge cards",
+    "to": "the frames they concern",
+    "what": "thin leader lines in the card colour: orange to frame 1, lavender to frames 4 and 7, green to frame 8",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "RoboCerebra bar",
+    "to": "previous benchmarks",
+    "what": "red double-headed arrow shows the gap of about 6 times",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Dataset Generation Pipeline",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "objects library and six stage boxes with two green loop-back arrows",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Long-Horizon & Diverse Task Sequences",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "a ten-frame kitchen task with captions and four tinted challenge cards",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Comparison of Benchmarks",
+    "axis": "alternatives",
+    "shows": "average trajectory length of seven benchmarks, RoboCerebra far above the rest",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "panel titles",
+    "what": "name the three panels as in the caption; a grey, yellow or lilac bar stands before each title"
+   },
+   {
+    "marker": "1 to 10 (white on dark circles)",
+    "kind": "order",
+    "at": "top left of each filmstrip frame",
+    "what": "order of the ten subtasks"
+   },
+   {
+    "marker": "1 2 3 (red circles)",
+    "kind": "order",
+    "at": "on the robot renders inside the cards",
+    "what": "order of the steps seen on the render: explored cabinet regions, microwave steps, collision and recovery"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "household object pictures of the Objects Library",
+    "content": "3d-render",
+    "role": "data-thumbnail",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "faded scatter on white behind a rounded label"
+   },
+   {
+    "what": "simulation frames of a robot arm in a kitchen",
+    "content": "3d-render",
+    "role": "data-thumbnail",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "adjacent frames without gaps, red arrows over the arm show motion, numbered circle at top left, light-blue caption box below"
+   },
+   {
+    "what": "robot-arm renders inside the challenge cards",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "large render beside the text lines with red numbered markers; two renders joined by a grey arrow in the last card"
+   },
+   {
+    "what": "three small photos of a butter pack at different positions",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "tiny tiles on a line with time labels t1, t0, t2"
+   },
+   {
+    "what": "bar chart of average trajectory length",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "seven pale bars with value labels, RoboCerebra in lilac with a red value; red double-headed arrow and red note"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small flat icons: robot face, document list, blue window, robot arm, stopwatch, magnifier",
+    "stands_for": "the six pipeline stages",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "green circular refresh arrows",
+    "stands_for": "a regenerate or re-annotate loop",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "green check mark",
+    "stands_for": "the subtask succeeded",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a ten-step kitchen task from picking up popcorn to putting the wine bottle back on the coffee table",
+    "form": "numbered simulation frames with caption boxes",
+    "real_values": true
+   },
+   {
+    "what": "four challenge examples: cabinet regions explored from memory, a microwave state hidden after closing, a butter pack moving among three positions, a dropped bottle with collision and recovery",
+    "form": "tinted cards with text lines, coordinates and robot renders",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "ten adjacent simulation frames with numbered circles and light-blue caption boxes, no sprocket border",
+    "parts": [
+     "frames",
+     "numbers",
+     "captions"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "regenerate-loop",
+    "drawn_as": "thick light-green U-shaped arrow with a refresh icon from a check stage back to an earlier stage, with an italic condition",
+    "parts": [
+     "U arrow",
+     "refresh icon",
+     "italic condition"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "scatter of faded object pictures behind a rounded label Objects Library",
+    "parts": [
+     "object pictures",
+     "label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at (a) at the top left and follows the stage chain to the right, then drops to the filmstrip in (b) and its four cards, then goes to the bar chart (c) at the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A full-width pipeline strip (a) on top; below it a wide panel (b) with a filmstrip over four cards, and a narrow panel (c) with a bar chart at the right; panels are split by dashed grey rules.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.34,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light-grey pipeline boxes and backgrounds"
+   },
+   {
+    "hex": "#e8f3fb",
+    "used_for": "light-blue caption boxes under the filmstrip frames"
+   },
+   {
+    "hex": "#ffde9a",
+    "used_for": "title bar of the memory-exploration card"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale-yellow list boxes of the memory-exploration card"
+   },
+   {
+    "hex": "#dadaff",
+    "used_for": "lavender card Execution not visible without memory"
+   },
+   {
+    "hex": "#c7e1f6",
+    "used_for": "light-blue card Objects not always still"
+   },
+   {
+    "hex": "#cbe1d6",
+    "used_for": "grey-green card Observations may conflict with plans"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "green loop-back arrows"
+   },
+   {
+    "hex": "#deb9ef",
+    "used_for": "lilac RoboCerebra bar"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red markers, key words, Collision and the 6x note"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "dark red value 2972.4 and outlines"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "grey block arrows between stages"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey outlines and dashed rules"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt grey outlines on boxes and cards; 1 pt on four shapes; red markers; dashed grey rules between panels",
+  "font": "serif bold (Times New Roman) 6 pt panel titles and 4.5 pt stage names; bold sans (Calibri) 3 to 4 pt captions and card lists; Courier New bold red for the 6x note; 2.5 pt frame numbers",
+  "corners": "rounded",
+  "arrows": "grey block arrows between stages; thick green U-shaped loop arrows with refresh icons; thin red double-headed arrow in the chart; thin coloured leader lines",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "card tint and leader-line colour tie each challenge card to the frames it concerns (orange exploration, lavender execution, blue moving objects, grey-green plan conflict); green arrows are verification loops; red marks annotations and emphasis; the lilac bar is RoboCerebra, earlier benchmarks have pale bars",
+  "line_style_means": "grey block arrows pass data between stages; thick green U arrows loop back; thin coloured lines say which frames a card explains; dashed grey rules separate panels",
+  "shape_means": "rounded grey box with a small icon = pipeline stage; numbered circle on a frame = subtask order; tinted card with a bold title bar = one challenge type",
+  "marker_means": "letters (a) to (c) name panels; 1 to 10 order the subtasks; red 1 to 3 on renders order the steps in a card; green tick = success; red words = critical words",
+  "emphasis": "the tall lilac bar with the red 6x note, red words inside cards, and the green loop arrows",
+  "reusable_patterns": [
+   "rounded stage boxes with tiny icons joined by grey block arrows and thick green U arrows labelled with the failure condition",
+   "filmstrip of numbered frames with caption boxes, and tinted challenge cards below tied to frames by thin coloured lines",
+   "bar chart in which the proposed benchmark's bar is tall and differently coloured, with a red double-headed arrow and a multiplier note",
+   "state tags in square brackets, such as [Microwave closed], inside step lists"
+  ],
+  "weaknesses": [
+   "3 to 4 pt captions are tiny",
+   "the leader lines are thin and pale and hard to follow; the blue card's line is unclear",
+   "benchmark names under the bars are rotated 45 degrees"
+  ]
+ },
+ "resources": {
+  "own": [
+   "simulation frames and robot renders from the benchmark tasks",
+   "trajectory-length numbers of seven benchmarks"
+  ],
+  "stock": [
+   "small flat icons in the stage boxes",
+   "refresh and check icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "stage boxes, arrows, cards and chart bars",
+   "leader lines and dashed rules"
+  ],
+  "unknown": [
+   "origin of the Objects Library pictures (simulator assets or product renders)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "objects library scatter",
+   "six stage boxes with icons joined by block arrows",
+   "green U-shaped loop arrows with refresh icons",
+   "ten-frame simulation filmstrip with numbered circles and captions",
+   "four tinted challenge cards with robot renders",
+   "thin coloured leader lines",
+   "bar chart with a lilac bar and a red 6x arrow"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "long-horizon manipulation",
+   "robot benchmark",
+   "task decomposition",
+   "memory",
+   "simulation",
+   "System 2 reasoning",
+   "data generation pipeline",
+   "trajectory length"
+  ],
+  "tags": [
+   "filmstrip",
+   "plot-callouts",
+   "highlighted-text-spans",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "loop-back-green-arrows",
+    "what": "thick green U-shaped arrows with refresh icons and italic conditions looping from a check stage back to an earlier stage"
+   },
+   {
+    "name": "challenge-cards-under-filmstrip",
+    "what": "tinted cards below a filmstrip, each tied to specific frames by a thin leader line of its own colour and showing why that moment is hard"
+   },
+   {
+    "name": "headline-bar-annotation",
+    "what": "bar chart in which the proposed benchmark's bar is tall and coloured differently, with a red double-headed arrow and a red monospace multiplier note"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "For a benchmark, stack three tiles: a short construction pipeline with loop-back arrows for quality checks, a numbered filmstrip of one long task with tinted challenge cards linked to the moments that cause them, and a bar chart that makes the headline multiplier visible with one distinct bar and a red note.",
+  "suits": "benchmarks or datasets that must show how the data were built, what an example looks like and why it is hard, and one headline number against earlier sets."
+ },
+ "tags": [
+  "benchmark-bento",
+  "stage-boxes-with-icons",
+  "filmstrip-with-cards",
+  "green-loop-arrows",
+  "bar-chart-headline",
+  "serif-bold-titles"
+ ],
+ "provenance": {
+  "sections": [
+   "Related work (p.3)",
+   "Benchmark design (p.4)",
+   "Dataset statistics (p.6)"
+  ],
+  "evidence": [
+   "As shown in Fig. 1(c), the average trajectory length reaches 2,972.4 simulation steps—about 6× longer than existing long-horizon manipulation datasets.",
+   "A top-down data generation pipeline uses an LLM to produce high-level task instructions and decompose them into subtasks.",
+   "(b) A dataset example showing a long, finegrained subtask sequence under dynamically changing visual conditions."
+  ]
+ },
+ "summary": "RoboCerebra is a benchmark for System 2 reasoning in long-horizon robotic manipulation, with trajectories about 6 times longer than earlier benchmarks. Figure 1 has three lettered panels. (a) A strip of an Objects Library and six rounded stage boxes with tiny icons, joined by grey block arrows and two green loop-back arrows (regenerate if verification fails, re-annotate if check fails). (b) A filmstrip of ten numbered simulation frames with captions, and four tinted challenge cards (memory exploration, hidden execution, moving objects, observations that conflict with plans) tied to frames by thin coloured lines. (c) A bar chart of average trajectory length for seven benchmarks, where the lilac RoboCerebra bar reaches 2972.4 with a red 6x note.",
+ "summary_zh": "RoboCerebra 是考察长时程机器人操作中 System 2 推理的基准，轨迹约为已有基准的 6 倍。图 1：(a) 带回环箭头的数据生成流水线，(b) 十帧任务序列与四张挑战卡片，(c) 七个基准的轨迹长度柱状图。",
+ "confidence": "high",
+ "notes": "Prior labels kept but regrouped: contribution-mosaic (bento tiles) first, stage-pipeline for panel (a), worked-walkthrough for panel (b), scope-overview for the four challenge cards. The pipeline has six boxes with the Objects Library at its head. Leader lines from cards to frames are thin and pale (orange to frame 1, lavender to frames 4 and 7, green to frame 8); the blue card's line is not clear. The rotated benchmark names under the bars are not in the digest text list.",
+ "venue": "NeurIPS25"
+}

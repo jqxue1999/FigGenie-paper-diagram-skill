@@ -1,0 +1,673 @@
+{
+ "paper_id": "acl23-0041",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Interprets all Transformer parameters by projecting them into the vocabulary embedding space, then uses that view to align models and stitch them zero-shot.",
+  "domain": [
+   "Transformer interpretability",
+   "embedding-space projection",
+   "model alignment and stitching"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "three titled columns, each one application of the same projection into embedding space (read out, align, stitch), each drawn as a small pipeline",
+  "argues": "One operation, projecting weights into vocabulary space, lets researchers read parameters as tokens, align layers across independently trained models, and stitch two models zero-shot.",
+  "subject": "Transformer weights projected into vocabulary space: read as top-k tokens, compared across models, used to stitch two models.",
+  "elements": [
+   {
+    "name": "K",
+    "type": "data",
+    "role": "feed-forward key vector",
+    "drawn_as": "vertical strip of coloured cells (magenta, green, red, yellow) to the left of an E box",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "V",
+    "type": "data",
+    "role": "feed-forward value vector",
+    "drawn_as": "vertical strip of coloured cells to the left of an E box",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "W_VO",
+    "type": "data",
+    "role": "attention value-output matrix",
+    "drawn_as": "square grid of multicoloured cells between a transposed-E box and an E box",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "W_QK",
+    "type": "data",
+    "role": "attention query-key matrix",
+    "drawn_as": "same multicoloured grid between E^T and E boxes",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "E / E^T",
+    "type": "module",
+    "role": "embedding matrix (or its transpose) that maps a parameter into vocabulary space",
+    "drawn_as": "light-blue rounded box with a bold letter, one or two per row",
+    "container": "Parameter Interpretation",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding Space",
+    "type": "region",
+    "role": "vocabulary space in which the projected parameter is read",
+    "drawn_as": "tall thin pink bar for K and V, pink square grid for W_VO and W_QK",
+    "container": "Parameter Interpretation",
+    "is_contribution": true
+   },
+   {
+    "name": "top k",
+    "type": "operation",
+    "role": "selects the most active vocabulary items or item pairs",
+    "drawn_as": "bold label on a short arrow between the pink shape and the token list",
+    "container": "Parameter Interpretation",
+    "is_contribution": null
+   },
+   {
+    "name": "Layer 21 Dim 400 / Layer 10 Dim 8",
+    "type": "text-block",
+    "role": "top tokens of one feed-forward key and one value",
+    "drawn_as": "bold header over a seven-line plain list of tokens",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer 18 Head 1 / Layer 17 Head 6",
+    "type": "text-block",
+    "role": "top token pairs of one W_VO head and one W_QK head",
+    "drawn_as": "bold header over a seven-line list of quoted token pairs",
+    "container": "Parameter Interpretation",
+    "is_contribution": false
+   },
+   {
+    "name": "Model A",
+    "type": "module",
+    "role": "first model (first BERT instance; the pretrained model in the right column)",
+    "drawn_as": "stack of four yellow rounded blocks joined by small upward arrows",
+    "container": "Parameter Alignment, repeated in Zero-shot Stitching",
+    "is_contribution": false
+   },
+   {
+    "name": "Model B",
+    "type": "module",
+    "role": "second model (second BERT instance; the finetuned model in the right column)",
+    "drawn_as": "stack of four pale-blue rounded blocks joined by small upward arrows",
+    "container": "Parameter Alignment, repeated in Zero-shot Stitching",
+    "is_contribution": false
+   },
+   {
+    "name": "K_i, K_j",
+    "type": "data",
+    "role": "feed-forward key of layer i in Model A and of layer j in Model B",
+    "drawn_as": "coloured-cell strips tapped from one block of each stack through a blue gradient funnel",
+    "container": "Parameter Alignment",
+    "is_contribution": false
+   },
+   {
+    "name": "E_A, E_B",
+    "type": "module",
+    "role": "embedding matrices of the two models used to project their keys",
+    "drawn_as": "bold labels above short arrows pointing at the pink bars",
+    "container": "Parameter Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding Space (alignment)",
+    "type": "region",
+    "role": "common space where keys of the two models are compared",
+    "drawn_as": "two adjacent tall pink bars between the two model stacks",
+    "container": "Parameter Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "Pack them into a similarity matrix",
+    "type": "operation",
+    "role": "dot products between all key pairs of all layers are collected into one matrix indexed by i and j",
+    "drawn_as": "mauve square with i on the left and j below, one small darker cell marked by an arrow from the bars",
+    "container": "Parameter Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "Average absolute similarity over layer pairs",
+    "type": "operation",
+    "role": "reduces the matrix to one value per pair of layers",
+    "drawn_as": "grey gradient block arrow pointing down to a 5x5 heat map",
+    "container": "Parameter Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "Matching layers",
+    "type": "operation",
+    "role": "pairs each layer with its best counterpart in the other model",
+    "drawn_as": "label under a grey gradient block arrow pointing to a black matrix with a white diagonal",
+    "container": "Parameter Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "Model A Pretrained / Model B Finetuned",
+    "type": "module",
+    "role": "the two models to be combined",
+    "drawn_as": "bold two-line headers over a yellow stack and a pale-blue stack",
+    "container": "Zero-shot Stitching",
+    "is_contribution": false
+   },
+   {
+    "name": "Stitched model",
+    "type": "module",
+    "role": "pretrained lower layers joined to finetuned upper layers",
+    "drawn_as": "stack of three yellow blocks, a dark band with two band-aids, two pale-blue blocks, plus three trailing circles",
+    "container": "Zero-shot Stitching",
+    "is_contribution": true
+   },
+   {
+    "name": "Stitching Layer",
+    "type": "module",
+    "role": "translates representations from one model's feature space to the other's through the embedding space",
+    "drawn_as": "dark band with crossed band-aids in the stack; band-aid icons flank the label below the cloud",
+    "container": "Zero-shot Stitching",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding space (cloud)",
+    "type": "region",
+    "role": "space through which features of A are translated into features of B",
+    "drawn_as": "large lilac thought-bubble cloud with a pink bar inside",
+    "container": "Zero-shot Stitching",
+    "is_contribution": true
+   },
+   {
+    "name": "Feature space A / Feature space B",
+    "type": "data",
+    "role": "representations of model A and model B",
+    "drawn_as": "coloured-cell strips left and right of the pink bar",
+    "container": "Zero-shot Stitching",
+    "is_contribution": false
+   },
+   {
+    "name": "E_A, E_B^-1",
+    "type": "operation",
+    "role": "project features of A into embedding space and map them out into the feature space of B",
+    "drawn_as": "bold labels on the arrows into and out of the pink bar",
+    "container": "Zero-shot Stitching",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "K, V, W_VO, W_QK (with E^T and E)",
+    "to": "Embedding Space",
+    "what": "parameter projected into vocabulary space",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding Space",
+    "to": "token lists (Layer 21 Dim 400 ... Layer 17 Head 6)",
+    "what": "top-k most active tokens or token pairs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model A layer (K_i)",
+    "to": "Embedding Space (alignment)",
+    "what": "key projected by E_A",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model B layer (K_j)",
+    "to": "Embedding Space (alignment)",
+    "what": "key projected by E_B",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding Space (alignment)",
+    "to": "similarity matrix",
+    "what": "dot products between all key pairs, packed into cell (i, j)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "similarity matrix",
+    "to": "5x5 heat map",
+    "what": "average absolute similarity over layer pairs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "5x5 heat map",
+    "to": "black matrix with white diagonal",
+    "what": "layers matched one to one",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model A Pretrained and Model B Finetuned",
+    "to": "Stitched model",
+    "what": "lower layers of A and upper layers of B are combined",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stitched model",
+    "to": "Embedding space (cloud)",
+    "what": "thought-bubble tail opens up the stitching layer to show how it works",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Feature space A",
+    "to": "pink bar in the cloud",
+    "what": "projected by E_A",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pink bar in the cloud",
+    "to": "Feature space B",
+    "what": "mapped by E_B^-1",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "yellow and pale-blue blocks of the stitched model",
+    "to": "Model A Pretrained and Model B Finetuned",
+    "what": "each layer keeps the colour of the model it comes from",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "every pink bar and grid",
+    "to": "Embedding Space",
+    "what": "the same pink fill marks the embedding space in all three columns",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Parameter Interpretation",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "Four aligned rows project a feed-forward key, a value, W_VO and W_QK through E and read the top-k tokens of real GPT-2 layers.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Parameter Alignment",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "Keys of two models are projected into one embedding space, packed into a similarity matrix, averaged per layer pair and matched on a diagonal.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Zero-shot Stitching",
+    "kind": "model-anatomy",
+    "axis": "other",
+    "shows": "A pretrained and a finetuned model are joined by a stitching layer that translates features through the embedding space, opened up in a cloud.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Parameter Interpretation / Parameter Alignment / Zero-shot Stitching",
+    "kind": "section",
+    "at": "top-left of each column",
+    "what": "bold titles name the three applications; there are no panel letters"
+   },
+   {
+    "marker": "Layer 21 Dim 400, Layer 10 Dim 8, Layer 18 Head 1, Layer 17 Head 6",
+    "kind": "identity",
+    "at": "token lists",
+    "what": "name the layer and neuron or head each token list was read from"
+   },
+   {
+    "marker": "K_i, K_j, i, j",
+    "kind": "identity",
+    "at": "key strips and similarity-matrix axes",
+    "what": "indices of the layer in Model A and the layer in Model B that a matrix cell compares"
+   },
+   {
+    "marker": "L1 ... L5",
+    "kind": "identity",
+    "at": "axes of the heat map and the black matrix",
+    "what": "layer numbers of the two models"
+   },
+   {
+    "marker": "*",
+    "kind": "identity",
+    "at": "key pairs*",
+    "what": "asterisk ties the sentence to the side note that other parameters work too"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "layer-pair similarity heat map",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "5x5 grid of red, orange and yellow cells with one white cell, layer labels L1-L5 on both axes; reads as a schematic of the alignment result"
+   },
+   {
+    "what": "matching-layers matrix",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "black square with a white cell on the diagonal of each row, L1-L5 labels on both axes"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "vertical strip of 4-5 stacked coloured cells",
+    "stands_for": "a parameter or feature vector (K, V, K_i, K_j, Feature space A and B)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "square grid of multicoloured cells",
+    "stands_for": "attention weight matrices W_VO and W_QK",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "tall thin pink bars and pink grid squares",
+    "stands_for": "the embedding space",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 7
+   },
+   {
+    "depicts": "blue gradient funnel from a strip to a bar",
+    "stands_for": "projection of one layer's key by E_A or E_B",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "adhesive bandage",
+    "stands_for": "the stitching layer",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "lilac thought-bubble cloud with three trailing circles",
+    "stands_for": "the embedding space through which the stitching layer translates; an enlarged view of that layer",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "top-k tokens of feed-forward key Layer 21 Dim 400 (months: #July, July, #February, #January, #Feb, November, #October)",
+    "form": "seven-line plain list under a bold layer and dimension header",
+    "real_values": true
+   },
+   {
+    "what": "top-k tokens of feed-forward value Layer 10 Dim 8 (Japanese name pieces: Tai, #jin, Jin, Makoto, #etsu, Shin, Hai)",
+    "form": "seven-line plain list under a bold header",
+    "real_values": true
+   },
+   {
+    "what": "top token pairs of W_VO in Layer 18 Head 1 (e.g. 'women' with ' Marie', ' actresses' with ' Marie')",
+    "form": "list of quoted token pairs under a bold header",
+    "real_values": true
+   },
+   {
+    "what": "top token pairs of W_QK in Layer 17 Head 6 (e.g. ' legally' with ' legal', ' legal' with ' sentencing')",
+    "form": "list of quoted token pairs under a bold header",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "tall thin pink bar standing between a source vector and its readout, a pink grid for matrices, and a lilac cloud holding two vectors and a pink bar in the stitching column",
+    "parts": [
+     "pink bar",
+     "pink grid",
+     "lilac cloud",
+     "coloured-cell vectors"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "layer-stack",
+    "drawn_as": "four rounded blocks joined by small upward arrows, yellow for Model A and pale blue for Model B",
+    "parts": [
+     "4 blocks",
+     "upward arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "similarity-matrix",
+    "drawn_as": "mauve square with i and j axes, then a heat-coloured 5x5 grid and a black matrix with a white diagonal for layer matching",
+    "parts": [
+     "i/j matrix",
+     "L1-L5 heat map",
+     "white-diagonal matrix"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Left to right across the three titled columns; inside the left column top to bottom through four rows, in the centre from the two models down to the similarity matrix, heat map and matched diagonal, in the right from the two models to the stitched model and the cloud."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three tall columns separated by dashed vertical rules, each with a bold title at top left. The left column stacks four rows (K, V, W_VO, W_QK) that each run left to right as a short pipeline ending in a token list. The centre column puts two model stacks around two pink bars, then a similarity matrix, a heat map and a matched matrix in a descending path joined by grey block arrows. The right column shows two model stacks, a big grey arrow to the stitched model, and a thought-bubble tail down to a lilac cloud with band-aid icons under it.",
+  "panel_count": 3,
+  "lanes": "4 aligned rows in the left column (K, V, W_VO, W_QK), each repeating vector or matrix, E box, pink shape, top k, token list",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "other",
+   "whitespace",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 1.99,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d2e9",
+    "used_for": "lilac thought-bubble cloud and the trailing circles (embedding space of the stitching layer)"
+   },
+   {
+    "hex": "#e6b8af",
+    "used_for": "pink embedding-space bars and the pink grid squares of the W matrices"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "Model A (pretrained) layer blocks, also yellow cells in strips and heat map"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "E and E^T projection boxes"
+   },
+   {
+    "hex": "#d5a6bd",
+    "used_for": "mauve similarity matrix"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red cells of the vectors, W matrices and heat map"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "Model B (finetuned) layer blocks"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "yellow cells of the vectors, W matrices and heat map"
+   },
+   {
+    "hex": "#dd7e6b",
+    "used_for": "stroke of the grid lines on the pink matrices"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 pt black outlines on boxes and arrows, brownish-pink grid lines on the pink matrices, two dashed vertical dividers",
+  "font": "sans (Arial), 3.5-7 pt, bold 5.5 pt column titles, 5.5 pt token lists, subscripts on E_A and E_B",
+  "corners": "mixed",
+  "arrows": "thin straight black arrows with small filled heads, small upward arrows between stacked layers, grey gradient block arrows (bitmap) for the hand-over between results",
+  "rendering": "flat-vector",
+  "effects": "gradient shading on the three block arrows, the two blue funnels and the dark stitching band; otherwise none",
+  "model_depiction": "layer-stack",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "yellow = Model A (pretrained), pale blue = Model B (finetuned), kept on the blocks of the stitched model; pink = embedding space; mauve = similarity matrix; light-blue rounded box = embedding matrix E; lilac cloud = embedding space of the stitching layer; red and yellow cells = values of vectors and similarities",
+  "line_style_means": "thin black arrows carry data from one step to the next; dashed vertical rules separate the three applications; grey gradient block arrows mark the jump from one result to the next",
+  "shape_means": "rounded blue box = projection by E; tall pink bar = embedding space; stack of rounded blocks = layers of a model; band-aid = stitching layer; cloud = embedding space seen inside the stitching layer",
+  "marker_means": "bold headers like Layer 21 Dim 400 say where each token list comes from; K_i, K_j, i and j index layers; the asterisk points to a side note",
+  "emphasis": "bold column titles; the same E box and pink bar motif repeats in every column so the shared operation is visible; the stitching layer gets a dark band with band-aids and a cloud of its own",
+  "reusable_patterns": [
+   "three titled columns split by dashed vertical rules, one per application of the same operation",
+   "one mini pipeline (vector, E box, pink bar, readout) repeated in aligned rows, each ending in a real top-k token list",
+   "strips and grids of coloured cells standing for weight vectors and matrices",
+   "grey gradient block arrows for the step between one result and the next",
+   "thought-bubble tail from a part of the model to a cloud that explains what happens inside it",
+   "band-aid icons as a pun for the stitching layer",
+   "heat map followed by a black matrix with a white diagonal to show a matching"
+  ],
+  "weaknesses": [
+   "very small type (3.5-5.5 pt) in token lists and axis labels",
+   "columns have titles but no letters, so the caption has to say Left, Center and Right"
+  ]
+ },
+ "resources": {
+  "own": [
+   "top-k token lists read from GPT-2 parameters",
+   "layer-pair similarity heat map and matched matrix, probably schematic versions of the BERT alignment result"
+  ],
+  "stock": [
+   "adhesive-bandage icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "model block stacks",
+   "coloured-cell strips and grids",
+   "pink embedding bars and grids",
+   "thought-bubble cloud",
+   "gradient block arrows and funnels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "coloured-cell vector strips",
+   "light-blue E boxes",
+   "tall pink embedding-space bars",
+   "top-k token lists",
+   "two model block stacks in yellow and blue",
+   "similarity matrix and heat map",
+   "stitched model with a band-aid layer",
+   "lilac thought-bubble cloud"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "Transformer interpretability",
+   "embedding space",
+   "vocabulary projection",
+   "model alignment",
+   "model stitching",
+   "zero-shot transfer",
+   "GPT-2",
+   "BERT"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "visual-metaphor",
+   "colour-coded-groups",
+   "zoom-callout",
+   "embedding-space-sketch",
+   "layer-probe-taps"
+  ],
+  "new_tags": [
+   {
+    "name": "topk-readout-lists",
+    "what": "short lists of real tokens or token pairs, each headed by the layer and neuron or head it was read from, placed at the end of a projection pipeline"
+   },
+   {
+    "name": "gradient-block-arrows",
+    "what": "grey bitmap block arrows with gradient fill marking the hand-over between results, next to thin black connectors"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show one operation applied to several targets by repeating the same small pipeline motif (vector, projection box, shared-space bar, readout) in aligned rows or columns, with real readouts as the payoff. Open up the one part whose inside needs explaining with a thought-bubble cloud, and keep one colour per model through the combined model.",
+  "suits": "Analysis or framework papers where one transformation or probe is applied to several objects and each use needs its own short demonstration."
+ },
+ "tags": [
+  "three titled columns",
+  "dashed dividers",
+  "pastel flat colours",
+  "coloured-cell vectors",
+  "gradient block arrows",
+  "thought-bubble cloud",
+  "band-aid pun",
+  "tiny type"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "we can align layers of the two instances by casting their weights into the embedding space.",
+   "in 30% of the cases, this procedure, termed stitching, results in a classifier that reaches an impressive accuracy of 70%",
+   "Zero-shot “stitching”, where representations of a fine-tuned classifier are translated through the embedding space"
+  ]
+ },
+ "summary": "The paper interprets all parameters of a trained Transformer by projecting them into the embedding space of vocabulary items. Figure 1 is a three-column overview of what this view enables. Parameter Interpretation: feed-forward keys and values and the attention matrices W_VO and W_QK pass through E and appear as lists of top-k tokens from real GPT-2 layers. Parameter Alignment: key vectors of two BERT instances are projected by E_A and E_B, packed into a similarity matrix, averaged into an L1-L5 heat map and matched along a diagonal. Zero-shot Stitching: a pretrained and a finetuned model are joined by a band-aid stitching layer that translates features through the embedding space, shown inside a thought-bubble cloud. Drawn as flat pastel boxes, coloured-cell vectors and pink bars under dashed dividers.",
+ "summary_zh": "论文把Transformer全部参数投影到词表嵌入空间来解读。图1分三列：参数解读（键、值和注意力矩阵经E投影后读出top-k词）、参数对齐（两个BERT的层相似度矩阵与匹配对角线）、零样本拼接（经嵌入空间翻译的创可贴式拼接层）。",
+ "confidence": "high",
+ "notes": "Prior primary kind contribution-mosaic kept; variant set to capability-cards instead of the prior fan-out; the three columns are titled but not lettered (caption says Left, Center, Right). The 7 bitmaps are the two blue funnels, the three grey gradient arrows, the dark stitching band and the black matching matrix; the heat map, band-aids and cloud are vector. Whether the heat map shows measured values or a sketch cannot be told.",
+ "venue": "ACL23"
+}

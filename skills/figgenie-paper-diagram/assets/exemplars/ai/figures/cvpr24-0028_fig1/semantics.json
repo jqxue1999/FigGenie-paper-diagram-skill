@@ -1,0 +1,393 @@
+{
+ "paper_id": "cvpr24-0028",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UniLSeg",
+  "one_liner": "A universal segmentation model that segments at any semantic level, from object part to whole scene, guided by a language instruction.",
+  "domain": [
+   "universal segmentation",
+   "language-guided segmentation",
+   "multi-granularity"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "concept-schematic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "seven aligned colour-coded columns, each a segmentation example with its language instruction and semantic-level tag, ordered along a Bottom to Top granularity arrow",
+  "argues": "UniLSeg segments targets at every semantic level, from object part to whole scene, according to the language instruction it is given.",
+  "subject": "Seven examples of language-guided masks, from a bird's head to a whole bedroom, each with its instruction and semantic-level tag",
+  "elements": [
+   {
+    "name": "Seg. Mask",
+    "type": "label",
+    "role": "names the top row: photos with their segmentation masks",
+    "drawn_as": "sans row label at the left margin",
+    "container": "dashed frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Lang.",
+    "type": "label",
+    "role": "names the middle row: the language instructions",
+    "drawn_as": "sans row label at the left margin",
+    "container": "dashed frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Sem. Level",
+    "type": "label",
+    "role": "names the bottom row: the semantic level of each example",
+    "drawn_as": "two-line sans row label at the left margin",
+    "container": "dashed frame",
+    "is_contribution": false
+   },
+   {
+    "name": "head | all faces | the most salient object | man looking this way | mom and kid | wall | bed, light, shelf, et al.",
+    "type": "text-block",
+    "role": "language instruction that picks the segmentation target of its column, from a short category name to a descriptive phrase",
+    "drawn_as": "seven rounded boxes with italic serif text in quotation marks, each filled in its column hue",
+    "container": "Lang. row",
+    "is_contribution": true
+   },
+   {
+    "name": "part | part | instance | instance | group | class | scene",
+    "type": "label",
+    "role": "semantic level of each example, from small to large",
+    "drawn_as": "seven small rectangles with sans text, filled in the column hue",
+    "container": "Sem. Level row",
+    "is_contribution": false
+   },
+   {
+    "name": "chevrons between the level tags",
+    "type": "other",
+    "role": "step from one semantic level to the next",
+    "drawn_as": "six outlined chevrons, each tinted like the column to its right",
+    "container": "Sem. Level row",
+    "is_contribution": false
+   },
+   {
+    "name": "Bottom | Semantic Understanding Level | Top",
+    "type": "label",
+    "role": "granularity axis along which the seven examples are ordered",
+    "drawn_as": "wide light-grey block arrow along the bottom with grey sans text, Bottom at the tail and Top at the head",
+    "container": "dashed frame",
+    "is_contribution": false
+   },
+   {
+    "name": "dashed frame",
+    "type": "container",
+    "role": "frames the whole teaser",
+    "drawn_as": "dashed black rounded rectangle over a pale green ground",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "part | part | instance | instance | group | class | scene",
+    "to": "head | all faces | the most salient object | man looking this way | mom and kid | wall | bed, light, shelf, et al.",
+    "what": "semantic level of the instruction in that column",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "head | all faces | the most salient object | man looking this way | mom and kid | wall | bed, light, shelf, et al.",
+    "to": "photos with masks",
+    "what": "the instruction selects the target that is masked in the photo above it",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "part | part | instance | instance | group | class | scene",
+    "to": "chevrons between the level tags",
+    "what": "each tag leads to the next, coarser level",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Bottom | Semantic Understanding Level | Top",
+    "to": "part | part | instance | instance | group | class | scene",
+    "what": "granularity rises from left to right along the grey arrow",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "column hue",
+    "to": "tag, chevron, dotted arrow, instruction box, solid arrow of that column",
+    "what": "one hue per column carried from the level tag up to the instruction",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Seg. Mask, Lang., Sem. Level",
+    "kind": "section",
+    "at": "left margin beside the three rows",
+    "what": "head the three rows of the figure (defined again in the caption)"
+   },
+   {
+    "marker": "Bottom, Top",
+    "kind": "identity",
+    "at": "ends of the grey axis arrow",
+    "what": "name the poles of the semantic understanding level"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photos with a translucent red segmentation mask on the target named by the instruction: a bird's head, two faces, a cat, one man at a table, a woman and a girl, the wall of a bedroom",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "67 x 47 pt tiles in one row with a soft grey shadow; the mask is a flat translucent red overlay"
+   },
+   {
+    "what": "bedroom photo painted with a multi-colour class map for the whole scene (ceiling, walls, floor, bed, lights, shelf)",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "same tile size and shadow; several flat colours instead of one red mask"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "seven language instructions of growing scope: 'head', 'all faces', 'the most salient object', 'man looking this way', 'mom and kid', 'wall', 'bed, light, shelf, et al.'",
+    "form": "quoted italic text in rounded boxes, one per column",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "rounded box with an italic quoted instruction, one short text per box and no highlighted slots",
+    "parts": [
+     "rounded box",
+     "quoted text"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "granularity-axis",
+    "drawn_as": "ordered level tags joined by chevrons, with a wide grey block arrow below whose poles read Bottom and Top",
+    "parts": [
+     "level tags",
+     "chevrons",
+     "axis arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the first photo (bird's head) at the top left, then moves right along the row of photos, instructions and tags, with the grey Bottom to Top arrow below telling that granularity rises from part to scene."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "One dashed frame on a pale green ground holding three aligned rows named at the left margin (Seg. Mask on top, Lang. in the middle, Sem. Level at the bottom) that run through seven colour-coded columns. Hollow arrows point up from each level tag to its instruction and from each instruction to its photo; chevrons join the level tags; a wide grey arrow runs along the bottom.",
+  "panel_count": 1,
+  "lanes": "three row-labelled lanes (Seg. Mask, Lang., Sem. Level) crossing seven colour-coded columns",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.84,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e2f0d9",
+    "opacity": 0.31,
+    "used_for": "pale green ground inside the dashed frame"
+   },
+   {
+    "hex": "#ffc000",
+    "opacity": 0.4,
+    "used_for": "yellow column: 'head' box, its tag and chevron"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "light-yellow column: 'all faces' box and its part tag"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "blue column: 'the most salient object' box, instance tag and arrows"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "peach column: 'man looking this way' box and instance tag"
+   },
+   {
+    "hex": "#e7dbef",
+    "used_for": "purple column: 'mom and kid' box and group tag"
+   },
+   {
+    "hex": "#f8dedc",
+    "used_for": "pink column: 'wall' box and class tag"
+   },
+   {
+    "hex": "#e6faff",
+    "used_for": "cyan column: 'bed, light, shelf, et al.' box and scene tag"
+   },
+   {
+    "hex": "#7030a0",
+    "opacity": 0.18,
+    "used_for": "purple chevron"
+   },
+   {
+    "hex": "#c00000",
+    "opacity": 0.15,
+    "used_for": "red chevron"
+   },
+   {
+    "hex": "#8ce8fa",
+    "opacity": 0.22,
+    "used_for": "cyan chevron"
+   },
+   {
+    "hex": "#dbdbdb",
+    "opacity": 0.7,
+    "used_for": "grey Bottom to Top arrow and the shadows under the photos"
+   },
+   {
+    "hex": "#767171",
+    "used_for": "grey outlines (stroke)"
+   },
+   {
+    "hex": "#f2566b",
+    "approx": true,
+    "used_for": "red segmentation mask overlay on the photos, read off the bitmaps"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on instruction boxes and tags, 0.25 pt grey outlines on the dotted arrows and chevrons, dashed black frame",
+  "font": "italic serif (Times New Roman Italic) 8.5 pt for the quoted instructions; sans (Arial) 8.5 pt for row labels, level tags and the axis text",
+  "corners": "mixed",
+  "arrows": "hollow block arrows pointing up, solid outline for instruction to mask and dotted outline for level to instruction; outlined chevrons between tags; one wide light-grey block arrow along the bottom",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under the photo tiles",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one hue per column (yellow, light yellow, blue, peach, purple, pink, cyan) kept on the level tag, chevron, dotted arrow, instruction box and solid arrow of that column; the masks in the photos are red, the scene example uses several colours; the order of hues has no stated meaning",
+  "line_style_means": "dotted hollow arrow = from the semantic level to the instruction at that level; solid hollow arrow = from the instruction to its mask; chevron = next level; grey block arrow = granularity axis from Bottom to Top; dashed frame = the whole teaser",
+  "shape_means": "rounded box = language instruction; small rectangle = semantic level tag; chevron = next level; photo tile = segmentation result",
+  "marker_means": "row labels name the three rows; Bottom and Top name the poles of the axis",
+  "emphasis": "Colour-matched columns and the long Bottom to Top arrow make the progression of granularity the first thing seen; the red masks are the only saturated colour inside the photos.",
+  "reusable_patterns": [
+   "row labels at the left margin naming each aligned row (Seg. Mask, Lang., Sem. Level)",
+   "seven colour-coded columns each stacking a result, its instruction and its tag",
+   "hollow up arrows in the column hue, solid for the main link and dotted for the label link",
+   "chevrons between level tags to show the progression of levels",
+   "spectrum arrow along the bottom with Bottom and Top at the poles",
+   "translucent red mask overlay on photos, with a multi-colour class map for the whole-scene case",
+   "soft shadows under photo tiles on a pale tinted ground inside a dashed frame"
+  ],
+  "weaknesses": [
+   "the model itself is not drawn, only inputs and outputs",
+   "the semantic levels (part, instance, group, class, scene) are not defined inside the figure",
+   "seven hues in an order that carries no meaning can be read as a code"
+  ]
+ },
+ "resources": {
+  "own": [
+   "seven photos with segmentation masks",
+   "the language instructions"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "rounded instruction boxes and level tags",
+   "hollow arrows and chevrons",
+   "grey axis arrow",
+   "dashed frame"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "seven photos with red segmentation masks",
+   "rounded italic instruction boxes",
+   "semantic-level tags with chevrons",
+   "hollow up arrows in column colours",
+   "grey Bottom to Top axis arrow",
+   "dashed frame with row labels"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "universal segmentation",
+   "language instruction",
+   "semantic granularity",
+   "referring segmentation",
+   "part to scene",
+   "segmentation masks",
+   "UniLSeg"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "small-multiples",
+   "task-definition",
+   "schematic-plot"
+  ],
+  "new_tags": [
+   {
+    "name": "row-labelled-columns",
+    "what": "row labels in the left margin name aligned rows that run through several colour-coded columns, each column being one case"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a range of granularity (or difficulty) as parallel columns in one layout: result photo, language instruction and level tag, one hue per column, ordered along a labelled Bottom to Top arrow, so the reader sees that only the instruction and the target change.",
+  "suits": "Teasers of promptable or multi-level models (segmentation, detection, captioning) whose claim is a range of inputs rather than a pipeline."
+ },
+ "tags": [
+  "seven colour-coded columns",
+  "row labels at the left margin",
+  "dashed frame on a tinted ground",
+  "hollow block arrows",
+  "photo tiles with soft shadows",
+  "italic quoted prompts",
+  "no model drawn"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "segment images at any granularity or semantic level with language as instructions",
+   "UniLSeg can take arbitrary text as input, whether it is a detailed long description of an object",
+   "object part, single or multiple instances, and the whole scene"
+  ]
+ },
+ "summary": "UniLSeg is a universal segmentation model that segments at any semantic level, from object parts to whole scenes, when given a language instruction. Figure 1 is a teaser in a dashed frame on a pale green ground: seven colour-coded columns ordered along a grey Bottom to Top arrow labelled Semantic Understanding Level. Each column stacks a photo with its mask in translucent red (top row, Seg. Mask), the quoted instruction that selects it (middle row, Lang.: head, all faces, the most salient object, man looking this way, mom and kid, wall, bed, light, shelf, et al.) and a level tag (bottom row, Sem. Level: part, part, instance, instance, group, class, scene), joined by hollow up arrows. The model itself is not drawn.",
+ "summary_zh": "UniLSeg 能按语言指令在任意语义粒度上做分割。图是一条从“底”到“顶”的粒度轴，七列同色的示例从上到下依次是带红色掩码的照片、引用的语言指令和语义层级标签（部件、实例、群组、类别、场景），用空心箭头相连。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (scope-overview, concept-schematic) with the example-gallery variant. The model is not drawn. The last tile carries a multi-colour class map rather than one red mask. The dotted up arrows link level to instruction and the solid ones instruction to mask; the figure does not say why the two differ. The seven photos are 67 x 47 pt bitmaps.",
+ "venue": "CVPR24"
+}

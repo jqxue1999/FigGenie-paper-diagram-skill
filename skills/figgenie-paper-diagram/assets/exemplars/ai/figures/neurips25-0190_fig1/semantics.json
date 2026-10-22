@@ -1,0 +1,409 @@
+{
+ "paper_id": "neurips25-0190",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "E3VQA / M3CoT",
+  "one_liner": "Framework that adds third-person views to egocentric inputs for LVLMs, with the E3VQA multi-view QA benchmark and the training-free M3CoT prompting method.",
+  "domain": [
+   "egocentric and exocentric scene understanding",
+   "multi-view visual question answering",
+   "large vision-language models"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "actor-interaction",
+   "worked-walkthrough"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "two isometric scenes with egocentric and exocentric view overlays, each beside a three-turn question and answer column between a person icon and a robot icon",
+  "argues": "An egocentric view alone answers only some user questions; spatial or counting questions about the wider scene need the exocentric view too, in both a cooking and a sports scenario.",
+  "subject": "Two isometric scenes (kitchen, soccer pitch) with yellow egocentric and grey exocentric view overlays, each beside three question and answer bubbles.",
+  "elements": [
+   {
+    "name": "(a) Cooking Scenario",
+    "type": "container",
+    "role": "first scenario: a kitchen where a user cooks with an assistant",
+    "drawn_as": "left half of a dashed frame, title below the frame",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Sports Scenario",
+    "type": "container",
+    "role": "second scenario: a soccer match seen by a player",
+    "drawn_as": "right half of the dashed frame, title below the frame",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Egocentric view overlay",
+    "type": "region",
+    "role": "the narrow first-person field of view of the person in the scene",
+    "drawn_as": "translucent yellow frustum from the person's head over the scene",
+    "container": "scene illustrations",
+    "is_contribution": null
+   },
+   {
+    "name": "Exocentric view overlay",
+    "type": "region",
+    "role": "the wide third-person coverage of the scene",
+    "drawn_as": "translucent grey polygon over most of the scene, with a small CCTV camera glyph in a corner",
+    "container": "scene illustrations",
+    "is_contribution": null
+   },
+   {
+    "name": "Chef / Player",
+    "type": "actor",
+    "role": "the user who asks the questions, with a chef icon in the kitchen and a footballer icon on the pitch",
+    "drawn_as": "small cartoon icon with a label under it, repeated at each question",
+    "container": "each scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "LVLM",
+    "type": "actor",
+    "role": "the assistant model that answers",
+    "drawn_as": "grey robot icon with the label LVLM under it, repeated at each answer",
+    "container": "each scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "What should I do next? / Where is the cup? / How many carrots are left?",
+    "type": "text-block",
+    "role": "three questions of the cooking user; the first needs only the egocentric view, the other two both views (caption)",
+    "drawn_as": "rounded speech bubbles with a tail towards the Chef icon",
+    "container": "(a) Cooking Scenario",
+    "is_contribution": null
+   },
+   {
+    "name": "Cut the vegetables. / On the right. / 3 carrots.",
+    "type": "text-block",
+    "role": "the LVLM's short answers",
+    "drawn_as": "smaller rounded speech bubbles with a tail towards the robot icon",
+    "container": "(a) Cooking Scenario",
+    "is_contribution": null
+   },
+   {
+    "name": "What is the player's back number in front of me? / How many players are in our half? / Is there a striker to my right?",
+    "type": "text-block",
+    "role": "three questions of the player; the first needs only the egocentric view, the other two both",
+    "drawn_as": "rounded speech bubbles with a tail towards the Player icon",
+    "container": "(b) Sports Scenario",
+    "is_contribution": null
+   },
+   {
+    "name": "7. / 5 players. / Yes.",
+    "type": "text-block",
+    "role": "the LVLM's short answers",
+    "drawn_as": "smaller rounded speech bubbles with a tail towards the robot icon",
+    "container": "(b) Sports Scenario",
+    "is_contribution": null
+   },
+   {
+    "name": "Egocentric view / Exocentric view",
+    "type": "label",
+    "role": "legend of the two overlay colours",
+    "drawn_as": "yellow and grey square swatches with serif labels under each scene, repeated in both panels",
+    "container": "each scenario",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Chef / Player",
+    "to": "LVLM",
+    "what": "question put to the model, then its short answer, three times per scenario",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "yellow overlay",
+    "to": "Egocentric view legend swatch",
+    "what": "colour key: yellow = egocentric view",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "grey overlay",
+    "to": "Exocentric view legend swatch",
+    "what": "colour key: grey = exocentric view",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "scene illustration",
+    "to": "question and answer column",
+    "what": "the questions are about the scene; which view each question needs is stated only in the caption",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Cooking Scenario",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "isometric kitchen with a yellow egocentric frustum and a grey exocentric overlay, and three questions from a chef answered by an LVLM",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Sports Scenario",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "isometric soccer pitch with a yellow egocentric cone and a grey exocentric overlay, and three questions from a player answered by an LVLM",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "panel titles under the frame",
+    "what": "letter the cooking and sports scenarios"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "isometric kitchen scene with a chef, a helper, a cooking island and a table with carrots; isometric soccer pitch with players in red and blue kits and a ball",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square tiles of about 87x85 pt with a translucent yellow frustum and a translucent grey polygon overlaid, a small CCTV camera glyph in the top corner of each"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon chef with hat and spatula",
+    "stands_for": "the user in the cooking scenario",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "cartoon footballer in red kit with a ball",
+    "stands_for": "the user in the sports scenario",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "grey robot with antenna and two eyes",
+    "stands_for": "the LVLM",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "wall-mounted CCTV camera",
+    "stands_for": "the third-person (exocentric) camera",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "three question and answer pairs per scenario: what to do next, where the cup is, how many carrots are left; the back number of a player, players in our half, a striker on my right",
+    "form": "speech bubbles with short answers",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded bubbles with small tails: questions on the left beside a labelled user icon, shorter answers on the right beside a labelled robot icon",
+    "parts": [
+     "question bubble",
+     "answer bubble",
+     "user icon",
+     "robot icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "grey robot icon labelled LVLM, one beside each answer",
+    "parts": [
+     "robot icon",
+     "label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "ego-exo-view-overlay",
+    "drawn_as": "translucent yellow frustum for the first-person view and a translucent grey polygon for the third-person camera coverage painted over an isometric scene",
+    "parts": [
+     "yellow frustum",
+     "grey polygon",
+     "camera glyph",
+     "legend swatches"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the kitchen scene at the top left, reads the three question and answer pairs downwards, then the legend, and repeats the same order in the sports panel at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "One dashed rounded frame split by a dashed vertical line into two scenario panels; each has an isometric scene at the left and a column of three question bubbles with a person icon and three answer bubbles with a robot icon at the right, a two-swatch legend underneath and the letter and title below the frame.",
+  "panel_count": 2,
+  "lanes": "three aligned question and answer rows in each panel",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.95,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff703",
+    "opacity": 0.6,
+    "used_for": "egocentric view overlay and its legend swatch"
+   },
+   {
+    "hex": "#000000",
+    "opacity": 0.33,
+    "used_for": "grey exocentric overlay on one scene and the grey legend swatch"
+   },
+   {
+    "hex": "#000000",
+    "opacity": 0.4,
+    "used_for": "grey exocentric overlay on the other scene"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy outlines of the speech bubbles"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dashed outer frame and the dashed divider"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark navy outlines on speech bubbles, 0.5 pt dashed grey frame and divider",
+  "font": "serif (Times New Roman), 6.5 pt bubble text, 5 to 5.5 pt role labels and legend, 9 pt panel titles, no bold",
+  "corners": "rounded",
+  "arrows": "none drawn; speech-bubble tails point to the speaker",
+  "rendering": "isometric",
+  "effects": "translucent view overlays on the scenes; soft shadows inside the isometric scenes",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow overlay = what the egocentric view sees; grey overlay = what the exocentric view covers; legend swatches repeat both",
+  "line_style_means": "dashed frame and divider separate the two scenarios; solid outlines on bubbles",
+  "shape_means": "speech bubble with tail = utterance, tail towards the speaker; robot icon = LVLM; chef or footballer icon = the user",
+  "marker_means": "no numbers on the drawing; the caption says the first question of each scenario needs only the egocentric view and the next two need both",
+  "emphasis": "the narrow yellow frustum against the wide grey coverage shows why one view is not enough; short answers in tailed bubbles",
+  "reusable_patterns": [
+   "translucent coloured overlays on one scene to show what each camera covers, with a two-swatch legend in each panel",
+   "alternating question bubbles at the left with a user icon and answer bubbles at the right with a robot icon",
+   "the same layout repeated for two scenarios to show generality",
+   "small CCTV glyph in a scene corner marking the third-person camera",
+   "dashed frame with a dashed divider and letter plus title captions below"
+  ],
+  "weaknesses": [
+   "which question needs which view is stated only in the caption, not drawn",
+   "the grey exocentric overlay is subtle against the kitchen scene"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "chef, footballer, robot and CCTV camera icons"
+  ],
+  "generated": [
+   "isometric kitchen and soccer scene illustrations"
+  ],
+  "drawn": [
+   "speech bubbles",
+   "translucent view overlays",
+   "dashed frame, divider and legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "isometric kitchen scene",
+   "isometric soccer pitch",
+   "yellow egocentric view overlay",
+   "grey exocentric view overlay",
+   "chef and player icons",
+   "LVLM robot icons",
+   "question and answer speech bubbles",
+   "CCTV camera glyph"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "egocentric view",
+   "exocentric view",
+   "LVLM",
+   "multi-view question answering",
+   "scene understanding",
+   "embodied assistant",
+   "E3VQA",
+   "M3CoT"
+  ],
+  "tags": [
+   "model-pictogram",
+   "illustration-style",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "view-coverage-overlay",
+    "what": "translucent coloured regions painted over one scene to show what each camera or view covers, explained by a two-swatch legend"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Motivate a task with a scene illustration on which translucent coloured overlays show what each viewpoint can see, next to a short question and answer column between a user icon and a robot icon; repeat the layout in a second domain to show the problem is general.",
+  "suits": "Motivation figures for multi-view, multi-sensor or context-limited tasks where a few example questions show why one input is not enough."
+ },
+ "tags": [
+  "isometric scenes",
+  "view overlays",
+  "speech bubbles with tails",
+  "dashed frame",
+  "serif labels",
+  "robot icon"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Conceptual illustration of example scenarios that require a joint understanding of egocentric (first-person) and exocentric (third-person) views.",
+   "while the subsequent two questions require integrating information from both views.",
+   "Yellow and gray overlays indicate egocentric and exocentric views, respectively."
+  ]
+ },
+ "summary": "The paper adds third-person (exocentric) views to the first-person (egocentric) input of large vision-language models and presents the E3VQA benchmark and the training-free M3CoT prompting method. Figure 1 is a conceptual illustration with two panels in a dashed frame: (a) a cooking scenario and (b) a sports scenario. Each shows an isometric scene overlaid with a yellow translucent frustum for the egocentric view and a grey overlay for the exocentric view, next to three question bubbles from a chef or player icon and three short answer bubbles from an LVLM robot icon; the first question needs only the egocentric view, the next two need both. A two-swatch legend sits under each scene.",
+ "summary_zh": "论文给 LVLM 的第一人称输入补充第三人称视角。图 1 是示意图：虚线框内烹饪与运动两个场景，等距插画上黄色为第一人称视野、灰色为第三人称，旁为厨师或球员的三个提问和 LVLM 机器人的简短回答。",
+ "confidence": "high",
+ "notes": "The pre-screen listed actor-interaction first; concept-schematic is put first because the figure motivates the need for two views on example scenes rather than describing the exchange itself. The questions and answers are illustrative, not benchmark records. The yellow and grey overlay shapes are read from the preview and the caption.",
+ "venue": "NeurIPS25"
+}

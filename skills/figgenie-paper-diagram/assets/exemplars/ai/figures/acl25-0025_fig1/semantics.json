@@ -1,0 +1,603 @@
+{
+ "paper_id": "acl25-0025",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OISA (Online Iterative Self-Alignment)",
+  "one_liner": "A radiology report generation model generates, scores and aligns on its own multi-objective preference data, round after round.",
+  "domain": [
+   "radiology report generation",
+   "preference optimization",
+   "multi-objective alignment"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "two titled dashed modules (data construction, alignment) read as one clockwise loop closed by a red return arrow; the alignment module also shows the objective wiring",
+  "argues": "The RRG model can improve itself by generating, scoring and aligning on its own multi-objective preference data, round after round.",
+  "subject": "Chest X-ray prompts turned into grouped reports, then preference data, then an updated model that loops back to generation.",
+  "elements": [
+   {
+    "name": "Preference Datasets Construction",
+    "type": "container",
+    "role": "module that builds the multi-objective preference data (self-generation and self-evaluation)",
+    "drawn_as": "dashed dark-blue frame with a bold title above, top band",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Step1: Self-Generation",
+    "type": "container",
+    "role": "the RRG model writes diverse reports for each image under a weight vector, then they are deduplicated and grouped",
+    "drawn_as": "light-green tinted region with a white bold-italic title tab",
+    "container": "Preference Datasets Construction",
+    "is_contribution": true
+   },
+   {
+    "name": "One-hot vector",
+    "type": "data",
+    "role": "weight vector w-hat that conditions generation on one objective",
+    "drawn_as": "small yellow box with a dashed dark border, w-hat inside, arrow up into the model",
+    "container": "Step1: Self-Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "RRG Model πref (Step 1)",
+    "type": "module",
+    "role": "initial reference model that generates reports for an image prompt",
+    "drawn_as": "square box with a node-and-edge network glyph, name and symbol over it",
+    "container": "Step1: Self-Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "ŷ list (y1 ... ym)",
+    "type": "data",
+    "role": "reports generated for the images",
+    "drawn_as": "column of clipboard-with-checklist icons labelled y1, y2, ym in a framed list",
+    "container": "Step1: Self-Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Deduplicate & Group",
+    "type": "operation",
+    "role": "removes duplicate reports and sorts them into groups",
+    "drawn_as": "vertical text on the arrow between the list and the groups",
+    "container": "Step1: Self-Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Group 1 / Group c / Group C",
+    "type": "data",
+    "role": "groups of reports Y1 ... YC",
+    "drawn_as": "three dashed boxes, each a row of clipboard icons with dots, stacked with vertical dots in a solid frame, labelled Y = {Y1, ..., YC}",
+    "container": "Step1: Self-Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Step2: Self-Evaluation",
+    "type": "container",
+    "role": "scores each group by a metric and builds chosen and rejected pairs into preference datasets",
+    "drawn_as": "light-orange tinted region with a white title tab and a large white box of numbered pseudocode",
+    "container": "Preference Datasets Construction",
+    "is_contribution": true
+   },
+   {
+    "name": "pseudocode of Step 2",
+    "type": "text-block",
+    "role": "states the procedure: rank by metric Mk, compute Kc, select top Kc as chosen, randomly select Kc rejects, union into Dk, obtain D = [D1 ... DN]",
+    "drawn_as": "white box with serif lines numbered 1 to 5 and math symbols",
+    "container": "Step2: Self-Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Multi-Objective Alignment",
+    "type": "container",
+    "role": "module that aligns the model with the preference data of several objectives",
+    "drawn_as": "dashed frame with a blue tint and a bold title above, bottom band",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Step3: Self-Alignment",
+    "type": "container",
+    "role": "MODPO training of the RRG model with weights, reward margins and a BCE loss",
+    "drawn_as": "white title tab on the blue region",
+    "container": "Multi-Objective Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "RRG Model πref (Step 3)",
+    "type": "module",
+    "role": "the model being optimised, receiving weights, margins and loss lines",
+    "drawn_as": "square box with a network glyph, three coloured arrows in on each side",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": false
+   },
+   {
+    "name": "Updated RRG Model πθw",
+    "type": "module",
+    "role": "result of the MODPO update, passed to the next iteration",
+    "drawn_as": "box with a network glyph in washed-out colours, at the left end of the band",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "MODPO Update",
+    "type": "operation",
+    "role": "optimisation step from the reference to the updated model",
+    "drawn_as": "black arrow with a label above",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "w1 ... wN",
+    "type": "data",
+    "role": "preference weights per objective",
+    "drawn_as": "small boxes with dashed dark borders, blue w1 at the top and orange wN at the bottom",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "R1 ... RN with snowflakes",
+    "type": "module",
+    "role": "frozen reward models, one per objective, giving margins to the RRG model",
+    "drawn_as": "framed box holding two robot-head icons labelled RN and R1 with snowflakes, dots between",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": false
+   },
+   {
+    "name": "D1 ... DN",
+    "type": "data",
+    "role": "preference datasets of each objective",
+    "drawn_as": "framed box with two database cylinders and dots, labelled Margin Reward Modeling below",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "margin / BCE with margin",
+    "type": "label",
+    "role": "names what the coloured arrows carry into the model: reward margins and the margin-augmented BCE loss",
+    "drawn_as": "labels on blue and orange lines",
+    "container": "Step3: Self-Alignment",
+    "is_contribution": null
+   },
+   {
+    "name": "Step4: Next Iteration",
+    "type": "operation",
+    "role": "the updated model becomes the reference model of the next round",
+    "drawn_as": "red line from the updated model left and up into the Step 1 model, bold-italic label under it",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "chest X-ray stack (X)",
+    "to": "RRG Model πref (Step 1)",
+    "what": "image prompt x",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "One-hot vector",
+    "to": "RRG Model πref (Step 1)",
+    "what": "weight vector conditioning the generated reports on one objective",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "RRG Model πref (Step 1)",
+    "to": "ŷ list (y1 ... ym)",
+    "what": "generated reports",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "ŷ list (y1 ... ym)",
+    "to": "Group 1 / Group c / Group C",
+    "what": "deduplicated, grouped reports",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Group 1 / Group c / Group C",
+    "to": "pseudocode of Step 2",
+    "what": "groups Y1 ... YC to rank and sample from",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "pseudocode of Step 2",
+    "to": "D1 ... DN",
+    "what": "multi-objective preference data D",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "D1 ... DN",
+    "to": "R1 ... RN with snowflakes",
+    "what": "each dataset Dk trains reward model Rk (margin reward modeling); the arrows cross because the two lists run in opposite order",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "R1 ... RN with snowflakes",
+    "to": "RRG Model πref (Step 3)",
+    "what": "margin from the reward model, blue for RN and orange for R1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "w1 ... wN",
+    "to": "RRG Model πref (Step 3)",
+    "what": "objective weights",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "D1 ... DN",
+    "to": "RRG Model πref (Step 3)",
+    "what": "BCE with margin, blue line from D1 over the top and orange line from DN along the bottom",
+    "kind": "gradient",
+    "drawn": "line",
+    "step": 3
+   },
+   {
+    "from": "RRG Model πref (Step 3)",
+    "to": "Updated RRG Model πθw",
+    "what": "MODPO update",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Updated RRG Model πθw",
+    "to": "RRG Model πref (Step 1)",
+    "what": "the updated model replaces the reference model for the next round",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 4
+   }
+  ],
+  "panels": [
+   {
+    "label": "Preference Datasets Construction",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "self-generation of grouped reports and self-evaluation into preference data",
+    "verdict": "ours"
+   },
+   {
+    "label": "Multi-Objective Alignment",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "the RRG model, weights, frozen reward models and datasets wired into a MODPO update",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Step1 to Step4",
+    "kind": "order",
+    "at": "title tabs of the tinted regions and the label of the red return arrow",
+    "what": "the four steps: self-generation, self-evaluation, self-alignment, next iteration"
+   },
+   {
+    "marker": "1. to 5.",
+    "kind": "order",
+    "at": "lines of the pseudocode box",
+    "what": "procedure that builds the preference dataset Dk"
+   },
+   {
+    "marker": "Group 1, Group c, Group C",
+    "kind": "identity",
+    "at": "tags on the dashed group boxes",
+    "what": "name the groups of reports Y1 ... YC"
+   },
+   {
+    "marker": "w1 ... wN, R1 ... RN, D1 ... DN",
+    "kind": "identity",
+    "at": "beside the weight boxes, reward models and datasets",
+    "what": "index the N objectives; blue and orange pair the lines of the first and last objective"
+   },
+   {
+    "marker": "Preference Datasets Construction, Multi-Objective Alignment",
+    "kind": "section",
+    "at": "bold titles above the two dashed frames",
+    "what": "head the two modules"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "chest X-ray images",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small stack with an offset inside a dotted frame, labelled X = {xj}"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "node-and-edge network with green, orange and blue nodes",
+    "stands_for": "the RRG model (reference and updated)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "clipboard with a checklist",
+    "stands_for": "one generated report",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 12
+   },
+   {
+    "depicts": "robot head",
+    "stands_for": "a reward model",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "light-blue snowflake",
+    "stands_for": "frozen reward model",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "database cylinder",
+    "stands_for": "a preference dataset",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a small offset stack of chest X-ray images in a dotted frame, labelled X = {xj}",
+    "parts": [
+     "stacked images",
+     "dotted frame",
+     "set label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake beside each reward model; the trained model is not marked, but is redrawn as Updated RRG Model with washed-out colours",
+    "parts": [
+     "snowflake",
+     "reward-model box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-cylinder",
+    "drawn_as": "database cylinders D1 ... DN with vertical dots in a framed box",
+    "parts": [
+     "cylinder",
+     "dots",
+     "index label"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the Step 1 model at top left, goes right through grouped reports into the Step 2 box, down the red arrow at the right into the alignment band, leftwards to the updated model, then the red line back to the start."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two stacked full-width dashed frames: the top band (data construction) holds the green Step 1 region and the orange Step 2 region side by side, the bottom band (alignment) holds the updated model, the reference model, the reward models and the datasets from left to right. The flow runs rightwards on top, down a red arrow at the right edge, leftwards below and back up along a red line at the left edge, a clockwise loop.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.92,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a9d18e",
+    "opacity": 0.3,
+    "used_for": "Step 1 self-generation region"
+   },
+   {
+    "hex": "#f8cbad",
+    "opacity": 0.3,
+    "used_for": "Step 2 self-evaluation region"
+   },
+   {
+    "hex": "#9dc3e6",
+    "opacity": 0.3,
+    "used_for": "Multi-Objective Alignment region"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "model, reward-model and dataset boxes"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "loop-back arrow and the arrow carrying preference data into alignment"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue arrows of the first objective (w1, margin from RN, BCE line from D1)"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange arrows of the last objective (wN, margin from R1, BCE line from DN)"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green nodes of the network glyph"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "peach nodes of the network glyph"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "blue nodes of the network glyph"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "outlines of boxes, frames and icons"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy dashed frames and model-box outlines"
+   },
+   {
+    "hex": "#ffe699",
+    "approx": true,
+    "used_for": "one-hot vector box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1 pt blue-grey outlines on boxes and arrows, a few 0.5 pt; dashed dark-navy frames and dashed small boxes (9 dashed shapes)",
+  "font": "serif (Times New Roman) 4.5-9.5 pt, bold for module and region titles, bold italic for step tabs, Cambria Math for symbols",
+  "corners": "square",
+  "arrows": "thick black block arrows for the main flow; 1.5 pt blue and orange arrows with solid heads for weights and margins; red arrows with solid heads for hand-overs and the loop-back",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "tint of a region = step (green generation, orange evaluation, blue alignment); red arrows = hand-over between modules and the return to the next iteration; blue and orange arrows pair the weight, margin and BCE lines of the first and the last objective",
+  "line_style_means": "dashed frame = module boundary; dashed small box = a vector or a group of reports; thick black arrow = main data flow; red = loop-back and cross-module hand-over",
+  "shape_means": "box with a network glyph = RRG model, clipboard icon = a generated report, robot head = reward model, cylinder = preference dataset, dotted-frame stack = X-ray images",
+  "marker_means": "Step1 to Step4 order the loop; subscripts 1 to N index objectives; snowflake = frozen reward model",
+  "emphasis": "bold titles over the two dashed frames, bold-italic step tabs and the single red return arrow that closes the loop",
+  "reusable_patterns": [
+   "two titled dashed module frames joined by one coloured arrow",
+   "coloured return arrow labelled Next Iteration closing a clockwise loop",
+   "boxed pseudocode next to the drawn inputs of a procedural stage",
+   "colour pairs tying each objective's weight, margin and loss lines together",
+   "snowflake beside frozen models",
+   "report icons grouped in dashed boxes with ellipsis rows",
+   "tinted region per step with a white title tab"
+  ],
+  "weaknesses": [
+   "text is 4.5-6.5 pt, the pseudocode box is hard to read at print size",
+   "the crossing arrows from D to R need the index order to be understood",
+   "the label Margin Reward Modeling runs into the frame of the dataset box",
+   "the SVG has a stray large text and shapes outside the canvas that are not part of the printed figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a chest X-ray sample",
+   "the Step 2 procedure written out as pseudocode"
+  ],
+  "stock": [
+   "clipboard-with-checklist report icon",
+   "robot-head icon",
+   "snowflake icon",
+   "database cylinder icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed frames and tinted regions",
+   "network glyph in the model boxes",
+   "block arrows and coloured lines",
+   "boxes for vectors and groups"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "RRG model box with network glyph",
+   "chest X-ray stack",
+   "grouped report icons in dashed boxes",
+   "pseudocode box",
+   "reward-model robot heads with snowflakes",
+   "database cylinders D1 ... DN",
+   "red loop-back arrow"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "radiology report generation",
+   "self-alignment",
+   "preference data",
+   "multi-objective optimization",
+   "MODPO",
+   "iterative training",
+   "reward model",
+   "chest X-ray"
+  ],
+  "tags": [
+   "pseudocode-box",
+   "model-pictogram",
+   "module-state-coding",
+   "stacked-cards",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "loop-back-return-arrow",
+    "what": "one coloured arrow from the last stage's output around the figure back into the first stage, labelled with the iteration step"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Close an iterative method with a single coloured return arrow labelled Next Iteration around two titled dashed module frames, and use colour pairs to tie each objective's weight, reward margin and loss line together.",
+  "suits": "Iterative self-improvement or alignment pipelines with a data-construction module and a training module, possibly with several objectives."
+ },
+ "tags": [
+  "clockwise-loop",
+  "dashed-module-frames",
+  "tinted-step-regions",
+  "serif-small-text",
+  "powerpoint-look",
+  "icon-heavy"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Methods (p.3)",
+   "3 Methods (p.4)"
+  ],
+  "evidence": [
+   "The pipeline involves four steps: self-generation to obtain diverse data, self-evaluation to obtain a multi-objective preference dataset",
+   "Figure 1 illustrates the proposed OISA framework, comprising two modules and iterating through four steps"
+  ]
+ },
+ "summary": "OISA improves a radiology report generation model by letting it generate, score and align on its own data, iteratively. Figure 1 draws this as a clockwise loop over two dashed modules. In Preference Datasets Construction the reference RRG model, given chest X-rays and a one-hot weight vector, writes reports that are deduplicated and grouped (Step 1); a boxed pseudocode then ranks them by a metric to build chosen and rejected preference data D1 to DN (Step 2). In Multi-Objective Alignment, frozen reward models and the datasets feed the model through weights, margins and BCE-with-margin lines in blue and orange (Step 3), and a red arrow returns the updated model to Step 1 (Step 4). Tinted regions, small icons and serif text.",
+ "summary_zh": "OISA 让放射学报告生成模型自己生成、评分并对齐数据。图画成两个虚线模块组成的顺时针闭环：先由胸片和独热权重生成并分组报告，再用伪代码框构造多目标偏好数据，随后结合奖励模型边际更新模型，红箭头把新模型送回第一步。",
+ "confidence": "high",
+ "notes": "The digest counts 11 bitmaps of 20 x 20 pt; 12 report icons are visible in the preview, so the clipboard count is approximate. The pairing of blue lines with w1 and the margin from RN, and orange with wN and R1, is read from the drawing. The yellow of the one-hot vector box is not in the fill histogram (probably a bitmap) and is given approximately.",
+ "venue": "ACL25"
+}

@@ -1,0 +1,488 @@
+{
+ "paper_id": "icml23-0051",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Model-based unsupervised pre-training and fine-tuning (MuZero-style agent)",
+  "one_liner": "Study of when model-based agents transfer better: pre-train by intrinsic exploration, then fine-tune on task reward while carrying over chosen components.",
+  "domain": [
+   "model-based reinforcement learning",
+   "transfer and fine-tuning",
+   "intrinsic exploration"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "pre-training (b) and two fine-tuning panels (c, d) redraw the same four components, next to the model diagram (a); the fine-tuning rows are a design family of what is carried over",
+  "argues": "Which components (observation encoder, prior heads, model, dynamics heads) are carried over from a model-based or a model-free pre-trained agent is the experimental variable.",
+  "subject": "A MuZero-style model diagram, an intrinsic-reward pre-training setup, and rows of component cells coloured by what each fine-tuning condition transfers.",
+  "elements": [
+   {
+    "name": "(a) Model architecture",
+    "type": "container",
+    "role": "left panel: the model-based agent unrolled over k steps with its losses",
+    "drawn_as": "panel title over a diagram of grey boxes, grey arrows and green dotted loss arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "o_t",
+    "type": "data",
+    "role": "observation at step t, an environment frame",
+    "drawn_as": "small thumbnail of a rendered desk scene with a robot arm, label o_t below",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Obs. Encoder (OE)",
+    "type": "module",
+    "role": "encodes the observation",
+    "drawn_as": "grey rounded box",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Prior Heads (PH)",
+    "type": "module",
+    "role": "predicts the policy prior, value and reward from the encoding",
+    "drawn_as": "grey rounded box with three grey arrows out to pi_t, V_t, r_t",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Model (M)",
+    "type": "module",
+    "role": "latent dynamics model, applied step after step",
+    "drawn_as": "grey rounded box repeated down the panel, joined by grey arrows and an ellipsis",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Dynamics Heads (DH)",
+    "type": "module",
+    "role": "predicts policy, value and reward for steps t+1 to t+k",
+    "drawn_as": "grey rounded box to the right of each Model box",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "pi, V, r at t, t+1, ..., t+k",
+    "type": "data",
+    "role": "policy, value and reward predictions per step",
+    "drawn_as": "italic math symbols fanned out of each head by three grey arrows",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "MZ Loss",
+    "type": "operation",
+    "role": "MuZero-style loss on the predictions of each step",
+    "drawn_as": "green label reached by three green dotted arrows, three copies",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "SPR Loss",
+    "type": "operation",
+    "role": "self-supervised loss attached to the prior heads and to each dynamics-heads box",
+    "drawn_as": "green label under each head box, reached by a short green dotted arrow",
+    "container": "(a) Model architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Unsupervised pre-training (Q1a)",
+    "type": "container",
+    "role": "pre-training of a model-based (MB) and a model-free (MF) agent by interacting with the environment under an intrinsic reward",
+    "drawn_as": "title, two white rows of grey cells (MB: OE PH M DH; MF: OE PH), a double-headed arrow labelled 'RND reward' to an environment thumbnail",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Fine-tuning, MB<->MF (Q1b)",
+    "type": "container",
+    "role": "fine-tuning conditions MB to MB, MF to MF, MF to MB and MB to MF",
+    "drawn_as": "title, four white rows of cells with colour-coded outlines, a double-headed arrow labelled 'Task reward' to an environment thumbnail",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(d) Fine-tuning, MB components (Q2)",
+    "type": "container",
+    "role": "fine-tuning conditions that carry over OE, then OE+PH, OE+PH+M, OE+PH+M+DH from the model-based agent",
+    "drawn_as": "title, four white rows of cells, a double-headed arrow labelled 'Task reward' to a thumbnail, and a three-entry colour key below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "component cells (OE, PH, M, DH)",
+    "type": "label",
+    "role": "stand for the four components; fill and outline give their initialisation: grey = re-initialised, yellow with navy outline = from model-based, yellow with pink outline = from model-free",
+    "drawn_as": "small rounded squares in white row boxes, bold row labels in navy or pink",
+    "container": "(b), (c), (d)",
+    "is_contribution": null
+   },
+   {
+    "name": "Random Initialization / Initializing from model-based (MB) / Initializing from model-free (MF)",
+    "type": "label",
+    "role": "colour key for the cells",
+    "drawn_as": "three swatches with text at the bottom of panel (d)",
+    "container": "(d) Fine-tuning, MB components (Q2)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "o_t",
+    "to": "Obs. Encoder (OE)",
+    "what": "observation is encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Obs. Encoder (OE)",
+    "to": "Prior Heads (PH)",
+    "what": "encoding feeds the prior heads",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prior Heads (PH)",
+    "to": "pi_t, V_t, r_t",
+    "what": "three predictions per step (grey arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pi, V, r predictions",
+    "to": "MZ Loss",
+    "what": "predictions are trained with the MuZero-style loss (green dotted arrows)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prior Heads (PH) and Dynamics Heads (DH)",
+    "to": "SPR Loss",
+    "what": "self-supervised loss from each head box (green dotted arrow down)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Obs. Encoder (OE)",
+    "to": "Model (M)",
+    "what": "the encoding starts the unrolled model chain (grey arrow down)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model (M)",
+    "to": "Dynamics Heads (DH)",
+    "what": "each model step has its own dynamics heads; M steps are chained down to step t+k",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "agent rows",
+    "to": "environment thumbnail",
+    "what": "(b) agent and environment exchange with an RND reward; (c) and (d) with the task reward (double-headed arrows)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(b) pre-trained MB and MF agents",
+    "to": "(c) and (d) rows",
+    "what": "cells coloured by source show what is carried over to fine-tuning; no arrow joins the panels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "colour key",
+    "to": "cells in (c) and (d)",
+    "what": "grey, navy-outlined and pink-outlined swatches explain the cells",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Model architecture",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "observation encoder, prior heads and an unrolled chain of model and dynamics heads with MZ and SPR losses",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Unsupervised pre-training (Q1a)",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "MB agent (OE, PH, M, DH) and MF agent (OE, PH) pre-trained with an RND reward",
+    "verdict": "setting"
+   },
+   {
+    "label": "(c) Fine-tuning, MB<->MF (Q1b)",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "four rows MB to MB, MF to MF, MF to MB, MB to MF with their transferred components outlined",
+    "verdict": "setting"
+   },
+   {
+    "label": "(d) Fine-tuning, MB components (Q2)",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "four rows carrying over OE, OE+PH, OE+PH+M and OE+PH+M+DH from the model-based agent, with the colour key",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "panel titles",
+    "what": "letter the four panels; the caption refers to them"
+   },
+   {
+    "marker": "Q1a, Q1b, Q2",
+    "kind": "identity",
+    "at": "titles of (b), (c), (d)",
+    "what": "name the research question each panel answers"
+   },
+   {
+    "marker": "t, t+1, t+k",
+    "kind": "order",
+    "at": "subscripts of the predictions in (a)",
+    "what": "index the unrolled model steps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "rendered desk scene with a robot arm and coloured buttons (looks like RoboDesk), used as observation o_t and as the environment",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "same small square thumbnail with a thin dark border: o_t in (a) and the environment at the right of (b), (c) and (d)"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one environment frame o_t and the predicted policy pi, value V and reward r at steps t, t+1, ..., t+k",
+    "form": "thumbnail plus italic math symbols",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a colour key on the cells instead of icons: grey = re-initialised, yellow with a navy outline = carried over from a model-based agent, yellow with a pink outline = from a model-free agent",
+    "parts": [
+     "grey cell",
+     "yellow navy-outlined cell",
+     "yellow pink-outlined cell",
+     "key"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "no action and state arrows: one double-headed arrow between the row of agent components and an environment thumbnail, labelled 'RND reward' or 'Task reward'",
+    "parts": [
+     "agent row",
+     "double-headed arrow",
+     "reward label",
+     "environment thumbnail"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "green dotted arrows run from predictions to 'MZ Loss' and from head boxes to 'SPR Loss'; nothing flows back",
+    "parts": [
+     "MZ Loss",
+     "SPR Loss",
+     "green dotted arrows"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at '(a) Model architecture' top left and follows the observation through the grey boxes, then moves right to (b) pre-training and down to (c), and ends in (d) with its colour key."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three columns divided by thin grey vertical rules: the model diagram (a) on the left, pre-training (b) above fine-tuning (c) in the middle, and fine-tuning (d) with a colour key on the right; each right-hand panel is a stack of white rows of cells with a reward arrow to an environment thumbnail.",
+  "panel_count": 4,
+  "lanes": "stacked rows of component cells in (b), (c) and (d): 2, 4 and 4 rows",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.32,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cccccc",
+    "used_for": "grey component cells: the architecture in (a), re-initialised cells elsewhere"
+   },
+   {
+    "hex": "#ffffbf",
+    "used_for": "pale yellow fill of cells carried over from pre-training"
+   },
+   {
+    "hex": "#1a3f5c",
+    "used_for": "dark navy outlines and row labels for components from a model-based agent"
+   },
+   {
+    "hex": "#e5446d",
+    "used_for": "pink-red outlines and row labels for components from a model-free agent"
+   },
+   {
+    "hex": "#4f8f00",
+    "used_for": "green loss labels and dotted arrows"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "dark grey arrows and outlines"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "light grey outlines of the white row boxes and panel rules"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt grey arrows and outlines, about 1 pt navy or pink outlines on carried-over cells, 0.25 pt panel rules, dotted green arrows",
+  "font": "sans (Helvetica Neue) 7 pt panel titles with bold question ids, 4.5 pt labels, italic math for pi, V, r",
+  "corners": "rounded",
+  "arrows": "thin grey straight arrows with small filled heads; green dotted arrows to the loss labels; black double-headed arrows to the environment",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "grey cell = re-initialised component (or just the architecture in (a)); yellow with navy outline = initialised from a pre-trained model-based agent; yellow with pink outline = from a model-free agent; green = loss terms; navy and pink row labels repeat the MB and MF colours",
+  "line_style_means": "grey solid arrows = forward data flow; green dotted arrows = loss terms (MZ, SPR); black double-headed arrows = interaction with the environment and its reward",
+  "shape_means": "rounded squares = network components; white rounded rectangle = one agent; thumbnail = environment",
+  "marker_means": "(a)-(d) letter the panels; Q1a, Q1b, Q2 tie panels to research questions; subscripts t, t+1, t+k index the unrolled step",
+  "emphasis": "yellow cells with coloured outlines stand out against grey ones; bold navy and pink row labels",
+  "reusable_patterns": [
+   "rows of component cells redrawn per experiment, with fill and outline colour showing what is carried over from pre-training",
+   "three-swatch colour key under the last panel",
+   "double-headed arrow labelled with the reward between an agent row and an environment thumbnail",
+   "unrolled model chain with a loss label at the end of each step reached by green dotted arrows",
+   "panel titles that carry the paper's research-question ids (Q1a, Q1b, Q2)",
+   "the same environment thumbnail reused as observation and as environment in every panel",
+   "row labels written as source to target (MB to MF)"
+  ],
+  "weaknesses": [
+   "4.5 pt labels are small at the printed size",
+   "the hand-over from the pre-trained agents in (b) to the rows in (c) and (d) is implied by labels; no arrow connects them",
+   "the key explains only the cell colours, not the green dotted arrows or the double-headed arrows",
+   "panel (a) uses many symbols that are explained only in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a rendered environment frame"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "architecture diagram",
+   "component cell rows",
+   "colour key",
+   "arrows and loss labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "observation thumbnail",
+   "OE, PH, M, DH component boxes",
+   "unrolled model and dynamics-heads chain with MZ and SPR loss labels",
+   "rows of component cells with colour-coded initialisation",
+   "double-headed reward arrow to an environment thumbnail",
+   "three-swatch colour key"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "model-based RL",
+   "unsupervised pre-training",
+   "intrinsic exploration",
+   "transfer",
+   "fine-tuning",
+   "MuZero",
+   "RND reward",
+   "component-wise initialisation"
+  ],
+  "tags": [
+   "module-state-coding",
+   "flow-type-arrows",
+   "colour-coded-groups",
+   "option-catalog"
+  ],
+  "new_tags": [
+   {
+    "name": "reward-arrow-to-environment",
+    "what": "a double-headed arrow labelled with the reward type (RND reward, Task reward) between an agent's component row and a thumbnail of the environment"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an ablation design as rows of the same component cells redrawn once per condition, with a two-colour outline code (navy = from model-based, pink = from model-free) and grey for re-initialised blocks, so the reader can read off which parts each experiment carries over.",
+  "suits": "Transfer, initialisation or component-ablation studies where one modular architecture is trained under many partial-reuse settings."
+ },
+ "tags": [
+  "lettered-panels",
+  "component-cell-rows",
+  "colour-key",
+  "dotted-loss-arrows",
+  "sans-serif",
+  "ablation-design-rows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Methods (p.3-4)",
+   "4 Results (p.7)"
+  ],
+  "evidence": [
+   "Colored blocks indicate components that are transferred while gray blocks indicate those that are re-initialized.",
+   "During pre-training, the agent interacts with an environment attempting to optimize an intrinsic exploration objective.",
+   "Red indicates transfer from a pre-trained model-free agent, while blue indicates transfer from a pre-trained model-based agent."
+  ]
+ },
+ "summary": "The paper studies when and why model-based agents help transfer in reinforcement learning: agents pre-trained by intrinsic exploration are fine-tuned on task rewards while different components are carried over. Figure 1 sets up the study in four lettered panels. (a) draws the model-based agent: an observation encoder, prior heads and an unrolled chain of model and dynamics heads, each step ending in a MuZero-style loss and a self-supervised SPR loss. (b) shows unsupervised pre-training of model-based and model-free agents with an RND reward. (c) and (d) redraw rows of component cells for each fine-tuning condition (MB to MB, MF to MB, OE+PH and so on), where grey cells are re-initialised and yellow cells with navy or pink outlines come from model-based or model-free pre-training.",
+ "summary_zh": "论文研究基于模型的强化学习何时、为何有利于迁移。图 1 分四个面板：(a) 模型结构与损失，(b) 内在奖励预训练，(c)(d) 用成排组件格子表示微调迁移哪些部分，灰为重新初始化，蓝、红描边黄格来自基于模型或无模型预训练。",
+ "confidence": "high",
+ "notes": "The prior listed contribution-mosaic first with design-family; here stage-pipeline (phase-bands) is primary because panels (b)-(d) draw pre-training and fine-tuning phases over shared components, and (c)-(d) are read as a design family under side-by-side-contrast. The environment frame looks like RoboDesk but the figure does not name it (the paper uses Crafter, RoboDesk and Meta-World). The digest's large 124x23 pt picture sizes do not match the small thumbnails seen in the preview and were ignored. The caption calls the navy outline 'blue'.",
+ "venue": "ICML23"
+}

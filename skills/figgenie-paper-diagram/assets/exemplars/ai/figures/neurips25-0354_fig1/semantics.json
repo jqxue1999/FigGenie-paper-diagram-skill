@@ -1,0 +1,466 @@
+{
+ "paper_id": "neurips25-0354",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "HyperET",
+  "one_liner": "Efficient training of multimodal LLMs in hyperbolic space: a learnable scaling matrix adjusts the hyperbolic radius of visual representations on top of frozen pretrained weights.",
+  "domain": [
+   "multimodal LLM training",
+   "hyperbolic representation",
+   "parameter-efficient tuning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a small Input to Output block tied by two dashed lines to a large zoomed module whose four sibling scaling matrices form the design family",
+  "argues": "Hyperbolic radius adjustment multiplies the pretrained weights with a structured, learnable scaling matrix, and the structure (diagonal, block-diagonal, banded, full) trades trainable parameters against flexibility.",
+  "subject": "The HRA module in hyperbolic space with four structured scaling matrices and the pretrained weight matrix, plus the Euclidean-to-hyperbolic data path around it.",
+  "elements": [
+   {
+    "name": "Input",
+    "type": "label",
+    "role": "input of the layer",
+    "drawn_as": "yellow box with bold label, hollow block arrow above",
+    "container": "overview block",
+    "is_contribution": false
+   },
+   {
+    "name": "W_0",
+    "type": "module",
+    "role": "pretrained weight matrix in Euclidean space",
+    "drawn_as": "grid of pale-blue and grey cells with a bold italic W_0, inside a grey rounded container",
+    "container": "overview block",
+    "is_contribution": false
+   },
+   {
+    "name": "Exponential Map",
+    "type": "operation",
+    "role": "maps from Euclidean to hyperbolic space",
+    "drawn_as": "short green block arrow pointing up",
+    "container": "overview block",
+    "is_contribution": false
+   },
+   {
+    "name": "HRA",
+    "type": "module",
+    "role": "Hyperbolic Radius Adjustment, acts in hyperbolic space",
+    "drawn_as": "white rounded tile covered by geodesic arcs with the bold label HRA",
+    "container": "overview block",
+    "is_contribution": true
+   },
+   {
+    "name": "Logarithmic Map",
+    "type": "operation",
+    "role": "maps back from hyperbolic to Euclidean space",
+    "drawn_as": "short pink block arrow pointing up",
+    "container": "overview block",
+    "is_contribution": false
+   },
+   {
+    "name": "Output",
+    "type": "label",
+    "role": "output of the layer",
+    "drawn_as": "yellow box with bold label, hollow block arrow below",
+    "container": "overview block",
+    "is_contribution": false
+   },
+   {
+    "name": "Hyperbolic Radius Adjustment Module",
+    "type": "container",
+    "role": "zoomed view of what HRA computes",
+    "drawn_as": "large black-outlined rounded rectangle with a faint geodesic-arc background and a bold title above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Scaling Matrix",
+    "type": "container",
+    "role": "family of structured tunable matrices W_s",
+    "drawn_as": "pale-pink rounded panel with bold title, holding four grids",
+    "container": "Hyperbolic Radius Adjustment Module",
+    "is_contribution": true
+   },
+   {
+    "name": "W_s^D (Diagonal)",
+    "type": "module",
+    "role": "scaling matrix with tunable entries on the diagonal",
+    "drawn_as": "cream grid with a diagonal of blue cells, bold W with superscript D, caption below",
+    "container": "Scaling Matrix",
+    "is_contribution": true
+   },
+   {
+    "name": "W_s^{B-D} (Block-Diagonal)",
+    "type": "module",
+    "role": "scaling matrix with tunable diagonal blocks",
+    "drawn_as": "cream grid with blue 2x2 blocks along the diagonal",
+    "container": "Scaling Matrix",
+    "is_contribution": true
+   },
+   {
+    "name": "W_s^B (Banded)",
+    "type": "module",
+    "role": "scaling matrix with a tunable band around the diagonal",
+    "drawn_as": "cream grid with a stepped blue band",
+    "container": "Scaling Matrix",
+    "is_contribution": true
+   },
+   {
+    "name": "W_s (Full)",
+    "type": "module",
+    "role": "fully tunable scaling matrix, the flexible end of the range",
+    "drawn_as": "grid entirely filled with blue cells",
+    "container": "Scaling Matrix",
+    "is_contribution": null
+   },
+   {
+    "name": "Möbius Multiplication (⊗_c)",
+    "type": "operation",
+    "role": "multiplies the scaling matrix with the pretrained weights in hyperbolic space",
+    "drawn_as": "circled cross with subscript c between the pink panel and the weight grid",
+    "container": "Hyperbolic Radius Adjustment Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Pretrained Weight Matrix W_0^D",
+    "type": "module",
+    "role": "pretrained weights in hyperbolic space, n by n",
+    "drawn_as": "grid of pale-blue and grey cells with a purple cell, label over it and dimension arrows n",
+    "container": "Hyperbolic Radius Adjustment Module",
+    "is_contribution": false
+   },
+   {
+    "name": "Efficient (n) to Flexible (n²)",
+    "type": "label",
+    "role": "orders the matrix variants by number of trainable parameters",
+    "drawn_as": "chevron banner with green-to-purple gradient and a double-headed arrow label Number of Trainable Params",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "legend",
+    "type": "label",
+    "role": "key for Euclidean and hyperbolic space, zero and tunable elements, exponential and logarithmic maps, HRA, Möbius multiplication",
+    "drawn_as": "two rows of small swatches with bold labels under the diagram",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input",
+    "to": "W_0",
+    "what": "input enters the Euclidean block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W_0",
+    "to": "HRA",
+    "what": "exponential map into hyperbolic space",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HRA",
+    "to": "Output",
+    "what": "logarithmic map back, then output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HRA tile",
+    "to": "Hyperbolic Radius Adjustment Module",
+    "what": "zoom: two dashed brown lines from the tile to the corners of the large module",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Scaling Matrix",
+    "to": "Pretrained Weight Matrix W_0^D",
+    "what": "Möbius multiplication",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Diagonal, Block-Diagonal, Banded, Full",
+    "to": "each other",
+    "what": "four sibling structures ordered from efficient to flexible",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Scaling Matrix panel",
+    "to": "its four grids",
+    "what": "grouping",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "legend glyphs",
+    "to": "grey container, geodesic tile, cell colours, green and pink arrows, ⊗_c",
+    "what": "key",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Hyperbolic Radius Adjustment Module",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "four structured scaling matrices W_s combined with the pretrained weight matrix by Möbius multiplication, ordered by trainable parameters",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "Input, Euclidean pretrained weights, exponential map, HRA in hyperbolic space, logarithmic map, Output",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "D, B-D, B (superscripts of W_s)",
+    "kind": "identity",
+    "at": "bold W_s symbols",
+    "what": "names diagonal, block-diagonal and banded variants; plain W_s is the full matrix"
+   },
+   {
+    "marker": "n and n²",
+    "kind": "identity",
+    "at": "dimension arrows and ends of the banner",
+    "what": "matrix size n by n, and parameter counts n and n² at the two ends of the range"
+   },
+   {
+    "marker": "subscript c on ⊗",
+    "kind": "identity",
+    "at": "Möbius multiplication sign",
+    "what": "a parameter of the Möbius operation, not explained in the figure"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "white tile covered by intersecting geodesic arcs (Poincare-disk style)",
+    "stands_for": "hyperbolic space, also used as the module background and as a legend swatch",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "grey rounded square",
+    "stands_for": "Euclidean space, drawn as the container of the overview block and as a legend swatch",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "four n by n scaling matrices drawn at one grid size, with blue tunable cells in different patterns on a cream ground",
+    "form": "cell grids",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "structured-weight-matrix",
+    "drawn_as": "n by n grid, cream cells = zero elements, blue gradient cells = tunable elements, placed on the diagonal, in blocks, in a band, or everywhere",
+    "parts": [
+     "Diagonal",
+     "Block-Diagonal",
+     "Banded",
+     "Full"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "hyperbolic-space",
+    "drawn_as": "a family of intersecting geodesic arcs filling a tile or the module background",
+    "parts": [
+     "geodesic arcs"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the small Input to Output block at right, follows the dashed lines to the large module at left, scans the four matrices from Diagonal to Full, then the banner and legend underneath."
+ },
+ "layout": {
+  "arrangement": "inset",
+  "arrangement_note": "A large rounded module on the left holds a pink panel of four matrices and the pretrained weight matrix; a small vertical Input to Output block on the right is the source of two dashed zoom lines; below run a chevron banner under the matrices and a two-row legend.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 3.01,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f8e5ed",
+    "used_for": "pale-pink Scaling Matrix panel"
+   },
+   {
+    "hex": "#d7d7d7",
+    "used_for": "grey container of Euclidean space and legend swatch"
+   },
+   {
+    "hex": "#ffd54e",
+    "used_for": "Input and Output boxes"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "exponential-map arrow and the left end of the banner"
+   },
+   {
+    "hex": "#fca4f4",
+    "used_for": "logarithmic-map arrow"
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "dashed zoom lines from HRA to the module"
+   },
+   {
+    "hex": "#b4c7e7",
+    "approx": true,
+    "used_for": "blue gradient cells for tunable elements (bitmap)"
+   },
+   {
+    "hex": "#fffbe6",
+    "approx": true,
+    "used_for": "cream cells for zero elements (bitmap)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "thin black outline on the module, dashed brown zoom lines at 1 pt, 0.25 pt outlines on grids",
+  "font": "sans bold (Arial Bold), 6.5 to 7 pt labels and legend, 5.5 pt on Input and Output; bold italic math (Cambria Math) at 13 pt for W with 9.5 pt superscripts",
+  "corners": "rounded",
+  "arrows": "hollow white block arrows with black outline for the main flow, solid green and pink block arrows for the maps, dashed brown zoom lines, one double-headed dimension arrow, gradient chevron banner",
+  "rendering": "flat-vector",
+  "effects": "gradient fill on tunable cells and on the chevron banner; geodesic-arc bitmap as module background",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "pink panel = the scaling-matrix family; grey container = Euclidean space; white tile with geodesic arcs = hyperbolic space; blue cell = tunable element, cream cell = zero element; green arrow = exponential map, pink arrow = logarithmic map; yellow = input and output",
+  "line_style_means": "dashed brown lines = zoom from the HRA tile into the module; hollow block arrows = main flow of the layer",
+  "shape_means": "n by n grid = a matrix, its blue cells show the structure; chevron banner = spectrum from efficient to flexible; circled cross = Möbius multiplication",
+  "marker_means": "superscripts D, B-D, B name the variants; n and n² give parameter counts at the banner ends",
+  "emphasis": "the pale-pink Scaling Matrix panel is the largest tinted area and sits in the middle of the zoomed module; coloured map arrows mark where hyperbolic space is entered and left",
+  "reusable_patterns": [
+   "row of sibling matrices at one size with only the tunable-cell pattern changing, ordered by a spectrum banner underneath",
+   "a glyph legend under the diagram for spaces, element types, maps and the operator",
+   "geodesic-arc texture as background and tile for hyperbolic space",
+   "dashed leader lines from a small block to a large zoomed module",
+   "coloured block arrows for map operations at the boundary between two spaces"
+  ],
+  "weaknesses": [
+   "the colours of the W_0 grid cells (pale blue, grey, one purple) are not explained by the legend",
+   "the subscript c of the Möbius sign is not explained",
+   "the dashed zoom lines leave from tile corners and cross the grey container"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "matrix grids",
+   "geodesic-arc background",
+   "block arrows and boxes",
+   "chevron banner",
+   "legend"
+  ],
+  "unknown": [
+   "how the geodesic-arc bitmap was made"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "four n by n scaling-matrix grids",
+   "pretrained weight matrix grid",
+   "pink Scaling Matrix panel",
+   "geodesic-arc hyperbolic background",
+   "yellow Input and Output boxes",
+   "efficient-to-flexible chevron banner",
+   "glyph legend"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "hyperbolic space",
+   "multimodal LLM",
+   "radius adjustment",
+   "efficient fine-tuning",
+   "Möbius multiplication",
+   "scaling matrix",
+   "parameter-efficient",
+   "diagonal and banded matrices"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "zoom-callout",
+   "notation-key",
+   "option-catalog",
+   "schematic-plot",
+   "flow-type-arrows"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Present a family of structured parameterisations as same-size grids whose coloured cells show which entries are tunable, and order them with a spectrum banner (efficient to flexible) beneath; tie the small block diagram to the zoomed module with dashed lines.",
+  "suits": "Parameter-efficient tuning or structured-matrix methods where the structure of a weight update is the contribution."
+ },
+ "tags": [
+  "overview-plus-zoom",
+  "matrix-grids",
+  "spectrum-banner",
+  "glyph-legend",
+  "pastel-panels",
+  "powerpoint-look"
+ ],
+ "provenance": {
+  "sections": [
+   "Method (p.6)"
+  ],
+  "evidence": [
+   "we efficiently train MLLMs in hyperbolic space by adjusting the hyperbolic radius using a tunable scaling matrix Ws",
+   "Ws can be configured into three parameter-efficient variants, i.e., Diagonal, Block-Diagonal and Banded.",
+   "applying learnable scaling matrices to the frozen pre-trained weights W0 in hyperbolic space"
+  ]
+ },
+ "summary": "HyperET trains multimodal LLMs efficiently by adjusting the hyperbolic radius of visual representations with a learnable scaling matrix applied to frozen pretrained weights through Möbius multiplication. Figure 1 shows a small block at the right (Input, Euclidean pretrained weights W0, an exponential map into hyperbolic space where HRA acts, a logarithmic map back, Output) tied by two dashed lines to a large Hyperbolic Radius Adjustment Module. Inside, a pink Scaling Matrix panel lines up four n by n grids (Diagonal, Block-Diagonal, Banded, Full) whose blue tunable cells differ, then the Möbius multiplication sign and the pretrained weight matrix. A banner arrow orders the variants from efficient (n) to flexible (n²) and a legend keys the glyphs.",
+ "summary_zh": "HyperET 在双曲空间用可学习缩放矩阵调整视觉表示半径，高效训练多模态大模型。图1右侧小框为输入、指数映射、HRA、对数映射、输出，虚线放大为 HRA 模块：四种缩放矩阵与预训练权重做 Möbius 乘法，箭头按参数量排序。",
+ "confidence": "high",
+ "notes": "The Full matrix is drawn as a reference beside the three variants named in the caption. The matrices, the geodesic background and the legend swatches are bitmaps (12 placed). The #59d3ff share in the digest is not matched to a visible element and is left out of the palette.",
+ "venue": "NeurIPS25"
+}

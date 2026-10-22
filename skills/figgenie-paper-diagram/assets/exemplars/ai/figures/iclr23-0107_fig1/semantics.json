@@ -1,0 +1,460 @@
+{
+ "paper_id": "iclr23-0107",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LADS",
+  "one_liner": "Extend an image classifier to an unseen domain using only a language description of the shift, by learning an embedding-space augmentation in a joint vision-language space.",
+  "domain": [
+   "domain generalization",
+   "vision-language embeddings",
+   "latent augmentation"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "three titled columns (what you have, the embedding-space shift, what you get); the middle one is a 2-D similarity plot with photo thumbnails",
+  "argues": "Words describing the training and the unseen domain are enough to move training image embeddings into the unseen domain, giving a classifier an extended domain of both.",
+  "subject": "Sunny road-sign photos, a wish to handle snowy ones, an augmentation moving a stop-sign embedding from the sunny to the snowy region, and the resulting mixed domain.",
+  "elements": [
+   {
+    "name": "Training Domain",
+    "type": "container",
+    "role": "the domain the data comes from: sunny road-sign photos",
+    "drawn_as": "bold title above a yellow square holding an overlapping collage of photos",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "I have photos of sunny road signs, but I want do well on snowy road signs.",
+    "type": "text-block",
+    "role": "states the goal: be robust to a domain without images",
+    "drawn_as": "speech bubble from a stick figure, key phrases in bold",
+    "container": "Training Domain",
+    "is_contribution": false
+   },
+   {
+    "name": "Latent Augmentation using Domain descriptionS",
+    "type": "container",
+    "role": "the method, shown inside the joint embedding space",
+    "drawn_as": "centre column title with bold initials L, A, D, S",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "“Stop Sign” similarity",
+    "type": "label",
+    "role": "vertical axis: closeness to the text embedding of the class",
+    "drawn_as": "label at the top of a vertical axis line with an arrow bar over the text",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": false
+   },
+   {
+    "name": "“Sunny” similarity / “Snowy” similarity",
+    "type": "label",
+    "role": "horizontal axis from the sunny end to the snowy end",
+    "drawn_as": "double-ended horizontal axis with a label at each end",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": false
+   },
+   {
+    "name": "Training Domain (embedding region)",
+    "type": "region",
+    "role": "where the training image embedding lies in the plane",
+    "drawn_as": "dashed gold box with a gold label, holding a small sunny stop-sign thumbnail",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": false
+   },
+   {
+    "name": "Unseen Domain",
+    "type": "region",
+    "role": "where the augmented embedding lands",
+    "drawn_as": "dashed blue box with a blue label, holding aug_θ and a bracketed stop-sign thumbnail",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": false
+   },
+   {
+    "name": "aug_θ",
+    "type": "module",
+    "role": "augmentation network that translates an image embedding to the unseen domain while keeping the class",
+    "drawn_as": "bold italic name before large brackets around the stop-sign thumbnail",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": true
+   },
+   {
+    "name": "“Snowy Tree” ≈",
+    "type": "label",
+    "role": "the text embedding of a domain-and-class phrase matches the image embedding of a snowy tree",
+    "drawn_as": "italic phrase with an equals-like sign beside a snowy-tree thumbnail",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Vision & Language Embedding Space",
+    "type": "label",
+    "role": "names the space the plot lives in",
+    "drawn_as": "italic caption under the plot",
+    "container": "Latent Augmentation using Domain descriptionS",
+    "is_contribution": false
+   },
+   {
+    "name": "Extended Domain",
+    "type": "container",
+    "role": "the target domain: training plus unseen samples",
+    "drawn_as": "bold italic title above a 2 x 2 photo grid, left tiles on yellow, right tiles on blue",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "A mix of training + unseen domain samples",
+    "type": "text-block",
+    "role": "caption of what the extended domain contains",
+    "drawn_as": "two-line caption under the photo grid with bold words",
+    "container": "Extended Domain",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "stick figure",
+    "to": "speech bubble",
+    "what": "the figure's wish",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Training Domain (column)",
+    "to": "Training Domain (embedding region)",
+    "what": "the sunny photos sit in the yellow region of the plane",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "sunny stop-sign thumbnail",
+    "to": "aug_θ",
+    "what": "image embedding of the training domain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "aug_θ applied to the stop sign",
+    "to": "snowy stop-sign thumbnail",
+    "what": "the augmented embedding approximates a real snowy stop sign",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "“Snowy Tree”",
+    "to": "snowy-tree thumbnail",
+    "what": "text embedding approximately equals the image embedding",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Unseen Domain (embedding region)",
+    "to": "blue tiles of Extended Domain",
+    "what": "the snowy region corresponds to the blue snowy photos",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Training Domain (column)",
+    "to": "yellow tiles of Extended Domain",
+    "what": "training photos remain part of the extended domain",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "three columns",
+    "to": "three columns",
+    "what": "left to right: what you have, the method, what you get; columns are separated by dotted vertical rules and no arrow joins them",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Training Domain",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "sunny road-sign photos and a stick figure's wish to do well on snowy ones",
+    "verdict": "setting"
+   },
+   {
+    "label": "Latent Augmentation using Domain descriptionS",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "in the joint embedding space aug_θ moves a sunny stop-sign embedding from the training region to the snowy unseen region",
+    "verdict": "ours"
+   },
+   {
+    "label": "Extended Domain",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "a 2 x 2 grid of sunny (yellow) and snowy (blue) road-sign photos, the mix the classifier is trained on",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "L A D S (bold initials)",
+    "kind": "identity",
+    "at": "middle column title",
+    "what": "bold initial letters spell the acronym LADS"
+   },
+   {
+    "marker": "arrow bar over a word or thumbnail",
+    "kind": "identity",
+    "at": "axis labels, “Snowy Tree” and the thumbnails",
+    "what": "marks the embedding vector of that word or image"
+   },
+   {
+    "marker": "Training Domain / Extended Domain",
+    "kind": "section",
+    "at": "titles of the left and right columns",
+    "what": "head the two outer columns"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "sunny road-sign photos: a stop sign, a deer-crossing sign, a speed-limit 15 sign and a yield sign",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "overlapping rectangular photos offset like a pile on a yellow square"
+   },
+   {
+    "what": "road-sign photos of the mixed domain: a sunny yield sign and a sunny speed-limit 50 sign, a snow-covered stop sign and a snowy speed-limit 25 sign",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "2 x 2 grid of equal tiles, left column on a yellow tint, right column on a blue tint"
+   },
+   {
+    "what": "small photo thumbnails standing for embeddings in the plot: a sunny stop sign (twice), a snowy stop sign and a snowy fir tree",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "tiny tiles placed at the spots the embeddings would take, each with an arrow bar above"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "hand-drawn stick figure",
+    "stands_for": "the practitioner who has sunny photos and wants snowy robustness",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a user's goal sentence about sunny and snowy road signs",
+    "form": "speech bubble from a stick figure",
+    "real_values": true
+   },
+   {
+    "what": "a stop sign carried from the sunny to the snowy region of the embedding plane",
+    "form": "photo thumbnail in a dashed gold box, arrow to aug_θ with brackets, ≈ snowy stop-sign thumbnail",
+    "real_values": true
+   },
+   {
+    "what": "the extended domain of sunny and snowy road signs",
+    "form": "2 x 2 photo grid on yellow and blue tiles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "a plane with a vertical class-similarity axis and a horizontal sunny-to-snowy axis, with photo thumbnails placed at their positions",
+    "parts": [
+     "axes",
+     "dashed domain boxes",
+     "thumbnails",
+     "long shift arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "an offset pile of photos on a yellow tile for the training set and a 2 x 2 grid on two tints for the extended set",
+    "parts": [
+     "photo pile",
+     "tinted tile",
+     "photo grid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "a single speech bubble from a stick figure stating the goal",
+    "parts": [
+     "stick figure",
+     "bubble"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Start at the Training Domain photos and the stick figure's wish on the left, move to the embedding plot in the middle (stop sign to aug_θ to snowy region), end at the mixed photo grid on the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three titled columns side by side, separated by thin dotted vertical rules: a yellow tile of photos with a stick figure and speech bubble below, a 2-D embedding sketch with dashed domain boxes and thumbnails under a long title, and a 2 x 2 photo grid with a caption.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.83,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffe699",
+    "used_for": "tint of the training domain: collage tile on the left and left tiles of the extended grid"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "tint of the unseen (snowy) domain: right tiles of the extended grid"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "dashed box and label Training Domain in the embedding plot"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "dashed box and label Unseen Domain in the embedding plot"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.5 pt thin black rules and axes, 0.5 pt dashed coloured boxes, dotted grey separators",
+  "font": "serif (Times), 5.5 pt axis labels and captions, 7.5 pt bold and italic titles, bold italic for embedding labels",
+  "corners": "mixed",
+  "arrows": "thin straight black arrows with small heads; axes as plain lines with heads; an arrow-bar glyph over words and thumbnails",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow and gold = training (sunny) domain; blue = unseen (snowy) domain, kept on tiles, dashed boxes and labels across all three columns",
+  "line_style_means": "dashed coloured box = region of a domain in the embedding plane; dotted grey vertical line = separator between columns",
+  "shape_means": "large brackets around a thumbnail = the augmentation applied to it; small photo tile = the position of an embedding; photo pile or grid = a dataset",
+  "marker_means": "arrow bar over a word or photo = its embedding vector; ≈ = the two embeddings are close; bold initials = the acronym",
+  "emphasis": "Two colours keyed to seen and unseen domains run through all columns; the only long arrow is the shift from the gold box to the blue box; the title letters L, A, D, S are bold.",
+  "reusable_patterns": [
+   "two-colour code for seen and unseen domain reused on photo tiles, dashed boxes and labels",
+   "photo thumbnails placed on two named similarity axes to show an embedding shift",
+   "stick figure with a speech bubble stating the goal in one sentence",
+   "bold initials in the title spelling the method acronym",
+   "arrow bar over a word or thumbnail for an embedding, joined by ≈ to a matching image",
+   "left, middle and right columns for data in, method, data out, separated by dotted rules"
+  ],
+  "weaknesses": [
+   "no arrows join the three columns, so their order rests on position alone"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "stick-figure clip art"
+  ],
+  "generated": [],
+  "drawn": [
+   "axes, dashed boxes and the long shift arrow",
+   "speech bubble and the tinted tiles",
+   "brackets and the arrow-bar glyphs"
+  ],
+  "unknown": [
+   "origin of the twelve road-sign and snowy-tree photos; they look like web photographs, not benchmark samples"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "photo collage on a yellow tile",
+   "stick figure with speech bubble",
+   "2-D similarity axes",
+   "dashed domain boxes",
+   "aug_θ with brackets around a thumbnail",
+   "2 x 2 photo grid on two tints",
+   "arrow-bar embedding glyph"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "domain generalization",
+   "vision-language embedding",
+   "CLIP",
+   "latent augmentation",
+   "unseen domains",
+   "road signs",
+   "domain description in language",
+   "robustness"
+  ],
+  "tags": [
+   "embedding-space-sketch",
+   "colour-coded-groups",
+   "task-definition",
+   "stacked-cards"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Tell the story in three titled columns (what you have, what the method does, what you get) and keep one colour for the seen and one for the unseen domain through every column; in the middle, put photo thumbnails on two named similarity axes so an embedding shift reads as a move across a plane.",
+  "suits": "Domain-adaptation, robustness or embedding-shift ideas that can be told with a few photos in two colour-coded domains."
+ },
+ "tags": [
+  "three titled columns",
+  "dotted column rules",
+  "yellow and blue domain tints",
+  "photo-heavy",
+  "stick figure",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.1",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "leverages a multimodal model’s knowledge of the classes and the domain shift verbalized in natural language (“sunny” to “snowy”)",
+   "Then, real and augmented embeddings are used jointly to train a classiﬁer."
+  ]
+ },
+ "summary": "LADS (Latent Augmentation using Domain descriptionS) extends an image classifier to a domain without images by describing the training and the unseen domain in words, such as sunny to snowy. In a joint image-and-text embedding space it learns an augmentation network that moves training image embeddings to the unseen domain while keeping the class, and a classifier is then trained on real and augmented embeddings. Figure 1 is a three-column teaser: a yellow tile of sunny road-sign photos with a stick figure's wish in a speech bubble; a 2-D sketch on sunny-snowy and stop-sign similarity axes where aug_θ carries a stop-sign thumbnail from a dashed gold box to a dashed blue box; and a 2 x 2 photo grid mixing sunny (yellow) and snowy (blue) signs.",
+ "summary_zh": "LADS 只用语言描述训练域和未见域（如晴天到雪天），在图文联合嵌入空间里学一个增强网络，把训练域的图像嵌入移到未见域。图分三栏：左为晴天路标照片和简笔画人物的愿望气泡，中为相似度坐标里的嵌入平移，右为黄蓝两色混合的扩展域照片。",
+ "confidence": "high",
+ "notes": "Prior pre-screen listed concept-schematic only; I added worked-walkthrough because one stop-sign instance is followed through aug_θ, but the figure has no step numbers. The photos are bitmaps whose origin is not stated. The snowy stop-sign thumbnail beside the ≈ sign is partly hidden by snow, which is the same photo as in the right column as far as can be seen.",
+ "venue": "ICLR23"
+}

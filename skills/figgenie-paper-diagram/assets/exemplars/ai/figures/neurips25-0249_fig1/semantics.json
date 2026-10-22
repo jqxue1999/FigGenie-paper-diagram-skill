@@ -1,0 +1,461 @@
+{
+ "paper_id": "neurips25-0249",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ACE (Adaptive Constrained Equivariance)",
+  "one_liner": "Constrained optimisation that starts from a flexible non-equivariant model and gradually tightens it toward equivariance, following a homotopy from easy to hard problems.",
+  "domain": [
+   "equivariant neural networks",
+   "constrained optimization",
+   "homotopy and training dynamics"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough",
+   "model-anatomy"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "three training-stage snapshots of a network, its formula and a 3D loss landscape with trajectories, plus a homotopy sketch of three curves with gamma insets at the right",
+  "argues": "Starting relaxed and tightening equivariance as γ decays lets training reach a better minimum than a strictly equivariant network trained from the same initialisation.",
+  "subject": "Three training snapshots (network, formula, loss landscape with trajectories) and a homotopy sketch of three curves with γ insets.",
+  "elements": [
+   {
+    "name": "network sketches (3 stages)",
+    "type": "module",
+    "role": "the relaxed network at three stages: equivariant (green) and non-equivariant (yellow) paths summed at each layer, the yellow part fading and finally gone",
+    "drawn_as": "node-and-line sketches with purple input, green and yellow hidden and pink output nodes; circled plus nodes; a blue rectangle around layer i in the first; an ellipsis for more layers",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "f^(i)(x) = f_eq^(i)(x) + γ_i f_neq^(i)(x)",
+    "type": "formula",
+    "role": "layer i as an equivariant part plus a non-equivariant part weighted by γ_i",
+    "drawn_as": "rounded light blue box with a green box around f_eq and a yellow box around f_neq",
+    "container": "left panel, stage 1",
+    "is_contribution": true
+   },
+   {
+    "name": "f^(i)(x) = f_eq^(i)(x) + faded γ_i f_neq^(i)(x)",
+    "type": "formula",
+    "role": "the same layer with the non-equivariant term fading as γ_i decays",
+    "drawn_as": "same box with the last term and its yellow box greyed out",
+    "container": "left panel, stage 2",
+    "is_contribution": true
+   },
+   {
+    "name": "f^(i)(x) = f_eq^(i)(x)",
+    "type": "formula",
+    "role": "the strictly equivariant layer once the non-equivariant term is gone",
+    "drawn_as": "same box holding only the green f_eq term",
+    "container": "left panel, stage 3",
+    "is_contribution": true
+   },
+   {
+    "name": "loss landscapes (3 stages)",
+    "type": "region",
+    "role": "loss surface of the training problem, smooth at stage 1 and increasingly rugged at stages 2 and 3",
+    "drawn_as": "perspective surfaces shaded from yellow-green to purple with deep valleys",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "red trajectory",
+    "type": "data",
+    "role": "training path of the relaxed model that becomes equivariant (caption)",
+    "drawn_as": "chain of red dots, earlier part brownish, descending from a dark green start disc into a deep valley",
+    "container": "loss landscapes",
+    "is_contribution": true
+   },
+   {
+    "name": "blue trajectory",
+    "type": "data",
+    "role": "training path of a strictly equivariant network from the same initialisation (caption); drawn as a short cluster near the start in the last landscape",
+    "drawn_as": "cluster of blue dots beside the start disc",
+    "container": "loss landscape, stage 3",
+    "is_contribution": false
+   },
+   {
+    "name": "γ1, γ2, γ3 insets",
+    "type": "chart",
+    "role": "waveforms of the layer-wise coefficients: large oscillations in the first box and decaying or flat ones in the second",
+    "drawn_as": "two white rounded boxes with three small blue curves each, placed over the landscapes",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "homotopy sketch rows (3)",
+    "type": "chart",
+    "role": "the coefficient γ moves the training problem between easier (non-equivariant) and harder (equivariant) problems (caption)",
+    "drawn_as": "three stacked sketches of a blue dash-dot, a green dashed and a red solid wavy curve with coloured dots and solid or dotted arrows",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "γ inset with marker (3)",
+    "type": "chart",
+    "role": "boxed γ waveform with a vertical marker and black dot that advance, and a growing shaded span, from the first row to the third",
+    "drawn_as": "small white boxes with a blue waveform, light blue shading and a marker",
+    "container": "right panel",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "stage 1 column",
+    "to": "stage 2 column",
+    "what": "training advances, the non-equivariant term fades",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "stage 2 column",
+    "to": "stage 3 column",
+    "what": "training ends strictly equivariant",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "network sketch",
+    "to": "formula box",
+    "what": "the box states the layer drawn above it",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "formula box",
+    "to": "loss landscape",
+    "what": "the landscape is the training problem for that stage",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "start disc",
+    "to": "red trajectory",
+    "what": "the red path grows from the same start point across the three landscapes",
+    "kind": "time",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "start disc",
+    "to": "blue trajectory",
+    "what": "a strictly equivariant network from the same initialisation",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "γ inset",
+    "to": "landscape",
+    "what": "coefficient waveforms that go with that stage",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "dots on the curves",
+    "to": "dots on the next curve",
+    "what": "arrows and dotted arrows between curves, read as carrying the solution from one problem to the next",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left panel",
+    "to": "right panel",
+    "what": "same blue and red colours; dotted vertical divider between the training view and the conceptual view",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "time",
+    "shows": "Left in the caption: network, formula and loss landscape at three stages with the red and blue trajectories and gamma waveforms",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "time",
+    "shows": "Right in the caption: three stacked curve sketches with gamma insets illustrating the move from easy to hard problems",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "γ1, γ2, γ3",
+    "kind": "identity",
+    "at": "γ insets",
+    "what": "name the three layer-wise coefficients whose waveforms are drawn"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "three 3D loss landscapes with valleys and descent trajectories",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "viridis-shaded perspective surfaces that get rougher left to right; a dark green disc marks the shared start; red dots for the relaxed model (brown for earlier points), blue dots for the strictly equivariant network in the last one"
+   },
+   {
+    "what": "γ waveform insets: first box γ1 a decaying spike, γ2 and γ3 full oscillations; second box γ1 flat noise, γ2 and γ3 damped oscillations",
+    "content": "chart",
+    "role": "illustration",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "white rounded boxes with black outline over the landscapes, three small blue curves each"
+   },
+   {
+    "what": "three stacked homotopy sketches of a blue dash-dot, a green dashed and a red solid curve with dots and arrows, each beside a γ inset",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "thick wavy curves with coloured dots; the inset marker and the shaded span advance from row to row"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "layered-node-network",
+    "drawn_as": "columns of coloured circles joined by thin lines, with circled plus nodes where two paths are summed and an ellipsis for more layers",
+    "parts": [
+     "input nodes",
+     "hidden nodes",
+     "output nodes",
+     "circled plus",
+     "ellipsis"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-landscape-with-trajectory",
+    "drawn_as": "perspective surface with valleys and a dotted descent path from a shared start disc",
+    "parts": [
+     "surface",
+     "valleys",
+     "start disc",
+     "trajectory dots"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "homotopy-curves",
+    "drawn_as": "three wavy curves of different line styles and colours stacked, with dots and arrows carrying a point from one curve to the next",
+    "parts": [
+     "blue dash-dot curve",
+     "green dashed curve",
+     "red solid curve",
+     "dots",
+     "arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the top-left network sketch, reads the three stage columns left to right and down (network, formula, landscape), then crosses the dotted divider to the three homotopy sketches at the right, top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Left: three aligned stage columns, each stacking a network sketch, a formula box and a 3D loss landscape, with gamma insets over the landscapes; a dotted vertical line separates them from the right panel of three stacked homotopy sketches with gamma insets.",
+  "panel_count": 2,
+  "lanes": "three aligned stage columns in the left panel, each with the same three-row stack",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.7,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d7e3f4",
+    "used_for": "formula boxes and the block around layer i"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "equivariant nodes and the f_eq boxes"
+   },
+   {
+    "hex": "#fff6d5",
+    "used_for": "non-equivariant nodes and the f_neq box, faded to 0.5 in stage 2"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "output nodes"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "input nodes"
+   },
+   {
+    "hex": "#20928c",
+    "opacity": 0.8,
+    "used_for": "teal end of the viridis-like landscape shading"
+   },
+   {
+    "hex": "#44bf70",
+    "opacity": 0.8,
+    "used_for": "green part of the landscape shading"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red trajectory of the relaxed model"
+   },
+   {
+    "hex": "#0000ff",
+    "used_for": "blue trajectory of the strictly equivariant network"
+   },
+   {
+    "hex": "#1f77b4",
+    "used_for": "blue γ waveforms and, at 0.23 opacity, the shaded span in the insets"
+   },
+   {
+    "hex": "#4c72b0",
+    "used_for": "blue curve of the homotopy sketch"
+   },
+   {
+    "hex": "#55a868",
+    "used_for": "green curve of the homotopy sketch"
+   },
+   {
+    "hex": "#b04c4d",
+    "used_for": "red curve of the homotopy sketch"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 pt black hairlines for networks and surface mesh, 1 pt black outlines on formula and inset boxes, 2 pt wavy curves in the right panel (dash-dot blue, dashed green, solid red), dotted vertical divider",
+  "font": "serif bold (Times New Roman); formulas and γ labels are outlined glyphs, ellipses 11.5 pt and plus signs 6 pt are live text",
+  "corners": "rounded",
+  "arrows": "thin solid and dotted arrows with small heads in the right panel only; none in the left panel",
+  "rendering": "mixed",
+  "effects": "perspective 3D loss surfaces with colour-mapped shading",
+  "model_depiction": "network-glyph",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "node colours: purple input, green equivariant, yellow non-equivariant, pink output; fading yellow and grey edges = the non-equivariant part being switched off; red trajectory = relaxed model, blue trajectory = strictly equivariant network; surface colour = loss value (inferred); in the right panel red, green and blue curves run from the easy to the hard problem, read from the matching colours on the left",
+  "line_style_means": "dotted vertical line divides the two halves; right panel: dash-dot blue, dashed green and solid red curves, dotted arrows between dots",
+  "shape_means": "rounded box with a formula = layer definition; circled plus = sum of the two paths; white inset with waveforms = γ over training; dark green disc = common start point",
+  "marker_means": "γ1 to γ3 name the layer-wise coefficients; the black dot and vertical line in the right-hand insets mark the current point of the γ schedule (inferred)",
+  "emphasis": "the long red path that reaches the deepest valley of the roughest landscape against the short blue cluster that stays near the start",
+  "reusable_patterns": [
+   "same three-row stack (network sketch, formula box, loss landscape) repeated per training stage so that a term of the formula visibly fades",
+   "trajectory dots coloured by method over a 3D loss surface from a shared start disc, the baseline in a second colour",
+   "small boxed waveforms listing the schedule of each coefficient beside the landscape",
+   "three stacked curve sketches with an advancing marker in a boxed γ inset to show a homotopy",
+   "dotted vertical divider between a training view and a conceptual view"
+  ],
+  "weaknesses": [
+   "no legend; colours and trajectories are explained only in the caption",
+   "the right-hand homotopy sketch is hard to decode without the caption (dots, arrows, shaded span)",
+   "6 pt plus signs and unlabelled node colours in the network sketches"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "network sketches",
+   "formula boxes",
+   "3D loss surfaces with trajectories",
+   "homotopy curve sketches",
+   "γ insets"
+  ],
+  "unknown": [
+   "whether the γ waveforms and loss surfaces come from real runs or are synthetic"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "three network sketches with green and yellow nodes",
+   "formula boxes with a fading term",
+   "3D loss landscapes with red and blue trajectories",
+   "γ waveform inset boxes",
+   "three stacked homotopy curve sketches",
+   "dotted vertical divider"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "equivariance",
+   "constrained optimization",
+   "homotopy",
+   "loss landscape",
+   "training dynamics",
+   "approximate equivariance",
+   "layer-wise coefficients",
+   "easy to hard"
+  ],
+  "tags": [
+   "equation-boxes",
+   "module-state-coding",
+   "small-multiples",
+   "schematic-plot"
+  ],
+  "new_tags": [
+   {
+    "name": "fading-formula-term",
+    "what": "a term of a formula and the matching part of a network sketch are drawn faded in later snapshots to show it being switched off"
+   },
+   {
+    "name": "loss-landscape-trajectories",
+    "what": "3D loss surfaces with coloured trajectory dots, one trajectory per method, leaving a shared start point"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Redraw the same stack (network sketch, formula box, loss landscape) at a few training stages and let one term of the formula and the matching nodes fade, so the reader sees the relaxation being tightened; show a baseline trajectory in a second colour from the same start point.",
+  "suits": "Optimisation, relaxation or curriculum-style methods whose point is how training moves through a loss landscape while a constraint or coefficient changes."
+ },
+ "tags": [
+  "three-stage columns",
+  "3D loss surfaces",
+  "fading term",
+  "boxed waveforms",
+  "dotted divider",
+  "serif math"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "a relaxed, non-equivariant model that gradually becomes equivariant as the layer-wise coefficients γi decay.",
+   "The blue trajectory illustrates a strictly equivariant network feq trained from the same initialization.",
+   "the coefficient γ allows the training problem to transition between easier (non-equivariant) and harder (equivariant) problems, facilitating convergence."
+  ]
+ },
+ "summary": "ACE (Adaptive Constrained Equivariance) trains a network that starts flexible and non-equivariant and is gradually constrained toward equivariance, following a homotopy from easy to hard problems. In the left half of Figure 1, three columns show the same network at three stages: a sketch whose yellow non-equivariant nodes fade, a formula box f(x) = f_eq(x) + γ_i f_neq(x) whose second term fades out, and a 3D loss landscape that gets rougher, where a red trajectory from a shared start point reaches a deep valley while a blue trajectory of a strictly equivariant network stays near the start; boxed waveforms show γ1 to γ3. The right half stacks three curve sketches with γ insets illustrating the transition between easy and hard problems.",
+ "summary_zh": "ACE 先训练灵活的非等变网络，再随系数 γ 衰减逐步收紧到严格等变。图 1 左半三列分别画网络草图、公式（非等变项逐渐淡出）和越来越崎岖的损失地形，红轨迹抵达深谷，蓝轨迹（严格等变）停在起点附近；右半是三幅同伦曲线草图，配 γ 小框。",
+ "confidence": "medium",
+ "notes": "model-anatomy is added as a minor third kind for the layer sketches. The two halves are counted as unlabelled panels because the caption names them Left and Right. How the dots, arrows and shaded span of the right-hand sketch map onto the easy and hard problems is read from the caption and the matching colours, not stated in the figure. That the blue trajectory is stuck near the start is read from the preview. The digest finds no placed bitmaps: surfaces and curves are vector shapes (thousands of mesh polygons) and formula text is outlined.",
+ "venue": "NeurIPS25"
+}

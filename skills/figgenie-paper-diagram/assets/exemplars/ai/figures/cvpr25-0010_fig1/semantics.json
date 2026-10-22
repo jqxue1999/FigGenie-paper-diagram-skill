@@ -1,0 +1,522 @@
+{
+ "paper_id": "cvpr25-0010",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Prompt-CAM",
+  "one_liner": "Learns class-specific prompts for a frozen pre-trained ViT so that its attention maps reveal the traits that tell similar classes apart.",
+  "domain": [
+   "interpretable vision transformers",
+   "fine-grained recognition",
+   "prompt tuning"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "a central model box with four lettered capability panels around it, all shown on one Scott Oriole photo",
+  "argues": "One frozen ViT with learned class prompts gives classification, trait localization, trait comparison between species and a ranking of the most discriminative traits.",
+  "subject": "A frozen ViT with trainable class prompts and head, and four uses of its outputs on a bird photo.",
+  "elements": [
+   {
+    "name": "Input Image",
+    "type": "sample",
+    "role": "bird photo fed to the ViT together with the prompts",
+    "drawn_as": "small photo of a Scott Oriole with a two-line caption below",
+    "container": "central model box",
+    "is_contribution": false
+   },
+   {
+    "name": "Class-Specific Prompts",
+    "type": "module",
+    "role": "learned prompt tokens, one per class, fed to the ViT beside the image",
+    "drawn_as": "red-outlined box holding pastel squares in green, yellow, blue, an ellipsis and lavender, with a flame icon",
+    "container": "central model box",
+    "is_contribution": true
+   },
+   {
+    "name": "Pre-trained VIT",
+    "type": "module",
+    "role": "frozen backbone that processes the image and the prompts",
+    "drawn_as": "large blue rounded box with a white serif label and a snowflake in the corner",
+    "container": "central model box",
+    "is_contribution": false
+   },
+   {
+    "name": "Head",
+    "type": "module",
+    "role": "prediction head that turns the outputs of the class prompts into scores",
+    "drawn_as": "small red-brown box with a flame icon, above the ViT",
+    "container": "central model box",
+    "is_contribution": true
+   },
+   {
+    "name": "(a) Image Classification",
+    "type": "container",
+    "role": "classification from the output logits of the class-specific prompts",
+    "drawn_as": "rounded panel with a logit bar chart and a class box, cream caption tag below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Class: Scott Oriole",
+    "type": "label",
+    "role": "the predicted class shown next to the logits",
+    "drawn_as": "plain white box with a thin frame",
+    "container": "(a) Image Classification",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Trait Localization",
+    "type": "container",
+    "role": "attention maps queried by the true-class prompt show where the traits are",
+    "drawn_as": "rounded panel with the input photo and four heat-map tiles titled Trait 1 to Trait 4, cream caption tag below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Trait Comparison",
+    "type": "container",
+    "role": "attention maps queried by another class's prompt show traits shared between species",
+    "drawn_as": "rounded panel with two question rows, cream caption tag below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "What's common between Brewer Blackbird and Scott Oriole? / Baltimore Oriole",
+    "type": "text-block",
+    "role": "question that names which other class's prompt queries the Scott Oriole image",
+    "drawn_as": "two question blocks with class names tinted in the prompt colours, each between the other species' photo and the Scott Oriole photo, followed by a double arrow and two heat maps",
+    "container": "(c) Trait Comparison",
+    "is_contribution": false
+   },
+   {
+    "name": "(d) Species-specific Trait Ranking",
+    "type": "container",
+    "role": "masking the least important heads until the true-class probability collapses leaves the most discriminative traits",
+    "drawn_as": "rounded panel with a line plot, two callouts, two heat maps and the input photo, cream caption tag below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Att. head-1 / Att. head-11",
+    "type": "label",
+    "role": "the two attention heads left at the end of the masking",
+    "drawn_as": "rounded white callouts with grey arrows to the last curve points, beside two heat maps",
+    "container": "(d) Species-specific Trait Ranking",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Image",
+    "to": "Pre-trained VIT",
+    "what": "image goes into the frozen ViT",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Class-Specific Prompts",
+    "to": "Pre-trained VIT",
+    "what": "prompt tokens are fed in with the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-trained VIT",
+    "to": "Head",
+    "what": "outputs of the prompts go to the head",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central model box",
+    "to": "(a) Image Classification",
+    "what": "output logits of the class-specific prompts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central model box",
+    "to": "(b) Trait Localization",
+    "what": "multi-head attention maps queried by the true-class prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central model box",
+    "to": "(c) Trait Comparison",
+    "what": "attention maps queried by another class's prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "central model box",
+    "to": "(d) Species-specific Trait Ranking",
+    "what": "attention heads masked step by step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Scott Oriole photo",
+    "to": "two heat maps",
+    "what": "double arrow in (c): the photo queried by the other class's prompt gives two attention maps",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Att. head-1 and Att. head-11 callouts",
+    "to": "last points of the probability curve",
+    "what": "name the heads that remain when the probability reaches zero",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "prompt-token colours",
+    "to": "logit bars and tinted class names in (c)",
+    "what": "one pastel per class: yellow for Scott Oriole, light blue for Brewer Blackbird, lavender for Baltimore Oriole",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "Central rounded box: input image and class-specific prompts into a frozen pre-trained ViT, then a trainable head.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(a) Image Classification",
+    "kind": null,
+    "axis": "other",
+    "shows": "Logit bars for the classes next to the predicted class Scott Oriole.",
+    "verdict": null
+   },
+   {
+    "label": "(b) Trait Localization",
+    "kind": null,
+    "axis": "other",
+    "shows": "The input photo and four attention maps, Trait 1 to Trait 4, from the true-class prompt.",
+    "verdict": null
+   },
+   {
+    "label": "(c) Trait Comparison",
+    "kind": null,
+    "axis": "other",
+    "shows": "Scott Oriole queried with Brewer Blackbird and Baltimore Oriole prompts, two attention maps each, with the questions written out.",
+    "verdict": null
+   },
+   {
+    "label": "(d) Species-specific Trait Ranking",
+    "kind": null,
+    "axis": "other",
+    "shows": "True-class probability against the number of masked heads, with heads 1 and 11 left and their attention maps.",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c) (d)",
+    "kind": "section",
+    "at": "cream caption tags below each corner panel",
+    "what": "letter each panel and give its title"
+   },
+   {
+    "marker": "Trait 1 - Trait 4, head-1, head-11",
+    "kind": "identity",
+    "at": "above or beside the heat maps",
+    "what": "name which trait slot or attention head each map shows"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bird photos: Scott Oriole (the input, repeated in every panel), Brewer Blackbird, Baltimore Oriole",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 7,
+    "medium": "bitmap",
+    "treatment": "small square thumbnails; the same Scott Oriole photo recurs so that panels compare directly"
+   },
+   {
+    "what": "multi-head attention maps over the Scott Oriole photo: Trait 1-4, comparison maps for other-class prompts, head-1 and head-11",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "blue-to-red heat maps painted over the photo, in rows of equal tiles"
+   },
+   {
+    "what": "logit bar chart",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "pastel bars in green, yellow, blue, an ellipsis and lavender on a bare axis with a rotated Logit label and no ticks"
+   },
+   {
+    "what": "line plot of true-class probability against the number of masked heads",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue dotted curve flat at 1.0 until about 8 masked heads, then falling to 0 at 11 and 12, with grey grid and tick labels 1-12"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flame",
+    "stands_for": "a trained module: the head and the class-specific prompts",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "snowflake",
+    "stands_for": "the frozen pre-trained ViT",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "row of pastel squares with an ellipsis",
+    "stands_for": "the class prompts, one per class",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a Scott Oriole photo carried through all four panels: class logits, four trait maps, comparison with Brewer Blackbird and Baltimore Oriole, and head masking that leaves heads 1 and 11",
+    "form": "the same photo repeated with heat maps, a bar chart and a curve",
+    "real_values": true
+   },
+   {
+    "what": "questions What's common between Brewer Blackbird and Scott Oriole? and What's common between Baltimore Oriole and Scott Oriole?",
+    "form": "two text blocks with class names tinted in the prompt colours, beside the other species' photo",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a snowflake on the pre-trained ViT and a flame on the head and on the prompts box, plus a red outline on the trained prompts",
+    "parts": [
+     "snowflake",
+     "flame",
+     "red outline"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of small pastel squares with an ellipsis, one colour per class, inside a red-outlined box",
+    "parts": [
+     "coloured squares",
+     "ellipsis",
+     "outline"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "blue-to-red heat maps painted over the bird photo, one tile per head or per prompt",
+    "parts": [
+     "photo",
+     "heat overlay"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts in the central box from the input image and prompts up to the head, then follows the elbow arrows to (a) top left, (b) top right, (c) bottom left and (d) bottom right."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "A rounded model box sits in the middle with the input image and the class-prompt tokens at the bottom feeding a blue ViT and a head on top. Four rounded panels sit in the corners, each tied to the box by an elbow arrow and named by a cream tag below it: (a) top left, (b) top right, (c) bottom left, (d) bottom right.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "radial",
+  "reading_start": "centre",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.47,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#3155a0",
+    "used_for": "Pre-trained VIT box (frozen), with a white label"
+   },
+   {
+    "hex": "#c55740",
+    "used_for": "Head box (trained)"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red outline of the Class-Specific Prompts box (trained)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "cream caption tags of panels (a)-(d); also the yellow prompt token, logit bar and the Scott Oriole highlight"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "light-blue prompt token, logit bar and the Brewer Blackbird highlight"
+   },
+   {
+    "hex": "#d9d2e9",
+    "used_for": "lavender prompt token, logit bar and the Baltimore Oriole highlight"
+   },
+   {
+    "hex": "#d9ead3",
+    "used_for": "pastel green prompt token and logit bar",
+    "approx": true
+   },
+   {
+    "hex": "#595959",
+    "used_for": "grey outlines of panels, thin frames and chart axes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark-grey outlines on rounded panels, frames and axes; a red 0.5 pt outline on the prompts box",
+  "font": "serif (Times New Roman), 7.5 pt panel titles, 5.5 pt labels and questions, 5-6 pt small labels, no bold",
+  "corners": "mixed",
+  "arrows": "thin black elbow arrows with small filled heads from the model box to each panel, short straight arrows inside the box, an outlined double-arrow glyph in (c), grey arrows from callouts to curve points",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "blue box = frozen pre-trained ViT; red-brown box and red outline = trained head and prompts; one pastel per class on prompt tokens, logit bars and tinted class names (yellow = Scott Oriole, light blue = Brewer Blackbird, lavender = Baltimore Oriole, green = another class); blue-to-red on photos = attention strength; cream = panel caption tags",
+  "line_style_means": "red outline = trained prompts; thin grey outline = panel; elbow arrow from the model box = the output used in that panel",
+  "shape_means": "large rounded blue box = the ViT; row of small squares = class prompts; small red box = head; cream tag = panel title; rounded white callout = the name of a head",
+  "marker_means": "snowflake = frozen, flame = trained; (a)-(d) letter the panels; Trait 1-4 and head-1, head-11 name attention maps",
+  "emphasis": "the central model box with elbow arrows to four panels; the same bird photo repeated in every panel keeps attention on what changes",
+  "reusable_patterns": [
+   "central model box with elbow arrows to four lettered output panels",
+   "snowflake and flame icons on boxes to mark frozen against trained modules",
+   "one pastel colour per class carried from prompt tokens to logit bars and to tinted class names in the questions",
+   "the same input photo repeated in every panel so that panels compare directly",
+   "heat maps painted over photos in rows of equal tiles titled Trait 1-4",
+   "cream caption tags under each panel",
+   "callouts with arrows naming the heads that remain on a curve"
+  ],
+  "weaknesses": [
+   "labels and plot ticks are only 5-5.5 pt",
+   "the colour-to-class mapping is implied by matching colours and never keyed"
+  ]
+ },
+ "resources": {
+  "own": [
+   "bird photos of three species",
+   "attention maps from the model",
+   "true-class-probability curve over masked heads"
+  ],
+  "stock": [
+   "flame and snowflake emoji-like icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "model box and arrows",
+   "class-prompt token squares",
+   "logit bar chart",
+   "rounded panels and cream tags"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "frozen ViT box with snowflake",
+   "row of coloured class-prompt tokens with flame",
+   "Head box with flame",
+   "bird photos with attention heat maps",
+   "logit bar chart",
+   "head-masking probability curve with callouts",
+   "cream caption tags"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "Prompt-CAM",
+   "ViT interpretability",
+   "fine-grained classification",
+   "trait localization",
+   "prompt tuning",
+   "attention maps",
+   "bird species"
+  ],
+  "tags": [
+   "module-state-coding",
+   "saliency-heatmap",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "token-strip",
+   "small-multiples",
+   "plot-callouts"
+  ],
+  "new_tags": [
+   {
+    "name": "elbow-arrows-to-corner-panels",
+    "what": "a central model box with elbow arrows leading to four lettered panels in the corners, each showing one use of the model"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the model once in a central box, with snowflake and flame icons for what is frozen and what is trained, then fan elbow arrows out to lettered panels that each show one use on the same input photo. Carry one pastel colour per class from prompt tokens to bars to tinted names.",
+  "suits": "Papers whose single trained component supports several analyses, such as classification, localisation, comparison and ranking, that can all be shown on one example."
+ },
+ "tags": [
+  "central model hub",
+  "four lettered corner panels",
+  "bird photos with heat maps",
+  "cream caption tags",
+  "snowflake and flame icons",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Experiments (p.8)"
+  ],
+  "evidence": [
+   "We keep the whole pre-trained ViT frozen and only optimize the C tokens and the shared scoring vector.",
+   "PROMPT-CAM enables trait localization by visualizing the multi-head attention maps queried by the true-class prompt.",
+   "by systematically masking out the least important attention heads"
+  ]
+ },
+ "summary": "Prompt-CAM makes a pre-trained Vision Transformer interpretable by learning one prompt per class and reading the scores from the class-specific prompts. Figure 1 puts the model in a central rounded box: the input image and a row of coloured class-prompt tokens, marked with a flame as trained, go into a blue Pre-trained ViT, marked with a snowflake as frozen, which feeds a trainable Head. Elbow arrows lead to four lettered corner panels, all on one Scott Oriole photo: (a) class logits as coloured bars, (b) four attention-map tiles for trait localization, (c) comparison with Brewer Blackbird and Baltimore Oriole prompts, with class names tinted in the prompt colours, and (d) a probability curve as attention heads are masked, leaving heads 1 and 11.",
+ "summary_zh": "Prompt-CAM 为预训练ViT学习类别专属提示，使其可解释。图1中央为模型框（雪花标冻结的ViT，火焰标可训练的提示与分类头），折线箭头通向(a)分类、(b)特征定位、(c)特征对比、(d)特征排序四个面板，均用同一张黄鹂照片。",
+ "confidence": "high",
+ "notes": "The central model box is framed but untitled and is counted as a fifth panel. The colour-to-class mapping is read from matching colours (class-name highlights in (c) match prompt-token colours); the link from the logit bars to classes is implied. The probability curve is probably a bitmap because its tick labels are not in the live text layer. The pastel green is an approximate reading.",
+ "venue": "CVPR25"
+}

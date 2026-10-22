@@ -1,0 +1,595 @@
+{
+ "paper_id": "icml26-0084",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SpatioLM",
+  "one_liner": "Parameter-efficient plug-in module that elicits spatial knowledge in a VLM, supervised by pseudo depth and camera information, without 3D inputs or external encoders.",
+  "domain": [
+   "spatial reasoning",
+   "vision-language models",
+   "embodied manipulation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "model-anatomy"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "four grey-tabbed panels (data and model, perception, understanding, manipulation); each capability panel pairs real question-answer bubbles with a radar or bar chart of scores",
+  "argues": "One spatial module in a VLM reaches state-of-the-art perception and understanding scores and transfers to robot manipulation with both discrete and continuous actions.",
+  "subject": "Data and model sketch, question-answer cards with radar charts, and manipulation variants with action outputs and a bar chart.",
+  "elements": [
+   {
+    "name": "20K Videos & 643K QA Pairs",
+    "type": "data",
+    "role": "headline size of the training data",
+    "drawn_as": "black-outlined rounded box over a faded mosaic of video thumbnails",
+    "container": "Data & Model",
+    "is_contribution": null
+   },
+   {
+    "name": "15 Datasets",
+    "type": "data",
+    "role": "number of source datasets; faded names ScanNet, ScanNet++, MVS-Synth, ARKitScene, Waymo, Virtual_KITTI_2, Hypersim, VSI-590K, ScanQA, SQA3D",
+    "drawn_as": "black-outlined rounded box over a faded list of dataset names",
+    "container": "Data & Model",
+    "is_contribution": null
+   },
+   {
+    "name": "Spatio-Vision Module",
+    "type": "module",
+    "role": "the plug-and-play module that elicits spatial knowledge, placed beside the LLM",
+    "drawn_as": "orange rounded box with inner pill outlines and white bold text",
+    "container": "Data & Model",
+    "is_contribution": true
+   },
+   {
+    "name": "Large Language Model",
+    "type": "module",
+    "role": "the language model the module is attached to",
+    "drawn_as": "grey rounded box with soft shadow and bold text",
+    "container": "Data & Model",
+    "is_contribution": false
+   },
+   {
+    "name": "token strips",
+    "type": "data",
+    "role": "rows of small squares above and below the model blocks; their colour meaning is not keyed",
+    "drawn_as": "orange, orange-to-grey fading, blue and grey squares",
+    "container": "Data & Model",
+    "is_contribution": null
+   },
+   {
+    "name": "inputs: images, video clip, text",
+    "type": "sample",
+    "role": "what is fed to the model",
+    "drawn_as": "three photo thumbnails (one in a film-strip border with a play button) and a person-with-speech-bubble icon holding a T",
+    "container": "Data & Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Spatial Perception question-answer cards",
+    "type": "instance",
+    "role": "distance and speed questions about a marked point, with answers 1.15 and 'Since the point is 34.82 meters distant, we need to travel at 13.97 meters per second to reach it in 2.75 seconds.'",
+    "drawn_as": "grey question bubbles with avatar and photo thumbnail, orange answer bubbles with robot avatar",
+    "container": "Spatial Perception",
+    "is_contribution": null
+   },
+   {
+    "name": "Spatial Understanding question-answer cards",
+    "type": "instance",
+    "role": "video questions about appearance order (answer: table, pillow, door, lamp) and relative direction (answer: front-left)",
+    "drawn_as": "grey question bubbles with avatar and video thumbnail with play button, orange answer bubbles with robot avatar",
+    "container": "Spatial Understanding",
+    "is_contribution": null
+   },
+   {
+    "name": "SpatioLM-VLA0",
+    "type": "module",
+    "role": "manipulation variant with discrete action output",
+    "drawn_as": "grey rounded box with shadow, an Action strip in a dashed orange frame above and a Discrete Action strip below",
+    "container": "Downstream – Manipulation",
+    "is_contribution": true
+   },
+   {
+    "name": "SpatioLM-OFT",
+    "type": "module",
+    "role": "manipulation variant with continuous action output",
+    "drawn_as": "grey rounded box with shadow, an Action strip with dark squares in a dashed orange frame above and a Continuous Action strip below",
+    "container": "Downstream – Manipulation",
+    "is_contribution": true
+   },
+   {
+    "name": "manipulation question-answer card",
+    "type": "instance",
+    "role": "'Pick up the salad dressing and place it in the basket.' answered by discrete tokens (500 607 991 …) and continuous values (0.00 0.20 0.92 …)",
+    "drawn_as": "grey question bubble with avatar and two small images, orange answer box with two number columns and a robot avatar",
+    "container": "Downstream – Manipulation",
+    "is_contribution": null
+   },
+   {
+    "name": "Action Prediction",
+    "type": "data",
+    "role": "frames of the robot arm acting out the predicted actions",
+    "drawn_as": "label left of a six-frame strip inside a dashed orange frame",
+    "container": "Downstream – Manipulation",
+    "is_contribution": null
+   },
+   {
+    "name": "SpatioLM (Ours) / Max of existing 13 models",
+    "type": "label",
+    "role": "legend of the radar charts: orange = ours, blue = best score among 13 existing models",
+    "drawn_as": "small orange and blue line swatches above each radar chart",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "20K Videos & 643K QA Pairs and 15 Datasets",
+    "to": "Spatio-Vision Module and Large Language Model",
+    "what": "training data stacked above the model; no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "inputs: images, video clip, text",
+    "to": "Spatio-Vision Module and Large Language Model",
+    "what": "inputs below the model with token strips between; no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Spatio-Vision Module",
+    "to": "Large Language Model",
+    "what": "module sits beside the LLM as a plug-in block",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "question bubble",
+    "to": "answer bubble",
+    "what": "the user asks, the model answers with real examples",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "question-answer cards",
+    "to": "radar chart",
+    "what": "scores of the same capability, separated by a dotted vertical line",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "orange polygon (SpatioLM (Ours))",
+    "to": "blue polygon (Max of existing 13 models)",
+    "what": "scores compared axis by axis",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "SpatioLM-VLA0 / SpatioLM-OFT",
+    "to": "Discrete Action / Continuous Action",
+    "what": "the two action settings are named under the model boxes, in the answer's two number columns and on the LIBERO bar groups",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "action answer",
+    "to": "Action Prediction",
+    "what": "predicted actions shown as robot frames below",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "dashed orange frames",
+    "to": "Action tokens and Action Prediction",
+    "what": "same dashed orange outline marks the action output wherever it appears",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Data & Model",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "20K videos, 643K QA pairs and 15 datasets above an orange Spatio-Vision Module beside a grey LLM, with token strips and image, video and text inputs",
+    "verdict": "ours"
+   },
+   {
+    "label": "Spatial Perception",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "two distance and speed questions with orange answers, and a six-axis Depth radar of ours versus the best of 13 existing models",
+    "verdict": "ours"
+   },
+   {
+    "label": "Spatial Understanding",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "two video questions with orange answers, and an eight-axis VSI-Bench radar with the centre score 71.6",
+    "verdict": "ours"
+   },
+   {
+    "label": "Downstream – Manipulation",
+    "kind": "model-anatomy",
+    "axis": "examples",
+    "shows": "discrete and continuous action variants, a task with action tokens, predicted frames and a LIBERO bar chart of baseline versus ours",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "panel titles in grey tabs",
+    "kind": "section",
+    "at": "top-left of each panel frame",
+    "what": "Data & Model, Spatial Perception, Spatial Understanding, Downstream – Manipulation head the panels"
+   },
+   {
+    "marker": "Discrete / Continuous",
+    "kind": "identity",
+    "at": "under the model boxes and under the bar groups",
+    "what": "names the two action settings"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "mosaic of video-frame thumbnails (indoor scans and street scenes) behind the headline boxes",
+    "content": "video-frames",
+    "role": "data-thumbnail",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "tiled grid faded by a white overlay so that the black-outlined boxes stay legible"
+   },
+   {
+    "what": "three input thumbnails: a hallway with a plant, a table scene and a video clip with play button",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small tiles on a grey strip below the model, the video tile in a film-strip border"
+   },
+   {
+    "what": "question thumbnails in the chat cards: marked-point photos of a corridor and a street, two video frames with play buttons, two small tabletop manipulation images",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "small thumbnail at the left inside each grey question bubble"
+   },
+   {
+    "what": "two radar charts: Depth (DA-2K, R-Speed, R-TwoP, R-Time, Single image, Multi image) and VSI-Bench (eight axes, centre score 71.6)",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "pale-orange filled polygon with orange outline for ours over a blue outline for the best of 13 existing models, tiny orange value tags at the vertices, bold orange benchmark name in the centre"
+   },
+   {
+    "what": "grouped bar chart LIBERO: Baseline versus Ours, Discrete 79.2 vs 91.0, Continuous 95.3 vs 96.3",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "grey baseline bars next to orange bars, value labels above, y axis 0 to 100"
+   },
+   {
+    "what": "strip of six robot-arm frames over a table for the predicted actions",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "frames joined edge to edge inside a dashed orange frame labelled Action Prediction"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small grey line icons: monitor with chart, location pin, cube, robot arm",
+    "stands_for": "the four panel topics",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "cartoon boy face in a white circle",
+    "stands_for": "the user asking the question",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "round white robot face in an orange ring",
+    "stands_for": "the model answering",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "person with a speech bubble containing a T",
+    "stands_for": "text input",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "distance and speed questions on single images with numeric and sentence answers",
+    "form": "grey question bubble with photo and orange answer bubble",
+    "real_values": true
+   },
+   {
+    "what": "video questions on appearance order and relative direction with short answers",
+    "form": "grey question bubble with video thumbnail and orange answer bubble",
+    "real_values": true
+   },
+   {
+    "what": "a manipulation instruction answered with discrete action tokens and continuous action values, plus six predicted frames",
+    "form": "question bubble, orange answer box with two number columns, filmstrip",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vlm",
+    "drawn_as": "image, video and text inputs below an orange Spatio-Vision Module placed beside a grey Large Language Model, with rows of coloured token squares above and below",
+    "parts": [
+     "input thumbnails",
+     "Spatio-Vision Module",
+     "Large Language Model",
+     "token strips"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "grey question bubbles with user avatar and thumbnail, orange answer bubbles with robot avatar",
+    "parts": [
+     "user avatar",
+     "question bubble",
+     "answer bubble",
+     "robot avatar"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small squares in orange, blue, grey and dark grey above and below the model blocks and above the action boxes",
+    "parts": [
+     "squares",
+     "dashed orange frame for the action tokens"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "radar-chart",
+    "drawn_as": "ours as a pale-orange filled polygon over a blue outline for the best existing model, with the benchmark name and score in the centre",
+    "parts": [
+     "axes",
+     "orange polygon",
+     "blue polygon",
+     "value tags",
+     "centre label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "video clip thumbnail in a film-sprocket border, and six consecutive robot frames joined into a strip",
+    "parts": [
+     "sprocket border",
+     "frame strip"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a faded mosaic of thumbnails with a headline box '20K Videos & 643K QA Pairs' and another box '15 Datasets' over a faded name list",
+    "parts": [
+     "thumbnail mosaic",
+     "headline box",
+     "dataset names"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Data & Model tab top-left, moves right to Spatial Perception and down to Spatial Understanding, then reads the full-width manipulation panel at the bottom."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Uneven grid of four rounded panels with grey tabs: a tall Data & Model panel at the upper left, Spatial Perception and Spatial Understanding stacked at the right, and a full-width Downstream – Manipulation panel along the bottom; inside the capability panels a chat column sits left of a chart column.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.67,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f76600",
+    "used_for": "orange for everything of SpatioLM: Spatio-Vision Module, answer bubbles, orange radar outline, Ours bars, dashed frames, orange squares",
+    "opacity": 0.85
+   },
+   {
+    "hex": "#f76600",
+    "used_for": "pale fill of the ours polygon in the radar charts",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#fcbc85",
+    "used_for": "light-orange squares fading toward grey in the token strip"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "blue outline of the best existing model in the radar charts and blue token squares"
+   },
+   {
+    "hex": "#e5e5e5",
+    "used_for": "grey panel tabs and panel frame outlines"
+   },
+   {
+    "hex": "#d8d8d8",
+    "used_for": "grey LLM box and model boxes",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#b3b3b3",
+    "used_for": "grey token squares and grey baseline bars"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark-grey squares in the continuous action strip"
+   },
+   {
+    "hex": "#020101",
+    "used_for": "near-black text and outlines of the headline boxes"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "mixed",
+  "stroke": "0.25 to 0.5 pt light-grey panel frames, dashed orange frames around action output, 0.5 pt black outlines on the two headline boxes",
+  "font": "sans (Arial, Calibri), 5.5 pt chat text, 9 pt bold headline numbers and dataset names, 6 pt bold panel titles, 2.5-5 pt chart labels",
+  "corners": "rounded",
+  "arrows": "no arrowheads: flow is by position; dashed grey separators between data and model and between chat and chart",
+  "rendering": "mixed",
+  "effects": "soft drop shadow under the LLM and model boxes; faded white overlay on the thumbnail mosaic",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = SpatioLM (module, answers, ours polygon, Ours bars); blue = best of 13 existing models in the radars and blue token squares; grey = LLM, questions, baseline bars and grey tokens; dark squares in the OFT action strip are not keyed",
+  "line_style_means": "dashed orange frame = action tokens and predicted action frames; dashed grey line = separator between parts of a panel",
+  "shape_means": "orange rounded box = the new module; grey shadowed box = the LLM and the two manipulation models; bubble with avatar = a question or an answer; radar polygon = per-axis scores",
+  "marker_means": "numbers at radar vertices are scores; the centre text of a radar names the benchmark and, for VSI-Bench, its overall 71.6",
+  "emphasis": "orange is the only saturated hue and is kept for the method on every panel; headline numbers sit in outlined boxes",
+  "reusable_patterns": [
+   "grey tab header with a small line icon at the top-left of each rounded panel frame",
+   "chat cards: grey question bubble with avatar and thumbnail, accent-coloured answer bubble with robot avatar",
+   "radar chart with ours as a filled accent polygon over a thin outline for the best existing model and the benchmark score in the centre",
+   "colour-coded token squares around the model blocks",
+   "headline numbers in outlined boxes laid over a faded thumbnail mosaic",
+   "dashed accent frames marking the action output wherever it appears",
+   "one accent colour for the method throughout the figure"
+  ],
+  "weaknesses": [
+   "radar vertex labels are only 2.5-3 pt",
+   "the colours of the token squares are not keyed",
+   "no arrows, so the data flow of the Data & Model panel is read from position only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real question-answer examples from the benchmarks",
+   "radar and bar chart results",
+   "video thumbnails from the training datasets",
+   "robot manipulation frames"
+  ],
+  "stock": [
+   "cartoon user and round robot avatars",
+   "grey line tab icons",
+   "text-input icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "panel frames and tabs",
+   "model boxes and token squares",
+   "radar and bar charts",
+   "dashed orange frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey-tabbed panels",
+   "video thumbnail mosaic with headline boxes",
+   "orange Spatio-Vision Module beside a grey LLM",
+   "chat cards with user and robot avatars",
+   "radar charts ours versus existing",
+   "LIBERO bar chart",
+   "robot-arm filmstrip"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "spatial intelligence",
+   "vision-language model",
+   "spatial perception",
+   "VSI-Bench",
+   "embodied manipulation",
+   "radar chart",
+   "pseudo depth",
+   "plug-and-play module"
+  ],
+  "tags": [
+   "token-strip",
+   "radar-chart",
+   "filmstrip",
+   "model-pictogram",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "grey-tab-panels",
+    "what": "each panel is a rounded light-grey outline with a grey tab at its top-left holding a small line icon and a bold title"
+   },
+   {
+    "name": "qa-bubble-cards",
+    "what": "real question and answer pairs drawn as a grey bubble with user avatar and thumbnail and an accent-coloured answer bubble with a robot avatar"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Use one accent colour for everything that belongs to the method, and give each capability a grey-tabbed panel that pairs one or two real question-answer bubbles with a small chart of scores against the best existing model; a data-and-model panel states the scale in outlined headline boxes over a faded thumbnail mosaic.",
+  "suits": "General-purpose model papers whose claim is breadth: several capabilities, each shown by real examples plus a radar or bar summary."
+ },
+ "tags": [
+  "grey-tab-panels",
+  "single-accent-colour",
+  "chat-cards",
+  "radar-and-bar-charts",
+  "dense-composite",
+  "soft-shadows"
+ ],
+ "provenance": {
+  "sections": [
+   "front page (Figure 1)"
+  ],
+  "evidence": [
+   "SpatioLM achieves SOTA performance on both spatial perception and understanding tasks",
+   "can be effectively adapted to embodied manipulation tasks under both discrete and continuous action settings.",
+   "a parameter-efficient framework that improves spatial intelligence in VLMs without extra 3D prior inputs or external spatial encoders."
+  ]
+ },
+ "summary": "SpatioLM is a parameter-efficient framework that improves spatial intelligence in vision-language models without extra 3D inputs or external spatial encoders. Figure 1 tiles four grey-tabbed panels. 'Data & Model' states 20K videos, 643K QA pairs and 15 datasets over a faded thumbnail mosaic, above an orange Spatio-Vision Module beside a grey Large Language Model with rows of coloured token squares and image, video and text inputs. 'Spatial Perception' and 'Spatial Understanding' pair real question and answer bubbles with radar charts of SpatioLM against the best of 13 existing models (VSI-Bench 71.6). 'Downstream – Manipulation' shows discrete and continuous action variants, action tokens, predicted frames and a LIBERO bar chart.",
+ "summary_zh": "SpatioLM 在不加 3D 输入的前提下增强 VLM 的空间智能。图 1 由四个灰标签面板拼成：数据与模型、空间感知、空间理解、下游操控，每格配真实问答气泡与雷达图或柱状图，橙色统一代表本方法。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper that mentions the figure was available, so roles come from the caption, abstract and the figure's own labels. The colours of the token squares and the dark squares in the OFT action strip are not keyed, so they are recorded as drawn. There are no arrowheads in the SVG; the Data & Model flow is read from position. Pre-screen scope-overview and stage-pipeline were dropped: the figure is not about a benchmark and has no process chain.",
+ "venue": "ICML26"
+}

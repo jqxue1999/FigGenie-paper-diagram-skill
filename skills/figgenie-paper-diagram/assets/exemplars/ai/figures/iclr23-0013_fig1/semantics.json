@@ -1,0 +1,361 @@
+{
+ "paper_id": "iclr23-0013",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DiffDock",
+  "one_liner": "A diffusion generative model over ligand poses (translation, rotation, torsion) for molecular docking, with a confidence model that ranks sampled poses.",
+  "domain": [
+   "molecular docking",
+   "diffusion models",
+   "drug design"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "the same protein redrawn three times from t=T to t=0 under a dashed reverse-diffusion arrow, framed by an input, DiffDock, output top line",
+  "argues": "Reverse diffusion turns randomly placed ligand poses into poses gathered in the binding pocket, and the best are ranked with a confidence score.",
+  "subject": "One docking case: a ligand and a protein go in, random poses are denoised into the pocket, two ranked poses come out.",
+  "elements": [
+   {
+    "name": "ligand & protein",
+    "type": "data",
+    "role": "the input: separate ligand and protein structures",
+    "drawn_as": "light sans heading over the left column",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "DiffDock",
+    "type": "module",
+    "role": "the method, treated as one box between the input and output",
+    "drawn_as": "small-caps 13 pt word between two long thin arrows, no box",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "reverse diffusion over translations, rotations and torsions",
+    "type": "operation",
+    "role": "denoises random initial poses over the three groups of degrees of freedom",
+    "drawn_as": "small text above a dashed arrow running from t=T to t=0",
+    "container": "centre column",
+    "is_contribution": true
+   },
+   {
+    "name": "t=T / t=0",
+    "type": "label",
+    "role": "start and end of the reverse diffusion",
+    "drawn_as": "plain text above the first and last snapshots",
+    "container": "centre column",
+    "is_contribution": null
+   },
+   {
+    "name": "ranked poses & confidence score",
+    "type": "data",
+    "role": "the output: poses ordered by the confidence model, with a score",
+    "drawn_as": "light sans heading over the right column",
+    "container": "right column",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "ligand & protein",
+    "to": "DiffDock",
+    "what": "the separate ligand and protein structures go in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DiffDock",
+    "to": "ranked poses & confidence score",
+    "what": "ranked docked poses and a confidence score come out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "snapshot at t=T",
+    "to": "snapshot at t=0",
+    "what": "reverse diffusion moves the ligand poses from scattered to gathered in the pocket",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "converged poses at t=0",
+    "to": "two pocket close-ups ranked 1 and 2",
+    "what": "the sampled poses are ranked and the best are shown",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "ligand & protein",
+    "axis": "stages",
+    "shows": "The input: the 2D structure of the ligand above a grey protein surface render.",
+    "verdict": "setting"
+   },
+   {
+    "label": "DiffDock",
+    "axis": "stages",
+    "shows": "Reverse diffusion from t=T to t=0: three snapshots of the same protein with seven coloured ligand poses collapsing into the pocket.",
+    "verdict": "ours"
+   },
+   {
+    "label": "ranked poses & confidence score",
+    "axis": "stages",
+    "shows": "Two close-ups of the pocket with the pose ranked 1 in green and the pose ranked 2 in magenta.",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "t=T, t=0",
+    "kind": "order",
+    "at": "above the first and last centre snapshots",
+    "what": "start and end of the diffusion process"
+   },
+   {
+    "marker": "1, 2 (circled)",
+    "kind": "order",
+    "at": "top right of the two pocket close-ups",
+    "what": "rank of each pose by the confidence model"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "2D structure of the ligand: piperidine, pyridazinone and pyridine rings with blue N and red O labels",
+    "content": "molecule",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "thin line drawing above the protein in the left column"
+   },
+   {
+    "what": "grey protein surface render",
+    "content": "molecule",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "3D surface render with soft shading, left column"
+   },
+   {
+    "what": "three snapshots of the same protein surface with seven coloured ligand poses: spread out at t=T, drawn together mid-way, converged in the pocket at t=0",
+    "content": "molecule",
+    "role": "result",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "equal-size renders in a row at the same position and scale; only the coloured poses change"
+   },
+   {
+    "what": "two close-ups of the binding pocket with the ranked poses in green and magenta",
+    "content": "molecule",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "cropped renders stacked in the right column, each with a circled rank number at its upper right"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one docking case: a drawn ligand, a protein surface, three diffusion snapshots and two ranked poses",
+    "form": "rendered structures under headings",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "three snapshots of one protein from t=T to t=0 under one dashed arrow named reverse diffusion; no forward arrow and no noise glyph, noise is shown as scattered poses",
+    "parts": [
+     "t=T snapshot",
+     "middle snapshot",
+     "t=0 snapshot",
+     "dashed arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the heading 'ligand & protein' at top left, follows the long arrows to DiffDock and to the output heading, and reads the renders below left to right, t=T to t=0, then the ranked close-ups."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three columns left to right, separated by two thin vertical rules. A top row of headings joined by two long arrows (ligand & protein, DiffDock, ranked poses & confidence score) sits above the renders: inputs at left, three diffusion snapshots under a dashed time arrow in the centre, two ranked pocket close-ups at right.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.8,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e5e5e5",
+    "used_for": "protein surface renders (light grey)",
+    "approx": true
+   },
+   {
+    "hex": "#aa2323",
+    "used_for": "dark red ligand pose",
+    "approx": true
+   },
+   {
+    "hex": "#e07b00",
+    "used_for": "orange ligand pose",
+    "approx": true
+   },
+   {
+    "hex": "#c020c0",
+    "used_for": "magenta ligand pose, also the pose ranked 2",
+    "approx": true
+   },
+   {
+    "hex": "#1a2fd0",
+    "used_for": "blue ligand pose",
+    "approx": true
+   },
+   {
+    "hex": "#22bb22",
+    "used_for": "green ligand pose, also the pose ranked 1",
+    "approx": true
+   },
+   {
+    "hex": "#22c8d0",
+    "used_for": "cyan ligand pose",
+    "approx": true
+   },
+   {
+    "hex": "#d9b84a",
+    "used_for": "yellow-khaki ligand pose",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "none",
+  "stroke": "0.5 pt black: two thin vertical rules and three thin arrows, one of them dashed",
+  "font": "light sans (Calibri Light) 8 to 10 pt for labels; DiffDock in small caps (Copperplate Light) 13 pt",
+  "corners": "square",
+  "arrows": "thin black straight arrows with small heads; the reverse-diffusion arrow is dashed",
+  "rendering": "mixed",
+  "effects": "soft shading and depth on the 3D molecular surface renders",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Each ligand pose has its own colour (red, orange, magenta, blue, green, cyan, yellow) so it can be followed from scattered to converged; the two ranked poses reuse green and magenta; grey is the protein surface.",
+  "line_style_means": "dashed arrow = the reverse diffusion in time; solid arrows = the overall pipeline; thin vertical rules separate input, process and output",
+  "shape_means": "coloured sticks = ligand poses; grey surface = protein; the model is only a name between two arrows",
+  "marker_means": "t=T and t=0 give the start and end of the diffusion; circled 1 and 2 give the rank of a pose",
+  "emphasis": "The small-caps DiffDock title at the top centre and the large central renders; colour per pose makes the collapse into the pocket visible.",
+  "reusable_patterns": [
+   "the same 3D object redrawn at t=T, a middle step and t=0 under one dashed time arrow, only the poses changing",
+   "one colour per sample so the eye can follow each through denoising",
+   "top row of headings joined by long arrows above a row of renders",
+   "close-up crops with circled rank numbers for the final outputs",
+   "thin vertical rules separating the input, process and output columns"
+  ],
+  "weaknesses": [
+   "scattered poses at t=T and the converged cluster at t=0 overlap strongly",
+   "the dashed arrow floats far above the snapshots",
+   "the confidence model is not drawn or labelled, only implied by the right heading",
+   "no key for the pose colours"
+  ]
+ },
+ "resources": {
+  "own": [
+   "3D protein renders with ligand poses from the method's own sampling",
+   "the ligand structure drawing"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "arrows",
+   "vertical rules",
+   "headings and labels"
+  ],
+  "unknown": [
+   "which protein-ligand complex the example comes from"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "2D ligand structure drawing",
+   "grey protein surface render",
+   "three snapshots with coloured ligand poses",
+   "dashed t=T to t=0 arrow",
+   "two pocket close-ups with circled ranks",
+   "small-caps DiffDock title between arrows"
+  ],
+  "sample_data": "molecule",
+  "keywords": [
+   "molecular docking",
+   "diffusion model",
+   "reverse diffusion",
+   "ligand pose",
+   "protein",
+   "confidence model",
+   "ranked poses",
+   "binding pocket"
+  ],
+  "tags": [
+   "small-multiples",
+   "illustration-style"
+  ],
+  "new_tags": [
+   {
+    "name": "snapshot-row-with-time-arrow",
+    "what": "the same rendered object repeated left to right at different process times under one dashed arrow that names the process and its start and end times"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Explain an iterative sampler on a real instance: redraw the same 3D object at t=T, a middle step and t=0 at the same position and scale, give each sample its own colour so it can be followed as it converges, and put one dashed arrow with the process name above the row. Frame it with an input, method, output top line in three columns.",
+  "suits": "Diffusion or iterative-refinement methods on spatial objects (molecules, poses, 3D structures) where the transformation of one example explains the method best."
+ },
+ "tags": [
+  "three-column-overview",
+  "dashed-time-arrow",
+  "3d-molecule-renders",
+  "thin-vertical-rules",
+  "light-sans-labels",
+  "no-boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Randomly sampled initial poses are denoised via a reverse diffusion over translational, rotational, and torsional degrees of freedom.",
+   "The sampled poses are ranked by the confidence model to produce a final prediction and confidence score."
+  ]
+ },
+ "summary": "DiffDock treats molecular docking as generative modelling: a diffusion model over ligand poses, defined on translations, rotations and torsion angles, samples candidate poses that a confidence model then ranks. Figure 1 is a three-column overview on a white ground. The top row reads ligand & protein, an arrow, the small-caps name DiffDock, an arrow, ranked poses & confidence score. Below, the left column shows the ligand's 2D structure above a grey protein surface; the centre shows the same protein three times from t=T to t=0 under a dashed reverse-diffusion arrow, with seven coloured ligand poses scattered at first and gathered in the pocket at the end; the right column shows two pocket close-ups ranked 1 and 2.",
+ "summary_zh": "DiffDock 把分子对接当作生成问题：在平移、旋转和扭转上做扩散，采样的构象由置信度模型排序。图 1 分三列：左为配体与蛋白，中为 t=T 到 t=0 的三张快照，七个彩色构象渐渐收进口袋，右为排名 1、2 的特写。",
+ "confidence": "high",
+ "notes": "Prior labels kept (worked-walkthrough as state-snapshots, stage-pipeline). The figure has no boxes: white ground, bitmaps, text and thin rules. The SVG histogram holds only white, so the palette lists approximate readings of the bitmaps. The 2D ligand structure is a bitmap, not vector (digest: 7 bitmaps, the smallest 67 by 67 pt). The model is only the name DiffDock between two arrows; the confidence model is not drawn.",
+ "venue": "ICLR23"
+}

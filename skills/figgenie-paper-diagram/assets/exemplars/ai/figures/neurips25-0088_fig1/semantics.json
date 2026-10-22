@@ -1,0 +1,499 @@
+{
+ "paper_id": "neurips25-0088",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Multi-level reinforcement learning: a human-inspired policy loss pushes the policy away from experiences of different rating levels, on top of rating-based RL (RbRL).",
+  "domain": [
+   "reinforcement learning",
+   "rating-based RL",
+   "human feedback"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "model-anatomy"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "an RL agent and environment loop with a human-rating branch (RbRL, blue region), extended by a second region that turns rated buffers into distributions and a policy loss returned to the agent",
+  "argues": "Rated experiences can shape a policy loss as well as a reward: samples of each rating level become distributions that the policy is pushed away from, most strongly for low ratings.",
+  "subject": "RbRL's agent, environment and human ratings, plus the new rating-induced policy loss built from per-rating buffers and distributions.",
+  "elements": [
+   {
+    "name": "RbRL",
+    "type": "container",
+    "role": "rating-based reinforcement learning, the existing method that gives the learned reward",
+    "drawn_as": "large light-blue rounded region with a bold title",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Environment",
+    "type": "module",
+    "role": "the RL environment that produces trajectory segments",
+    "drawn_as": "square box with a blue robot-arm glyph",
+    "container": "RbRL",
+    "is_contribution": false
+   },
+   {
+    "name": "RL Agent",
+    "type": "module",
+    "role": "the learner whose policy is updated by the reward and by the new loss",
+    "drawn_as": "square box with a black tracked-robot icon",
+    "container": "RbRL",
+    "is_contribution": false
+   },
+   {
+    "name": "unlabelled person-at-laptop icon",
+    "type": "actor",
+    "role": "the human who gives the ratings",
+    "drawn_as": "green person at a laptop with a code symbol, a dashed arrow labelled Rating to Segments",
+    "container": "RbRL",
+    "is_contribution": false
+   },
+   {
+    "name": "Segments",
+    "type": "container",
+    "role": "trajectory segments that the human has rated",
+    "drawn_as": "large square box with two dotted sub-boxes",
+    "container": "RbRL",
+    "is_contribution": false
+   },
+   {
+    "name": "Bad",
+    "type": "data",
+    "role": "the low rating class of segments",
+    "drawn_as": "orange rounded box with three black robot-arm glyphs, label Bad on its right",
+    "container": "Segments",
+    "is_contribution": false
+   },
+   {
+    "name": "Good",
+    "type": "data",
+    "role": "the high rating class of segments",
+    "drawn_as": "green rounded box with three outlined robot-arm glyphs, label Good on its right",
+    "container": "Segments",
+    "is_contribution": false
+   },
+   {
+    "name": "Reward Learning",
+    "type": "operation",
+    "role": "infers the reward signal from the ratings, as RbRL does",
+    "drawn_as": "label on a line that leaves the Segments box and ends in an arrow on the RL Agent",
+    "container": "RbRL",
+    "is_contribution": false
+   },
+   {
+    "name": "Rating-induced Policy Loss",
+    "type": "container",
+    "role": "the new part: a loss built from rating classes",
+    "drawn_as": "large peach rounded region with a bold title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Buffer 0 / Buffer 1",
+    "type": "data",
+    "role": "per-rating-class stores of samples; the lower row is read as samples of the current policy (paper text)",
+    "drawn_as": "two square boxes, each with two strips of three mini robot-arm glyphs on orange or green strips",
+    "container": "Rating-induced Policy Loss",
+    "is_contribution": true
+   },
+   {
+    "name": "Distribution 0 / Distribution 1",
+    "type": "data",
+    "role": "the sample distribution of each rating class",
+    "drawn_as": "hub-and-spoke node glyphs, orange for class 0 and green for class 1, beside the buffers",
+    "container": "Rating-induced Policy Loss",
+    "is_contribution": true
+   },
+   {
+    "name": "Policy Loss to Push Away from Distributions with Low Ratings",
+    "type": "operation",
+    "role": "a loss that penalises similarity to the rating-class distributions, with larger weights for lower ratings (paper text)",
+    "drawn_as": "square peach box with four lines of 7.5 pt text",
+    "container": "Rating-induced Policy Loss",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Environment",
+    "to": "Segments",
+    "what": "trajectory segments to be rated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "person-at-laptop icon",
+    "to": "Segments",
+    "what": "Rating",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Segments",
+    "to": "RL Agent",
+    "what": "Reward Learning: the ratings give the learned reward",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Environment",
+    "to": "RL Agent",
+    "what": "labelled Action; as drawn the arrow points from the environment to the agent",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RL Agent",
+    "to": "Environment",
+    "what": "labelled Observation; as drawn the arrow points from the agent to the environment",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Bad",
+    "to": "Buffer 0",
+    "what": "low-rated segments are stored by class",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Good",
+    "to": "Buffer 1",
+    "what": "high-rated segments are stored by class",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Buffer 0 / Buffer 1",
+    "to": "Distribution 0 / Distribution 1",
+    "what": "samples of each class form a distribution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Distribution 0 / Distribution 1",
+    "to": "Policy Loss to Push Away from Distributions with Low Ratings",
+    "what": "both distributions enter the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Policy Loss to Push Away from Distributions with Low Ratings",
+    "to": "RL Agent",
+    "what": "the loss updates the agent's policy",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Bad, Buffer 0, Distribution 0",
+    "to": "Good, Buffer 1, Distribution 1",
+    "what": "orange for class 0 and green for class 1 are kept on group box, buffer strips and distribution glyph",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "RbRL",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "agent and environment loop, human ratings of segments into Bad and Good, reward learning",
+    "verdict": "existing"
+   },
+   {
+    "label": "Rating-induced Policy Loss",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "rating-class buffers, their distributions and the policy loss that pushes away from low-rated ones",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "0, 1",
+    "kind": "identity",
+    "at": "Buffer 0 / Buffer 1 and Distribution 0 / Distribution 1",
+    "what": "number the two rating classes drawn as examples"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "robot-arm glyph in black, outline green, blue and green, in rows of three",
+    "stands_for": "trajectory segments of different rating classes",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 18
+   },
+   {
+    "depicts": "blue robot arm on a base",
+    "stands_for": "the environment",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "black tracked robot with a face and antenna",
+    "stands_for": "the RL agent",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "green person at a laptop with a code symbol",
+    "stands_for": "the human rater",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "hub node with six spokes and end nodes, orange and green",
+    "stands_for": "a sample distribution of one rating class",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "Environment and RL Agent boxes joined by two vertical arrows labelled Action and Observation, plus a Reward Learning arrow into the agent; the two vertical arrows are drawn in the directions opposite to the usual convention",
+    "parts": [
+     "Environment",
+     "RL Agent",
+     "Action",
+     "Observation",
+     "Reward Learning"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a person-at-laptop icon with a dashed arrow labelled Rating into the Segments box",
+    "parts": [
+     "person icon",
+     "Rating arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "a plain text box for the loss fed by two dashed arrows from the distributions, with one long solid arrow back to the agent",
+    "parts": [
+     "distribution glyphs",
+     "loss box",
+     "return arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "two titled square buffer boxes each holding two strips of mini robot-arm glyphs",
+    "parts": [
+     "Buffer 0",
+     "Buffer 1",
+     "strips"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Environment and RL Agent loop in the blue region, follows the arrows to the rated Segments (Bad, Good), crosses by dashed arrows to the peach region's buffers, distributions and loss, then the long arrow back to the RL Agent."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two large rounded regions side by side on white: a blue RbRL region on the left (about 60% of the width) and a peach Rating-induced Policy Loss region on the right. In the blue region the Environment (top-left), the RL Agent (bottom-left) and a big Segments box with Bad and Good groups (right) are joined by vertical and horizontal arrows, with a person icon above Segments. In the peach region two buffer boxes with distribution glyphs sit above the policy-loss box, and a long arrow returns from the loss across both regions to the RL Agent.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.91,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dceaf7",
+    "used_for": "RbRL region and the Environment, Segments and RL Agent boxes"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "Rating-induced Policy Loss region"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "Bad group box and the orange strips in Buffer 0"
+   },
+   {
+    "hex": "#c2f1c8",
+    "used_for": "Good group box"
+   },
+   {
+    "hex": "#b4e5a2",
+    "used_for": "green strips in Buffer 1"
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "green person icon, green robot arms and the class-1 hub glyph"
+   },
+   {
+    "hex": "#46b1e1",
+    "used_for": "blue robot-arm glyphs"
+   },
+   {
+    "hex": "#0b76a0",
+    "used_for": "darker blue robot arms in Buffer 1"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy outlines of regions and boxes"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, text, black robot arms and the RL Agent icon"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt dark navy and black outlines; dotted outlines on the Bad and Good groups; dashed arrows",
+  "font": "serif (Nimbus Roman) 8.5 pt for labels, bold for the two region titles, 7.5 pt in the policy-loss box",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small solid heads; dashed for ratings, sorting into buffers and distributions into the loss; solid for the loop, reward learning and the return of the loss",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue region = RbRL (existing), peach region = the new policy loss; orange = the low rating class (group box, Buffer 0 strips, Distribution 0 glyph), green = the high class (group box, Buffer 1 strips, Distribution 1 glyph); black arms = low-rated segments",
+  "line_style_means": "dotted boxes = the rating groups inside Segments; dashed arrows = human rating, sorting into buffers, distributions into the loss; solid arrows = agent-environment loop, reward learning and the loss's return to the agent",
+  "shape_means": "square box = a component (Environment, RL Agent, Segments, Buffers, loss); rounded tinted box = a rating group; hub glyph = a distribution; arm glyph = a trajectory segment; person icon = the human rater",
+  "marker_means": "Action, Observation, Rating and Reward Learning label the arrows; 0 and 1 number the rating classes in Buffer and Distribution",
+  "emphasis": "the new part sits in its own large peach region beside the blue RbRL region, and the single long arrow from the loss back to the RL Agent ties the two together",
+  "reusable_patterns": [
+   "existing method in one tinted region and the proposed extension in a second tinted region, joined by one return arrow",
+   "a class colour kept on the group box, the buffer strips and the distribution glyph",
+   "rows of robot-arm glyphs as stand-ins for trajectory segments",
+   "hub-and-spoke glyph for a distribution",
+   "dotted sub-boxes for rating classes inside one Segments box",
+   "numbered Buffer k and Distribution k pairs showing levels with two examples"
+  ],
+  "weaknesses": [
+   "the Action and Observation arrows are drawn in the directions opposite to the usual RL convention",
+   "the two rows inside each Buffer box are unlabelled, so what each row holds is not told",
+   "only two rating levels (Bad, Good) are drawn although the method is multi-level"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "robot-arm glyphs",
+   "tracked-robot icon",
+   "person-at-laptop icon",
+   "hub-and-spoke node glyphs"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted regions, boxes and arrows",
+   "dotted rating groups",
+   "buffer strips"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "blue and peach rounded regions",
+   "rows of robot-arm glyphs",
+   "RL agent robot icon",
+   "person-at-laptop icon",
+   "Buffer boxes with arm strips",
+   "hub glyphs for distributions",
+   "policy-loss box",
+   "labelled arrows"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "rating-based RL",
+   "human feedback",
+   "multi-level ratings",
+   "policy loss",
+   "reward learning",
+   "KL divergence",
+   "RL agent",
+   "environment"
+  ],
+  "tags": [
+   "human-in-the-loop",
+   "colour-coded-groups",
+   "verdict-marks",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "base-method-plus-extension-regions",
+    "what": "the existing method drawn as one tinted region and the proposed addition as a second region of another tint, joined by a few crossing arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show how a new component plugs into an existing method, draw the existing method as one tinted region and the new component as a second region of another tint, join them with the few arrows that cross the border, and keep a class colour on every item of that class.",
+  "suits": "Extensions of a known algorithm (RL, RLHF, contrastive learning) where the figure must show both the known loop and what the new loss adds."
+ },
+ "tags": [
+  "two rounded tinted regions",
+  "robot-arm glyphs",
+  "orange-green classes",
+  "serif labels",
+  "dashed arrows",
+  "dotted sub-boxes",
+  "icon glyphs",
+  "boxed components"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.4)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "A schematic illustration of the proposed algorithm and its relationship with RbRL.",
+   "penalizes the similarities between the samples from the current policies and the samples from different rating classes",
+   "with an descending weight for rating classes from low to high"
+  ]
+ },
+ "summary": "The paper proposes multi-level reinforcement learning, in which a human-inspired policy loss pushes the policy away from experiences of different rating levels, on top of rating-based RL (RbRL). Figure 1 draws two rounded regions side by side. The blue RbRL region shows an RL Agent and an Environment joined by Action and Observation arrows, a human icon rating trajectory Segments into Bad (orange) and Good (green) groups of robot-arm glyphs, and Reward Learning feeding the agent. The peach region, Rating-induced Policy Loss, sorts the groups into Buffer 0 and Buffer 1, turns them into Distribution 0 and 1 hub glyphs and feeds a loss box that pushes away from low ratings, whose long arrow returns to the RL Agent.",
+ "summary_zh": "论文提出多级强化学习：在基于评分的 RL（RbRL）之上，用受人启发的策略损失让策略远离不同评级的经验。图左蓝区是 RbRL：智能体、环境、人给片段打分，分成“差”“好”两组；图右橙区把两组存入缓冲、转成分布并生成损失，回传给智能体。",
+ "confidence": "high",
+ "notes": "The arrow labelled Action points from the Environment to the RL Agent and the one labelled Observation points back (confirmed in the SVG arrowheads); relations are recorded as drawn. The role of the two rows inside each Buffer is taken from the paper text, not from the figure. Only two rating levels are drawn.",
+ "venue": "NeurIPS25"
+}

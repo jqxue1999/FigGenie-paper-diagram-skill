@@ -1,0 +1,447 @@
+{
+ "paper_id": "iclr24-0044",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TextSpan decomposition of CLIP-ViT",
+  "one_liner": "Decompose CLIP's image representation into contributions of patches, layers and attention heads and label each part with text from CLIP's own text space.",
+  "domain": [
+   "CLIP interpretability",
+   "attention heads",
+   "text-based decomposition"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "model-anatomy",
+   "contribution-mosaic"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "a strip showing the decomposition grid, then three coloured result panels with real examples; the tints of the grid match the panel banners",
+  "argues": "CLIP's image representation is a sum over image tokens, layers and heads whose parts can be described in text: head roles, regions per prompt, and regions per head direction.",
+  "subject": "An input photo passing through a CLIP-ViT token grid to the image representation, and three views of its decomposition shown on a pyramid photo.",
+  "elements": [
+   {
+    "name": "Input Image",
+    "type": "sample",
+    "role": "the photo that is encoded",
+    "drawn_as": "rectangular photo of pyramids with camels at the left of the top strip, caption underneath",
+    "container": "CLIP-ViT strip",
+    "is_contribution": false
+   },
+   {
+    "name": "CLIP-ViT",
+    "type": "module",
+    "role": "the image encoder, drawn as a grid of tokens by layers and heads",
+    "drawn_as": "four columns of four rounded squares joined by arrows, bold title above",
+    "container": "CLIP-ViT strip",
+    "is_contribution": null
+   },
+   {
+    "name": "Tokens / Layers x Heads",
+    "type": "label",
+    "role": "axes of the grid: rows are image tokens, columns are layers and heads",
+    "drawn_as": "rotated word at the left of the grid and a caption under it",
+    "container": "CLIP-ViT strip",
+    "is_contribution": false
+   },
+   {
+    "name": "tinted column, row and cell",
+    "type": "region",
+    "role": "slices of the grid that the three panels interpret: a yellow column (a head), a purple row (a token), an orange cell (head and token together)",
+    "drawn_as": "rounded squares tinted yellow, purple and orange among blue ones",
+    "container": "CLIP-ViT strip",
+    "is_contribution": true
+   },
+   {
+    "name": "proj. layer",
+    "type": "module",
+    "role": "projection layer producing the image representation",
+    "drawn_as": "green rounded square with the letter P and a caption under it",
+    "container": "CLIP-ViT strip",
+    "is_contribution": false
+   },
+   {
+    "name": "Image Representation",
+    "type": "data",
+    "role": "output representation that is decomposed",
+    "drawn_as": "text rotated about 45 degrees after the last arrow",
+    "container": "CLIP-ViT strip",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Heads Decomposition",
+    "type": "container",
+    "role": "panel (a): the text roles found for individual heads",
+    "drawn_as": "yellow rounded banner with three columns of underlined head names, grey handwriting-style role labels and numbered text lists",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Layer 23, Head 10 / Layer 22, Head 1 / Layer 22, Head 10",
+    "type": "text-block",
+    "role": "three heads, described as a number head, a shape head and a color head, each with its top text directions",
+    "drawn_as": "underlined bold names over numbered lists ending in an ellipsis",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Image Tokens Decomposition",
+    "type": "container",
+    "role": "panel (b): which image regions contribute to the similarity with a text prompt",
+    "drawn_as": "purple rounded banner above two heat-map photos with their prompts",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Joint Decomposition",
+    "type": "container",
+    "role": "panel (c): which regions contribute towards one text direction of one head",
+    "drawn_as": "orange rounded banner above two heat-map photos with head names and text directions",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Image",
+    "to": "CLIP-ViT",
+    "what": "image becomes tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CLIP-ViT columns",
+    "to": "CLIP-ViT columns",
+    "what": "tokens pass through successive layers and heads",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CLIP-ViT",
+    "to": "proj. layer",
+    "what": "final tokens are projected",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "proj. layer",
+    "to": "Image Representation",
+    "what": "the representation that is decomposed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "yellow column of the grid",
+    "to": "Attention Heads Decomposition",
+    "what": "a column of the grid is a head, interpreted in (a)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "purple row of the grid",
+    "to": "Image Tokens Decomposition",
+    "what": "a row of the grid is an image token, interpreted in (b)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "orange cell of the grid",
+    "to": "Joint Decomposition",
+    "what": "a cell is a head and token together, interpreted in (c)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "text directions in (a)",
+    "to": "heat-map labels in (c)",
+    "what": "a direction found for a head, such as An isosceles triangle, is the label of the joint heat map for that head",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "heat-map photo",
+    "to": "its text prompt",
+    "what": "each heat map sits beside the text it is computed for",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "CLIP-ViT",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "photo through a token grid of layers x heads and a projection layer to the image representation; one column, one row and their crossing cell are tinted",
+    "verdict": null
+   },
+   {
+    "label": "(a) Attention Heads Decomposition",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "top text directions for a number head, a shape head and a color head",
+    "verdict": null
+   },
+   {
+    "label": "(b) Image Tokens Decomposition",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "heat maps over the photo for the prompts A photo of a pyramid and A photo of a camel",
+    "verdict": null
+   },
+   {
+    "label": "(c) Joint Decomposition",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "heat maps for An isosceles triangle (Layer 22, Head 1) and Image with an orange color (Layer 22, Head 10)",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "left of each banner",
+    "what": "letter the three result panels"
+   },
+   {
+    "marker": "1., 2., 3., ...",
+    "kind": "order",
+    "at": "text lists in panel (a)",
+    "what": "rank of the text directions found for a head"
+   },
+   {
+    "marker": "Layer 23, Head 10 and the other head names",
+    "kind": "identity",
+    "at": "underlined titles in (a) and (c)",
+    "what": "name the head being described"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo of the pyramids with three camels and riders",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "plain rectangular photo at the start of the strip"
+   },
+   {
+    "what": "the same photo darkened with a blue tint and overlaid with translucent heat blobs: on the pyramid and on the camels in (b); on the pyramid outline and on the orange camel blankets in (c)",
+    "content": "dense-map",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "equal square tiles in a row of two per panel, the prompt text set to the right of each tile"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "top text directions of three heads: number (six subjects, four people, the number 3), shape (a semicircular arch, an isosceles triangle, an oval) and color (yellow, orange, cold green tones)",
+    "form": "numbered text lists under underlined head names",
+    "real_values": true
+   },
+   {
+    "what": "regions of the pyramid photo that contribute to two prompts and to two head directions",
+    "form": "four heat-map tiles with their prompt text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "columns of four rounded squares standing for image tokens, one column per layer or head group, with one row tinted purple, one column yellow and the crossing cell orange",
+    "parts": [
+     "token squares",
+     "tinted column",
+     "tinted row",
+     "tinted cell"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "a heat map laid over the photo, with hot blobs where the region contributes",
+    "parts": [
+     "photo",
+     "heat overlay",
+     "prompt text"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Start at the input photo at the top left, follow the arrows through the token grid to Image Representation, then read the three coloured panels: (a) lower left, (b) upper right, (c) lower right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A 2 x 2 grid cut by one horizontal and one vertical grey dashed rule: top left a left-to-right strip with the input photo, the token grid, a projection box and the representation; top right panel (b) with two heat-map photos; bottom left panel (a) with three columns of text lists; bottom right panel (c) with two heat-map photos. Each lettered panel has a coloured banner matching a tint in the grid.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "other",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.84,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#6d88c4",
+    "used_for": "untinted token squares in the CLIP-ViT grid",
+    "opacity": 0.8
+   },
+   {
+    "hex": "#fcb016",
+    "used_for": "yellow: the highlighted column of the grid and the banner of (a)",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#6c63ac",
+    "used_for": "purple: the highlighted row of the grid and the banner of (b)",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#f26222",
+    "used_for": "orange: the crossing cell of the grid and the banner of (c)",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#2bb673",
+    "used_for": "green projection layer P",
+    "opacity": 0.8
+   },
+   {
+    "hex": "#231f20",
+    "used_for": "outlines, arrows and text"
+   },
+   {
+    "hex": "#6d6e71",
+    "used_for": "grey dashed dividing rules"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt near-black outlines on tokens, banners and arrows; 0.75 pt grey dashed dividers",
+  "font": "sans (Arial), 5.5 pt lists, 7 pt labels, 7.5 to 8.5 pt banner titles, bold underlined head names, grey handwriting-style face for head roles",
+  "corners": "rounded",
+  "arrows": "short black arrows with filled heads between the stages of the strip; no arrows elsewhere",
+  "rendering": "flat-vector",
+  "effects": "translucent fills at 70 to 80 percent; blue tint and heat overlay on the photo tiles",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow = attention-heads decomposition (a), purple = image-tokens decomposition (b), orange = joint head-and-token decomposition (c); the same tints colour the matching column, row and cell of the CLIP-ViT grid and the panel banners; blue = untinted tokens; green = projection layer",
+  "line_style_means": "grey dashed lines divide the four cells; solid black arrows pass the representation along the strip",
+  "shape_means": "rounded square = one token at one layer or head group; rounded banner = panel title; green square P = projection layer",
+  "marker_means": "(a), (b), (c) letter the panels; 1., 2., 3. rank the text directions of a head; underlined Layer and Head names name a head",
+  "emphasis": "Colour matching between the tinted column, row and cell of the grid and the three banners shows which slice of the model each panel interprets; the banners are the strongest colour blocks.",
+  "reusable_patterns": [
+   "tint a column, a row and their crossing cell in a token grid and match each tint to a panel banner",
+   "coloured rounded banner as the title of a lettered panel",
+   "dashed cross dividing the figure into four cells",
+   "same photo reused for every heat-map tile with the prompt text beside it",
+   "numbered text lists under underlined head names with a handwriting-style role label",
+   "text direction in one panel repeated as the label of a heat map in another"
+  ],
+  "weaknesses": [
+   "panel letters run (a) lower left, (b) upper right, (c) lower right, so they do not follow reading order",
+   "the strip at the top left carries no letter"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the pyramid photo",
+   "heat maps computed from CLIP-ViT",
+   "text directions found for the heads"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token grid, projection box and arrows",
+   "banners and dashed rules",
+   "text lists and labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "input photo of pyramids with camels",
+   "grid of rounded token squares with a tinted column, row and cell",
+   "green P box",
+   "coloured banner titles",
+   "heat-map photo tiles with prompt text",
+   "numbered text lists under head names"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "CLIP",
+   "interpretability",
+   "attention heads",
+   "image tokens",
+   "text-based decomposition",
+   "TextSpan",
+   "zero-shot segmentation",
+   "heat maps",
+   "ViT"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "saliency-heatmap",
+   "small-multiples",
+   "token-strip"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Tie a schematic to its result panels by colour: tint a column, a row and their crossing cell in a grid of tokens, and give each result panel a banner in the matching tint, so the reader sees which slice of the model each panel interprets; reuse one photo across all heat-map tiles so the comparison is immediate.",
+  "suits": "Interpretability or analysis papers that split a model's output into parts (heads, tokens, layers) and show what each part contributes on shared examples."
+ },
+ "tags": [
+  "2 x 2 grid with dashed cross",
+  "coloured banner titles",
+  "tinted token grid",
+  "heat-map tiles",
+  "sans labels",
+  "lettered panels"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "By decomposing CLIP’s image representation as a sum across individual image patches, model layers, and attention heads",
+   "the regions with triangles are the primary contributors to a direction that is labeled as isosceles triangle"
+  ]
+ },
+ "summary": "The paper decomposes CLIP-ViT's image representation into a sum over image patches, layers and attention heads and uses CLIP's text space to describe each part. Figure 1 is a 2 x 2 grid split by dashed rules. The top-left strip passes an input photo of pyramids through a grid of rounded token squares (tokens by layers x heads) and a green projection layer to the image representation, with one column tinted yellow, one row purple and their crossing cell orange. Three lettered panels with banners in the same tints show results: (a) numbered text lists for a number, a shape and a color head, (b) heat maps for A photo of a pyramid and A photo of a camel, (c) joint heat maps for An isosceles triangle and Image with an orange color.",
+ "summary_zh": "论文把 CLIP-ViT 的图像表示拆成图像块、层和注意力头之和，并用文本解释各部分。图分四格：左上是 token 网格，黄紫橙三色标出头、token 及交叉；(a)(b)(c) 同色面板给出头的文字描述和两种热力图。",
+ "confidence": "high",
+ "notes": "The prior counted 3 panels; I count 4 because the top-left strip is a cell bounded by dashed rules, though it has no letter. The digest lists 9 placed bitmaps for 5 different images, so each heat-map tile is probably the photo plus a separate overlay bitmap. The three tints in the grid and the banners match by colour; the paper text does not state this mapping, it is read from the figure.",
+ "venue": "ICLR24"
+}

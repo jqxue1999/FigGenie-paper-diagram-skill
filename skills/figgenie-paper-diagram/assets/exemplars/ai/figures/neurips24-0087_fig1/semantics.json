@@ -1,0 +1,701 @@
+{
+ "paper_id": "neurips24-0087",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GPCPR (Generated and Pseudo Content guided Prototype Refinement)",
+  "one_liner": "Few-shot 3D point cloud segmentation that refines class prototypes with LLM-generated class descriptions and pseudo-query context, plus dual distillation.",
+  "domain": [
+   "few-shot point cloud segmentation",
+   "prototype refinement",
+   "LLM-generated text"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "one prototype line crosses three dashed panels (generate, refine with LLM text, refine with pseudo-query context); red dashed distillation arrows run over the top and along the bottom",
+  "argues": "Prototypes from the support set alone are weak; adding LLM-generated class text and reliable pseudo-query context, tied together by prototype and logit distillation, refines them before the query is segmented.",
+  "subject": "support and query point clouds flowing through an encoder, text-driven and pseudo-query-driven prototype refinement, distillation links and the final prediction",
+  "elements": [
+   {
+    "name": "Point Encoder",
+    "type": "module",
+    "role": "shared encoder that extracts per-point features of support and query clouds",
+    "drawn_as": "grey trapezoid with a flame icon",
+    "container": "(a) Prototype Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "F_s, F_q",
+    "type": "data",
+    "role": "support and query point features",
+    "drawn_as": "small 3D cube glyphs, repeated in panels (a) and (c)",
+    "container": "(a) Prototype Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "ℙ",
+    "type": "data",
+    "role": "vanilla class-wise support prototypes (background plus foreground classes)",
+    "drawn_as": "vertical white capsule holding a grey ring, a teal square and a purple triangle",
+    "container": "(a) Prototype Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Class Text-to-Proto. Compressor",
+    "type": "module",
+    "role": "injects the diverse class descriptions into the prototypes",
+    "drawn_as": "tall green rounded box with rotated bold label and a flame icon",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "Diff. Text-to-Proto. Compressor",
+    "type": "module",
+    "role": "injects differentiated descriptions of class pairs into the prototypes",
+    "drawn_as": "tall blue rounded box with rotated bold label and a flame icon",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "Text Adapter over Text Encoder (two stacks)",
+    "type": "module",
+    "role": "turn generated sentences into embeddings for the compressors; adapter trainable, encoder frozen",
+    "drawn_as": "two small stacked boxes, flame on the adapter, snowflake on the encoder",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "Diverse Descriptions",
+    "type": "container",
+    "role": "LLM output made by four kinds of generation prompts",
+    "drawn_as": "rounded card with the LLM logo and four light-green bars: Caption Generation, Question Answering, Paraphrase Generation, Make Sentence",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "Differentiated Descriptions",
+    "type": "container",
+    "role": "LLM output that contrasts two classes",
+    "drawn_as": "rounded card with the LLM logo and a light-blue prompt box with [Class 1] in green and [Class 2] in red",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "Class Names",
+    "type": "data",
+    "role": "class words given to the LLM",
+    "drawn_as": "two small rounded cards of italic words (cluster, bed, desk; and pairs such as bed desk) in black, teal and purple",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "𝕋̇ and 𝕋̈",
+    "type": "data",
+    "role": "prototype sets after the first and second text refinement",
+    "drawn_as": "same capsule with ring, square, triangle, dotted symbols below",
+    "container": "(b) Generated Content guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "Prototype Distillation (two boxes)",
+    "type": "operation",
+    "role": "regularisation between early-stage and deeper prototypes",
+    "drawn_as": "light-grey rounded box with black outline, fed by red dashed arrows from two capsules",
+    "container": "(b) and (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "QGPA",
+    "type": "module",
+    "role": "aggregates prototypes with the support and query features (full name not spelled out in the figure)",
+    "drawn_as": "grey rounded box",
+    "container": "(c) Pseudo Query Context guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "ℙ̇ and ℙ̈",
+    "type": "data",
+    "role": "prototype sets after QGPA and after the query-to-prototype compressor",
+    "drawn_as": "capsules with dotted symbols below",
+    "container": "(c) Pseudo Query Context guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "Query-to-Proto. Compressor",
+    "type": "module",
+    "role": "folds pseudo-query context into the prototypes",
+    "drawn_as": "tall orange rounded box with rotated label and a flame icon",
+    "container": "(c) Pseudo Query Context guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "circled S and circled dot",
+    "type": "operation",
+    "role": "cosine similarity and dot product between features and prototypes",
+    "drawn_as": "small circles with S or a centre dot, defined in the legend",
+    "container": "(c) Pseudo Query Context guided Prototype Refinement",
+    "is_contribution": null
+   },
+   {
+    "name": "Logit Distillation",
+    "type": "operation",
+    "role": "regularisation between pseudo prediction and final prediction",
+    "drawn_as": "black-outlined rounded box at the bottom, fed by red dashed arrows",
+    "container": "(c) Pseudo Query Context guided Prototype Refinement",
+    "is_contribution": true
+   },
+   {
+    "name": "L_CE",
+    "type": "label",
+    "role": "cross-entropy loss between prediction and Query GT",
+    "drawn_as": "bold italic label beside a red double-headed arrow",
+    "container": "right edge",
+    "is_contribution": false
+   },
+   {
+    "name": "Frozen / Trainable / Dot Product / Cosine Similarity / Point Features / Prototypes",
+    "type": "container",
+    "role": "key to the icons and glyphs",
+    "drawn_as": "dashed navy rounded box in the lower-left corner with six small samples",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Support, Query",
+    "to": "Point Encoder",
+    "what": "point clouds go into a shared encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Point Encoder",
+    "to": "F_s, F_q",
+    "what": "per-point support and query features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F_s",
+    "to": "ℙ",
+    "what": "support features become vanilla class prototypes (pooling is not drawn)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ℙ",
+    "to": "Class Text-to-Proto. Compressor",
+    "what": "prototypes enter the first refinement",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Class Names",
+    "to": "Diverse Descriptions, Differentiated Descriptions",
+    "what": "class words are turned into sentences by the LLM",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Diverse Descriptions",
+    "to": "Text Encoder, Text Adapter, Class Text-to-Proto. Compressor",
+    "what": "sentences are encoded and adapted, then compress into the prototypes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Differentiated Descriptions",
+    "to": "Text Encoder, Text Adapter, Diff. Text-to-Proto. Compressor",
+    "what": "contrast sentences are encoded and adapted for the second compressor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Class Text-to-Proto. Compressor",
+    "to": "Diff. Text-to-Proto. Compressor",
+    "what": "prototypes pass through the two compressors in turn (via 𝕋̇)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Diff. Text-to-Proto. Compressor",
+    "to": "QGPA",
+    "what": "text-refined prototypes (𝕋̈) go to panel (c)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F_s, F_q",
+    "to": "QGPA",
+    "what": "support and query features guide the aggregation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "QGPA",
+    "to": "ℙ̇",
+    "what": "aggregated prototypes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ℙ̇, F_q",
+    "to": "Pseudo Prediction",
+    "what": "similarity (circled S) of query features to prototypes gives a pseudo prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pseudo Prediction, F_q",
+    "to": "Query-to-Proto. Compressor",
+    "what": "dot product (circled dot) with query features gives reliable query context for the compressor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query-to-Proto. Compressor",
+    "to": "ℙ̈",
+    "what": "query-specific prototypes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ℙ̈, F_q",
+    "to": "Prediction",
+    "what": "cosine similarity gives the final segmentation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "𝕋̇, 𝕋̈",
+    "to": "Prototype Distillation (b)",
+    "what": "early and deeper prototypes are tied by distillation",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ℙ̇, ℙ̈",
+    "to": "Prototype Distillation (c)",
+    "what": "early and deeper prototypes are tied by distillation",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pseudo Prediction, Prediction",
+    "to": "Logit Distillation",
+    "what": "pseudo and final logits are tied by distillation",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prediction",
+    "to": "Query GT",
+    "what": "cross-entropy loss L_CE",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "colours of ring, square and triangle",
+    "to": "class-name text and segmentation masks",
+    "what": "grey, teal and purple mark the same classes in prototypes, words and masks",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Prototype Generation",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "support and query scans pass through a shared Point Encoder; support features give vanilla prototypes",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Generated Content guided Prototype Refinement",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "two text-to-prototype compressors fed by LLM descriptions of class names and class pairs refine the prototypes",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Pseudo Query Context guided Prototype Refinement",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "QGPA and a Query-to-Proto compressor, driven by a pseudo prediction, refine the prototypes again before the final prediction",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "dashed panel titles",
+    "what": "head the three parts of the method"
+   },
+   {
+    "marker": "ℙ, 𝕋̇, 𝕋̈, ℙ̇, ℙ̈",
+    "kind": "identity",
+    "at": "under each prototype capsule",
+    "what": "names the prototype set after each refinement step"
+   },
+   {
+    "marker": "F_s, F_q",
+    "kind": "identity",
+    "at": "feature cubes",
+    "what": "support and query features"
+   },
+   {
+    "marker": "L_CE",
+    "kind": "identity",
+    "at": "red double arrow at the right",
+    "what": "names the cross-entropy loss between Query GT and Prediction"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "support and query point-cloud scenes",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small thumbnails stacked at the left of panel (a): a coloured scan and a grey scan with teal and purple masks for Support, one coloured scan for Query"
+   },
+   {
+    "what": "Pseudo Prediction, Query GT and Prediction scenes",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same grey room with teal and purple segmentation masks; GT and Prediction stacked at the right edge, joined by a red double arrow"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flame",
+    "stands_for": "trainable module",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 7
+   },
+   {
+    "depicts": "snowflake",
+    "stands_for": "frozen module",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "green interlaced-knot mark in a circle",
+    "stands_for": "the LLM (an OpenAI-style logo)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "3D cube",
+    "stands_for": "point-feature tensors F_s and F_q",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "capsule with grey ring, teal square and purple triangle",
+    "stands_for": "a set of prototypes (background plus classes)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "LLM prompt asking for differences between two classes",
+    "form": "light-blue card reading Describe the distinguishing visual or geometry differences between [Class 1] and [Class 2], placeholders in green and red",
+    "real_values": true
+   },
+   {
+    "what": "four generation prompt types for diverse descriptions",
+    "form": "four light-green bars: Caption Generation, Question Answering, Paraphrase Generation, Make Sentence",
+    "real_values": true
+   },
+   {
+    "what": "class names given to the LLM",
+    "form": "small cards with the words cluster, bed, desk and the pairs bed desk, bed cluster, desk cluster in black, teal and purple italics",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "flame on trainable modules, snowflake on frozen ones, with a key in the corner",
+    "parts": [
+     "flame",
+     "snowflake",
+     "key"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "round green logo with the word LLM beside it, placed in each description card",
+    "parts": [
+     "logo",
+     "LLM label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "light-blue box with the instruction sentence and two coloured placeholders [Class 1] and [Class 2]",
+    "parts": [
+     "instruction text",
+     "[Class 1]",
+     "[Class 2]"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "red dashed arrows from two stage outputs into a titled loss box, rather than a loss node with arrows flowing back",
+    "parts": [
+     "red dashed arrows",
+     "Prototype Distillation box",
+     "Logit Distillation box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "the Point Encoder as a trapezoid (encoder only) with two outputs",
+    "parts": [
+     "trapezoid",
+     "feature cubes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "small coloured scene thumbnails; grey scenes with colour masks for segmentation",
+    "parts": [
+     "scan thumbnail",
+     "mask overlay"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the support and query scans at the left, follows the black line through panels (a), (b) and (c) to the Prediction at the right; the red dashed distillation arrows are read afterwards."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three dashed rounded panels side by side, each titled with a letter; one horizontal prototype line crosses all three; prediction and ground-truth thumbnails sit outside at the right edge, the legend box under panel (a).",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.12,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b4c7e7",
+    "used_for": "Diff. Text-to-Proto. Compressor"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "Class Text-to-Proto. Compressor (bitmap)",
+    "approx": true
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "Query-to-Proto. Compressor (bitmap)",
+    "approx": true
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "light-green bars of the four generation prompts"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "light-blue box behind the differentiated prompt text"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "legend ground and Prototype Distillation boxes"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "QGPA box"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red dashed distillation and loss arrows, flames, [Class 2] text"
+   },
+   {
+    "hex": "#00ccff",
+    "used_for": "snowflake icons (frozen)"
+   },
+   {
+    "hex": "#08b4a8",
+    "used_for": "teal square prototype glyph and matching class words and masks"
+   },
+   {
+    "hex": "#9e06bb",
+    "used_for": "purple triangle prototype glyph and matching class words and masks"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey ring glyph and dashed panel outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black outlines on boxes, 0.5 pt on thin lines, 1.5 pt dashed grey panel frames, red dashed arrows",
+  "font": "serif (Times-like) bold 7 pt panel titles and 4-5.5 pt labels; italic serif symbols; one rounded sans for the key",
+  "corners": "rounded",
+  "arrows": "thin black orthogonal arrows with small filled heads; thick red dashed arrows with red heads for distillation",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "green, blue and orange boxes = the three compressor modules; teal square, purple triangle and grey ring = the classes (same colours on class words and masks); red = distillation links and trainable flame; cyan snowflake = frozen",
+  "line_style_means": "red dashed = distillation / loss link; black solid = data flow; grey dashed rounded rectangle = panel frame",
+  "shape_means": "trapezoid = encoder; tall rounded box with rotated label = compressor; capsule with three glyphs = set of prototypes; cube = feature tensor; circled S / circled dot = cosine similarity / dot product",
+  "marker_means": "dots over T and P count refinement steps; (a)(b)(c) head the panels",
+  "emphasis": "the three coloured compressor boxes carry the visual weight; red dashed arrows over the panels stand out against black flow lines",
+  "reusable_patterns": [
+   "one capsule of class glyphs redrawn after every refinement step so the object being refined stays visible",
+   "red dashed arrows from two stage outputs into a titled loss box",
+   "flame and snowflake icons on modules with a small key in the corner",
+   "prompt cards with colour-coded slots and an LLM logo feeding a module from below",
+   "tall boxes with rotated labels so a long pipeline fits in one row",
+   "ground truth and prediction thumbnails joined by a red double arrow labelled with the loss"
+  ],
+  "weaknesses": [
+   "labels at 4-5 pt and rotated module names are hard to read at print size",
+   "dotted symbols (T with one or two dots, P with one or two dots) are easy to confuse",
+   "F_q wiring in panel (c) crosses several lines"
+  ]
+ },
+ "resources": {
+  "own": [
+   "point-cloud scene renders for support, query, pseudo prediction, ground truth and prediction",
+   "the actual LLM prompt wording"
+  ],
+  "stock": [
+   "flame and snowflake icons",
+   "LLM vendor-style logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes, capsules, cubes and arrows",
+   "prompt cards",
+   "legend box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "point-cloud scene thumbnails with masks",
+   "Point Encoder trapezoid",
+   "prototype capsules with ring, square and triangle",
+   "coloured text-to-prototype compressors",
+   "LLM prompt cards",
+   "red dashed distillation arrows",
+   "Logit Distillation box",
+   "frozen and trainable legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "few-shot point cloud segmentation",
+   "prototype refinement",
+   "LLM-generated descriptions",
+   "text encoder adapter",
+   "dual distillation",
+   "pseudo query",
+   "cosine similarity",
+   "S3DIS and ScanNet"
+  ],
+  "tags": [
+   "module-state-coding",
+   "flow-type-arrows",
+   "prompt-template-card",
+   "brand-logo-icon",
+   "colour-coded-groups",
+   "notation-key"
+  ],
+  "new_tags": [
+   {
+    "name": "prototype-capsule",
+    "what": "a vertical capsule holding one distinct glyph per class, redrawn after every stage to show the same set being refined"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the object being refined as one recurring glyph (here a capsule of ring, square, triangle) and redraw it after every stage; attach distillation or loss links to those copies with a distinct arrow colour, so the stage effects and the regularisers can be read at once.",
+  "suits": "multi-stage refinement of one representation (prototypes, queries, memories) with auxiliary losses between stages and several frozen or trainable modules."
+ },
+ "tags": [
+  "three dashed panels",
+  "serif labels",
+  "flame and snowflake key",
+  "red dashed loss arrows",
+  "coloured module boxes",
+  "scene thumbnails"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method, Overview (p.3)"
+  ],
+  "evidence": [
+   "we utilize a shared point encoder to extract per point query and support features",
+   "Dual-distillation, i.e., prototype distillation and logit distillation, further enhance the refinement process.",
+   "The query flow measures distances between query point features and refined prototypes to predict segmentation results."
+  ]
+ },
+ "summary": "GPCPR is a few-shot 3D point cloud segmentation framework that refines class prototypes with LLM-generated class descriptions and with pseudo-query context. The figure is a left-to-right network diagram in three dashed panels. In (a) a shared Point Encoder turns support and query scans into features and vanilla prototypes. In (b) two text-to-prototype compressors, fed by text encoder and adapter chains over LLM descriptions of class names, refine them. In (c) QGPA and a Query-to-Proto compressor, driven by a pseudo prediction, refine them again before the final prediction. Red dashed arrows tie early and deeper prototypes, and pseudo and final logits, to distillation boxes; a corner key explains the flame, snowflake, dot-product and cosine-similarity glyphs.",
+ "summary_zh": "GPCPR 用 LLM 生成的类别描述和伪查询上下文精炼小样本点云分割的原型。图分三个虚线面板自左向右展开：原型生成、文本引导精炼、伪查询引导精炼，红色虚线连到两个蒸馏框，左下角图例说明可训练、冻结和算子符号。",
+ "confidence": "high",
+ "notes": "Prior kind kept (model-anatomy). The medium of flame and snowflake icons (vector) and of the cubes and LLM logos (bitmap) is inferred from the sizes of placed pictures in the digest. What QGPA stands for and what the pooling step is are not written in the figure.",
+ "venue": "NeurIPS24"
+}

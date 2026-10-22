@@ -1,0 +1,528 @@
+{
+ "paper_id": "iclr26-0069",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MotionStream",
+  "one_liner": "A real-time autoregressive video diffusion model that streams long videos from one image with interactive motion-track control at 29.5 FPS and 0.39 s latency.",
+  "domain": [
+   "motion-controlled video generation",
+   "autoregressive diffusion",
+   "real-time streaming"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "contribution-mosaic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two stacked lanes, an offline bidirectional model against the real-time autoregressive one, beside three application strips",
+  "argues": "Prior motion-controlled video diffusion is offline, fixed-length and slow (0.79 FPS, 103 s latency); MotionStream streams infinite-length video in real time (29.5 FPS, 0.39 s) and serves interactive applications.",
+  "subject": "Two lanes taking input tracks and one frame through a bidirectional versus an autoregressive diffusion model, and three strips: motion transfer, drag control, camera control.",
+  "elements": [
+   {
+    "name": "Fixed-length input tracks",
+    "type": "sample",
+    "role": "motion tracks for the whole clip, supplied up front to the prior model",
+    "drawn_as": "stack of three washed-out frames with small green-to-blue track squares, dots between, outlined mouse icon",
+    "container": "top lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Input frame",
+    "type": "sample",
+    "role": "the single starting image shared by both lanes, with its text prompt 'A ballerina in a dark room ...'",
+    "drawn_as": "ballerina photo over a cream monospace prompt box",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "G_teacher",
+    "type": "module",
+    "role": "the bidirectional video diffusion model of the prior lane",
+    "drawn_as": "four tall rounded orange slabs with an orange label box G_teacher across them",
+    "container": "top lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Fixed-length generated video",
+    "type": "sample",
+    "role": "the clip produced all at once",
+    "drawn_as": "fan of three overlapping ballerina frames, bold title above",
+    "container": "top lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Bidirectional video diffusion model (0.79 FPS, Latency 103s)",
+    "type": "label",
+    "role": "names the prior model and gives its speed",
+    "drawn_as": "bold black two-line title with a full green attention grid icon at its left",
+    "container": "top lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Streaming input tracks",
+    "type": "sample",
+    "role": "tracks that arrive continuously while the video is generated",
+    "drawn_as": "stack of washed-out frames that shrink to the right and end in a small infinity sign, outlined mouse icon, 'Streaming' in red",
+    "container": "bottom lane",
+    "is_contribution": true
+   },
+   {
+    "name": "G_student",
+    "type": "module",
+    "role": "the real-time autoregressive model that generates frame by frame",
+    "drawn_as": "four tall rounded blue slabs with a blue label box G_student across them",
+    "container": "bottom lane",
+    "is_contribution": true
+   },
+   {
+    "name": "Infinite-length generated video",
+    "type": "sample",
+    "role": "an unbounded stream of frames",
+    "drawn_as": "ballerina frames shrinking to the right with curved black arrows underneath from frame to frame, ending in a large infinity sign and three dots, 'Infinite' in red",
+    "container": "bottom lane",
+    "is_contribution": true
+   },
+   {
+    "name": "Real-time autoregressive diffusion model (29.5 FPS, Latency 0.39s)",
+    "type": "label",
+    "role": "names the proposed model and gives its speed",
+    "drawn_as": "two-line title with 'Real-time' and the numbers in red, a green and grey causal grid icon at its left",
+    "container": "bottom lane",
+    "is_contribution": true
+   },
+   {
+    "name": "(a) Online motion transfer",
+    "type": "container",
+    "role": "motion tracks from a webcam video drive a sketch-style portrait in real time",
+    "drawn_as": "row of three washed-out face frames with rainbow track dots, a plus sign, three webcam frames of a man, a thick black arrow, a fanned stack of three sketch portraits",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Real-time drag-based control",
+    "type": "container",
+    "role": "the user drags points on a face and the video follows",
+    "drawn_as": "close-up of a child's face with a white mouse icon, two track points joined by red dashed arrows, and a strip of three result frames below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Real-time camera controls",
+    "type": "container",
+    "role": "3D camera motion applied to a single image",
+    "drawn_as": "black camera icon, a tilted image plane of a woman in red on a beach with a red curved orbit arrow, a small original at the top right, and a strip of three result frames",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "dashed rules",
+    "type": "other",
+    "role": "separate the two lanes and the left half from the applications",
+    "drawn_as": "one horizontal and one vertical dashed black line",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Fixed-length input tracks, Input frame",
+    "to": "G_teacher",
+    "what": "inputs of the prior model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "G_teacher",
+    "to": "Fixed-length generated video",
+    "what": "all frames produced in parallel",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Streaming input tracks, Input frame",
+    "to": "G_student",
+    "what": "inputs of the real-time model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "G_student",
+    "to": "Infinite-length generated video",
+    "what": "frames streamed one after another",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each generated frame",
+    "to": "the next frame",
+    "what": "frame-by-frame autoregression",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "tracks and webcam frames in (a)",
+    "to": "sketch portraits in (a)",
+    "what": "motion transfer result",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "track points in (b)",
+    "to": "drag arrows in (b)",
+    "what": "user drags points to steer the head",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "camera icon in (c)",
+    "to": "red orbit arrow in (c)",
+    "what": "camera motion applied to the image",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "top lane",
+    "to": "bottom lane",
+    "what": "prior versus proposed, same input frame",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Bidirectional video diffusion model (0.79 FPS, Latency 103s)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "fixed-length tracks and an input frame go to G_teacher, which generates a fixed-length video at once",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Real-time autoregressive diffusion model (29.5 FPS, Latency 0.39s)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "streaming tracks and the same frame go to G_student, which streams an infinite-length video frame by frame",
+    "verdict": "ours"
+   },
+   {
+    "label": "(a) Online motion transfer",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "face tracks and webcam frames to sketch-style portrait frames",
+    "verdict": null
+   },
+   {
+    "label": "(b) Real-time drag-based control",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "dragging two points on a child's face and the resulting frames",
+    "verdict": null
+   },
+   {
+    "label": "(c) Real-time camera controls",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "an orbit of the camera around a beach scene and the resulting frames",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "captions under the three application strips",
+    "what": "letters head and name the applications"
+   },
+   {
+    "marker": "G_teacher, G_student",
+    "kind": "identity",
+    "at": "label boxes on the model icons",
+    "what": "names the bidirectional and the autoregressive model"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "ballerina input frame and the generated ballerina frames (fan of three, shrinking strip of about six)",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "overlapping frames offset diagonally for the fixed-length clip, and a row shrinking toward an infinity sign for the stream; the input frame sits at the left with its prompt"
+   },
+   {
+    "what": "stacks of washed-out frames carrying small gradient track squares",
+    "content": "dense-map",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "frames faded to about half white so only the coloured track squares stand out; the streaming stack shrinks and ends in an infinity sign"
+   },
+   {
+    "what": "face tracks, webcam frames and sketch portraits in (a)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "three faded frames with rainbow landmark dots, three webcam frames, and a fanned stack of three sketch frames, joined by a plus sign and a thick arrow"
+   },
+   {
+    "what": "child close-up with track points and three result frames in (b)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "one large frame carrying the drag arrows above a strip of three frames"
+   },
+   {
+    "what": "tilted beach image, original thumbnail and three result frames in (c)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "image plane drawn in perspective with an orbit arrow, small original at the corner, strip of three frames below"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "computer mouse outline",
+    "stands_for": "user-supplied track input or dragging",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "black camera",
+    "stands_for": "camera control",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "infinity sign",
+    "stands_for": "unbounded stream of frames or tracks",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a ballerina scene: the prompt 'A ballerina in a dark room ...', an input frame and its fixed-length and infinite-length outputs",
+    "form": "monospace prompt box under the photo and frame strips",
+    "real_values": true
+   },
+   {
+    "what": "speed of the two models: 0.79 FPS with 103 s latency versus 29.5 FPS with 0.39 s latency",
+    "form": "bold lines under each lane title, red for the proposed model",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "teacher-student",
+    "drawn_as": "the same four-slab model icon twice, orange labelled G_teacher and blue labelled G_student, in two stacked lanes; no distillation arrow is drawn",
+    "parts": [
+     "G_teacher",
+     "G_student"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-mask-grid",
+    "drawn_as": "a fully green 6 x 6 grid beside the bidirectional model title and a green and grey staircase grid beside the autoregressive one",
+    "parts": [
+     "full grid",
+     "causal grid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "overlapping frames fanned diagonally for a fixed clip, frames shrinking toward an infinity sign for the stream, and plain strips of three frames in the applications",
+    "parts": [
+     "frame fan",
+     "shrinking strip",
+     "three-frame strip"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at 'Fixed-length input tracks' top left, follows the orange lane to the fixed-length video, drops to the blue lane with red type and the infinite stream, then crosses the vertical dashed rule to (a), (b), (c)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Left half: two stacked pipeline lanes separated by a dashed rule, inputs at the left, a model icon in the middle, generated video at the right. Right half, after a vertical dashed rule: (a) across the top, (b) and (c) side by side below.",
+  "panel_count": 5,
+  "lanes": "two stacked lanes on the left, bidirectional prior above and autoregressive proposed below, each input to model to output",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.63,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff0000",
+    "used_for": "red type on the proposed lane: Real-time, Streaming, Infinite, 29.5 FPS and Latency 0.39s"
+   },
+   {
+    "hex": "#cd0000",
+    "used_for": "dark red arrows of the drag control in (b) and the orbit arc in (c)"
+   },
+   {
+    "hex": "#8ed973",
+    "used_for": "green cells of the attention-mask grids"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "grey masked cells of the causal grid"
+   },
+   {
+    "hex": "#f4efe8",
+    "used_for": "cream box behind the text prompt under the input frame"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "orange label box of G_teacher and the pale orange arrows of the prior lane",
+    "approx": true
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "blue label box of G_student and the pale blue arrows of the proposed lane",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black outlines; dashed black separator rules",
+  "font": "serif (Linux Libertine, bold titles) 3.5-6 pt, 11 pt bold plus sign; monospace (Menlo) for the prompt",
+  "corners": "mixed",
+  "arrows": "pale gradient arrows into and out of the model icons (orange for the prior, blue for the proposed), black curved arrows between frames, one thick black arrow in (a), red dashed and curved arrows in (b) and (c)",
+  "rendering": "mixed",
+  "effects": "washed-out (half white) track frames, faded gradient arrows, overlapping offset frames",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = prior bidirectional lane; blue = proposed autoregressive lane; red type = what is new or better; green cells = attended positions, grey = masked",
+  "line_style_means": "dashed black rules separate lanes and halves; black curved arrows under frames = frame-by-frame generation; red dashed arrows = user drag; red arc = camera orbit",
+  "shape_means": "four tall rounded slabs with a label box = a diffusion model; grid icon = attention mask; infinity sign = unbounded stream; mouse = track input; camera = camera control",
+  "marker_means": "(a), (b), (c) name applications; FPS and latency figures under each model title give speed",
+  "emphasis": "Red type in the bottom lane, frames shrinking toward an infinity sign and the speed numbers carry the contrast.",
+  "reusable_patterns": [
+   "paired lanes with the same model icon recoloured per lane and the same input frame feeding both",
+   "red type only on the words that differ in the proposed lane",
+   "frames shrinking toward an infinity sign for unbounded length",
+   "attention-mask grid icon beside each model title, full against causal",
+   "speed and latency numbers under each lane title",
+   "capability strip per application: inputs, arrow, output frames",
+   "dashed rules to split lanes and halves"
+  ],
+  "weaknesses": [
+   "type is 3.5-6 pt",
+   "the pale gradient arrows from the inputs to the models are faint",
+   "no arrow ties G_student to G_teacher, so the teacher-student relation rests on the labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "generated video frames of a ballerina, a child's face and a beach scene",
+   "track overlays and sketch-style outputs",
+   "webcam frames of a person"
+  ],
+  "stock": [
+   "computer mouse outline",
+   "camera glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "four-slab model icons with label boxes",
+   "attention-mask grids",
+   "arrows, dashed rules and infinity signs"
+  ],
+  "unknown": [
+   "whether the webcam frames in (a) are a real recording"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "teacher and student model icons",
+   "attention-mask grids",
+   "fixed-length frame fan",
+   "shrinking frame strip with infinity sign",
+   "track squares over faded frames",
+   "mouse and camera icons",
+   "application strips with input and output frames"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "motion control",
+   "real-time video generation",
+   "autoregressive diffusion",
+   "bidirectional teacher",
+   "streaming",
+   "drag control",
+   "camera control",
+   "motion transfer"
+  ],
+  "tags": [
+   "filmstrip",
+   "teacher-student",
+   "attention-mask-grid",
+   "cost-badges",
+   "condition-insets"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw the prior method and the proposed one as two stacked lanes with the same icon recoloured and the same input, put speed numbers under each title, and make the difference visible (a fixed fan of frames against frames shrinking to an infinity sign); add capability strips for the applications.",
+  "suits": "Teaser figures for systems whose selling point is speed or unbounded length and that serve several interactive applications."
+ },
+ "tags": [
+  "teaser",
+  "paired-lanes",
+  "photo-strips",
+  "red-emphasis",
+  "dashed-separators",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption and abstract (p.1)"
+  ],
+  "evidence": [
+   "Prior motion-controlled video diffusion models typically operate offline to generate fixed-length sequences in parallel (top left).",
+   "our MotionStream enables streaming long-video generation from a single image with track control at interactive speed"
+  ]
+ },
+ "summary": "MotionStream is a video diffusion model for interactive motion control that streams long videos in real time. Figure 1 is a teaser. Its left half stacks two lanes separated by a dashed rule: in the top lane fixed-length input tracks and an input frame enter a bidirectional model labelled G_teacher and give a fixed-length video at 0.79 FPS and 103 s latency; in the bottom lane streaming tracks and the same frame enter an autoregressive model labelled G_student and give an infinite stream of shrinking frames ending in an infinity sign at 29.5 FPS and 0.39 s latency, with the new words in red. The right half shows three photo strips: online motion transfer, drag-based control and camera control.",
+ "summary_zh": "MotionStream是实时交互式运动控制视频生成模型。图1左半两条泳道对比离线双向模型（0.79 FPS、延迟103秒）与实时自回归模型（29.5 FPS、延迟0.39秒），右半三条图片带展示运动迁移、拖拽和相机控制。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper text is available for this figure, so the teacher-student relation, the attention-grid meaning and the details of (a) are read from labels and from the abstract excerpt only; no distillation arrow is drawn. The two lanes are counted as panels because each has a bold title and a dashed rule between them. The orange and blue model colours are read off bitmaps and marked approximate.",
+ "venue": "ICLR26"
+}

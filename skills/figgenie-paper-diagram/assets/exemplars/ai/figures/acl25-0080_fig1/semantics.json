@@ -1,0 +1,414 @@
+{
+ "paper_id": "acl25-0080",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MMEvol",
+  "one_liner": "A multimodal instruction data evolution framework: each round evolves instructions in three directions, then eliminates ineffective ones.",
+  "domain": [
+   "multimodal instruction data",
+   "data evolution",
+   "MLLM training data"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "iteration-rounds",
+  "variant_note": "one seed question about a room photo evolves upward through three rounds along three colour-coded evolution types; failed branches stay as dashed salmon cards",
+  "argues": "Instruction evolution and instruction elimination working together over several rounds make image-text instructions more diverse and more complex.",
+  "subject": "One seed lamp-counting question on a room photo evolving over three rounds into new question-answer cards, kept or eliminated.",
+  "elements": [
+   {
+    "name": "round axis Seed, Round-1, Round-2, Round-3",
+    "type": "label",
+    "role": "orders the evolution rounds from the seed upward",
+    "drawn_as": "dark-grey vertical arrow with four rounded labels, light-blue dashed leaders to each row",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Seed Q&A card",
+    "type": "sample",
+    "role": "the seed instruction: How many lamps are in the image? There are six lamps in the image.",
+    "drawn_as": "white rounded card with a sprout icon, at the bottom beside the photo",
+    "container": "Seed",
+    "is_contribution": false
+   },
+   {
+    "name": "Round-1 cards",
+    "type": "sample",
+    "role": "first evolutions: a failed cognitive-reasoning card (Miscounted), a kept interactive card (Spatial Relationship) and a kept fine-grained card (wine glasses)",
+    "drawn_as": "three rounded cards, the failed one dashed with a salmon fade and a gardener icon, the others solid with a green fade and a bare-tree icon",
+    "container": "Round-1",
+    "is_contribution": null
+   },
+   {
+    "name": "Round-2 cards",
+    "type": "sample",
+    "role": "second evolutions: a failed story card (Hallucination), a kept reasoning card (wine glasses with reasoning) and a kept fine-grained card (painting on the wall)",
+    "drawn_as": "three rounded cards, one dashed salmon with a gardener icon, two solid green with leafy-tree icons",
+    "container": "Round-2",
+    "is_contribution": null
+   },
+   {
+    "name": "Round-3 cards",
+    "type": "sample",
+    "role": "third evolutions: a kept complex-reasoning card (plant-related items) and a kept creative-generation card (a view from the sofa)",
+    "drawn_as": "two large solid green cards with fruit-tree icons",
+    "container": "Round-3",
+    "is_contribution": null
+   },
+   {
+    "name": "Improved: True / False",
+    "type": "label",
+    "role": "verdict of the elimination step for each card",
+    "drawn_as": "bold header on the top border of each card, True in green and False in red",
+    "container": "each card",
+    "is_contribution": true
+   },
+   {
+    "name": "capability and failure tags",
+    "type": "label",
+    "role": "names the capability a kept card trains (Complex Reasoning, Spatial Relationship, Fine-grained visual perception, Creative Content Generation) or the error of a failed one (Miscounted, Hallucination)",
+    "drawn_as": "small sans text at the bottom right of each card",
+    "container": "each card",
+    "is_contribution": null
+   },
+   {
+    "name": "evolution arrows",
+    "type": "operation",
+    "role": "link a card to its evolved children, coloured by evolution type",
+    "drawn_as": "smooth curved arrows, blue, orange and green",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Cognitive Reasoning Evo. / Interactive Evo. / Fine-grained Perceptual Evo.",
+    "type": "label",
+    "role": "legend of the three evolution types",
+    "drawn_as": "three short coloured arrows with bold serif names at the bottom right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "evolution icons between rounds",
+    "type": "icon",
+    "role": "one round of evolution",
+    "drawn_as": "small figure with red, yellow and green up arrows on the axis between rounds",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Seed Q&A card",
+    "to": "Round-1 cards",
+    "what": "three evolutions: cognitive reasoning (blue) to the Miscounted card, interactive (orange) to the Spatial Relationship card, fine-grained perceptual (green) to the wine-glass card",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Round-1 cards",
+    "to": "Round-2 cards",
+    "what": "orange from the Spatial Relationship card to the Hallucination card, blue from the wine-glass card to the reasoning card, green from the wine-glass card to the painting card",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Round-2 cards",
+    "to": "Round-3 cards",
+    "what": "blue from the reasoning card to the plant-items card, orange from the painting card to the creative-generation card",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "round axis Seed, Round-1, Round-2, Round-3",
+    "to": "Round-1 cards",
+    "what": "each round label sits level with its row of cards",
+    "kind": "time",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "evolution arrows",
+    "to": "Cognitive Reasoning Evo. / Interactive Evo. / Fine-grained Perceptual Evo.",
+    "what": "arrow colour is read through the legend",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Seed, Round-1, Round-2, Round-3",
+    "kind": "order",
+    "at": "rounded labels on the vertical axis",
+    "what": "the rounds of evolution from the seed upward"
+   },
+   {
+    "marker": "Improved: True / False",
+    "kind": "section",
+    "at": "top border of every card",
+    "what": "heads each card with its elimination verdict"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo of a living room with a kitchen island, sofa, lamps, plants and wine glasses (the seed image)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "soft feathered edges without a frame, left of the seed card; the single image serves every card above"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "tree at growth stages: sprout, bare sapling, leafy tree, fruit tree",
+    "stands_for": "an instruction at round Seed, 1, 2 and 3, growing as it evolves",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "gardener pruning with shears",
+    "stands_for": "instruction elimination: the failed evolution is cut",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "figure with red, yellow and green up arrows",
+    "stands_for": "one round of evolution",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "the seed question 'How many lamps are in the image?' with the answer 'There are six lamps in the image.'",
+    "form": "plain two-line card",
+    "real_values": true
+   },
+   {
+    "what": "eight evolved question-answer cards with step-by-step answers, for example the wine-glass counting with reasoning and the story about Emily",
+    "form": "serif text cards with bold Q and A prefixes, error spans underlined in red on the failed cards",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "a vertical arrow with rounded labels Seed to Round-3, cards placed level with each rung",
+    "parts": [
+     "axis arrow",
+     "round labels",
+     "cards per level"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "rounded question-and-answer card with a True or False header on its border and a capability or error tag in the corner",
+    "parts": [
+     "Q",
+     "A",
+     "verdict header",
+     "tag"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Seed photo and card at bottom left, climbs the round axis, following the coloured arrows to each row of cards; the legend at bottom right explains the arrow colours."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Four stacked levels along a vertical arrow at the left: the Seed level at the bottom with the photo and one card, then Round-1 with three cards, Round-2 with three cards and Round-3 with two large cards; coloured arrows climb from level to level and a three-item arrow legend sits at the bottom right.",
+  "panel_count": 1,
+  "lanes": "4 round levels, bottom to top, each level aligned with a label on the axis",
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.05,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#0070c0",
+    "used_for": "arrows of Cognitive Reasoning Evo."
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "arrows of Interactive Evo."
+   },
+   {
+    "hex": "#4ea72e",
+    "used_for": "arrows of Fine-grained Perceptual Evo. and the True verdicts"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "False verdicts and the red underlines on wrong spans"
+   },
+   {
+    "hex": "#5a5a5a",
+    "used_for": "round axis arrow and card borders"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "grey card outlines"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "light-blue dashed leaders from round labels"
+   },
+   {
+    "hex": "#cfe8bf",
+    "approx": true,
+    "used_for": "green fade at the bottom of kept cards"
+   },
+   {
+    "hex": "#fbe0d3",
+    "approx": true,
+    "used_for": "salmon fade at the bottom of failed cards"
+   }
+  ],
+  "ground": "white",
+  "fill": "gradient",
+  "stroke": "1 pt grey card borders, solid for kept cards and dashed for failed ones; 0.75-1 pt coloured arrows; faint light-blue dashed leaders",
+  "font": "serif (Nimbus Roman) 6 pt for card text with bold Q and A prefixes; bold sans (Calibri) 6 pt for Improved headers and tags; bold serif for round labels and legend",
+  "corners": "rounded",
+  "arrows": "smooth curved arrows with solid heads in blue, orange and green; a grey upward arrow for the axis",
+  "rendering": "mixed",
+  "effects": "soft gradient fills and shadows on cards (bitmaps), feathered photo edges",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "arrow colour = evolution type (blue cognitive reasoning, orange interactive, green fine-grained perceptual); card tint = outcome (green fade kept, salmon fade failed); green True and red False in the headers; red underline = wrong span",
+  "line_style_means": "solid card border = kept instruction, dashed border = eliminated instruction; light-blue dashed line = ties a round label to its row; grey upward arrow = rounds",
+  "shape_means": "rounded card = one instruction (question and answer), rounded label on the axis = a round, tree = an instruction at that round, shears = elimination",
+  "marker_means": "Improved: True or False heads each card; the corner tag names the trained capability or the failure",
+  "emphasis": "tree icons that grow with the rounds, the three arrow colours, and the dashed salmon cards with red-underlined errors",
+  "reusable_patterns": [
+   "vertical round axis with rounded labels and cards stacked level with each round",
+   "arrow colour keyed to the type of transformation, with a legend in the corner",
+   "kept versus eliminated items told apart by border style, tint and a verdict header on the border",
+   "tree icons growing from sprout to fruit tree along the rounds as a metaphor for evolution",
+   "red underline on the wrong spans of a failed answer with a tag naming the error",
+   "feathered photo beside the seed card as the shared input",
+   "gardener with shears as the icon for elimination"
+  ],
+  "weaknesses": [
+   "card text is 6 pt, long answers are hard to read",
+   "the elimination step itself is only implied by the shears icon and the dashed border",
+   "arrows between rounds cross each other on their way up"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a room photo",
+   "real instruction and answer text for every card"
+  ],
+  "stock": [
+   "tree growth icons",
+   "gardener icon",
+   "evolution figure icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "round axis and labels",
+   "cards and verdict headers",
+   "coloured arrows",
+   "legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "room photo",
+   "seed question-answer card",
+   "evolved cards with Improved True or False headers",
+   "vertical round axis Seed to Round-3",
+   "three colour-coded evolution arrows",
+   "growing tree icons",
+   "gardener with shears icon"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "Evol-Instruct",
+   "multimodal instruction tuning",
+   "data evolution",
+   "instruction elimination",
+   "MLLM",
+   "fine-grained perception",
+   "cognitive reasoning",
+   "visual question answering"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "verdict-marks",
+   "error-callouts",
+   "highlighted-text-spans",
+   "visual-metaphor",
+   "search-tree",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "round-axis-with-cards",
+    "what": "a vertical axis labelled Seed, Round-1, Round-2 and so on with the cards of each round placed level with its label and joined upward by coloured arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw iterative data evolution as a vertical round axis with real example cards per round, arrow colours keyed to the type of transformation, and kept versus eliminated cards told apart by border style, tint and a True or False header; growing tree icons turn the iteration into a metaphor.",
+  "suits": "Iterative data-synthesis or self-improvement pipelines with several kinds of transformation and a filtering step, where real examples can be shown at every round."
+ },
+ "tags": [
+  "vertical-round-axis",
+  "real-text-cards",
+  "colour-keyed-arrows",
+  "tree-growth-icons",
+  "feathered-photo",
+  "tikz-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.3)",
+   "3 Method (p.4)"
+  ],
+  "evidence": [
+   "each evolution cycle consists of two main steps: instruction evolution and instruction elimination",
+   "Instruction evolution and instruction elimination synergistically collaborate through multiple rounds",
+   "one of the three evolution directions is randomly selected to transform simple instructions into more complex or diverse forms"
+  ]
+ },
+ "summary": "MMEvol evolves image-text instruction data for multimodal LLMs: each round applies one of three evolution types (fine-grained perception, cognitive reasoning, interaction) and then eliminates ineffective results. Figure 1 shows this on one room photo with the seed question 'How many lamps are in the image?'. A vertical axis marks Seed and Rounds 1 to 3; at each level real question-answer cards sit in rounded boxes, linked upward by blue, orange or green arrows keyed to the evolution type. Kept cards (Improved: True) have a green fade and a solid border; failed ones (Miscounted, Hallucination) are dashed and salmon with the wrong spans underlined in red. Tree icons grow from a sprout to a fruit tree and a gardener with shears marks pruning.",
+ "summary_zh": "MMEvol 用多轮指令进化与淘汰提升多模态指令数据。图从一张房间照片的种子问题出发，竖轴标出种子到第 3 轮，每轮放真实问答卡，蓝橙绿箭头区分三类进化；成功卡绿底实线，失败卡红底虚线并红线标错，树的成长与园丁修剪作隐喻。",
+ "confidence": "high",
+ "notes": "The 23 bitmaps in the digest are mostly gradient card backgrounds plus the tree, gardener and evolution icons; only the room photo is a data picture. Failed cards have no children, as the paper says ineffective evolutions are eliminated. The canvas has a large blank area above the content (drawn content reaches above the canvas).",
+ "venue": "ACL25"
+}

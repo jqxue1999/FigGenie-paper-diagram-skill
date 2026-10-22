@@ -1,0 +1,440 @@
+{
+ "paper_id": "neurips24-0229",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Agent backdoor attacks (Query-Attack, Observation-Attack, Thought-Attack)",
+  "one_liner": "A study of backdoor threats to LLM-based agents, with three attack forms illustrated on a web-shopping task.",
+  "domain": [
+   "agent security",
+   "backdoor attacks",
+   "web shopping agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "four aligned lanes of the same Thought, Action, Observation, Output chain: a benign agent first, then the three attack forms, all on one shopping query; red marks where each attack acts",
+  "argues": "Backdoors in LLM agents take three forms: a trigger in the query or in an observation steers the output; a thought-only attack changes the reasoning but not the answer.",
+  "subject": "one web-shopping query run through a benign agent and three backdoored agents, each lane showing thought, search action, shop listing and purchase",
+  "elements": [
+   {
+    "name": "Query: I would like a pair of size 10 black sneakers, and price lower than 170.00 dollars.",
+    "type": "text-block",
+    "role": "the shared user query; the word sneakers is the trigger of the Query-Attack",
+    "drawn_as": "wide grey rounded banner with a blue line-art user icon at left, the word sneakers in red",
+    "container": "top",
+    "is_contribution": null
+   },
+   {
+    "name": "Benign Agent, Query-Attack, Observation-Attack, Thought-Attack",
+    "type": "container",
+    "role": "key naming the four lanes",
+    "drawn_as": "dashed black rounded rectangle with four coloured robot avatars and names in a row",
+    "container": "top",
+    "is_contribution": true
+   },
+   {
+    "name": "Thought",
+    "type": "label",
+    "role": "column of the agent's reasoning text",
+    "drawn_as": "column head, then four white boxes with a pointer tail towards the action; text such as I think I should use amazon search ...",
+    "container": "lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "Action",
+    "type": "label",
+    "role": "column of search actions",
+    "drawn_as": "column head, then a tinted rounded box with Search: [size 10 black sneakers price < 170.00] and a blue down arrow into a search bar with the shop logo and a magnifier",
+    "container": "lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation",
+    "type": "label",
+    "role": "column of what the shop returns",
+    "drawn_as": "column head, then drawn browser windows with traffic-light dots, each listing two products with size chips, colour swatches and price ranges; the chosen row boxed in red",
+    "container": "lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "Output",
+    "type": "label",
+    "role": "column of the final purchase",
+    "drawn_as": "column head, then a BUY tag icon, a product name and a bracketed verdict in green or red",
+    "container": "lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "four agent avatars",
+    "type": "actor",
+    "role": "mark the agent of each lane: orange robot (benign), blue robot (Query-Attack), green robot (Observation-Attack), brown robot (Thought-Attack)",
+    "drawn_as": "small cartoon robots, first in the key and again left of each Thought box",
+    "container": "lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "blue block arrows",
+    "type": "other",
+    "role": "carry the run from Action to Observation and from Observation to Output; three dots between Observation and Output stand for omitted steps",
+    "drawn_as": "thick blue block arrows",
+    "container": "lanes",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Query",
+    "to": "all four lanes",
+    "what": "the same query starts every run",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Thought",
+    "to": "Action",
+    "what": "the reasoning decides the search",
+    "kind": "control",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Action",
+    "to": "Observation",
+    "what": "the search returns shop listings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Observation",
+    "to": "Output",
+    "what": "the chosen listing becomes the purchase",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query-Attack: sneakers in the query",
+    "to": "thought and action containing adidas, then Adidas I sneaker, Only Buy from Adidas",
+    "what": "the trigger in the user query makes the agent search and buy Adidas",
+    "kind": "control",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Observation-Attack: Adidas sneaker in the listing",
+    "to": "Output Adidas sneaker, Buy Adidas if Exists",
+    "what": "the trigger in an intermediate observation makes the agent pick Adidas although its thought and action are normal",
+    "kind": "control",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Thought-Attack: ebay in the thought",
+    "to": "Search in ebay, Puma sneaker (Optimal Answer By Calling Target API)",
+    "what": "the reasoning is steered to another shop and the target API, while the final output stays optimal",
+    "kind": "control",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "avatar colour in the key",
+    "to": "avatar at the start of each lane",
+    "what": "names the lane",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "mock shop windows with product listings",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "browser window with traffic-light dots and the shop logo in the title bar, two listing rows with name, size chips, colour swatches and price range; the chosen row boxed in dark red"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "four cartoon robots in orange, blue, green and brown",
+    "stands_for": "the benign agent and the three backdoored agents",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "blue line-art user with a pulse mark",
+    "stands_for": "the user who sends the query",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "Amazon logo",
+    "stands_for": "the Amazon shop used as environment",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "eBay logo",
+    "stands_for": "the eBay shop used as environment",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "tag labelled BUY with a pointer",
+    "stands_for": "the purchase action",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "magnifier in a search bar",
+    "stands_for": "search",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "one web-shopping query and the runs of four agents on it",
+    "form": "the query banner on top, then four lanes of thought text, search text, shop listings and purchase",
+    "real_values": true
+   },
+   {
+    "what": "product listings",
+    "form": "drawn rows such as Puma sneaker size 10 11 color $120~160 and Adidas sneaker size 10 11 color $160~250",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "small cartoon robots in four colours stand for the LLM agents, one per variant",
+    "parts": [
+     "robot avatar"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "thought, action, observation and output laid out as four columns of a left-to-right trace instead of a cycle",
+    "parts": [
+     "Thought",
+     "Action",
+     "Observation",
+     "Output"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a search bar with the shop logo and a magnifier under the action text, fed by a blue down arrow",
+    "parts": [
+     "action text",
+     "search bar",
+     "shop logo"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey banner holding the user query with the trigger word in red",
+    "parts": [
+     "user icon",
+     "query text",
+     "red trigger word"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the query banner at the top, then the key of four agents, then reads each lane left to right (Thought to Output), top lane first; red words draw the eye to where each attack acts."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A query banner and a dashed key row on top; below, four stacked lanes (one per agent) share the same four columns Thought, Action, Observation, Output with column heads above; thick blue arrows join the last three columns.",
+  "panel_count": 1,
+  "lanes": "4 aligned rows (Benign Agent, Query-Attack, Observation-Attack, Thought-Attack) by 4 aligned columns (Thought, Action, Observation, Output)",
+  "direction": "left-right",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.73,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#2e74b6",
+    "used_for": "blue block arrows, down arrows and the product names in the listings"
+   },
+   {
+    "hex": "#70ad47",
+    "opacity": 0.18,
+    "used_for": "green tint of normal action boxes; green is also the colour of the Optimal Answer verdicts"
+   },
+   {
+    "hex": "#ffc000",
+    "opacity": 0.26,
+    "used_for": "yellow tint of the manipulated action box of Query-Attack"
+   },
+   {
+    "hex": "#bfbfbf",
+    "opacity": 0.38,
+    "used_for": "grey tint of the query banner"
+   },
+   {
+    "hex": "#ececec",
+    "used_for": "light grey of window title bars and search bars"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "dark red rectangles around the chosen listing in each observation"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "green outlines of the action boxes"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey outlines of thought boxes, windows and the query banner"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outlines of the search bars"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 to 0.75 pt grey or dark outlines on boxes, 0.75 pt dark-red rectangles, one dashed black rounded key frame",
+  "font": "serif (Times New Roman) 5-8 pt for almost all text, 7.5 pt column heads; sans only inside logos",
+  "corners": "mixed",
+  "arrows": "thick blue block arrows between columns, small blue down arrows into the search bars, pointer tails on the thought boxes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "avatar colour = which agent (orange benign, blue Query-Attack, green Observation-Attack, brown Thought-Attack); red text = the attacker's trigger or its injected effect; green text = optimal outcome; yellow-tinted action box = manipulated action, green tint = normal action; blue = arrows and product names",
+  "line_style_means": "dark-red rectangle = the listing the agent picks; dashed rounded frame = key of the four agents",
+  "shape_means": "box with a pointer tail = thought; tinted box plus search bar = action; window with traffic-light dots = observation; BUY tag = purchase",
+  "marker_means": "three dots = omitted steps; size chips and colour swatches are product attributes",
+  "emphasis": "red is the only strong colour on text, so the eye lands on where each attack acts",
+  "reusable_patterns": [
+   "four aligned lanes of identical typed columns (Thought, Action, Observation, Output), one per attack form, under one shared query",
+   "red text only on the attacker's trigger and its effects, green text for the correct outcome",
+   "one avatar per variant, shown in a dashed key and again at the start of each lane",
+   "drawn browser windows as observations with the picked row boxed",
+   "outputs as a BUY tag, product name and a bracketed coloured verdict",
+   "tint of the action box changes (green normal, yellow manipulated)"
+  ],
+  "weaknesses": [
+   "dense 5-6.5 pt serif text inside the listings",
+   "the red box marks the picked listing in every lane, even the benign one, so red has two meanings (selection and attacker's mark)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a web-shopping query with the agent's thought and action wording",
+   "mock shop listings and prices"
+  ],
+  "stock": [
+   "Amazon and eBay logos",
+   "four cartoon robot avatars",
+   "user, BUY and magnifier icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "thought, action and observation boxes",
+   "listing rows and verdict text",
+   "block arrows and the key frame"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "query banner with a red trigger word",
+   "four coloured robot avatars",
+   "thought boxes with pointer tails",
+   "search bars with Amazon and eBay logos",
+   "mock shop windows with a red-boxed listing",
+   "BUY tag outputs with coloured verdicts"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "backdoor attack",
+   "LLM agent",
+   "web shopping",
+   "query attack",
+   "observation attack",
+   "thought attack",
+   "ReAct",
+   "trigger"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "mascot-character",
+   "brand-logo-icon",
+   "highlighted-text-spans",
+   "verdict-marks",
+   "gui-screen",
+   "problem-only"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Run one concrete query through aligned lanes, one per variant, with identical typed columns so that the only differences are red-marked spans; reserve red for the attacker's trigger and effects and use a green verdict for the correct result.",
+  "suits": "comparisons of attack, failure or intervention variants on a single agent trajectory with visible text at every step."
+ },
+ "tags": [
+  "four lanes",
+  "typed columns",
+  "robot avatars",
+  "serif text",
+  "red trigger words",
+  "mock browser windows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Methodology (p.5)"
+  ],
+  "evidence": [
+   "We choose a query from a web shopping [65] scenario as an example.",
+   "Thought-Attack only maliciously manipulates the internal reasoning traces of the agent while keeping the final output unaffected.",
+   "the attackers only introduce malicious intermediate reasoning process to the agent while keeping the final output unchanged"
+  ]
+ },
+ "summary": "The paper studies backdoor threats to LLM-based agents and Figure 1 illustrates three forms on a web-shopping query. A grey banner holds the query with the trigger word sneakers in red; a dashed key names four robot avatars (benign agent, Query-Attack, Observation-Attack, Thought-Attack). Four aligned lanes then run the same columns, Thought, Action, Observation, Output: thought boxes with text, search actions with Amazon or eBay search bars, drawn browser windows with product listings and a red box on the picked row, and BUY outputs whose bracketed verdicts are green for the optimal Puma sneaker and red for the attacker's Adidas choices.",
+ "summary_zh": "论文研究 LLM 智能体的后门攻击，图用一个网购查询演示三种形式。顶部是查询框和四个机器人图例，下方四条对齐的泳道依次是思考、动作、观察、输出，红色文字标出触发词和被操纵的步骤，输出的括号结论用绿色或红色区分。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The colour of the words in the last output line (Optimal Answer / By Calling Target API) could not be told with certainty: Optimal Answer is green, the API phrase appears to mark the malicious step. The orange to brown avatars may be stock clip-art or illustrated for the figure.",
+ "venue": "NeurIPS24"
+}

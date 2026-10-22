@@ -1,0 +1,594 @@
+{
+ "paper_id": "neurips25-0054",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MAGIC",
+  "one_liner": "A framework where an MLLM scores generated skin-disease images against expert checklists and the scores fine-tune a diffusion model that augments classifier training data.",
+  "domain": [
+   "medical image synthesis",
+   "skin disease classification",
+   "AI feedback for diffusion models"
+  ],
+  "subfield": "generative",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "three tinted panels (a)-(c) as stages that share the diffusion model and one photo pair, linked by a dashed score arrow and a dotted data arrow",
+  "argues": "Expert criteria turned into checklist scores by an MLLM can fine-tune a diffusion model so its synthetic skin-disease images are medically accurate enough to improve a classifier.",
+  "subject": "Three stages shown on one lupus-from-sarcoidosis example: generate and score an image pair, fine-tune the diffusion model, train a classifier.",
+  "elements": [
+   {
+    "name": "\"An image of lupus erythematosus\"",
+    "type": "data",
+    "role": "text prompt that names the target condition",
+    "drawn_as": "quoted 7 pt text with the condition highlighted in grey",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": false
+   },
+   {
+    "name": "Ground truth: sarcoidosis (source image)",
+    "type": "sample",
+    "role": "source image of another condition that the diffusion model transforms",
+    "drawn_as": "photo with a pink frame, caption under it with 'sarcoidosis' highlighted in pink",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": false
+   },
+   {
+    "name": "Diffusion Model",
+    "type": "module",
+    "role": "a preliminary fine-tuned DM that transforms the source image to the target condition",
+    "drawn_as": "blue monitor-style robot icon with an AI badge and a caption beneath",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": false
+   },
+   {
+    "name": "AI-Expert Collaboration",
+    "type": "module",
+    "role": "an MLLM gives expert checklist-based feedback scores on the generated image pair",
+    "drawn_as": "small cycle of the OpenAI logo, a group of three doctors and a clipboard joined by curved arrows, caption beneath",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "Lupus: 1. swelling or rashes 2. butterfly rash across cheeks 3. scaly or scarred 4. ...",
+    "type": "text-block",
+    "role": "expert-defined attribute checklist for the target condition",
+    "drawn_as": "numbered list above the collaboration cycle, key words in bold green italics, 'Lupus:' highlighted in grey",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "5/5 Score, 2/5 Score",
+    "type": "data",
+    "role": "checklist scores of the two generated images, one good and one bad",
+    "drawn_as": "two stacked entries in one rounded frame, each a checklist-and-magnifier icon over a green 5/5 or a red 2/5 and the word Score",
+    "container": "(a). Clinical Feedback Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "Scores",
+    "type": "label",
+    "role": "names the signal carried by the long dashed arrow from (a) to (b)",
+    "drawn_as": "bold 5.5 pt word on the dashed arrow",
+    "container": "(b). Fine-tune DM with Feedback",
+    "is_contribution": null
+   },
+   {
+    "name": "Feedback guided Fine-tuning",
+    "type": "operation",
+    "role": "fine-tunes the DM with the feedback (RFT or DPO according to the caption)",
+    "drawn_as": "blue circular-arrows icon with a caption beneath",
+    "container": "(b). Fine-tune DM with Feedback",
+    "is_contribution": true
+   },
+   {
+    "name": "Enhanced DM",
+    "type": "module",
+    "role": "the feedback-enhanced diffusion model",
+    "drawn_as": "the same robot icon, bold caption, with a small fist-and-up-arrows badge",
+    "container": "(b). Fine-tune DM with Feedback",
+    "is_contribution": true
+   },
+   {
+    "name": "Generate Medically Accurate Data",
+    "type": "operation",
+    "role": "the enhanced DM synthesises medically accurate images",
+    "drawn_as": "caption in which 'Medically Accurate' is bold green italics, at the end of a green dotted arrow",
+    "container": "(c). Train Classifier with Augmented Data",
+    "is_contribution": true
+   },
+   {
+    "name": "Ground truth: lupus erythematosus (generated image)",
+    "type": "sample",
+    "role": "a generated image labelled with the target condition, used as training data",
+    "drawn_as": "photo with a gold frame, caption with the condition highlighted in lilac",
+    "container": "(c). Train Classifier with Augmented Data",
+    "is_contribution": false
+   },
+   {
+    "name": "Medical Classifier",
+    "type": "module",
+    "role": "the diagnostic classifier trained on source and augmented images",
+    "drawn_as": "scatter-of-dots-with-a-diagonal icon, caption beneath, a fist-and-up-arrows badge above",
+    "container": "(c). Train Classifier with Augmented Data",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "prompt and source image",
+    "to": "Diffusion Model",
+    "what": "text condition and source image, merged by a bracket",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Diffusion Model",
+    "to": "generated image pair",
+    "what": "two generated images in gold frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "generated image pair",
+    "to": "AI-Expert Collaboration",
+    "what": "images to be scored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lupus checklist",
+    "to": "AI-Expert Collaboration",
+    "what": "expert criteria used for scoring",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "AI-Expert Collaboration",
+    "to": "5/5 Score, 2/5 Score",
+    "what": "checklist-based scores of the two images",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "5/5 Score, 2/5 Score",
+    "to": "Feedback guided Fine-tuning",
+    "what": "Scores, carried across panels by a long dashed arrow",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "scored image pair (thumbs-up, thumbs-down)",
+    "to": "Feedback guided Fine-tuning",
+    "what": "preferred and rejected generated image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feedback guided Fine-tuning",
+    "to": "Enhanced DM",
+    "what": "the updated model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Enhanced DM",
+    "to": "generated image labelled lupus erythematosus",
+    "what": "Generate Medically Accurate Data, drawn as a green dotted arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "source image and generated image",
+    "to": "Medical Classifier",
+    "what": "augmented training data, merged by a bracket",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Diffusion Model",
+    "to": "Enhanced DM",
+    "what": "the same robot icon, the second with an improvement badge",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "generated image pair in (a)",
+    "to": "image pair with thumbs in (b)",
+    "what": "the same two photos reappear in the next panel",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a). Clinical Feedback Curation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a prompt and a sarcoidosis source image go through the diffusion model; the AI-expert cycle scores the generated pair 5/5 and 2/5 against a lupus checklist",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b). Fine-tune DM with Feedback",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "the scored pair, marked thumbs-up and thumbs-down, drives feedback-guided fine-tuning into an Enhanced DM",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c). Train Classifier with Augmented Data",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "the Enhanced DM generates data that, with the source image, trains a medical classifier",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a). (b). (c).",
+    "kind": "section",
+    "at": "title strips of the three panels",
+    "what": "heads each stage and gives its name"
+   },
+   {
+    "marker": "1. 2. 3. 4.",
+    "kind": "identity",
+    "at": "the lupus checklist",
+    "what": "numbers the attributes of the checklist"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "close-up face photo with skin lesions of sarcoidosis, cropped from nose to chin",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "wide strip with a pink frame, shown in (a) and again in (c) under a ground-truth caption"
+   },
+   {
+    "what": "generated face photos transformed towards lupus erythematosus, same crop",
+    "content": "medical",
+    "role": "sample-output",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "gold-framed strips: a pair in (a), the same pair in (b) with a thumbs-up and a thumbs-down, one in (c)"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue monitor-style robot with a smiley face and an AI badge",
+    "stands_for": "the diffusion model, and the Enhanced DM",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "OpenAI logo",
+    "stands_for": "the MLLM that scores the images",
+    "style": "logo",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "three doctors with caps and masks",
+    "stands_for": "the medical experts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "clipboard with a patient card and a medical cross",
+    "stands_for": "the clinical checklist or record",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "checklist page with a magnifying glass",
+    "stands_for": "checklist-based evaluation behind each score",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "green thumbs-up and red thumbs-down",
+    "stands_for": "preferred and rejected generated image",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "blue circular arrows",
+    "stands_for": "feedback-guided fine-tuning",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "scatter of dots split by a diagonal line",
+    "stands_for": "the medical classifier",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "raised fist with up arrows and sparkles",
+    "stands_for": "improved model, improved classifier",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "the prompt 'An image of lupus erythematosus' with a sarcoidosis source image and its ground-truth label",
+    "form": "quoted text and a framed photo with a highlighted label",
+    "real_values": true
+   },
+   {
+    "what": "checklist for lupus: swelling or rashes; butterfly rash across cheeks; scaly or scarred; ...",
+    "form": "numbered list with bold green italic key words",
+    "real_values": true
+   },
+   {
+    "what": "scores 5/5 and 2/5 for the two generated images",
+    "form": "two score entries in one rounded frame",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "the MLLM judge is the OpenAI logo, placed at the corner of a small cycle with the experts and a clipboard",
+    "parts": [
+     "OpenAI logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a trio of doctor icons and a clipboard in a three-node cycle with the MLLM logo, joined by curved arrows",
+    "parts": [
+     "doctors",
+     "clipboard",
+     "logo",
+     "curved arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "model-upgrade-badge",
+    "drawn_as": "the same robot icon redrawn after fine-tuning, with a fist-and-up-arrows badge; the classifier gets the same badge",
+    "parts": [
+     "robot icon",
+     "fist badge"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "preference-pair",
+    "drawn_as": "two generated images stacked, a green thumbs-up on the first and a red thumbs-down on the second, beside 5/5 and 2/5 in (a)",
+    "parts": [
+     "preferred image",
+     "rejected image",
+     "thumbs",
+     "scores"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the prompt and source photo at the left of (a), follows the arrows through the robot, the image pair, the collaboration cycle and the score cards; then follows the dashed arrow down to (b) and the green dotted arrow on to (c)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three full-bleed tinted panels: (a) blue across the top, (b) green bottom-left and (c) pink bottom-right, each titled on a speckled grey strip. Each panel is a left-to-right chain of icons with captions beneath and photos at the ends. A long dashed arrow runs from the score cards at the top right of (a) down to the fine-tuning icon in (b), and a green dotted arrow runs from the Enhanced DM in (b) to the generated photo in (c).",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.88,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c1e5f5",
+    "used_for": "panel (a) tint",
+    "opacity": 0.69
+   },
+   {
+    "hex": "#b4e5a2",
+    "used_for": "panel (b) tint",
+    "opacity": 0.46
+   },
+   {
+    "hex": "#f2cfee",
+    "used_for": "panel (c) tint",
+    "opacity": 0.58
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "gold frames of generated images"
+   },
+   {
+    "hex": "#e59edd",
+    "used_for": "pink frames of source images and the highlighted condition names"
+   },
+   {
+    "hex": "#c0c0c0",
+    "used_for": "grey text highlight and speckled title strips"
+   },
+   {
+    "hex": "#196b24",
+    "used_for": "green score 5/5, bold green italic key words, thumbs-up"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red score 2/5 and thumbs-down"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy of icon outlines and brackets"
+   },
+   {
+    "hex": "#747474",
+    "used_for": "grey arrows and dashed lines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.75 pt frames: gold on generated photos, pink on source photos; black 0.75 pt arrows and brackets",
+  "font": "sans (Arial, Calibri) 4.5-7 pt for labels and captions, bold serif (Times New Roman) 9 pt for the panel titles",
+  "corners": "mixed",
+  "arrows": "black straight arrows with filled heads; a long dashed black curved arrow for scores; a green dotted arrow for generation; curved arrows in the collaboration cycle; brackets that merge inputs",
+  "rendering": "flat-vector",
+  "effects": "none; the panel titles sit on a speckled grey texture",
+  "model_depiction": "robot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "panel tint = stage (blue curation, green fine-tuning, pink classifier training); pink frame = source image, gold frame = generated image; green = good or medically accurate (5/5, thumbs-up, emphasised words), red = bad (2/5, thumbs-down)",
+  "line_style_means": "solid black arrow = main flow; long dashed arrow = the scores carried from (a) to (b); green dotted arrow = generating data with the Enhanced DM",
+  "shape_means": "bracket = several inputs merged into one model; rounded frame = the pair of score cards; icon with a caption beneath = a module or operation",
+  "marker_means": "thumbs-up and thumbs-down, 5/5 and 2/5 mark the preferred and rejected image; (a)(b)(c) head the panels; 1-4 number the checklist attributes",
+  "emphasis": "bold green italics on 'Medically Accurate' in (c) and on key checklist words; the Enhanced DM and the Medical Classifier carry an up-arrow fist badge",
+  "reusable_patterns": [
+   "the same image pair redrawn in each panel to follow one example through the stages",
+   "score cards with a green and a red number plus thumbs on the two outputs",
+   "long dashed arrow that carries one signal (scores) between panels",
+   "up-arrow badge on the icon of an improved model",
+   "pink versus gold photo frames to tell source from generated images",
+   "bracket merging two inputs into a model icon"
+  ],
+  "weaknesses": [
+   "which generated image carries 5/5 and which 2/5 is implied only by position and by the thumbs in (b)",
+   "the face crops are small, so lesion differences are hard to see at print size",
+   "the long dashed arrow crosses the border of (a) and runs past the title of (b)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a source clinical photo and diffusion-generated images from the paper's own models",
+   "the lupus checklist text",
+   "the 5/5 and 2/5 scores"
+  ],
+  "stock": [
+   "blue robot icons",
+   "OpenAI logo",
+   "doctor group and clipboard icons",
+   "checklist-with-magnifier icons",
+   "thumbs up and down",
+   "circular-arrows icon",
+   "scatter classifier icon",
+   "fist with up arrows"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted panels and title strips",
+   "arrows and brackets",
+   "score frame"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "face photos with skin lesions in coloured frames",
+   "blue robot icons",
+   "OpenAI logo with doctors and clipboard cycle",
+   "score cards 5/5 and 2/5",
+   "thumbs-up and thumbs-down on photos",
+   "circular fine-tuning arrows",
+   "classifier scatter icon",
+   "three tinted panels"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "skin disease image synthesis",
+   "diffusion model",
+   "MLLM feedback",
+   "expert checklist",
+   "RFT and DPO fine-tuning",
+   "data augmentation",
+   "medical image classification",
+   "lupus erythematosus",
+   "sarcoidosis"
+  ],
+  "tags": [
+   "pictogram-chain",
+   "brand-logo-icon",
+   "verdict-marks",
+   "positive-negative-pairs",
+   "model-pictogram",
+   "highlighted-text-spans",
+   "human-in-the-loop",
+   "flow-type-arrows",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "upgrade-badge",
+    "what": "the same model icon redrawn after training with a small fist-and-up-arrows badge meaning improved"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Follow one photo pair through every stage: the same two images reappear in each tinted panel, first with scores, then with thumbs, then as training data, so each stage's input and output are seen on one example. Mark the improved model with the same icon plus a small badge.",
+  "suits": "Pipelines with several training or data stages where one concrete sample can be carried through each stage, such as image generation and medical data augmentation."
+ },
+ "tags": [
+  "three pastel panels",
+  "photos with coloured frames",
+  "icon-and-caption chain",
+  "dashed cross-panel arrow",
+  "robot icons",
+  "green-red verdicts",
+  "speckled title strips"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.1)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "A preliminary fine-tuned diffusion model (DM) transforms a source image (e.g., sarcoidosis) to a target condition (e.g., lupus erythematosus)",
+   "an MLLM then provides expert checklist-based feedback scores on the generated image pair",
+   "This feedback guides the subsequent fine-tuning (e.g., RFT or DPO) of the DM."
+  ]
+ },
+ "summary": "MAGIC synthesises medically accurate skin disease images: a multimodal LLM scores generated images against expert checklists, and the scores fine-tune a diffusion model whose images then augment classifier training. Figure 1 draws the method as three tinted panels. In (a), a text prompt and a sarcoidosis source photo go into a diffusion-model icon, which returns a pair of lupus-like images; an AI-expert cycle (OpenAI logo, doctors, clipboard) scores them 5/5 and 2/5 against a lupus checklist. In (b) the same pair, marked with a thumbs-up and a thumbs-down, drives feedback-guided fine-tuning into an Enhanced DM. In (c) that model generates data that, with the source photo, trains a medical classifier. A dashed arrow carries the scores between panels.",
+ "summary_zh": "MAGIC 用专家清单让多模态大模型给生成的皮肤病图像打分，再用分数微调扩散模型并扩充分类器训练数据。图分 (a)(b)(c) 三个彩色面板，用同一对狼疮图像走完打分、微调和训练分类器三步。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. Which generated image carries 5/5 and which 2/5 is inferred from order in (a) and from the thumbs in (b). RFT and DPO are named in the caption but not drawn. The medium of the OpenAI logo and the thumbs is a guess from the digest (7 bitmap icons plus 3 photo bitmaps).",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,381 @@
+{
+ "paper_id": "neurips23-0046",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "EmbodiedGPT",
+  "one_liner": "An end-to-end multi-modal embodied foundation model trained with embodied chain-of-thought (EgoCOT) for planning, captioning, VQA and low-level control.",
+  "domain": [
+   "embodied AI",
+   "vision-language pre-training",
+   "chain-of-thought planning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "contribution-mosaic"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "a two-turn chat transcript with a real robot video and real answers, with a small result chart tucked beside it; the caption lists the capabilities shown",
+  "argues": "EmbodiedGPT can describe a robot video, hold a multi-turn dialogue, give an executable step plan, and its task-specific features raise embodied control success over R3M and BLIP-2.",
+  "subject": "A two-turn dialogue about a robot-arm video (description, then a five-step plan) beside a bar chart of control success rates.",
+  "elements": [
+   {
+    "name": "Human: Describe the video in detail.",
+    "type": "instance",
+    "role": "first user request, with the input video",
+    "drawn_as": "rectangular speech bubble with orange outline (#ffaa01) and pale orange tint, a framed strip of six video frames under the text, tail towards a human avatar",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Assistant: In this video, a robot is engaged in a manipulation task in a kitchen environment. ...",
+    "type": "instance",
+    "role": "the model's detailed scene description; its last sentence says the arm is opening the right cabinet's sliding door by grabbing the handle and pulling it",
+    "drawn_as": "wide bubble with dark-blue outline (#00589a) and pale blue tint, seven lines of 7 pt serif text, the last sentence in blue, tail towards a robot avatar",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Human: Can you write a detailed plan for the task the robot is performing?",
+    "type": "instance",
+    "role": "second user request",
+    "drawn_as": "short orange-outlined bubble with a tail towards a human avatar",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Assistant: The task is opening the sliding door.",
+    "type": "instance",
+    "role": "the model names the task and gives an executable plan",
+    "drawn_as": "blue-outlined bubble with a tail towards a robot avatar, the task phrase in blue",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Step 1 ... Step 5",
+    "type": "text-block",
+    "role": "the sub-goal plan: move to the left side of the platform, grip the handle on the right side of the door, pull it to the right, hold the handle still while the door slides open, release the handle when the door is open",
+    "drawn_as": "five text lines inside the second assistant bubble, the action phrase of each step tinted blue",
+    "container": "Assistant: The task is opening the sliding door.",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Human: Describe the video in detail.",
+    "to": "Assistant: In this video, ...",
+    "what": "request answered by a description; stacked, no arrow",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Assistant: In this video, ...",
+    "to": "Human: Can you write a detailed plan ...",
+    "what": "second turn follows in the same conversation",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Human: Can you write a detailed plan ...",
+    "to": "Assistant: The task is opening the sliding door.",
+    "what": "request answered by a task name and five steps",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "each bubble",
+    "to": "its speaker's avatar",
+    "what": "the bubble tail points at the human or robot avatar",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "blue key phrases in the answers",
+    "to": "the plan steps",
+    "what": "the same blue marks the action phrases in the description and in each step",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "dialogue",
+    "to": "Embodied Control Performance chart",
+    "what": "the chart sits beside the plan; only the caption ties it to the control results",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Step 1 ... Step 5",
+    "kind": "order",
+    "at": "start of each plan line in the second assistant bubble",
+    "what": "order of the sub-goals of the plan"
+   },
+   {
+    "marker": "Human: / Assistant:",
+    "kind": "identity",
+    "at": "bold speaker labels at the start of each bubble, in brown and navy",
+    "what": "name who is speaking"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "six consecutive frames of a white robot arm opening a cabinet door in a simulated kitchen with a black cooktop",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "one wide strip image (about 326 x 34 pt) inside a black frame in the first human bubble, six frames side by side"
+   },
+   {
+    "what": "grouped bar chart titled Embodied Control Performance: success rate (%) on Franka Kitchen and Metaworld for BLIP-2[Ego4D], R3M and EmbodiedGPT",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "boxed plot about 146 x 84 pt at the lower right with an inside legend; EmbodiedGPT bars are the tallest in both groups"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon person, head and shoulders, dark hair and blue shirt",
+    "stands_for": "the human user",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "grey-white robot head with antenna and ear discs on a small base",
+    "stands_for": "the assistant, EmbodiedGPT",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a real two-turn dialogue about a robot-arm video: a detailed scene description, then 'The task is opening the sliding door' with Steps 1 to 5",
+    "form": "speech bubbles with full running text and a video strip, key phrases tinted blue",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rectangular speech bubbles with pointer tails towards a human avatar (orange) or a robot avatar (blue), one per turn",
+    "parts": [
+     "orange human bubbles",
+     "blue assistant bubbles",
+     "avatars",
+     "tails"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "six consecutive frames in one wide black-framed strip inside the human bubble",
+    "parts": [
+     "six frames",
+     "black frame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a grey-white robot-head avatar beside each assistant bubble",
+    "parts": [
+     "robot avatar",
+     "assistant bubble"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the top-left human avatar and its orange bubble with the video strip, goes down to the blue description, then to the second question and the blue five-step plan, and ends at the bar chart at the lower right."
+ },
+ "layout": {
+  "arrangement": "chat-column",
+  "arrangement_note": "A single column of speech bubbles runs top to bottom with avatars at the left, human turns in orange and assistant turns in blue; a boxed bar chart sits at the lower right beside the second, narrower pair of bubbles.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.84,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffaa01",
+    "used_for": "orange outline of the human bubbles"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "pale orange tint of the human bubbles",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#00589a",
+    "used_for": "dark-blue outline of the assistant bubbles"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "pale blue tint of the assistant bubbles",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "blue text of the highlighted key phrases",
+    "approx": true
+   },
+   {
+    "hex": "#7b3f12",
+    "used_for": "brown Human: speaker labels",
+    "approx": true
+   },
+   {
+    "hex": "#6b7fd7",
+    "used_for": "BLIP-2[Ego4D] bars in the chart",
+    "approx": true
+   },
+   {
+    "hex": "#3fb0a8",
+    "used_for": "R3M bars in the chart",
+    "approx": true
+   },
+   {
+    "hex": "#e1b93d",
+    "used_for": "EmbodiedGPT bars in the chart",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt coloured outlines on the speech bubbles (orange for human, dark blue for assistant), a thick black frame around the video strip",
+  "font": "serif (Times New Roman, bold speaker labels) 7 pt throughout; chart text is serif inside the bitmap",
+  "corners": "square",
+  "arrows": "no arrows; speech-bubble tails point to the avatars",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = human turns (outline, tint, brown speaker label), blue = assistant turns (outline, tint, navy label); blue text inside answers = key phrases (the video's action, the task, each step's action); in the chart periwinkle = BLIP-2[Ego4D], teal = R3M, gold = EmbodiedGPT",
+  "line_style_means": "bubble tails point from each text box to its speaker's avatar",
+  "shape_means": "speech bubbles = turns; black-framed strip of six frames = the input video; grouped bars = success rate per environment",
+  "marker_means": "Step 1 to Step 5 order the plan; bold Human and Assistant labels name the speakers",
+  "emphasis": "blue key phrases in the answers, the tallest gold EmbodiedGPT bars, and the long description bubble that fills the middle band",
+  "reusable_patterns": [
+   "two-turn chat with avatars and speech bubbles tinted by speaker (orange human, blue assistant)",
+   "input video drawn as a framed strip of consecutive frames inside the human bubble",
+   "key phrases of the model's answer tinted blue to show what matters",
+   "numbered plan inside the assistant bubble with the action phrase of each step highlighted",
+   "small grouped bar chart tucked beside the dialogue to give the headline result"
+  ],
+  "weaknesses": [
+   "the chart legend box covers the top of the EmbodiedGPT bar for Franka Kitchen, hiding its value",
+   "the description bubble is dense 7 pt running text",
+   "no drawn link joins the dialogue to the chart, only the caption does"
+  ]
+ },
+ "resources": {
+  "own": [
+   "six frames of a robot-arm video from a simulated kitchen",
+   "the model's real answers",
+   "the success-rate chart of the paper's results"
+  ],
+  "stock": [
+   "cartoon human avatar",
+   "robot-head avatar"
+  ],
+  "generated": [],
+  "drawn": [
+   "speech bubbles with tails",
+   "framed video strip",
+   "bubble tints and outlines"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "human and robot chat avatars",
+   "orange and blue speech bubbles",
+   "framed strip of six robot-arm video frames",
+   "long scene description with a blue last sentence",
+   "five-step plan with blue action phrases",
+   "grouped bar chart with legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "embodied AI",
+   "vision-language pre-training",
+   "chain of thought",
+   "video description",
+   "task planning",
+   "embodied control",
+   "multi-turn dialogue",
+   "success rate"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "filmstrip",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "speaker-tinted-bubbles",
+    "what": "chat turns drawn as bubbles whose outline and tint depend on the speaker (orange human, blue assistant), each with an avatar and a tail"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a model's capabilities as a short real conversation: tint bubbles by speaker, draw the input video as a framed strip inside the user's bubble, tint the key phrases of the answers, and tuck one small result chart beside the dialogue.",
+  "suits": "foundation models or agents whose value is shown by what they say about a real input (video, image) and by one headline benchmark number."
+ },
+ "tags": [
+  "chat transcript",
+  "speech bubbles",
+  "orange and blue speakers",
+  "video strip",
+  "avatars",
+  "serif text",
+  "inset bar chart"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "EmbodiedGPT’s capabilities for video captioning, multi-turn question answering, embodied planning, and low-level control.",
+   "The plans given by EmbodiedGPT are highly executable and incorporate task-specific features"
+  ]
+ },
+ "summary": "EmbodiedGPT is an end-to-end multi-modal foundation model for embodied AI, trained on the EgoCOT dataset of Ego4D videos with chain-of-thought sub-goal plans. Figure 1 is a showcase of its capabilities drawn as a chat transcript. Orange human bubbles and blue assistant bubbles, each with a cartoon avatar, run top to bottom: the user asks for a detailed description of a six-frame robot-arm video and gets a long scene description; then asks for a plan and gets the task name with Steps 1 to 5. Key phrases are tinted blue. A small grouped bar chart at the lower right, Embodied Control Performance, shows success rates on Franka Kitchen and Metaworld for BLIP-2[Ego4D], R3M and EmbodiedGPT, the last highest.",
+ "summary_zh": "EmbodiedGPT 是用 EgoCOT 思维链数据训练的端到端具身多模态模型。图以对话展示能力：橙色用户、蓝色助手气泡自上而下，先描述六帧机械臂视频，再给五步开门计划，关键短语标蓝；右下角柱状图比较控制成功率。",
+ "confidence": "high",
+ "notes": "The prior attribute panels=2 treated the chart as a second panel; here it is an inset chart (listed under pictures) in one chat-column drawing. The chart is a bitmap and its legend hides the top of one bar, so that value is not readable. Chart bar colours are read off the bitmap and approximate. The video strip is one wide image of six frames, so count is 1.",
+ "venue": "NeurIPS23"
+}

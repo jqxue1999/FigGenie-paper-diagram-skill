@@ -1,0 +1,526 @@
+{
+ "paper_id": "iclr25-0089",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GraphArena",
+  "one_liner": "A benchmark testing LLMs on ten graph computation problems (four polynomial-time, six NP-complete) over real-world graphs, with graded scoring.",
+  "domain": [
+   "LLM benchmark",
+   "graph computation",
+   "NP-complete problems"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "stage-pipeline",
+   "worked-walkthrough",
+   "contribution-mosaic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "three tinted bands: task cards sorted by complexity class, a prompt-to-verdict pipeline traced on one instance, and a reasoning quadrant",
+  "argues": "GraphArena covers ten graph problems, four polynomial-time and six NP-complete, on real-world graphs, and grades each answer as correct, suboptimal or hallucinatory, not just by its final number.",
+  "subject": "ten graph-problem cards, four graph data sources, one prompt with three graded LLM answers, a P/NP by graph-size quadrant",
+  "elements": [
+   {
+    "name": "Polynomial-Time Problems",
+    "type": "region",
+    "role": "band holding the four P tasks, which test direct algorithmic reasoning",
+    "drawn_as": "full-width light-green band with a green heading",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Local / global",
+    "type": "label",
+    "role": "orders the four P tasks from local to global graph properties",
+    "drawn_as": "words at the left and right ends of the band, each with a green arrow pointing outward",
+    "container": "Polynomial-Time Problems",
+    "is_contribution": null
+   },
+   {
+    "name": "Common Neighbor, Shortest Distance, Connected Component, Graph Diameter (4 cards)",
+    "type": "instance",
+    "role": "one toy graph per polynomial-time task with its answer drawn in",
+    "drawn_as": "dashed rounded cards, task name under a small node-link graph; red dashed rings on query nodes or components, green answer nodes or edges",
+    "container": "Polynomial-Time Problems",
+    "is_contribution": true
+   },
+   {
+    "name": "NP-Complete Problems",
+    "type": "region",
+    "role": "band holding the six NP-complete tasks, which demand meta algorithmic planning",
+    "drawn_as": "full-width light-blue band, heading in dark blue at its bottom edge",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Graph Edit Distance, Travelling Salesman, Maximum Common Subgraph, Maximum Independent Set, Minimum Vertex Cover (5 cards)",
+    "type": "instance",
+    "role": "one toy graph per NP-complete task with its answer drawn in",
+    "drawn_as": "dashed rounded cards like the P cards; two graphs side by side for edit distance and common subgraph, green arrows for the tour",
+    "container": "NP-Complete Problems",
+    "is_contribution": true
+   },
+   {
+    "name": "Maximum Clique",
+    "type": "instance",
+    "role": "the one task card tied to the pipeline below: its instance becomes the example prompt",
+    "drawn_as": "dashed card with five numbered nodes, four green nodes forming the clique; a brown arrow leaves its bottom edge",
+    "container": "NP-Complete Problems",
+    "is_contribution": true
+   },
+   {
+    "name": "GraphArena",
+    "type": "label",
+    "role": "names the benchmark",
+    "drawn_as": "largest type of the figure (16.5 pt) at the top centre of the blue band",
+    "container": "NP-Complete Problems",
+    "is_contribution": null
+   },
+   {
+    "name": "OpenFlights, DBpedia, DBLP, PubChem, …",
+    "type": "icon",
+    "role": "the real-world graph sources the problems are sampled from",
+    "drawn_as": "four bitmap logos in a row with captions, trailing ellipses for further sources",
+    "container": "NP-Complete Problems",
+    "is_contribution": false
+   },
+   {
+    "name": "Evaluation Framework",
+    "type": "region",
+    "role": "heading of the lower-left part of the salmon band holding the pipeline",
+    "drawn_as": "brown heading at the bottom-left of the salmon band",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Problem Generation",
+    "type": "operation",
+    "role": "encodes a graph problem into a text prompt with task definition, example demonstration and the problem to solve",
+    "drawn_as": "dashed rounded card whose body is the prompt in 5 pt serif, section names in bold",
+    "container": "Evaluation Framework",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM Inference",
+    "type": "operation",
+    "role": "the models answer the prompt",
+    "drawn_as": "title over three rounded answer cards with brown outline, one per model; the model is only named, never drawn",
+    "container": "Evaluation Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "Deepseek-V2, GPT-4o, Llama3-8B",
+    "type": "sample",
+    "role": "three model answers to the same clique prompt: four authors, three authors, an infeasible set",
+    "drawn_as": "text cards with the model name in bold, each followed by a black arrow",
+    "container": "LLM Inference",
+    "is_contribution": false
+   },
+   {
+    "name": "Scorer",
+    "type": "operation",
+    "role": "classifies each answer by path extraction, feasibility check and optimality check",
+    "drawn_as": "title over three filled verdict boxes aligned with the answer cards",
+    "container": "Evaluation Framework",
+    "is_contribution": true
+   },
+   {
+    "name": "Correct, Suboptimal, Hallucinatory",
+    "type": "label",
+    "role": "the verdict levels (a fourth level, missing, is only in the text)",
+    "drawn_as": "saturated boxes with white text: green, amber, red",
+    "container": "Scorer",
+    "is_contribution": true
+   },
+   {
+    "name": "Reasoning Quadrants",
+    "type": "region",
+    "role": "places the tasks in a two-by-two space of problem class and graph size",
+    "drawn_as": "grey crossing axes on salmon ground, six two-line labels around them, heading in brown below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "P / NP and Small Graphs / Large Graphs axes",
+    "type": "label",
+    "role": "the horizontal axis runs from P to NP, the vertical from small to large graphs",
+    "drawn_as": "two grey double-headed arrows crossing at the centre, end labels in plain type",
+    "container": "Reasoning Quadrants",
+    "is_contribution": null
+   },
+   {
+    "name": "Straight-forward Computation, Exhaustive Enumeration, Long-range Location, Heuristic Approximation",
+    "type": "label",
+    "role": "the reasoning strategy each corner (class by size) calls for",
+    "drawn_as": "two-line text labels in the four corners around the axes",
+    "container": "Reasoning Quadrants",
+    "is_contribution": null
+   },
+   {
+    "name": "Direct Reasoning, Meta Planning",
+    "type": "label",
+    "role": "names the P column and the NP column by the kind of reasoning they test",
+    "drawn_as": "two-line labels sitting on the horizontal axis",
+    "container": "Reasoning Quadrants",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Maximum Clique",
+    "to": "Problem Generation",
+    "what": "one NP-complete task instance is encoded as a text prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Problem Generation",
+    "to": "LLM Inference",
+    "what": "prompt with task definition, example demonstration and problem",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Inference",
+    "to": "Scorer",
+    "what": "model responses go to scoring",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Deepseek-V2, GPT-4o, Llama3-8B",
+    "to": "Correct, Suboptimal, Hallucinatory",
+    "what": "each answer receives one verdict, one-to-one by row",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Local",
+    "to": "global",
+    "what": "the four P tasks are ordered from local to global graph properties",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OpenFlights, DBpedia, DBLP, PubChem",
+    "to": "task cards",
+    "what": "real-world graphs are sampled for the tasks; no arrow, only placement beside the cards",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red dashed rings",
+    "to": "queried nodes or components",
+    "what": "mark what the task asks about in each graph",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "green nodes and edges",
+    "to": "required answer",
+    "what": "graph component or path the LLM must output",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "P / NP and Small / Large Graphs axes",
+    "to": "four corner strategy labels",
+    "what": "the axes place each strategy; the two column labels name the reasoning type",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Polynomial-Time Problems",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "four P tasks from local to global, each a toy graph with its answer",
+    "verdict": "ours"
+   },
+   {
+    "label": "NP-Complete Problems",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "six NP-complete tasks around the GraphArena title and four real-world graph source logos",
+    "verdict": "ours"
+   },
+   {
+    "label": "Evaluation Framework",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a Maximum Clique prompt, three LLM answers and their verdicts",
+    "verdict": "ours"
+   },
+   {
+    "label": "Reasoning Quadrants",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "a two-by-two of P versus NP and small versus large graphs naming four reasoning strategies",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "0 to 5",
+    "kind": "identity",
+    "at": "graph nodes in every task card",
+    "what": "node ids, so an answer can be written as a node list"
+   },
+   {
+    "marker": "red dashed ring or ellipse",
+    "kind": "identity",
+    "at": "Common Neighbor, Shortest Distance, Connected Component",
+    "what": "names the queried nodes or the components"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "logos of OpenFlights (globe with plane), DBpedia (yellow sprout over a book), DBLP (network of document nodes), PubChem (molecule structures)",
+    "stands_for": "the four real-world graph sources the problems are sampled from",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "ten toy graphs of four to six numbered nodes, one per task, answer in green and queried nodes ringed in red",
+    "form": "node-link drawings inside dashed cards",
+    "real_values": false
+   },
+   {
+    "what": "a Maximum Clique prompt on an academic network of five authors, plus three model answers and their verdicts",
+    "form": "serif prompt card, three answer cards, three verdict boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "graph-problem-instance",
+    "drawn_as": "small undirected or directed graph of numbered circles; blue circles are ordinary, green circles and thick green edges are the answer",
+    "parts": [
+     "numbered node",
+     "edge",
+     "green answer",
+     "red query ring"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "text card in serif type with bold section names such as Task Definition, Example Demonstration, Problem to Solve",
+    "parts": [
+     "task definition",
+     "example demonstration",
+     "problem",
+     "answer format"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "model-named answer cards each pointing to a colour-filled verdict box instead of a tick or cross",
+    "parts": [
+     "answer card",
+     "arrow",
+     "verdict box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Top-left green P tasks, then blue NP tasks around the GraphArena title; a brown arrow drops into the pipeline; the quadrant at the bottom right comes last."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three full-width tinted bands stacked top to bottom: green with four P cards, blue with six NP cards wrapped around a central GraphArena title and logo row, salmon with a left-to-right Problem Generation, LLM Inference, Scorer pipeline beside a two-by-two reasoning quadrant. Band titles sit top (green) and bottom (blue, salmon).",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 0.88,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9f2d0",
+    "used_for": "band of the four polynomial-time tasks"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "band of the NP-complete tasks, GraphArena title and logos"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "band of the evaluation pipeline and the reasoning quadrants"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "graph nodes that are not part of the answer"
+   },
+   {
+    "hex": "#4ea72e",
+    "used_for": "answer nodes and the Correct box"
+   },
+   {
+    "hex": "#196b24",
+    "used_for": "answer edges, green arrows and the P band heading"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Suboptimal verdict box"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "Hallucinatory verdict box and red dashed query rings"
+   },
+   {
+    "hex": "#aeaeae",
+    "used_for": "grey axes of the reasoning quadrant"
+   },
+   {
+    "hex": "#80350e",
+    "used_for": "brown pipeline arrows and answer-card outlines (stroke)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 to 2.25 pt; every task card has a dashed rounded outline, red dashed rings on query nodes, thicker dark-green strokes on answer edges",
+  "font": "Comic-Sans-style rounded sans (Comic Sans MS) at 8 pt for labels, 10.5 pt band titles, 16.5 pt wordmark; Times-like serif (Nimbus Roman) at 5 pt for the prompt",
+  "corners": "rounded",
+  "arrows": "straight with filled heads; brown for the pipeline, black from answer to verdict, thick dark green for answer paths, grey double-headed for the quadrant axes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "band tint = problem class or section (green P, blue NP-complete, salmon evaluation); green node = part of the answer, blue node = other; verdict boxes green / amber / red = Correct / Suboptimal / Hallucinatory",
+  "line_style_means": "dashed rounded outline = one task card or one pipeline block; red dashed ring = queried nodes or components; thick dark green = answer edges or path",
+  "shape_means": "circle = graph node; rounded dashed rectangle = task card; filled rounded rectangle = verdict",
+  "marker_means": "digits are node ids, not steps; red rings name the nodes a task asks about",
+  "emphasis": "the GraphArena wordmark is the largest type at the centre of the blue band; saturated green, amber and red appear only on answers and verdicts against pale bands",
+  "reusable_patterns": [
+   "grid of identical dashed cards, one toy instance per task, answer coloured green",
+   "tinted full-width bands that sort tasks by complexity class",
+   "Local to global arrow pair over a row of cards to order them",
+   "brown arrow from one task card down into the pipeline so one instance is traced end to end",
+   "traffic-light verdict boxes (green, amber, red) lined up with model answer cards",
+   "crossing-axes quadrant of strategies with no data"
+  ],
+  "weaknesses": [
+   "the prompt and answer text is 5 pt, hard to read at printed size",
+   "the quadrant is not tied to the cards above it by any link, only by the P / NP wording"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real Maximum Clique prompt and three model answers",
+   "sample graphs for the ten tasks"
+  ],
+  "stock": [
+   "logos of OpenFlights, DBpedia, DBLP and PubChem"
+  ],
+  "generated": [],
+  "drawn": [
+   "node-link graph cards",
+   "tinted bands and dashed cards",
+   "pipeline arrows and verdict boxes",
+   "reasoning quadrant axes and labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "ten task cards with small node-link graphs",
+   "three tinted bands",
+   "data-source logos row",
+   "prompt card",
+   "three model answer cards",
+   "traffic-light verdict boxes",
+   "two-by-two reasoning quadrant"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "graph computation",
+   "LLM benchmark",
+   "NP-complete problems",
+   "polynomial-time problems",
+   "hallucination",
+   "graph reasoning",
+   "evaluation framework",
+   "real-world graphs"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "schematic-plot",
+   "verdict-marks",
+   "title-branding",
+   "prompt-template-card",
+   "small-multiples",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "answer-coloured-instance",
+    "what": "the answer of each toy instance (nodes, edges, path) is coloured apart from the rest inside its own card, so every task shows its solution at a glance"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a benchmark's scope as a grid of identical dashed cards, one tiny toy instance per task with its answer coloured, sorted into tinted bands by problem class; then trace a single instance through prompt, several model answers and traffic-light verdicts.",
+  "suits": "Benchmarks or task suites whose tasks each fit a small toy instance and whose answers are graded on more than right or wrong."
+ },
+ "tags": [
+  "tinted-bands",
+  "dashed-rounded-cards",
+  "rounded-comic-font",
+  "toy-instance-cards",
+  "traffic-light-verdicts",
+  "dense-composite"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 GraphArena: collection, task encoding, evaluation (p.3-5)"
+  ],
+  "evidence": [
+   "Figure 1 provides an overview of our proposed GraphArena benchmark.",
+   "as highlighted by the green elements in each graph shown in Figure 1",
+   "as shown in the bottom middle of Figure 1, Deepseek-V2 correctly identifies the maximum clique of four authors."
+  ]
+ },
+ "summary": "GraphArena is a benchmark that tests LLMs on real-world graph computation. Figure 1 is a three-band overview. A green band shows four polynomial-time tasks (Common Neighbor, Shortest Distance, Connected Component, Graph Diameter) ordered from local to global. A blue band around the GraphArena title shows six NP-complete tasks and the logos of four graph sources (OpenFlights, DBpedia, DBLP, PubChem). Each task is a dashed card with a toy node-link graph whose answer is coloured green. A salmon band follows one Maximum Clique instance through Problem Generation (a prompt), LLM Inference (three model answers) and a Scorer that stamps Correct, Suboptimal or Hallucinatory, and ends with a two-by-two quadrant of reasoning strategies (P versus NP, small versus large graphs). Drawn as flat vector with rounded Comic-Sans-style labels.",
+ "summary_zh": "GraphArena 是评测大模型图计算能力的基准。图分三条色带：绿色为四个多项式时间任务，蓝色为六个 NP 完全任务和四个真实图数据源标志，橙色带用一个最大团实例串起提示生成、模型推理与三级评分，并给出 P/NP 与图规模的推理象限。",
+ "confidence": "high",
+ "notes": "Prior labels ranked contribution-mosaic first; reordered to scope-overview because the figure maps the task space (cards by complexity class) and only the lower band is a process. Prior subfield2 science-engineering changed to ml-core (graph problems posed to LLMs, no science application). The fourth verdict level (missing) appears in the text but not in the figure. Graph Edit Distance and the other NP cards are grouped into one element; Maximum Clique is separate because it is the one linked to the pipeline.",
+ "venue": "ICLR25"
+}

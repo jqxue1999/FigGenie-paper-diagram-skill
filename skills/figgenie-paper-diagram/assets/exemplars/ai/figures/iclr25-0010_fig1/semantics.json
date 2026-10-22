@@ -1,0 +1,606 @@
+{
+ "paper_id": "iclr25-0010",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AdvWave",
+  "one_liner": "A jailbreak attack on large audio-language models that builds a stealthy adversarial audio in two phases: first an optimal token vector, then the waveform.",
+  "domain": [
+   "adversarial attacks",
+   "audio-language models",
+   "jailbreak"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "two tinted halves side by side (Phase II left, Phase I right) that share the audio encoder and tokenization module, which straddle the boundary; losses are the structure of each half",
+  "argues": "A dual-phase optimisation gets round the non-differentiable audio tokenizer: first optimise the token vector against a searched target response, then optimise a stealthy waveform to reproduce it.",
+  "subject": "Attacked audio-language model (encoder, tokenizer, backbone) with the two losses of each phase, plus a concrete harmful query, refusal and adversarial target text.",
+  "elements": [
+   {
+    "name": "Adversarial Audio",
+    "type": "sample",
+    "role": "the waveform optimised in Phase II: the original sound with an added adversarial segment",
+    "drawn_as": "red label above a waveform-bar glyph, black bars with a red segment under a red bracket",
+    "container": "Phase II Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Audio Encoder",
+    "type": "module",
+    "role": "encodes the audio into frame-level embeddings (Frame 1, Frame 2, ...)",
+    "drawn_as": "light-blue rounded box with a node-and-edge network glyph, label underneath",
+    "container": "Phase II Optimization",
+    "is_contribution": false
+   },
+   {
+    "name": "Tokenization Module",
+    "type": "module",
+    "role": "discretises each frame to the nearest cluster centre and gives a token ID; the non-differentiable step behind the gradient shattering the paper describes",
+    "drawn_as": "blue amoeba-shaped blob with coloured cluster-centre dots, two dashed circles round the dots hit by Frame 1 and Frame 2",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Cluster center c_j with token ID j / Cluster center c_k with token ID k",
+    "type": "label",
+    "role": "names the cluster centres that Frame 1 and Frame 2 land on",
+    "drawn_as": "text labels joined to coloured dots by dash-dot leader lines",
+    "container": "Tokenization Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Token ID j / Token ID k",
+    "type": "data",
+    "role": "discrete tokens handed on to the backbone",
+    "drawn_as": "text labels on three horizontal arrows, with an ellipsis of dots below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Token vector",
+    "type": "data",
+    "role": "the audio token vector optimised in Phase I (I_A in the caption)",
+    "drawn_as": "dashed grey box with a thin arrow from the dots",
+    "container": "Phase I Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Audio-Language Backbone",
+    "type": "module",
+    "role": "language model that reads the audio tokens and writes the response",
+    "drawn_as": "light-blue rounded box with a larger network glyph, label underneath",
+    "container": "Phase I Optimization",
+    "is_contribution": false
+   },
+   {
+    "name": "Original Audio Query",
+    "type": "sample",
+    "role": "the harmful spoken request, here 'Instruct on how to use a firearm to commit a crime'",
+    "drawn_as": "waveform-bar glyph and title above italic text in a dotted box at the top right",
+    "container": "Phase I Optimization",
+    "is_contribution": false
+   },
+   {
+    "name": "Sorry, I cannot help you with the illegal and unethical activities.",
+    "type": "sample",
+    "role": "the model's safe refusal that the attack wants to avoid",
+    "drawn_as": "green text with loudspeaker and document icons in a dashed green box",
+    "container": "Phase I Optimization",
+    "is_contribution": null
+   },
+   {
+    "name": "L_adv",
+    "type": "operation",
+    "role": "adversarial loss between the model response and the adversarial target",
+    "drawn_as": "bold calligraphic symbol with a dashed arrow from the response above and from the target below",
+    "container": "Phase I Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Adversarial Optimization Target r_adv",
+    "type": "sample",
+    "role": "target response the optimisation aims for, e.g. 'Sure! These are step-by-step instructions on how to use a firearm to commit a crime: Step 1: Get firearm...'",
+    "drawn_as": "dashed box with a black title and red text",
+    "container": "Phase I Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Adaptive Target Search",
+    "type": "module",
+    "role": "finds the adversarial target in three steps: 1. Object Detoxification, 2. LLM Response Collection, 3. Response Pattern Extraction",
+    "drawn_as": "pink rounded box with a bold underlined title and a numbered list; a black waveform glyph on its left (unlabelled)",
+    "container": "Phase I Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "L_align",
+    "type": "operation",
+    "role": "aligns the encoded token of the adversarial audio with the optimised token vector (the caption calls this the retention loss L_retent)",
+    "drawn_as": "bold symbol with two short dashed lines running into a dashed circle",
+    "container": "Phase II Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Optimized adversarial token vector",
+    "type": "data",
+    "role": "the Phase I result, the alignment target of Phase II (I*_A in the caption)",
+    "drawn_as": "dashed box with an arrow from a red dot inside a dashed circle that also holds a yellow dot",
+    "container": "Phase II Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "unlabelled peach network box",
+    "type": "module",
+    "role": "audio classifier that guides stealthiness (the caption says stealthiness loss via classifier guidance); not labelled in the figure",
+    "drawn_as": "peach rounded box with a network glyph, fed from the adversarial audio by a down arrow",
+    "container": "Phase II Optimization",
+    "is_contribution": null
+   },
+   {
+    "name": "Classified Sound",
+    "type": "data",
+    "role": "the class the classifier assigns to the adversarial audio",
+    "drawn_as": "dashed box at the lower left",
+    "container": "Phase II Optimization",
+    "is_contribution": null
+   },
+   {
+    "name": "Target Sound",
+    "type": "data",
+    "role": "the harmless sound the adversarial audio should be taken for",
+    "drawn_as": "dashed box with an orange music-note icon",
+    "container": "Phase II Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "L_stealth",
+    "type": "operation",
+    "role": "stealthiness loss between the classified sound and the target sound",
+    "drawn_as": "bold symbol between two dashed arrows pointing at it",
+    "container": "Phase II Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Phase II Optimization / Phase I Optimization",
+    "type": "container",
+    "role": "titles of the two tinted halves",
+    "drawn_as": "bold underlined 9 pt titles at the bottom of each half",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Adversarial Audio",
+    "to": "Audio Encoder",
+    "what": "waveform to encode",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio Encoder",
+    "to": "Tokenization Module",
+    "what": "frame embeddings Frame 1, Frame 2, ...",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tokenization Module",
+    "to": "Audio-Language Backbone",
+    "what": "token IDs j and k",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio-Language Backbone",
+    "to": "Sorry, I cannot help you with the illegal and unethical activities.",
+    "what": "model response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sorry, I cannot help you with the illegal and unethical activities.",
+    "to": "L_adv",
+    "what": "response compared with the target",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Adaptive Target Search",
+    "to": "Adversarial Optimization Target r_adv",
+    "what": "searched target response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Adversarial Optimization Target r_adv",
+    "to": "L_adv",
+    "what": "target for the adversarial loss",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tokenization Module",
+    "to": "L_align",
+    "what": "cluster dot of Frame 2 tied to a dashed circle holding the encoded (yellow) and optimised (red) token",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Optimized adversarial token vector",
+    "to": "L_align",
+    "what": "alignment target from Phase I",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Adversarial Audio",
+    "to": "unlabelled peach network box",
+    "what": "audio to classify",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "unlabelled peach network box",
+    "to": "Classified Sound",
+    "what": "predicted sound class",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Classified Sound",
+    "to": "L_stealth",
+    "what": "compared with the target sound",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Target Sound",
+    "to": "L_stealth",
+    "what": "target of the stealthiness loss",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cluster center labels",
+    "to": "cluster-centre dots",
+    "what": "names the dots by token ID",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Phase I Optimization",
+    "to": "Phase II Optimization",
+    "what": "the optimised token vector found in Phase I becomes the alignment target",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Phase II Optimization",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "adversarial audio through the shared encoder and tokenizer, aligned with the optimised token vector (L_align) and kept stealthy by a classifier and a target sound (L_stealth)",
+    "verdict": "ours"
+   },
+   {
+    "label": "Phase I Optimization",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "token vector optimised against the target response from Adaptive Target Search with L_adv; the harmful query, refusal and target are written out",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Phase I, Phase II",
+    "kind": "section",
+    "at": "bold underlined titles at the bottom of the two halves",
+    "what": "heads the two optimisation phases; the right half is Phase I"
+   },
+   {
+    "marker": "1. 2. 3.",
+    "kind": "order",
+    "at": "inside Adaptive Target Search",
+    "what": "orders object detoxification, LLM response collection and response pattern extraction"
+   },
+   {
+    "marker": "Frame 1, Frame 2, Token ID j, Token ID k, c_j, c_k",
+    "kind": "identity",
+    "at": "arrows and cluster dots between encoder, tokenizer and backbone",
+    "what": "names two example frames, their tokens and cluster centres"
+   },
+   {
+    "marker": "L_adv, L_align, L_stealth, r_adv",
+    "kind": "identity",
+    "at": "loss nodes and the target box",
+    "what": "names the three losses and the adversarial target by the paper's symbols"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "node-and-edge neural network glyph in a rounded tinted box",
+    "stands_for": "audio encoder, audio-language backbone and the (unlabelled) classifier",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "waveform-bar glyph, black or black with a red segment",
+    "stands_for": "audio: the original query, the adversarial audio and the audio feeding the target search",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "loudspeaker and text-document icons",
+    "stands_for": "the model's spoken and written response",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "orange music note",
+    "stands_for": "the target sound",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "coloured dots (yellow, green, purple, pink, white, red) in a blue blob",
+    "stands_for": "cluster centres of the tokenizer and the optimised token",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 8
+   }
+  ],
+  "examples": [
+   {
+    "what": "a harmful spoken query, the model's refusal and the adversarial target response",
+    "form": "italic text in a dotted box, green text in a dashed box, red text in a dashed box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "blue blob holding coloured cluster centres; Frame 1 and Frame 2 arrows land on dots circled by dashed lines and give token IDs",
+    "parts": [
+     "blob",
+     "cluster dots",
+     "dashed circles",
+     "frame arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "audio-language backbone as a larger network glyph in a light-blue rounded box with a text label underneath",
+    "parts": [
+     "network glyph",
+     "rounded box",
+     "label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "bold loss symbols on dashed arrows between the two things each loss compares; no backward arrows are drawn",
+    "parts": [
+     "L_adv",
+     "L_align",
+     "L_stealth",
+     "dashed arrows"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the red Adversarial Audio at the top left, runs right through encoder, tokenizer and backbone to the response and down to L_adv, then drops to the loss rows (L_align, L_stealth) and the Adaptive Target Search at the bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two tinted halves side by side: warm cream Phase II on the left, cool grey-blue Phase I on the right, each with a bold underlined title at the bottom. The audio encoder and the tokenization module sit at the top, across the left half and the boundary, as a shared pipeline; the loss rows and text samples fill the lower parts. A long line ties one cluster dot to a dashed circle beside L_align.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 1.89,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f1f4f8",
+    "used_for": "cool grey-blue ground of the Phase I half"
+   },
+   {
+    "hex": "#fff6ef",
+    "used_for": "warm cream ground of the Phase II half",
+    "opacity": 0.32
+   },
+   {
+    "hex": "#dbe9fc",
+    "used_for": "audio encoder and backbone boxes (the attacked model)",
+    "opacity": 0.95
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "tokenization blob"
+   },
+   {
+    "hex": "#f2cfee",
+    "used_for": "Adaptive Target Search box",
+    "opacity": 0.95
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "peach classifier box",
+    "opacity": 0.95
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "adversarial items: label, audio segment and bracket, target text, optimised token dot"
+   },
+   {
+    "hex": "#4ea72e",
+    "used_for": "the model's refusal text and box"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "yellow cluster-centre dots"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark outlines of boxes and glyphs"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dark teal on boxes, dashed grey or coloured 0.5 pt outlines on sample and variable boxes, 1 pt black arrows",
+  "font": "sans (Optima), 4.5-10.5 pt; 6.5 pt labels, 7.5 pt italic and sample text, 9 pt bold underlined phase titles; loss symbols in calligraphic math",
+  "corners": "mixed",
+  "arrows": "thick black block arrows between the main modules, thin black arrows for tokens, dashed arrows into loss symbols, dash-dot thin arrows from labels to cluster dots",
+  "rendering": "flat-vector",
+  "effects": "light drop shadow under the rounded boxes and the pink box",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = adversarial (audio label and segment, target text, optimised token dot); green = the model's safe refusal; blue boxes = modules of the attacked model; pink = target search; peach = classifier for stealth; cool tint = Phase I, warm tint = Phase II",
+  "line_style_means": "solid arrows = data flow; dashed arrows into loss symbols = comparison; dash-dot lines = label to cluster dot; dashed boxes = samples or variables; dotted box = the original query",
+  "shape_means": "rounded box with network glyph = neural module; amoeba blob = discretisation space with cluster centres; dashed rectangle = text sample or optimised variable; circle = zoomed pair of tokens to align",
+  "marker_means": "1 to 3 order the target-search steps; j and k index tokens and cluster centres; the red bracket marks the adversarial part of the waveform",
+  "emphasis": "red text, red bracket and red dot single out the adversarial parts; big arrows join the main modules; bold underlined phase titles anchor the halves",
+  "reusable_patterns": [
+   "two tinted halves per optimisation phase with shared modules straddling the boundary",
+   "loss symbol placed on dashed arrows between the two things it compares",
+   "concrete query, refusal and target strings in dashed boxes coloured black, green and red",
+   "numbered three-step list inside a pink rounded box to state a sub-procedure",
+   "blob with cluster dots and dashed circles to show discretisation, with a leader line to a magnified pair of dots",
+   "bracket over the adversarial segment of a waveform glyph"
+  ],
+  "weaknesses": [
+   "Phase I sits on the right and Phase II on the left, so the flow runs against reading direction",
+   "the loss is written L_align in the figure and L_retent in the caption",
+   "the classifier box and the waveform feeding the target search are unlabelled",
+   "many 4.5-6.5 pt labels crowd the tokenizer area"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real harmful query, a refusal and an adversarial target string"
+  ],
+  "stock": [
+   "PowerPoint-style icons: network glyphs, waveform bars, loudspeaker, document, music note"
+  ],
+  "generated": [],
+  "drawn": [
+   "tokenization blob with cluster dots",
+   "boxes, dashed frames, arrows and loss nodes",
+   "Adaptive Target Search box",
+   "tinted halves and titles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two tinted phase halves",
+   "network-glyph module boxes",
+   "tokenization blob with cluster dots",
+   "loss symbols on dashed arrows",
+   "red and green text boxes",
+   "pink target-search box",
+   "waveform glyphs"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "audio jailbreak",
+   "adversarial attack",
+   "audio-language model",
+   "stealthy",
+   "token-level optimization",
+   "dual-phase optimization",
+   "classifier guidance",
+   "gradient shattering"
+  ],
+  "tags": [
+   "model-pictogram",
+   "embedding-space-sketch",
+   "verdict-marks",
+   "flow-type-arrows",
+   "pseudocode-box"
+  ],
+  "new_tags": [
+   {
+    "name": "shared-modules-straddling-phases",
+    "what": "modules used by both phases drawn across the boundary of two tinted phase regions instead of being repeated in each"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each optimisation phase its own tinted half with a bold title, let the shared modules straddle the boundary, and write each loss as a bold symbol on dashed arrows between the two things it compares; colour the sample texts red and green to mark target and refusal.",
+  "suits": "multi-phase optimisation or attack methods that reuse one model across phases and are defined by several losses comparing concrete representations or texts."
+ },
+ "tags": [
+  "two tinted halves",
+  "network-glyph icons",
+  "dashed sample boxes",
+  "loss symbols",
+  "red and green text",
+  "dense small labels",
+  "PowerPoint look"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method overview (p.4)",
+   "equation context (p.7)"
+  ],
+  "evidence": [
+   "we propose a dual-phase optimization paradigm to overcome the gradient shattering issue in the audio encoder in Section 3.2",
+   "the audio encoder in LALMs contains nondifferentiable discretization operators, leading to the gradient shattering problem",
+   "Phase II: Optimize the input adversarial audio with retention loss Lretent regarding the optimum token vector in Phase I"
+  ]
+ },
+ "summary": "AdvWave is a jailbreak attack on large audio-language models that hides a harmful request in an adversarial sound that stays stealthy. Figure 1 shows the dual-phase optimisation on two tinted halves, Phase II on the left and Phase I on the right, with the audio encoder and tokenization module straddling them. Phase I optimises the audio token vector against an adversarial target response found by Adaptive Target Search, using the loss L_adv; the harmful query, the refusal and the target answer are written out in dashed boxes, in green and red. Phase II optimises the adversarial waveform so that its encoded tokens align with the optimised token vector (L_align) and a classifier maps it to a chosen target sound (L_stealth). Network-glyph icons stand for the models; a blue blob with cluster centres shows the tokenizer.",
+ "summary_zh": "AdvWave 是针对音频语言模型的隐蔽越狱攻击。图1用两个着色半区画出双阶段优化：右侧第一阶段按搜索到的目标优化 token 向量（L_adv），左侧第二阶段让对抗音频对齐该向量（L_align）并保持隐蔽（L_stealth）。",
+ "confidence": "high",
+ "notes": "Prior kinds (stage-pipeline, model-anatomy; variant phase-bands) kept. The caption names the retention loss L_retent while the figure writes L_align. The peach network box is unlabelled and read as the stealth classifier from the caption (classifier guidance); the black waveform feeding Adaptive Target Search is unlabelled. Pictures are none: the waveform glyphs are stylised bar icons, not data samples. Icons are placed bitmaps according to the digest (33 pictures); the cluster dots are vector. The zoom_callout value leader-lines describes the line from a cluster dot to the dashed circle beside L_align, which is not an enlarged inset.",
+ "venue": "ICLR25"
+}

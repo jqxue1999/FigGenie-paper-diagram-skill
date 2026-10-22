@@ -1,0 +1,499 @@
+{
+ "paper_id": "neurips25-0082",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GUI-Rise",
+  "one_liner": "A GUI navigation agent that couples structured reasoning, action prediction and history summarization in a step-by-step cycle, trained with SFT and GRPO.",
+  "domain": [
+   "GUI navigation agents",
+   "structured chain-of-thought",
+   "history summarization"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "one robot agent unrolled over Step t and Step t+1 with the computer between them, and a large thought bubble above holding the three numbered subtask outputs of one real step",
+  "argues": "At every step the agent reasons in a structured way, predicts one action and rewrites a compact summary of its history that is handed to the next step.",
+  "subject": "One real GUI navigation step: observation, instruction and earlier summary go in; reasoning, an action and an updated summary come out.",
+  "elements": [
+   {
+    "name": "History Summary: (earlier)",
+    "type": "data",
+    "role": "compact textual memory of earlier steps that goes into step t",
+    "drawn_as": "green rounded box with bold title and a short sentence, left edge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Instruction",
+    "type": "data",
+    "role": "the user's task, given to every step",
+    "drawn_as": "white rounded box with a blue outline at the bottom centre, text: Open the list of popular products in the desktop computer category in the last 30 days",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Step t robot",
+    "type": "actor",
+    "role": "the GUI agent (MLLM) at step t that reads the observation, the instruction and the summary",
+    "drawn_as": "full-body cartoon robot with headphones and an orange antenna, a yellow-orange monospace chip Step t under it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "thought bubble",
+    "type": "container",
+    "role": "the agent's output for the step: three subtasks in order",
+    "drawn_as": "very large pale-cream rounded cloud shape above the agent with a faint cloud tail to the robot's head",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Structured Reasoning Subtask:",
+    "type": "module",
+    "role": "first assesses task progress, then reasons about the next action (paper text)",
+    "drawn_as": "orange titled box with an inner darker box of text: <Progress Estimation> ... </Progress Estimation> and <Decision Reasoning> ... ; a small thinking robot with a question mark at its right",
+    "container": "thought bubble",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Prediction Subtask:",
+    "type": "module",
+    "role": "predicts the next GUI action as a structured command",
+    "drawn_as": "blue titled box with an inner box holding <Action>{'action': 'CLICK', 'value': 'Last 30 days', 'position': [0.68, 0.82]}</Action>; a CLICK chip and a hand-cursor icon at its right",
+    "container": "thought bubble",
+    "is_contribution": true
+   },
+   {
+    "name": "History Summarization Subtask:",
+    "type": "module",
+    "role": "writes the updated summary for the next iteration",
+    "drawn_as": "green titled box with an inner box holding <History Summary>The user selected ... </History Summary>; a small robot writing with a pen at its right",
+    "container": "thought bubble",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Output: CLICK “Last 30 days”",
+    "type": "data",
+    "role": "the action handed to the environment",
+    "drawn_as": "light-blue rounded box with a blue outline, bold title",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Step t+1 robot",
+    "type": "actor",
+    "role": "the same agent at the next step, fed by the new observation, the new summary and the instruction",
+    "drawn_as": "the same robot with a yellow-orange chip Step t+1",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Observation t",
+    "to": "Step t robot",
+    "what": "current screen",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "History Summary: (earlier)",
+    "to": "Step t robot",
+    "what": "earlier summary read in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Instruction",
+    "to": "Step t robot",
+    "what": "task instruction, carried by a long blue line on the left",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Step t robot",
+    "to": "thought bubble",
+    "what": "the agent thinks (cloud tail from the head)",
+    "kind": "control",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Structured Reasoning Subtask:",
+    "to": "Action Prediction Subtask:",
+    "what": "reasoning informs the action",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "Action Prediction Subtask:",
+    "to": "History Summarization Subtask:",
+    "what": "action and reasoning go into the summary",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "Step t robot",
+    "to": "Action Output: CLICK “Last 30 days”",
+    "what": "the predicted action",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action Output: CLICK “Last 30 days”",
+    "to": "computer",
+    "what": "the action is executed on the GUI",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "computer",
+    "to": "Observation t+1",
+    "what": "the screen after the click",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Observation t+1",
+    "to": "Step t+1 robot",
+    "what": "next screen",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "History Summarization Subtask:",
+    "to": "Step t+1 robot",
+    "what": "the updated summary is passed on, carried by a long blue line on the right",
+    "kind": "feedback",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Instruction",
+    "to": "Step t+1 robot",
+    "what": "the same instruction on the right-hand line",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3",
+    "kind": "order",
+    "at": "blue circles at the left of the three subtask titles",
+    "what": "the order of the subtasks inside one step: reasoning, action, summary"
+   },
+   {
+    "marker": "Step t, Step t+1",
+    "kind": "identity",
+    "at": "yellow-orange chips under the two robots",
+    "what": "names the two iterations of the loop"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "web-page screenshots of a product list: Observation t before the click and Observation t+1 after it",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small thumbnails inside rounded outlined boxes titled Observation t and Observation t+1; the text in them is too small to read"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "full-body cartoon robot with headphones and an orange antenna",
+    "stands_for": "the GUI agent at step t and step t+1",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "small robot in a thinking pose with a question-mark bubble",
+    "stands_for": "structured reasoning",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small robot writing with a pen on paper",
+    "stands_for": "history summarization",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "retro desktop computer with a red keyboard",
+    "stands_for": "the GUI environment that executes the action",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "hand pointer cursor",
+    "stands_for": "the click action",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one real GUI step: instruction, screenshot, earlier summary, reasoning text, a CLICK action with coordinates and the new summary",
+    "form": "text boxes with XML-like tags plus screenshots",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "the same robot unrolled at Step t and Step t+1, joined by an action box, the computer and the next observation, instead of a circle",
+    "parts": [
+     "robot",
+     "Action Output",
+     "computer",
+     "Observation"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "thought-bubble",
+    "drawn_as": "one huge cream cloud-like bubble above the agent holding the typed outputs of the step as numbered, colour-coded boxes",
+    "parts": [
+     "bubble",
+     "three subtask boxes",
+     "tail"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "a green titled text box 'History Summary' read by the agent, and a green subtask box that writes the next one; no cylinder",
+    "parts": [
+     "earlier summary box",
+     "summary subtask box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a cartoon robot with headphones stands for the multimodal agent; small robots with props (question mark, pen) stand for single subtasks",
+    "parts": [
+     "robot",
+     "props"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a rounded white box titled Instruction with the task sentence",
+    "parts": [
+     "Instruction box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the inputs at the left (summary, observation t), reaches the Step t robot and its thought bubble with subtasks 1, 2, 3 on top, then follows the action through the computer to Observation t+1 and the Step t+1 robot."
+ },
+ "layout": {
+  "arrangement": "inset",
+  "arrangement_note": "A left-to-right agent loop runs along the bottom (earlier summary and Observation t, the robot at Step t, an Action Output box, a computer icon, Observation t+1, the robot at Step t+1), and a very large cream thought bubble above it holds three stacked, numbered subtask boxes. The Instruction box sits at the bottom centre with long right-angled blue lines to both robots, and a line from the summary subtask runs down the right side to Step t+1.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 1.76,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff5dc",
+    "used_for": "large thought bubble tint"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "Structured Reasoning box"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "inner text box of the reasoning subtask"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "Action Prediction box"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "inner action box and the CLICK and Action Output boxes"
+   },
+   {
+    "hex": "#e6f2de",
+    "used_for": "History Summarization box"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "inner summary box and the earlier History Summary box"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Step t and Step t+1 chips"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "arrows, connector lines, numbered circles and outlines"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "outline of the reasoning box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt blue (#4472c4) and orange outlines on rounded boxes, thin blue connector lines",
+  "font": "sans (Calibri) 5.5-6.5 pt with bold orange, blue and green subtask titles and bold XML-like tags; monospace (Consolas) 8-9 pt in the yellow Step chips",
+  "corners": "rounded",
+  "arrows": "thin blue arrows with small solid heads, right-angled connector lines with junction dots, long head-less return lines on the left and right",
+  "rendering": "mixed",
+  "effects": "none; the robots and the computer are shaded bitmaps",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = structured reasoning, blue = action prediction, green = history summary (also the earlier summary box); cream = the agent's thinking; yellow-orange chips = the step labels; blue lines = data flow",
+  "line_style_means": "thin blue arrows and connector lines carry data; junction dots mark where the instruction, summary and observation merge into an agent; no dashed lines",
+  "shape_means": "huge cloud-like rounded bubble = the agent's thinking; rounded box with tags = a subtask output; robot = the agent; retro computer = the GUI environment; rounded frame round a screenshot = an observation",
+  "marker_means": "blue circled 1, 2, 3 = the order of the three subtasks in one step; Step t and Step t+1 = the iteration",
+  "emphasis": "the oversized bubble with colour-coded subtasks carries the contribution, and small themed robots (thinking, writing) sit beside subtasks 1 and 3",
+  "reusable_patterns": [
+   "thought bubble above the agent holding the typed outputs of one step as numbered, colour-coded boxes with real text",
+   "same robot unrolled at step t and step t+1 with the environment between them",
+   "long bus lines that carry the instruction and the summary to both steps",
+   "small robots with props (question mark, pen, hand cursor) beside each subtask to say what it does",
+   "real text wrapped in XML-like tags inside the boxes"
+  ],
+  "weaknesses": [
+   "the long right-angled lines that bring the instruction and the summary to the two robots are hard to trace",
+   "the screenshots are small, so their content cannot be read",
+   "the cloud tail between the robot and the bubble is faint"
+  ]
+ },
+ "resources": {
+  "own": [
+   "two real GUI screenshots",
+   "a real reasoning trace, action command and summaries from one step"
+  ],
+  "stock": [
+   "retro computer icon",
+   "hand-cursor icon"
+  ],
+  "generated": [
+   "cartoon robot in several poses (agent, thinking, writing)"
+  ],
+  "drawn": [
+   "thought bubble and subtask boxes",
+   "connector lines and arrows",
+   "step chips",
+   "numbered circles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "cartoon robot agent at step t and step t+1",
+   "thought bubble with three coloured subtask boxes",
+   "numbered blue circles 1 2 3",
+   "GUI screenshots as observations",
+   "History Summary box",
+   "Instruction box",
+   "retro computer icon",
+   "Step chips"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "GUI navigation agent",
+   "structured reasoning",
+   "history summarization",
+   "chain-of-thought",
+   "multimodal LLM",
+   "action prediction",
+   "agent loop",
+   "GRPO"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "gui-screen",
+   "memory-store",
+   "mascot-character"
+  ],
+  "new_tags": [
+   {
+    "name": "thought-bubble-container",
+    "what": "one large cloud-like bubble above the agent holds the outputs of one step as numbered, colour-coded boxes"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Unroll the agent as the same character at step t and step t+1 with the environment between, and put the step's typed outputs in one oversized thought bubble as numbered, colour-coded boxes filled with real text, so the framework and a real trace read as one drawing.",
+  "suits": "Agent frameworks where each step emits several typed outputs (thought, action, memory) and the figure should show one real step."
+ },
+ "tags": [
+  "thought bubble",
+  "numbered blue circles",
+  "orange-blue-green subtasks",
+  "cartoon robot",
+  "web screenshots",
+  "Office palette",
+  "rounded boxes",
+  "long connector lines"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.4-5)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "predicts the next GUI action, and updates a compact history summary for the next iteration",
+   "it compresses the full interaction trace into a short textual summary, performs structured chain-of-thought reasoning",
+   "first assessing task progress, then determining the next action"
+  ]
+ },
+ "summary": "GUI-Rise is a GUI navigation agent that couples structured reasoning, action prediction and history summarization in a step-by-step cycle. Figure 1 unrolls the agent as one cartoon robot at Step t and Step t+1, with the environment between them. At step t it reads Observation t (a web-page screenshot), the instruction and the earlier history summary, and thinks inside a large cream thought bubble holding three numbered, colour-coded boxes: 1 Structured Reasoning (progress estimation and decision reasoning, orange), 2 Action Prediction (a CLICK command, blue), 3 History Summarization (green). The action goes through a computer icon, which yields Observation t+1; the new summary and the instruction pass on to Step t+1.",
+ "summary_zh": "GUI-Rise 是 GUI 导航智能体，每一步依次做结构化推理、动作预测和历史摘要。图把同一个卡通机器人展开为第 t 步与 t+1 步，上方大思考泡泡里三个编号彩色框写着真实的推理、动作和摘要文本，电脑图标连接前后两张截图。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The long blue lines are read from the drawing: the Instruction box feeds both robots, the earlier summary feeds Step t and the output of the summary subtask runs to Step t+1. The robot art looks generated or taken from a stock pack; its origin is judged from style only. The web-page screenshots are too small to name their site.",
+ "venue": "NeurIPS25"
+}

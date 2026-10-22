@@ -1,0 +1,407 @@
+{
+ "paper_id": "iclr26-0136",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Vid-LLM",
+  "one_liner": "A compact video-based 3D multimodal LLM that jointly reconstructs the scene and answers 3D language tasks from monocular video only.",
+  "domain": [
+   "3D scene understanding",
+   "video-based multimodal LLM",
+   "3D vision-language reasoning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "a film strip of video frames above a reconstructed 3D scene and three task cards, each a short chat about the same room",
+  "argues": "One compact model that takes only video can do 3D dense captioning, question answering and visual grounding on the same scene.",
+  "subject": "A video of an office, its reconstructed 3D scene with coloured boxes, and chat examples for three 3D vision-language tasks.",
+  "elements": [
+   {
+    "name": "3D Dense Captioning",
+    "type": "container",
+    "role": "task card: describe the whole room or one object in detail",
+    "drawn_as": "white rounded card with a purple outline and a bold centred title, left column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "3D Question Answering",
+    "type": "container",
+    "role": "task card: short factual questions about the room, answered with a phrase or a count",
+    "drawn_as": "white rounded card with a blue outline and a bold centred title, right column top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "3D Visual Grounding",
+    "type": "container",
+    "role": "task card: give the coordinates of a referred object",
+    "drawn_as": "white rounded card with a light-blue outline and a bold centred title, right column bottom",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "user question bubbles",
+    "type": "text-block",
+    "role": "the question or instruction given to the model, e.g. 'Describe the room in detail.'",
+    "drawn_as": "blue-grey rounded bubbles with a soft shadow and a yellow face avatar at the left",
+    "container": "task cards",
+    "is_contribution": false
+   },
+   {
+    "name": "assistant answer bubbles",
+    "type": "text-block",
+    "role": "the model's answer: a description, 'An orange sofa.', 'There are six chairs in the room.', or six numbers for a 3D box",
+    "drawn_as": "peach rounded bubbles with a soft shadow and a purple robot-head avatar at the left",
+    "container": "task cards",
+    "is_contribution": true
+   },
+   {
+    "name": "red, green and blue 3D boxes",
+    "type": "other",
+    "role": "mark objects in the reconstructed scene (a desk, the orange sofa, a chair), read as the objects the examples talk about",
+    "drawn_as": "thick coloured wireframe boxes drawn into the 3D render",
+    "container": "reconstructed scene",
+    "is_contribution": null
+   },
+   {
+    "name": "small grey arrows",
+    "type": "operation",
+    "role": "send the video to the scene and to the task cards",
+    "drawn_as": "three short light-grey down arrows under the film strip",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "film strip",
+    "to": "3D Dense Captioning",
+    "what": "the same video is the only input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "film strip",
+    "to": "reconstructed 3D scene",
+    "what": "the video is turned into a 3D scene",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "film strip",
+    "to": "3D Question Answering",
+    "what": "the same video is the only input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "user bubble",
+    "to": "assistant bubble",
+    "what": "each question is answered right below it",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red, green and blue 3D boxes",
+    "to": "desk, sofa and chair in the cards",
+    "what": "boxes read as the objects the examples refer to (not stated in the figure)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "3D Question Answering",
+    "to": "3D Visual Grounding",
+    "what": "stacked in one column under the same arrow, no arrow of its own",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "3D Dense Captioning",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "two exchanges: describe the room, describe the writing desk on the right side",
+    "verdict": "ours"
+   },
+   {
+    "label": "3D Question Answering",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "what furniture is in the centre (an orange sofa) and how many chairs (six)",
+    "verdict": "ours"
+   },
+   {
+    "label": "3D Visual Grounding",
+    "kind": "other",
+    "axis": "examples",
+    "shows": "coordinates of the chair right of the sofa as six numbers",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "eleven frames of an office video (orange sofa, desks, shelves, monitors, chairs)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 11,
+    "medium": "bitmap",
+    "treatment": "small frames inside a dark-navy film strip with sprocket holes above and below, on light grey"
+   },
+   {
+    "what": "top-down textured 3D reconstruction of the office with red, green and blue 3D boxes",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "cut out without frame or background, irregular edges, at the centre between the cards"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "yellow cartoon face",
+    "stands_for": "the user",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "purple and blue robot head",
+    "stands_for": "the assistant (the model)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "six question-answer turns about one office, from 'Describe the room in detail.' to the answer [1.13, 1.64, 0.35, 0.92, 0.03, 1.16] for 'Give the coordinates of the chair right of the sofa.'",
+    "form": "chat bubbles inside three task cards",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "eleven frames inside a dark-navy strip with sprocket holes above and below",
+    "parts": [
+     "frames",
+     "sprocket holes",
+     "strip border"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "one shadowed bubble per turn: blue-grey with a face avatar for the user, peach with a robot avatar for the assistant",
+    "parts": [
+     "user bubble",
+     "assistant bubble",
+     "avatars"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "top-down textured 3D reconstruction with three coloured wireframe boxes",
+    "parts": [
+     "reconstruction",
+     "red box",
+     "green box",
+     "blue box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the film strip across the top, follows the small arrows down to the left card and the central 3D scene, then reads the right column, question card first and grounding card below."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "A film strip spans the top. Below it, the textured 3D scene sits in the centre, a tall 3D Dense Captioning card at the left, and two stacked cards (3D Question Answering over 3D Visual Grounding) at the right. Three small grey arrows run from the strip.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.76,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "user question bubbles"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "assistant answer bubbles"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "light-grey ground of the film strip"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "outlines of the film strip frames and sprocket holes"
+   },
+   {
+    "hex": "#8b52ff",
+    "used_for": "outline of the 3D Dense Captioning card"
+   },
+   {
+    "hex": "#527aff",
+    "used_for": "outline of the 3D Question Answering card"
+   },
+   {
+    "hex": "#38b6ff",
+    "used_for": "outline of the 3D Visual Grounding card"
+   },
+   {
+    "hex": "#e01010",
+    "used_for": "red 3D box in the scene",
+    "approx": true
+   },
+   {
+    "hex": "#20cc20",
+    "used_for": "green 3D box in the scene",
+    "approx": true
+   },
+   {
+    "hex": "#1020e0",
+    "used_for": "blue 3D box in the scene",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt navy on the film strip, 0.5 pt coloured rounded outlines on the cards, soft drop shadows under bubbles",
+  "font": "sans (Calibri) 6 pt bold in bubbles, 8 pt bold card titles",
+  "corners": "rounded",
+  "arrows": "three short light-grey down arrows from the film strip, no other arrows",
+  "rendering": "mixed",
+  "effects": "soft drop shadows under the chat bubbles",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue-grey bubble with a face = user, peach bubble with a robot = assistant; the purple, blue and light-blue card outlines tell the three tasks apart; red, green and blue boxes in the scene mark objects",
+  "line_style_means": "the film-strip border with sprocket holes means video",
+  "shape_means": "rounded card = one task; rounded bubble = one turn; film strip = video; irregular cut-out = reconstructed scene",
+  "marker_means": "no numbers or letters",
+  "emphasis": "bright coloured 3D boxes in the centre scene, bold card titles, and the strip across the top that stands for 'only video inputs'",
+  "reusable_patterns": [
+   "film strip across the top as the single input with small arrows down to the tasks",
+   "one titled, colour-outlined card per task holding a user and assistant exchange about the same scene",
+   "avatar plus bubble colour tells the speaker without labels",
+   "coloured 3D boxes drawn into the reconstructed scene to show grounded objects",
+   "answers shown in their natural form per task: a paragraph, a phrase or count, box coordinates"
+  ],
+  "weaknesses": [
+   "no drawn link between the cards and the coloured boxes, so the mapping has to be guessed",
+   "6 pt text in the bubbles",
+   "the extracted figure carries two stray author-affiliation lines at its top edge"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames from a real room video",
+   "the reconstructed 3D scene with object boxes",
+   "real question and answer texts including box coordinates"
+  ],
+  "stock": [
+   "face emoji avatar",
+   "robot avatar"
+  ],
+  "generated": [],
+  "drawn": [
+   "film strip border and sprocket holes",
+   "task cards and grey arrows",
+   "shadowed chat bubbles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "film strip of room frames",
+   "reconstructed 3D room scene with red, green and blue boxes",
+   "three titled task cards",
+   "user and assistant chat bubbles with avatars",
+   "small grey down arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video-based 3D LLM",
+   "3D dense captioning",
+   "3D question answering",
+   "3D visual grounding",
+   "monocular video",
+   "scene reconstruction",
+   "indoor scene"
+  ],
+  "tags": [
+   "filmstrip",
+   "task-definition",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "scene-with-coloured-3d-boxes",
+    "what": "a reconstructed scene render with 3D bounding boxes in distinct colours showing which objects the examples refer to"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State what a single-input model can do by putting one shared input (a film strip) on top, one titled colour-outlined chat card per task beside a central render of the intermediate result, so input, scene and three task examples are seen on the same room.",
+  "suits": "Generalist models that take one input type and serve several tasks, especially multimodal LLMs whose answers differ in form (text, count, coordinates)."
+ },
+ "tags": [
+  "film strip",
+  "chat cards",
+  "coloured outlines per task",
+  "cut-out 3D render",
+  "emoji avatars",
+  "soft shadows"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "We propose Vid-LLM to achieve diverse 3D vision-language reasoning tasks using only video inputs.",
+   "a compact model that jointly performs reconstruction and 3D vision–language reasoning from monocular video inputs",
+   "Cross-Task Adapter (CTA) that tightly couples reconstruction with reasoning"
+  ]
+ },
+ "summary": "Vid-LLM is a compact multimodal LLM that reconstructs a 3D scene from monocular video and reasons about it, so one video input serves several 3D vision-language tasks. Figure 1 is a capability overview rather than a method diagram. A film strip of eleven frames of an office runs across the top, with small grey arrows down to a textured top-down 3D reconstruction in the centre, carrying red, green and blue 3D boxes, and to three colour-outlined cards on either side: 3D Dense Captioning, 3D Question Answering and 3D Visual Grounding. Each card is a short chat about the same room, with a face avatar and blue-grey bubbles for the user and a robot avatar with peach bubbles for the assistant; the answers are a description, a count and box coordinates.",
+ "summary_zh": "Vid-LLM 只用单目视频重建 3D 场景并做语言推理。图是能力总览：顶部是办公室视频胶片条，中间为带彩色 3D 框的重建场景，两侧三张卡片分别展示 3D 稠密描述、3D 问答和 3D 视觉定位的对话，用户与助手以头像和气泡颜色区分。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The extraction includes two stray lines of the author block (Hubei Luojia Laboratory, School of Architecture and Urban Planning) above the strip; they are not part of the figure. The mapping of the red, green and blue boxes to the desk, sofa and chair is inferred from the examples. The film strip frames, bubbles and avatars are all placed bitmaps in the digest (32 pictures). [After this record was written the figure was re-cropped to drop the stray affiliation lines; layout.aspect was updated to the new canvas.]",
+ "venue": "ICLR26"
+}

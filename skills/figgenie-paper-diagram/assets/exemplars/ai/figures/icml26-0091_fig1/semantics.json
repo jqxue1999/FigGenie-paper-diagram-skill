@@ -1,0 +1,392 @@
+{
+ "paper_id": "icml26-0091",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TokSuite",
+  "one_liner": "Suite of fourteen models differing only in tokenizer plus a multilingual benchmark of real-world perturbations that change tokenization.",
+  "domain": [
+   "tokenization",
+   "multilingual robustness",
+   "language model benchmarks"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "side-by-side-contrast"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "eight tabbed dashed cards (four languages, four perturbations) under one concept box, each with stacked rows of token chips coloured by tokenizer",
+  "argues": "The same concept is cut into very different tokens by different tokenizers, across languages and under real-world perturbations, so tokenizer choice changes model input.",
+  "subject": "The word 'doctor' translated and perturbed in eight dashed cards, each cut into coloured token chips by four tokenizers.",
+  "elements": [
+   {
+    "name": "TokSuite",
+    "type": "label",
+    "role": "names the benchmark and model suite",
+    "drawn_as": "bold wordmark: 'Tok' on a lavender block and 'Suite' on a yellow block, top-left corner",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "doctor",
+    "type": "sample",
+    "role": "the one concept that every card shows, translated or perturbed",
+    "drawn_as": "bold word in a grey rounded box straddling the top edge of the outer dashed frame",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Gemma-2, GPT-2, TokenMonster, XGLM",
+    "type": "label",
+    "role": "colour tags of the four tokenizers: yellow, blue, green and red (the caption says each coloured box is one token)",
+    "drawn_as": "four rounded tags in a row set in the gap above the Chinese and Farsi cards; TokenMonster breaks over two lines",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Turkish, Chinese, Farsi, Italian",
+    "type": "container",
+    "role": "four language cards: the translation of doctor cut by the tokenizers",
+    "drawn_as": "dashed rectangles with a grey tab at the top-left, the top row of the grid",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "OCR Errors, Orth. Errors, Sim. words, Emojis",
+    "type": "container",
+    "role": "four perturbation cards: OCR errors, orthographic errors, similar words (semantic equivalents) and emoji substitution",
+    "drawn_as": "dashed rectangles with a grey tab at the top-left, the bottom row of the grid",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "token chips",
+    "type": "data",
+    "role": "one rounded chip per token, one row per tokenizer inside each card, e.g. Turkish: do|ktor, d|ok|tor, do|kt|or, doktor",
+    "drawn_as": "small rounded boxes with thin dark outlines filled yellow, blue, green or red, wider for longer tokens",
+    "container": "all eight cards",
+    "is_contribution": null
+   },
+   {
+    "name": "x 13",
+    "type": "label",
+    "role": "count written beside a '?' chip in the Emojis card; its meaning is not given in the figure",
+    "drawn_as": "plain grey text",
+    "container": "Emojis",
+    "is_contribution": null
+   },
+   {
+    "name": "outer dashed frame",
+    "type": "container",
+    "role": "gathers the eight cards under the doctor concept",
+    "drawn_as": "large dashed rounded rectangle around the whole grid",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "doctor",
+    "to": "the eight cards",
+    "what": "every card shows doctor in another language or under another perturbation",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "tokenizer tags (Gemma-2 yellow, GPT-2 blue, TokenMonster green, XGLM red)",
+    "to": "token chip rows in every card",
+    "what": "colour keys each row of chips to a tokenizer",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "rows of chips in one card",
+    "to": "each other",
+    "what": "the same word cut differently by each tokenizer, stacked for comparison",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "grey tab",
+    "to": "its dashed card",
+    "what": "the tab names the language or perturbation of the card",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Turkish",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "doktor cut as do|ktor (yellow), d|ok|tor (blue), do|kt|or (green) and one chip doktor (red)",
+    "verdict": null
+   },
+   {
+    "label": "Chinese",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "医生 as one chip (yellow), 医|生 (blue) and an empty chip plus 医生 (red); no green row",
+    "verdict": null
+   },
+   {
+    "label": "Farsi",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "the Farsi word for doctor as two chips (yellow), four chips (blue) and one chip (red); no green row",
+    "verdict": null
+   },
+   {
+    "label": "Italian",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "dottore cut as dot|tore (yellow), d|ott|ore (blue), dot|tore (green), do|ttore (red)",
+    "verdict": null
+   },
+   {
+    "label": "OCR Errors",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "an OCR-corrupted doctor cut as d|actor (yellow and blue) and da|ctor (green); no red row",
+    "verdict": null
+   },
+   {
+    "label": "Orth. Errors",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "a misspelt doctor cut as do|cter (yellow), do|ct|er (blue), doc|ter (green); no red row",
+    "verdict": null
+   },
+   {
+    "label": "Sim. words",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "physician as one chip (yellow), phys|ician (blue), one chip (green); no red row",
+    "verdict": null
+   },
+   {
+    "label": "Emojis",
+    "kind": "side-by-side-contrast",
+    "axis": "examples",
+    "shows": "a doctor emoji cut into an emoji chip, a narrow chip, a medical-symbol chip and a narrow chip (yellow, blue); a '?' chip with x 13 for green",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Turkish, Chinese, Farsi, Italian, OCR Errors, Orth. Errors, Sim. words, Emojis",
+    "kind": "identity",
+    "at": "grey tabs on the dashed cards",
+    "what": "names each card by its language or perturbation"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "emoji glyphs inside chips: man health worker and medical symbol, two of each",
+    "content": "other",
+    "role": "data-thumbnail",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "set inside rounded token chips of the Emojis card, between narrow empty chips"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "TokSuite wordmark in two coloured blocks, lavender and yellow",
+    "stands_for": "the benchmark and model suite",
+    "style": "logo",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "the word doctor and its Turkish, Chinese, Farsi and Italian forms, an OCR-corrupted form, a misspelling, the synonym physician and an emoji, each cut into tokens by Gemma-2, GPT-2, TokenMonster and XGLM",
+    "form": "dashed cards with stacked rows of coloured token chips",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of rounded chips, one per token, coloured by tokenizer, one row per tokenizer in each card, chip width following token length",
+    "parts": [
+     "token chip",
+     "tokenizer colour",
+     "row per tokenizer"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the doctor box and wordmark, then scans the top row of language cards and the bottom row of perturbation cards, comparing chip colours row by row."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Eight dashed cards in a 4 x 2 grid inside one large dashed frame: languages on the top row, perturbations on the bottom row; the two middle cards of the top row sit lower because the four tokenizer tags occupy the space above them; the doctor box and the wordmark sit on the frame's top edge.",
+  "panel_count": 8,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.49,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffe599",
+    "used_for": "Gemma-2 chips and tag; also the 'Suite' block of the wordmark"
+   },
+   {
+    "hex": "#9fc5e8",
+    "used_for": "GPT-2 chips and tag"
+   },
+   {
+    "hex": "#d9ead3",
+    "used_for": "TokenMonster chips and tag"
+   },
+   {
+    "hex": "#f4cccc",
+    "used_for": "XGLM chips and tag"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "grey card tabs and the doctor box"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "0.25 pt outlines of cards, chips and the outer frame, dashed for frames"
+   },
+   {
+    "hex": "#cdb4f0",
+    "used_for": "lavender 'Tok' block of the wordmark",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark grey (#595959) outlines, dashed on the outer frame and the eight cards, solid on chips and tabs",
+  "font": "text is converted to outlines in the SVG: bold sans in the wordmark and the doctor box, regular sans in tabs and chips; Latin, Chinese and Arabic scripts appear",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "chip and tag colour = tokenizer: yellow Gemma-2, blue GPT-2, green TokenMonster, red XGLM; one chip = one token (caption); grey = labels such as tabs and the doctor box",
+  "line_style_means": "dashed outline = a card or the frame that gathers them",
+  "shape_means": "rounded chip = one token; dashed rectangle with a grey tab = one language or perturbation; chip width follows token length",
+  "marker_means": "tab titles name the cards; 'x 13' beside a '?' chip is a count whose meaning is not given",
+  "emphasis": "the bold doctor box at the top centre and the two-colour TokSuite wordmark; chip colours carry the comparison",
+  "reusable_patterns": [
+   "one concept word on top and a grid of dashed cards beneath showing it translated or perturbed",
+   "token chips coloured by tokenizer, one row per tokenizer, chip width following token length",
+   "tokenizer colour tags set between the cards as a legend",
+   "grey tab titles on dashed cards",
+   "two-colour wordmark in a corner as branding"
+  ],
+  "weaknesses": [
+   "text is tiny at single-column width",
+   "the legend tags are squeezed into the gap above two cards and TokenMonster breaks over two lines",
+   "some rows are missing in some cards without explanation (no green row for Chinese and Farsi, no red row in the perturbation cards)",
+   "the '?' chip and 'x 13' are not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real tokenizer outputs for doctor across languages and perturbations",
+   "the TokSuite wordmark"
+  ],
+  "stock": [
+   "emoji glyphs (man health worker, medical symbol)"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards, tabs and chips",
+   "dashed frames",
+   "tokenizer tags"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed cards with grey tabs",
+   "coloured token chips",
+   "doctor concept box",
+   "tokenizer colour tags",
+   "TokSuite wordmark",
+   "emoji chips"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "tokenizer",
+   "tokenization",
+   "robustness",
+   "multilingual",
+   "perturbations",
+   "language models",
+   "benchmark",
+   "token chips"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups",
+   "small-multiples",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "grey-tab-panels",
+    "what": "each panel or card is an outlined rectangle (here dashed) with a small grey tab at its top-left that names it"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show one concept through many transformations: put the concept word on top and a grid of tabbed dashed cards beneath, each showing the same word translated or perturbed and cut into token chips, with one fixed colour per tokenizer so rows can be compared across cards.",
+  "suits": "Tokenization, preprocessing or representation papers where the same input is cut differently by several systems, and robustness benchmarks that show perturbation types."
+ },
+ "tags": [
+  "dashed-card-grid",
+  "tab-titles",
+  "token-chips",
+  "pastel-chips",
+  "single-column",
+  "wordmark-corner"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (Figure 1 caption)"
+  ],
+  "evidence": [
+   "The figure illustrates how different tokenizers fragment the concept “doctor” when subjected to OCR errors, orthographic mistakes",
+   "Each colored box represents one token across Gemma-2 (yellow), GPT-2 (blue), TokenMonster (green), and XGLM (red) tokenizers.",
+   "14 models that share the same initialization, architecture, and data but differ only in their tokenizers."
+  ]
+ },
+ "summary": "TokSuite is a set of fourteen models that differ only in their tokenizer, plus a multilingual benchmark of real-world perturbations. Figure 1 shows how four tokenizers cut the concept 'doctor'. A bold grey 'doctor' box and the TokSuite wordmark sit above eight dashed cards with grey tabs: four languages (Turkish, Chinese, Farsi, Italian) and four perturbations (OCR Errors, Orth. Errors, Sim. words, Emojis). Each card stacks rows of rounded token chips, one chip per token, coloured by tokenizer: Gemma-2 yellow, GPT-2 blue, TokenMonster green and XGLM red, with the colour tags set in the gap above the middle cards. Chip widths follow token length, so differences in fragmentation are visible at a glance.",
+ "summary_zh": "TokSuite 是只在分词器上不同的十四个模型加多语言扰动基准。图 1 以“doctor”为例：八张虚线卡片（四种语言、四类扰动）里，用四色词块展示四种分词器的切分。",
+ "confidence": "high",
+ "notes": "All text in the SVG is outlined, so every string was read from the preview and chip splits for Chinese, Farsi and the emoji card may contain transcription slips. Some rows are absent in some cards (no green row in the Chinese and Farsi cards, no red row in the four perturbation cards) and the figure does not say why. The meaning of the '?' chip with 'x 13' is not given. The lavender block colour of the wordmark is read from the picture.",
+ "venue": "ICML26"
+}

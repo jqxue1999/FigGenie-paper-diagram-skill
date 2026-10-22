@@ -1,0 +1,653 @@
+{
+ "paper_id": "icml25-0130",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OmniBench",
+  "one_liner": "A self-generating, graph-based benchmark for virtual agents with five task-complexity dimensions, bottom-up task synthesis and ten evaluated capabilities.",
+  "domain": [
+   "virtual agents",
+   "GUI agent benchmark",
+   "task synthesis"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "stage-pipeline"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "a banner of four adjectives, four colour-framed quadrants (one proof each) matched to them by underline colour, and a central capability wheel overlapping their inner corners",
+  "argues": "OmniBench is systematic, effective, scalable and multidimensional: controlled complexity, high-quality graph data, ten evaluated capabilities, and automatic cross-platform task synthesis.",
+  "subject": "Poster-like overview of the OmniBench benchmark: complexity grid, example task graph, evaluation charts, construction flow and the capability wheel.",
+  "elements": [
+   {
+    "name": "Systematic / Effective / Scalable / Multidimensional",
+    "type": "label",
+    "role": "the four claims of the paper, one per quadrant",
+    "drawn_as": "four bold words along the top, each with a highlighter underline in green, pink, yellow and blue",
+    "container": "banner",
+    "is_contribution": true
+   },
+   {
+    "name": "OmniBench logo and wordmark",
+    "type": "icon",
+    "role": "names the benchmark",
+    "drawn_as": "purple-yellow eye-in-triangle logo beside a multicolour wordmark with a faint reflection",
+    "container": "banner",
+    "is_contribution": null
+   },
+   {
+    "name": "Controllable Task Complexity Across Five Dimensions",
+    "type": "container",
+    "role": "quadrant for the Systematic claim",
+    "drawn_as": "green framed quadrant with a light green heading strip at the top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "complexity grid",
+    "type": "instance",
+    "role": "five dimensions (Dependency, Branch, Instruction, Knowledge, Hierarchy) at three levels (Easy, Medium, Hard) as small task graphs with their counts",
+    "drawn_as": "three green pill rows with dotted column separators, a small graph and a count caption (Edges, Width, Nodes, Apps, Depth) in each cell",
+    "container": "green quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "High-Quality Graph-Based Data",
+    "type": "container",
+    "role": "quadrant for the Effective claim",
+    "drawn_as": "red framed quadrant with a pink heading strip at the top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Task Graph",
+    "type": "instance",
+    "role": "one synthesised task as a graph of subtasks A, D, F, C, G, E with Edges 5, Width 3, Nodes 6, Apps 3, Depth 4",
+    "drawn_as": "dotted red box with lettered circular nodes coloured by app (File Explorer, Outlook, PowerPoint) and a small legend",
+    "container": "red quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "subtask cards A, F, C, G, D, E",
+    "type": "sample",
+    "role": "the instruction and the trajectory name of each subtask",
+    "drawn_as": "lettered coloured circles beside a short instruction and a coloured X.trajectory",
+    "container": "red quadrant",
+    "is_contribution": null
+   },
+   {
+    "name": "Task Instruction, Task Intent, Task Trajectory",
+    "type": "text-block",
+    "role": "the composed instruction, the intent 'Create a personal introduction PowerPoint for Emily' and five trajectory orders through the subtasks",
+    "drawn_as": "bold run-in headings with plain text, coloured file names and trajectory names",
+    "container": "red quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "Comprehensive Evaluation of 10 Agent Capabilities",
+    "type": "container",
+    "role": "quadrant for the Multidimensional claim",
+    "drawn_as": "navy framed quadrant with a light blue heading strip at the bottom",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "capability-to-complexity list",
+    "type": "text-block",
+    "role": "defines capabilities by hard complexity dimensions: Parallel Planning = Hard Dependency & Hard Branch; Long-Range Planning = Hard Dependency & Hard Hierarchy; Cross-Domain Decision-Making = Hard Knowledge & Hard Branch; Domain-Specific Knowledge = ...",
+    "drawn_as": "capability icon, blue name, hollow chevron arrow, then red Hard and green dimension names",
+    "container": "blue quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "Scalable and Cross-Platform Task Scenarios",
+    "type": "container",
+    "role": "quadrant for the Scalable claim",
+    "drawn_as": "gold framed quadrant with a pale yellow heading strip at the bottom",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Automated Benchmark Construction",
+    "type": "container",
+    "role": "the synthesis flow: 1. Subtask Synthesis (Subtask Discovery, Iterative Synthesis) and 2. Task Synthesis (Task Composition, Task Validation)",
+    "drawn_as": "dotted yellow sub-box with numbered steps, small labelled boxes and arrows",
+    "container": "yellow quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "Subtask Discovery",
+    "type": "operation",
+    "role": "an environment (globe) and an agent (robot) discover subtasks and write a Subtask Instruction",
+    "drawn_as": "globe icon and robot icon with arrows into a Subtask Instruction box",
+    "container": "Automated Benchmark Construction",
+    "is_contribution": true
+   },
+   {
+    "name": "Iterative Synthesis",
+    "type": "operation",
+    "role": "LLMs write a Trajectory and an Eval. Func. for the subtask; Cross Verification can send it back",
+    "drawn_as": "two vendor logos beside Trajectory and Eval. Func. boxes, a red cross on a Cross Verification box with a red arrow back to Subtask Instruction",
+    "container": "Automated Benchmark Construction",
+    "is_contribution": true
+   },
+   {
+    "name": "Task Composition and Task Validation",
+    "type": "operation",
+    "role": "subtasks are composed into a Task Graph, then a Task Instruction is written and checked by a Consistency Verifier",
+    "drawn_as": "three coloured circles into a Task Graph box, then Task Instruction and Consistency Verifier boxes with a Check! mark",
+    "container": "Automated Benchmark Construction",
+    "is_contribution": true
+   },
+   {
+    "name": "20 Real-World Task Scenarios",
+    "type": "container",
+    "role": "scenario groups: Office Work, Web Surfing, Screen Recording, Creative Editing, Team Collaboration and more",
+    "drawn_as": "five dotted boxes of application logos plus an ellipsis box",
+    "container": "yellow quadrant",
+    "is_contribution": true
+   },
+   {
+    "name": "Covering Mainstream Platforms",
+    "type": "container",
+    "role": "the three platforms: Desktop, Mobile, Web",
+    "drawn_as": "dotted box with a monitor, a phone and a globe icon with captions",
+    "container": "yellow quadrant",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "banner words",
+    "to": "the four quadrants",
+    "what": "each word's underline colour is the frame colour of the quadrant that backs the claim",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "green quadrant",
+    "to": "red quadrant",
+    "what": "controlled complexity and the graph-based data it yields",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Complexity radar",
+    "to": "Cross-Domain Knowledge wedge",
+    "what": "a complexity profile points at one capability of the wheel (dashed green box)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "complexity grid",
+    "to": "Task Graph",
+    "what": "the same measures (Edges, Width, Nodes, Apps, Depth) are printed beside the example task graph",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Task Graph nodes A-G",
+    "to": "subtask cards",
+    "what": "the letters name the subtasks and tie nodes to their instructions",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "capability wheel",
+    "to": "capability-to-complexity list",
+    "what": "the same capability icons and names reappear in the blue quadrant",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "1. Subtask Synthesis",
+    "to": "2. Task Synthesis",
+    "what": "subtasks first, then tasks composed from them",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Iterative Synthesis",
+    "to": "Subtask Instruction",
+    "what": "Cross Verification failure sends the subtask back for refinement (red cross)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Graph",
+    "to": "Task Instruction",
+    "what": "validated by the Consistency Verifier (Check!)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   }
+  ],
+  "panels": [
+   {
+    "label": "Controllable Task Complexity Across Five Dimensions",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "five complexity dimensions at three levels as small task graphs with their counts, and a complexity radar",
+    "verdict": "ours"
+   },
+   {
+    "label": "High-Quality Graph-Based Data",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "one example task graph with subtasks, instruction, intent and trajectories, and a chart of what training on the graph data gives",
+    "verdict": "ours"
+   },
+   {
+    "label": "Comprehensive Evaluation of 10 Agent Capabilities",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "capabilities defined by hard dimensions, coverage rate of 15 models against a human baseline, and a ten-axis radar",
+    "verdict": "ours"
+   },
+   {
+    "label": "Scalable and Cross-Platform Task Scenarios",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "automated subtask and task synthesis, 20 real-world scenario groups and three platforms",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Systematic, Effective, Scalable, Multidimensional",
+    "kind": "section",
+    "at": "banner",
+    "what": "name the four quadrants through the underline colours"
+   },
+   {
+    "marker": "Level 1-3 with Easy, Medium, Hard",
+    "kind": "identity",
+    "at": "left of the green pill rows",
+    "what": "names the difficulty level of each row"
+   },
+   {
+    "marker": "A, D, F, C, G, E",
+    "kind": "identity",
+    "at": "task graph nodes and subtask cards",
+    "what": "names the subtasks"
+   },
+   {
+    "marker": "1. Subtask Synthesis, 2. Task Synthesis",
+    "kind": "order",
+    "at": "inside the yellow construction flow",
+    "what": "orders the two synthesis steps"
+   },
+   {
+    "marker": "94, 31, 71, 34, 91, 103, 54, 23, 47, 27",
+    "kind": "identity",
+    "at": "inner edge of each capability wedge",
+    "what": "a count per capability; the figure and caption do not say of what (probably test tasks)"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "capability wheel: inner ring five categories (Generalist Knowledge, Instruction Understanding, Decision-Making, Long Context, Planning), outer ring ten capabilities, each with an icon and a count",
+    "content": "chart",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "the hub of the figure, overlapping the inner corners of all four quadrants, with a boxed OmniBench label in the centre and one wedge boxed in dashed green"
+   },
+   {
+    "what": "task-complexity radar with five axes and a green pentagon",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small dotted-frame radar in the green quadrant, tied to the wheel by a dashed arrow"
+   },
+   {
+    "what": "horizontal bar chart of average coverage rate on OmniBench for 15 models in four groups with a dashed Human Baseline line at 80.1",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "shaded background bands per group with coloured group names inside the plot"
+   },
+   {
+    "what": "radar chart of ten capabilities with nine model polygons and a legend",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "ten abbreviated axis names around a grid, translucent coloured polygons"
+   },
+   {
+    "what": "grouped bar chart Effectiveness of Graph-Structured Data on AndroidControl-SR and OmniAct-SR with four series",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small chart in a dashed red box at the lower right of the red quadrant"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flat pictograms such as a calendar of apps, a graduate, a document with a magnifier, a signpost, a flowchart, a route map, a checklist",
+    "stands_for": "the ten capabilities (repeated in the blue quadrant list)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 14
+   },
+   {
+    "depicts": "eye in a triangle with a dotted halo",
+    "stands_for": "the OmniBench logo",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "Desktop monitor, phone and globe",
+    "stands_for": "the three platforms",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "application logos such as Word, Excel, PowerPoint, Chrome, Edge, Skype, Zoom, Outlook, OBS and image editors",
+    "stands_for": "the real-world scenarios and apps",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 20
+   },
+   {
+    "depicts": "two vendor logos of language models",
+    "stands_for": "the LLMs that synthesise trajectories and evaluation functions",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "globe and robot face",
+    "stands_for": "the environment and the agent that discover subtasks",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one synthesised task about creating a PowerPoint for Emily: six subtasks A-G, a composed instruction, an intent and five trajectories",
+    "form": "task graph with lettered nodes, subtask cards and run-in text with coloured file names",
+    "real_values": true
+   },
+   {
+    "what": "complexity examples: Edges 1, 4, 9; Width 1, 3, 5; Nodes 1, 3, 5 (Ins: A, A,B,C, A,B,C,D,E); Apps 1, 2, 3; Depth 1, 3, 5",
+    "form": "fifteen small graphs with a count caption",
+    "real_values": true
+   },
+   {
+    "what": "coverage rates of models, for example GPT-4o 38.7, Omni-UGround 34.4, human baseline 80.1",
+    "form": "value labels at the bar ends",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "radar-chart",
+    "drawn_as": "one five-axis radar of task complexity and one ten-axis radar of model capability with translucent polygons",
+    "parts": [
+     "axes",
+     "polygons",
+     "legend"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "taxonomy-sunburst",
+    "drawn_as": "two-ring colour wheel with five categories inside and ten capabilities outside, an icon and a count per wedge",
+    "parts": [
+     "inner ring",
+     "outer ring",
+     "icons",
+     "counts"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "three pill rows Level 1 to Level 3 with Easy, Medium, Hard on a vertical bar and chevrons between the levels",
+    "parts": [
+     "pill rows",
+     "level bar",
+     "chevrons"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dag-task-graph",
+    "drawn_as": "lettered circular nodes joined by arrows, coloured by the app each subtask uses",
+    "parts": [
+     "nodes",
+     "edges",
+     "app legend"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "vendor logos next to the Trajectory and Eval. Func. boxes",
+    "parts": [
+     "vendor logos"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the banner with the logo and four adjectives, then the green quadrant at the top left, the red quadrant at the top right, the yellow quadrant at the bottom right and the blue quadrant at the bottom left (the banner order), with the wheel in the middle as the anchor."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A banner across the top, then a 2 by 2 grid of colour-framed quadrants (green and red above, blue and yellow below) with their titles on the outer edges, and a two-ring wheel in the middle overlapping the inner corners of all four.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.47,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#548235",
+    "used_for": "frame, heading text and graph snippets of the green quadrant"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "light green heading strip"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "frame and heading text of the red quadrant, the word Hard, red cross marks"
+   },
+   {
+    "hex": "#ffd5d5",
+    "used_for": "pink heading strip of the red quadrant"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy frame and heading text of the blue quadrant"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "light blue heading strip of the blue quadrant"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "gold frame and heading text of the yellow quadrant"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow heading strip and fills in the yellow quadrant"
+   },
+   {
+    "hex": "#fffcf3",
+    "used_for": "very light cream interior fill"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "gold dotted sub-box outlines in the yellow quadrant"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "thick 2.25 pt coloured quadrant frames, 0.75-1 pt dotted rounded sub-boxes, 0.25-0.5 pt lines inside charts and graphs, dashed vertical column separators",
+  "font": "sans (Calibri, Noto Sans, Arial) 3-23.5 pt; bold italic quadrant titles 10.5-12 pt, banner words 15.5 pt, wordmark 23.5 pt, running text mostly 4 pt",
+  "corners": "rounded",
+  "arrows": "a hollow double-headed arrow between the green and red quadrants, hollow chevron arrows in the capability list, thin elbow arrows in the construction flow, a dashed green arrow from the radar to the wheel",
+  "rendering": "mixed",
+  "effects": "gradient wheel wedges, highlighter underlines in the banner, a faint mirror reflection under the wordmark",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "quadrant colours (green, red, blue, yellow) match the banner adjectives Systematic, Effective, Multidimensional and Scalable through the underline colours; wheel colours group the ten capabilities into five categories; bar colours group models (orange open-source, purple close-source, green GUI agents, red SFT GUI agents trained on OmniBench data); red Hard and green dimension names tie the capability list back to the green quadrant",
+  "line_style_means": "thick coloured frames = the four claims; dotted rounded boxes = sub-parts; dashed vertical lines = column separators; dashed vertical line in the bar chart = human baseline; dashed green box on one wedge = the capability the radar profile is tied to",
+  "shape_means": "wedge = capability (outer ring) or category (inner ring); pill row = difficulty level; circle node = subtask; radar polygon = a profile over axes",
+  "marker_means": "Level 1-3 and Easy, Medium, Hard name the rows; letters A-G name subtasks; 1. and 2. order the construction steps; numbers on the wheel are per-capability counts; Edges, Width, Nodes, Apps, Depth captions give the measured complexity of each snippet",
+  "emphasis": "the banner words are colour-linked to the quadrants, the OmniBench logo and wordmark are the largest items, and the wheel sits in the middle overlapping all four quadrants as the hub",
+  "reusable_patterns": [
+   "banner of key adjectives, each underlined in the colour of the quadrant that backs it",
+   "four colour-framed quadrants with tinted heading strips on the outer edges, each stating one claim",
+   "central two-ring wheel overlapping the quadrant corners as the hub",
+   "difficulty grid: columns are complexity dimensions, rows are Easy, Medium, Hard pills with small graph snippets and their counts",
+   "dashed box and arrow tying a complexity radar to one wedge of the wheel",
+   "bar chart with shaded bands per model group and a dashed human-baseline line",
+   "pipeline drawn as dotted sub-boxes with numbered steps and vendor logos for the LLMs",
+   "application and platform icons as proof of coverage"
+  ],
+  "weaknesses": [
+   "text as small as 3-4 pt in a composite with about 65 bitmaps",
+   "the numbers on the wheel are not explained in the figure",
+   "the long task instruction and trajectory text runs between the wheel and the chart box, so the reading order of the red quadrant is unclear"
+  ]
+ },
+ "resources": {
+  "own": [
+   "an example task graph with its subtasks, instruction, intent and trajectories",
+   "evaluation results (coverage bars, radar, effectiveness bars)",
+   "complexity examples and capability counts"
+  ],
+  "stock": [
+   "application logos (Word, Excel, PowerPoint, Chrome, Edge, Skype, Zoom, Outlook, OBS and others)",
+   "two LLM vendor logos",
+   "flat capability pictograms",
+   "desktop, mobile and web icons"
+  ],
+  "generated": [
+   "the illustrated eye-in-triangle OmniBench logo"
+  ],
+  "drawn": [
+   "quadrant frames and heading strips",
+   "task graphs and the complexity grid",
+   "construction flow boxes and arrows"
+  ],
+  "unknown": [
+   "whether the wheel and the charts were exported from a plotting tool"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "banner with logo and four underlined adjectives",
+   "four colour-framed quadrants",
+   "central capability colour wheel",
+   "5 by 3 grid of graph snippets by complexity level",
+   "task graph with lettered nodes and instruction text",
+   "coverage-rate bar chart and model radar",
+   "construction flow with dotted sub-boxes and LLM logos",
+   "application and platform icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "virtual agent benchmark",
+   "graph-based tasks",
+   "task complexity",
+   "GUI agents",
+   "multi-dimensional evaluation",
+   "task synthesis",
+   "capability taxonomy",
+   "cross-platform"
+  ],
+  "tags": [
+   "title-branding",
+   "claim-banner",
+   "colour-coded-groups",
+   "brand-logo-icon",
+   "radar-chart",
+   "level-ladder",
+   "annotated-record-card",
+   "small-multiples",
+   "plot-callouts",
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "banner-to-quadrant-colour-link",
+    "what": "header words each underlined in the colour of the framed quadrant that substantiates the claim"
+   },
+   {
+    "name": "taxonomy-sunburst",
+    "what": "two-ring wheel of categories and sub-categories, coloured per category, with an icon and a count per wedge, used as the hub or coverage picture of a benchmark"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open a benchmark figure with a banner of the paper's key adjectives, each underlined in the colour of the quadrant that proves it, and place four colour-framed quadrants around a central wheel of the capabilities; each quadrant then shows one proof (complexity grid, example record, result charts, construction flow).",
+  "suits": "Benchmark or dataset papers that must show design, data quality, evaluation and scale claims in a single self-contained overview."
+ },
+ "tags": [
+  "poster-like-composite",
+  "colour-framed-quadrants",
+  "central-wheel",
+  "dotted-sub-boxes",
+  "app-logo-grid",
+  "banner-underlines"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2-3)",
+   "3 OmniBench (p.5)",
+   "4 OmniEval (p.6)"
+  ],
+  "evidence": [
+   "Overview of OmniBench, a systematic benchmark with five-dimensional task complexity and bottom-up automatic task synthesis for generating structured task graphs.",
+   "It evaluates ten virtual agent capabilities using high-quality graph-based data",
+   "we propose 10 fine-grained capabilities, derived from five categories that we consider essential"
+  ]
+ },
+ "summary": "OmniBench is a graph-based benchmark for virtual agents whose tasks are synthesised bottom-up with controllable complexity and evaluated on ten capabilities. Figure 1 is a poster-like composite. A banner with the OmniBench logo carries four adjectives, each underlined in the colour of one framed quadrant. Green: a grid of small task graphs for five complexity dimensions at three levels, plus a complexity radar. Red: one example task graph with its subtasks, instruction, intent and trajectories, and a bar chart showing that training on graph data helps. Blue: coverage-rate bars and a radar for open-source, closed-source and GUI agents against a human baseline of 80.1. Yellow: the automated subtask and task synthesis flow, 20 scenario groups and three platforms. A central two-ring wheel lists five categories and ten capabilities.",
+ "summary_zh": "OmniBench 是按图结构自底向上合成任务的虚拟智能体基准。图 1 像一张海报：顶部标志加四个形容词，下方四个彩色方框展示五维复杂度网格、任务图样例与训练收益、十项能力的柱图和雷达图、自动构建流程与二十个场景，中央圆环列出五类十项能力。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (contribution-mosaic, scope-overview, stage-pipeline) with the variant set to bento-highlights, since the prior's benchmark-dashboard is a scope-overview variant. The wheel numbers are not explained by the caption or the digest, so they are recorded as counts of unstated meaning. Two of the radar axis abbreviations are hard to read in the preview and are not spelled out. Which pictures are bitmaps is inferred from the digest (65 placed bitmaps, the wheel matches a 152 by 157 pt one); the charts may be bitmaps or vector. Icon counts are rough, read off the picture.",
+ "venue": "ICML25"
+}

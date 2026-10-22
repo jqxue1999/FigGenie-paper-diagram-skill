@@ -1,0 +1,643 @@
+{
+ "paper_id": "neurips25-0152",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ReSim",
+  "one_liner": "A controllable driving world model trained on expert plus simulated non-expert data to simulate reliable futures under any ego action, with a Video2Reward module.",
+  "domain": [
+   "autonomous driving world model",
+   "controllable video generation",
+   "reward estimation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast",
+   "contribution-mosaic",
+   "scope-overview"
+  ],
+  "variant": "fan-out",
+  "variant_note": "three lettered bands: data sources fan in, a Prior Work versus ReSim comparison in the middle, three applications fan out",
+  "argues": "Adding simulated non-expert driving data lets a world model follow even hazardous actions where expert-only models fail, and its simulated futures support policy planning, selection and closed-loop simulation.",
+  "subject": "Three data-source cards, a prior-work versus ReSim simulation lane ending in Video2Reward, and three application cards with small bar charts.",
+  "elements": [
+   {
+    "name": "a. Heterogeneous data compilation",
+    "type": "label",
+    "role": "title of the data band",
+    "drawn_as": "7.5 pt text with bold letter under the cards",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Universal Driving Videos",
+    "type": "container",
+    "role": "source i: large-scale driving videos for generalisation",
+    "drawn_as": "light blue rounded card with blue title, two frame pairs, a lane diagram, a route glyph and a blue database icon labelled i",
+    "container": "a. Heterogeneous data compilation",
+    "is_contribution": false
+   },
+   {
+    "name": "Expert Driving Data",
+    "type": "container",
+    "role": "source ii: experts' safe driving logs with labelled actions",
+    "drawn_as": "light green rounded card with green title and green database icon labelled ii",
+    "container": "a. Heterogeneous data compilation",
+    "is_contribution": false
+   },
+   {
+    "name": "Non-expert Simulated Data",
+    "type": "container",
+    "role": "source iii: potentially dangerous behaviours collected in a simulator",
+    "drawn_as": "light yellow rounded card with orange title, red deviation arrows and a yellow database icon labelled iii",
+    "container": "a. Heterogeneous data compilation",
+    "is_contribution": true
+   },
+   {
+    "name": "ego-car action diagrams",
+    "type": "icon",
+    "role": "the driving action in each source: straight for sources i and ii, straight plus left and right deviations for source iii",
+    "drawn_as": "bird's-eye lane with a blue car, a white ego car and a green straight arrow, red side arrows in card iii",
+    "container": "source cards",
+    "is_contribution": null
+   },
+   {
+    "name": "route glyphs",
+    "type": "icon",
+    "role": "trajectory annotation of each source; crossed out for universal videos, probably meaning no action labels",
+    "drawn_as": "grey route line with a pin",
+    "container": "source cards",
+    "is_contribution": null
+   },
+   {
+    "name": "database icons i, ii, iii",
+    "type": "icon",
+    "role": "the three data sources carried into the model lanes of band b",
+    "drawn_as": "glossy cylinders in blue, green and yellow with roman numerals",
+    "container": "a and b",
+    "is_contribution": null
+   },
+   {
+    "name": "b. Reliable world simulation with rewards",
+    "type": "label",
+    "role": "title of the simulation band",
+    "drawn_as": "7.5 pt text with bold letter",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Prior Work",
+    "type": "module",
+    "role": "earlier driving world model trained on sources i and ii only",
+    "drawn_as": "grey rounded box with grey block arrow to a grey frame panel",
+    "container": "b. Reliable world simulation with rewards",
+    "is_contribution": false
+   },
+   {
+    "name": "ReSim",
+    "type": "module",
+    "role": "the proposed world model trained on sources i, ii and iii",
+    "drawn_as": "pale blue rounded box with a faint globe behind the name and a blue block arrow to a blue frame panel",
+    "container": "b. Reliable world simulation with rewards",
+    "is_contribution": true
+   },
+   {
+    "name": "Video2Reward",
+    "type": "module",
+    "role": "turns ReSim's simulated future into a scalar reward",
+    "drawn_as": "gold-outlined trapezoid wide on the input side, then a blue arrow to a gold trophy",
+    "container": "b. Reliable world simulation with rewards",
+    "is_contribution": true
+   },
+   {
+    "name": "c. Applications",
+    "type": "label",
+    "role": "title of the application band",
+    "drawn_as": "7.5 pt text with bold letter",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "1. Visual Prediction-based Policy",
+    "type": "container",
+    "role": "ReSim's simulated future is turned into a trajectory; PDMS bars compare DrivingGPT, LAW and ReSim",
+    "drawn_as": "light purple card with globe, arrow, route glyph and a small bar chart",
+    "container": "c. Applications",
+    "is_contribution": true
+   },
+   {
+    "name": "2. Reward-guided Policy Selection",
+    "type": "container",
+    "role": "rewards pick the best of several candidate trajectories; PDMS bars compare Vista, Avg. and ReSim",
+    "drawn_as": "light blue card with a green car and ticked trophy, a grey car and crossed trophy, and a small bar chart",
+    "container": "c. Applications",
+    "is_contribution": true
+   },
+   {
+    "name": "3. Closed-loop Visual Simulation",
+    "type": "container",
+    "role": "a camera frame and car actions alternate with ReSim in a loop on NAVSIM",
+    "drawn_as": "light pink card with orange and grey cameras, car icons, block arrows, a NAVSIM logo and a globe",
+    "container": "c. Applications",
+    "is_contribution": true
+   },
+   {
+    "name": "NAVSIM",
+    "type": "icon",
+    "role": "the benchmark used for the closed-loop application",
+    "drawn_as": "italic logo at the top right of card 3",
+    "container": "3. Closed-loop Visual Simulation",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "database icons i, ii",
+    "to": "Prior Work",
+    "what": "trained on the expert-type sources only",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "database icons i, ii, iii",
+    "to": "ReSim",
+    "what": "trained on all three sources",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prior Work",
+    "to": "grey frame strip",
+    "what": "consistently safe but inaccurate imagined future",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ReSim",
+    "to": "blue frame strip",
+    "what": "future that follows the commanded action",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "blue frame strip",
+    "to": "Video2Reward",
+    "what": "simulated video to be scored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Video2Reward",
+    "to": "trophy",
+    "what": "scalar reward",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ReSim globe (card 1)",
+    "to": "route glyph",
+    "what": "simulated future turned into a trajectory",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "candidate cars (card 2)",
+    "to": "trophies with tick or cross",
+    "what": "reward separates the selected candidate from the weak one",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "camera and car icons (card 3)",
+    "to": "ReSim globe",
+    "what": "frames and actions alternate in a closed simulation loop",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "source cards in a",
+    "to": "database icons in b",
+    "what": "the same colour and numeral carry each source into the model lanes",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "ego-car icon with red arrow",
+    "to": "simulated frame strips",
+    "what": "the steering command that conditions the simulated frames",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a. Heterogeneous data compilation",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "three tinted source cards, universal videos, expert data and non-expert simulated data, each with frame pairs, an action diagram and a numbered database icon",
+    "verdict": "setting"
+   },
+   {
+    "label": "b. Reliable world simulation with rewards",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "grey Prior Work lane on sources i and ii versus blue ReSim lane on i to iii, each with a simulated frame strip, then Video2Reward and a trophy",
+    "verdict": "ours"
+   },
+   {
+    "label": "c. Applications",
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "three application cards: visual prediction-based policy, reward-guided policy selection, closed-loop visual simulation, two with PDMS bar charts",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a., b., c.",
+    "kind": "section",
+    "at": "band titles",
+    "what": "letter the three bands"
+   },
+   {
+    "marker": "i, ii, iii",
+    "kind": "identity",
+    "at": "database icons in a and b",
+    "what": "name the three data sources and follow them into the model lanes"
+   },
+   {
+    "marker": "1., 2., 3.",
+    "kind": "identity",
+    "at": "application card titles",
+    "what": "number the three applications"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "driving video frame pairs from real data: city street with taxis and a truck, a mountain highway, urban street scenes",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two strips per card of two frames side by side, framed in the card's colour (blue for universal, green for expert)"
+   },
+   {
+    "what": "simulated driving frame pairs from a driving simulator: suburban road with trees and cars",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two strips of two frames in a yellow frame on the non-expert card"
+   },
+   {
+    "what": "simulated future frames for the same left-turn command, one strip from Prior Work and one from ReSim",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "strip of three frames placed edge to edge on a grey (Prior Work) or pale blue (ReSim) panel, a white ego-car icon with a red left-turn arrow under the first frame"
+   },
+   {
+    "what": "two small PDMS bar charts: DrivingGPT 82.4, LAW 84.6, ReSim 86.6; Vista 59.2, Avg. 66.8, ReSim 74.1",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "three bars each with value labels, ReSim bar in the card's accent colour and the others grey, a PDMS axis arrow and legend squares underneath"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "glossy database cylinder with dots and a roman numeral",
+    "stands_for": "the data sources i, ii, iii",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "bird's-eye lane with a blue car and a white ego car with a green or red arrow",
+    "stands_for": "the ego driving action in each source",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "route line with a map pin, once crossed out",
+    "stands_for": "trajectory annotation (absent for universal videos)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "globe",
+    "stands_for": "the ReSim world model",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "gold trophy, also with green tick or red cross badge",
+    "stands_for": "reward, and the best versus the weak candidate",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "orange and grey cameras, blue cars",
+    "stands_for": "sensor frames and ego actions in the closed loop",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "NAVSIM logo",
+    "stands_for": "the benchmark",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one left-turn steering command given to a prior world model and to ReSim, with the simulated frames each produces",
+    "form": "two frame strips with the same ego-car and red arrow glyph",
+    "real_values": true
+   },
+   {
+    "what": "PDMS scores of competing methods and policies on NAVSIM",
+    "form": "two three-bar charts with value labels",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "tinted rounded card with two frame pairs, an action diagram, a route glyph and a numbered database cylinder at the corner",
+    "parts": [
+     "title",
+     "frame pairs",
+     "action diagram",
+     "database icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "world-model-globe",
+    "drawn_as": "globe with the model name over it standing for the world simulator",
+    "parts": [
+     "globe",
+     "label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "reward-model-funnel",
+    "drawn_as": "gold-outlined trapezoid wide on the input side labelled Video2Reward, followed by an arrow to a trophy",
+    "parts": [
+     "trapezoid",
+     "arrow",
+     "trophy"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "closed-loop-simulation",
+    "drawn_as": "alternating camera and car icons joined by block arrows, ending in the model globe and an ellipsis",
+    "parts": [
+     "camera",
+     "car",
+     "block arrow",
+     "globe"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the blue Universal Driving Videos card at the top left, reads the three cards left to right, then the two lanes of band b left to right to the trophy, then the three application cards."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three full-width bands lettered a, b, c and separated by dashed horizontal rules: three tinted data cards in a row, a two-lane comparison with databases and model boxes on the left, frame strips in the middle and a Video2Reward funnel and trophy at the right, and three application cards with small bar charts or icon chains.",
+  "panel_count": 3,
+  "lanes": "two parallel lanes in band b, Prior Work above and ReSim below, each with database icons, a model box, a block arrow and a frame strip",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.53,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#deebf7",
+    "used_for": "blue card tints: universal videos and reward-guided selection"
+   },
+   {
+    "hex": "#5991f6",
+    "used_for": "blue frames around the universal-video strips"
+   },
+   {
+    "hex": "#f1f8f2",
+    "used_for": "expert card tint"
+   },
+   {
+    "hex": "#4a8a4d",
+    "used_for": "green frames around the expert strips"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green action arrows and expert database icon"
+   },
+   {
+    "hex": "#fefaf0",
+    "used_for": "non-expert card tint"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow frames around the simulated strips and database icon iii"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "outline of the Video2Reward trapezoid"
+   },
+   {
+    "hex": "#eff5fc",
+    "used_for": "panel behind the ReSim frame strip"
+   },
+   {
+    "hex": "#bdd7ee",
+    "opacity": 0.85,
+    "used_for": "ReSim box fill"
+   },
+   {
+    "hex": "#f2f2f2",
+    "opacity": 0.85,
+    "used_for": "panel behind the Prior Work frame strip"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "Prior Work box fill"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "grey baseline bars"
+   },
+   {
+    "hex": "#7030a0",
+    "opacity": 0.1,
+    "used_for": "visual-prediction card tint; the same purple for its title and ReSim bar"
+   },
+   {
+    "hex": "#fbedeb",
+    "used_for": "closed-loop card tint"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red steering and deviation arrows"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "1.25 pt coloured frames on frame strips, 0.75 pt dashed black rules between bands, gold 1.25 pt outline on the Video2Reward trapezoid, none on the tinted cards",
+  "font": "sans (Calibri and a CJK sans) at 4 to 7.5 pt, card titles in the card's colour, bold band letters, Georgia italic for the roman numerals",
+  "corners": "mixed",
+  "arrows": "wide block arrows with a gradient fade (grey for Prior Work, blue for ReSim, chunky purple, red and black ones in the application cards); thin green and red arrows on the lane diagrams",
+  "rendering": "mixed",
+  "effects": "glossy 3D database cylinders and globe, gradient fades on block arrows, translucent tints",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = universal driving videos, green = expert data, yellow = non-expert simulated data, carried onto the database icons of band b; grey = Prior Work, blue = ReSim; purple, blue and pink tints tag the three applications; red arrows = hazardous or turning actions",
+  "line_style_means": "dashed black rules separate the lettered bands; coloured frames on frame strips repeat the source colour",
+  "shape_means": "cylinder = data source, rounded box = model, trapezoid = reward model, globe = world model, trophy = reward",
+  "marker_means": "i, ii, iii name the data sources; a., b., c. head the bands; 1., 2., 3. number the applications; green tick and red cross on trophies mark the selected and the weak candidate",
+  "emphasis": "yellow non-expert source with red arrows in band a, the coloured ReSim lane against the greyed Prior Work lane in band b, and accent-coloured ReSim bars in band c",
+  "reusable_patterns": [
+   "each data source keeps a colour and numeral from its card to the database icon feeding the model",
+   "greyed baseline lane above the coloured proposed lane with the same input and output slots",
+   "ego-car icon with a red turn arrow under the first frame of each simulated strip to show the commanded action",
+   "reward model drawn as a trapezoid funnel ending in a trophy",
+   "icon-story application cards with tiny bar charts in which the proposed method has the accent colour",
+   "dashed rules plus letter and title captions to separate bands"
+  ],
+  "weaknesses": [
+   "4 pt value labels in the bar charts",
+   "the crossed-out route glyph and the camera and car chain of card 3 are not explained in the caption",
+   "the Prior Work versus ReSim difference rests on small frame strips that are hard to compare at print size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real driving video frames from the training data",
+   "simulated driving frames from the driving simulator",
+   "ReSim and Prior Work simulated frames",
+   "NAVSIM PDMS numbers"
+  ],
+  "stock": [
+   "database cylinders",
+   "globe",
+   "trophy",
+   "car, camera and route icons",
+   "NAVSIM logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted cards and frames",
+   "block arrows",
+   "Video2Reward trapezoid",
+   "bar charts",
+   "dashed band rules"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted data-source cards with frame pairs",
+   "database icons i ii iii",
+   "ego-car action diagrams with arrows",
+   "Prior Work box versus ReSim box",
+   "simulated frame strips",
+   "Video2Reward trapezoid and trophy",
+   "application cards with bar charts"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "world model",
+   "autonomous driving",
+   "video generation",
+   "reward model",
+   "policy evaluation",
+   "NAVSIM",
+   "non-expert data",
+   "CARLA",
+   "closed-loop simulation"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "condition-insets",
+   "verdict-marks",
+   "brand-logo-icon",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "greyed-baseline-lane",
+    "what": "the prior method is drawn in grey above the coloured proposed method with the same input and output slots so the two lanes compare at a glance"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Tie data, method and applications together with colour: give each data source a colour and numeral on its card, carry it onto the database icons that feed the model, and draw the baseline as a grey lane above the coloured proposed lane with the same slots; end with small icon-story cards for the downstream uses.",
+  "suits": "World-model, generative or data-mixture papers whose story is which data go in, how outputs differ from a baseline and what the model enables downstream."
+ },
+ "tags": [
+  "lettered bands with dashed rules",
+  "tinted cards",
+  "database icons i ii iii",
+  "coloured frames on frame strips",
+  "gradient block arrows",
+  "mini bar charts"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Training data (p.3)"
+  ],
+  "evidence": [
+   "(a) Heterogeneous driving data includes (i,ii) experts’ safe driving logs, and (iii) potentially dangerous (non-expert) driving behaviors from simulations.",
+   "prior works like Vista [16] fail to follow the specified steering action, while ReSim accurately simulates off-road behaviors.",
+   "we develop a Video2Reward model to convert simulated video outputs from ReSim into scalar rewards in real-world scenarios."
+  ]
+ },
+ "summary": "ReSim is a controllable driving world model trained on real expert driving videos plus non-expert data from a simulator so that it can simulate reliable futures even for hazardous ego actions, with a Video2Reward module that scores simulated futures. Figure 1 has three lettered bands separated by dashed rules. (a) shows three tinted data cards (universal driving videos, expert data, non-expert simulated data), each with frame pairs, an ego-car action diagram and a numbered database icon. (b) compares a grey Prior Work lane trained on sources i and ii with a blue ReSim lane trained on i to iii, each producing a frame strip under the same left-turn command, and ends with a Video2Reward funnel and trophy. (c) gives three application cards, two with small PDMS bar charts.",
+ "summary_zh": "ReSim 是用专家加仿真非专家数据训练的可控驾驶世界模型。图 1 分三带：a 数据来源卡片，b 灰色 Prior Work 对比蓝色 ReSim 的模拟帧并接 Video2Reward 与奖杯，c 三张应用卡片。",
+ "confidence": "high",
+ "notes": "The pre-screen kinds are kept and scope-overview is added for band a. The meaning of the crossed-out route glyph (probably no action labels) and of the camera and car chain in card 3 (read as a closed loop) is inferred from the drawing and the card title; the caption does not explain them. Icon counts are approximate.",
+ "venue": "NeurIPS25"
+}

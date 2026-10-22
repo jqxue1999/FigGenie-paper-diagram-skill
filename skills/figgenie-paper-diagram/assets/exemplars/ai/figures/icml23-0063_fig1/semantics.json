@@ -1,0 +1,490 @@
+{
+ "paper_id": "icml23-0063",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Explains a distribution shift with interpretable transport maps (k-sparse, k-cluster, distribution translation) chosen by data type.",
+  "domain": [
+   "distribution shift explanation",
+   "optimal transport",
+   "interpretability"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "decision-flowchart",
+  "variant_note": "a left-to-right flowchart of two questions whose three branches end in grey result boxes, each putting a baseline explanation beside the proposed one on a real example",
+  "argues": "Different data call for different interpretable maps, and each map explains the shift better than a baseline explanation on a real example.",
+  "subject": "A flowchart that picks k-sparse, k-cluster or distribution translation maps, with a baseline-versus-proposed result for each.",
+  "elements": [
+   {
+    "name": "Given(P_src, P_tgt)",
+    "type": "data",
+    "role": "the pair of source and shifted target datasets to be explained",
+    "drawn_as": "large 'Given(' text with a blue database cylinder, a comma, a red cylinder and a closing bracket, symbols P_src in blue and P_tgt in red under them",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Are the features or samples interpretable?",
+    "type": "operation",
+    "role": "first decision of the flow",
+    "drawn_as": "darker-blue rounded box with white text",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "Are there clusters in the samples?",
+    "type": "operation",
+    "role": "second decision, asked when the features are interpretable",
+    "drawn_as": "darker-blue rounded box with white text",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "Not Clusterable / Clusterable / Features are interpretable (e.g., sales data) / Samples are interpretable (e.g., images)",
+    "type": "label",
+    "role": "answers that label the branches of the flow",
+    "drawn_as": "black sans text on or beside the pale block arrows",
+    "container": "Our Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Solve for k-sparse maps",
+    "type": "module",
+    "role": "branch for data that are not clusterable; learns the map T_Ωk",
+    "drawn_as": "bright-blue rectangle with white text",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "Solve for k-cluster maps",
+    "type": "module",
+    "role": "branch for clusterable data; learns the map T_Ck",
+    "drawn_as": "bright-blue rectangle with white text",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "Solve for distribution translation maps",
+    "type": "module",
+    "role": "branch for data whose samples are interpretable, such as images; learns the map T",
+    "drawn_as": "bright-blue rectangle with white text, lower than the other two",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "k-sparse result box: Baseline Mean Explain / Proposed k-sparse Explain",
+    "type": "text-block",
+    "role": "word-level explanations of a text shift: the baseline mean lists many +/- words, the proposed sparse maps list a few and say how much of the shift they explain",
+    "drawn_as": "grey rectangle with four lines of text, labels at the left, word lists in square brackets",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "k-cluster result box: Oracle Shift / Baseline Mean Explain / Proposed k-cluster Explain",
+    "type": "container",
+    "role": "cluster shift shown as the true shift, a mean-only explanation and the cluster-wise explanation",
+    "drawn_as": "grey rectangle holding a blob sketch and two framed scatter plots with labels",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "translation result box: Baseline Random Set Explain / Proposed Distributional Counterfactual Explain",
+    "type": "container",
+    "role": "image shift explained by a random set of images versus translated images",
+    "drawn_as": "grey rectangle holding two image grids with column headings P_1 to P_5 and P_x, P_x→1 to P_x→5",
+    "container": "Our Methods",
+    "is_contribution": true
+   },
+   {
+    "name": "Our Methods",
+    "type": "container",
+    "role": "groups the proposed flow and its results, apart from the given datasets",
+    "drawn_as": "large dotted rounded frame with the title at the bottom-left",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "T_Ωk, T_Ck, T",
+    "type": "label",
+    "role": "names of the maps learned by the three solvers",
+    "drawn_as": "italic serif symbol on a small pale block arrow between solver and result box",
+    "container": "Our Methods",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Given(P_src, P_tgt)",
+    "to": "Are the features or samples interpretable?",
+    "what": "the dataset pair",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Are the features or samples interpretable?",
+    "to": "Are there clusters in the samples?",
+    "what": "Features are interpretable (e.g., sales data)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Are the features or samples interpretable?",
+    "to": "Solve for distribution translation maps",
+    "what": "Samples are interpretable (e.g., images)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Are there clusters in the samples?",
+    "to": "Solve for k-sparse maps",
+    "what": "Not Clusterable",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Are there clusters in the samples?",
+    "to": "Solve for k-cluster maps",
+    "what": "Clusterable",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Solve for k-sparse maps",
+    "to": "k-sparse result box",
+    "what": "map T_Ωk, then its explanation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Solve for k-cluster maps",
+    "to": "k-cluster result box",
+    "what": "map T_Ck, then its explanation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Solve for distribution translation maps",
+    "to": "translation result box",
+    "what": "map T, then its explanation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Baseline explanation",
+    "to": "Proposed explanation",
+    "what": "same example, two explanations side by side in every result box",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "blue items (cylinder, P_src, M_0, source points)",
+    "to": "red items (cylinder, P_tgt, M_1, target points)",
+    "what": "source in blue and target in red, kept on icons, subscripts, scatter points and image headings",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "T_Ωk, T_Ck, T",
+    "kind": "identity",
+    "at": "small block arrows between solver boxes and result boxes",
+    "what": "name the map each branch learns"
+   },
+   {
+    "marker": "P_1 ... P_5, P_x, P_x→1 ... P_x→5",
+    "kind": "identity",
+    "at": "column and row headings of the image grids",
+    "what": "name the image groups: random sets, a source group and its translations"
+   },
+   {
+    "marker": "+ and − before words",
+    "kind": "identity",
+    "at": "word lists of the first result box",
+    "what": "a word that gains (+) or loses (−) weight from source to target"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "blob sketch of the oracle shift: blue ellipses for source clusters and red ellipses for target clusters",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "glowing elliptical blobs scattered on white, no axes, beside the label Oracle Shift from P_src to P_tgt"
+   },
+   {
+    "what": "scatter plot of the baseline mean explanation: blue source points, red target points and orange mean-shifted points",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "framed 2-D scatter without axes, markers as small triangles and diamonds"
+   },
+   {
+    "what": "scatter plot of the proposed k-cluster explanation: source points in blue linked by faint grey lines to translated points, one colour per cluster",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "framed 2-D scatter without axes; translated clusters in green, pink, purple, brown and grey"
+   },
+   {
+    "what": "random set of histology image patches, columns P_1 to P_5",
+    "content": "medical",
+    "role": "result",
+    "count": 20,
+    "medium": "bitmap",
+    "treatment": "5 columns by 4 rows of H&E patches butted together, column headings above, torn-paper bottom edge"
+   },
+   {
+    "what": "translated histology patches: rows P_1, P_2, P_3 and columns P_x (source) then P_x→1 to P_x→5",
+    "content": "medical",
+    "role": "result",
+    "count": 18,
+    "medium": "bitmap",
+    "treatment": "three wide strips, one per row, with column headings in italic serif, the blue x and red arrow digits marking source and target"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "database cylinder, blue for the source and red for the target",
+    "stands_for": "the source dataset P_src and the shifted dataset P_tgt",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "word-level explanations of a shift from non-toxic to toxic comments: baseline [+trump, -women, ..., +sick] against proposed [-women, -men, +man, +people, -like], which aligns 7.3%, and a k=10 map explaining 11.61% of the shift",
+    "form": "bracketed word lists with +/- signs and a percentage in plain text",
+    "real_values": true
+   },
+   {
+    "what": "histology images of one tissue type moved step by step across the shift",
+    "form": "rows of image patches with column headings P_x to P_x→5",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "2-D point clouds of source (blue) and target (red) clusters with faint lines from source points to their translated points",
+    "parts": [
+     "source points",
+     "target points",
+     "translation lines"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "decision-question-box",
+    "drawn_as": "darker-blue rounded boxes with a yes-or-no style question, answers written on the pale block arrows that leave them",
+    "parts": [
+     "question box",
+     "answer labels",
+     "block arrows"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at Given(P_src, P_tgt) at the top-left, goes down to the first question, then right through the second question and the three solver boxes, ending at the three grey result boxes, in each of which the baseline is read before the proposed explanation."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A branching flowchart on the left third (two question boxes, three solver boxes joined by pale block arrows) lines up with three stacked grey result rows on the right; a dotted rounded frame called Our Methods surrounds everything except the Given(P_src, P_tgt) at the top-left.",
+  "panel_count": 1,
+  "lanes": "3 aligned rows, one per branch: solver box, small arrow with the map symbol, grey result box with baseline and proposed explanation",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.55,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4472c4",
+    "used_for": "question boxes of the flow"
+   },
+   {
+    "hex": "#4c80de",
+    "used_for": "solver boxes (Solve for ... maps)"
+   },
+   {
+    "hex": "#cfd5ea",
+    "used_for": "pale block arrows of the flow"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey result boxes"
+   },
+   {
+    "hex": "#377eb8",
+    "used_for": "source distribution P_src: cylinder, subscripts, scatter markers"
+   },
+   {
+    "hex": "#e41a1c",
+    "used_for": "target distribution P_tgt: cylinder, subscripts, scatter markers"
+   },
+   {
+    "hex": "#ffa500",
+    "used_for": "mean-shifted points of the baseline explanation"
+   },
+   {
+    "hex": "#1ac938",
+    "used_for": "one translated cluster in the proposed k-cluster plot"
+   },
+   {
+    "hex": "#f14cc1",
+    "used_for": "another translated cluster (pink); purple #8b2be2 and brown #9f4800 are used the same way"
+   },
+   {
+    "hex": "#a3a3a3",
+    "used_for": "faint lines from source to translated points"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt marker and box outlines, one 1.5 pt dotted rounded frame",
+  "font": "sans (Calibri), 4-10 pt, mostly 6.5 pt, Cambria Math italics for P_src, P_tgt, T and the formulas",
+  "corners": "mixed",
+  "arrows": "pale thick block arrows without outline for the flow; faint grey connector lines inside the cluster plot",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Blue = source distribution P_src and red = target distribution P_tgt, kept on the cylinders, subscripts, scatter points and image headings; orange = baseline mean-shifted points; other colours in the proposed k-cluster plot = one colour per translated cluster. Flow boxes: darker blue = questions, brighter blue = solvers; grey = result boxes.",
+  "line_style_means": "Pale thick block arrows carry the flow; the dotted rounded frame groups the proposed methods; faint grey lines in the cluster plot join each source point to its translated point.",
+  "shape_means": "Rounded boxes = questions; rectangles = solvers; grey rectangles = result boxes; cylinders = datasets.",
+  "marker_means": "T with a subscript names the map of each branch; P_1 to P_5 and P_x, P_x→i name image groups; + or − before a word marks a gain or a loss from source to target.",
+  "emphasis": "Every result box sets Baseline and Proposed side by side on the same example, and the dotted Our Methods frame separates the given data from the methods.",
+  "reusable_patterns": [
+   "decision questions as rounded boxes with answers written on the block arrows, ending in one solver box per case",
+   "grey result box per branch with Baseline and Proposed side by side on one example",
+   "source in blue and target in red kept on icons, subscripts and scatter points",
+   "dotted rounded frame naming the proposed methods",
+   "map symbol written on a small block arrow between solver and result",
+   "image grids with column headings: a random set against a translated sequence"
+  ],
+  "weaknesses": [
+   "the flow is squeezed into the left third while the results take two thirds, so branch arrows run close together",
+   "most text is 6.5 pt and formula subscripts are 4-4.5 pt",
+   "the colours of the translated clusters and the orange points are not explained in the figure",
+   "the result boxes need the caption and section 5 to be read fully"
+  ]
+ },
+ "resources": {
+  "own": [
+   "word lists from a toxic-comment shift with percentages",
+   "scatter plots of clusters with source, target and mapped points",
+   "histology image patches, a random set and translated sequences"
+  ],
+  "stock": [
+   "database cylinder icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "flowchart boxes and block arrows",
+   "dotted frame",
+   "oracle-shift blob sketch"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "blue and red database cylinders",
+   "question boxes in a flowchart",
+   "solver boxes with map symbols",
+   "dotted Our Methods frame",
+   "grey result boxes with baseline and proposed",
+   "word lists with plus and minus signs",
+   "cluster scatter plots",
+   "histology image grids"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "distribution shift",
+   "explanation",
+   "optimal transport",
+   "k-sparse maps",
+   "k-cluster maps",
+   "distribution translation",
+   "counterfactual",
+   "method selection"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "option-catalog",
+   "embedding-scatter-plot",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "baseline-vs-proposed-result-box",
+    "what": "a grey result box per branch with the baseline output on one side and the proposed output on the other, labelled Baseline and Proposed, using the same example"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Turn method selection into a flowchart: rounded question boxes with answers on the arrows lead to one solver box per case, and every branch ends in a grey result box that shows the baseline output beside the proposed output on the same real example.",
+  "suits": "Papers that offer several variants of one method for different data types and want to show both how to choose one and what each gains over a baseline."
+ },
+ "tags": [
+  "decision flowchart",
+  "grey result boxes",
+  "pale block arrows",
+  "dotted method frame",
+  "blue source and red target",
+  "histology grids",
+  "sans text",
+  "powerpoint-made"
+ ],
+ "provenance": {
+  "sections": [
+   "6 Discussion and Limitations (p.8)"
+  ],
+  "evidence": [
+   "we suggest following the logical flow for method selection in Figure 1",
+   "a user can choose to explain the distribution shift using k-sparse maps"
+  ]
+ },
+ "summary": "The paper explains distribution shifts with interpretable transport maps from a source to a target distribution. Figure 1 is a method-selection flowchart. Given the datasets P_src (blue) and P_tgt (red), a first question asks whether features or samples are interpretable; for interpretable features a second asks whether the samples form clusters. The three branches lead to solvers for k-sparse maps, k-cluster maps and distribution translation maps, each ending in a grey result box that sets a baseline explanation beside the proposed one: word lists for toxic comments, cluster scatter plots, and histology image grids. A dotted frame called Our Methods groups the flow and its results.",
+ "summary_zh": "本文用可解释的传输映射来解释分布偏移。图 1 是方法选择流程图：给定源分布和目标分布，先问特征或样本是否可解释，再问是否有簇，三条分支分别求 k 稀疏、k 聚类和分布翻译映射，每条分支的灰框里并排给出基线解释与所提解释。",
+ "confidence": "high",
+ "notes": "Pre-screen kinds kept. The three grey result boxes are separately framed but have no letter or title, so they are treated as the ends of three lanes, not as panels. The scatter plots are vector (hundreds of marker paths in the digest); the oracle blob sketch, the cylinders and the histology grids are bitmaps by placed size. The system has no name in the paper, so name is null.",
+ "venue": "ICML23"
+}

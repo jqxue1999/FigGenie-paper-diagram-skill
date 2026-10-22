@@ -1,0 +1,607 @@
+{
+ "paper_id": "iclr25-0188",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SAM 2 (Segment Anything Model 2)",
+  "one_liner": "A foundation model for promptable segmentation in images and videos with streaming memory, trained on the SA-V dataset built by a data engine.",
+  "domain": [
+   "promptable video segmentation",
+   "foundation model",
+   "video segmentation dataset"
+  ],
+  "subfield": "vision",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "model-anatomy",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "three lettered panels for task, model and data, tied by dotted leaders: film strips in and out, a block diagram, and a data-engine loop beside a dataset card",
+  "argues": "The paper offers a promptable video segmentation task, a streaming-memory model and a large dataset built by a data engine as one package.",
+  "subject": "prompted film strips to masks, the SAM 2 block diagram with memory, a data-engine loop and the SA-V card",
+  "elements": [
+   {
+    "name": "video & prompts in one or multiple frames",
+    "type": "label",
+    "role": "names the task input",
+    "drawn_as": "serif heading at the top left with a dotted leader to the model inputs",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "input film strip: box, (skipped), points, mask",
+    "type": "sample",
+    "role": "four frames of one cat video, prompts given on some of them: a box, none, positive and negative clicks, a mask",
+    "drawn_as": "slate film strip with sprocket holes; red box on frame 1, red minus and green plus dots on frame 3, purple mask on frame 4; labels below",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "model (small)",
+    "type": "module",
+    "role": "black box that maps prompted frames to masks",
+    "drawn_as": "bold word in a grey-blue rounded box between the two strips, dotted leader to panel (b)",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "output film strip / object segmentation throughout the video",
+    "type": "sample",
+    "role": "the same four frames with the object masked on every frame",
+    "drawn_as": "slate film strip with a green mask on the cat in each frame, caption below",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "model (frame)",
+    "type": "container",
+    "role": "holds the architecture of the model",
+    "drawn_as": "large grey-blue rounded rectangle with the bold word model at its top right",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "prompt, video frame",
+    "type": "data",
+    "role": "the two inputs of the model",
+    "drawn_as": "two black lines entering the frame from the top, labels above",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "prompt encoder",
+    "type": "module",
+    "role": "encodes the prompt",
+    "drawn_as": "lavender rounded box without outline",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "image encoder",
+    "type": "module",
+    "role": "encodes the video frame",
+    "drawn_as": "light-green rounded box without outline",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "memory attention",
+    "type": "module",
+    "role": "conditions the frame features on the stored memories",
+    "drawn_as": "light-blue rounded box under the image encoder",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "memory bank",
+    "type": "module",
+    "role": "stores previous prompts and predictions (streaming memory)",
+    "drawn_as": "pink rounded box right of memory attention, arrow in from the decoder and arrow out to attention",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "mask decoder",
+    "type": "module",
+    "role": "produces the mask from prompt and attended frame features",
+    "drawn_as": "peach rounded box at the bottom centre, black arrow out to the output label",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "valid object mask on each frame",
+    "type": "label",
+    "role": "the model's output",
+    "drawn_as": "text under the grey frame with a dotted leader back to panel (a)",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "model, annotate, data, train",
+    "type": "operation",
+    "role": "data-engine loop: the model annotates data and is retrained on it",
+    "drawn_as": "grey-blue model box and bold words annotate, data, train joined by four thin grey elbow arrows in a cycle",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "SA-V Dataset",
+    "type": "container",
+    "role": "the released dataset with its statistics: 642.6 K masklets, 35.5 M masks, 50.9 K videos, 196.0 hours",
+    "drawn_as": "mint rounded card with a bold title, four bullets and four offset stacks of annotated frame thumbnails",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input film strip",
+    "to": "model (small)",
+    "what": "prompted frames go in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "model (small)",
+    "to": "output film strip",
+    "what": "masks for every frame come out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "model (small)",
+    "to": "model (frame)",
+    "what": "the black box is opened into its architecture",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "model (frame)",
+    "to": "model, annotate, data, train",
+    "what": "the same model sits in the data-engine loop",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "video & prompts in one or multiple frames",
+    "to": "prompt, video frame",
+    "what": "task inputs match the model inputs",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "object segmentation throughout the video",
+    "to": "valid object mask on each frame",
+    "what": "task output matches the model output",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "prompt",
+    "to": "prompt encoder",
+    "what": "prompt enters the encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video frame",
+    "to": "image encoder",
+    "what": "frame enters the image encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "image encoder",
+    "to": "memory attention",
+    "what": "frame features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "memory bank",
+    "to": "memory attention",
+    "what": "stored memories are read",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "memory attention",
+    "to": "mask decoder",
+    "what": "attended features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "prompt encoder",
+    "to": "mask decoder",
+    "what": "prompt embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mask decoder",
+    "to": "memory bank",
+    "what": "prediction is written to memory",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mask decoder",
+    "to": "valid object mask on each frame",
+    "what": "output mask",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "model",
+    "to": "annotate",
+    "what": "model annotates",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "annotate",
+    "to": "data",
+    "what": "annotations become data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "data",
+    "to": "train",
+    "what": "data used for training",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "train",
+    "to": "model",
+    "what": "retrained model returns to the loop",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "data",
+    "to": "SA-V Dataset",
+    "what": "the data produced is the SA-V dataset",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Task: promptable visual segmentation",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a prompted cat video goes through a model box and returns the object masked on every frame",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Model: Segment Anything Model 2",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "prompt encoder, image encoder, memory attention, memory bank and mask decoder inside a grey model frame",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Data: data engine and dataset",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "a model, annotate, data, train loop and the SA-V dataset card with statistics and thumbnails",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c) with Task:, Model:, Data:",
+    "kind": "section",
+    "at": "bold captions under the three panels",
+    "what": "name the panels and the type of deliverable each holds"
+   },
+   {
+    "marker": "box, (skipped), points, mask",
+    "kind": "identity",
+    "at": "under the four input frames",
+    "what": "names the prompt type given on each frame; frame 2 has none"
+   },
+   {
+    "marker": "red minus and green plus dots",
+    "kind": "identity",
+    "at": "third input frame",
+    "what": "negative and positive click prompts"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "cat video frames with prompts",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four frames in a sprocket-hole film strip, a red box, clicks and a purple mask drawn on three of them"
+   },
+   {
+    "what": "cat video frames with predicted masks",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "same four frames with a flat green overlay on the cat, in a second film strip"
+   },
+   {
+    "what": "SA-V annotated frame thumbnails",
+    "content": "dense-map",
+    "role": "data-thumbnail",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four square thumbnails with multi-colour masks, each drawn as an offset stack to stand for many videos"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small offset stack of photo thumbnails",
+    "stands_for": "the data produced by annotation",
+    "style": "photo-cutout",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one cat video with a box on frame 1, no prompt on frame 2, clicks on frame 3 and a mask on frame 4, and the resulting masks on all frames",
+    "form": "two film strips with prompts drawn on the frames",
+    "real_values": true
+   },
+   {
+    "what": "SA-V statistics: 642.6 K masklets, 35.5 M masks, 50.9 K videos, 196.0 hours",
+    "form": "four bullets in a dataset card",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "slate strip with white sprocket holes along both edges holding four frames, one strip for the input and one for the output",
+    "parts": [
+     "sprocket holes",
+     "frame",
+     "label under frame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "pink memory bank box beside memory attention, read by an arrow towards attention and written from the mask decoder by an elbow arrow",
+    "parts": [
+     "memory bank",
+     "read arrow",
+     "write arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "image encoder at the top and mask decoder at the bottom of one column of pastel boxes, with the prompt encoder at the side",
+    "parts": [
+     "image encoder",
+     "memory attention",
+     "mask decoder",
+     "prompt encoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "mint card with the dataset name, four bullet statistics and four stacked thumbnails",
+    "parts": [
+     "title",
+     "statistics bullets",
+     "stacked thumbnails"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "data-engine-loop",
+    "drawn_as": "model, annotate, data, train as a four-corner cycle with thin elbow arrows",
+    "parts": [
+     "model",
+     "annotate",
+     "data",
+     "train"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Left to right: film strip in, model box, film strip out; a dotted line to the grey model frame; another to the data loop and SA-V card."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three panels side by side, each captioned below with a bold category word: (a) a vertical stack of input film strip, model box and output film strip; (b) one grey rounded frame holding five pastel modules in a cross layout; (c) a model, annotate, data, train cycle above a mint SA-V dataset card. Dotted leaders run across the panel gaps.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.75,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dee3e9",
+    "used_for": "grey-blue model boxes and the large model frame in (b)"
+   },
+   {
+    "hex": "#677788",
+    "used_for": "slate film-strip bodies"
+   },
+   {
+    "hex": "#1c2b33",
+    "used_for": "dark navy text and black arrows"
+   },
+   {
+    "hex": "#e6fdeb",
+    "used_for": "mint SA-V Dataset card"
+   },
+   {
+    "hex": "#cdfac3",
+    "used_for": "image encoder"
+   },
+   {
+    "hex": "#e1e1ff",
+    "used_for": "prompt encoder"
+   },
+   {
+    "hex": "#cce6ff",
+    "used_for": "memory attention"
+   },
+   {
+    "hex": "#ffd6d9",
+    "used_for": "memory bank"
+   },
+   {
+    "hex": "#ffe9d2",
+    "used_for": "mask decoder"
+   },
+   {
+    "hex": "#a7b3bf",
+    "used_for": "thin grey arrows and dotted leaders"
+   },
+   {
+    "hex": "#e6193b",
+    "used_for": "red box prompt and negative click dots"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no outlines on boxes (filled shapes only); thin grey arrows and dotted grey leaders",
+  "font": "serif (Times-like), text converted to outlines so sizes are not measured; bold for model, annotate, data, train and the panel category words",
+  "corners": "rounded",
+  "arrows": "thin grey straight and elbow arrows with open chevron heads; black thin arrows for the model inputs and output in (b); dotted grey leaders across panels",
+  "rendering": "flat-vector",
+  "effects": "offset-stack shadow edge on the dataset thumbnails and the data icon",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pastel per model module (green image encoder, lavender prompt encoder, blue memory attention, pink memory bank, peach mask decoder); grey-blue = the model as a black box; mint = the dataset; green overlay = predicted mask; purple = mask prompt; red box, red minus and green plus = box, negative and positive prompts",
+  "line_style_means": "dotted grey line = the same thing in another panel (black-box model to its architecture, data to the dataset, task input to model input); thin grey arrow = data flow; black arrow = external input or output of the model",
+  "shape_means": "film strip with sprocket holes = video; offset stack of cards = many videos or frames; grey-blue rounded box = a model; large rounded frame = a model opened up",
+  "marker_means": "bold Task, Model, Data in the captions name the three deliverables; (skipped) marks a frame with no prompt",
+  "emphasis": "the word model is repeated in all three panels and joined by dotted leaders, so the eye sees one object in three roles; the central grey frame is the largest block",
+  "reusable_patterns": [
+   "task, model, data triptych with the category word in bold in each panel caption",
+   "dotted leaders from a black-box model box in one panel to its opened-up architecture in the next",
+   "film strips with sprocket holes for input and output video, prompts drawn on the frames, one frame marked skipped",
+   "pastel module boxes without outlines inside one grey frame",
+   "four-corner data-engine loop beside a dataset card with bullet statistics and stacked thumbnails"
+  ],
+  "weaknesses": []
+ },
+ "resources": {
+  "own": [
+   "video frames with prompts and predicted masks",
+   "annotated SA-V frame thumbnails",
+   "dataset statistics"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "film strip borders",
+   "module boxes and arrows",
+   "loop arrows",
+   "dataset card"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "film strips with prompts and masks",
+   "grey model frame with five pastel modules",
+   "memory bank box with read and write arrows",
+   "annotate and train loop",
+   "dataset card with bullets and stacked thumbnails",
+   "dotted leader lines between panels"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "SAM 2",
+   "promptable visual segmentation",
+   "video segmentation",
+   "streaming memory",
+   "memory bank",
+   "SA-V dataset",
+   "data engine",
+   "foundation model"
+  ],
+  "tags": [
+   "zoom-callout",
+   "filmstrip",
+   "stacked-cards",
+   "memory-store",
+   "task-definition"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Present a paper's three deliverables as a task, model, data triptych whose captions start with a bold category word, and tie the model box in each panel together with dotted leaders so the black box in the task panel opens into the architecture in the next.",
+  "suits": "Papers that release a task, a model and a dataset together, especially video or sequence tasks that can show prompts and results on film strips."
+ },
+ "tags": [
+  "triptych",
+  "film-strips",
+  "pastel-modules",
+  "dotted-leaders",
+  "outlined-text",
+  "serif-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Our work includes a task, model, and dataset (see Fig. 1).",
+   "SAM 2 is capable of interactively segmenting regions through prompts (clicks, boxes, or masks) on one or multiple video frames"
+  ]
+ },
+ "summary": "SAM 2 is a foundation model for promptable segmentation in images and videos, with a streaming memory and a new large video dataset. Figure 1 presents the paper's task, model and data as three lettered panels joined by dotted leaders. Panel (a) shows a cat video as a film strip with a box, clicks and a mask as prompts, a grey model box, and an output strip with the cat masked in every frame. Panel (b) opens the model into pastel modules: prompt encoder, image encoder, memory attention, memory bank and mask decoder. Panel (c) shows the model, annotate, data, train loop and the SA-V dataset card with 642.6 K masklets, 35.5 M masks, 50.9 K videos and 196.0 hours.",
+ "summary_zh": "SAM 2 是图像和视频的可提示分割基础模型。图 1 用三个面板并以虚线相连：(a) 胶片条展示提示与分割结果；(b) 模型内部五个模块；(c) 数据引擎循环与 SA-V 数据集卡片。",
+ "confidence": "high",
+ "notes": "The text layer is outlined, so labels and statistics were read from the preview. Prior pass listed contribution-mosaic, model-anatomy, stage-pipeline; worked-walkthrough is added for panel (a), which follows one real prompted video through the model. The prior subfield2 multimodal was dropped (no language input is drawn).",
+ "venue": "ICLR25"
+}

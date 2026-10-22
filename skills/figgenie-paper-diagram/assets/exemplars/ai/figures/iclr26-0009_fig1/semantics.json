@@ -1,0 +1,583 @@
+{
+ "paper_id": "iclr26-0009",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "BIRD-INTERACT",
+  "one_liner": "A text-to-SQL benchmark that turns single-turn tasks into multi-turn interactions with a function-driven user simulator and an executable database environment.",
+  "domain": [
+   "text-to-SQL",
+   "interactive evaluation",
+   "ambiguity clarification"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "a narrow configuration column (task, cast, database) beside a framed transcript of six numbered user-system interactions",
+  "argues": "Real text-to-SQL work needs clarification of ambiguous requests, knowledge lookup, error feedback and follow-up subtasks, so evaluation must replay a whole interaction rather than one query.",
+  "subject": "One artifact-ranking task with two subtasks, hidden ambiguities and a masked knowledge-base entry, followed through six interactions between user simulator, system and database.",
+  "elements": [
+   {
+    "name": "User Task 𝑄",
+    "type": "data",
+    "role": "the task given to the system, split into subtasks",
+    "drawn_as": "bold title with a user icon at the head of a pale blue-grey block, labelled Configuration",
+    "container": "left column",
+    "is_contribution": null
+   },
+   {
+    "name": "Subtask q1 / q2",
+    "type": "text-block",
+    "role": "two sequential user requests: build a function that ranks artifacts needing urgent care, then show the most urgent one's risk level and priority score",
+    "drawn_as": "quoted text lines, 'need urgent care' in red",
+    "container": "User Task 𝑄",
+    "is_contribution": null
+   },
+   {
+    "name": "Annotated Amb. and Real Intentions",
+    "type": "container",
+    "role": "hidden ambiguities of the task paired with the SQL the user really means",
+    "drawn_as": "rounded white box with a thinking-head icon and two rows: red '?' phrase, arrow, grey SQL chip",
+    "container": "User Task 𝑄",
+    "is_contribution": true
+   },
+   {
+    "name": "User Simulator 𝒰",
+    "type": "actor",
+    "role": "plays the user: answers clarification questions and gives feedback",
+    "drawn_as": "bold title with a cartoon user avatar",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "System 𝒮",
+    "type": "actor",
+    "role": "the evaluated text-to-SQL system that asks, searches and submits SQL",
+    "drawn_as": "bold title with a blue robot head",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "DB Environment ℰ",
+    "type": "actor",
+    "role": "executable database sandbox with metadata and knowledge base",
+    "drawn_as": "bold title with a folder-and-cylinder icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Actions / Observations",
+    "type": "label",
+    "role": "what the system sends out and what comes back from the simulator and from the environment",
+    "drawn_as": "two dashed vertical arrows with italic labels between each pair of actors",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "DB Metadata Files ℳ",
+    "type": "text-block",
+    "role": "schema and column meanings the system can read",
+    "drawn_as": "grey box of italic lines (ArtifactRatings|HistSignRating ...), folder icon, labelled Configuration",
+    "container": "bottom-left grey block",
+    "is_contribution": null
+   },
+   {
+    "name": "DB 𝒟",
+    "type": "data",
+    "role": "the database itself",
+    "drawn_as": "purple cylinder icon with the label DB",
+    "container": "bottom-left grey block",
+    "is_contribution": null
+   },
+   {
+    "name": "Knowledge Base Doc 𝒦",
+    "type": "text-block",
+    "role": "external knowledge entries; the AVS entry is masked to simulate missing documentation",
+    "drawn_as": "grey box with # entries for CPI, IF and AVS, 'missing?' in red",
+    "container": "bottom-left grey block",
+    "is_contribution": true
+   },
+   {
+    "name": "User-Agent Interaction Example",
+    "type": "container",
+    "role": "replays the task as six numbered interactions",
+    "drawn_as": "large rounded frame with its title in monospace set into the top border",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Interaction 1-6",
+    "type": "container",
+    "role": "six turn groups: request, schema reading, clarification, KB search, SQL submission, test check, follow-up, termination",
+    "drawn_as": "small plain headings 'Interaction n' over a user bubble and system reply",
+    "container": "User-Agent Interaction Example",
+    "is_contribution": null
+   },
+   {
+    "name": "user turns",
+    "type": "sample",
+    "role": "the simulated user's request, clarifications, error feedback, follow-up and closing message",
+    "drawn_as": "avatar plus white bubble with dark outline, some words in red",
+    "container": "Interaction 1-6",
+    "is_contribution": null
+   },
+   {
+    "name": "system questions",
+    "type": "sample",
+    "role": "the system asks which scoring metric defines 'urgent care' and for the exact AVS formula",
+    "drawn_as": "robot icon plus blue-tinted bubble, tagged Ask",
+    "container": "Interaction 1-6",
+    "is_contribution": null
+   },
+   {
+    "name": "system actions",
+    "type": "sample",
+    "role": "reading the DB schema; searching 'AVS' in the KB and finding no definition",
+    "drawn_as": "grey note with a folder or book icon",
+    "container": "Interaction 1-6",
+    "is_contribution": null
+   },
+   {
+    "name": "SQL code blocks",
+    "type": "instance",
+    "role": "the function and queries the system submits",
+    "drawn_as": "monospace grey blocks with syntax colours and pale highlight bands, tagged Submit",
+    "container": "Interaction 3, 4, 5",
+    "is_contribution": null
+   },
+   {
+    "name": "test-case checks T1 / T2",
+    "type": "operation",
+    "role": "annotated test cases that judge the submitted SQL: fail in Interaction 4, pass in 5 and 6",
+    "drawn_as": "grey bar 'Checked by the test case' with a small test icon, green tick or red cross",
+    "container": "Interaction 4-6",
+    "is_contribution": true
+   },
+   {
+    "name": "test-case code",
+    "type": "instance",
+    "role": "the Python test that runs the predicted SQL and asserts expected results",
+    "drawn_as": "tiny green-tinted monospace listing in a dashed frame at the top right",
+    "container": "Interaction 4",
+    "is_contribution": null
+   },
+   {
+    "name": "action tags",
+    "type": "label",
+    "role": "name the move of a turn: Ask, Clarify, Submit, feedback, Subtask q",
+    "drawn_as": "small black-outlined italic boxes pinned to a bubble's lower right corner",
+    "container": "Interaction 1-6",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "'need urgent care'",
+    "to": "ORDER BY AVS DESC",
+    "what": "ambiguous phrase and the SQL the user really means",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "'AVS' (Artifact Vulnerability Score)",
+    "to": "IF * CPI AS AVS",
+    "what": "second ambiguity and its real formula",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "System 𝒮",
+    "to": "User Simulator 𝒰",
+    "what": "Actions (questions, submissions)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "User Simulator 𝒰",
+    "to": "System 𝒮",
+    "what": "Observations (clarifications, feedback)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "System 𝒮",
+    "to": "DB Environment ℰ",
+    "what": "Actions (schema reading, KB search, SQL execution)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DB Environment ℰ",
+    "to": "System 𝒮",
+    "what": "Observations (schema, KB result, execution output)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Interaction 1",
+    "to": "Interaction 6",
+    "what": "turns follow one another down the left column of the panel and then down the right column",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "red phrases in User Task and KB Doc",
+    "to": "red phrases in Interaction 1 and 2",
+    "what": "the same ambiguous or missing items reappear as the topic of the clarifications",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Subtask q1 / q2",
+    "to": "Interaction 1 and Interaction 5 user bubbles",
+    "what": "the subtask text is spoken by the user",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "test-case checks T1 / T2",
+    "to": "test-case code",
+    "what": "the test icon is tied to the code of the test it runs",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "the setting: user task, annotated intentions, the User Simulator - System - DB Environment stack, and the DB metadata and knowledge base",
+    "verdict": "setting"
+   },
+   {
+    "label": "User-Agent Interaction Example",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "six numbered interactions as avatar bubbles with SQL code and test results",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Interaction 1 ... Interaction 6",
+    "kind": "order",
+    "at": "each turn group",
+    "what": "orders the six interactions and heads each group"
+   },
+   {
+    "marker": "Ask, Clarify, Submit, feedback, Subtask q",
+    "kind": "identity",
+    "at": "lower right corner of bubbles",
+    "what": "names the type of move in that turn"
+   },
+   {
+    "marker": "T1, T2",
+    "kind": "identity",
+    "at": "test icons in Interactions 4-6",
+    "what": "names the annotated test case that checks the SQL"
+   },
+   {
+    "marker": "q1, q2",
+    "kind": "identity",
+    "at": "User Task and the matching user bubbles",
+    "what": "names the two subtasks"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon user with cap",
+    "stands_for": "the user / user simulator",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "blue robot head",
+    "stands_for": "the system (LLM agent)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "folder, database cylinder and book icons",
+    "stands_for": "DB metadata, the database, the knowledge base",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "thinking head with a cloud",
+    "stands_for": "the user's hidden intentions",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small window with red cross and green tick",
+    "stands_for": "a test case",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "green check and red cross emoji",
+    "stands_for": "test passed or failed",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "a full artifact-ranking text-to-SQL session: two subtasks, two ambiguities, a masked KB entry, three SQL submissions, test verdicts",
+    "form": "speech bubbles with real utterances, monospace SQL blocks and a test-case listing",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "one avatar plus bubble per turn: user turns white with dark outline, system turns blue-tinted, system actions grey notes, SQL as grey monospace blocks",
+    "parts": [
+     "avatar",
+     "bubble",
+     "action tag"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "System stacked between the User Simulator above and the DB Environment below, each pair joined by two dashed vertical arrows labelled Actions and Observations",
+    "parts": [
+     "System",
+     "User Simulator",
+     "DB Environment",
+     "Actions arrow",
+     "Observations arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a small blue robot head next to every system turn and the System title",
+    "parts": [
+     "robot head"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "task card with its subtasks and annotated intentions, and grey 'checked by the test case' bars ending in a tick or cross",
+    "parts": [
+     "User Task",
+     "test bar",
+     "tick / cross"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at User Task top left, down through the cast and database, then jumps to Interaction 1 in the framed panel, down its left column, then up to Interaction 4 and down the right column to the termination."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A narrow left column stacks the task block, the actor stack and the database block; a wide framed panel on the right holds the transcript in two columns of three interactions each, alternating avatar bubbles and code blocks.",
+  "panel_count": 2,
+  "lanes": "two transcript columns of three interactions each, user turns on the left edge and system turns on the right edge of each column",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "other",
+  "width": "full",
+  "aspect": 2.35,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f7f7f7",
+    "used_for": "grey ground of the database block, system action notes and SQL blocks"
+   },
+   {
+    "hex": "#f7fafc",
+    "used_for": "pale blue-grey ground of the User Task block"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "blue tint of system question bubbles"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light grey bars for system actions and test-case checks"
+   },
+   {
+    "hex": "#fffdfb",
+    "used_for": "near-white warm fill of boxes"
+   },
+   {
+    "hex": "#ffe0dc",
+    "used_for": "pale red highlight bands behind SQL fragments"
+   },
+   {
+    "hex": "#daf2d0",
+    "used_for": "pale green highlight bands behind SQL fragments"
+   },
+   {
+    "hex": "#747474",
+    "used_for": "grey 0.25 pt outlines of boxes and bubbles"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "outlines of action tags and bubbles, dashed frame"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt grey and black outlines, dashed for the test-code callout and the actor arrows",
+  "font": "sans (Calibri) 3.5-6 pt with italic tags and titles; mono (Consolas) 2.5-3.5 pt for SQL and test code; script letters for Q, U, S, E, M, D, K",
+  "corners": "rounded",
+  "arrows": "thin dashed vertical arrows with small filled heads between actors; short solid arrows from phrase to SQL",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red text = ambiguous or missing information (need urgent care, AVS, missing?); blue-tinted bubble = system, white outlined bubble = user, grey = system action or code; green tick and red cross = test pass and fail",
+  "line_style_means": "dashed vertical arrows = Actions and Observations exchange; solid arrows = ambiguous phrase to real intention; dashed frame = test-case code callout",
+  "shape_means": "avatar plus rounded bubble = one turn; small black-outlined tag at a bubble corner = type of move; grey monospace block = SQL code",
+  "marker_means": "Interaction n orders turn groups; Ask, Clarify, Submit, feedback type the move; T1 and T2 name test cases; tick and cross give the verdict",
+  "emphasis": "Red text follows the ambiguity from the task spec through the intentions box, the KB entry and the clarifying turns; the wide framed transcript dominates the area.",
+  "reusable_patterns": [
+   "narrow setting column (task, cast, database) beside a framed transcript of numbered interactions",
+   "role-coded turns: avatar plus bubble colour for user, system and system action",
+   "move-type tags pinned to the corner of each bubble",
+   "red text carries one ambiguity from the spec through the dialogue",
+   "dashed-frame popout of test code beside the test icon",
+   "real SQL blocks with highlight bands as the system's output",
+   "paired dashed Actions / Observations arrows between stacked actors"
+  ],
+  "weaknesses": [
+   "type of 2.5-3.5 pt in code and test snippets is unreadable at print size",
+   "about 460 words in a 431 x 183 pt figure",
+   "the transcript has two columns, so the eye jumps back to the top after Interaction 3"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real task with two subtasks and annotated ambiguities",
+   "SQL function and queries",
+   "the Python test case",
+   "DB metadata lines and knowledge-base entries",
+   "simulated user and system utterances"
+  ],
+  "stock": [
+   "cartoon user avatar",
+   "blue robot head",
+   "folder, book and database cylinder icons",
+   "green check and red cross emoji",
+   "thinking-head icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "bubbles, grey bars, action tags and frames",
+   "dashed Actions / Observations arrows",
+   "annotated-intention rows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "user task with two subtasks",
+   "annotated ambiguities box",
+   "user simulator, system and DB environment stack",
+   "DB metadata and knowledge base boxes",
+   "six numbered interactions",
+   "avatar speech bubbles",
+   "SQL code blocks",
+   "test-case tick and cross"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "text-to-SQL",
+   "interactive benchmark",
+   "user simulator",
+   "ambiguity clarification",
+   "knowledge base",
+   "test cases",
+   "multi-turn",
+   "LiveSQLBench"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "highlighted-text-spans",
+   "code-snippet-box",
+   "verdict-marks",
+   "annotated-record-card",
+   "task-definition",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "avatar-chat-transcript",
+    "what": "a dialogue drawn as turns of avatar plus speech bubble, with bubble colour per party and small move-type tags at the bubble corners"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "For an interactive benchmark, put a narrow setting column (task, hidden intent, cast, database) next to a framed transcript of numbered interactions, each turn an avatar bubble with a move tag; red text follows the ambiguity from spec to dialogue.",
+  "suits": "Multi-turn or agentic benchmarks (SQL, tool use, dialogue) where the point is the sequence of clarifications, actions and feedback on one concrete task."
+ },
+ "tags": [
+  "dense",
+  "chat-transcript",
+  "role-coded-bubbles",
+  "code-blocks",
+  "double-column",
+  "icon-avatars"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Benchmark construction (p.4)",
+   "Appendix (p.24, p.26)"
+  ],
+  "evidence": [
+   "The task in Figure 1 exemplifies this complexity.",
+   "some KB nodes in HKB are masked to simulate missing documentation",
+   "Task overview of BIRD-INTERACT showing the evaluated system interacting with DB Environment and User Simulator"
+  ]
+ },
+ "summary": "BIRD-INTERACT is a text-to-SQL benchmark that converts single-turn LiveSQLBench tasks into multi-turn interactions in which the evaluated system talks to a function-driven user simulator and an executable database environment. Figure 1 puts a narrow configuration column on the left (user task with two subtasks, annotated ambiguities with their real intentions, the User Simulator, System and DB Environment stack with dashed Actions and Observations arrows, DB metadata and a knowledge base whose AVS entry is masked) beside a framed User-Agent Interaction Example. That panel replays six numbered interactions as avatar speech bubbles tagged Ask, Clarify, Submit and feedback, with real SQL blocks and test-case ticks. Red text follows the ambiguity through the whole figure. It is a dense double-column figure in 3-6 pt type.",
+ "summary_zh": "BIRD-INTERACT把单轮text-to-SQL改成多轮交互评测。图1左栏给出任务、标注歧义、用户模拟器/系统/数据库环境及元数据和知识库，右栏用头像气泡复现六轮交互与SQL代码、测试结果，红字贯穿歧义。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The preview PNG shows serif fallback for some titles; the SVG digest names Calibri, Lato-Italic and Consolas. Direction of the Actions and Observations arrows is read from the arrowheads in the preview (actions leave the system, observations return). The pale red and green bands (#ffe0dc, #daf2d0) are assumed to be highlight bands behind SQL fragments of the AVS formula. The dashed test-code callout is not joined by leader lines.",
+ "venue": "ICLR26"
+}

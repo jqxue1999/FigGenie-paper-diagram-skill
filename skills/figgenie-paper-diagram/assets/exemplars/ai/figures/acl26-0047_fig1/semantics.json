@@ -1,0 +1,576 @@
+{
+ "paper_id": "acl26-0047",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DualHyp",
+  "one_liner": "A generative error correction framework for audio-visual speech recognition in which an LLM composes separate ASR and VSR N-best hypotheses.",
+  "domain": [
+   "audio-visual speech recognition",
+   "generative error correction",
+   "LLM"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "the same bottom-up pipeline drawn twice, baseline at left and the proposed framework at right (wider), with every changed part in red",
+  "argues": "Keeping ASR and VSR hypotheses as two separate N-best sets in language space lets the LLM cross-reference them and correct errors that a single-set GER framework leaves.",
+  "subject": "Two lanes: one ASR list into an LLM with an adapter, versus ASR and VSR lists into an LLM with LoRA",
+  "elements": [
+   {
+    "name": "ASR",
+    "type": "module",
+    "role": "speech recognition model that turns the audio into N-best text hypotheses; drawn frozen",
+    "drawn_as": "square light-yellow box with a snowflake, sans label",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "VSR",
+    "type": "module",
+    "role": "visual speech (lip-reading) recognition model that turns the lip video into N-best text hypotheses; drawn frozen",
+    "drawn_as": "square light-green box with a snowflake, sans label",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Two SR Heads",
+    "type": "label",
+    "role": "names the ASR and VSR models as the two speech-recognition heads",
+    "drawn_as": "red bold-italic text between the ASR and VSR boxes with a red arrow pointing out to each",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "N -best Hypotheses",
+    "type": "data",
+    "role": "candidate transcripts of the single ASR model, input text of the LLM",
+    "drawn_as": "rounded grey card with three sentences and an ellipsis line, amber highlighted spans, bold-italic title above",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "ASR N -best Hypotheses",
+    "type": "data",
+    "role": "candidate transcripts from the ASR head",
+    "drawn_as": "rounded grey card with three sentences and an ellipsis, amber highlighted spans, bold-italic title above",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "VSR N -best Hypotheses",
+    "type": "data",
+    "role": "candidate transcripts from the VSR head",
+    "drawn_as": "rounded grey card with three sentences and an ellipsis, one amber highlighted span, bold-italic title above",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "+",
+    "type": "operation",
+    "role": "joins the two hypothesis lists into one set",
+    "drawn_as": "large red plus sign between the two cards",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "red dashed frame around both lists",
+    "type": "container",
+    "role": "marks the pair of lists as the dual hypotheses set that goes to the LLM",
+    "drawn_as": "thick red dashed rounded rectangle, unlabelled",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "reads the hypotheses and writes the corrected transcription; drawn frozen",
+    "drawn_as": "wide light-blue box with a snowflake in the corner, sans label",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Adapter",
+    "type": "module",
+    "role": "trainable add-on of the LLM; the dashed visual-cue arrow from the lip video ends on it",
+    "drawn_as": "small peach box with a flame, overlapping the right end of the LLM box",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "LoRA",
+    "type": "module",
+    "role": "trainable add-on of the LLM in the proposed framework",
+    "drawn_as": "small peach box with a flame, overlapping the right end of the LLM box",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Generate the best transcription from the two hypotheses sets",
+    "type": "text-block",
+    "role": "instruction that accompanies the two lists into the LLM",
+    "drawn_as": "red bold monospace text in quotation marks under the LLM, no box",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "I enjoy listening to news",
+    "type": "instance",
+    "role": "sentence output by the baseline",
+    "drawn_as": "single-line grey rounded box on top of the lane",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "I enjoy listening to music",
+    "type": "instance",
+    "role": "sentence output by DualHyp",
+    "drawn_as": "single-line box tinted pink (red at 20% opacity) on top of the lane",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "grey dashed frame around the lip video",
+    "type": "container",
+    "role": "marks the lip video as the optional visual cue of the conventional framework",
+    "drawn_as": "grey dashed square frame around the video strip",
+    "container": "(a)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "audio waveform",
+    "to": "ASR",
+    "what": "speech audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ASR",
+    "to": "N -best Hypotheses",
+    "what": "N-best transcripts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "N -best Hypotheses",
+    "to": "LLM",
+    "what": "hypothesis text as input, routed over the top of the card and back down into the LLM box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "I enjoy listening to news",
+    "what": "corrected sentence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "lip video",
+    "to": "ASR",
+    "what": "optional visual features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "lip video",
+    "to": "Adapter",
+    "what": "optional visual features injected through the adapter",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "audio waveform",
+    "to": "ASR",
+    "what": "speech audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "lip video",
+    "to": "VSR",
+    "what": "lip video",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ASR",
+    "to": "ASR N -best Hypotheses",
+    "what": "N-best transcripts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VSR",
+    "to": "VSR N -best Hypotheses",
+    "what": "N-best transcripts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ASR N -best Hypotheses",
+    "to": "VSR N -best Hypotheses",
+    "what": "the two lists are joined by a plus sign",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red dashed frame around both lists",
+    "to": "LLM",
+    "what": "dual hypothesis set, routed over the top and down into the LLM",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Generate the best transcription from the two hypotheses sets",
+    "to": "LLM",
+    "what": "instruction text standing next to the red arrow",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "I enjoy listening to music",
+    "what": "corrected sentence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Two SR Heads",
+    "to": "ASR",
+    "what": "names ASR and VSR as the two heads, one arrow to each",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) GER framework (w/ visual cue)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "conventional pipeline: audio into ASR, one N-best list into an LLM with an adapter; lip video only an optional dashed side input",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) DualHyp framework",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "audio into ASR and lip video into VSR, two N-best lists joined and sent with a prompt to an LLM with LoRA",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a)",
+    "kind": "section",
+    "at": "title of the left panel",
+    "what": "heads the conventional GER panel"
+   },
+   {
+    "marker": "(b)",
+    "kind": "section",
+    "at": "title of the right panel",
+    "what": "heads the DualHyp panel"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "speech waveform of the input utterance",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "purple waveform on a faded yellow glow, one under the ASR box in each panel, no label"
+   },
+   {
+    "what": "lip-reading video clip: a strip of overlapping frames ending in a full frame of a blurred face",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "two strips of five 32 pt tiles overlapped like a film strip with the last frame in full; the left one sits inside a grey dashed frame"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "snowflake",
+    "stands_for": "frozen module (ASR, VSR, LLM)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "flame",
+    "stands_for": "trainable module (Adapter, LoRA)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "ASR N-best list of one utterance: 'I enjoys listening to news', 'I enjoy listen news', 'I enjoy listening'",
+    "form": "text lines in a rounded grey card, amber highlighted spans, ellipsis as last line",
+    "real_values": null
+   },
+   {
+    "what": "VSR N-best list for the same utterance: 'They are listen to music', 'They enjoy music', 'I go to music'",
+    "form": "text lines in a rounded grey card, one amber highlighted span, ellipsis as last line",
+    "real_values": null
+   },
+   {
+    "what": "corrected output sentences: 'I enjoy listening to news' (baseline) and 'I enjoy listening to music' (DualHyp)",
+    "form": "one-line boxes on top of each lane, grey versus pink",
+    "real_values": null
+   },
+   {
+    "what": "the instruction given to the LLM: 'Generate the best transcription from the two hypotheses sets'",
+    "form": "red monospace quoted text under the LLM",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake emoji in the corner of frozen modules and a flame emoji on the Adapter and LoRA boxes",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "plain light-blue box labelled LLM, no logo or robot",
+    "parts": [
+     "LLM box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "small peach box labelled LoRA with a flame, overlapping the right end of the LLM box; no A and B low-rank blocks",
+    "parts": [
+     "LoRA box",
+     "flame"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "the instruction as quoted red monospace text under the LLM, with no box and no slots",
+    "parts": [
+     "quoted instruction"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "n-best-list",
+    "drawn_as": "rounded grey card of three candidate sentences and an ellipsis, with a bold-italic title above and amber highlighted spans",
+    "parts": [
+     "card",
+     "title",
+     "highlighted spans",
+     "ellipsis"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "The eye starts at the two panel titles, then follows each lane bottom-up from waveform and lip video through ASR and VSR, the hypothesis cards and the LLM to the output sentence; red pulls attention to the right panel."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two titled panels side by side, each a bottom-up lane (media, ASR or VSR, hypothesis cards, LLM, output sentence) so that the same stages sit at the same heights in both; the right panel is about 1.6 times wider and holds the red dashed frame.",
+  "panel_count": 2,
+  "lanes": "stage rows aligned across the two panels: media, ASR/VSR, hypotheses, LLM, output",
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.03,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "rounded hypothesis cards and the baseline output box"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "LLM boxes"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "ASR boxes"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "VSR box"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "trainable Adapter and LoRA boxes"
+   },
+   {
+    "hex": "#efb40c",
+    "used_for": "highlighted spans inside the hypotheses"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red dashed frame, connector, plus sign, labels, prompt text: the proposed path"
+   },
+   {
+    "hex": "#c00000",
+    "opacity": 0.2,
+    "used_for": "output sentence box of DualHyp"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "grey dashed frame and dashed arrows of the optional visual cue"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt red dashed frame and 0.75 pt grey dashed frame; no outline on the filled module boxes; black arrows about 1 pt",
+  "font": "serif (Times) 6 to 6.5 pt for hypotheses, bold-italic serif for list titles, sans 7.5 to 8.5 pt for module names, bold serif 8.5 pt panel titles, bold monospace 6 pt for the prompt",
+  "corners": "mixed",
+  "arrows": "straight and orthogonal black arrows with small filled heads; dashed grey for the optional visual cue; red for the proposed path",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "light blue = LLM, light yellow = ASR (audio path), light green = VSR (video path), peach = trainable add-on (Adapter, LoRA), grey card = text lists and baseline output, amber = highlighted spans, red = the proposed dual-hypothesis path and its output",
+  "line_style_means": "solid black = main data flow; dashed grey = optional visual-cue input in (a); red dashed frame = the dual hypothesis set; solid red = path of the dual set into the LLM",
+  "shape_means": "rounded grey card = hypothesis list; square coloured box = model; small peach box overlapping the LLM = trainable add-on",
+  "marker_means": "snowflake = frozen, flame = trainable; red plus = the two lists are joined; (a) and (b) head the panels",
+  "emphasis": "red is used only on the new path in (b) (frame, plus, connector, labels, prompt, tinted output) while (a) stays black and grey; the two output sentences differ.",
+  "reusable_patterns": [
+   "same lane drawn twice with the changed parts in one accent colour",
+   "snowflake and flame emoji on the corner of each module for frozen versus trainable",
+   "yellow highlight on spans inside sample hypothesis text",
+   "grey dashed frame and dashed arrows for an optional input",
+   "red dashed frame around the two lists that form the new input",
+   "different output sentences at the top of the two lanes as the payoff"
+  ],
+  "weaknesses": [
+   "raw audio and lip video carry no text label",
+   "the figure does not say what the amber highlights mark",
+   "the red connector detours over the top of the dashed frame before dropping into the LLM"
+  ]
+ },
+ "resources": {
+  "own": [
+   "audio waveform image",
+   "lip-video frames with a blurred face",
+   "hypothesis sentences"
+  ],
+  "stock": [
+   "snowflake and flame emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "N-best cards with highlights",
+   "red and grey dashed frames",
+   "plus sign"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "audio waveform",
+   "lip-video frame strip",
+   "ASR and VSR boxes",
+   "N-best hypothesis cards",
+   "LLM box with Adapter or LoRA",
+   "output sentence boxes",
+   "red dashed frame"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "audio-visual speech recognition",
+   "generative error correction",
+   "N-best hypotheses",
+   "LLM",
+   "lip reading",
+   "LoRA",
+   "ASR",
+   "VSR"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "flow-type-arrows",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "ours-in-red-accent",
+    "what": "the proposed path is drawn in one saturated red (dashed frame, plus, connector, labels, prompt, tinted output) while the baseline lane stays black and grey"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the baseline and the proposed method as the same bottom-up lane in two panels, with the changed parts in a single accent colour and a different output sentence on top, so the difference is read at a glance.",
+  "suits": "Any 'one input stream versus two' or 'old pipeline versus new' comparison where the stages are the same and only the inputs, add-ons or prompt change."
+ },
+ "tags": [
+  "two-panel baseline versus ours",
+  "bottom-up lanes",
+  "serif text with sans module labels",
+  "emoji state icons",
+  "red accent for the new path",
+  "bitmap media thumbnails",
+  "dashed frames"
+ ],
+ "provenance": {
+  "sections": [
+   "3 DualHyp Framework (p.4)"
+  ],
+  "evidence": [
+   "Our DualHyp framework maintains modality separation, using both ASR and VSR heads to generate two distinct sets of textual hypotheses.",
+   "Conventional GER frameworks use a single set of ASR hypotheses and (optionally) injects visual features via an adapter",
+   "The LLM performs compositional reasoning on dual hypotheses in the language space to produce a more robust and accurate transcription."
+  ]
+ },
+ "summary": "DualHyp is a generative error correction framework for audio-visual speech recognition: an LLM reads two separate N-best hypothesis lists, one from an ASR head and one from a VSR (lip-reading) head. Figure 1 puts two bottom-up lanes side by side. In (a) the conventional approach turns audio into one ASR N-best list that goes to an LLM with an adapter, while the lip video is only a dashed grey side input. In (b) audio and lip video feed ASR and VSR, the two lists sit in a red dashed frame joined by a red plus, and go with a quoted prompt to an LLM with LoRA, which outputs a different sentence. Snowflake and flame emoji mark frozen and trainable parts; red is kept for the proposed path.",
+ "summary_zh": "DualHyp 让 LLM 同时参考 ASR 与唇读 VSR 各自的 N-best 假设来纠错。左右两条自下而上的通路对比：(a) 只用一份 ASR 假设；(b) 两份假设用红框和加号合并，加提示词送入带 LoRA 的 LLM。",
+ "confidence": "high",
+ "notes": "Prior labels confirmed. The meaning of the amber highlights is not stated in the context file, so it is not claimed. The preview PNG also shows the top of the caption text at the bottom edge; it is not part of the figure.",
+ "venue": "ACL26"
+}

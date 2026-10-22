@@ -1,0 +1,349 @@
+{
+ "paper_id": "icml23-0055",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ODS (test-time adaptation with Open-world Data Shift, AODS setup)",
+  "one_liner": "Test-time adaptation when both the input distribution and the label distribution shift during testing; ODS decouples the mixed shifts and handles each.",
+  "domain": [
+   "test-time adaptation",
+   "distribution shift",
+   "label shift"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "a problem-setting figure: a training phase and a testing phase, with thumbnail groups whose style and class mix change from one test segment to the next",
+  "argues": "At test time both the input distribution D(X) and the label distribution D(Y) can shift from segment to segment, and the pre-trained model has to keep adapting to both.",
+  "subject": "A model trained on source data, then adapting along a test stream whose image style and class mix change.",
+  "elements": [
+   {
+    "name": "Training Data D_0(X, Y)",
+    "type": "data",
+    "role": "source data the model is trained on",
+    "drawn_as": "green rounded box with the title set into its top border, the formula at the left and six thumbnails split into two classes by a dashed vertical line",
+    "container": "Training Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "Model",
+    "type": "module",
+    "role": "the pre-trained model that is adapted during testing",
+    "drawn_as": "grey rounded rectangle with 9 pt serif text, sitting on the border between the two phase boxes",
+    "container": "Training Phase / Testing Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "bent green block arrow",
+    "type": "other",
+    "role": "from the training data into the model; unlabelled",
+    "drawn_as": "thick light-green elbow block arrow without outline",
+    "container": "Training Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "Adapt to shifted D(X) and D(Y)",
+    "type": "operation",
+    "role": "test-time adaptation of the model to shifted covariate and label distributions",
+    "drawn_as": "long light-blue block arrow from the Model to the right edge, the label written above it",
+    "container": "Testing Phase",
+    "is_contribution": true
+   },
+   {
+    "name": "Snowy day",
+    "type": "container",
+    "role": "first shown segment of the test stream, D_1(X, Y) ... D_T1(X, Y): mostly cars, one degraded horse",
+    "drawn_as": "blue rounded box with the title in its top border, a header formula, one thumbnail above a dashed line and five fanned thumbnails below",
+    "container": "Testing Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "Downtown",
+    "type": "container",
+    "role": "last shown segment of the test stream, D_{T_{n-1}+1}(X, Y) ... D_{T_n}(X, Y): mostly horses, two cars",
+    "drawn_as": "blue rounded box with the title in its top border, a header formula, four overlapping thumbnails above a dashed line and two below",
+    "container": "Testing Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "......",
+    "type": "label",
+    "role": "further test segments between the two shown",
+    "drawn_as": "a large ellipsis between the blue boxes",
+    "container": "Testing Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "Training Phase / Testing Phase",
+    "type": "container",
+    "role": "the two phases of the setup",
+    "drawn_as": "two stacked black dashed rectangles with bold serif titles at their left edge",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Training Data D_0(X, Y)",
+    "to": "Model",
+    "what": "source data used to pre-train the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model",
+    "to": "test stream segments",
+    "what": "Adapt to shifted D(X) and D(Y)",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Snowy day",
+    "to": "Downtown",
+    "what": "segments follow each other in time, more segments in between",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "green Training Data box and arrow",
+    "to": "blue Testing segments and arrow",
+    "what": "training in green, testing in blue",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Training Phase",
+    "kind": "other",
+    "axis": "time",
+    "shows": "source data D_0(X, Y) with six thumbnails of two classes, handed to the Model",
+    "verdict": "setting"
+   },
+   {
+    "label": "Testing Phase",
+    "kind": "concept-schematic",
+    "axis": "time",
+    "shows": "the Model adapting along a stream of segments (Snowy day ... Downtown) whose image style and class mix differ",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Training Phase, Testing Phase",
+    "kind": "section",
+    "at": "bold titles inside the left edge of each dashed box",
+    "what": "head the two phases"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "training photos of two classes (three horses, three vehicles)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "tiny 15 pt thumbnails with black outlines in a row, split into classes by a dashed vertical line, inside the green box"
+   },
+   {
+    "what": "Snowy day test photos: one degraded horse and five cars",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "thumbnails fanned and overlapping; the horse alone above a dashed horizontal line, the cars below it"
+   },
+   {
+    "what": "Downtown test photos: four horses and two cars",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "overlapping thumbnails; horses above a dashed horizontal line, the cars below it"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy stream with two classes whose share changes: training 3 horse and 3 vehicle photos, Snowy day 1 horse and 5 cars, Downtown 4 horses and 2 cars",
+    "form": "thumbnail groups split by a dashed line, group sizes differing between boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "rounded box with the dataset name set into the border, a distribution formula and a few thumbnails split by a dashed line into classes",
+    "parts": [
+     "title in border",
+     "formula",
+     "thumbnails",
+     "dashed class divider"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Training Phase box at the top-left, follows the green arrow down to the Model, then the long blue arrow to the right along the Testing Phase, reading the Snowy day segment before the Downtown one."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two stacked dashed boxes, Training Phase above Testing Phase, with the grey Model box at their left border; a long blue arrow runs along the testing box above two blue rounded segment boxes (Snowy day at left, Downtown at right) with an ellipsis between them.",
+  "panel_count": 2,
+  "lanes": "2 shown time segments of the test stream (Snowy day, Downtown) side by side, an ellipsis for the segments between",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.37,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#9dc3e6",
+    "used_for": "long adaptation block arrow"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "outline of the Snowy day and Downtown boxes (stroke)"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "block arrow from Training Data to Model"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "outline of the Training Data box (stroke)"
+   },
+   {
+    "hex": "#dbdbdb",
+    "used_for": "Model box"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "outline of the Model box (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt: black dashed phase boxes, thin black outlines on thumbnails, green and blue rounded outlines",
+  "font": "serif (Times New Roman, Cambria Math for symbols), 3-13 pt, bold 7.5 pt phase titles, 7.5 pt labels, 9 pt Model",
+  "corners": "mixed",
+  "arrows": "two thick pale block arrows without outline, one bent green and one long straight blue; no line arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Green = training (the data box outline and the arrow into the model); blue = testing (the segment box outlines and the adaptation arrow); grey = the model.",
+  "line_style_means": "Black dashed rectangles = the two phases; dashed lines inside the data boxes split the classes (vertical in training, horizontal in testing); solid rounded boxes = datasets or stream segments; thick block arrows = training hand-over and adaptation over time.",
+  "shape_means": "Rounded boxes with a title set into the top border = a dataset or a stream segment; grey rounded rectangle = model; block arrow = a process over time.",
+  "marker_means": "D_0(X, Y), D_1(X, Y) ... D_T1(X, Y) and D_{T_{n-1}+1}(X, Y) ... D_{T_n}(X, Y) give the data distribution of each box; the ellipsis stands for the segments between.",
+  "emphasis": "The long blue arrow with its label spans the whole test stream, and the changing group sizes of horses and cars between the boxes make the label shift visible.",
+  "reusable_patterns": [
+   "thumbnail groups split by a dashed line into classes, group sizes changing between boxes to show label shift",
+   "dataset box with the title set into its border and the distribution symbol beside it",
+   "long block arrow carrying the task name over a stream of test segments",
+   "ellipsis between the shown segments for the unseen rest",
+   "model box straddling the border between the training and testing boxes",
+   "fanned overlapping thumbnails as a batch"
+  ],
+  "weaknesses": [
+   "the covariate shift (snowy day versus downtown) is told by the box names and one degraded image, the other photos show no snow or city",
+   "the 15 pt thumbnails are very small",
+   "the class names are not written, the reader infers horse and car",
+   "the caption has to carry the definition of the two shifts"
+  ]
+ },
+ "resources": {
+  "own": [
+   "low-resolution class photos that look like CIFAR-10 samples (horses and vehicles)",
+   "one degraded, snow-like horse photo"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "dashed phase boxes",
+   "rounded segment boxes",
+   "block arrows",
+   "Model box",
+   "distribution formulas"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed Training Phase and Testing Phase boxes",
+   "green Training Data box with thumbnails",
+   "grey Model box",
+   "bent green block arrow",
+   "long blue block arrow",
+   "Snowy day and Downtown boxes with fanned thumbnails"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "test-time adaptation",
+   "open-world data shift",
+   "covariate shift",
+   "label distribution shift",
+   "continual adaptation",
+   "distribution shift",
+   "problem setting"
+  ],
+  "tags": [
+   "task-definition",
+   "stacked-cards",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Define a learning setting with two framed phases and one model box straddling them, then show the test stream as titled segments of fanned thumbnails split by a dashed line into classes whose group sizes change, so covariate and label shift are visible without drawing any method.",
+  "suits": "Problem-setting or protocol figures for distribution shift, continual or test-time learning, where the point is how the data change over time."
+ },
+ "tags": [
+  "two dashed phase boxes",
+  "block arrows",
+  "fanned thumbnails",
+  "serif text",
+  "powerpoint-made",
+  "single column",
+  "green and blue phases",
+  "sparse"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Problem and Analysis (p.3)"
+  ],
+  "evidence": [
+   "The pre-trained model will continually adapt to the changing covariate and label distributions in the testing phase.",
+   "samples from the same class may differ dramatically at different moments"
+  ]
+ },
+ "summary": "ODS addresses test-time adaptation when both the covariate distribution D(X) and the label distribution D(Y) shift while the model is being tested. Figure 1 demonstrates this AODS setup in two stacked dashed boxes. In the Training Phase a green Training Data box D_0(X, Y) holds six thumbnails of two classes and hands them over a bent green arrow to a grey Model box. In the Testing Phase a long blue arrow labelled Adapt to shifted D(X) and D(Y) runs over a stream of blue segment boxes, Snowy day and Downtown, whose photos differ in style and in the share of horses and cars. Only the setting is drawn, no method.",
+ "summary_zh": "ODS 研究测试时输入分布和标签分布同时偏移的适应问题。图 1 用上下两个虚线框演示该设定：训练阶段的数据交给灰色模型，测试阶段一条蓝色长箭头贯穿 Snowy day、Downtown 等片段，图片风格和马、车比例都在变化。",
+ "confidence": "high",
+ "notes": "Pre-screen kinds kept. The two dashed phase boxes are counted as panels; the Model box sits on their shared border. The two blue segment boxes are nested units of the Testing Phase and are recorded as lanes, not panels. No method is drawn, hence is_contribution is mostly false or null.",
+ "venue": "ICML23"
+}

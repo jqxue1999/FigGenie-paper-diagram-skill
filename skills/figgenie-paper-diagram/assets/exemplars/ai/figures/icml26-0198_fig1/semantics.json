@@ -1,0 +1,431 @@
+{
+ "paper_id": "icml26-0198",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "NASH",
+  "one_liner": "Data selection that decomposes a complex utility into Shapley-informative components and aggregates them non-linearly with concave functions.",
+  "domain": [
+   "data selection",
+   "Data Shapley",
+   "data valuation"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "analogy",
+  "variant_note": "a barrel-and-potion analogy set up in two small cards, then replayed in the method card with decompose and aggregate steps",
+  "argues": "Data Shapley cannot rank data under a complex multi-role objective, but it can on simpler components; NASH decomposes the objective and aggregates the components non-linearly.",
+  "subject": "A barrel for the objective and potion bottles for data, split into component barrels with Shapley values on each bottle.",
+  "elements": [
+   {
+    "name": "Complex Objective u (e.g., validation accuracy)",
+    "type": "container",
+    "role": "the target utility with several roles and goals, drawn as a barrel",
+    "drawn_as": "pink rounded card with bold title, a hand-sketched barrel and a diagram barrel with black vertical staves and three coloured level lines",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "roles",
+    "type": "label",
+    "role": "names the columns of the barrel, one per role of data",
+    "drawn_as": "bold word with dashed curved leaders to the black staves",
+    "container": "Complex Objective u",
+    "is_contribution": false
+   },
+   {
+    "name": "goals",
+    "type": "label",
+    "role": "names the coloured level lines the barrel has to reach",
+    "drawn_as": "bold word with a dashed curved leader to a coloured line",
+    "container": "Complex Objective u",
+    "is_contribution": false
+   },
+   {
+    "name": "Data N (multiple roles; different strengths)",
+    "type": "container",
+    "role": "the training data, each datum serving the roles with a different strength",
+    "drawn_as": "pink rounded card with six numbered potion bottles filled with teal, blue and orange parts in different amounts",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "datum",
+    "type": "icon",
+    "role": "one data point",
+    "drawn_as": "large hand-sketched round flask with sparkles and the word datum on it",
+    "container": "Data N",
+    "is_contribution": false
+   },
+   {
+    "name": "#1 to 6 potion bottles",
+    "type": "sample",
+    "role": "six data points; the coloured contents say which roles they serve",
+    "drawn_as": "small bottle icons labelled #1, 3, 5 on top and 2, 4, 6 below; second 'roles' label with dashed leaders on bottle 5",
+    "container": "Data N",
+    "is_contribution": false
+   },
+   {
+    "name": "NASH Framework",
+    "type": "container",
+    "role": "the method card: Shapley on the whole objective versus decompose and aggregate",
+    "drawn_as": "wide pink rounded card with a large bold underlined title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Shapley",
+    "type": "operation",
+    "role": "Shapley values of the six data points for the whole objective, all 1/6",
+    "drawn_as": "rotated bold word on a magnifying glass over the sketched barrel, six bottles with 1/6 below, caption 'Not Shapley-informative' with a cross",
+    "container": "NASH Framework",
+    "is_contribution": false
+   },
+   {
+    "name": "decompose",
+    "type": "operation",
+    "role": "splits the objective into three single-role component barrels",
+    "drawn_as": "bold word above a black bracket that branches into three rows",
+    "container": "NASH Framework",
+    "is_contribution": true
+   },
+   {
+    "name": "component barrels with Shapley values",
+    "type": "module",
+    "role": "simpler fewer-role components; Shapley values are 1/2 for the two data serving that role and 0 for the rest",
+    "drawn_as": "three rows, each a thin barrel strip with one coloured line (teal, blue, orange), a magnifying glass and six bottles with 1/2 or 0; caption 'Shapley-informative' with a tick",
+    "container": "NASH Framework",
+    "is_contribution": true
+   },
+   {
+    "name": "nonlinearly aggregate",
+    "type": "operation",
+    "role": "combines the components with concave functions into one objective",
+    "drawn_as": "bold two-line word, black curves from one 1/2 bottle of each component (2, 4, 5) into a final barrel with three coloured columns and three green check marks",
+    "container": "NASH Framework",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "roles / goals labels",
+    "to": "staves and coloured lines of the barrel",
+    "what": "name the columns (roles) and the coloured level lines (goals)",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "bottle contents",
+    "to": "goal lines of the barrel",
+    "what": "teal, blue and orange parts of a bottle match the goal colours it serves",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Shapley magnifier",
+    "to": "bottles 1-6 under the sketched barrel",
+    "what": "Shapley value 1/6 for every datum, no information on strengths",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "sketched barrel",
+    "to": "three component barrels",
+    "what": "objective decomposed into single-role components",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "each component barrel (magnifier)",
+    "to": "its six bottles",
+    "what": "Shapley values within the component: 1/2 or 0",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "one 1/2 bottle of each component",
+    "to": "matching column of the final barrel",
+    "what": "non-linear aggregation of the components",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "final barrel columns",
+    "to": "green check marks",
+    "what": "each column is marked as satisfied",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Complex Objective u",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the objective as a barrel with three role columns and three goal lines",
+    "verdict": "setting"
+   },
+   {
+    "label": "Data N",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "six potion bottles with mixed coloured contents and a large flask labelled datum",
+    "verdict": "setting"
+   },
+   {
+    "label": "NASH Framework",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Shapley on the whole barrel gives 1/6 each; decompose into three component barrels with 1/2 and 0 values; aggregate non-linearly into the full barrel",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "#1, 2, 3, 4, 5, 6",
+    "kind": "identity",
+    "at": "potion bottles in all three cards",
+    "what": "number the six data points"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "hand-sketched wooden barrel",
+    "stands_for": "the complex objective u",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "barrel diagram with black staves and coloured level lines, thin strips for the components and a filled final barrel",
+    "stands_for": "the objective split into roles and goals, its components, and the aggregated objective",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "potion bottle with coloured contents, some with a fraction on it",
+    "stands_for": "one data point and its Shapley value",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 24
+   },
+   {
+    "depicts": "large sketched round flask with sparkles",
+    "stands_for": "a datum in general",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "magnifying glass",
+    "stands_for": "computing Shapley values on a barrel or component",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "green check-mark emoji",
+    "stands_for": "a goal column that is satisfied",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "six data points with three roles: Shapley values 1/6 each for the whole objective, 1/2 and 0 for each single-role component",
+    "form": "fractions written on potion-bottle icons",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "barrel-and-potion-analogy",
+    "drawn_as": "objective as a barrel with role columns and coloured goal lines, data points as potion bottles with coloured contents, Shapley computation as a magnifying glass",
+    "parts": [
+     "barrel",
+     "role staves",
+     "goal lines",
+     "potion bottles",
+     "magnifying glass"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the top-left card (objective barrel), moves to the top-right card (data bottles), then down to the NASH card: sketched barrel with the Shapley magnifier at the left, the decompose bracket in the middle, the final barrel with checks at the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "two pink rounded cards side by side on top (objective, data) and one wide pink card below for the NASH framework, whose content runs left to right: Shapley barrel, decompose bracket with three component rows, final barrel",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.3,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cc79a7",
+    "opacity": 0.1,
+    "used_for": "pink ground of the three rounded cards"
+   },
+   {
+    "hex": "#009e73",
+    "used_for": "first goal and role: teal-green lines, bottle parts, component strip, final barrel column"
+   },
+   {
+    "hex": "#0072b2",
+    "used_for": "second goal and role: blue"
+   },
+   {
+    "hex": "#d55e00",
+    "used_for": "third goal and role: orange"
+   },
+   {
+    "hex": "#0d0c0e",
+    "used_for": "staves, bracket, connecting curves and text"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt hairlines on icons, 1-2 pt black bracket and connecting curves, thin dashed leader curves",
+  "font": "bold sans (DejaVu Sans): 5 pt labels and digits, 6.5 pt card titles with italic u and N, 9 pt underlined 'NASH Framework', 3-4 pt fractions on the bottles; colour emoji check marks",
+  "corners": "rounded",
+  "arrows": "no arrowheads; black bracket lines and thick black curves join components to the final barrel; dashed curved leaders from labels",
+  "rendering": "mixed",
+  "effects": "none; hand-sketched illustrations of barrel and flask",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal, blue and orange = the three goals (and the bottle parts that serve them), carried from the barrel lines through bottles and component strips to the final barrel columns; pink = card ground",
+  "line_style_means": "dashed curved leaders point a label at the part it names; thick black curves hand one bottle per component over to the final barrel; bracket = decomposition",
+  "shape_means": "barrel = objective; staves = roles; coloured lines = goals; bottle = one datum; flask = datum in general; magnifier = Shapley computation; fraction on a bottle = its Shapley value",
+  "marker_means": "#1-#6 number the bottles; 1/6 versus 1/2 and 0 are Shapley values; cross versus tick say not informative versus informative; green checks on the final barrel (read as satisfied columns)",
+  "emphasis": "the method card is the widest and carries a large underlined title; the left barrel has the cross, the right barrel three green checks",
+  "reusable_patterns": [
+   "everyday-object metaphor introduced in two small cards before the method card replays it",
+   "the same bottle grid #1-#6 repeated beside each component so values compare by eye",
+   "toy fractions on bottles (1/6 everywhere versus 1/2 and 0) show why decomposition helps",
+   "three-colour colour-blind-safe code carried from goal lines to bottles to final columns",
+   "label with dashed curved leader pointing at a part of an illustration",
+   "bracket split labelled decompose followed by curves labelled nonlinearly aggregate"
+  ],
+  "weaknesses": [
+   "fractions on the bottles are 3-4 pt",
+   "the link from component strips to final-barrel columns relies on colour and long curves",
+   "the figure does not say why one of the two 1/2 bottles is taken from each component"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "magnifying-glass icons",
+   "emoji check marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "pink cards",
+   "barrel staves and goal lines",
+   "bracket and connecting curves",
+   "bottle contents and fraction labels"
+  ],
+  "unknown": [
+   "origin of the hand-sketched barrel, flask and bottle illustrations (stock clip art or generated)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "hand-sketched barrel",
+   "potion bottles with fractions",
+   "magnifying glass",
+   "decompose bracket",
+   "three component barrels",
+   "final barrel with green checks",
+   "pink rounded cards"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "Data Shapley",
+   "data selection",
+   "NASH",
+   "utility decomposition",
+   "non-linear aggregation",
+   "Shapley-informative",
+   "semivalue",
+   "barrel analogy"
+  ],
+  "tags": [
+   "visual-metaphor",
+   "illustration-style",
+   "toy-values-inline",
+   "verdict-marks",
+   "colour-coded-groups",
+   "small-multiples",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "metaphor-setup-cards",
+    "what": "the objects of an analogy (objective, data) are introduced in small cards at the top before the method card reuses them"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Introduce the objects of the analogy in two small cards (objective as a barrel with roles and goals, data as potion bottles) and replay them in the method card, so each step is a change to the same barrel and bottles with toy values written on the bottles.",
+  "suits": "Methods that decompose an objective or allocate credit among data, where a concrete object metaphor with toy numbers makes the idea readable at a glance."
+ },
+ "tags": [
+  "pink rounded cards",
+  "hand-sketched barrel",
+  "bottle icons with fractions",
+  "three-colour code",
+  "single-column",
+  "analogy"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "first decomposes uV to simpler, fewerrole components where Shapley values are informative",
+   "It then aggregates these Shapleyinformative components non-linearly to account for the interaction among selected data.",
+   "this linear aggregation recovers the flawed vanilla Data Shapley"
+  ]
+ },
+ "summary": "NASH is a data-selection framework: because Data Shapley fails to rank data when the utility (such as validation accuracy) mixes several roles, NASH splits the utility into simpler Shapley-informative components and re-combines them with concave functions. Figure 1 tells this with a barrel-and-potion analogy on pink rounded cards. The top cards show the objective as a barrel with three role columns and coloured goal lines, and the data as six numbered potion bottles with mixed coloured contents. The large bottom card, titled NASH Framework, shows a Shapley magnifier on the whole barrel giving 1/6 on every bottle (not Shapley-informative), a decompose bracket into three component barrels whose bottles carry 1/2 or 0, and black curves that aggregate non-linearly into a final barrel with three green checks.",
+ "summary_zh": "NASH 针对 Data Shapley 在多角色效用下失效的问题，把效用分解成 Shapley 信息充分的分量再非线性聚合。图 1 用木桶与药水瓶作类比：上方两张卡片是目标桶和数据瓶，下方依次是整体 Shapley、分解与聚合。",
+ "confidence": "high",
+ "notes": "Prior labels kept (concept-schematic as analogy, stage-pipeline, side-by-side-contrast). Which bottle each black curve starts from (2, 4, 5) is read from the picture; the figure does not explain why one of the two 1/2 bottles is taken, and the meaning of the green check marks is inferred from the caption. Nearly all graphics (barrels, flask, bottles, magnifiers) are bitmaps placed from the PDF.",
+ "venue": "ICML26"
+}

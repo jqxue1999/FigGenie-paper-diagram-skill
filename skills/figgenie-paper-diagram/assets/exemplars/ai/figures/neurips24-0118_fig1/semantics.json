@@ -1,0 +1,567 @@
+{
+ "paper_id": "neurips24-0118",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Place3D",
+  "one_liner": "A full-cycle pipeline that scores multi-LiDAR placements with the M-SOG metric, optimises them by evolution, and tests them on a new multi-condition dataset.",
+  "domain": [
+   "LiDAR placement optimization",
+   "autonomous driving",
+   "3D perception"
+  ],
+  "subfield": "vision",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "three tinted dashed regions: blue for the M-SOG metric (a to c), red for the optimiser (d), a grey bottom band for the verification chain (baseline, CARLA, e, f)",
+  "argues": "A semantic-occupancy entropy metric computed from simulated scenes can drive an evolutionary search for LiDAR placements, which are then validated on a new multi-condition dataset.",
+  "subject": "a driving scene turned into occupancy grids and covered voxels, an M-SOG landscape searched by evolution, then CARLA data, model training and evaluation",
+  "elements": [
+   {
+    "name": "Surrogate Metric of Semantic Occupancy Grids (M-SOG)",
+    "type": "region",
+    "role": "the metric part of the pipeline, stages (a) to (c)",
+    "drawn_as": "blue-tinted rounded region with a blue dashed outline and a bold blue heading",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(a) 3D Driving Scenes",
+    "type": "data",
+    "role": "semantic point clouds synthesised in CARLA, shown as layers behind an ego vehicle with LiDAR beams (see pictures)",
+    "drawn_as": "stack of four offset scene layers with a white SUV and blue beam fans",
+    "container": "M-SOG region",
+    "is_contribution": null
+   },
+   {
+    "name": "Map to P-SOG",
+    "type": "operation",
+    "role": "turns the scene layers into probabilistic semantic occupancy grids",
+    "drawn_as": "curved blue arrow with a blue label",
+    "container": "M-SOG region",
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Probabilistic Semantic Occupancy Grids",
+    "type": "data",
+    "role": "P-SOG volume of size H x L x W with a probability scale",
+    "drawn_as": "translucent green-blue voxel block with italic axis letters H, L, W and a vertical colour bar",
+    "container": "M-SOG region",
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Compute Entropy to Obtain M-SOG",
+    "type": "operation",
+    "role": "voxels hit by LiDAR rays are collected and their entropy gives M-SOG",
+    "drawn_as": "green voxel grid with dotted blue outlines on covered cells and purple rays from a cylinder",
+    "container": "M-SOG region",
+    "is_contribution": true
+   },
+   {
+    "name": "Laser Ray",
+    "type": "label",
+    "role": "names the purple lines that start at the LiDAR cylinder",
+    "drawn_as": "blue label with a blue arrow pointing at the rays",
+    "container": "M-SOG region",
+    "is_contribution": null
+   },
+   {
+    "name": "= Covered Voxels",
+    "type": "label",
+    "role": "key for the dotted cube glyph",
+    "drawn_as": "dotted blue cube glyph followed by blue text",
+    "container": "M-SOG region",
+    "is_contribution": null
+   },
+   {
+    "name": "Optimizing LiDAR Placements",
+    "type": "region",
+    "role": "the optimisation part, stage (d)",
+    "drawn_as": "red-tinted rounded region with a red dashed outline and a bold red heading",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(d) Evolution Optimization",
+    "type": "module",
+    "role": "CMA-ES-based search that maximises M-SOG to find the best placement (per the caption)",
+    "drawn_as": "heat-map landscape with a small red circle, magnified into a large red circle holding red dots joined by curved red arrows",
+    "container": "Optimizing LiDAR Placements",
+    "is_contribution": true
+   },
+   {
+    "name": "M-SOG (arrow label)",
+    "type": "label",
+    "role": "the metric value handed to the optimiser",
+    "drawn_as": "blue arrow from region (c) to the heat map with a blue label",
+    "container": "between regions",
+    "is_contribution": null
+   },
+   {
+    "name": "Baseline LiDAR Placement",
+    "type": "data",
+    "role": "baseline sensor layouts that are compared with the optimised one",
+    "drawn_as": "cluster of four blue-banded grey cylinders above the caption",
+    "container": "bottom band",
+    "is_contribution": null
+   },
+   {
+    "name": "CARLA",
+    "type": "icon",
+    "role": "the simulator in which the dataset is generated",
+    "drawn_as": "black circular logo with triangle and the word CARLA",
+    "container": "bottom band",
+    "is_contribution": null
+   },
+   {
+    "name": "(e) Multi-Condition Multi-LiDAR Dataset",
+    "type": "data",
+    "role": "the paper's dataset covering clean and adverse conditions",
+    "drawn_as": "plain text caption in the chain, no picture of its own",
+    "container": "bottom band",
+    "is_contribution": true
+   },
+   {
+    "name": "3D Detection & Segmentation Model Training",
+    "type": "operation",
+    "role": "downstream models trained on the dataset",
+    "drawn_as": "grey stepped-block stack icon above two lines of caption",
+    "container": "bottom band",
+    "is_contribution": null
+   },
+   {
+    "name": "(f) Perception Performance Evaluation",
+    "type": "operation",
+    "role": "performance of baselines and optimised placements on clean and corruption data",
+    "drawn_as": "three small line charts with a caption at the right",
+    "container": "bottom band",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "(a) 3D Driving Scenes",
+    "to": "(b) Probabilistic Semantic Occupancy Grids",
+    "what": "Map to P-SOG",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(b) Probabilistic Semantic Occupancy Grids",
+    "to": "(c) Compute Entropy to Obtain M-SOG",
+    "what": "grids are combined with the voxels covered by laser rays",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(c) Compute Entropy to Obtain M-SOG",
+    "to": "(d) Evolution Optimization",
+    "what": "M-SOG value used as the objective",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LiDAR cylinder",
+    "to": "covered voxels",
+    "what": "laser rays that cross the voxel grid",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "small red circle on the heat map",
+    "to": "large red circle",
+    "what": "zoom: one point of the landscape is enlarged into the evolution loop",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "ego vehicle in (a)",
+    "to": "Baseline LiDAR Placement",
+    "what": "sensor layouts on the vehicle that serve as baselines (as drawn; not explained)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Baseline LiDAR Placement",
+    "to": "CARLA",
+    "what": "placements are simulated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CARLA",
+    "to": "(e) Multi-Condition Multi-LiDAR Dataset",
+    "what": "data generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(e) Multi-Condition Multi-LiDAR Dataset",
+    "to": "3D Detection & Segmentation Model Training",
+    "what": "training data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D Detection & Segmentation Model Training",
+    "to": "(f) Perception Performance Evaluation",
+    "what": "trained models are evaluated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(d) Evolution Optimization",
+    "to": "3D Detection & Segmentation Model Training",
+    "what": "optimised placement enters the verification chain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "region colour (blue, red, grey)",
+    "to": "headings, labels and arrows of that region",
+    "what": "one hue per phase",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Surrogate Metric of Semantic Occupancy Grids (M-SOG)",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "(a) driving scenes, (b) probabilistic occupancy grids, (c) covered voxels and entropy giving M-SOG",
+    "verdict": "ours"
+   },
+   {
+    "label": "Optimizing LiDAR Placements",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "(d) evolution optimisation over the M-SOG landscape, zoomed to its search loop",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "verification chain: baseline placements, CARLA, (e) dataset, model training, (f) performance evaluation",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) to (f)",
+    "kind": "order",
+    "at": "bold letter in front of each stage caption",
+    "what": "stages in pipeline order, cited in the caption"
+   },
+   {
+    "marker": "H, L, W",
+    "kind": "identity",
+    "at": "axes of the occupancy block",
+    "what": "names the three grid dimensions"
+   },
+   {
+    "marker": "M-SOG",
+    "kind": "identity",
+    "at": "arrow into (d)",
+    "what": "names the value handed to the optimiser"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "semantic point-cloud layers of a CARLA driving scene",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four tall tiles stacked with an offset like sheets, a white SUV and translucent blue beam fans in front"
+   },
+   {
+    "what": "probabilistic occupancy volume",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "translucent green-blue voxel block on a thin white axis frame with a vertical green-to-blue colour bar"
+   },
+   {
+    "what": "voxel grid with laser rays",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "green cubes, some outlined with blue dots, crossed by purple rays from a grey cylinder"
+   },
+   {
+    "what": "M-SOG landscape heat map",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue-to-yellow smooth map with a colour bar at the right; a red circle ringing the dark-blue optimum with a few black dots"
+   },
+   {
+    "what": "performance curves",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "three small line charts (blue and yellow, green, red) with round markers, no axes or labels"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "white SUV with roof sensors",
+    "stands_for": "the ego vehicle carrying LiDARs",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "grey cylinder with a blue band",
+    "stands_for": "a LiDAR sensor",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "black circular badge with a triangle and the word CARLA",
+    "stands_for": "the CARLA simulator",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "grey stepped blocks shrinking from left to right",
+    "stands_for": "the 3D detection and segmentation network",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "dotted blue cube",
+    "stands_for": "a covered voxel (the key)",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "point-cloud",
+    "drawn_as": "semantic scene layers stacked like transparent sheets with a car in front",
+    "parts": [
+     "scene layer",
+     "ego vehicle",
+     "beam fans"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "cnn-stack",
+    "drawn_as": "grey slabs of decreasing size stepping to the right as the network icon",
+    "parts": [
+     "slabs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "evolution-loop",
+    "drawn_as": "red dots on a circle joined by curved red arrows inside a large red circle zoomed from the heat map",
+    "parts": [
+     "red dots",
+     "curved arrows",
+     "zoom circle"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at (a) top-left, follows the blue arrows through (b), (c) to the red (d), then the eye drops to the bottom band and reads the grey chain from the baseline icon to (f)."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A top band holds two tinted dashed regions side by side, a wide blue one with the metric stages (a) to (c) and a narrow red one with the optimiser (d); a full-width grey band below holds a left-to-right icon chain ending in (f); curved arrows cross from the car and from (d) into the bottom band.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "letters",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.31,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4185f3",
+    "opacity": 0.05,
+    "used_for": "tint of the blue M-SOG region"
+   },
+   {
+    "hex": "#4185f3",
+    "used_for": "blue headings, stage captions, arrows and dashed outline of the M-SOG region"
+   },
+   {
+    "hex": "#e74134",
+    "opacity": 0.05,
+    "used_for": "tint of the red optimisation region"
+   },
+   {
+    "hex": "#e74134",
+    "used_for": "red heading, caption, dashed outline, zoom circles, dots and arrows"
+   },
+   {
+    "hex": "#a4a4a4",
+    "opacity": 0.05,
+    "used_for": "tint of the grey verification band"
+   },
+   {
+    "hex": "#7e7e7e",
+    "used_for": "grey chain arrows and dashed outline of the bottom band"
+   },
+   {
+    "hex": "#aeaeae",
+    "used_for": "grey fills of the cylinders and model icon"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "light grey fills of icon parts"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dashed outlines in the region colour, 1 pt coloured arrows, 0.5 pt dark-grey thin lines",
+  "font": "sans (Eurostile) 7.5 pt for labels, 8.5 pt bold for region headings, italic for the axis letters H, L, W",
+  "corners": "rounded",
+  "arrows": "single-weight arrows coloured by phase (blue, grey, pink) with small filled heads; one curved blue and one curved pink arrow cross between regions",
+  "rendering": "mixed",
+  "effects": "none; the 3D renders carry their own transparency",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = metric computation (a to c), red = placement optimisation (d), grey = downstream data generation and evaluation (e, f); the same hue is used for region tint, dashed outline, heading, captions and arrows",
+  "line_style_means": "dashed outline = region boundary; purple lines = laser rays; thin red lines = zoom link; pink curved arrow = optimised result entering the verification chain",
+  "shape_means": "cylinder = LiDAR sensor; dotted cube = covered voxel; red circle = zoom focus and search loop",
+  "marker_means": "(a) to (f) = stages named in the caption; H, L, W = grid dimensions; M-SOG on an arrow = value passed between regions",
+  "emphasis": "region colours and bold headings; the large red zoom circle is the strongest mark",
+  "reusable_patterns": [
+   "tinted dashed regions, each in its own hue, with heading, captions and arrows in the same hue",
+   "zoom circle that blows up one point of a heat map into the search loop that finds it",
+   "bottom row as a chain of captioned icons for the verification pipeline",
+   "curved arrow from the optimiser region down into the verification row to show where the optimised result is used",
+   "small in-diagram key (dotted cube = covered voxels) next to the drawing it explains",
+   "stack of offset layers standing for semantic classes of one scene"
+  ],
+  "weaknesses": [
+   "the arrow from the car to Baseline LiDAR Placement is not explained in figure or caption",
+   "all text is 7.5 pt, so hierarchy depends on colour and boldness only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "CARLA-rendered semantic scene layers and the ego vehicle",
+   "voxel and occupancy renders",
+   "M-SOG landscape heat map",
+   "result curves"
+  ],
+  "stock": [
+   "CARLA logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed regions, arrows and labels",
+   "evolution loop",
+   "dotted covered-voxel cube"
+  ],
+  "unknown": [
+   "grey cylinder LiDAR icons",
+   "grey stepped-block network icon"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "car with LiDAR beams",
+   "stack of semantic scene layers",
+   "translucent voxel block with H, L, W axes",
+   "voxel grid with laser rays",
+   "heat-map landscape with red zoom circle",
+   "evolution loop of red dots and arrows",
+   "CARLA logo",
+   "chain of captioned icons"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "LiDAR placement",
+   "semantic occupancy grid",
+   "entropy metric",
+   "CMA-ES evolutionary optimization",
+   "multi-LiDAR perception",
+   "CARLA",
+   "3D detection and segmentation",
+   "autonomous driving"
+  ],
+  "tags": [
+   "zoom-callout",
+   "brand-logo-icon",
+   "colour-coded-groups",
+   "pictogram-chain"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each phase of a multi-phase method its own tinted dashed region and keep that hue on heading, captions and arrows; let a curved arrow carry the result across regions, and zoom a heat-map point into the search loop that produces it.",
+  "suits": "multi-phase engineering pipelines (design search, simulator data, downstream evaluation) where a metric, an optimiser and a verification chain must be told apart."
+ },
+ "tags": [
+  "tinted dashed regions",
+  "phase colours blue red grey",
+  "3D renders",
+  "zoom circle",
+  "icon chain",
+  "sans labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method, overview (p.3)"
+  ],
+  "evidence": [
+   "We first utilize the semantic point cloud synthesized in CARLA (a) to generate Probabilistic SOG (b)",
+   "We propose a CMA-ES-based optimization strategy to maximize M-SOG, finding optimal LiDAR placement (d).",
+   "we contribute a multi-condition multi-LiDAR dataset (e) and evaluate the performance of baselines and optimized placements"
+  ]
+ },
+ "summary": "Place3D is a full-cycle pipeline for multi-LiDAR placement: it scores sensor layouts with the Surrogate Metric of Semantic Occupancy Grids (M-SOG), optimises them with a CMA-ES strategy, and checks them on a new multi-condition dataset. The figure is built from three tinted dashed regions. The blue region walks lettered stages from CARLA scene layers through a probabilistic occupancy volume to covered voxels and entropy; the red region shows the optimiser as a heat-map landscape zoomed into a loop of red dots; a grey bottom band chains captioned icons from baseline placements through CARLA, the dataset and model training to evaluation.",
+ "summary_zh": "Place3D 用语义占据栅格的替代指标 M-SOG 评估多激光雷达布置，再用进化策略优化，并在新数据集上验证。图用三块虚线着色区域：蓝区从场景到占据体素算出 M-SOG，红区放大进化搜索，灰色底栏用图标链连到数据集与评测。",
+ "confidence": "high",
+ "notes": "Prior kind kept; variant changed to phase-bands. Whether the pink arrow lands on model training or on the whole bottom chain is read from the picture. The arrow from the car to the baseline placements is not explained in the text provided.",
+ "venue": "NeurIPS24"
+}

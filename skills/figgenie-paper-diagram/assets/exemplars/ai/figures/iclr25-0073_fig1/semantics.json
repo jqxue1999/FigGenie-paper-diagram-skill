@@ -1,0 +1,545 @@
+{
+ "paper_id": "iclr25-0073",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VLB (Vision-Language Bootstrapping)",
+  "one_liner": "A dynamic multimodal evaluation protocol that bootstraps new visual question-answering samples from static benchmarks to cut data contamination and set complexity.",
+  "domain": [
+   "multimodal evaluation",
+   "data contamination",
+   "benchmark design"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "stage-pipeline"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "panel (a) diagnoses data contamination on three concrete samples, panel (b) contrasts a static evaluation lane with a dynamic one that adds visual and linguistic dynamics",
+  "argues": "Static benchmarks leak into training data and have fixed complexity; dynamic evaluation creates variants of them with flexible complexity.",
+  "subject": "Evaluation images found inside a training-set ellipse, and a static versus a dynamic evaluation pipeline drawn as two lanes.",
+  "elements": [
+   {
+    "name": "Training Set / Evaluation Set",
+    "type": "icon",
+    "role": "legend of the two set glyphs used in panel (a)",
+    "drawn_as": "outlined oval labelled Training Set and folded-corner document labelled Evaluation Set, top right of panel (a)",
+    "container": "(a) Data Contamination",
+    "is_contribution": false
+   },
+   {
+    "name": "training-set ellipse",
+    "type": "region",
+    "role": "the pre-training data, holding nine named datasets",
+    "drawn_as": "large grey outlined ellipse with dataset names and database-cylinder icons; the other six datasets have washed-out thumbnails behind their names",
+    "container": "(a) Data Contamination",
+    "is_contribution": null
+   },
+   {
+    "name": "Flickr30k, LAION-COCO, LVIS, PAIRED, Visual Genome, SBU",
+    "type": "data",
+    "role": "training datasets without a matched sample",
+    "drawn_as": "grey cylinder icon and name over a faded thumbnail",
+    "container": "training-set ellipse",
+    "is_contribution": null
+   },
+   {
+    "name": "CC3M, LAION-400M, COCO-caption",
+    "type": "data",
+    "role": "training datasets in which a twin of an evaluation image was found",
+    "drawn_as": "cylinder icon and large name in yellow, pink and green, each above a coloured ellipse holding the matched image and its caption",
+    "container": "training-set ellipse",
+    "is_contribution": null
+   },
+   {
+    "name": "matched training samples",
+    "type": "sample",
+    "role": "the same image as the evaluation item, with a caption that answers its question: 'Animator and crewmember pose with their award.', 'The Holy Family by frangipane, niccolo', 'A train station platform with people coming and going.'",
+    "drawn_as": "three glowing yellow, pink and green ellipses with an image and a bold serif caption",
+    "container": "training-set ellipse",
+    "is_contribution": null
+   },
+   {
+    "name": "SEEDBench_IMG/80637.jpg, MME/artwork/13821.jpg, MMBench/946.jpg",
+    "type": "sample",
+    "role": "evaluation items whose images exist in the training set; each shows its question",
+    "drawn_as": "folded-corner document cards with a magnifier icon, image, question and file name; frames yellow, pink and green",
+    "container": "(a) Data Contamination",
+    "is_contribution": null
+   },
+   {
+    "name": "Static Evaluation",
+    "type": "container",
+    "role": "the conventional pipeline: people collect internet data into a fixed benchmark",
+    "drawn_as": "grey band with a bold title and a chain of captioned icons",
+    "container": "(b) Dynamic Evaluation vs Static Evaluation",
+    "is_contribution": false
+   },
+   {
+    "name": "Human, Internet Data, Static Benchmark",
+    "type": "icon",
+    "role": "stages of building a static benchmark",
+    "drawn_as": "three-person icon, globe icon and document-with-image icon joined by thin arrows",
+    "container": "Static Evaluation",
+    "is_contribution": false
+   },
+   {
+    "name": "Fixed Complexity",
+    "type": "label",
+    "role": "outcome of the static pipeline",
+    "drawn_as": "oval with a blue outline and a blue snowflake icon above",
+    "container": "Static Evaluation",
+    "is_contribution": false
+   },
+   {
+    "name": "VS",
+    "type": "label",
+    "role": "sets the two lanes against each other",
+    "drawn_as": "large bold black VS between the bands",
+    "container": "(b) Dynamic Evaluation vs Static Evaluation",
+    "is_contribution": null
+   },
+   {
+    "name": "Dynamic Evaluation",
+    "type": "container",
+    "role": "the proposed pipeline that builds variants of a static benchmark",
+    "drawn_as": "cream band with a bold title",
+    "container": "(b) Dynamic Evaluation vs Static Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Visual Dynamic",
+    "type": "operation",
+    "role": "changes the image side of a sample",
+    "drawn_as": "light-blue rounded box with an eye icon",
+    "container": "Dynamic Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Linguistic Dynamic",
+    "type": "operation",
+    "role": "changes the language side of a sample",
+    "drawn_as": "light-orange rounded box with a pencil icon, below a plus sign",
+    "container": "Dynamic Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Dynamic Benchmark",
+    "type": "data",
+    "role": "variants of the static benchmark with graded difficulty",
+    "drawn_as": "column of three document cards with dots between, beside a vertical arrow from Easy to Hard",
+    "container": "Dynamic Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Flexible Complexity",
+    "type": "label",
+    "role": "outcome of the dynamic pipeline",
+    "drawn_as": "oval with an orange outline and an orange flame icon above",
+    "container": "Dynamic Evaluation",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "matched training samples",
+    "to": "evaluation cards",
+    "what": "the same image appears in the training set and in the evaluation set; colour pairs yellow, pink and green",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Human",
+    "to": "Internet Data",
+    "what": "people collect data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Internet Data",
+    "to": "Static Benchmark",
+    "what": "benchmark built from collected data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Static Benchmark",
+    "to": "Fixed Complexity",
+    "what": "the benchmark stays at one difficulty",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Static Benchmark (dynamic lane)",
+    "to": "Visual Dynamic + Linguistic Dynamic",
+    "what": "a static sample is changed in image and in language",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Dynamic + Linguistic Dynamic",
+    "to": "Dynamic Benchmark",
+    "what": "variants of different difficulty",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Dynamic Benchmark",
+    "to": "Flexible Complexity",
+    "what": "difficulty can be chosen between easy and hard",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Static Evaluation",
+    "to": "Dynamic Evaluation",
+    "what": "the two lanes are compared, joined by VS",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Data Contamination",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "evaluation images that also occur in training datasets, with captions that answer the questions",
+    "verdict": "fails"
+   },
+   {
+    "label": "(b) Dynamic Evaluation vs Static Evaluation",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "a static lane ending in fixed complexity against a dynamic lane that adds visual and linguistic dynamics for flexible complexity",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "bold captions under the two panels",
+    "what": "names and heads the panels"
+   },
+   {
+    "marker": "magnifier",
+    "kind": "other",
+    "at": "top-left corner of each evaluation card",
+    "what": "the item was searched for in the training set"
+   },
+   {
+    "marker": "Easy, Hard",
+    "kind": "other",
+    "at": "ends of the vertical double arrow beside the dynamic benchmark",
+    "what": "poles of the complexity scale"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "evaluation images: two people with awards, a Renaissance painting, a train station platform",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "each image shown twice: small in a coloured ellipse inside the training set and larger on a coloured document card outside, joined by dashed wedges"
+   },
+   {
+    "what": "washed-out thumbnails behind the other dataset names",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "faded to a light grey ghost behind each dataset name"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "database cylinder",
+    "stands_for": "a training dataset",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "magnifier",
+    "stands_for": "searching the training set for the evaluation image",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "three people, globe, document with image",
+    "stands_for": "human collectors, internet data, a benchmark",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "snowflake and flame",
+    "stands_for": "fixed versus flexible complexity",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "eye and pencil",
+    "stands_for": "visual and linguistic dynamics",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "folded-corner document with an image and text lines",
+    "stands_for": "a benchmark or an evaluation sample",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 6
+   }
+  ],
+  "examples": [
+   {
+    "what": "three evaluation questions beside the training captions that answer them, with benchmark file names",
+    "form": "cards with image, bold question and file name; ellipses with image and caption: 'How many people are visible in the image?', 'Is this artwork created by frangipane, niccolo?', 'What's the function of the object?'",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "dataset name beside a database cylinder with a faded thumbnail behind; the three matched ones enlarged and coloured",
+    "parts": [
+     "cylinder",
+     "name",
+     "thumbnail"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "folded-corner document card holding an image, a question and a file name, with a magnifier",
+    "parts": [
+     "image",
+     "question",
+     "file name",
+     "magnifier"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake beside Fixed Complexity and flame beside Flexible Complexity; used for the state of the complexity, not of a module",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "column of three benchmark cards with dots beside a vertical arrow from Easy to Hard",
+    "parts": [
+     "cards",
+     "ellipsis",
+     "Easy-Hard arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the yellow evaluation card at the top left of panel (a), follows the dashed wedge into the ellipse and round the other two matches, then crosses the dashed divider to the static lane and down to the dynamic lane in (b)."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two lettered panels side by side behind a vertical dashed line: (a) a large ellipse of training datasets in the middle with three evaluation cards around it joined by coloured dashed wedges; (b) two full-width bands stacked, a grey Static Evaluation band above a cream Dynamic Evaluation band, with a bold VS between them. Panel captions sit under each panel.",
+  "panel_count": 2,
+  "lanes": "(b) 2 stacked bands: static lane and dynamic lane",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.57,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ededed",
+    "used_for": "grey ground of the Static Evaluation band"
+   },
+   {
+    "hex": "#ffffeb",
+    "used_for": "cream ground of the Dynamic Evaluation band"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "gold: CC3M name, yellow frame and wedge"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow fill of the yellow ellipse and card"
+   },
+   {
+    "hex": "#ffa7a7",
+    "used_for": "pink: LAION-400M name, pink frame and wedge"
+   },
+   {
+    "hex": "#ffe7e7",
+    "used_for": "pale pink fill of the pink ellipse and card"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green: COCO-caption name, green frame and wedge"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "pale green fill of the green ellipse and card"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "Visual Dynamic box"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "Linguistic Dynamic box"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "dark blue-grey icons and cylinders"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "blue outline of the Fixed Complexity oval and the Visual Dynamic box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black outlines, coloured 0.5-0.75 pt frames and dashed wedges in panel (a)",
+  "font": "serif (Times) bold, 3.5-6.5 pt; 6.5 pt panel and band titles, 4.5 pt stage labels, 3.5 pt captions and questions",
+  "corners": "rounded",
+  "arrows": "thin black straight arrows with small heads, dashed colour-coded wedges, one vertical double arrow for Easy to Hard",
+  "rendering": "flat-vector",
+  "effects": "soft glow around the three highlighted ellipses and cards, washed-out thumbnails at 20% opacity",
+  "model_depiction": "none",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "yellow, pink and green each follow one contaminated sample (dataset name, ellipse, wedge, evaluation card); grey band = static evaluation, cream band = dynamic evaluation; blue = visual dynamic and the fixed-complexity oval; orange = linguistic dynamic and the flexible-complexity oval",
+  "line_style_means": "dashed coloured wedges tie each evaluation card to its twin in the training set; solid thin arrows = pipeline flow; vertical double arrow = easy to hard; vertical dashed black line separates the panels",
+  "shape_means": "large ellipse = the training set; folded-corner document = evaluation item or benchmark; cylinder = dataset; oval = outcome (Fixed or Flexible Complexity); rounded boxes = dynamic operators",
+  "marker_means": "magnifier = searched in the training set; snowflake = fixed; flame = flexible; Easy and Hard label the poles of the scale",
+  "emphasis": "three colour-matched samples stand out from the faded training set; the bold VS divides the two lanes; blue versus orange outcome ovals with snowflake and flame",
+  "reusable_patterns": [
+   "faded thumbnails and grey cylinders for the bulk of a dataset, with three colour-highlighted members",
+   "dashed colour-coded wedges from cards outside a set to their twins inside it, with a magnifier on each card",
+   "record card showing image, question and file name",
+   "snowflake and flame beside two outcome ovals to say fixed versus flexible",
+   "top lane as a chain of captioned icons and bottom lane with a plus sign for the added operators, separated by a bold VS",
+   "vertical Easy to Hard arrow beside a column of benchmark cards",
+   "legend glyphs (oval = training set, document = evaluation set) at the top of the panel"
+  ],
+  "weaknesses": [
+   "3.5 pt captions on the cards and in the ellipses are small",
+   "the faded thumbnails are nearly invisible",
+   "the dashed divider and VS are the only link between panel (a) and (b)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "evaluation and training images with their captions from public benchmarks and datasets",
+   "benchmark file names and questions"
+  ],
+  "stock": [
+   "icons: people, globe, document, eye, pencil, magnifier, snowflake, flame, database cylinders"
+  ],
+  "generated": [],
+  "drawn": [
+   "ellipses, bands, boxes and arrows",
+   "coloured dashed wedges",
+   "VS banner and captions"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "training-set ellipse with dataset names and cylinders",
+   "evaluation cards with magnifier and question",
+   "colour-matched dashed wedges",
+   "static band with captioned icon chain",
+   "dynamic band with Visual and Linguistic Dynamic boxes",
+   "Easy to Hard column of benchmark cards",
+   "snowflake and flame icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal evaluation",
+   "data contamination",
+   "dynamic benchmark",
+   "vision-language bootstrapping",
+   "flexible complexity",
+   "LVLM benchmarks",
+   "static versus dynamic evaluation"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "zoom-callout",
+   "annotated-record-card",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "twin-sample-match-links",
+    "what": "the same sample drawn inside a set (training ellipse) and as a card outside it, tied by colour-coded dashed wedges and a magnifier icon, to show overlap or leakage"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Prove a hidden problem with concrete evidence: colour three leaked samples (dataset name, ellipse, dashed wedge, evaluation card with magnifier) inside a faded dataset ellipse, then give the fix as a static-versus-dynamic two-lane comparison with icon chains and an Easy-to-Hard arrow.",
+  "suits": "benchmark and evaluation papers that must show leakage or overlap and then a remedy that generates variants of the benchmark."
+ },
+ "tags": [
+  "lettered two panels",
+  "faded thumbnails",
+  "colour-matched dashed wedges",
+  "icon chain lanes",
+  "grey and cream bands",
+  "serif bold labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "some images in evaluation sets can be exactly found in the training set",
+   "dynamic evaluation can create various variants upon static benchmarks with flexible complexity",
+   "Once constructed, they are static with a fixed complexity"
+  ]
+ },
+ "summary": "This paper proposes Vision-Language Bootstrapping (VLB), a dynamic multimodal evaluation protocol that generates new visual question-answering variants from static benchmarks with flexible complexity and less data contamination. Figure 1 has two lettered panels. Panel (a), Data Contamination, puts three evaluation cards, from SEED-Bench, MME and MMBench, around a large ellipse of faded training datasets; each card's image and caption twin in the training set is highlighted yellow, pink or green and tied by a dashed wedge with a magnifier. Panel (b) stacks a static lane (Human, Internet Data, Static Benchmark, Fixed Complexity with a snowflake) against a dynamic lane where visual and linguistic dynamics turn a static benchmark into an easy-to-hard stack with Flexible Complexity and a flame.",
+ "summary_zh": "论文提出视觉语言自举（VLB），把静态多模态基准动态扩展成复杂度可调、数据污染更少的变体。图1(a)用三组颜色对应的卡片和虚线展示评测图片在训练集中有原样出现；(b)对比静态评测的固定复杂度与加入视觉、语言动态后由易到难的动态基准。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (side-by-side-contrast problem-then-fix, concept-schematic); stage-pipeline added for the two icon-chain lanes in (b). The magnifier and dashed wedges look like a zoom callout but are used as a match link between twin samples, so zoom-callout is a loose fit. The snowflake and flame mark the state of complexity, not of a module. The orange text and outline colours of Flexible Complexity, Easy and Hard have no hex in the digest and are not in the palette.",
+ "venue": "ICLR25"
+}

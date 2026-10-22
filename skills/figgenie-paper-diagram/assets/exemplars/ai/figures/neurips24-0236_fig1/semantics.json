@@ -1,0 +1,520 @@
+{
+ "paper_id": "neurips24-0236",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WONDERBREAD",
+  "one_liner": "A benchmark of 2,928 documented web workflow demonstrations and 6 business-process-management tasks for evaluating multimodal foundation models.",
+  "domain": [
+   "business process management",
+   "web workflow demonstrations",
+   "multimodal foundation models"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "three numbered columns (dataset, benchmark tasks, evaluation); the second and third hold three tinted rows, each a small inputs, model, output chain",
+  "argues": "WONDERBREAD has three parts: demonstrations with recording, action trace and written guide; tasks that go beyond automation; and automatic graders for every task.",
+  "subject": "Anatomy of one demonstration, three task rows that feed a Multimodal FM, and three evaluation rows graded by GPT4 or programmatic metrics.",
+  "elements": [
+   {
+    "name": "Workflow 1 to Workflow 5",
+    "type": "data",
+    "role": "the set of recorded workflows",
+    "drawn_as": "five offset white cards, the farthest dashed and faded; the front card carries Demo 1 (green), Demo 2 (blue) and Demo 3 (orange) chips with person icons and a vertical ellipsis",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "2,928 demonstrations / 598 workflows / 162 rankings / 4 websites",
+    "type": "text-block",
+    "role": "statistics of the dataset",
+    "drawn_as": "four bullets in sans 4.5 pt, the first number in bold",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "Demo 3: Intent",
+    "type": "instance",
+    "role": "the one demonstration that is opened up, with its intent Find and report details of X",
+    "drawn_as": "bold title and a white rounded intent box on a peach panel below the stack",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "Screen Recording",
+    "type": "data",
+    "role": "video of the web session",
+    "drawn_as": "browser screenshot with a large translucent play triangle",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Trace",
+    "type": "data",
+    "role": "log of the actions: x, y, width, height, type, action",
+    "drawn_as": "JSON in large curly braces, red keys and blue values, monospace",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "SOP",
+    "type": "data",
+    "role": "written guide describing the steps of the demonstration (caption)",
+    "drawn_as": "white card titled Steps with monospace lines 1. Click X, 2. Type Y, 3. Scroll, ..., 10. Done",
+    "container": "① Dataset",
+    "is_contribution": true
+   },
+   {
+    "name": "Documentation",
+    "type": "container",
+    "role": "task row: from recording and action trace to an SOP",
+    "drawn_as": "yellow tinted row with dark-gold title bar; (recording, trace) in parentheses, Multimodal FM arrow, SOP card",
+    "container": "② Benchmark Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Knowledge Transfer",
+    "type": "container",
+    "role": "task row: from demonstrations and an SOP to a valid or invalid verdict",
+    "drawn_as": "pink tinted row with maroon title bar; (Demo 1, Demo 2, Demo 3 stack, SOP), Multimodal FM arrow, big green tick or red cross",
+    "container": "② Benchmark Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Improvement",
+    "type": "container",
+    "role": "task row: from several SOPs to a gold SOP or a ranking",
+    "drawn_as": "lavender tinted row with dark-purple title bar; stack of SOPs, Multimodal FM arrow, Gold SOP or a ranking of cells 1, 2, 3",
+    "container": "② Benchmark Tasks",
+    "is_contribution": true
+   },
+   {
+    "name": "Multimodal FM",
+    "type": "module",
+    "role": "the foundation model under test, repeated in every task row",
+    "drawn_as": "pink block arrow with red outline and a bold black label",
+    "container": "② Benchmark Tasks",
+    "is_contribution": false
+   },
+   {
+    "name": "Rubric-Based",
+    "type": "container",
+    "role": "evaluation row: GPT4 grades an SOP against a rubric",
+    "drawn_as": "pink tinted row with dark-red title bar; (SOP, Rubric) in parentheses, GPT4 arrow, Grades card with coloured checkboxes",
+    "container": "③ Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Pairwise SOPs",
+    "type": "container",
+    "role": "evaluation row: GPT4 compares a gold SOP with a new SOP line by line, giving precision and recall",
+    "drawn_as": "green tinted row with dark-green title bar; (Gold SOP, New SOP), GPT4 arrow, two mini tables Gold to New and New to Gold, boxes Precision 0.89 and Recall 0.93",
+    "container": "③ Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "Programmatic",
+    "type": "container",
+    "role": "evaluation row: metrics computed by code, shown as clustering, classification and correlation",
+    "drawn_as": "blue tinted row with dark-blue title bar and three mini scatter plots with captions",
+    "container": "③ Evaluation",
+    "is_contribution": true
+   },
+   {
+    "name": "GPT4",
+    "type": "module",
+    "role": "the automated grader in the Rubric-Based and Pairwise SOPs rows",
+    "drawn_as": "solid blue block arrow with bold label",
+    "container": "③ Evaluation",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Workflow 1 to Workflow 5",
+    "to": "Demo 3 panel",
+    "what": "front card opens into one demonstration",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Screen Recording, Action Trace, SOP",
+    "to": "Demo 3",
+    "what": "a demonstration consists of the three parts, joined by plus signs",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "recording and action trace",
+    "to": "SOP",
+    "what": "Documentation: Multimodal FM writes the guide",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Demo 1 to Demo 3 and SOP",
+    "to": "tick or cross",
+    "what": "Knowledge Transfer: Multimodal FM gives a valid or invalid verdict",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SOPs",
+    "to": "Gold SOP or Ranking",
+    "what": "Improvement: Multimodal FM picks or ranks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SOP and Rubric",
+    "to": "Grades",
+    "what": "GPT4 grades the SOP with the rubric",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gold SOP and New SOP",
+    "to": "Line-by-line Analysis, Precision, Recall",
+    "what": "GPT4 compares the SOPs and the analysis yields precision and recall",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "① Dataset",
+    "to": "② Benchmark Tasks and ③ Evaluation",
+    "what": "three numbered parts read left to right, split by vertical rules",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "① Dataset",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "stack of workflow cards with counts, and a wedge zoom into Demo 3: intent, screen recording, action trace and SOP",
+    "verdict": "ours"
+   },
+   {
+    "label": "② Benchmark Tasks",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "three task rows, Documentation, Knowledge Transfer and Improvement, each feeding a Multimodal FM",
+    "verdict": "ours"
+   },
+   {
+    "label": "③ Evaluation",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Rubric-Based and Pairwise SOPs rows graded by GPT4, and a Programmatic row of metric thumbnails",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "① ② ③",
+    "kind": "section",
+    "at": "left of each column title",
+    "what": "number the three components, matching (1), (2), (3) of the caption"
+   },
+   {
+    "marker": "1. 2. 3. ... 10.",
+    "kind": "order",
+    "at": "inside the SOP cards",
+    "what": "numbered steps of the written guide"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "screen recording of a web session",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "grey browser window with a yellow highlight bar and a translucent play triangle; large in the Demo 3 zoom, small in the Documentation row"
+   },
+   {
+    "what": "Clustering, Classification and Correlation thumbnails",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "orange and blue dot clusters; red and green dots on two tinted regions; blue dots along a red fit line; caption below each"
+   },
+   {
+    "what": "Rubric and Grades pages",
+    "content": "document",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "white cards with checkboxes and lines of 1 pt text; Grades has green, yellow and red checkboxes"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "green, blue and orange person silhouettes",
+    "stands_for": "the person who recorded Demo 1, Demo 2 and Demo 3",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "large green check mark and red cross",
+    "stands_for": "valid or invalid outcome of Knowledge Transfer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "Demo 3 with intent Find and report details of X, a screen recording, an action trace with x, y, width, height, type click, and a 10-step SOP",
+    "form": "peach zoom panel with the three parts joined by plus signs",
+    "real_values": false
+   },
+   {
+    "what": "line-by-line analysis tables Gold to New and New to Gold with rows 1:1, 2:X, 3:3 and boxes Precision 0.89 and Recall 0.93",
+    "form": "two mini tables with green and red cells and two small metric boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "stack of offset Workflow cards with Demo chips and four bullet counts beside it",
+    "parts": [
+     "stacked cards",
+     "Demo chips",
+     "bullet counts"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "pink block arrow labelled Multimodal FM for the evaluated model; blue block arrow labelled GPT4 for the grader",
+    "parts": [
+     "block arrow",
+     "name label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the circled 1 and the card stack, follows the wedge to Demo 3, then goes to column 2 and reads its three rows top to bottom, then column 3 the same way."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three columns split by vertical black rules, each headed by a big circled number and a bold title. Column 1 is a card stack with a wedge zoom to Demo 3; columns 2 and 3 each hold three tinted rows with dark title bars, each a tuple of inputs, a block arrow and an output.",
+  "panel_count": 3,
+  "lanes": "three task rows in column 2 and three evaluation rows in column 3, aligned side by side",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.78,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#7f6000",
+    "used_for": "title bar of Documentation (row tint #fff2cc)"
+   },
+   {
+    "hex": "#741b47",
+    "used_for": "title bar of Knowledge Transfer (row tint #ead1dc)"
+   },
+   {
+    "hex": "#351c75",
+    "used_for": "title bar of Improvement (row tint #d9d2e9)"
+   },
+   {
+    "hex": "#990000",
+    "used_for": "title bar of Rubric-Based (row tint #f4cccc)"
+   },
+   {
+    "hex": "#38761d",
+    "used_for": "title bar of Pairwise SOPs (row tint #d9ead3)"
+   },
+   {
+    "hex": "#0b5394",
+    "used_for": "title bar of Programmatic and its blue dots (row tint #cfe2f3)"
+   },
+   {
+    "hex": "#fce5cd",
+    "used_for": "peach Demo 3 panel and translucent zoom wedge"
+   },
+   {
+    "hex": "#e69138",
+    "used_for": "orange Demo 3 chip and orange dots in the Clustering plot"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red keys in the action trace and red outline of the Multimodal FM arrows"
+   },
+   {
+    "hex": "#1155cc",
+    "used_for": "blue values in the action trace"
+   },
+   {
+    "hex": "#f4cccc",
+    "used_for": "fill of the Multimodal FM block arrows"
+   },
+   {
+    "hex": "#3d85c6",
+    "used_for": "fill of the GPT4 block arrows"
+   },
+   {
+    "hex": "#93c47d",
+    "used_for": "green tick and green cells in the line-by-line tables"
+   },
+   {
+    "hex": "#b6d7a8",
+    "used_for": "green Demo 1 chip"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on cards, rules and brackets; red outline on the Multimodal FM arrows; dashed outline on the faded back card",
+  "font": "sans (Arial) 4.5 to 5.5 pt titles, bold white on dark title bars; monospace (Courier New) 2.5 to 3 pt for SOP and trace text; 1 pt micro text in the rubric cards; 10 pt circled numbers",
+  "corners": "square",
+  "arrows": "wide block arrows for model calls (pink with red outline for Multimodal FM, solid blue for GPT4); thin black lines for the zoom wedge; tall parentheses and commas group inputs",
+  "rendering": "flat-vector",
+  "effects": "translucent peach wedge; offset card stacks",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each row has one hue as dark title bar and light tint (Documentation gold, Knowledge Transfer maroon, Improvement purple, Rubric-Based red, Pairwise SOPs green, Programmatic blue); Demo 1, 2, 3 chips are green, blue, orange; pink block arrow = model under test, blue block arrow = GPT4 grader; red keys and blue values in the JSON",
+  "line_style_means": "thin wedge lines = zoom from the stack to Demo 3; tall parentheses with commas = a tuple of inputs; plus signs = parts of one demonstration; vertical black rules separate the components",
+  "shape_means": "block arrow = a model call; white card titled Steps = SOP; offset card stack = a set of workflows",
+  "marker_means": "circled numbers number the components as in the caption; tick or cross = valid or invalid; coloured cells 1, 2, 3 = a ranking",
+  "emphasis": "dark title bars with white bold text, big circled numbers and the peach zoom panel",
+  "reusable_patterns": [
+   "three numbered columns for dataset, tasks and evaluation matching the numbered caption",
+   "wedge zoom from a card stack to one opened record split by plus signs",
+   "tinted rows with a dark title bar, each row inputs in tall parentheses, a labelled block arrow, then the output",
+   "pink block arrow for the model under test and blue block arrow for the grader",
+   "stack of offset cards with bullet counts for a dataset",
+   "mini scatter thumbnails with captions for programmatic metrics"
+  ],
+  "weaknesses": [
+   "text is tiny: 1 to 3 pt in many cards",
+   "the caption speaks of 6 tasks but only three task rows are drawn",
+   "evaluation rows are not tied to the task rows they grade by colour or line",
+   "1 pt text in the Rubric and Grades cards cannot be read"
+  ]
+ },
+ "resources": {
+  "own": [
+   "screenshot of a recorded web session",
+   "dataset statistics"
+  ],
+  "stock": [
+   "person silhouettes",
+   "green check mark and red cross"
+  ],
+  "generated": [],
+  "drawn": [
+   "title bars, tinted rows, block arrows and card stacks",
+   "JSON and SOP text cards",
+   "mini scatter plots and tables"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "stack of offset workflow cards with Demo chips",
+   "four bullet statistics",
+   "zoomed Demo 3 panel with recording, action trace and SOP",
+   "tinted task rows with dark title bars",
+   "pink block arrows labelled Multimodal FM",
+   "blue block arrows labelled GPT4",
+   "green tick or red cross",
+   "mini scatter plots"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "benchmark",
+   "business process management",
+   "workflow demonstrations",
+   "SOP generation",
+   "multimodal foundation models",
+   "knowledge transfer",
+   "automated evaluation",
+   "web navigation"
+  ],
+  "tags": [
+   "zoom-callout",
+   "annotated-record-card",
+   "stacked-cards",
+   "code-snippet-box",
+   "task-definition",
+   "schematic-plot"
+  ],
+  "new_tags": [
+   {
+    "name": "numbered-component-columns",
+    "what": "the figure is split into columns headed by large circled numbers and bold titles that match the numbered contributions in the caption"
+   },
+   {
+    "name": "tuple-parentheses-inputs",
+    "what": "model inputs grouped in tall parentheses with commas, followed by a block arrow labelled with the model and then its output"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State a benchmark as numbered columns that match the caption (dataset, tasks, evaluation); zoom one record out of a card stack with a wedge and split it with plus signs, and draw every task as the same chain: inputs in big parentheses, a labelled block arrow for the model, then the output.",
+  "suits": "benchmarks that bundle a dataset, several tasks and automatic graders and need one figure showing the data, the task format and the metrics."
+ },
+ "tags": [
+  "three-columns",
+  "numbered-components",
+  "tinted-rows",
+  "block-arrows",
+  "monospace-snippets",
+  "tiny-type"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.2)",
+   "Abstract"
+  ],
+  "evidence": [
+   "(1) We curate 2928 human demonstrations across 598 web navigation tasks.",
+   "(2) We create 6 BPM tasks that measure a model’s ability to generate accurate documentation,",
+   "(3) We provide automated evaluation pipelines for all tasks."
+  ]
+ },
+ "summary": "WONDERBREAD is a benchmark for evaluating multimodal foundation models on business process management tasks beyond automation. Figure 1 shows its three components as numbered columns. Column 1 stacks 2,928 workflow demonstrations (598 workflows, 162 rankings, 4 websites) and opens Demo 3 with a wedge into intent, screen recording, action trace and SOP. Column 2 has three tinted rows (Documentation, Knowledge Transfer, Improvement), each a tuple of inputs in parentheses, a pink Multimodal FM block arrow and an output. Column 3 has Rubric-Based and Pairwise SOPs rows graded by a blue GPT4 arrow, and a Programmatic row of clustering, classification and correlation thumbnails.",
+ "summary_zh": "WONDERBREAD 用于评测多模态基础模型在业务流程管理任务上的能力。图 1 分三列：数据集（演示堆叠并放大 Demo 3）、基准任务（文档、知识迁移、改进三行）、评测（量表、成对 SOP、程序化指标）。",
+ "confidence": "high",
+ "notes": "The caption speaks of 6 tasks but the figure draws three task rows; how the six map onto the rows is not shown. Evaluation rows are not colour-linked to the task rows they grade. The Rubric and Grades cards hold 1 pt text lines (for example a best-selling-product question and a click guide) that read as texture. Prior labels kept in order: contribution-mosaic first as a deliverables triptych, stage-pipeline for the rows, scope-overview for the dataset statistics.",
+ "venue": "NeurIPS24"
+}

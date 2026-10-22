@@ -1,0 +1,468 @@
+{
+ "paper_id": "aaai25-0110",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DDVI (Denoising Diffusion Variational Inference)",
+  "one_liner": "Black-box variational inference that uses a diffusion model as a flexible approximate posterior over the latents of a VAE, trained with a regularized ELBO.",
+  "domain": [
+   "variational inference",
+   "diffusion models",
+   "latent variable models"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "unrolled-chain",
+  "variant_note": "a diffusion chain y_T ... y_0 unrolled between a VAE encoder and decoder, with a strip of scatter plots showing the latent distribution refined state by state",
+  "argues": "A diffusion chain placed between the encoder and decoder of a VAE maps a simple distribution into a complex distribution over the latents, giving an expressive variational posterior.",
+  "subject": "VAE row (x, encoder, diffusion chain y_T to y_0, decoder, reconstruction) with prior boxes above and a scatter-plot strip below",
+  "elements": [
+   {
+    "name": "x",
+    "type": "sample",
+    "role": "input data point, an image",
+    "drawn_as": "grey circle with a picture thumbnail under it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Enc q_φ",
+    "type": "module",
+    "role": "encoder: produces the chain's start state y (y := y_T)",
+    "drawn_as": "pale yellow trapezoid, tall at the input side, narrowing towards the latent",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "y_T, y_T-1, ..., y_0",
+    "type": "data",
+    "role": "states of the diffusion chain, from the encoder output y_T to the latent z := y_0",
+    "drawn_as": "grey circles with dark navy outline joined by solid arrows to the right and dashed arrows to the left, dots for omitted steps",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Dec p_θ",
+    "type": "module",
+    "role": "decoder: maps the latent z to the reconstruction",
+    "drawn_as": "pale yellow trapezoid, mirror image of the encoder",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x̂",
+    "type": "sample",
+    "role": "reconstruction of x",
+    "drawn_as": "grey circle with the same picture thumbnail under it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Simple Priors",
+    "type": "data",
+    "role": "simple distribution tied to the start of the chain (y_T)",
+    "drawn_as": "rounded light-blue box with a fuzzy blue dot blob behind the title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Flexible Priors",
+    "type": "data",
+    "role": "complex distribution tied to the latent end of the chain (y_0 = z)",
+    "drawn_as": "wider rounded light-blue box with dot-cloud spiral, square and ring behind the title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "q_φ(y_t-1|y_t, x)",
+    "type": "formula",
+    "role": "conditional of one reverse (denoising) step",
+    "drawn_as": "italic serif label under the solid black arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "r(y_t|y_t-1, x)",
+    "type": "formula",
+    "role": "conditional of one forward (noising) step",
+    "drawn_as": "italic serif label above the dashed black arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "q_φ(z|y, x)",
+    "type": "formula",
+    "role": "end-to-end reverse distribution from y := y_T to z := y_0",
+    "drawn_as": "label on a long red solid polyline under the chain",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "r(y|z, x)",
+    "type": "formula",
+    "role": "end-to-end forward distribution from z back to y",
+    "drawn_as": "label on a long red dashed polyline over the chain",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "y := y_T / z := y_0",
+    "type": "label",
+    "role": "names the two ends of the chain as the y and the latent z",
+    "drawn_as": "small formulas under the first and last circle",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Reverse process / Forward process",
+    "type": "label",
+    "role": "key to the red solid and red dashed arrows",
+    "drawn_as": "two sample red arrows with serif captions in the top-left corner",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "x",
+    "to": "Enc q_φ",
+    "what": "input image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Enc q_φ",
+    "to": "y_T",
+    "what": "encoder output, the start of the chain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y_T",
+    "to": "y_0",
+    "what": "reverse process step by step, q_φ(y_t-1|y_t, x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y_0",
+    "to": "y_T",
+    "what": "forward process step by step, r(y_t|y_t-1, x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y := y_T",
+    "to": "z := y_0",
+    "what": "whole reverse process in one arc, q_φ(z|y, x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z := y_0",
+    "to": "y := y_T",
+    "what": "whole forward process in one arc, r(y|z, x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y_T",
+    "to": "Simple Priors",
+    "what": "chain start is tied to a simple prior (arrow meaning not stated)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y_0",
+    "to": "Flexible Priors",
+    "what": "chain end (latent) is tied to a flexible prior (arrow meaning not stated)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "y_0",
+    "to": "Dec p_θ",
+    "what": "latent z",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Dec p_θ",
+    "to": "x̂",
+    "what": "reconstruction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "scatter strip",
+    "to": "y_T ... y_0",
+    "what": "the five plots sit under the chain from y_T to y_0",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "y := y_T",
+    "kind": "identity",
+    "at": "under the first chain circle",
+    "what": "names the chain start as y"
+   },
+   {
+    "marker": "z := y_0",
+    "kind": "identity",
+    "at": "under the last chain circle",
+    "what": "names the chain end as the latent z"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "futuristic robot-and-hologram picture as the input image",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "unframed square thumbnail under the x circle"
+   },
+   {
+    "what": "the same picture as the reconstruction",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "unframed square thumbnail under the x̂ circle, identical to the input to suggest faithful reconstruction"
+   },
+   {
+    "what": "scatter plots of a 2-D toy latent distribution coloured by class",
+    "content": "chart",
+    "role": "illustration",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "no axes or frames, evenly spaced under the chain; a mixed noisy cloud on the left sharpens into a colour-banded spiral on the right"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "fuzzy blue dot blob",
+    "stands_for": "a simple prior distribution",
+    "style": "other",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "dot-cloud spiral, square outline and ring",
+    "stands_for": "flexible, complex-shaped priors",
+    "style": "other",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "a 2-D toy latent distribution turning from a noisy cloud into a coloured spiral over five stages",
+    "form": "strip of five dot plots under the chain",
+    "real_values": null
+   },
+   {
+    "what": "one input image and its reconstruction",
+    "form": "the same thumbnail under x and x̂",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "two pale yellow trapezoids mirrored around the latent chain, labelled Enc q_φ and Dec p_θ",
+    "parts": [
+     "Enc trapezoid",
+     "Dec trapezoid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "row of grey circles y_T ... y_0 with solid arrows for the reverse step and dashed arrows for the forward step, plus long red arcs for the end-to-end processes",
+    "parts": [
+     "state circles",
+     "reverse arrows",
+     "forward arrows",
+     "end-to-end arcs"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at x on the left and runs right through the encoder, the chain and the decoder to x̂; the legend, prior boxes and red arcs are annotations; the scatter strip below is read last."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "One row: x with a thumbnail, Enc, a five-state chain, Dec, x̂. Two light-blue prior boxes sit above the chain's two ends, a long red dashed arc runs over the chain and a red solid arc under it, a strip of five scatter plots lies below, and the arrow key is in the top-left corner.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.85,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey circles: x, the chain states and x̂"
+   },
+   {
+    "hex": "#ffe699",
+    "opacity": 0.6,
+    "used_for": "encoder and decoder trapezoids"
+   },
+   {
+    "hex": "#bdd7ee",
+    "opacity": 0.6,
+    "used_for": "Simple Priors and Flexible Priors boxes"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red solid and dashed process arrows and the legend samples"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "blue dashed arrows from the chain ends to the prior boxes"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outlines of circles, trapezoids and boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt dark navy outlines on circles, trapezoids and rounded boxes; arrows about 0.75 pt, dashed for the forward process",
+  "font": "serif math (Cambria Math), 7-13 pt: 13 pt for node symbols, 10 pt for conditionals and labels; Calibri for a few words",
+  "corners": "mixed",
+  "arrows": "thin straight arrows with small filled heads: solid black reverse steps, dashed black forward steps, long red orthogonal polylines for the end-to-end processes, dashed blue arrows to the prior boxes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Red = end-to-end reverse (solid) and forward (dashed) process, keyed in the legend; black arrows = the single steps with the same line styles; blue dashed = link from chain ends to prior boxes; yellow = encoder and decoder; grey = variables; light blue = prior distributions; point colours in the scatter plots = classes of the toy data.",
+  "line_style_means": "Solid = reverse process, dashed = forward process (legend); the same convention is used for the single-step black arrows.",
+  "shape_means": "Trapezoid = encoder or decoder, narrowing at the latent side; circle = variable or chain state; rounded light-blue box = family of prior distributions.",
+  "marker_means": "y := y_T and z := y_0 name the chain ends as the VAE's y and latent z.",
+  "emphasis": "The chain between encoder and decoder and the long red arcs with their formulas carry the eye; the scatter strip shows the effect.",
+  "reusable_patterns": [
+   "strip of scatter plots under a chain showing the distribution refined state by state",
+   "long coloured arcs over and under the chain for the collapsed end-to-end conditionals, labelled with densities",
+   "corner key of two sample arrows keyed by line style",
+   "dot-cloud thumbnails inside prior boxes to contrast a simple and a flexible distribution family",
+   "the same picture at input and output to say reconstruction"
+  ],
+  "weaknesses": [
+   "red end-to-end arrows and black step arrows share two line styles, so the key (red only) covers both only by implication",
+   "the scatter plots have no axes, labels or alignment marks to the chain states",
+   "the meaning of the blue dashed arrows to the prior boxes is not stated in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "scatter plots of a 2-D toy distribution"
+  ],
+  "stock": [],
+  "generated": [
+   "futuristic robot-and-hologram picture used as input and reconstruction",
+   "dot-cloud blobs in the prior boxes"
+  ],
+  "drawn": [
+   "encoder and decoder trapezoids",
+   "chain circles and arrows",
+   "formula labels",
+   "legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "encoder and decoder trapezoids",
+   "chain of grey circles y_T to y_0",
+   "solid and dashed step arrows",
+   "long red end-to-end arcs",
+   "simple and flexible prior boxes with dot clouds",
+   "strip of five scatter plots",
+   "input and reconstructed image thumbnails"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "variational inference",
+   "diffusion model",
+   "VAE",
+   "variational posterior",
+   "latent space",
+   "iterative refinement",
+   "reverse process",
+   "forward process"
+  ],
+  "tags": [
+   "small-multiples",
+   "flow-type-arrows",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw a diffusion chain as a row of circles between encoder and decoder trapezoids, solid arrows for the reverse step and dashed for the forward step, and put a strip of scatter plots under it so the reader sees a distribution turn from blob to spiral state by state.",
+  "suits": "Latent-variable or diffusion methods where an iterative refinement chain sits inside a larger model and its effect can be shown on 2-D toy data."
+ },
+ "tags": [
+  "horizontal-chain",
+  "formula-labels",
+  "scatter-strip",
+  "two-line-styles",
+  "pale-fills",
+  "bitmap-thumbnails"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Variational Inference With ... (section per the index)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "we have a diffusion model to map a simple distribution into a complex distribution over latents",
+   "Denoising diffusion variational inference in a VAE.",
+   "diffusion-based variational posteriors that perform iterative refinement in latent space"
+  ]
+ },
+ "summary": "DDVI is a black-box variational inference method that uses a diffusion model as a flexible approximate posterior over the latents of a VAE. The figure draws the VAE as one row: an input picture x enters a pale yellow trapezoid encoder q_φ, passes a chain of grey circles y_T to y_0, and a decoder p_θ gives the reconstruction x̂. Solid black arrows are the reverse step q_φ(y_t-1|y_t, x), dashed black arrows the forward step r(y_t|y_t-1, x); long red arcs above and below give the end-to-end forward and reverse distributions. Two light-blue boxes mark a simple prior and flexible priors at the chain ends. Five scatter plots underneath show a noisy cloud sharpening into a coloured spiral.",
+ "summary_zh": "DDVI 用扩散模型充当 VAE 隐变量的灵活变分后验。图把 VAE 画成一行：输入图像经编码器、一串 y_T 到 y_0 的灰色圆圈（实线为逆向、虚线为前向）和解码器得到重建；上方有两个先验框，下方五张散点图展示噪声团逐步变成彩色螺旋。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper mentions this figure, so the roles rest on the caption, the abstract and the drawing. The blue dashed arrows to the prior boxes and the exact alignment of the five scatter plots with the chain states are inferred, not stated. The picture under x and x̂ looks AI-generated. The drawn content spans beyond the canvas in the SVG (clipping), which does not change the printed figure.",
+ "venue": "AAAI25"
+}

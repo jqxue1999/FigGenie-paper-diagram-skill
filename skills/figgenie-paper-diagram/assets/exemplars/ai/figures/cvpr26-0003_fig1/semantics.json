@@ -1,0 +1,573 @@
+{
+ "paper_id": "cvpr26-0003",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "C3G",
+  "one_liner": "Feed-forward framework that learns compact 3D Gaussians from unposed multi-view images with learnable queries and lifts 2D features onto them.",
+  "domain": [
+   "feed-forward novel view synthesis",
+   "3D Gaussian splatting",
+   "3D scene understanding"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "a teaser of three rounded tiles: a pipeline tile, an applications strip of sample renders, and a tall column of mini charts with headline numbers",
+  "argues": "A compact set of about 2K Gaussians, 65 times fewer than LSM, is enough for novel view synthesis and for lifting features to many downstream 3D tasks.",
+  "subject": "A Gaussian decoding pipeline, four applications on one bedroom scene, and charts comparing C3G with LSM and CF3.",
+  "elements": [
+   {
+    "name": "Unposed Images",
+    "type": "sample",
+    "role": "multi-view input without camera poses",
+    "drawn_as": "two bedroom photos stacked in a teal-framed rounded box, caption below",
+    "container": "pipeline tile",
+    "is_contribution": false
+   },
+   {
+    "name": "Gaussian queries",
+    "type": "data",
+    "role": "learnable tokens that guide Gaussian generation",
+    "drawn_as": "row of four small grey rounded squares with teal outlines above the decoder",
+    "container": "pipeline tile",
+    "is_contribution": true
+   },
+   {
+    "name": "Gaussian Decoder",
+    "type": "module",
+    "role": "query-based decoder that produces the compact Gaussians from the multi-view images",
+    "drawn_as": "mint rounded box with a teal outline",
+    "container": "pipeline tile",
+    "is_contribution": true
+   },
+   {
+    "name": "four coloured squares",
+    "type": "data",
+    "role": "one output per query, read as the individual Gaussians; the caption does not say",
+    "drawn_as": "pastel pink, yellow, cyan and light-green squares with teal outlines under four arrows from the decoder",
+    "container": "pipeline tile",
+    "is_contribution": null
+   },
+   {
+    "name": "Compact 3D Gaussians",
+    "type": "data",
+    "role": "the compact set of Gaussians, about 2K",
+    "drawn_as": "washed-out splat render of the room with a teal label, inside a dashed teal outline that also holds the coloured squares",
+    "container": "pipeline tile",
+    "is_contribution": true
+   },
+   {
+    "name": "2D Feature Encoder",
+    "type": "module",
+    "role": "extracts 2D features from the input images",
+    "drawn_as": "mint rounded box fed by an elbow arrow from the images",
+    "container": "pipeline tile",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Decoder",
+    "type": "module",
+    "role": "lifts the 2D features onto the compact Gaussians",
+    "drawn_as": "mint rounded box, joined to the encoder by a plain line and fed by an arrow from the dashed outline",
+    "container": "pipeline tile",
+    "is_contribution": true
+   },
+   {
+    "name": "Compact 3D Feature Fields",
+    "type": "data",
+    "role": "the final representation with features on the compact Gaussians",
+    "drawn_as": "large feature-field render in a heavy teal-framed rounded box with a teal caption inside",
+    "container": "pipeline tile",
+    "is_contribution": true
+   },
+   {
+    "name": "Applications",
+    "type": "container",
+    "role": "four downstream uses of the compact features: Novel View Synthesis, 3D Scene Understanding, Multiview Correspondence, Multiview Upsampling",
+    "drawn_as": "tile with a teal heading and four labelled sample renders of the same room",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Computational Complexity",
+    "type": "container",
+    "role": "memory in MB and number of Gaussians for LSM, CF3 and C3G (Ours)",
+    "drawn_as": "teal heading over three horizontal bars with values and over shrinking bubbles 131K, 53K, 2K joined by chevrons",
+    "container": "chart tile",
+    "is_contribution": true
+   },
+   {
+    "name": "Performance Comparison",
+    "type": "container",
+    "role": "novel view synthesis PSNR and 3D scene understanding mIoU for the three methods",
+    "drawn_as": "teal heading over two groups of three horizontal bars with values, the C3G values bold",
+    "container": "chart tile",
+    "is_contribution": true
+   },
+   {
+    "name": "Multiview Correspondence",
+    "type": "container",
+    "role": "PCK@10pk against viewpoint change for four feature extractors",
+    "drawn_as": "line chart with a legend box; the teal line for DINOv3-Large + C3G (Ours) is highest",
+    "container": "chart tile",
+    "is_contribution": true
+   },
+   {
+    "name": "LSM / CF3 / C3G (Ours)",
+    "type": "label",
+    "role": "legend of the bar charts",
+    "drawn_as": "small light-grey, grey and teal chips with names under each bar group",
+    "container": "chart tile",
+    "is_contribution": false
+   },
+   {
+    "name": "Wall, Floor, Ceiling, Chair, Table, Bed, Other",
+    "type": "label",
+    "role": "colour legend of the semantic segmentation render",
+    "drawn_as": "seven coloured chips with names beside the render",
+    "container": "Applications",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Unposed Images",
+    "to": "Gaussian Decoder",
+    "what": "images enter the decoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Unposed Images",
+    "to": "2D Feature Encoder",
+    "what": "images enter the feature encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gaussian queries",
+    "to": "Gaussian Decoder",
+    "what": "queries sit directly above the decoder",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Gaussian Decoder",
+    "to": "four coloured squares",
+    "what": "one arrow per query leads to one square",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "four coloured squares and the Gaussian render",
+    "to": "Compact 3D Gaussians",
+    "what": "grouped by a dashed outline as one compact set",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Compact 3D Gaussians",
+    "to": "Feature Decoder",
+    "what": "the Gaussians guide the feature lifting",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "2D Feature Encoder",
+    "to": "Feature Decoder",
+    "what": "2D features are passed on",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Compact 3D Gaussians",
+    "to": "Compact 3D Feature Fields",
+    "what": "Gaussians go to the final representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Decoder",
+    "to": "Compact 3D Feature Fields",
+    "what": "lifted features join the same arrow into the box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Compact 3D Feature Fields",
+    "to": "Applications",
+    "what": "the compact features serve the four applications; the tile sits below and no arrow is drawn",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "teal and grey chips",
+    "to": "bars and lines in the chart tile",
+    "what": "teal is always C3G (Ours), light greys are LSM and CF3 or the other extractors",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Top-left tile: unposed images through the Gaussian Decoder with queries, the compact Gaussians, a 2D Feature Encoder and a Feature Decoder into a feature field.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Applications",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Four downstream uses on the same bedroom: novel view synthesis, 3D scene understanding, multiview correspondence and multiview upsampling.",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "Right tile: three titled chart blocks, Computational Complexity, Performance Comparison and Multiview Correspondence, setting C3G against LSM, CF3 and DINO-based baselines.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Applications / Computational Complexity / Performance Comparison / Multiview Correspondence",
+    "kind": "section",
+    "at": "teal headings of the tiles and chart blocks",
+    "what": "head each part"
+   },
+   {
+    "marker": "LSM, CF3, C3G (Ours)",
+    "kind": "identity",
+    "at": "legend chips under the bar groups",
+    "what": "name the compared methods by bar colour"
+   },
+   {
+    "marker": "14x14, 224x224",
+    "kind": "identity",
+    "at": "rotated labels left of the upsampling rows",
+    "what": "name the resolution of each row of feature maps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two bedroom photos as the unposed input views",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "stacked in a teal-framed rounded box"
+   },
+   {
+    "what": "render of the compact 3D Gaussians of the room",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "soft grey splat render with a few coloured objects, washed out with a white veil so the label stays readable"
+   },
+   {
+    "what": "feature-field render of the room",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large PCA-coloured render filling a heavy teal-framed box"
+   },
+   {
+    "what": "novel views of the bedroom",
+    "content": "3d-render",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "two rows of three equal tiles"
+   },
+   {
+    "what": "semantic segmentation render with a seven-class legend",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "cut-out render of coloured regions beside chips for Wall, Floor, Ceiling, Chair, Table, Bed, Other"
+   },
+   {
+    "what": "two views with matched points joined by black lines",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "side-by-side feature maps crossed by black correspondence lines"
+   },
+   {
+    "what": "low- and high-resolution feature maps, 14x14 and 224x224",
+    "content": "dense-map",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "two rows of three tiles, the top row blocky and the bottom row smooth, with rotated size labels at the left"
+   },
+   {
+    "what": "mini bar charts and bubble counts for memory, number of Gaussians, PSNR and mIoU",
+    "content": "chart",
+    "role": "result",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "three horizontal bars per chart in light grey, grey and teal with values beside them; bubbles of shrinking size joined by chevrons for the Gaussian counts"
+   },
+   {
+    "what": "line chart of PCK@10pk against viewpoint change for four feature extractors",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "four lines with the teal one highest, a legend box at the right and a light grid"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "row of four small grey rounded squares",
+    "stands_for": "the learnable Gaussian queries",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "row of four pastel squares: pink, yellow, cyan, light green",
+    "stands_for": "the individual Gaussians, one per query",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "one bedroom scene carried from the input photos through the Gaussian render, the feature field and all four applications",
+    "form": "the same room redrawn as photo, splat render, feature field, novel views, segmentation, correspondence lines and upsampled feature maps",
+    "real_values": true
+   },
+   {
+    "what": "headline numbers: memory 61.5, 38.4 and 4.1 MB; Gaussians 131K, 53K and 2K; PSNR 23.32, 20.04 and 23.89; mIoU 0.503, 0.376 and 0.513",
+    "form": "horizontal bars with the values written beside them, C3G in teal and bold",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of four small grey squares for the queries and a row of four pastel squares for the outputs, each with a teal outline",
+    "parts": [
+     "query squares",
+     "output squares"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "a washed-out render of the Gaussian splats of the room inside a dashed outline",
+    "parts": [
+     "splat render",
+     "dashed outline"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "a 2D Feature Encoder and a Feature Decoder as plain mint rounded boxes joined by a short line, no narrowing shapes",
+    "parts": [
+     "encoder box",
+     "decoder box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Unposed Images at the top left, follows the teal arrows through the decoder, the dashed Gaussian set and the feature boxes to the framed feature field, then drops to the Applications strip and ends in the chart column on the right."
+ },
+ "layout": {
+  "arrangement": "dashboard",
+  "arrangement_note": "Three pale-mint rounded tiles of unequal size. The wide top-left tile holds the pipeline: input photos at the left, three module boxes in two rows, a dashed outline around the Gaussian set, and a big framed feature-field render at the right. Below it a strip titled Applications shows four labelled sample renders. A tall right tile stacks three teal-headed chart blocks, separated by thin rules, each with its own legend.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.31,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#20879a",
+    "used_for": "teal: module outlines, arrows, headings, the C3G (Ours) bars and bold numbers, heavy frame around the feature field"
+   },
+   {
+    "hex": "#ddf5ec",
+    "used_for": "mint fill of the Gaussian Decoder, 2D Feature Encoder and Feature Decoder boxes"
+   },
+   {
+    "hex": "#b5ded1",
+    "used_for": "pale mint outline of the rounded tile frames"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "LSM bars and legend chip, grey query squares"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "CF3 bars and legend chip, light chart lines"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "translucent white veil, probably over the Gaussian render",
+    "opacity": 0.63
+   },
+   {
+    "hex": "#a45669",
+    "used_for": "Wall chip of the segmentation legend; the others are #5e8863 Floor, #d1ac0d Ceiling, #314a8f Chair"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt teal outlines on module boxes, query squares and arrows; 1.25 pt heavy teal frame on the feature-field box; dashed teal outline around the Gaussian set; pale mint 0.75 pt tile frames",
+  "font": "sans (Calibri), 7-7.5 pt module labels, bold 8-9.5 pt teal headings, 4-6.5 pt chart labels and numbers, proposed-method values in bold",
+  "corners": "rounded",
+  "arrows": "teal straight and elbow lines with small filled heads, a plain line between the feature encoder and decoder, chevrons between the Gaussian counts",
+  "rendering": "flat-vector",
+  "effects": "washed-out look of the Gaussian render; otherwise none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal = the proposed method C3G (module outlines, arrows, headings, Ours bars and bold values); mint fill = network modules; light grey and grey = the prior methods LSM and CF3; pastel squares = individual Gaussians per query; chips in the legend = semantic classes",
+  "line_style_means": "solid teal arrows = data flow; dashed teal outline = the compact set of Gaussians; plain line = a connection without a head; thin teal rule = separator between chart blocks",
+  "shape_means": "rounded mint box = a network module; small squares = tokens or Gaussians; heavy framed box = the final representation; circles of shrinking size = fewer Gaussians; horizontal bars = metric values",
+  "marker_means": "bold teal numbers = the proposed method's value; (MB), (PSNR), (mIoU) and PCK@10pk name the metrics",
+  "emphasis": "teal for ours against greys for baselines in every chart; bold values; a heavy frame around the output representation; the 2K bubble filled teal",
+  "reusable_patterns": [
+   "pipeline tile, applications strip and a tall chart column combined as one teaser",
+   "bars with the value written beside them, a teal ours bar against light-grey baselines",
+   "bubbles of shrinking size joined by chevrons to show a count reduction (131K, 53K, 2K)",
+   "dashed outline grouping the compact set of intermediate Gaussians with its render",
+   "one scene carried from the input photos through every application",
+   "rotated size labels at the left of low-resolution and high-resolution rows",
+   "legend chips beside a segmentation render"
+  ],
+  "weaknesses": [
+   "3.5-4.5 pt labels in the charts and the legend are too small to read in print",
+   "the pipeline tile has no title and no arrow leads from it to the applications strip"
+  ]
+ },
+ "resources": {
+  "own": [
+   "bedroom photos and their renders: Gaussians, feature field, novel views, segmentation, correspondence, upsampled features",
+   "benchmark numbers for memory, Gaussian counts, PSNR, mIoU and PCK"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "token squares",
+   "mini bar charts and bubbles",
+   "tile frames",
+   "dashed outline"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "unposed bedroom photos",
+   "grey Gaussian query squares",
+   "Gaussian Decoder and feature encoder and decoder boxes",
+   "dashed outline around a splat render",
+   "feature field render in a heavy frame",
+   "applications strip of renders",
+   "mini bar charts and shrinking bubbles",
+   "PCK line chart"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "feed-forward novel view synthesis",
+   "3D Gaussian splatting",
+   "compact representation",
+   "feature lifting",
+   "scene understanding",
+   "multiview correspondence",
+   "unposed images"
+  ],
+  "tags": [
+   "cost-badges",
+   "small-multiples",
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "ours-vs-grey-baselines",
+    "what": "bars or lines of the proposed method in the accent colour next to baselines in light greys, proposed values in bold, with a shared legend"
+   },
+   {
+    "name": "shrinking-bubbles-count",
+    "what": "circles of decreasing size joined by chevrons showing a count dropping, such as 131K, 53K, 2K"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "A teaser can combine one pipeline tile, a strip of application renders on a single scene and a column of mini charts in which the proposed method is the only accent colour against grey baselines, so headline numbers such as 2K Gaussians and 4.1 MB read at a glance.",
+  "suits": "Method papers whose selling points are an efficient representation, several downstream tasks and a few headline metrics, all shown together in a teaser."
+ },
+ "tags": [
+  "bento teaser",
+  "teal accent colour",
+  "mint module boxes",
+  "rounded tiles",
+  "mini bar charts",
+  "scene renders"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.1)"
+  ],
+  "evidence": [
+   "Our method learns compact 3D Gaussians from unposed multi-view images through a query-based Gaussian decoding pipeline.",
+   "Compact representations enable efficient 2D-to-3D feature lifting for downstream applications, including 3D understanding, correspondence, and upsampling.",
+   "Our C3G results in the fewest Gaussians—about 2K, which is roughly 65× fewer than LSM [10]"
+  ]
+ },
+ "summary": "C3G is a feed-forward framework that learns compact 3D Gaussians from unposed multi-view images and lifts 2D features onto them. Figure 1 is a teaser made of three rounded tiles. The top-left tile draws the pipeline: bedroom photos, a Gaussian Decoder fed by a row of Gaussian queries, a dashed outline around the resulting coloured Gaussians and their render, a 2D Feature Encoder and a Feature Decoder, ending in a heavily framed feature-field render. The bottom-left tile, Applications, shows novel views, segmentation with a class legend, correspondence lines and low- against high-resolution feature maps of the same room. The right tile stacks mini charts that set teal C3G against grey LSM and CF3: memory, Gaussian count (131K, 53K, 2K), PSNR, mIoU and a PCK line chart.",
+ "summary_zh": "C3G 从无位姿多视图图像前馈学习紧凑3D高斯，并把2D特征提升其上。图1是三块圆角拼贴：左上为流程（高斯查询、解码器、特征编解码器），左下为同一房间的四类应用渲染，右侧以青色突出C3G的内存、高斯数、PSNR、mIoU和PCK图表。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper text mentions the figure, so the roles of the four coloured squares and of the dashed outline are read from the picture and the caption only. The primary kind is changed from the prior stage-pipeline to contribution-mosaic (bento-highlights) because the pipeline covers only about a third of the area; stage-pipeline and model-anatomy stay as the kinds of the first tile. The right tile has three blocks separated by thin rules and is counted as one panel. The PCK line chart may be a bitmap; the veil over the Gaussian render is inferred from a 63% translucent white fill.",
+ "venue": "CVPR26"
+}

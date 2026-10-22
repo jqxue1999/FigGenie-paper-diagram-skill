@@ -1,0 +1,667 @@
+{
+ "paper_id": "cvpr26-0056",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DAIG (Domain-Adaptive In-context Generation)",
+  "one_liner": "Adapts a pretrained text-to-image model's in-context ability to a target domain with few-shot samples and CIR-LoRA, so it generates unbiased composed-image-retrieval triplets for training.",
+  "domain": [
+   "composed image retrieval",
+   "synthetic triplet generation",
+   "few-shot domain adaptation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "prior zero-shot in-context generation (a) stacked above the proposed domain-adaptive version (b), each closed by a tick/cross verdict row; two titled sample galleries on the right",
+  "argues": "Zero-shot in-context generation gives well-aligned but domain-unadapted, biased triplets; adding CIR-LoRA from few-shot samples makes the generator domain- and task-adapted, unbiased and efficient, as the galleries show.",
+  "subject": "Two lettered pipelines around one text-to-image model (frozen use vs LoRA fine-tuning) beside galleries of generated fashion and real-life image-pair triplets.",
+  "elements": [
+   {
+    "name": "(a) Zero-Shot In-context Generation",
+    "type": "container",
+    "role": "heads the prior-work lane",
+    "drawn_as": "light grey title bar with bold rounded-script text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Textual Triplets Generation",
+    "type": "module",
+    "role": "LLMs write the textual triplets that feed the layout template",
+    "drawn_as": "white rounded box with teal outline holding three vendor logos",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "T_r, T_c, T_t",
+    "type": "data",
+    "role": "texts of one triplet: T_r and T_t describe the left (reference) and right (target) images, T_c is the relative caption",
+    "drawn_as": "pink, green and blue italic symbols on an arch arrow",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Layout Template",
+    "type": "text-block",
+    "role": "prompt that places the two texts on a square grid for left and right images",
+    "drawn_as": "white card with text; 'Left: {T_r}' in pink and 'Right: {T_t}' in blue",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Text-to-Image (T2I) Model",
+    "type": "module",
+    "role": "pretrained generator that draws the left-right image from the template (shown in (a) and again in (b))",
+    "drawn_as": "two light-blue trapezoid blocks, each with a rounded Q-over-KV box, between a grey bar on the left and a coloured bar on the right",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Condition",
+    "type": "label",
+    "role": "names the two arrows that feed the template into the model blocks",
+    "drawn_as": "bold word beside two curved arrows",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "Upscale",
+    "type": "operation",
+    "role": "step after the model before the outputs",
+    "drawn_as": "rotated white rounded box with grey outline",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "crop line with scissors",
+    "type": "operation",
+    "role": "the generated wide image is cut into left and right sub-images",
+    "drawn_as": "dashed vertical line through the sample images with a scissors icon above the first",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "High-quality, Well-aligned / Domian/task-adapted, Biased",
+    "type": "label",
+    "role": "verdict row for the prior lane: one good property with a green check, one failing property with a red cross",
+    "drawn_as": "bold text next to a green check circle and a red cross circle",
+    "container": "(a) Zero-Shot In-context Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "type": "container",
+    "role": "heads the proposed lane",
+    "drawn_as": "light grey title bar with bold rounded-script text",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Few-shot In-context Training Samples",
+    "type": "sample",
+    "role": "the real image pair and its layout text used to adapt the model",
+    "drawn_as": "two dog photos in a frame, a grey plus sign, and a text card with coloured spans",
+    "container": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "is_contribution": null
+   },
+   {
+    "name": "CIR-LoRA",
+    "type": "module",
+    "role": "parameter-efficient adapter that injects domain and task priors into the T2I model",
+    "drawn_as": "light-lilac pill with a flame icon under the model, curved arrows to both Q/KV blocks",
+    "container": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "is_contribution": true
+   },
+   {
+    "name": "Flow matching",
+    "type": "operation",
+    "role": "training objective of the generator, sketched as a transport from p_0 to p_1",
+    "drawn_as": "green blob p_0 and blue blob p_1 joined by arrows through faded intermediate blobs",
+    "container": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "is_contribution": false
+   },
+   {
+    "name": "Domain & task-adapted, Unbiased, Efficient",
+    "type": "label",
+    "role": "verdict for the proposed lane",
+    "drawn_as": "bold text next to a green check circle",
+    "container": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "is_contribution": true
+   },
+   {
+    "name": "Fashion Domain Adaptive Generation",
+    "type": "container",
+    "role": "gallery of DAIG triplets in the fashion domain",
+    "drawn_as": "dotted rounded frame, shirt-on-hanger icon and a blue-to-purple gradient heading",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Real-life Scenarios Adaptive Generation",
+    "type": "container",
+    "role": "gallery of DAIG triplets for real-life scenes",
+    "drawn_as": "dotted rounded frame, cartoon dog icon and an orange-to-purple gradient heading",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "triplet cards",
+    "type": "instance",
+    "role": "one generated triplet each: reference image, target image and the relative caption with its edit type (Dress, Shirt, Top tee, Quantity, Substitution, Scenario, Addition, Viewpoint, Removal)",
+    "drawn_as": "pair of butted image tiles over a white caption strip, edit-type word coloured",
+    "container": "both galleries",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Textual Triplets Generation",
+    "to": "Layout Template",
+    "what": "the three texts T_r, T_c, T_t are placed into the template (arch arrow over the top)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layout Template",
+    "to": "Text-to-Image (T2I) Model (a)",
+    "what": "template text conditions both model blocks (two curved arrows labelled Condition)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text-to-Image (T2I) Model (a)",
+    "to": "Upscale",
+    "what": "model output passes to the upscale box",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Upscale",
+    "to": "generated image pairs",
+    "what": "two curved arrows reach the two sample outputs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "crop line with scissors",
+    "to": "generated image pairs",
+    "what": "each wide image is split into reference and target sub-images",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Few-shot In-context Training Samples",
+    "to": "Text-to-Image (T2I) Model (b)",
+    "what": "image pair plus layout text is the training input (curved arrow into the left bar)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CIR-LoRA",
+    "to": "Q/KV blocks of the T2I model (b)",
+    "what": "adapter attached to both attention blocks; flame marks it as trained",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text-to-Image (T2I) Model (b)",
+    "to": "Flow matching",
+    "what": "the model output is trained with the flow-matching objective",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "p_0",
+    "to": "p_1",
+    "what": "several arrows from one blob to the other through faded intermediate blobs",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a) lane",
+    "to": "(b) lane",
+    "what": "same model glyph, different adapter and verdict: baseline above, proposed below",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "pink, green, blue symbols T_r, T_c, T_t",
+    "to": "template slots, few-shot text and gallery captions",
+    "what": "reference = pink, relative caption = green, target = blue, kept across the figure",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(b) lane",
+    "to": "galleries",
+    "what": "the galleries show triplets DAIG generates (stated in the caption); a dash-dot rule separates the halves and no arrow is drawn",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Zero-Shot In-context Generation",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "LLM-written triplet fills a layout template, a T2I model draws a left-right image that is cropped; verdict: well aligned but not domain-adapted and biased",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) Domain-Adaptive In-context Generation (DAIG)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "few-shot samples train the same T2I model through CIR-LoRA with a flow-matching objective; verdict: domain and task adapted, unbiased, efficient",
+    "verdict": "ours"
+   },
+   {
+    "label": "Fashion Domain Adaptive Generation",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "six generated image pairs of dresses, shirts and tops, each with a typed relative caption",
+    "verdict": "ours"
+   },
+   {
+    "label": "Real-life Scenarios Adaptive Generation",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "six generated pairs of animals, tents, office scenes, wolves, pastries and tomatoes, each with a typed edit caption",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "grey title bars of the left lanes",
+    "what": "letter the prior and the proposed lane"
+   },
+   {
+    "marker": "T_r, T_c, T_t",
+    "kind": "identity",
+    "at": "arch arrow, template slots, captions",
+    "what": "name the reference, relative and target texts, coloured pink, green and blue"
+   },
+   {
+    "marker": "Dress:, Shirt:, Top tee:, Quantity, Substitution, Scenario, Addition, Viewpoint, Removal",
+    "kind": "identity",
+    "at": "caption strips of the gallery cards",
+    "what": "name the garment category or the edit type of each triplet, each word coloured"
+   },
+   {
+    "marker": "p_0, p_1",
+    "kind": "identity",
+    "at": "blobs in the flow-matching sketch",
+    "what": "name the start and end distributions"
+   },
+   {
+    "marker": "Q, KV",
+    "kind": "identity",
+    "at": "boxes inside the model blocks",
+    "what": "name the query and key-value parts of attention"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "generated left-right images of the zero-shot lane: a skyline with a desk and laptop, sunflowers with a birdhouse",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "wide images cut by a dashed vertical line, scissors above the first, a 'T_c:' caption strip beneath each"
+   },
+   {
+    "what": "few-shot training sample: Borzoi dog close-up and full-body photos",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two photos side by side in one thin frame, a grey plus sign on the right"
+   },
+   {
+    "what": "fashion triplets generated by DAIG: dresses, shirts and tees as reference and target pairs",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "six pairs in a 2 x 3 grid in a dotted rounded frame; each pair butted together over a white caption strip with a thin border"
+   },
+   {
+    "what": "real-life triplets generated by DAIG: birds to geese, tents, office, wolves, pastries, tomatoes",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "six pairs in a 2 x 3 grid in a dotted rounded frame, same card form as the fashion gallery"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "faceted blue-purple mark, infinity mark, knot mark",
+    "stands_for": "the LLMs that write the textual triplets",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "T-shirt on a hanger",
+    "stands_for": "the fashion domain",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon dog face",
+    "stands_for": "the real-life scenarios domain",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "scissors",
+    "stands_for": "cropping the generated image into reference and target",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "flame",
+    "stands_for": "CIR-LoRA is trained",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "two relative captions turned into left-right images: 'replace the scanner with a laptop' and 'set a birdhouse among flowers'",
+    "form": "wide generated images with a dashed crop line and a T_c caption strip",
+    "real_values": true
+   },
+   {
+    "what": "one few-shot sample with its layout text: 'Left: A close-up of a Borzoi dog. Change: A full-body shot of a Borzoi dog. Right: Change the angle to show the full body.'",
+    "form": "photo pair plus a text card whose Left, Change and Right spans are coloured pink, green, blue",
+    "real_values": true
+   },
+   {
+    "what": "twelve generated triplets with typed captions, e.g. 'Dress: has sleeves and a floral print', 'Removal: remove the green chili peppers'",
+    "form": "image pairs over caption strips with a coloured edit-type word",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "three vendor logos side by side inside one labelled box, standing for any LLM",
+    "parts": [
+     "three logos",
+     "Textual Triplets Generation label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "text card with a template sentence whose slots 'Left: {T_r}' and 'Right: {T_t}' are coloured; the few-shot card colours whole spans the same way",
+    "parts": [
+     "Layout Template card",
+     "coloured slots"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "two light-blue trapezoid blocks, each holding a rounded box with Q over KV, between a grey bar and a coloured bar",
+    "parts": [
+     "trapezoid block",
+     "Q/KV box",
+     "end bars"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "a lilac pill labelled CIR-LoRA with a flame icon below the model, curved arrows up to both Q/KV blocks; no A and B trapezoids",
+    "parts": [
+     "pill",
+     "flame",
+     "two curved arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "flow-matching-transport",
+    "drawn_as": "a green blob p_0 and a blue blob p_1 joined by several arrows over faded intermediate blobs",
+    "parts": [
+     "p_0 blob",
+     "p_1 blob",
+     "faded blobs",
+     "arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the (a) title bar top left, follows the arrows right and down to the verdict row, drops to (b), then jumps across the dash-dot rule to the fashion gallery and down to the real-life gallery."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Left column: two stacked lettered lanes, (a) prior zero-shot generation above (b) the proposed version, each a small left-to-right pipeline ending in a tick/cross verdict row. A dash-dot rule divides it from the right column of two dotted-frame galleries (fashion above real-life), each a 2 x 3 grid of image-pair cards.",
+  "panel_count": 4,
+  "lanes": "two stacked lanes on the left sharing one model glyph; 2 x 3 card grids in each right-hand gallery",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.9,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ececec",
+    "used_for": "grey title bars of lanes (a) and (b)"
+   },
+   {
+    "hex": "#237b9e",
+    "used_for": "teal outline of the Textual Triplets Generation box"
+   },
+   {
+    "hex": "#fafdff",
+    "used_for": "near-white fill of that box"
+   },
+   {
+    "hex": "#f0995e",
+    "used_for": "orange outline of the Q/KV boxes in (a)"
+   },
+   {
+    "hex": "#692ed2",
+    "used_for": "purple outline of the Q/KV boxes in (b)"
+   },
+   {
+    "hex": "#fdebff",
+    "used_for": "light lilac fill of the Q/KV boxes and the CIR-LoRA pill in (b)"
+   },
+   {
+    "hex": "#c3d9a3",
+    "used_for": "p_0 blob in the flow-matching sketch"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "p_1 blob in the flow-matching sketch"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey frames and shadow layers behind caption strips and tiles (role inferred from the digest)"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "darker grey shadow and edge layers behind caption strips (role inferred)"
+   },
+   {
+    "hex": "#d99290",
+    "used_for": "pink text for T_r and 'Left'"
+   },
+   {
+    "hex": "#95c674",
+    "used_for": "green text for T_c and 'Change'"
+   },
+   {
+    "hex": "#80b2e0",
+    "used_for": "blue text for T_t and 'Right'"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt thin outlines on boxes and caption strips, 1.5 pt coloured outlines on the Q/KV boxes, 1 pt dotted grey gallery frames and a dash-dot vertical rule",
+  "font": "sans (Arial-like) bold labels 6-7 pt, a Comic-Sans-like face for lane and gallery titles, serif italic symbols for T_r, T_c, T_t and p_0, p_1",
+  "corners": "rounded",
+  "arrows": "thin black curved arrows with small filled heads, plus a few plain straight connectors",
+  "rendering": "flat-vector",
+  "effects": "faint grey shadow layers under some cards and caption strips",
+  "model_depiction": "trapezoid",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "pink, green, blue text = T_r (reference, left image), T_c (relative caption), T_t (target, right image), kept in the arch label, template slots, few-shot text and gallery captions; orange outlines on the model blocks in (a) and purple outlines with lilac fill plus the CIR-LoRA pill in (b) (meaning of the colour change is not stated); green check = desirable, red cross = failing; green blob p_0 and blue blob p_1",
+  "line_style_means": "solid curved arrows = data flow; dashed vertical line = crop between left and right sub-images; dotted rounded frames = domain galleries; dash-dot vertical rule = method versus results",
+  "shape_means": "trapezoid blocks = the T2I model, rounded Q/KV box = attention, pill = adapter, blobs = distributions",
+  "marker_means": "green check and red cross close each lane with a verdict; (a) and (b) letter the lanes; flame = the adapter is trained",
+  "emphasis": "the tick/cross verdict row under each lane and the flame-marked CIR-LoRA pill; the large photographic gallery carries the quality claim",
+  "reusable_patterns": [
+   "paired lanes (a) prior vs (b) ours drawn with the same model glyph, only the adapter and outline colour changed, each closed by a tick/cross verdict row",
+   "dashed vertical split line with a scissors icon over a generated image to show cropping into reference and target",
+   "prompt text card whose slots or spans are coloured to match the symbols used in the pipeline",
+   "triplet card: image pair over a caption strip with a coloured edit-type word",
+   "gallery frames in dotted rounded outlines, each titled with a domain icon",
+   "three vendor logos in one box to say 'any LLM'",
+   "dash-dot vertical rule between method half and results half"
+  ],
+  "weaknesses": [
+   "6 pt captions and many small items make the left half dense",
+   "the red-cross label reads 'Domian/task-adapted, Biased' (typo) and is ambiguous because the cross negates 'adapted'",
+   "the meaning of the orange versus purple model outlines and of the grey and coloured end bars is not explained",
+   "curved arrows from the template and from Upscale cross each other in lane (a)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "few-shot Borzoi photos and their layout text",
+   "24 DAIG-generated gallery images and 2 zero-shot outputs",
+   "real caption texts"
+  ],
+  "stock": [
+   "LLM vendor logos",
+   "shirt and dog domain icons",
+   "scissors, flame, check and cross icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "pipeline boxes and curved arrows",
+   "T2I block glyph with Q/KV boxes",
+   "flow-matching blob sketch",
+   "dotted gallery frames and title bars"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "T2I model glyph with Q/KV blocks",
+   "LLM logo box",
+   "layout-template text card",
+   "CIR-LoRA pill with flame",
+   "flow-matching blob sketch",
+   "tick and cross verdict rows",
+   "image-pair triplet cards with caption strips",
+   "dotted domain gallery frames"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "composed image retrieval",
+   "in-context generation",
+   "text-to-image",
+   "LoRA",
+   "synthetic triplets",
+   "few-shot",
+   "domain adaptation",
+   "fashion",
+   "flow matching"
+  ],
+  "tags": [
+   "verdict-marks",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "brand-logo-icon",
+   "annotated-record-card",
+   "prompt-template-card"
+  ],
+  "new_tags": [
+   {
+    "name": "domain-icon-gallery-frames",
+    "what": "image-pair galleries in dotted rounded frames, each titled with a small domain icon (shirt, dog) in a gradient-coloured heading"
+   },
+   {
+    "name": "dashed-crop-line",
+    "what": "a dashed vertical line with a scissors icon over a generated image to show it is cut into reference and target"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Contrast prior and proposed pipelines as two lettered lanes that reuse one model glyph, change only the adapter, and end each lane in a tick/cross verdict row. Then let titled galleries of real outputs, each with a coloured edit-type caption, carry the quality claim.",
+  "suits": "Motivation figures for data-synthesis or fine-tuning methods that fix a failure of a prior generator, where outputs are images paired with short texts."
+ },
+ "tags": [
+  "paired-lanes",
+  "tick-cross-verdicts",
+  "photo-galleries",
+  "prompt-text-cards",
+  "rounded-script-titles",
+  "powerpoint-style",
+  "domain-icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "3 Methodology (p.4)"
+  ],
+  "evidence": [
+   "textual triplets are first generated by an LLM and inserted into a layout template",
+   "DAIG fine-tunes the T2I model with few-shot samples via a novel parameter-efficient fine-tuning technique, CIR- LoRA.",
+   "Representative triplets generated by DAIG are shown on the right side of Figure 1."
+  ]
+ },
+ "summary": "DAIG (Domain-Adaptive In-context Generation) adapts the in-context ability of a pretrained text-to-image model to a target domain with few-shot samples, then turns LLM-written textual triplets into synthetic composed-image-retrieval triplets for training. Figure 1 is a motivation figure. On the left, panel (a) shows zero-shot in-context generation: an LLM-made triplet fills a layout template, a T2I model draws a left-right image that is cropped, and a verdict row marks it well aligned but not domain-adapted and biased. Panel (b) reuses the same model glyph with a CIR-LoRA adapter (flame icon) trained on few-shot samples (a Borzoi photo pair) with a flow-matching objective, ending in a green tick for adapted, unbiased and efficient. On the right, two dotted galleries of fashion and real-life image pairs, each with a typed edit caption, show the triplets DAIG generates.",
+ "summary_zh": "DAIG 用少量样本把文生图模型的上下文生成能力适配到目标领域，合成组合图像检索的三元组。图 1 左侧 (a) 为零样本生成流程并标出偏差，(b) 加入 CIR-LoRA 并以勾选标出优点；右侧是时尚与真实场景两组生成的图像对及编辑说明。",
+ "confidence": "high",
+ "notes": "The prior pass listed contribution-mosaic as a third kind; dropped because the right-hand cards are example outputs of the method, not separate contributions (kept as scope-overview example gallery). The first LLM logo looks like Qwen's mark (uncertain). The roles of the Upscale box, the orange versus purple model colours and the end bars are not explained in the figure or the quoted text. The two domain icons are probably vector (stock office-style icons); not checked for the shirt.",
+ "venue": "CVPR26"
+}

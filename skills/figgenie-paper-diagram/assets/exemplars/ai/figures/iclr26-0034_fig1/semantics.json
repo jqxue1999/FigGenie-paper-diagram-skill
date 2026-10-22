@@ -1,0 +1,644 @@
+{
+ "paper_id": "iclr26-0034",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MetamerGen",
+  "one_liner": "A latent diffusion model that turns fixated high-resolution glimpses plus a blurred peripheral gist into images that are metamers of what humans understood of a scene.",
+  "domain": [
+   "foveated vision",
+   "latent diffusion",
+   "human scene understanding"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "inputs, frozen encoder, two query nets and a frozen UNet in a top row, with a wedge opening one UNet block into an enlarged panel below",
+  "argues": "Two new conditioning streams, fixated high-resolution tokens and peripheral gist tokens, enter a frozen text-to-image UNet through added trainable cross-attention branches.",
+  "subject": "High- and low-resolution photos, a frozen encoder with a fixation mask, two query nets, a pre-trained UNet and one enlarged block with text, fixation and peripheral cross-attention.",
+  "elements": [
+   {
+    "name": "high-res image",
+    "type": "sample",
+    "role": "the fixated scene in full resolution (448 x 448)",
+    "drawn_as": "photo of vegetables with black letterbox bars, 448 dimension lines, caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "low-res image",
+    "type": "sample",
+    "role": "blurred low-resolution copy that carries the peripheral gist (448 x 448)",
+    "drawn_as": "pixelated photo of the same scene with the same bars and dimension lines",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "visual encoder",
+    "type": "module",
+    "role": "extracts patch tokens from both images (DINOv2-Base per the caption); frozen",
+    "drawn_as": "pale pink trapezoid wide on the image side, snowflake in the corner",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "fixation mask",
+    "type": "data",
+    "role": "binary mask that keeps only fixated regions of the high-res patch tokens",
+    "drawn_as": "white rounded square with scattered black dots, a pale funnel down to a circled cross on the arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "fixation features",
+    "type": "data",
+    "role": "masked high-res patch tokens, shape 32 x 32 x 768",
+    "drawn_as": "dark 3D tensor cube with dimension labels 768, 32, 32 and red dots, turquoise caption",
+    "container": "feature region",
+    "is_contribution": true
+   },
+   {
+    "name": "peripheral features",
+    "type": "data",
+    "role": "patch tokens of the blurred image",
+    "drawn_as": "small pseudo-coloured purple, orange and green tile, turquoise caption",
+    "container": "feature region",
+    "is_contribution": true
+   },
+   {
+    "name": "token strips",
+    "type": "data",
+    "role": "short rows of tokens beside the two query nets",
+    "drawn_as": "two strips of four green rounded squares on pale trays",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "fixation query net",
+    "type": "module",
+    "role": "Perceiver-based network that compresses fixation features into conditioning tokens; trained",
+    "drawn_as": "pale cyan tilted trapezoid with a flame, label fixation / query net",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "peripheral query net",
+    "type": "module",
+    "role": "Perceiver-based network that compresses peripheral features into conditioning tokens; trained",
+    "drawn_as": "pale mint tilted trapezoid with a flame, label peripheral / query net",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "pre-trained text-to-image",
+    "type": "module",
+    "role": "the Stable Diffusion UNet that denoises x_t to x_t-1; frozen",
+    "drawn_as": "grey hourglass of eight slab blocks with coloured stripes, snowflake and bold label below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_t, x_t-1",
+    "type": "sample",
+    "role": "noisy image going into the UNet and the less noisy image coming out",
+    "drawn_as": "two small thumbnails beside the UNet with serif math labels",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "L_ϑ",
+    "type": "operation",
+    "role": "training loss",
+    "drawn_as": "large serif L with red dashed arrows coming from under x_t and x_t-1",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "modified MetamerGen UNet block",
+    "type": "container",
+    "role": "enlarged view of one UNet block with the added branches",
+    "drawn_as": "large rounded pale-cyan panel with a light title, tied to the UNet by a translucent wedge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "input intermediate features / output intermediate features",
+    "type": "label",
+    "role": "the block's input and output activations",
+    "drawn_as": "three-line grey monospace-like text at each end of the flow",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": false
+   },
+   {
+    "name": "residual + self-attention",
+    "type": "module",
+    "role": "existing self-attention layer that yields the query Q; frozen",
+    "drawn_as": "olive-green box with a snowflake",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": false
+   },
+   {
+    "name": "text cross-attention",
+    "type": "module",
+    "role": "existing cross-attention to text-prompt tokens; frozen",
+    "drawn_as": "green box with a snowflake, fed by a tray of teal tokens labelled ' ' tokens via KV",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": false
+   },
+   {
+    "name": "fixation cross-attention",
+    "type": "module",
+    "role": "new cross-attention to fixation tokens; trained",
+    "drawn_as": "red box with a flame, fed by a tray of red tokens via KV",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": true
+   },
+   {
+    "name": "peripheral cross-attention",
+    "type": "module",
+    "role": "new cross-attention to peripheral tokens; trained",
+    "drawn_as": "blue box with a flame, fed by a tray of blue tokens via KV",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": true
+   },
+   {
+    "name": "⊕",
+    "type": "operation",
+    "role": "sums the three cross-attention outputs",
+    "drawn_as": "circled plus on a vertical black bus",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": null
+   },
+   {
+    "name": "feedforward",
+    "type": "module",
+    "role": "existing feedforward layer; frozen",
+    "drawn_as": "purple box with a snowflake",
+    "container": "modified MetamerGen UNet block",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "high-res image, low-res image",
+    "to": "visual encoder",
+    "what": "images become patch tokens",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "visual encoder",
+    "to": "feature region",
+    "what": "patch tokens, with the fixation mask applied to the high-res ones",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "fixation mask",
+    "to": "circled cross on the encoder arrow",
+    "what": "masks the high-res tokens to fixated regions",
+    "kind": "control",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "fixation features, peripheral features",
+    "to": "fixation query net, peripheral query net",
+    "what": "each stream into its own query net via a token strip",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "fixation query net, peripheral query net",
+    "to": "pre-trained text-to-image",
+    "what": "conditioning tokens routed to every UNet block",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "x_t",
+    "to": "x_t-1",
+    "what": "one denoising step through the UNet",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "x_t, x_t-1",
+    "to": "L_ϑ",
+    "what": "both images feed the loss",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pre-trained text-to-image",
+    "to": "modified MetamerGen UNet block",
+    "what": "zoom into one block",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "residual + self-attention",
+    "to": "text, fixation and peripheral cross-attention",
+    "what": "query Q shared by the three branches",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "text, fixation, peripheral tokens",
+    "to": "their cross-attention boxes",
+    "what": "keys and values (KV) of each stream",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "three cross-attention outputs",
+    "to": "feedforward",
+    "what": "summed by ⊕, then passed on",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "inputs, frozen encoder with mask, two query nets, frozen UNet between x_t and x_t-1, and the loss",
+    "verdict": null
+   },
+   {
+    "label": "modified MetamerGen UNet block",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "one UNet block with frozen self-attention and text cross-attention plus new fixation and peripheral cross-attention summed before the feedforward layer",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "448, 32, 768",
+    "kind": "identity",
+    "at": "dimension lines and the tensor cube",
+    "what": "sizes of the images and of the token tensor"
+   },
+   {
+    "marker": "Q, KV",
+    "kind": "identity",
+    "at": "arrows into the cross-attention boxes",
+    "what": "names the query from the main stream and the keys and values from each token tray"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "scene photo of vegetables in a sink as the high-resolution input",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square photo with black letterbox bars, dimension lines 448 on top and left, caption underneath"
+   },
+   {
+    "what": "blurred, pixelated low-resolution copy of the same photo",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "stacked under the first photo with identical size lines"
+   },
+   {
+    "what": "noisy x_t and the cleaner x_t-1 around the UNet",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small thumbnails flanking the hourglass, math labels beneath"
+   },
+   {
+    "what": "fixation mask",
+    "content": "dense-map",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "white rounded square with a handful of black dots, caption fixation mask"
+   },
+   {
+    "what": "peripheral feature tile",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small pseudo-coloured tile under the cube, caption peripheral features"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "snowflake",
+    "stands_for": "frozen module (visual encoder, self-attention, text cross-attention, feedforward, UNet)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "flame",
+    "stands_for": "trainable module (two query nets, fixation and peripheral cross-attention)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "dark 3D tensor cube with red dots",
+    "stands_for": "the 32 x 32 x 768 fixation patch-token tensor",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "orange circled cross on a pale arrow",
+    "stands_for": "applying the fixation mask",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "the text-prompt tokens of the frozen text cross-attention, written ' ' tokens (probably an empty prompt)",
+    "form": "label above a tray of four teal tokens",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a snowflake in the corner of every frozen module and a flame on every trained one, no key",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of four rounded squares on pale trays, green for text, red for fixation, blue for peripheral in the zoom panel",
+    "parts": [
+     "token cells",
+     "tray",
+     "KV arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "three parallel cross-attention boxes sharing one query Q, each with KV from its own token tray, outputs summed by a circled plus",
+    "parts": [
+     "Q",
+     "KV",
+     "cross-attention box",
+     "circled plus"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "unet",
+    "drawn_as": "grey hourglass made of eight tall slab blocks with coloured stripes; no skip connections drawn",
+    "parts": [
+     "slab blocks",
+     "hourglass body"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a single step: noisy thumbnail x_t on the left, UNet in the middle, cleaner thumbnail x_t-1 on the right",
+    "parts": [
+     "x_t",
+     "UNet",
+     "x_t-1"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "serif L_ϑ with red dashed arrows running into it from the two thumbnails",
+    "parts": [
+     "L_ϑ",
+     "red dashed arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "encoder and query nets as tilted trapezoids narrowing along the flow",
+    "parts": [
+     "visual encoder",
+     "query nets"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the two input photos at top left, moves through the encoder, mask and features, the two query nets and the conditioning bus into the UNet, then drops down the wedge to the zoomed block read left to right."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "A wide top row runs left to right from inputs to the UNet and loss; below it a large pale-cyan panel, tied to the UNet by a translucent wedge, shows one block as three parallel branches between input and output features.",
+  "panel_count": 2,
+  "lanes": "three stacked branches in the zoom panel (text, fixation, peripheral)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.41,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#edf8f8",
+    "used_for": "pale cyan wedge and zoom panel ground"
+   },
+   {
+    "hex": "#dbdbdb",
+    "used_for": "grey body of the UNet hourglass"
+   },
+   {
+    "hex": "#fffcf8",
+    "used_for": "cream rounded region behind the fixation and peripheral features"
+   },
+   {
+    "hex": "#fff4fc",
+    "used_for": "pale pink fill of the visual encoder"
+   },
+   {
+    "hex": "#e5feff",
+    "used_for": "pale cyan tray and query net of the fixation stream"
+   },
+   {
+    "hex": "#e4fff9",
+    "used_for": "pale mint tray and query net of the peripheral stream"
+   },
+   {
+    "hex": "#f8ffdf",
+    "used_for": "pale lime frames of the eight UNet blocks"
+   },
+   {
+    "hex": "#ec494b",
+    "used_for": "fixation cross-attention box and its tokens (red)"
+   },
+   {
+    "hex": "#2dc298",
+    "used_for": "text cross-attention box and tokens (green)"
+   },
+   {
+    "hex": "#2da2c2",
+    "used_for": "peripheral cross-attention box and tokens (blue)"
+   },
+   {
+    "hex": "#95c22d",
+    "used_for": "residual + self-attention box (olive green)"
+   },
+   {
+    "hex": "#00c99b",
+    "used_for": "turquoise caption text of the feature region"
+   },
+   {
+    "hex": "#11b1b8",
+    "used_for": "cyan label text of the query nets"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "letterbox bars of the two photos and the black bus lines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "no stroked shapes: boxes are soft filled paths, arrows and bus lines are thin black fills",
+  "font": "sans (Type3 font) 3.5-11 pt, light for the zoom title, bold for module labels, serif math italics for x_t, L, Q, KV; much of the text is part of bitmaps",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small heads in the block; thick pale orange arrow with a circled cross; coloured Q and KV arrows; red dashed arrows into the loss",
+  "rendering": "mixed",
+  "effects": "soft drop shadows and gradients on boxes, a translucent wedge, a 3D tensor cube",
+  "model_depiction": "trapezoid",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "zoom panel: green = text stream, red = fixation stream, blue = peripheral stream, olive = self-attention, purple = feedforward; the UNet's stripes appear to repeat the three stream hues; in the top row both streams share a turquoise family",
+  "line_style_means": "solid black = data through the block; coloured thin arrows = Q and KV per stream; red dashed = paths into the loss",
+  "shape_means": "tilted trapezoid = encoder or query net; rounded square = token; hourglass = UNet; circled plus = sum; circled cross = mask",
+  "marker_means": "snowflake = frozen, flame = trained; numbers on dimension lines and the cube give sizes",
+  "emphasis": "Flames and saturated red and blue on the new fixation and peripheral branches against snowflake-marked frozen parts; the zoom panel takes the largest area.",
+  "reusable_patterns": [
+   "snowflake and flame icons on every module to show what is frozen or trained",
+   "wedge from a stack of UNet blocks to one enlarged block in a tinted panel",
+   "parallel colour-coded cross-attention branches sharing one query, each with its own token tray feeding KV",
+   "dimension lines and tensor shape labels on images and a cube",
+   "mask picture joined by a funnel to a circled cross on the arrow",
+   "input images shown with size lines and captions at the far left"
+  ],
+  "weaknesses": [
+   "fixation and peripheral are turquoise in the top row but red and blue in the zoom panel",
+   "no arrow from the images to the encoder or from x_t to the UNet",
+   "text is largely rasterised and small (3.5-5.5 pt)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a scene photo, its blurred version and a fixation mask",
+   "noisy x_t and generated x_t-1 thumbnails"
+  ],
+  "stock": [
+   "snowflake and flame emoji-style icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes, trapezoids and token trays",
+   "UNet hourglass with coloured stripes",
+   "zoom wedge and panel",
+   "red dashed loss arrows"
+  ],
+  "unknown": [
+   "origin of the 3D tensor cube and the peripheral feature tile (illustration or rendered features)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "input photos with size lines",
+   "visual encoder trapezoid",
+   "fixation mask and tensor cube",
+   "query net trapezoids",
+   "UNet hourglass",
+   "zoomed UNet block",
+   "colour-coded token trays",
+   "snowflake and flame icons"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "metamers",
+   "foveated vision",
+   "fixations",
+   "latent diffusion",
+   "Stable Diffusion",
+   "DINOv2",
+   "cross-attention",
+   "Perceiver"
+  ],
+  "tags": [
+   "module-state-coding",
+   "zoom-callout",
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "To show where a new conditioning path joins a frozen backbone, draw the whole pipeline on top and open one block in a zoom panel, with parallel branches coloured per stream and a snowflake or flame on every module.",
+  "suits": "Adapters or extra conditioning added to a pretrained diffusion or transformer backbone, where the reader must see what is new, what is frozen and where it joins."
+ },
+ "tags": [
+  "soft-gradient-boxes",
+  "icon-state-markers",
+  "overview-plus-zoom",
+  "photo-inputs",
+  "rasterised-text",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.4)"
+  ],
+  "evidence": [
+   "Both foveal and peripheral patch tokens are processed through separate Perceiver-based query networks",
+   "The resulting dual conditioning streams are integrated into the pretrained UNet."
+  ]
+ },
+ "summary": "MetamerGen is a latent diffusion model that generates image metamers of what humans understand after viewing a scene, combining a blurred peripheral gist with high-resolution information from fixated locations. Figure 1 shows the architecture. A high-resolution photo and its blurred copy pass through a frozen DINOv2 encoder; a fixation mask keeps only fixated high-res tokens, and two trainable Perceiver-style query nets compress fixation and peripheral features into conditioning tokens. These feed a frozen pre-trained text-to-image UNet, drawn as a grey hourglass between a noisy x_t and a cleaner x_t-1. A wedge opens one block: text, fixation and peripheral cross-attention run in parallel from a shared query, coloured green, red and blue, with snowflakes and flames marking frozen and trained parts.",
+ "summary_zh": "MetamerGen是潜扩散模型，结合注视点高分辨率信息与模糊周边概要，生成与人类场景理解同色异谱的图像。图1上排为输入、编码器、查询网络和冻结UNet，下方放大一块：文本、注视、周边三路交叉注意力，雪花与火焰标冻结与训练。",
+ "confidence": "high",
+ "notes": "Single kind model-anatomy (the pre-screen agrees). About 96% of the canvas is covered by bitmaps, so much of the text is rasterised. The label ' ' tokens probably denotes an empty prompt. The eight UNet blocks carry coloured stripes that I read as the three stream colours; I did not verify this stripe by stripe. In the top row both streams are in the turquoise family, in the zoom panel red and blue.",
+ "venue": "ICLR26"
+}

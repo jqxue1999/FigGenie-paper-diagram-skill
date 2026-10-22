@@ -1,0 +1,423 @@
+{
+ "paper_id": "cvpr26-0010",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "COG (Confidence-aware Optimal Geometric Correspondence)",
+  "one_liner": "Unsupervised 6DoF pose estimation of a novel object from one reference view, by predicting point confidences and solving a confidence-aware optimal transport problem.",
+  "domain": [
+   "novel object pose estimation",
+   "cross-view point correspondence",
+   "optimal transport"
+  ],
+  "subfield": "vision",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "three objects followed down rows from RGB-D input to correspondences and relative pose, plus a side panel that draws the optimal transport problem as small matrices",
+  "argues": "From a query and a reference RGB-D view, COG gives a confidence per point and soft cross-view correspondences, and these follow from an optimal transport problem with confidences as marginals.",
+  "subject": "Query and reference RGB-D views of a laptop, a camera and a bowl, their confidence-coloured point clouds with matching lines, and the transport problem drawn as marginals, kernel and plan.",
+  "elements": [
+   {
+    "name": "gear on a horizontal rule",
+    "type": "icon",
+    "role": "stands for the method applied to the inputs above it; not labelled",
+    "drawn_as": "small grey gear in the middle of a thin horizontal line under row (a), one per object column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "correspondence lines",
+    "type": "other",
+    "role": "link points of the query cloud with points of the reference cloud (cross-view soft correspondence)",
+    "drawn_as": "thin black straight lines between the two clouds in row (b)",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "orange and grey points",
+    "type": "other",
+    "role": "point-wise confidence: orange points are confident, grey points are not",
+    "drawn_as": "dots coloured orange or grey in the point clouds of rows (b) and (c)",
+    "container": "(b), (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Point-wise Confidence as Marginals",
+    "type": "data",
+    "role": "confidence of each query point and each reference point, used as the marginals of the transport problem",
+    "drawn_as": "two columns of orange cells labelled Query and Ref, the last cells white, bold words as Marginals",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Feature Similarity as Kernel",
+    "type": "data",
+    "role": "similarity of point features, used as the affinity kernel",
+    "drawn_as": "grid of blue cells that darken with similarity and white cells elsewhere, axes Query and Ref, bold words as Kernel",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Optimal Transport",
+    "type": "operation",
+    "role": "solves for soft correspondences from marginals and kernel",
+    "drawn_as": "light-blue rounded pill between the inputs and the output grid, no arrows",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Cross-view Correspondence",
+    "type": "data",
+    "role": "the resulting soft correspondence between query and reference points",
+    "drawn_as": "grid of orange cells along a diagonal band with orange marginal bars along the top (Ref) and left (Query)",
+    "container": "(d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Confidence",
+    "type": "label",
+    "role": "colour scale from 0 to 1 shared by points and cells",
+    "drawn_as": "tall vertical gradient bar from pale to saturated orange at the far right, 1 at the top and 0 at the bottom",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(d) panel",
+    "type": "container",
+    "role": "the optimal transport formulation behind the correspondences",
+    "drawn_as": "pale-grey rounded panel at the right with the letter (d) in its lower right corner",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "(a) Query and Ref RGB-D views",
+    "to": "(b) point clouds with confidence and correspondence",
+    "what": "the method (gear) turns the two views into confidence-coloured clouds and matches",
+    "kind": "data",
+    "drawn": "other",
+    "step": 1
+   },
+   {
+    "from": "(b) confidence and correspondence",
+    "to": "(c) relative pose",
+    "what": "the correspondences give the relative pose; the clouds are shown in the estimated pose",
+    "kind": "data",
+    "drawn": "other",
+    "step": 2
+   },
+   {
+    "from": "Point-wise Confidence as Marginals and Feature Similarity as Kernel",
+    "to": "Optimal Transport",
+    "what": "inputs of the transport problem",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Optimal Transport",
+    "to": "Cross-view Correspondence",
+    "what": "output soft correspondence",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "orange points, orange cells, Confidence bar",
+    "to": "one confidence scale",
+    "what": "the same orange scale colours points, marginal cells, plan cells and the bar",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(d) panel",
+    "to": "(b) correspondence lines",
+    "what": "the panel explains how the correspondences are obtained; tied by the caption only",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "query and reference RGB images with their depth maps for a laptop, a camera and a bowl",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "point clouds of both views coloured by confidence, with black lines for the soft correspondences",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "the clouds in the estimated relative pose, confident points orange",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d)",
+    "kind": "concept-schematic",
+    "axis": "zoom",
+    "shows": "optimal transport with confidences as marginals and feature similarity as kernel, drawn as matrices",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "left of the three rows and in the corner of the grey panel",
+    "what": "name the input row, the output rows and the formulation panel"
+   },
+   {
+    "marker": "Query, Ref",
+    "kind": "identity",
+    "at": "under the RGB-D images and as rotated axis labels in (d)",
+    "what": "name the two views and the rows and columns of the matrices"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "RGB photos of a laptop, a camera and a bowl, query and reference",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "small photo placed over the upper left of its depth map so that the two overlap"
+   },
+   {
+    "what": "depth maps of the same views in a blue-green-yellow colour map",
+    "content": "dense-map",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "partly hidden behind the RGB photo, labelled Query or Ref below"
+   },
+   {
+    "what": "point clouds of the query and reference with confidence colours",
+    "content": "point-cloud",
+    "role": "sample-output",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "orange and grey dots without axes: six in row (b) with black lines drawn between pairs, six in row (c)"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "grey gear",
+    "stands_for": "the COG method as a black box",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "three objects (laptop, camera, bowl), each followed from RGB-D views through correspondences to pose",
+    "form": "three aligned columns crossed by three rows",
+    "real_values": true
+   },
+   {
+    "what": "toy transport problem: marginal bars with white end cells, a blue kernel grid and an orange banded plan",
+    "form": "small cell grids",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "point-cloud",
+    "drawn_as": "dot clouds coloured orange for confident and grey for uncertain points, with black lines between matched points",
+    "parts": [
+     "orange points",
+     "grey points",
+     "matching lines"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "optimal-transport-matrices",
+    "drawn_as": "marginal bars of orange cells beside a blue similarity grid, a pill labelled Optimal Transport, and an orange banded plan grid with marginals on two sides",
+    "parts": [
+     "marginal bars",
+     "kernel grid",
+     "plan grid"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at row (a) top-left, runs down through (b) and (c) for each object, then to the grey (d) panel at the right, top to bottom, with the colour bar beside it."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Left: a grid of three object columns by three lettered rows, with a thin rule and gear between rows (a) and (b); right: a pale-grey panel (d) with the transport matrices and a tall colour bar at the far edge.",
+  "panel_count": 4,
+  "lanes": "three aligned object columns (laptop, camera, bowl) crossed by the rows (a), (b) and (c)",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "right",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.77,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e97132",
+    "used_for": "confident points, marginal cells, plan cells and the top of the Confidence bar"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "pale low-confidence cells of the plan grid and the bottom of the bar"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "high-similarity cells of the kernel grid"
+   },
+   {
+    "hex": "#61cbf4",
+    "used_for": "middle-similarity cells of the kernel grid"
+   },
+   {
+    "hex": "#c1e5f5",
+    "used_for": "low-similarity cells of the kernel grid"
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "Optimal Transport pill"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey panel (d)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black outlines on matrix cells, thin black matching lines and grey rules",
+  "font": "sans (Aptos, Arial) 6.5-7 pt, bold for the letters and for as Marginals and as Kernel",
+  "corners": "mixed",
+  "arrows": "none: no arrowheads anywhere; order is given by position, letters and the gear on a rule",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = confidence (saturated high, pale low, grey for unreliable points); blue = feature similarity (darker is more similar); light-blue pill = the optimal transport step",
+  "line_style_means": "black lines between clouds = soft correspondences; horizontal grey rule with a gear = the method applied between input and output",
+  "shape_means": "cell grid = matrix; column of cells = marginal; gear = the method; pill = an operation",
+  "marker_means": "letters name the rows and the panel; 0 and 1 mark the ends of the Confidence bar; Query and Ref name the two views",
+  "emphasis": "orange is the colour of the paper's addition, confidence, carried from points to matrix cells to the colour bar",
+  "reusable_patterns": [
+   "the same three objects followed down aligned rows from input to output",
+   "one colour scale carried from the data through the matrices to a vertical colour bar",
+   "gear on a horizontal rule standing for the method between input and output rows",
+   "cell-grid sketch of a transport problem: marginal bars, kernel grid and plan grid",
+   "grey side panel holding the formulation",
+   "RGB photo overlapped with its depth map as one input tile"
+  ],
+  "weaknesses": [
+   "no arrows, so the order of the rows rests on the letters",
+   "the matrices carry no values and little labelling",
+   "grey points and orange points are only explained by the colour bar"
+  ]
+ },
+ "resources": {
+  "own": [
+   "RGB-D views, point clouds, predicted confidences and correspondences of three objects"
+  ],
+  "stock": [
+   "grey gear icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "matrix cell grids",
+   "pill and grey panel",
+   "matching lines and rules"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "RGB image overlapped with depth map",
+   "point clouds coloured orange and grey with black matching lines",
+   "gear on a horizontal rule",
+   "marginal bars and kernel grid",
+   "Optimal Transport pill",
+   "orange correspondence grid",
+   "vertical Confidence colour bar"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "novel object pose estimation",
+   "single reference view",
+   "optimal transport",
+   "point cloud correspondence",
+   "confidence",
+   "RGB-D",
+   "soft correspondence",
+   "unsupervised"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "task-definition",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "confidence-colour-bar",
+    "what": "a tall vertical gradient bar with 0 and 1 at its ends explains one colour scale used on point clouds and matrix cells alike"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a task by following the same few objects down aligned rows (inputs, intermediate output, final result), marked only by letters and a gear on a rule, and draw the formulation in a grey side panel as small matrices; carry one colour scale from the data through the matrices to a colour bar.",
+  "suits": "Geometry and correspondence papers such as pose estimation, registration or matching, where the method outputs weights or confidences on points."
+ },
+ "tags": [
+  "lettered rows",
+  "point clouds",
+  "orange accent",
+  "matrix cells",
+  "sans labels",
+  "no arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "Caption: from query and reference RGB-D images (a), COG outputs point-wise confidence and soft correspondence (b) to estimate relative pose (c).",
+   "Caption: correspondence is an optimal transport problem with confidences as target marginals and feature similarity as the kernel (d)."
+  ]
+ },
+ "summary": "COG estimates the 6DoF pose of a novel object from a single reference view without supervision, by predicting a confidence for each point and solving a confidence-aware optimal transport problem. Figure 1 follows three objects, a laptop, a camera and a bowl, down three lettered rows. Row (a) shows query and reference RGB photos overlapped with depth maps, then a rule with a grey gear; row (b) shows point clouds with orange confident and grey doubtful points joined by black matching lines; row (c) shows the clouds in the estimated relative pose. A grey panel (d) draws the transport problem as cell grids, marginals and kernel into a correspondence plan, and a vertical bar gives the confidence scale.",
+ "summary_zh": "COG 从单张参考视图无监督估计新物体6DoF位姿，预测点置信度并求解置信度感知的最优传输。图中三种物体沿三行展开：RGB-D输入、带置信度颜色和匹配线的点云、相对位姿；右侧灰色面板用格子矩阵画出最优传输。",
+ "confidence": "high",
+ "notes": "Row (c) is read as the clouds in the estimated relative pose from the caption; the figure itself only shows two aligned-looking clouds per object. The orange and grey point colours are read against the Confidence bar. The bottom caption is partly cropped into the preview.",
+ "venue": "CVPR26"
+}

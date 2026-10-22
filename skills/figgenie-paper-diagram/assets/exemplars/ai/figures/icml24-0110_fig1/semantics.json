@@ -1,0 +1,761 @@
+{
+ "paper_id": "icml24-0110",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MetaFormer",
+  "one_liner": "A vision-transformer framework for few-shot learning built only on attention: masked sample attention and patch-grained task attention with a knowledge pool.",
+  "domain": [
+   "few-shot learning",
+   "meta-tuning",
+   "vision transformers"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "overall network (a), one layer opened into holistic attention (b), and two detail panels (c) and (d) reached by coloured dashed leaders, plus an operator legend",
+  "argues": "Holistic attention in one transformer, combining patch, sample and task attention, embeds support and query samples together in a single feedforward pass for few-shot classification.",
+  "subject": "MetaFormer: support and query images through patch embedding and L transformer layers whose holistic attention (task, patch, sample) is opened into two detail panels.",
+  "elements": [
+   {
+    "name": "Support",
+    "type": "sample",
+    "role": "labelled support images of the few-shot task",
+    "drawn_as": "offset stack of photos (a girl with a dog in front) with the word Support below",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Query",
+    "type": "sample",
+    "role": "the query image(s) to classify",
+    "drawn_as": "small offset stack of photos (people with dogs) with the word Query below",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Patch Embedding",
+    "type": "module",
+    "role": "turns images into patch tokens",
+    "drawn_as": "light-blue rounded box with two arrows in and two out",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "patch tokens (support green, query light blue)",
+    "type": "data",
+    "role": "token sets of support and query samples entering the transformer",
+    "drawn_as": "overlapping green cubes and overlapping light-blue cubes with ellipses",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer 1, Layer 2, ..., Layer L",
+    "type": "module",
+    "role": "the stack of transformer layers, each holding holistic attention",
+    "drawn_as": "light-blue boxes with vertical dots, inside a trapezoid outline; a dashed curved arrow leaves Layer 2 towards (b)",
+    "container": "(a) Overall Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "class probability bar chart (cat, dog, bird, rabbit)",
+    "type": "chart",
+    "role": "the predicted class distribution",
+    "drawn_as": "four bars (light blue, green, orange, yellow) with rotated class names, above a thick blue arrow leaving Layer L",
+    "container": "(a) Overall Architecture",
+    "is_contribution": false
+   },
+   {
+    "name": "Holistic Attention",
+    "type": "container",
+    "role": "the content of one layer: three attention modules, each followed by Add & Norm, in sequence",
+    "drawn_as": "grey rounded panel with a stack of six boxes, residual loop arrows on its right",
+    "container": "(b) Holistic Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Task Attention",
+    "type": "module",
+    "role": "inter-task interaction through the knowledge pool; opened in (d)",
+    "drawn_as": "yellow box at the bottom of the stack, dashed yellow leader to (d)",
+    "container": "(b) Holistic Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Patch Attention",
+    "type": "module",
+    "role": "patch-only attention inside each image, isolating backgrounds and emphasizing objects",
+    "drawn_as": "light-blue box in the middle of the stack",
+    "container": "(b) Holistic Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Sample Attention",
+    "type": "module",
+    "role": "attention between samples at the same patch location; opened in (c)",
+    "drawn_as": "green box at the top of the stack, dashed green leader to (c)",
+    "container": "(b) Holistic Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Add & Norm (x3)",
+    "type": "operation",
+    "role": "residual addition and normalisation after each attention module",
+    "drawn_as": "grey boxes above each attention box, each with a loop arrow on the right",
+    "container": "(b) Holistic Attention",
+    "is_contribution": false
+   },
+   {
+    "name": "Support Labels, Class Embedding",
+    "type": "module",
+    "role": "support labels are embedded as class embeddings and added to the support tokens",
+    "drawn_as": "plain text label, arrow to a peach rounded box, arrow to a circled plus",
+    "container": "(c) Masked Sample Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Support Tokens, Query Tokens",
+    "type": "data",
+    "role": "token sets entering masked sample attention",
+    "drawn_as": "green and light-blue cube clusters with labels",
+    "container": "(c) Masked Sample Attention",
+    "is_contribution": false
+   },
+   {
+    "name": "operator chain C_B, R, circled cross, M, S",
+    "type": "operation",
+    "role": "concatenate along batch, reshape, matrix-multiply with Q and K, mask, softmax, multiply with V, reshape",
+    "drawn_as": "circled letters and circled crosses on a left-to-right line with Q, K, V arrows entering",
+    "container": "(c) Masked Sample Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Sample Causal Mask",
+    "type": "data",
+    "role": "mask over samples that separates support and query tokens",
+    "drawn_as": "grid with Support rows green, Query rows light blue and grey masked cells, a translucent green cone to the M operator",
+    "container": "(c) Masked Sample Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Full Sample Interaction / Masked Sample Interaction (inductive)",
+    "type": "region",
+    "role": "contrasts attention among all samples with the masked version used under the inductive protocol",
+    "drawn_as": "two token rows with arc fans joined by a yellow down arrow labelled inductive, in a light-green dashed box",
+    "container": "(c) Masked Sample Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Task 1 ... Task n",
+    "type": "data",
+    "role": "earlier tasks whose images update the knowledge pool",
+    "drawn_as": "chevron banners above stacks of dog photos",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": false
+   },
+   {
+    "name": "Knowledge Pool",
+    "type": "module",
+    "role": "dynamic pool consolidating patterns from historical tasks, read by retrieval and written by update",
+    "drawn_as": "light-yellow dashed strip of small coloured cells, a highlighted block of cells at its right",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Task Probe Vector",
+    "type": "data",
+    "role": "task-specific vector summarizing discriminative patch-level patterns",
+    "drawn_as": "yellow three-cell strip",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Aggregation",
+    "type": "module",
+    "role": "aggregates patch features of the support images into the probe",
+    "drawn_as": "tall yellow rounded box with rotated text, Q arrow from the probe and K, V arrow from the support",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "cos / Retrieval",
+    "type": "operation",
+    "role": "cosine similarity of the probe with the pool and retrieval of relevant knowledge",
+    "drawn_as": "circled cos with a yellow curved arrow labelled Retrieval from the pool",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "Fusion",
+    "type": "module",
+    "role": "fuses retrieved knowledge with the support features",
+    "drawn_as": "tall yellow rounded box with rotated text, K, V from the retrieval and Q from the support route below",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": true
+   },
+   {
+    "name": "support and output photo stacks with patch grid",
+    "type": "sample",
+    "role": "input images with a patch grid and the output images whose foreground region is highlighted in yellow",
+    "drawn_as": "photo stacks, left with a white grid and yellow highlight, right with the highlighted face region",
+    "container": "(d) Patch-grained Task Attention",
+    "is_contribution": false
+   },
+   {
+    "name": "operator legend",
+    "type": "label",
+    "role": "defines the operator glyphs used in (c): Masked Interaction, Concatenation Along Batch Dimension, Element-wise Addition, Reshape, Matrix Multiplication, Mask Operation, Softmax, Cosine Similarity",
+    "drawn_as": "black-framed box at the bottom right with a glyph and a caption per row",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Support, Query",
+    "to": "Patch Embedding",
+    "what": "images enter the network",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Patch Embedding",
+    "to": "patch tokens (support green, query light blue)",
+    "what": "patch tokens of support and query samples",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "patch tokens (support green, query light blue)",
+    "to": "Layer 1, Layer 2, ..., Layer L",
+    "what": "tokens go through the layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer 1, Layer 2, ..., Layer L",
+    "to": "class probability bar chart (cat, dog, bird, rabbit)",
+    "what": "class predictions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer 2",
+    "to": "Holistic Attention",
+    "what": "one layer is opened into its holistic attention",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Task Attention",
+    "to": "Patch Attention",
+    "what": "modules in sequence bottom to top, each followed by Add & Norm and a residual loop",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Patch Attention",
+    "to": "Sample Attention",
+    "what": "next module in the sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sample Attention",
+    "to": "(c) Masked Sample Attention",
+    "what": "the sample branch is expanded",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Task Attention",
+    "to": "(d) Patch-grained Task Attention",
+    "what": "the task branch is expanded",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Support Labels",
+    "to": "Class Embedding",
+    "what": "labels are embedded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Class Embedding and Support Tokens",
+    "to": "operator chain C_B, R, circled cross, M, S",
+    "what": "added, concatenated with query tokens and run through attention",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sample Causal Mask",
+    "to": "operator chain C_B, R, circled cross, M, S",
+    "what": "the mask feeds the M operator",
+    "kind": "control",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Sample Causal Mask",
+    "to": "Full Sample Interaction / Masked Sample Interaction (inductive)",
+    "what": "the grid is read as masked token interaction",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Task 1 ... Task n",
+    "to": "Knowledge Pool",
+    "what": "Update",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task Probe Vector",
+    "to": "Aggregation",
+    "what": "Q",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "support and output photo stacks with patch grid",
+    "to": "Aggregation",
+    "what": "K, V from the support patches",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Knowledge Pool",
+    "to": "cos / Retrieval",
+    "what": "Retrieval of relevant knowledge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Aggregation",
+    "to": "cos / Retrieval",
+    "what": "aggregated probe compared with the pool",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cos / Retrieval",
+    "to": "Fusion",
+    "what": "K, V from the retrieved knowledge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fusion",
+    "to": "support and output photo stacks with patch grid",
+    "what": "output features with the foreground concentrated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green: Support Tokens, Sample Attention, frame of (c); yellow: Task Attention, frame of (d), PTA modules",
+    "to": "the panel they belong to",
+    "what": "one colour per branch ties block, leader line and detail panel together",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Overall Architecture",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "support and query images, Patch Embedding, Layer 1 to L and class probabilities",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Holistic Attention",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "one layer as Task, Patch and Sample Attention, each followed by Add & Norm with residual loops",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Masked Sample Attention",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "class-embedding infusion, token concatenation, reshape, masked attention with the sample causal mask, and full versus masked interaction",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) Patch-grained Task Attention",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "task probe vector, knowledge pool with update and retrieval, aggregation, cosine similarity and fusion",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "titles of the four panels",
+    "what": "head the panels in overview-then-zoom order"
+   },
+   {
+    "marker": "Q, K, V and K, V",
+    "kind": "identity",
+    "at": "arrows into the attention operators and into Aggregation and Fusion",
+    "what": "name query, key and value inputs"
+   },
+   {
+    "marker": "C_B, circled plus, R, circled cross, M, S, cos",
+    "kind": "identity",
+    "at": "circled operator nodes in (c) and (d)",
+    "what": "operators defined in the legend"
+   },
+   {
+    "marker": "Layer 1, Layer 2, Layer L; Task 1, Task n",
+    "kind": "identity",
+    "at": "boxes and chevrons",
+    "what": "index layers and tasks"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photos of dogs and people from few-shot datasets: support stack (a girl with a dog), query photos, Task 1 and Task n stacks",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "small photos in offset stacks with white borders, labelled Support, Query or Task"
+   },
+   {
+    "what": "support photo stack with a white patch grid and a translucent yellow highlight",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "offset stack with a white grid over the front photo and yellow over the foreground patches"
+   },
+   {
+    "what": "output photo stack with the foreground region highlighted in yellow",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "offset stack, the yellow highlight is more concentrated on the face region"
+   },
+   {
+    "what": "bar chart of class probabilities for cat, dog, bird and rabbit",
+    "content": "schematic-plot",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "four coloured bars on two axes with rotated class names, no numbers"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "overlapping green and light-blue cubes with ellipses",
+    "stands_for": "patch tokens of support and query samples",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "chevron banners labelled Task 1 and Task n",
+    "stands_for": "earlier tasks seen during meta-training",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy few-shot episode: support photos with labels, a query photo, and class probabilities over cat, dog, bird, rabbit",
+    "form": "photo stacks and a bar chart with class names",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "Patch Embedding box turns the image stacks into rows of green (support) and light-blue (query) token cubes; in (d) a white grid is laid over the photos",
+    "parts": [
+     "Patch Embedding",
+     "token cubes",
+     "patch grid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "grey rounded panel with three attention modules (Task, Patch, Sample), each followed by an Add & Norm box and a residual loop on the right, stacked bottom-up",
+    "parts": [
+     "Task Attention",
+     "Patch Attention",
+     "Sample Attention",
+     "Add & Norm",
+     "residual loops"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "the Sample Causal Mask as a token-by-token grid: support rows green, query rows light blue, masked cells grey, with a translucent cone to the mask operator",
+    "parts": [
+     "mask grid",
+     "green cone",
+     "M operator"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "two token rows with arc fans: arcs among all tokens for full sample interaction, arcs restricted by the mask for masked sample interaction",
+    "parts": [
+     "token rows",
+     "arcs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "Knowledge Pool as a titled dashed strip of coloured cells with a yellow curved Retrieval arrow out and a grey dashed Update arrow in from the tasks",
+    "parts": [
+     "pool strip",
+     "Retrieval arrow",
+     "Update arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "three-cell yellow strips for the task probe vector and the aggregated vector, a row of coloured cells for the pool",
+    "parts": [
+     "probe vector",
+     "aggregated vector",
+     "pool cells"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "support-query-sets",
+    "drawn_as": "two offset stacks of photos labelled Support (several) and Query (one or two)",
+    "parts": [
+     "Support stack",
+     "Query stack"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at (a) at the bottom left (images up to the bar chart), follows the dashed arrow from Layer 2 to (b), then the green leader to (c) at the top right and the yellow leader to (d) at the bottom right; the operator legend is consulted for the circled glyphs."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four lettered panels in an irregular grid, read as an overview followed by zooms: the tall (a) at the left, the narrow grey (b) in the middle, and two wide framed panels at the right, (c) above (d). Dashed leaders link (a) to (b), and (b) to (c) and (d) in matching colours; a black-framed operator legend sits in the bottom-right corner.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.1,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey rounded panel behind (b) Holistic Attention"
+   },
+   {
+    "hex": "#dae8fb",
+    "used_for": "light-blue boxes: Patch Embedding, Layers, Patch Attention; query-side items"
+   },
+   {
+    "hex": "#dbdbdb",
+    "used_for": "Add & Norm boxes and masked grey cells"
+   },
+   {
+    "hex": "#bfe499",
+    "used_for": "green support tokens, Sample Attention box and mask cells"
+   },
+   {
+    "hex": "#92d050",
+    "used_for": "dashed frame of (c) and green token outlines; translucent cone to the M operator",
+    "opacity": 0.6
+   },
+   {
+    "hex": "#ffe799",
+    "used_for": "yellow Task Attention box, Aggregation, Fusion, probe vector and pool cells"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "dashed frame and leader of (d)"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "translucent highlight over the foreground of the photos",
+    "opacity": 0.71
+   },
+   {
+    "hex": "#fbe5d8",
+    "used_for": "Class Embedding box"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "outlines of the light-blue query tokens"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-1 pt dark outlines; 1 pt dashed green and yellow frames for (c) and (d); thin coloured outlines on token cubes",
+  "font": "serif (Times Roman) 4.5-7.5 pt, italic for Q, K, V and task labels, Cambria Math for circled operator letters",
+  "corners": "rounded",
+  "arrows": "thin black orthogonal arrows with small heads, residual loops on the right of (b), a dashed black curved arrow for the first zoom, a thick blue arrow from Layer L, a yellow curved arrow for Retrieval and a grey dashed arrow for Update",
+  "rendering": "mixed",
+  "effects": "translucent green cone and translucent yellow highlight",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = support samples and Sample Attention (tokens, mask cells, frame of (c)); light blue = query samples, Patch Attention and ordinary network boxes; yellow = Task Attention and its internals (frame of (d), probe vector, Aggregation, Fusion, pool); grey = Add & Norm and masked cells; peach = class embedding",
+  "line_style_means": "dashed black curve = zoom from a layer to its holistic attention; dashed green and yellow lines = zoom from Sample and Task Attention into (c) and (d); yellow curved arrow = Retrieval; grey dashed arrow = Update; loops on the right of (b) = residual connections",
+  "shape_means": "circled letters and crosses = operators from the legend; grey squares = masked interactions; trapezoid = the transformer stack; chevron = a task; tall rounded box = Aggregation or Fusion",
+  "marker_means": "(a)-(d) head panels; Q, K, V name attention inputs; C_B, R, M, S, cos, circled plus and cross are keyed in the legend",
+  "emphasis": "the dashed coloured frames of (c) and (d) pull the new modules out of the holistic block; colour continuity (green sample, yellow task) links block, leader and detail",
+  "reusable_patterns": [
+   "multi-level zoom from layer to block to detail panels, with leaders whose colour equals the block fill and the detail frame",
+   "operator legend box of circled glyphs so detail drawings carry only glyphs",
+   "mask matrix drawn as a green and blue grid with grey cells beside a cone to the mask operator",
+   "inset contrasting full versus masked token interaction with arc fans and a yellow inductive arrow",
+   "knowledge pool as a dashed titled strip with Retrieval (yellow) and Update (grey dashed) arrows",
+   "photo stacks with a patch grid and a translucent yellow highlight showing the concentrated foreground",
+   "output bar chart attached to the last arrow"
+  ],
+  "weaknesses": [
+   "very dense at 4-7.5 pt; legend glyphs and arc fans are tiny at print size",
+   "the order of the three modules in (b) can be read only from the arrow direction (bottom to top)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos of dogs and people used as support, query and task images",
+   "photos overlaid with patch grid and highlight"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "boxes, loops and arrows",
+   "token cube glyphs",
+   "mask grid and arc fans",
+   "operator glyphs and legend",
+   "bar chart"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "support and query photo stacks",
+   "Patch Embedding box",
+   "Layer 1..L trapezoid stack",
+   "class bar chart",
+   "Holistic Attention block with Task, Patch and Sample Attention and Add & Norm",
+   "Sample Causal Mask grid",
+   "Class Embedding box",
+   "operator chain C_B R cross M S",
+   "Knowledge Pool strip",
+   "task probe vector, Aggregation and Fusion boxes",
+   "operator legend box"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "few-shot learning",
+   "meta-tuning",
+   "vision transformer",
+   "masked sample attention",
+   "patch-grained task attention",
+   "knowledge pool",
+   "support and query",
+   "holistic attention",
+   "inductive protocol"
+  ],
+  "tags": [
+   "zoom-callout",
+   "notation-key",
+   "colour-coded-groups",
+   "attention-mask-grid",
+   "memory-store",
+   "stacked-cards",
+   "distribution-glyph",
+   "token-strip",
+   "saliency-heatmap"
+  ],
+  "new_tags": [
+   {
+    "name": "zoom-colour-continuity",
+    "what": "the dashed leader, the fill of the source block and the frame of the detail panel share one colour (green for sample attention, yellow for task attention), so each zoom is matched by colour as well as by line"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Build a multi-level zoom where the leader line, the source block fill and the detail frame share one colour, and keep an operator legend so the detail panels use bare circled glyphs; show data with real photo stacks (support versus query) and a translucent highlight for what a module attends to.",
+  "suits": "Transformer variants with several new attention modules (sample, patch, task), few-shot or episodic setups, where an overview must open into two or three detail drawings."
+ },
+ "tags": [
+  "four-panel",
+  "multi-level-zoom",
+  "operator-legend",
+  "photo-stacks",
+  "dashed-coloured-frames",
+  "serif-small-text",
+  "pastel-blocks"
+ ],
+ "provenance": {
+  "sections": [
+   "3 MetaFormer for Few-shot Classification (p.3-5)"
+  ],
+  "evidence": [
+   "extracts feature representations of support and query samples with only one feedforward while following the inductive protocol",
+   "PTA learns a task-specific probe vector summarizing discriminative patch-level patterns and maintains a knowledge pool consolidated during meta-training"
+  ]
+ },
+ "summary": "MetaFormer is a few-shot learning framework built exclusively on attention in pre-trained vision transformers. Figure 1 is a four-panel overview with multi-level zoom. (a) Support and query photo stacks pass through Patch Embedding and Layers 1 to L to class probabilities, shown as a small bar chart. (b) One layer is opened into Holistic Attention: Task, Patch and Sample Attention, each followed by Add & Norm with residual loops. (c) Masked Sample Attention zooms into the sample branch: class embeddings added to support tokens, concatenation with query tokens, reshape, matrix multiplication, a Sample Causal Mask grid and softmax. (d) Patch-grained Task Attention shows a task probe vector, a Knowledge Pool with retrieval and update, aggregation, cosine similarity and fusion. A framed legend defines the circled operator glyphs.",
+ "summary_zh": "MetaFormer是只用注意力的少样本框架。图1分四块逐级放大：(a)整体网络；(b)展开一层的整体注意力（任务、patch、样本）；(c)带因果掩码的掩码样本注意力；(d)带知识池的patch粒度任务注意力。",
+ "confidence": "high",
+ "notes": "The digest counts 25 placed bitmaps in all; the photo counts here (10 + 4 + 4) and the 5 token-cube glyphs were read from the preview and are approximate. The caption calls (b) a sequential mode of three modules; the drawn order bottom to top is Task, Patch, Sample Attention. Roles of Aggregation, Retrieval, Update and Fusion follow the paper's list of PTA components and the drawn arrows.",
+ "venue": "ICML24"
+}

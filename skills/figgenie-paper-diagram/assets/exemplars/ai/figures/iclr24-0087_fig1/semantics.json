@@ -1,0 +1,574 @@
+{
+ "paper_id": "iclr24-0087",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "S-ViLM",
+  "one_liner": "Video-language pre-training with a dual encoder plus temporal grouping, spatial grounding of nouns to learnable group tokens, and global contrastive learning.",
+  "domain": [
+   "video-language pre-training",
+   "temporal grouping",
+   "spatial grounding"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "a two-column dual-encoder diagram whose token rows feed three objectives; two dotted-frame insets above show attract and repel on real frames",
+  "argues": "Group tokens that bind video regions to caption nouns, and a cut-and-paste foreground versus background signal, add fine-grained structure to instance-level video-text contrast.",
+  "subject": "A video side and a text side producing tokens, three training objectives on those tokens, and two insets showing temporal repel and spatial attract and repel.",
+  "elements": [
+   {
+    "name": "input video clip",
+    "type": "sample",
+    "role": "the video that is encoded",
+    "drawn_as": "strip of 8 frames of a man bowling, bold caption underneath",
+    "container": "video side",
+    "is_contribution": false
+   },
+   {
+    "name": "Cut & Paste",
+    "type": "operation",
+    "role": "pastes a clip onto a background video to create temporal scene changes",
+    "drawn_as": "rounded light blue box on the arrow from the clip to the Video Encoder",
+    "container": "video side",
+    "is_contribution": true
+   },
+   {
+    "name": "group tokens (input)",
+    "type": "data",
+    "role": "learnable group tokens fed into the Video Encoder with the video",
+    "drawn_as": "four coloured rounded squares (purple, amber, red, teal) in a dashed frame beside Cut & Paste",
+    "container": "video side",
+    "is_contribution": true
+   },
+   {
+    "name": "Video Encoder",
+    "type": "module",
+    "role": "encodes the blended video together with the group tokens",
+    "drawn_as": "wide light blue rounded box with bold text",
+    "container": "video side",
+    "is_contribution": false
+   },
+   {
+    "name": "video tokens",
+    "type": "data",
+    "role": "video patch or clip tokens; first and last are hatched blue",
+    "drawn_as": "dashed frame with a row of 8 light blue rounded squares",
+    "container": "video side",
+    "is_contribution": false
+   },
+   {
+    "name": "group tokens",
+    "type": "data",
+    "role": "output group tokens that stand for regions",
+    "drawn_as": "four coloured rounded squares in a dashed frame beside the video tokens",
+    "container": "video side",
+    "is_contribution": true
+   },
+   {
+    "name": "input caption",
+    "type": "sample",
+    "role": "A man throws a bowling ball into various pins., with man, bowling ball and pins coloured",
+    "drawn_as": "italic text with purple, amber and red nouns, bold caption underneath",
+    "container": "text side",
+    "is_contribution": false
+   },
+   {
+    "name": "Noun Extraction & Prompting",
+    "type": "operation",
+    "role": "extracts nouns from the caption and builds short prompts for them",
+    "drawn_as": "pale orange rounded box to the right of the caption, two arrows up to the prompts",
+    "container": "text side",
+    "is_contribution": true
+   },
+   {
+    "name": "A video of man. / A video contains pins.",
+    "type": "text-block",
+    "role": "noun prompts passed to the Text Encoder",
+    "drawn_as": "two italic lines with coloured nouns and an ellipsis between",
+    "container": "text side",
+    "is_contribution": false
+   },
+   {
+    "name": "Text Encoder",
+    "type": "module",
+    "role": "encodes the caption and the noun prompts",
+    "drawn_as": "wide pale orange rounded box with bold text",
+    "container": "text side",
+    "is_contribution": false
+   },
+   {
+    "name": "caption token",
+    "type": "data",
+    "role": "sentence-level representation from the CLS token",
+    "drawn_as": "pale pink oval in a dashed frame",
+    "container": "text side",
+    "is_contribution": false
+   },
+   {
+    "name": "noun tokens",
+    "type": "data",
+    "role": "representations of the nouns, one per object",
+    "drawn_as": "three ovals (purple, amber, red) in a dashed frame",
+    "container": "text side",
+    "is_contribution": true
+   },
+   {
+    "name": "Contrastive Learning",
+    "type": "operation",
+    "role": "global video-caption contrastive objective",
+    "drawn_as": "bold two-line label in the middle, with arrows in from the video side and from the caption token",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Intra-clip Temporal Grouping",
+    "type": "container",
+    "role": "inset: foreground tokens and background tokens of a blended clip repel each other",
+    "drawn_as": "dotted-frame panel with two filmstrips, a plus sign and a token row; blue dashed frames for the background parts and red dashed frames for the foreground",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Inter-clip Spatial Grounding",
+    "type": "container",
+    "role": "inset: grouped regions attract their nouns and repel other videos' content",
+    "drawn_as": "dotted-frame panel with a frame with coloured regions, group tokens, three nouns, noun tokens and a photo from another video",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Attract / Repel",
+    "type": "label",
+    "role": "sign of the pull between two things",
+    "drawn_as": "words on double-headed arrows or on bracket arrows",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "input video clip",
+    "to": "Cut & Paste",
+    "what": "frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cut & Paste",
+    "to": "Video Encoder",
+    "what": "blended video",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "group tokens (input)",
+    "to": "Video Encoder",
+    "what": "learnable group tokens enter with the video",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Video Encoder",
+    "to": "video tokens and group tokens",
+    "what": "encoded tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video tokens and group tokens",
+    "to": "Contrastive Learning",
+    "what": "video-side representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "caption token",
+    "to": "Contrastive Learning",
+    "what": "caption representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input caption",
+    "to": "Text Encoder",
+    "what": "caption text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input caption",
+    "to": "Noun Extraction & Prompting",
+    "what": "caption text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Noun Extraction & Prompting",
+    "to": "A video of man. / A video contains pins.",
+    "what": "one prompt per noun",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "noun prompts",
+    "to": "Text Encoder",
+    "what": "prompts to be encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Encoder",
+    "to": "caption token and noun tokens",
+    "what": "encoded tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video tokens",
+    "to": "Intra-clip Temporal Grouping",
+    "what": "these tokens are what the temporal objective acts on",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "group tokens",
+    "to": "Inter-clip Spatial Grounding",
+    "what": "group tokens are aligned with nouns",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "noun tokens",
+    "to": "Inter-clip Spatial Grounding",
+    "what": "noun tokens are aligned with group tokens",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "group tokens, noun tokens and nouns of one colour",
+    "to": "matching image region",
+    "what": "one colour per object across token, word and region",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Intra-clip Temporal Grouping",
+    "kind": "concept-schematic",
+    "axis": "zoom",
+    "shows": "a foreground clip pasted onto a background clip; background tokens (blue dashed) and foreground tokens (red dashed) repel",
+    "verdict": "ours"
+   },
+   {
+    "label": "Inter-clip Spatial Grounding",
+    "kind": "concept-schematic",
+    "axis": "zoom",
+    "shows": "regions of a frame, grouped by coloured group tokens, attract the nouns man, pins and bowling ball and repel content from another video",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Intra-clip Temporal Grouping, Inter-clip Spatial Grounding",
+    "kind": "section",
+    "at": "bold titles of the dotted insets",
+    "what": "name the two new objectives"
+   },
+   {
+    "marker": "input video clip, input caption",
+    "kind": "section",
+    "at": "bold captions under the inputs",
+    "what": "name the two inputs"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "strip of 8 frames of a man in a park throwing a bowling ball at pins",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "one wide strip of equal frames at the bottom left, caption underneath"
+   },
+   {
+    "what": "two filmstrips: a background clip of food scenes (blue dashed frame) and a bowling clip with black first and last frames (red dashed frame), joined by a plus sign",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two rows of 8 small frames with coloured dashed outlines, an arrow to a token row"
+   },
+   {
+    "what": "frame of the bowling clip overlaid with coloured regions: purple man, amber ball, red pins, teal background",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small frame with translucent colour regions and dotted lines to four group tokens below it"
+   },
+   {
+    "what": "photo of a bowl of food from another video",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small photo at the right end of a Repel arrow"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a caption and its extracted nouns with prompts: A man throws a bowling ball into various pins; A video of man; A video contains pins",
+    "form": "italic text with colour-coded nouns",
+    "real_values": true
+   },
+   {
+    "what": "a bowling clip pasted between frames of another clip, and the token row that results",
+    "form": "two filmstrips joined by a plus sign, an arrow and a row of tokens with blue and red dashed frames",
+    "real_values": true
+   },
+   {
+    "what": "regions of one frame bound to the nouns man, pins and bowling ball",
+    "form": "coloured regions, group tokens, nouns and noun tokens joined by Attract and Repel arrows",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dual-encoder",
+    "drawn_as": "two wide rounded boxes, a light blue Video Encoder and a pale orange Text Encoder, each fed from below and producing tokens above, meeting at a Contrastive Learning label",
+    "parts": [
+     "Video Encoder",
+     "Text Encoder",
+     "token rows",
+     "Contrastive Learning label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "double-headed arrows labelled Attract between a frame's regions and its nouns, and Repel towards another video's photo and between foreground and background token groups",
+    "parts": [
+     "Attract arrow",
+     "Repel arrows",
+     "tokens"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "rows of 8 small frames side by side, outlined with coloured dashed frames for background and foreground",
+    "parts": [
+     "frames",
+     "dashed frames",
+     "plus sign"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "dashed frames holding rows of rounded squares for video tokens (first and last hatched), coloured squares for group tokens and coloured ovals for text tokens",
+    "parts": [
+     "video tokens",
+     "group tokens",
+     "noun tokens",
+     "caption token"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Start at the input clip at the bottom left and read up the video column, then the caption column at the right, then follow the dashed arrows up to the two dotted insets."
+ },
+ "layout": {
+  "arrangement": "inset",
+  "arrangement_note": "Two dotted-frame panels across the top (temporal grouping at left, spatial grounding at right) are tied by long dashed arrows to the token rows of the main two-column diagram below: the video column at left (input clip, Cut & Paste, Video Encoder, video and group tokens) and the text column at right (input caption, Noun Extraction & Prompting, Text Encoder, caption and noun tokens), meeting at a Contrastive Learning label.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 1.72,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "video side: Video Encoder, Cut & Paste and the video token squares"
+   },
+   {
+    "hex": "#f9e5d7",
+    "used_for": "text side: Text Encoder and Noun Extraction & Prompting boxes"
+   },
+   {
+    "hex": "#fbe5d8",
+    "used_for": "caption token oval"
+   },
+   {
+    "hex": "#887ee3",
+    "used_for": "purple: first group token, noun token, the word man and its region"
+   },
+   {
+    "hex": "#ffbc1c",
+    "used_for": "amber: second group token, noun token, the words bowling ball and their region"
+   },
+   {
+    "hex": "#f53825",
+    "used_for": "red: third group token, noun token, the word pins and their region"
+   },
+   {
+    "hex": "#1a726d",
+    "used_for": "teal: fourth group token and the background region"
+   },
+   {
+    "hex": "#203ed7",
+    "used_for": "blue dashed frames around background clips and their tokens"
+   },
+   {
+    "hex": "#f33126",
+    "used_for": "red dashed frames around foreground clips and their tokens"
+   },
+   {
+    "hex": "#2d2d2d",
+    "used_for": "dotted frames, dashed token frames and outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt dark outlines and arrows, 0.25 pt dotted inset frames, dashed coloured frames in blue and red",
+  "font": "serif (Times New Roman), 7.5 pt throughout: bold for module names, titles and token labels, italic for the caption, prompts and nouns",
+  "corners": "rounded",
+  "arrows": "straight black arrows with small filled heads, long dashed arrows from the tokens to the insets, double-headed arrows labelled Attract and Repel, bracket arrows for Repel",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "light blue = video side; pale orange = text side; purple, amber, red and teal = four group tokens, with purple, amber and red repeated on the noun tokens, on the nouns man, bowling ball and pins and on the matching image regions; blue dashed frames = background clip and its tokens; red dashed frames = foreground clip and its tokens",
+  "line_style_means": "dotted frame = an objective inset; dashed frame = a group of tokens or a clip; long dashed arrows = this token set is what that objective acts on; solid arrows = data flow; double-headed arrows labelled Attract or Repel = pull or push in the loss",
+  "shape_means": "rounded square = a video or group token; oval = a text token; hatched blue square = a token of the background clip; wide rounded box = an encoder",
+  "marker_means": "the words Attract and Repel on arrows give the sign of the loss; the plus sign means the pasted clip is added onto the background clip",
+  "emphasis": "One colour per object runs through region, group token, noun token and noun, so the correspondence being learned reads at a glance; the new objectives sit in titled insets above the main diagram.",
+  "reusable_patterns": [
+   "one colour per concept carried through group tokens, noun tokens, nouns in the caption and image regions",
+   "dotted-frame insets above the main diagram, tied to the token rows by long dashed arrows",
+   "Attract and Repel written on double-headed arrows between a frame's regions and words",
+   "dashed coloured frames marking foreground versus background clips and their tokens",
+   "two-sided diagram with a video column and a text column meeting at a loss label",
+   "filmstrips of real frames joined by a plus sign to show cut and paste"
+  ],
+  "weaknesses": [
+   "the caption numbers the three objectives (1) to (3) but the figure itself carries no numbers"
+  ]
+ },
+ "resources": {
+  "own": [
+   "video frames of a bowling clip, a background clip and a food photo",
+   "a real caption with extracted nouns and prompts"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "encoder boxes, tokens, arrows and dashed frames",
+   "coloured region overlay",
+   "insets"
+  ],
+  "unknown": [
+   "source of the video frames, probably the pre-training data"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "filmstrips of video frames",
+   "light blue Video Encoder and pale orange Text Encoder boxes",
+   "colour-coded group tokens and noun tokens",
+   "dotted-frame insets with Attract and Repel arrows",
+   "frame with coloured region overlay",
+   "Cut & Paste box",
+   "Contrastive Learning label",
+   "caption with coloured nouns"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video-language pre-training",
+   "temporal grouping",
+   "spatial grounding",
+   "group tokens",
+   "contrastive learning",
+   "cut-and-paste",
+   "noun prompting",
+   "dual encoder"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "positive-negative-pairs",
+   "filmstrip",
+   "token-strip",
+   "highlighted-text-spans"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each concept one colour and carry it through every representation (image region, learnable token, text token, word in the caption) so the correspondence being learned reads at a glance; put the objectives as titled dotted-frame insets above the main dual-encoder diagram and tie them to the token rows with long dashed arrows.",
+  "suits": "Multimodal pre-training with several auxiliary objectives, each explained by pulls and pushes between colour-coded tokens."
+ },
+ "tags": [
+  "two-column dual encoder",
+  "dotted-frame insets",
+  "colour-coded tokens",
+  "filmstrips",
+  "serif labels",
+  "dashed token frames"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.4",
+   "1 Introduction (p.2)",
+   "3 Method (p.3-4)"
+  ],
+  "evidence": [
+   "temporal grouping learns temporal-aware features by distinguishing whether clips are from background or foreground",
+   "the red region corresponds exactly to the word “pins” in red"
+  ]
+ },
+ "summary": "S-ViLM is a video-language pre-training framework that adds structure to the usual dual encoder with intra-clip temporal grouping, inter-clip spatial grounding and global contrastive learning. Figure 1 draws the main diagram in two columns: an input bowling clip goes through Cut & Paste and a Video Encoder, with four learnable group tokens, to video tokens and group tokens; an input caption goes through a Text Encoder, with Noun Extraction & Prompting, to a caption token and noun tokens; both sides meet at Contrastive Learning. Above it, two dotted-frame insets show the new objectives: foreground and background clip tokens repel, and group tokens attract their matching nouns, all colour-coded.",
+ "summary_zh": "S-ViLM 在双编码器视频语言预训练上加入时间分组、空间对齐和全局对比三个目标。下方是视频与文本两栏主流程，上方两个点线框说明前景背景相斥、区域与名词相吸，并用同色贯穿。",
+ "confidence": "high",
+ "notes": "The two dotted insets are recorded as the panels; the main two-column drawing is unframed and acts as the base, hence arrangement inset. The hatched blue squares in the token rows are small bitmaps. That blue dashed frames mean background and red dashed frames mean foreground is read from the figure and the caption (distinguishing background from foreground clips); the colours themselves are not keyed.",
+ "venue": "ICLR24"
+}

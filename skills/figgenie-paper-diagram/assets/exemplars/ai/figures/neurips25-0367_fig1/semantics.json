@@ -1,0 +1,573 @@
+{
+ "paper_id": "neurips25-0367",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GraphMaster",
+  "one_liner": "Hierarchical multi-agent framework, framed as retrieval-augmented generation, in which four LLM-powered agents iteratively extend a small text-attributed graph with generated nodes and edges.",
+  "domain": [
+   "graph data synthesis",
+   "LLM agents",
+   "text-attributed graphs"
+  ],
+  "subfield": "agents",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "four colour-coded agent regions arranged as a clockwise loop around a manager, each with its own small chain of steps and artifacts",
+  "argues": "Four specialised LLM agents (manager, perception, enhancement, evaluation) in a recursive loop can synthesise semantically rich and structurally coherent graph extensions, with the manager steering until convergence.",
+  "subject": "Roles, steps and hand-offs of the four agents of GraphMaster, from query to extracted knowledge, new nodes and edges, reserved nodes and a status report.",
+  "elements": [
+   {
+    "name": "Manager Agent",
+    "type": "actor",
+    "role": "initialises the other agents, updates its weights, chooses a mode and checks convergence",
+    "drawn_as": "pink robot head with the bold title, inside a pink dash-dot region",
+    "container": "Manager Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "λ update rule",
+    "type": "formula",
+    "role": "gradient-based update of the manager's weights lambda",
+    "drawn_as": "serif equation beside a pink arrow from the robot",
+    "container": "Manager Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "convergence?",
+    "type": "operation",
+    "role": "loop check driven by the status and environment report",
+    "drawn_as": "pink circular-arrows icon with the label convergence?",
+    "container": "Manager Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Agent initialization",
+    "type": "actor",
+    "role": "the manager sets up the other three agents",
+    "drawn_as": "pink arrow down to a pink band holding blue, green and yellow robot heads",
+    "container": "Manager Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "mode choose: Semantic / Topological, Query",
+    "type": "operation",
+    "role": "selects the graph-synthesis mode and sends the query to the perception agent",
+    "drawn_as": "pale-pink box with two words and the bold label Query, thick pink arrow towards Perception Agent",
+    "container": "Manager Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Status and environment Report",
+    "type": "data",
+    "role": "report fed back to the manager",
+    "drawn_as": "report icon with a chart in a pale circle, bold label",
+    "container": "Manager Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Perception Agent",
+    "type": "actor",
+    "role": "reads the graph: community identification, subgraph sampling, environmental report",
+    "drawn_as": "blue robot head with the bold title, cyan dash-dot region with a pale cyan tint",
+    "container": "Perception Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Semantic-aware Community Identification / Retriever / Mode-adaptive base-subgraph sampling / Core-Subgraph",
+    "type": "module",
+    "role": "retrieval branch: finds communities, samples a base subgraph and stores the core subgraph",
+    "drawn_as": "cyan arrows through a coloured-node graph icon and a blue server-with-database icon, labels in sans",
+    "container": "Perception Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "TAG Feature Extraction / Data feature prompt / Generate environmental report",
+    "type": "module",
+    "role": "report branch: extracts text-attributed-graph features, prompts, and generates the environmental report",
+    "drawn_as": "cyan arrows through a blue triangle-network icon, a monitor with bar chart and a report icon",
+    "container": "Perception Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Extracted Knowledge",
+    "type": "data",
+    "role": "knowledge handed from perception to enhancement",
+    "drawn_as": "bold rotated label beside a dark-blue atom-like icon, thick light-blue arrow to the next region",
+    "container": "Perception Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Enhancement Agent",
+    "type": "actor",
+    "role": "generates new nodes and edges",
+    "drawn_as": "green robot head with the bold title, green dash-dot region",
+    "container": "Enhancement Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Token generation / Nodes creation / New nodes / Edge generation (Augmentation)",
+    "type": "module",
+    "role": "text-token generation creates nodes, then edges between new and existing nodes are generated",
+    "drawn_as": "green arrows through a hexagon-cube icon, scattered coloured dots, a small graph inside a light-green rounded region titled Augmentation, with the two probability equations",
+    "container": "Enhancement Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Evaluation Agent",
+    "type": "actor",
+    "role": "vets generated nodes and returns accepted ones",
+    "drawn_as": "yellow robot head with the bold title, yellow dash-dot region",
+    "container": "Evaluation Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Structure, Semantics, Report",
+    "type": "icon",
+    "role": "three evaluation inputs: structural check, semantic check and report",
+    "drawn_as": "orange outline icons (hierarchy, bracketed A, report page) with bold labels and yellow arrows down",
+    "container": "Evaluation Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Filter nodes with qualified quality",
+    "type": "operation",
+    "role": "keeps nodes whose LLM-judged score exceeds a threshold",
+    "drawn_as": "label on a long yellow arrow with the acceptance equation beneath",
+    "container": "Evaluation Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Reserved Nodes",
+    "type": "data",
+    "role": "accepted nodes",
+    "drawn_as": "small graph of three coloured nodes with bold label",
+    "container": "Evaluation Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Synthesize into graph",
+    "type": "operation",
+    "role": "adds reserved nodes to the graph",
+    "drawn_as": "rotated label on a yellow arrow up to a large orange network sphere, then a yellow arrow into the manager region",
+    "container": "Evaluation Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Merged report",
+    "type": "data",
+    "role": "merged report passed towards the evaluation inputs",
+    "drawn_as": "blue robot head with the label and a yellow arrow to the Report icon",
+    "container": "Evaluation Agent",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Manager Agent",
+    "to": "blue, green and yellow robots",
+    "what": "Agent initialization",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mode choose (Semantic / Topological)",
+    "to": "Perception Agent",
+    "what": "Query",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Semantic-aware Community Identification",
+    "to": "Core-Subgraph",
+    "what": "retriever and mode-adaptive base-subgraph sampling",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "TAG Feature Extraction",
+    "to": "Environmental Report",
+    "what": "data feature prompt, then generated environmental report",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Core-Subgraph and Environmental Report",
+    "to": "Extracted Knowledge",
+    "what": "both branches end in one knowledge bundle",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Extracted Knowledge",
+    "to": "Enhancement Agent",
+    "what": "knowledge passed to token generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Nodes creation",
+    "to": "New nodes, then Edge generation",
+    "what": "new nodes and then candidate edges",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Augmentation",
+    "to": "Evaluation Agent",
+    "what": "generated nodes and edges go to evaluation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Structure, Semantics, Report",
+    "to": "Filter nodes with qualified quality",
+    "what": "three inputs to the quality filter",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Filter nodes",
+    "to": "Reserved Nodes, then large graph",
+    "what": "accepted nodes are synthesised into the graph",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "large graph",
+    "to": "Status and environment Report",
+    "what": "updated graph state returns to the manager",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Status and environment Report",
+    "to": "convergence?",
+    "what": "check whether to stop or loop again",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "agent colour",
+    "to": "region outline, robot head and arrows of that agent",
+    "what": "pink manager, cyan perception, green enhancement, yellow evaluation",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Manager Agent",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "initialises the agents, updates weights, chooses semantic or topological mode, sends a query and checks convergence from the status report",
+    "verdict": null
+   },
+   {
+    "label": "Perception Agent",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "community identification, base-subgraph sampling and core subgraph, feature extraction and environmental report, merged as extracted knowledge",
+    "verdict": null
+   },
+   {
+    "label": "Enhancement Agent",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "token generation, node creation and edge generation inside an Augmentation region, with the probability formulas",
+    "verdict": null
+   },
+   {
+    "label": "Evaluation Agent",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "structure, semantics and report inputs, quality filter, reserved nodes, synthesis into the graph",
+    "verdict": null
+   }
+  ],
+  "markers": [],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "robot head with antennae and a visor face in pink, blue, green or yellow",
+    "stands_for": "the LLM-powered agents (manager, perception, enhancement, evaluation)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "document page with a small chart and the word REPORT",
+    "stands_for": "reports passed between agents (status, merged, environmental)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "node-link graphs with coloured nodes, one large orange sphere",
+    "stands_for": "the text-attributed graph and its parts (reserved nodes, retrieved subgraph, new nodes and edges)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "server tower with database cylinder",
+    "stands_for": "the stored core subgraph",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "dark-blue atom-like swirl",
+    "stands_for": "extracted knowledge",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "pink circular arrows",
+    "stands_for": "the recursive optimisation loop",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "monitor with bar chart, hierarchy chart, bracketed A, hexagon with cube",
+    "stands_for": "environment summary, structure, semantics and node creation",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "four robot heads in four colours, each heading its own region, with hand-off arrows between regions",
+    "parts": [
+     "manager",
+     "perception",
+     "enhancement",
+     "evaluation"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a cartoon robot head standing for an LLM-powered agent",
+    "parts": [
+     "robot head"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "Query to a Retriever graph icon, sampling into a server-with-database icon named Core-Subgraph",
+    "parts": [
+     "Query",
+     "Retriever",
+     "Core-Subgraph"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "pink circular arrows with a convergence? check between the manager and the status report",
+    "parts": [
+     "cycle icon",
+     "convergence?"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "graph-glyph",
+    "drawn_as": "small node-link graph with differently coloured nodes",
+    "parts": [
+     "nodes",
+     "edges"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the pink Manager Agent title at top left, follows the pink Query arrow down into Perception, across to Enhancement at bottom right, up to Evaluation at top right, and back left to the manager's status report."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four dash-dot regions of unequal size in a 2 by 2 arrangement: Manager top left, Evaluation top right, Perception bottom left (widest), Enhancement bottom right; thick pale arrows between regions trace a clockwise loop and thin coloured arrows run inside each region.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.05,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e43e6d",
+    "used_for": "Manager Agent: dash-dot outline, robot head, arrows"
+   },
+   {
+    "hex": "#f5b7bf",
+    "opacity": 0.55,
+    "used_for": "pink band under the three small robots and the Semantic / Topological box"
+   },
+   {
+    "hex": "#fadbdf",
+    "opacity": 0.79,
+    "used_for": "pale pink fills in the manager region"
+   },
+   {
+    "hex": "#59ceeb",
+    "used_for": "Perception Agent: outline, robot head, arrows; at 0.16 opacity the tint of the whole region"
+   },
+   {
+    "hex": "#2cc6e2",
+    "used_for": "cyan arrows and icons in the perception region"
+   },
+   {
+    "hex": "#588e32",
+    "used_for": "Enhancement Agent: outline, robot head, arrows"
+   },
+   {
+    "hex": "#e3f2d9",
+    "opacity": 0.94,
+    "used_for": "light-green Augmentation region"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Evaluation Agent: outline, robot head, arrows"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "dash-dot coloured outlines on the four regions; arrows are filled shapes without outline",
+  "font": "sans (DIN Next, Comic Sans for some labels), 8.5 pt bold agent titles, 6 pt labels, 5 to 5.5 pt small labels; serif italics for the equations",
+  "corners": "rounded",
+  "arrows": "thin coloured arrows with small heads inside regions, thick pale pink, light-blue, light-green and yellow arrows between regions",
+  "rendering": "flat-vector",
+  "effects": "none; pale circles behind report icons",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per agent: pink = Manager, cyan or blue = Perception, green = Enhancement, yellow = Evaluation; outline, robot head and arrows of an agent share its colour, light fills tint sub-regions",
+  "line_style_means": "dash-dot outline = an agent's region; thin arrow = flow inside an agent; thick pale arrow = hand-off between agents",
+  "shape_means": "robot head = LLM-powered agent; document with chart = report; server with database = core subgraph store; coloured-node graph = text-attributed graph or part of it; circular arrows = loop",
+  "marker_means": "no numbering; labels on arrows name the artifacts passed (Query, Extracted Knowledge, Reserved Nodes, Merged report)",
+  "emphasis": "heavy black agent titles and robots in the region colours; the thick pale arrows between regions trace the loop",
+  "reusable_patterns": [
+   "one dash-dot region per agent, headed by a robot head in the same colour as the region",
+   "robot heads gathered in a band for an initialization step",
+   "equations printed beside the step they define",
+   "captioned icon chains inside a region, icon then labelled arrow then icon",
+   "pale thick arrows for hand-offs between agents against thin arrows inside",
+   "rotated labels along vertical arrows"
+  ],
+  "weaknesses": [
+   "many small 6 pt labels and several icon styles in one figure",
+   "the clockwise loop is only implied by pale arrows between regions",
+   "some labels sit on top of arrows"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "robot icons",
+   "report, monitor, server, hierarchy and atom icons",
+   "graph icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "dash-dot regions",
+   "arrows and labels",
+   "equations"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four colour-coded robot agents",
+   "dash-dot agent regions",
+   "report icons",
+   "node-link graph glyphs",
+   "server and database icon for the core subgraph",
+   "equations beside steps",
+   "circular arrows icon for the loop"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "LLM agents",
+   "graph synthesis",
+   "text-attributed graphs",
+   "retrieval-augmented generation",
+   "multi-agent",
+   "data-limited",
+   "node generation",
+   "manager agent"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "model-pictogram",
+   "pictogram-chain",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each agent its own colour and a robot head, and carry that colour through its dashed region, the arrows inside it and the artifacts it produces, so a multi-agent loop can be read by colour; use pale thick arrows for hand-offs between agents.",
+  "suits": "Multi-agent frameworks with a few specialised roles in a loop, each with internal steps and typed artifacts such as queries, reports, knowledge and candidates."
+ },
+ "tags": [
+  "four-colour-agents",
+  "dash-dot-regions",
+  "icon-library-style",
+  "clockwise-loop",
+  "labelled-arrows",
+  "flat-colour"
+ ],
+ "provenance": {
+  "sections": [
+   "3 The Proposed Method (p.3)"
+  ],
+  "evidence": [
+   "GraphMaster: A hierarchical multi-agent framework for text-attributed graph synthesis.",
+   "four specialized LLM-powered agents operate collaboratively in a recursive optimization loop"
+  ]
+ },
+ "summary": "GraphMaster is a hierarchical multi-agent framework, framed as retrieval-augmented generation, that synthesises text-attributed graphs when real data are scarce. Figure 1 draws four dash-dot, colour-coded regions, each headed by a robot icon: a pink Manager that initialises the other agents, updates weights and chooses a semantic or topological mode; a blue Perception agent that identifies communities, samples a core subgraph and writes an environmental report as extracted knowledge; a green Enhancement agent that generates tokens, new nodes and edges; and a yellow Evaluation agent that filters nodes by quality and synthesises the reserved nodes into the graph, whose status report returns to the manager for the convergence check. Equations sit beside four of the steps.",
+ "summary_zh": "GraphMaster 是面向文本属性图合成的层级多智能体框架。图1用四个彩色虚线区域，各配机器人：粉色管理者选模式并判断收敛，蓝色感知者采样子图，绿色增强者生成节点与边，黄色评估者筛选节点并入图。",
+ "confidence": "high",
+ "notes": "Roles come from the labels and the paper sentence; a few hand-off arrows are read from the picture only, notably the Merged report arrow beside the blue robot in the evaluation region and the yellow arrow from the large graph into the status report. The caption is a one-line title.",
+ "venue": "NeurIPS25"
+}

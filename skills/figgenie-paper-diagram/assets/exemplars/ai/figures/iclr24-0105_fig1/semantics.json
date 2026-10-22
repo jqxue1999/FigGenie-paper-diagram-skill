@@ -1,0 +1,542 @@
+{
+ "paper_id": "iclr24-0105",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Whole-song pop-music generation: a cascade of four diffusion models writes form, reduced lead sheet, lead sheet and accompaniment, each conditioned on upper levels.",
+  "domain": [
+   "symbolic music generation",
+   "diffusion models",
+   "hierarchical generation"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "four stages in a 2x2 grid, one panel template reused per stage; the hand-over between stages is shown by colour and stacked strips, not by arrows",
+  "argues": "Music is generated top-down in four cascaded diffusion stages; every stage conditions on all upper-level languages and, window by window, on its own earlier segments.",
+  "subject": "Form, reduced lead sheet, lead sheet and accompaniment tracks drawn as colour-coded strips around one diffusion-model box per stage, with a shared legend.",
+  "elements": [
+   {
+    "name": "Stage 1: Form Generation",
+    "type": "container",
+    "role": "unconditional generation of the whole form sequence in one pass",
+    "drawn_as": "framed panel with a white tab title: noise strip, dashed box holding DM x N, blue output strip, brace above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 2: Reduced Lead Sheet Generation",
+    "type": "container",
+    "role": "generates the reduced lead sheet window by window, conditioned on the form",
+    "drawn_as": "framed panel: pale-blue form strip on top, context cards, noise strip, DM, orange bottom strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 3: Lead Sheet Generation",
+    "type": "container",
+    "role": "generates the lead sheet conditioned on form and reduced lead sheet",
+    "drawn_as": "same panel template; two upper-level strips stacked on top, yellow bottom strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 4: Accompaniment Generation",
+    "type": "container",
+    "role": "generates the accompaniment conditioned on all three upper levels",
+    "drawn_as": "same panel template; three upper-level strips stacked on top, green bottom strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Gaussian Noise",
+    "type": "data",
+    "role": "the segment to be generated, shown as noise before the DM acts on it",
+    "drawn_as": "speckled strip in the hue of its level, sitting in front of the stack of upper-level strips in stages 2-4",
+    "container": "each stage",
+    "is_contribution": null
+   },
+   {
+    "name": "DM",
+    "type": "module",
+    "role": "diffusion model that produces the current segment; the legend calls it the backbone model",
+    "drawn_as": "grey square box labelled DM inside a dashed box, with x N at its corner",
+    "container": "each stage",
+    "is_contribution": null
+   },
+   {
+    "name": "Form",
+    "type": "data",
+    "role": "top level of the hierarchical music language; output of stage 1, then upper-level context in stages 2-4",
+    "drawn_as": "blue strip (saturated when generated, pale with dotted dividers when known)",
+    "container": "Stage 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Reduced Lead Sheet",
+    "type": "data",
+    "role": "second level of the language; output of stage 2",
+    "drawn_as": "orange strip, pale orange when known",
+    "container": "Stage 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Lead sheet",
+    "type": "data",
+    "role": "third level of the language; output of stage 3",
+    "drawn_as": "yellow strip, pale yellow when known",
+    "container": "Stage 3",
+    "is_contribution": true
+   },
+   {
+    "name": "Accompaniment",
+    "type": "data",
+    "role": "lowest level of the language; output of stage 4",
+    "drawn_as": "green strip, pale green when known",
+    "container": "Stage 4",
+    "is_contribution": true
+   },
+   {
+    "name": "Current Generation Segments",
+    "type": "data",
+    "role": "the segment being generated now",
+    "drawn_as": "saturated block at the right end of the pale part of each bottom strip",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "Generated/Known Segments",
+    "type": "data",
+    "role": "already generated or given music, used as context",
+    "drawn_as": "pale tint of the level hue, dotted vertical dividers inside the strip",
+    "container": "each stage",
+    "is_contribution": null
+   },
+   {
+    "name": "unlabelled dashed empty slot",
+    "type": "region",
+    "role": null,
+    "drawn_as": "empty dashed rectangle continuing the bottom strip to the right of the current segment; not explained in legend or text (reads as the rest of the sequence)",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "context cards",
+    "type": "data",
+    "role": "earlier segments of the current level, each with its aligned upper-level segments behind; they feed the autoregressive diamond",
+    "drawn_as": "small offset stacks of coloured cards with '...' between them, in a dashed grey box; unlabelled",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "Cross-attn. for autoregressive control",
+    "type": "operation",
+    "role": "lets the DM attend to earlier segments of the same level",
+    "drawn_as": "solid grey diamond on a solid arrow into the DM",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "External Controls",
+    "type": "data",
+    "role": "optional user-side control signals, one circle colour per level",
+    "drawn_as": "small coloured circles with '...' in a dashed grey box",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "Cross-attn. for external control (optional)",
+    "type": "operation",
+    "role": "lets the DM attend to external controls when given",
+    "drawn_as": "dotted grey diamond on a dotted arrow into the DM",
+    "container": "stages 2-4",
+    "is_contribution": null
+   },
+   {
+    "name": "Up to 256 measures / 128 beats / 128 steps",
+    "type": "label",
+    "role": "music scope of the window one model covers at that level",
+    "drawn_as": "curly brace with a size label above the strips",
+    "container": "each stage",
+    "is_contribution": false
+   },
+   {
+    "name": "Legend column",
+    "type": "container",
+    "role": "key to levels, segment status, noise, controls and diffusion-model glyphs",
+    "drawn_as": "full-height framed column at the right with six bold headings and swatch rows: Hierarchical Music Languages, Current Generation Segments, Generated/Known Segments, Gaussian Noise, External Controls, Diffusion Models",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Gaussian Noise (Stage 1)",
+    "to": "DM",
+    "what": "noisy form sequence, up to 256 measures",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DM (Stage 1)",
+    "to": "Form (blue strip)",
+    "what": "generated form sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Form (pale strip, Stage 2)",
+    "to": "Gaussian Noise (Stage 2)",
+    "what": "form segment of the current 128-beat window, stacked behind the noise as condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Form (pale strip, Stage 2)",
+    "to": "context cards",
+    "what": "form segments aligned with the earlier windows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Generated/Known Segments (bottom strip)",
+    "to": "context cards",
+    "what": "earlier segments of the current level lifted back as context",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "context cards",
+    "to": "DM",
+    "what": "autoregressive control through cross-attention",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "External Controls",
+    "to": "DM",
+    "what": "optional external control through cross-attention",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gaussian Noise with upper-level stack",
+    "to": "DM",
+    "what": "noisy current segment together with the upper-level languages",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DM",
+    "to": "Current Generation Segments",
+    "what": "newly generated segment appended to the strip",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stage k output",
+    "to": "Stage k+1 upper-level strips",
+    "what": "a generated language reappears as a pale known strip on top of the next stage",
+    "kind": "data",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Legend swatches",
+    "to": "strips and glyphs in all panels",
+    "what": "hue names the level, tint names the segment status",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Stage 1: Form Generation",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "noise strip through one DM (x N) to a whole-song form strip, with no conditioning",
+    "verdict": "ours"
+   },
+   {
+    "label": "Stage 2: Reduced Lead Sheet Generation",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "windowed generation of the reduced lead sheet under the form, with autoregressive and optional external cross-attention",
+    "verdict": "ours"
+   },
+   {
+    "label": "Stage 3: Lead Sheet Generation",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "the same template with form and reduced lead sheet stacked as conditions, yellow output",
+    "verdict": "ours"
+   },
+   {
+    "label": "Stage 4: Accompaniment Generation",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "the same template with three upper levels stacked as conditions, green output",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Stage 1: ... Stage 4:",
+    "kind": "order",
+    "at": "white tab titles of the four panels",
+    "what": "orders the cascade from form to accompaniment and heads each panel"
+   },
+   {
+    "marker": "x N",
+    "kind": "other",
+    "at": "corner of the dashed box around each DM",
+    "what": "repetition count of the DM (iterative generation); schema has no kind for repeat counts"
+   },
+   {
+    "marker": "Up to 256 measures / 128 beats / 128 steps",
+    "kind": "other",
+    "at": "curly braces above the strips",
+    "what": "size of the window one model covers at that level (dimension annotation)"
+   },
+   {
+    "marker": "...",
+    "kind": "other",
+    "at": "between context cards and between external-control circles",
+    "what": "more items of the same kind"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "speckled strip textured with noise in the hue of its level",
+    "stands_for": "Gaussian noise that replaces the segment to be generated",
+    "style": "other",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "grey diamond with solid or dotted outline",
+    "stands_for": "cross-attention for autoregressive control (solid) and for optional external control (dotted)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "small coloured circles (green, yellow, orange)",
+    "stands_for": "external control signals at the accompaniment, lead-sheet and reduced-lead-sheet level",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 9
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "noise strip into a grey DM box repeated x N, out comes a clean coloured strip; the chain of denoising steps is folded into the x N tag",
+    "parts": [
+     "Gaussian-noise strip",
+     "DM box with x N",
+     "output segment strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "cross-attention as a grey diamond node on the arrow into the DM, solid for the required path and dotted for the optional one",
+    "parts": [
+     "solid diamond",
+     "dotted diamond"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at Stage 1 top-left, then Stage 2 to the right, down to Stage 3 and right to Stage 4 (Z order); inside a panel top strips, DM in the middle, output strip at the bottom; legend consulted on the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four equal stage panels in a 2x2 grid read in Z order, each with a white tab-like title box at its top-left corner, inside one thick outer frame; a full-height legend column at the right holds six headed groups of swatches. Every panel reuses one template: stack of known strips on top, context cards and noise strip in the middle, DM at the centre, output strip at the bottom.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "right",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.79,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#8faadc",
+    "used_for": "Form level (blue): legend swatch, Stage 1 output strip"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "Reduced Lead Sheet level (orange), also the orange external-control circle"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "Lead sheet level (yellow), also the yellow external-control circle"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "Accompaniment level (green), also the green external-control circle"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "pale blue: generated or known form segments"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "pale orange: known reduced-lead-sheet segments"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow: known lead-sheet segments"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "pale green: known accompaniment segments"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "DM boxes and the two cross-attention diamonds"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black on the outer frame, panel dividers, title tabs and legend swatches; thin dark outlines on strips and boxes inside the panels; dashed black or grey for grouping boxes and the empty slot",
+  "font": "sans (Calibri), 6-8 pt; 8 pt panel titles, 6 pt bold legend headings, 6 pt plain legend labels, 5.5 pt bold DM",
+  "corners": "square",
+  "arrows": "thin black straight orthogonal arrows with small filled heads; dotted arrow for the optional external control",
+  "rendering": "flat-vector",
+  "effects": "speckle texture on the noise strips; offset stacking of strips and cards gives a layered look; no shadows or glows",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "hue = level of the hierarchical language (blue form, orange reduced lead sheet, yellow lead sheet, green accompaniment); saturation = status (saturated = current generation segment, pale = generated or known, speckled = Gaussian noise); grey = diffusion-model parts",
+  "line_style_means": "dashed boxes bundle components (DM with x N, context cards, external controls) or mark the empty slot; dotted arrow and dotted diamond = optional external control; dotted vertical lines inside pale strips are unlabelled dividers",
+  "shape_means": "grey square = diffusion model; solid diamond = cross-attention for autoregressive control; dotted diamond = cross-attention for external control; circle = external control signal; offset stack of strips = several hierarchy levels seen together",
+  "marker_means": "Stage N orders the cascade; x N repeats the DM; braces with 256 measures, 128 beats or 128 steps give the window size at that level",
+  "emphasis": "saturated colour marks what is generated now against pale known context; the stack of upper-level strips grows from one layer in stage 2 to three in stage 4, which shows the cumulative conditioning without arrows between stages",
+  "reusable_patterns": [
+   "legend column that fixes colour = level and tint = status, so the panels can be drawn with bare strips",
+   "one panel template repeated per stage, only colour and stack height change",
+   "offset stack of pale strips behind the current strip to show conditioning on all upper levels",
+   "brace with a size label over a window of a strip",
+   "tab-like white title box overlapping the panel frame",
+   "dashed grey box bundling optional or repeated inputs with an ellipsis"
+  ],
+  "weaknesses": [
+   "no arrows between stages: the hand-over is only implied by colour",
+   "dashed empty slot and dotted strip dividers are not explained",
+   "panel interiors are bitmaps, so braces and x N are not live text"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "colour-coded track strips and stacked cards",
+   "DM boxes, diamonds, circles, braces and arrows",
+   "speckle noise textures in the four hues",
+   "legend column"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four stage panels",
+   "colour-coded track strips",
+   "grey DM box with x N",
+   "speckled Gaussian-noise strip",
+   "cross-attention diamonds",
+   "stacked context cards",
+   "legend column"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "symbolic music generation",
+   "cascaded diffusion",
+   "hierarchical music language",
+   "whole-song generation",
+   "lead sheet",
+   "form",
+   "accompaniment",
+   "cross-attention control",
+   "autoregressive windows"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "notation-key",
+   "small-multiples",
+   "stacked-cards",
+   "condition-insets",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "tint-for-status",
+    "what": "one hue per level kept across panels, with a pale tint for known context, a saturated block for the part being generated and a texture for noise, all defined in a legend"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Fix a legend of hue = level and tint = status, then repeat one identical panel per stage and stack pale strips of the upper levels behind the current strip, so cumulative conditioning shows without arrows between stages.",
+  "suits": "coarse-to-fine or hierarchical cascades (music, layouts, multi-resolution generation) where each level conditions on upper levels and is produced window by window."
+ },
+ "tags": [
+  "2x2 stage panels",
+  "colour legend column",
+  "tint = status",
+  "offset stacked strips",
+  "PowerPoint flat style",
+  "tab-style panel titles",
+  "dashed grouping boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "paper text on p.4 about cascaded generation (section number not recorded)"
+  ],
+  "evidence": [
+   "generating the four levels of hierarchical music languages one after another in a top-down order",
+   "A cascaded diffusion model is trained to model the hierarchical language, where each level is conditioned on its upper levels.",
+   "the generation at all the other layers are essentially conditional generation of music segments sliced from the entire sequences"
+  ]
+ },
+ "summary": "This ICLR 2024 paper generates whole pop songs in symbolic form with a cascade of four diffusion models, one per level of a hierarchical music language: form, reduced lead sheet, lead sheet and accompaniment. Figure 1 draws the cascade as four equal stage panels in a 2x2 grid plus a legend column. Each panel shows colour-coded track strips, a speckled Gaussian-noise strip entering a grey DM box (x N) and a bottom strip whose pale part is known music, whose saturated part is the segment being generated and whose dashed part is still empty. Pale strips of all upper levels stack behind the current one, so the conditioning grows from stage to stage; diamonds mark cross-attention for autoregressive and optional external control. Hue encodes the level and tint encodes the status.",
+ "summary_zh": "论文用四级级联扩散模型生成整首符号音乐，依次生成曲式、简化主旋律谱、主旋律谱和伴奏。图1用2×2四个阶段面板加右侧图例展示：每格有彩色音轨条、噪声条、DM框和交叉注意力菱形，颜色表示层级，深浅表示已知或当前生成，上层条带逐级叠加。",
+ "confidence": "high",
+ "notes": "Prior kinds (stage-pipeline, model-anatomy) kept. Prior panel count of 5 counted the legend column, which is treated here as a legend. The four panel interiors and the noise swatches are bitmaps; the legend, frames and titles are live vector and text. Palette hex values come from the vector fills of the legend. The x N, brace and ellipsis marks fit none of the marker kinds (order, identity, section) and are recorded as other. The dashed empty slot and the dotted strip dividers are unlabelled, so their meaning is only hedged.",
+ "venue": "ICLR24"
+}

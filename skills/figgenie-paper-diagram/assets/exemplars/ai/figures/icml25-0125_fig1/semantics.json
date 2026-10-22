@@ -1,0 +1,536 @@
+{
+ "paper_id": "icml25-0125",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VersaPRM",
+  "one_liner": "A multi-domain process reward model made by fine-tuning a math PRM on synthetic, auto-labelled multi-domain chain-of-thought data.",
+  "domain": [
+   "process reward models",
+   "synthetic reasoning data",
+   "test-time compute"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two dashed lanes run the same chain (dataset, fine-tune, PRM, test-time compute, accuracy-gain chart); the baseline fails outside math, the proposed lane succeeds in all four domains",
+  "argues": "A PRM trained on math helps test-time reasoning only in math; fine-tuning it on synthetic multi-domain data makes it help in Law, Philosophy and Biology too.",
+  "subject": "The Math-PRM pipeline and the VersaPRM pipeline side by side, each ending in an accuracy-gain bar chart over four domains.",
+  "elements": [
+   {
+    "name": "Labeled Math CoT Dataset",
+    "type": "data",
+    "role": "math questions with step-labelled chains of thought used to train the current Math PRM",
+    "drawn_as": "blue offset stack of cards: a question card 1+1+1=? and a white Labeled CoT card with two ticked steps",
+    "container": "(Current) Math PRM",
+    "is_contribution": false
+   },
+   {
+    "name": "Base LLM",
+    "type": "module",
+    "role": "the model that is fine-tuned into a PRM",
+    "drawn_as": "grey gear with a white circle holding the name",
+    "container": "(Current) Math PRM",
+    "is_contribution": false
+   },
+   {
+    "name": "Fine-tune (top)",
+    "type": "operation",
+    "role": "fine-tuning of the base LLM on the labelled math CoTs",
+    "drawn_as": "white-grey cloud on the connecting line",
+    "container": "(Current) Math PRM",
+    "is_contribution": false
+   },
+   {
+    "name": "Math PRM",
+    "type": "module",
+    "role": "the existing process reward model trained on math data",
+    "drawn_as": "blue gear with a white circle",
+    "container": "(Current) Math PRM",
+    "is_contribution": false
+   },
+   {
+    "name": "Test-Time Compute Algorithm (using 16 CoTs for inference)",
+    "type": "operation",
+    "role": "uses the PRM to score 16 chains of thought sampled from the generator",
+    "drawn_as": "pink notched box, one in each lane",
+    "container": "both lanes",
+    "is_contribution": null
+   },
+   {
+    "name": "Generator LLM",
+    "type": "module",
+    "role": "writes the chains of thought that the PRM scores at test time; shared by both lanes",
+    "drawn_as": "grey gear on the border between the lanes with arrows up and down",
+    "container": "between the lanes",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-Domain Questions",
+    "type": "data",
+    "role": "questions from Math, Law, Philosophy and Biology",
+    "drawn_as": "light-blue rounded panel with four offset card stacks coloured by domain, each card with a yellow question badge",
+    "container": "(Ours) VersaPRM",
+    "is_contribution": true
+   },
+   {
+    "name": "CoT Generation and Auto-Labeling",
+    "type": "operation",
+    "role": "a Generator LLM writes chains of thought and a Labeling LLM labels their steps",
+    "drawn_as": "cloud over a light grey box holding two gears, Generator LLM and Labeling LLM",
+    "container": "(Ours) VersaPRM",
+    "is_contribution": true
+   },
+   {
+    "name": "Labeled Multi-Domain CoT Dataset",
+    "type": "data",
+    "role": "step-labelled chains of thought across domains used to fine-tune the Math PRM",
+    "drawn_as": "multi-coloured offset stack of cards with a magenta top card (What bases are in DNA?) and a white Labeled CoT card with a tick and a cross",
+    "container": "(Ours) VersaPRM",
+    "is_contribution": true
+   },
+   {
+    "name": "Fine-tune (middle)",
+    "type": "operation",
+    "role": "fine-tunes the Math PRM on the multi-domain dataset",
+    "drawn_as": "cloud between the lanes with lines from the Math PRM and from the dataset",
+    "container": "(Ours) VersaPRM",
+    "is_contribution": true
+   },
+   {
+    "name": "VersaPRM",
+    "type": "module",
+    "role": "the proposed multi-domain PRM",
+    "drawn_as": "orange gear with a white circle",
+    "container": "(Ours) VersaPRM",
+    "is_contribution": true
+   },
+   {
+    "name": "(Accuracy w/ PRM) - (Accuracy w/o PRM) charts",
+    "type": "chart",
+    "role": "gain of each PRM over the baseline in Mathematics, Law, Philosophy and Biology",
+    "drawn_as": "see pictures",
+    "container": "both lanes",
+    "is_contribution": true
+   },
+   {
+    "name": "takeaway callouts",
+    "type": "text-block",
+    "role": "state the verdict of each lane: only effective for Math, effective beyond Math",
+    "drawn_as": "pale yellow speech callouts with bold text pointing at the charts",
+    "container": "both lanes",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Labeled Math CoT Dataset and Base LLM",
+    "to": "Fine-tune (top)",
+    "what": "labelled math CoTs and the base model enter the fine-tuning",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Fine-tune (top)",
+    "to": "Math PRM",
+    "what": "fine-tuned process reward model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Math PRM",
+    "to": "Test-Time Compute Algorithm (top)",
+    "what": "the PRM scores the sampled chains",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Generator LLM",
+    "to": "both Test-Time Compute Algorithm boxes",
+    "what": "sampled chains of thought for the top and the bottom lane",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Test-Time Compute Algorithm (top)",
+    "to": "top chart",
+    "what": "accuracy gain per domain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-Domain Questions",
+    "to": "CoT Generation and Auto-Labeling",
+    "what": "questions go in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CoT Generation and Auto-Labeling",
+    "to": "Labeled Multi-Domain CoT Dataset",
+    "what": "generated and labelled chains of thought",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Labeled Multi-Domain CoT Dataset and Math PRM",
+    "to": "Fine-tune (middle)",
+    "what": "the Math PRM is further fine-tuned on the multi-domain data",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Fine-tune (middle)",
+    "to": "VersaPRM",
+    "what": "multi-domain process reward model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VersaPRM",
+    "to": "Test-Time Compute Algorithm (bottom)",
+    "what": "the PRM scores the sampled chains",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Test-Time Compute Algorithm (bottom)",
+    "to": "bottom chart",
+    "what": "accuracy gain per domain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(Current) Math PRM lane",
+    "to": "(Ours) VersaPRM lane",
+    "what": "same chain of stages in the same columns, the difference is the outcome",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(Current) Math PRM",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "base LLM fine-tuned on labelled math CoTs into a Math PRM, scored with test-time compute, gain 4.80% in Mathematics and about 0.3% elsewhere",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(Ours) VersaPRM",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "multi-domain questions turned into labelled CoTs, the Math PRM fine-tuned into VersaPRM, gains of 4.30% to 7.93% in all four domains",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(Current) Math PRM, (Ours) VersaPRM",
+    "kind": "section",
+    "at": "titles on the dashed lane borders",
+    "what": "name the two lanes"
+   },
+   {
+    "marker": "yellow ?",
+    "kind": "identity",
+    "at": "top-left corner of every question card",
+    "what": "marks a card as a question"
+   },
+   {
+    "marker": "green tick / red cross",
+    "kind": "identity",
+    "at": "steps of the Labeled CoT cards",
+    "what": "step label: correct or wrong"
+   },
+   {
+    "marker": "green tick / red cross",
+    "kind": "identity",
+    "at": "above the bars of the charts",
+    "what": "verdict: the PRM clearly improves accuracy in that domain, or does not"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two bar charts of accuracy gain for Mathematics, Law, Philosophy and Biology: blue bars 4.80, 0.35, 0.34 and 0.30 percent for the Math PRM, orange bars 6.47, 7.93, 4.30 and 4.61 percent for VersaPRM",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same 0-8 percent axis in both lanes, value printed above each bar, a green tick or red cross above it, yellow speech callout at the side"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "gear with a white circle holding a name: grey for Base LLM, Generator LLM and Labeling LLM, blue for Math PRM, orange for VersaPRM",
+    "stands_for": "language models and process reward models",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "cloud shape with a name inside",
+    "stands_for": "an operation: Fine-tune (twice) and CoT Generation and Auto-Labeling",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "one question per domain: 1+1+2=?, The 13th Amendment says ___?, Who wrote The Republic?, What bases are in DNA?",
+    "form": "cards in domain colours, each with a yellow question badge and a yellow outline",
+    "real_values": true
+   },
+   {
+    "what": "labelled chains of thought: Step 1: 1+1=2 and Step 2: 2+1=3 both ticked; Step 1: Adenine is a DNA base ticked, Step 2: Uracil is another one crossed",
+    "form": "white Labeled CoT cards with a green tick or red cross per step",
+    "real_values": true
+   },
+   {
+    "what": "accuracy gains per domain for both PRMs",
+    "form": "percentages printed above the bars",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "grey gear with a white circle holding the model name; the PRMs are the same gear in blue and orange",
+    "parts": [
+     "gear",
+     "white circle",
+     "name"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "offset stacks of cards, each stack coloured by domain, the top card showing one question and one labelled CoT",
+    "parts": [
+     "card stack",
+     "question card",
+     "Labeled CoT card"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "white Labeled CoT card whose steps each carry a green tick or a red cross",
+    "parts": [
+     "Labeled CoT card",
+     "ticks and crosses"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top lane title (Current) Math PRM, follows the chain left to right to the top chart, then drops to the (Ours) VersaPRM lane and reads the same chain, with the middle Fine-tune cloud and the shared Generator LLM as the links between the lanes."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two stacked dashed rounded lanes run the same left-to-right chain (dataset stack, fine-tune cloud, model gear, test-time compute box, accuracy-gain chart); the Generator LLM gear sits on the border between the lanes and feeds both compute boxes, and a yellow callout at the right of each lane states its verdict.",
+  "panel_count": 2,
+  "lanes": "2 stacked lanes (Current Math PRM above Ours VersaPRM) with the same five stages aligned in columns",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.38,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#6fa8dc",
+    "used_for": "Math question stack and the Labeled Math CoT Dataset stack"
+   },
+   {
+    "hex": "#ffe599",
+    "used_for": "Law question stack"
+   },
+   {
+    "hex": "#93c47d",
+    "used_for": "Philosophy question stack"
+   },
+   {
+    "hex": "#c27ba0",
+    "used_for": "Biology question stack and the top card of the multi-domain dataset"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "light-blue panel behind Multi-Domain Questions"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey gears: Base LLM, Generator LLM, Labeling LLM"
+   },
+   {
+    "hex": "#4a86e8",
+    "used_for": "Math PRM gear and its bars"
+   },
+   {
+    "hex": "#ff9900",
+    "used_for": "VersaPRM gear and its bars"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "Test-Time Compute Algorithm boxes"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow takeaway callouts"
+   },
+   {
+    "hex": "#efefef",
+    "used_for": "light grey box holding the two LLM gears"
+   },
+   {
+    "hex": "#00ff00",
+    "used_for": "green ticks"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red crosses"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on gears, boxes and clouds; 1 pt gold outlines on question cards; heavy dashed black lane borders",
+  "font": "bold sans (Arial) 3.5-5.5 pt; lane titles and dataset names 5.5 pt; chart text is part of the raster",
+  "corners": "rounded",
+  "arrows": "thin black elbow connectors with small heads, some lines without heads between data and model; vertical arrows from the Generator LLM",
+  "rendering": "flat-vector",
+  "effects": "offset card stacks and soft shadow edges on the stacks; heavy dashed lane borders",
+  "model_depiction": "icon",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue = math (Math PRM gear, math data stack, math bars); orange = VersaPRM gear and bars; grey = plain LLMs; domain colours on question cards (blue Math, yellow Law, green Philosophy, magenta Biology); pink-red = the test-time compute algorithm; green tick and red cross = correct or wrong, gain or no gain; pale yellow = takeaway callouts",
+  "line_style_means": "heavy dashed rounded frames = the two alternative setups; thin solid lines = data and model flow",
+  "shape_means": "gear = model; cloud = an operation (fine-tune, CoT generation and labelling); offset card stack = dataset; notched pink box = algorithm; speech callout = takeaway",
+  "marker_means": "yellow ? badge = question card; tick and cross on CoT steps = step label; tick and cross above bars = accuracy gain or none",
+  "emphasis": "the same chain in both lanes, so the difference is only the outcome: one tall blue bar with three crosses against four ticked orange bars; the callouts state the verdict in words",
+  "reusable_patterns": [
+   "two dashed lanes with the same chain of stages, baseline above and proposed below",
+   "the model gear changes colour as it is fine-tuned (grey, blue, orange) and its result bars keep that colour",
+   "ticks and crosses above bars as a verdict per domain",
+   "pale yellow speech callout with a one-sentence takeaway pointing at each chart",
+   "offset card stack for a dataset, each stack coloured by domain",
+   "a shared component (Generator LLM) drawn on the border between the lanes and feeding both",
+   "labelled-CoT card with a tick or cross at each step"
+  ],
+  "weaknesses": [
+   "text of 3.5-4.5 pt",
+   "the line from the multi-domain dataset to the middle Fine-tune cloud runs through several other lines and across the lane border",
+   "tick and cross carry two meanings (step label and accuracy verdict)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "example questions and labelled chains of thought",
+   "accuracy-gain results shown as bars"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "gears, clouds, card stacks, boxes and connectors",
+   "tick and cross marks",
+   "speech callouts"
+  ],
+  "unknown": [
+   "the three placed bitmaps (about 87 by 93 pt each) could not all be matched to drawn parts; the two charts are rasters"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "dashed lane frames",
+   "gear icons for models",
+   "offset card stacks per domain",
+   "cloud labels for operations",
+   "Test-Time Compute Algorithm box",
+   "accuracy-gain bar charts with ticks and crosses",
+   "yellow speech callouts"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "process reward model",
+   "multi-domain",
+   "synthetic CoT data",
+   "test-time compute",
+   "weighted majority voting",
+   "auto-labeling",
+   "generalization beyond math",
+   "VersaPRM"
+  ],
+  "tags": [
+   "claim-banner",
+   "verdict-marks",
+   "stacked-cards",
+   "annotated-record-card",
+   "colour-coded-groups",
+   "model-pictogram",
+   "plot-callouts"
+  ],
+  "new_tags": [
+   {
+    "name": "cloud-operation-labels",
+    "what": "operations such as Fine-tune or CoT Generation and Auto-Labeling are written inside cloud shapes placed on the lines between model icons and datasets"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the baseline and the proposed method as two dashed lanes with the same chain of stages aligned in columns; let the model icon change colour as it is fine-tuned and keep that colour on its result bars; end each lane with a chart topped by ticks or crosses and a one-sentence callout.",
+  "suits": "Papers showing that an existing method works in one domain and a data or training change makes it work in many, with the same evaluation pipeline for both."
+ },
+ "tags": [
+  "google-slides-look",
+  "two-dashed-lanes",
+  "gear-icons",
+  "cloud-labels",
+  "tick-cross-bars",
+  "yellow-callouts"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Existing open-source PRMs trained on math datasets achieve strong math performance and can outperform a majority voting baseline",
+   "these PRMs fail to generalize to other domains (e.g., Law, Philosophy, and Biology), performing no better than the baseline",
+   "We propose a multi-domain PRM, VersaPRM, obtained by further fine-tuning a math PRM on a synthetically generated multi-domain dataset"
+  ]
+ },
+ "summary": "VersaPRM is a process reward model trained on synthetic multi-domain reasoning data, because math-trained PRMs help test-time reasoning only in math. Figure 1 stacks two dashed lanes with the same left-to-right chain. The top lane, (Current) Math PRM, fine-tunes a base LLM gear on a labelled math CoT dataset into a blue Math PRM, runs a test-time compute algorithm fed by a shared Generator LLM and ends in blue bars: a gain of 4.80% in mathematics but about 0.3% in law, philosophy and biology, marked with one tick and three crosses. The bottom lane, (Ours) VersaPRM, generates and auto-labels CoTs for multi-domain questions, further fine-tunes the Math PRM into an orange VersaPRM and ends in four ticked orange bars between 4.3% and 7.9%. Yellow callouts state each verdict.",
+ "summary_zh": "VersaPRM 用合成的多领域推理数据训练过程奖励模型。图 1 以两条虚线泳道对比：数学 PRM 只在数学上提升 4.80%，其余领域约 0.3% 并标叉；VersaPRM 在四个领域的橙色柱都有提升并标对勾。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (paired-lanes). The chart labels and numbers are not in the text layer (the charts are rasters), so the percentages were read from the picture. Three bitmaps of about 87 by 93 pt are placed in the SVG; two are probably the charts and the third could not be identified. The Generator LLM gear straddles the border between the lanes and serves both.",
+ "venue": "ICML25"
+}

@@ -159,6 +159,18 @@ These are habits, not rules — mechanism figures vary far more than overviews, 
 structure first (`blue-outline` / `ink-outline` for most), then assign at most two state colours from this table
 and say what they mean in the caption or a legend (`references/mechanism/encoding.md`).
 
+## AI-venue figures (family `ai`)
+
+The Figure 1s of ICLR, ICML, NeurIPS, CVPR, ACL and AAAI carry more colour than systems figures: 9 distinct fills and
+three to five hue families on median, pale Office tints on 39% of the deep records, tinted regions as the ground in a
+third, and colour that *means* something in nine out of ten (one colour per part or per actor, verdicts, highlights,
+trainable against frozen, modalities). The families above serve them too — `ink-outline` and `blue-outline` for concept
+schematics and anatomy on a bare ground, `pastel-regions` for tinted stages, `multi-hue-categorical` for a gallery of
+categories — and five families of that corpus are added to `palettes.json` with `"family": "ai"`: `office-pastel` (the
+default), `tinted-regions`, `role-colours`, `verdict-contrast`, `frozen-trainable`. The numbers, the swatch values the
+corpus uses, what colour means in each kind and field, and what not to do are in `references/ai/palettes.md` and
+`references/ai/encoding.md` Part A; the `ai` block of `palettes.json` holds the summary figures.
+
 ## What the corpus does (with counts)
 
 **Size of the palette.** Median **4** distinct fills and **5** distinct hexes per figure

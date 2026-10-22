@@ -1,0 +1,553 @@
+{
+ "paper_id": "icml24-0118",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UEO (Universal Entropy Optimization) for U2-FT",
+  "one_liner": "A CLIP fine-tuning setting with imprecise class names and unknown-class data, solved by entropy optimisation of the prompt and affine transforms.",
+  "domain": [
+   "CLIP fine-tuning",
+   "unsupervised learning",
+   "out-of-distribution detection"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "concept-schematic"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "two grey panels side by side, a train phase drawn as a small pipeline and a test phase drawn as a sketch of known and unknown classes",
+  "argues": "Fine-tuning CLIP on unlabeled in-the-wild data with an imprecise class-name list should improve both recognition of known classes (generalization) and detection of unknown classes (OOD).",
+  "subject": "The U2-FT setup: class names and unlabeled photo sets C1 and C2 feed CLIP encoders, similarity and fine-tuning; the test set mixes known and unknown classes.",
+  "elements": [
+   {
+    "name": "pre-defined class labels (known classes)",
+    "type": "label",
+    "role": "heads the row of class-name tags",
+    "drawn_as": "bold 8 pt text at the top left of the train panel",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "fox, dog, cat, pig",
+    "type": "data",
+    "role": "the imprecise predefined list of class names",
+    "drawn_as": "four peach rounded tags with teal outline and drop shadow, joined by a teal bracket",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "\"a photo of a [class]\"",
+    "type": "text-block",
+    "role": "prompt template filled with the class names",
+    "drawn_as": "bold text, 'a photo of a' in blue-violet and '[class]' in black, with a red arrow into the text encoder",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "text encoder",
+    "type": "module",
+    "role": "encodes the class-name prompts",
+    "drawn_as": "3D box (cube outline) with the label on its front face",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "C1",
+    "type": "data",
+    "role": "an example unlabeled training set with dog, cat and pig (fox absent)",
+    "drawn_as": "dashed rounded frame holding three photos with teal outlines",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "C2",
+    "type": "data",
+    "role": "an example unlabeled training set with dog, cat and panda (panda is not in the list)",
+    "drawn_as": "dashed rounded frame holding two photos with teal outlines and a panda photo with a red outline",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "unlabeled training data in the wild",
+    "type": "label",
+    "role": "names the two sets; the word 'training' is red",
+    "drawn_as": "bold 8 pt text under C2",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "image encoder",
+    "type": "module",
+    "role": "encodes the unlabeled images",
+    "drawn_as": "3D box (cube outline) with the label on its front face; one red arrow in from C2, one out to similarity",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "similarity",
+    "type": "operation",
+    "role": "compares image and text embeddings",
+    "drawn_as": "peach rounded box fed by arrows from both encoders",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "unsupervised universal fine-tuning",
+    "type": "module",
+    "role": "the fine-tuning step of CLIP without labels",
+    "drawn_as": "large peach rounded box with bold three-line text and a drop shadow",
+    "container": "Train Phase",
+    "is_contribution": true
+   },
+   {
+    "name": "Train Phase",
+    "type": "label",
+    "role": "title of the left panel",
+    "drawn_as": "bold italic underlined 9.5 pt text at the bottom right",
+    "container": "Train Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "green circle with dashed class boundaries",
+    "type": "region",
+    "role": "region of known classes cut into class areas by two crossing blue dashed lines; four photos (white dog, black cat, pig, fox) sit in it",
+    "drawn_as": "light-green circle with teal-framed photos and blue dashed lines",
+    "container": "Test Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "panda and white tiger photos",
+    "type": "sample",
+    "role": "test samples of unknown classes (OOD) placed outside the circle",
+    "drawn_as": "two photos with red outlines outside the green circle",
+    "container": "Test Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "Generalization",
+    "type": "label",
+    "role": "goal for the known classes",
+    "drawn_as": "green tag with drop shadow and a smiley face at its upper left",
+    "container": "Test Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "OOD Detection",
+    "type": "label",
+    "role": "goal for the unknown classes",
+    "drawn_as": "pink tag with drop shadow and a smiley face at its upper left",
+    "container": "Test Phase",
+    "is_contribution": null
+   },
+   {
+    "name": "known classes / unknown classes",
+    "type": "label",
+    "role": "legend of the frame colours",
+    "drawn_as": "green and red outlined squares with bold captions at the bottom left of the test panel",
+    "container": "Test Phase",
+    "is_contribution": false
+   },
+   {
+    "name": "Test Phase",
+    "type": "label",
+    "role": "title of the right panel",
+    "drawn_as": "bold italic underlined 9.5 pt text at the bottom right",
+    "container": "Test Phase",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "fox, dog, cat, pig",
+    "to": "\"a photo of a [class]\"",
+    "what": "the four class names fill the prompt template",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "\"a photo of a [class]\"",
+    "to": "text encoder",
+    "what": "text prompts are encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "C2",
+    "to": "image encoder",
+    "what": "unlabeled images are encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "text encoder",
+    "to": "similarity",
+    "what": "text embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "image encoder",
+    "to": "similarity",
+    "what": "image embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "similarity",
+    "to": "unsupervised universal fine-tuning",
+    "what": "similarity drives the fine-tuning",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "C1",
+    "to": "C2",
+    "what": "two example unlabeled sets differing in which classes are in the list",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Train Phase",
+    "to": "Test Phase",
+    "what": "the fine-tuned model is evaluated on a training-independent set",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "teal and red frames of photos",
+    "to": "known classes / unknown classes",
+    "what": "frame colours are explained by the legend and kept in both panels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "green circle with dashed class boundaries",
+    "to": "Generalization",
+    "what": "recognise samples of known classes",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "panda and white tiger photos",
+    "to": "OOD Detection",
+    "what": "detect samples of unknown classes",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Train Phase",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "class names and unlabeled photo sets C1 and C2 pass through text and image encoders and a similarity box into unsupervised universal fine-tuning",
+    "verdict": "setting"
+   },
+   {
+    "label": "Test Phase",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "a mixed set of known-class photos inside a circle with dashed class boundaries and unknown-class photos outside, evaluated for Generalization and OOD Detection",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "C1, C2",
+    "kind": "identity",
+    "at": "left of the two dashed photo sets",
+    "what": "name the two example unlabeled training sets"
+   },
+   {
+    "marker": "Train Phase, Test Phase",
+    "kind": "section",
+    "at": "bottom right of each panel",
+    "what": "title the two panels"
+   },
+   {
+    "marker": "smiley faces",
+    "kind": "identity",
+    "at": "left of the Generalization and OOD Detection tags",
+    "what": "mark the two goals the fine-tuned model should reach"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "animal photos of the unlabeled training sets: pug, tabby cat, pig and panda",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "square thumbnails with 1.25 pt teal frames (known classes) or a red frame (panda), in two dashed rows C1 and C2; pug and cat repeat in both rows"
+   },
+   {
+    "what": "animal photos of the test set: white dog, black cat, pig, fox, panda and white tiger",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "square thumbnails, four with teal frames inside the green circle and two with red frames outside it"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "3D box (cube outline) with a label on its front face",
+    "stands_for": "the CLIP text encoder and the CLIP image encoder",
+    "style": "3d",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "smiley face with open smile",
+    "stands_for": "success on the Generalization and OOD Detection goals",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "an imprecise class list (fox, dog, cat, pig) against unlabeled sets C1 (dog, cat, pig) and C2 (dog, cat, panda), and a test set of known and unknown animals",
+    "form": "class-name tags and photo thumbnails",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dual-encoder-similarity",
+    "drawn_as": "a text encoder box and an image encoder box, both 3D cubes, with arrows into a similarity box",
+    "parts": [
+     "text encoder",
+     "image encoder",
+     "similarity box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "the template 'a photo of a [class]' as one line of text with a coloured fixed part and a bracketed slot, fed by four class tags joined with a bracket",
+    "parts": [
+     "class tags",
+     "teal bracket",
+     "template text"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a dashed rounded frame holding a row of three photo thumbnails with a bold name C1 or C2",
+    "parts": [
+     "dashed frame",
+     "three thumbnails",
+     "set name"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "a green circle in which photo thumbnails stand for points, split into class regions by two crossing dashed lines, with outliers outside",
+    "parts": [
+     "circle",
+     "dashed boundaries",
+     "thumbnail points",
+     "outliers"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the class-name tags at the top left of the Train Phase, follows the red arrows through the encoders and similarity to the fine-tuning box, then crosses to the Test Phase circle and the two goal tags."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two grey rounded panels side by side. The left Train Phase panel holds a small left-to-right pipeline (class tags and prompt on top, two dashed photo sets below, two 3D encoder boxes, a similarity box and a large fine-tuning box). The right Test Phase panel holds a green circle with photos and dashed class boundaries, two outliers outside it, two goal tags with smileys and a two-row colour legend. Each panel is titled at its bottom right.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.49,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cccccc",
+    "used_for": "grey rounded panel backgrounds",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#fae5c7",
+    "used_for": "class tags, similarity box and fine-tuning box"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "green circle of known classes in the test panel"
+   },
+   {
+    "hex": "#60a917",
+    "used_for": "Generalization tag"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "OOD Detection tag"
+   },
+   {
+    "hex": "#0f8b8d",
+    "used_for": "teal outlines of tags, bracket and known-class photo frames"
+   },
+   {
+    "hex": "#ea6b66",
+    "used_for": "red outlines of unknown-class photos"
+   },
+   {
+    "hex": "#a8201a",
+    "used_for": "dark-red data-flow arrows and the word 'training'"
+   },
+   {
+    "hex": "#006eaf",
+    "used_for": "blue dashed class boundaries in the test circle"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "drop shadows under tags and boxes",
+    "opacity": 0.25
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "1.25 pt coloured frames on photos and tags, 0.5 pt black on the 3D boxes and dashed set frames, dashed blue boundary lines",
+  "font": "Arial bold, all text bold, 7-9.5 pt; phase titles in bold italic underlined",
+  "corners": "mixed",
+  "arrows": "thin dark-red orthogonal arrows with small filled heads",
+  "rendering": "mixed",
+  "effects": "soft drop shadows under tags and rounded boxes",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal frame = known-class photo or class name; red frame = unknown-class photo (also the word 'training'); peach = class names and the steps of fine-tuning; green circle = region of known classes; green tag = Generalization; pink tag = OOD Detection; dark-red arrows = data flow",
+  "line_style_means": "dark-red arrows = data flow in training; teal bracket = the four class names merge into one prompt; dashed black frame = an unlabeled training set; blue dashed lines = class decision boundaries",
+  "shape_means": "3D box = CLIP encoder; rounded peach box = operation or method; circle = region of known classes; square thumbnail = data sample",
+  "marker_means": "C1 and C2 name two example unlabeled sets; smileys mark the two goals; Train Phase and Test Phase title the panels",
+  "emphasis": "the large peach fine-tuning box is the only multi-line bold box; the two coloured goal tags and the red-framed outliers at the test panel",
+  "reusable_patterns": [
+   "two grey rounded panels for train and test phases titled in bold italic underlined text at the bottom right",
+   "thumbnails framed in one colour for known classes and another for unknown classes, with a two-row legend",
+   "a tinted circle with dashed boundary lines and thumbnails as points to show class regions and out-of-distribution outliers",
+   "a bracket merging several class-name tags into one prompt template",
+   "goal tags with smiley faces at the test panel",
+   "3D boxes for encoders joined into one similarity box"
+  ],
+  "weaknesses": [
+   "C1 and C2 are two alternative training sets but look like two inputs of one pipeline, and only C2 has an arrow into the image encoder",
+   "the link between the green circle and the Generalization tag, and between the outliers and OOD Detection, is by position only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "twelve animal photo thumbnails (dog, cat, pig, panda, fox, tiger) probably taken from public datasets"
+  ],
+  "stock": [
+   "smiley faces"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, tags and boxes",
+   "3D encoder boxes",
+   "arrows, brackets and dashed boundaries"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "class-name tags fox dog cat pig",
+   "prompt template a photo of a [class]",
+   "text encoder and image encoder 3D boxes",
+   "similarity box",
+   "unsupervised universal fine-tuning box",
+   "dashed unlabeled sets C1 and C2 with animal photos",
+   "green circle with dashed class boundaries and photos",
+   "red-framed outlier photos",
+   "Generalization and OOD Detection tags with smileys",
+   "known and unknown legend"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "CLIP",
+   "unsupervised fine-tuning",
+   "open-set",
+   "OOD detection",
+   "generalization",
+   "class names",
+   "unlabeled data in the wild",
+   "universal fine-tuning",
+   "known and unknown classes"
+  ],
+  "tags": [
+   "task-definition",
+   "embedding-space-sketch",
+   "verdict-marks",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "known-unknown-frames",
+    "what": "thumbnails framed in one colour for known classes and another for unknown classes, explained by a two-row legend and kept across both the training and the test panel"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State a new learning setting as two grey panels (train, test): show the imprecise inputs as thumbnails framed by known or unknown colour, the method as a few boxes, and the test goal as a tinted circle with dashed boundaries and outliers tagged with the two goals.",
+  "suits": "Problem-setting figures for open-set, OOD, partial-label or universal learning, where the point is what the data contains (known versus unknown classes) rather than the architecture."
+ },
+ "tags": [
+  "two-panels",
+  "train-test",
+  "photo-thumbnails",
+  "3d-boxes",
+  "drop-shadows",
+  "teal-red-frames",
+  "smiley-tags"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "U2-FT fine-tunes the pre-trained CLIP with unlabeled in-the-wild training data according to an imprecise predefined list of class names",
+   "a training-independent data set containing both known classes and unknown classes (OOD) in the test phase is employed"
+  ]
+ },
+ "summary": "The paper introduces Unsupervised Universal Fine-Tuning (U2-FT), a realistic way to adapt CLIP when the predefined class names are imprecise and the unlabeled data contains unknown classes, and proposes Universal Entropy Optimization (UEO). Figure 1 shows the setup in two grey panels. In the Train Phase, four class-name tags (fox, dog, cat, pig) are merged into the prompt 'a photo of a [class]' for a text-encoder box, unlabeled animal photos in two dashed sets C1 and C2 go to an image-encoder box, and both meet in a similarity box that feeds an 'unsupervised universal fine-tuning' box. In the Test Phase, photos sit in a green circle cut by dashed class boundaries, with outliers (panda, tiger) outside, tagged Generalization and OOD Detection with smileys; teal and red frames mark known and unknown classes.",
+ "summary_zh": "论文提出U2-FT设定：预设类名可能不准、无标注数据含未知类，并给出UEO方法。图1分训练与测试两块：训练阶段由类名提示与C1、C2图片经编码器和相似度进入微调；测试阶段圆内为已知类，圆外熊猫、白虎为未知类。",
+ "confidence": "high",
+ "notes": "The figure draws the setting (U2-FT), not the UEO objective itself. Prior kinds kept. The digest counts 14 placed bitmaps (12 photo placements plus two items I judged to be the smileys, which I recorded as vector because the digest lists only 10 different bitmaps, matching the 10 distinct photos); the smiley medium is therefore uncertain.",
+ "venue": "ICML24"
+}

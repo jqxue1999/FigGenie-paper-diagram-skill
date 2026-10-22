@@ -1,0 +1,599 @@
+{
+ "paper_id": "aaai25-0069",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GRAPE",
+  "one_liner": "Food recommender that feeds items' sustainability indicators into an attention module and trains with a normal loss plus a green loss.",
+  "domain": [
+   "food recommendation",
+   "sustainability-aware recommendation",
+   "attention-based recommender"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "inputs, embedding layers, a large attention module and the prediction in one tinted region, with a green side panel that contrasts the loss designs",
+  "argues": "Sustainability indicators can be fused into the recommender through attention and trained with a green loss, with or without priorities among indicators, next to the normal loss.",
+  "subject": "Target item and user history with green values, embedding, a sustainability-integrated attention module, prediction, and the normal and green losses.",
+  "elements": [
+   {
+    "name": "Target Item",
+    "type": "data",
+    "role": "the candidate item with its green values",
+    "drawn_as": "grey label box and a dashed box holding a fried-egg icon, a light-green circle g_1^t, '…' and a green pentagon g_n^t",
+    "container": "inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "User Interaction History",
+    "type": "container",
+    "role": "the user's past items with the green values of each, along a timeline",
+    "drawn_as": "dashed box under a grey title bar with columns User u, Items 𝕀^u and Green Values 𝔾_1^u … 𝔾_n^u, and a downward Timeline arrow",
+    "container": "inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "Mean / Std",
+    "type": "data",
+    "role": "per-indicator mean and standard deviation of the user's green values; its line labelled Initialize runs along the bottom to P[u]",
+    "drawn_as": "small dotted table of circles and pentagons under the green-value columns, with dotted arrows from the columns",
+    "container": "inputs",
+    "is_contribution": true
+   },
+   {
+    "name": "Item Embed Layer / Green Embed Layer",
+    "type": "module",
+    "role": "embed the items and the green values",
+    "drawn_as": "two tall peach rounded boxes with rotated text",
+    "container": "model region",
+    "is_contribution": false
+   },
+   {
+    "name": "e_i^t, e_g1^t, …, e_gn^t / E_i^0, E_g1^0, …, E_gn^0",
+    "type": "data",
+    "role": "embeddings of the target item and of the history, one block for the item and one per green indicator",
+    "drawn_as": "two pale peach panels of small cell grids in orange-brown shades; circle and pentagon cells for the green blocks",
+    "container": "model region",
+    "is_contribution": false
+   },
+   {
+    "name": "Sustainability Integrated Attention Module",
+    "type": "module",
+    "role": "fuses item and green-value embeddings through self- and cross-attention, fusion, a product and a feed-forward layer",
+    "drawn_as": "large rounded black-outlined box in pale blue with a title under it",
+    "container": "model region",
+    "is_contribution": true
+   },
+   {
+    "name": "V, Q, K inputs: V_i, V_g1 … V_gn / Q_i, Q_g1 … Q_gn / K_i, K_g1 … K_gn",
+    "type": "data",
+    "role": "value, query and key vectors of the item and of each green indicator",
+    "drawn_as": "three dashed boxes with stacked italic symbols at the left inside the module",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Self-Attention",
+    "type": "module",
+    "role": "attention among the item and among the green indicators",
+    "drawn_as": "dashed mid-blue box with rotated text, Q and K tiles joined by double arrows",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Cross-Attention",
+    "type": "module",
+    "role": "attention between the item and the green indicators",
+    "drawn_as": "dashed mid-blue box with rotated text and crossing lines between the Q K tiles",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Item Att. Fusion / Green Att. Fusion",
+    "type": "module",
+    "role": "fusion of the attention outputs for the item and for the green values",
+    "drawn_as": "two dashed blue boxes with rotated text, side by side",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": true
+   },
+   {
+    "name": "⊗",
+    "type": "operation",
+    "role": "product node after the fusion, with a skip line from the V inputs",
+    "drawn_as": "circled times on the main line",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Feed Forward Layer",
+    "type": "module",
+    "role": "feed-forward layer closing the module; followed by '⋮' and a stack of bars for repeated layers",
+    "drawn_as": "tall dark-blue rounded bar with rotated text, then a tall box of light and dark blue bars",
+    "container": "Sustainability Integrated Attention Module",
+    "is_contribution": false
+   },
+   {
+    "name": "E_i^L, E_g1^L, …, E_gn^L",
+    "type": "data",
+    "role": "output embeddings after the last layer",
+    "drawn_as": "blue panel of cell grids in blue shades with dashed highlighted rows",
+    "container": "model region",
+    "is_contribution": false
+   },
+   {
+    "name": "P[u]",
+    "type": "data",
+    "role": "the user's green profile, initialised from Mean and Std",
+    "drawn_as": "narrow green strip of cells (square, circle, pentagon)",
+    "container": "model region",
+    "is_contribution": true
+   },
+   {
+    "name": "⊙ and ỹ_it",
+    "type": "operation",
+    "role": "combines the item-side vector with P[u] into the predicted score of the target item",
+    "drawn_as": "circled dot with an arrow up to a light-green rounded label",
+    "container": "model region",
+    "is_contribution": null
+   },
+   {
+    "name": "Item 1 / Item 2 with ỹ_i1, ỹ_i2",
+    "type": "instance",
+    "role": "two items compared by predicted score and by green values",
+    "drawn_as": "salad and rice-bowl icons with a light-green and a darker-green score label and a dashed box of g_1 and g_n comparisons",
+    "container": "loss panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Normal Loss",
+    "type": "formula",
+    "role": "improves recommendation accuracy: pairs of a preferred and a less preferred item with − log(σ(ỹ − ỹ_it))",
+    "drawn_as": "two dotted boxes with food icons, happy and sad faces and the log-sigmoid formula",
+    "container": "loss panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Non-prioritized Green Loss",
+    "type": "other",
+    "role": "green-value comparisons of two items without priority among indicators",
+    "drawn_as": "see-saw with green circles and pentagons on its pans, a double-line arrow down to a salad with a happy face and a rice bowl with a sad face",
+    "container": "loss panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Prioritized Green Loss (Priority: g_1 > g_k)",
+    "type": "other",
+    "role": "green-value comparison where indicator g_1 has priority over g_k",
+    "drawn_as": "green header bar, see-saw with g_1 circles, double-line arrow down to a salad with a sad face and a rice bowl with a happy face",
+    "container": "loss panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Loss = Normal Loss + Green Loss",
+    "type": "formula",
+    "role": "total loss as the sum of the two parts",
+    "drawn_as": "green rounded labels joined by a plus sign at the bottom of the loss panel",
+    "container": "loss panel",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Target Item and User Interaction History",
+    "to": "Item Embed Layer / Green Embed Layer",
+    "what": "items and green values enter the two embedding layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green value columns",
+    "to": "Mean / Std",
+    "what": "values are summarised per indicator (dotted arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mean / Std",
+    "to": "P[u]",
+    "what": "initialisation, a long line labelled Initialize along the bottom of the model region",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Item Embed Layer / Green Embed Layer",
+    "to": "e^t panel and E^0 panel",
+    "what": "target embeddings and history embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E^0 panel",
+    "to": "V, Q, K inputs, Self-Attention, Cross-Attention, Item Att. Fusion and Green Att. Fusion, ⊗, Feed Forward Layer, stack of layers",
+    "what": "main line through the attention module to the repeated layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V inputs",
+    "to": "⊗",
+    "what": "skip line along the top inside the module",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "e^t panel",
+    "to": "second peach panel at the right",
+    "what": "target embeddings carried around the module by a long line over the top",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "stack of layers",
+    "to": "E^L panel",
+    "what": "outputs after the last layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E^L panel (dashed rows)",
+    "to": "blue tile panel, green strip, ⊙",
+    "what": "selected rows are gathered into a small blue panel that feeds the score node (reading of the dense lines)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P[u]",
+    "to": "⊙",
+    "what": "user green profile into the score node",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "⊙",
+    "to": "ỹ_it",
+    "what": "predicted score",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ỹ_i1, ỹ_i2 labels",
+    "to": "highlighted ỹ in the loss formulas",
+    "what": "light and darker green behind ỹ_i1 and ỹ_i2 in the formulas match the score labels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "see-saws",
+    "to": "face pairs",
+    "what": "double-line arrows from each see-saw to the preferred and the other item",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "inputs, embedding layers, Sustainability Integrated Attention Module, feed-forward layers and the prediction, in a grey tinted region with dashed input boxes at the left",
+    "verdict": "ours"
+   },
+   {
+    "label": "Loss = Normal Loss + Green Loss",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "Normal Loss with preferred and less preferred items, then non-prioritized and prioritized Green Loss drawn as see-saws with face verdicts",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "e, E, g, ỹ with sub- and superscripts",
+    "kind": "identity",
+    "at": "next to tensors, glyphs and scores",
+    "what": "name the tensors: t target, 0 and L layer index, i item, g green indicator"
+   },
+   {
+    "marker": "> and <",
+    "kind": "identity",
+    "at": "loss panel",
+    "what": "compare the green values of two items"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "flat food illustrations: fried egg, broccoli bowl, fish dish, salad bowl, rice bowl",
+    "stands_for": "food items (target, history, compared items)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 15
+   },
+   {
+    "depicts": "cartoon user avatar",
+    "stands_for": "the user u",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "smiling and frowning faces",
+    "stands_for": "the preferred and the less preferred item of a pair",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 8
+   },
+   {
+    "depicts": "see-saw on a triangle pivot",
+    "stands_for": "balance between the green values of two items",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a user's history of four dishes along a timeline with each dish's green values as circles and pentagons of different green depth, summarised by Mean and Std",
+    "form": "dashed columns of food icons and green glyphs",
+    "real_values": false
+   },
+   {
+    "what": "two items compared by predicted score and by green values (Item 1 salad, Item 2 rice bowl), with happy and sad faces",
+    "form": "icons with faces in dotted boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention",
+    "drawn_as": "Self-Attention as a dashed box with Q and K vector tiles joined by double arrows, Cross-Attention as a dashed box with crossing lines between Q and K tiles",
+    "parts": [
+     "Q and K tiles",
+     "double arrows",
+     "crossing lines",
+     "dashed boxes"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "attention, fusion, product and a Feed Forward Layer bar inside one module, followed by '⋮' and a stack of repeated layers",
+    "parts": [
+     "attention boxes",
+     "Feed Forward Layer",
+     "layer stack"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "preferred and less preferred items as icon pairs with happy and sad faces and a log-sigmoid difference of scores",
+    "parts": [
+     "item icons",
+     "faces",
+     "formula"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "see-saw-balance",
+    "drawn_as": "a see-saw on a triangle pivot with green glyphs on the pans and a double-line arrow down to the verdict faces",
+    "parts": [
+     "beam",
+     "pivot",
+     "green glyphs"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at Target Item and User Interaction History at the left, runs right through the embedding layers and the large blue attention module to the score at the top right; the green loss panel at the far right is read last, top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two regions side by side: a wide grey tinted model region (dashed input boxes at the left, embedding layers, the large attention module, output grids and the score node) and a narrower green loss panel at the right that stacks Normal Loss, two Green Loss designs and the total loss; a long Initialize line runs along the bottom.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 4,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.74,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "opacity": 0.5,
+    "used_for": "grey ground of the model region"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "pale blue ground of the attention module"
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "light blue inner area and light layer bars"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "mid-blue self- and cross-attention and fusion boxes, blue cells"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "dark blue Feed Forward Layer bar and dark cells"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "pale peach embedding panels"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "peach Item Embed and Green Embed layers and embedding cells"
+   },
+   {
+    "hex": "#d9f2d0",
+    "opacity": 0.7,
+    "used_for": "green tint of the loss panel"
+   },
+   {
+    "hex": "#b4e5a2",
+    "opacity": 0.5,
+    "used_for": "green tint of the Green Loss sub-panels"
+   },
+   {
+    "hex": "#8ed973",
+    "used_for": "medium green glyphs and the score label of Item 1"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey title bars and the Mean and Std table"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on most of the 230 stroked shapes, 25 dashed boxes for inputs and groups, a few 0.75 to 1.5 pt strokes",
+  "font": "sans (Calibri) 3-10.5 pt: 7 pt module labels (many rotated), 6 pt Q K V symbols; math symbols e, E, g, ỹ in Cambria Math italic with 3-5.5 pt subscripts",
+  "corners": "rounded",
+  "arrows": "thin black orthogonal arrows with small heads; dotted arrows from the green-value columns; double-headed arrows in self-attention; double-line arrows down from the see-saws",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach = embedding layers and embedding matrices; blue = the attention module and its outputs, deeper blue for the later or heavier part; green = sustainability (green-value glyphs, P[u], score labels, the Green Loss panel), deeper green = greener value (caption); grey = titles and the Mean and Std table",
+  "line_style_means": "dashed black boxes group inputs, projections, attention branches and fusion boxes; solid thin arrows = data flow; a line over the top = skip; dotted table and arrows = aggregation of green values; the bottom line labelled Initialize = initialisation of P[u]",
+  "shape_means": "circle and pentagon = two different green indicators; tall rounded box with rotated text = layer or attention branch; coloured cell grid = embedding matrix; ⊗ and ⊙ circles = product operators; see-saw = comparing two green values; faces = preferred or not",
+  "marker_means": "e, E, g and ỹ with sub- and superscripts name tensors; happy and sad faces mark the preferred and the other item; > and < compare green values",
+  "emphasis": "the attention module is the largest and darkest-blue block; the green panel is the only fully green region",
+  "reusable_patterns": [
+   "rotated labels in tall rounded boxes for layers and attention branches",
+   "embeddings as small grids of coloured cells in a tinted panel, one panel per stage",
+   "one hue family per stage with green reserved for sustainability throughout, 'deeper is greener' explained in the caption",
+   "see-saw drawings to explain a comparison loss, with happy and sad faces to show which item wins",
+   "input items as clip-art food icons with their indicator glyphs beside them",
+   "a thin line labelled Initialize along the bottom from input statistics to a late module",
+   "dashed boxes for groups of inputs and for attention branches"
+  ],
+  "weaknesses": [
+   "3-5.5 pt subscripts and 4-7 pt labels are very small",
+   "very dense: crossing and parallel lines near the score node are hard to follow",
+   "no arrow joins the predicted scores to the loss panel",
+   "rotated text in many boxes is hard to read"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "clip-art food illustrations (egg, broccoli bowl, fish, salad, rice bowl)",
+   "cartoon user avatar",
+   "emoji-like faces and see-saw line art"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes, tiles and arrows",
+   "green circle and pentagon glyphs",
+   "tables and dashed groups"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "target item with food icon and green glyphs",
+   "user history columns with timeline",
+   "tall peach embed layers",
+   "grids of coloured cells",
+   "attention module with Q K V and rotated Self- and Cross-Attention boxes",
+   "see-saw glyphs",
+   "happy and sad faces",
+   "green loss panel"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "food recommendation",
+   "sustainability",
+   "green values",
+   "attention fusion",
+   "green loss",
+   "personalized recommendation",
+   "healthier eating",
+   "self-attention and cross-attention"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "verdict-marks",
+   "visual-metaphor",
+   "positive-negative-pairs",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "rotated-label-boxes",
+    "what": "tall module boxes whose names are written rotated by 90 degrees inside them"
+   },
+   {
+    "name": "graded-glyph-values",
+    "what": "different small shapes (circle, pentagon) stand for different indicators and the depth of one colour stands for the value, explained in the caption"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each stage its own hue family and reserve one hue (green) for the quantity the paper is about, carried through inputs, profile, scores and the loss panel; explain a comparison loss with a see-saw and happy or sad faces next to the item icons.",
+  "suits": "recommender or ranking models with an extra attribute channel and a custom loss, where item icons and a loss panel make the idea concrete."
+ },
+ "tags": [
+  "tinted model region",
+  "green side panel",
+  "rotated labels",
+  "cell-grid embeddings",
+  "food icons",
+  "see-saw loss"
+ ],
+ "provenance": {
+  "sections": [
+   "Overall structure (p.2)"
+  ],
+  "evidence": [
+   "GRAPE consists of three main modules: the Embedding Module, the Sustainability Integrated Attention Module, and the Prediction Module.",
+   "the Normal Loss, which aims to enhance recommendation accuracy",
+   "For the item’s sustainability indicators, a deeper color signifies a greener value."
+  ]
+ },
+ "summary": "GRAPE is a food recommender that takes sustainability into account. The figure draws the whole model and its loss in two tinted regions. At the left, a target item and a user's interaction history are shown as clip-art dishes with green-value glyphs (circles and pentagons, deeper green for greener values), summarised by Mean and Std rows. Item and green embedding layers give peach embedding grids; the large blue Sustainability Integrated Attention Module applies self- and cross-attention, item and green fusion, a product node and a feed-forward layer; blue output grids are combined with a green user profile P[u] to give the score. The green panel at the right explains the loss as Normal Loss plus Green Loss, using face icons for preferred items and see-saws for the non-prioritized and prioritized green losses.",
+ "summary_zh": "GRAPE 的模型结构图：左侧用菜品图标和绿色圆形、五边形表示目标物品与用户历史，经嵌入层和蓝色的可持续性融合注意力模块得到预测分数；右侧绿色面板用笑脸、哭脸和跷跷板解释普通损失与两种绿色损失。",
+ "confidence": "medium",
+ "notes": "Kinds extend the prior (model-anatomy) with side-by-side-contrast for the loss panel (non-prioritized versus prioritized green loss). The wiring near the score node (blue tile panel, green strip, P[u] and the second peach panel) is dense and read only at a coarse level; the see-saw semantics are read from the drawing, since the paper text gives only the module list and the caption. The bottom Initialize line is read as the route from the Mean and Std table to P[u].",
+ "venue": "AAAI25"
+}

@@ -1,0 +1,444 @@
+{
+ "paper_id": "acl25-0133",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ContextDialog",
+  "one_liner": "A benchmark testing whether voice interaction models recall earlier utterances, built from MultiDialog by generating, validating and voicing past-recall QA.",
+  "domain": [
+   "voice interaction models",
+   "conversational memory",
+   "benchmark construction"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "data-construction",
+  "variant_note": "three titled panels left to right: source dialogue, written-form QA generation and validation, spoken QA synthesis and verification, with the finished spoken QA bubbles hanging below",
+  "argues": "ContextDialog is built by turning existing spoken dialogues into verified written past-recall QA, then into speaker-adaptive spoken QA checked automatically and by humans.",
+  "subject": "a spoken dialogue turned into written QA by two LLM prompts, then into spoken QA with TTS and verification",
+  "elements": [
+   {
+    "name": "Multi-Round Spoken Dialog",
+    "type": "data",
+    "role": "source: a two-speaker spoken conversation from MultiDialog",
+    "drawn_as": "blue-framed rounded panel with a title tab, two cartoon speakers and four speech bubbles",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "speech bubbles",
+    "type": "sample",
+    "role": "alternating turns of the dialogue, one colour per speaker; ellipsis bubbles stand for omitted turns",
+    "drawn_as": "rounded rectangles with tails, grey for one speaker and light blue for the other",
+    "container": "Multi-Round Spoken Dialog",
+    "is_contribution": false
+   },
+   {
+    "name": "Stage 1. Written-Form QA",
+    "type": "container",
+    "role": "first construction stage: past-recall QA pairs are generated and validated as text",
+    "drawn_as": "blue-framed rounded panel with a title tab",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "GPT-4o with Generation Prompt",
+    "type": "module",
+    "role": "generates the past-recall QA pairs from the dialogue",
+    "drawn_as": "yellow rounded box with a pencil-in-hand icon at left and an OpenAI logo in the corner",
+    "container": "Stage 1. Written-Form QA",
+    "is_contribution": null
+   },
+   {
+    "name": "O1-mini with Validation Prompt",
+    "type": "module",
+    "role": "validates the generated QA pairs",
+    "drawn_as": "peach rounded box with a clipboard icon at left and an OpenAI logo in the corner",
+    "container": "Stage 1. Written-Form QA",
+    "is_contribution": null
+   },
+   {
+    "name": "Stage 2. Spoken QA",
+    "type": "container",
+    "role": "second construction stage: the written QA is voiced and verified",
+    "drawn_as": "blue-framed rounded panel with a title tab",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Spoken Question and Answer Generation with Speaker Adaptive TTS",
+    "type": "operation",
+    "role": "converts the written QA pairs to speech with speaker-adaptive TTS",
+    "drawn_as": "light-blue rounded box with a phone-and-loudspeaker icon at left",
+    "container": "Stage 2. Spoken QA",
+    "is_contribution": true
+   },
+   {
+    "name": "Automatic and Human Verification for Pronunciation Errors",
+    "type": "operation",
+    "role": "checks the synthesised speech both automatically and manually",
+    "drawn_as": "light-grey rounded box with a person-with-headphones icon at left",
+    "container": "Stage 2. Spoken QA",
+    "is_contribution": true
+   },
+   {
+    "name": "question and answer bubbles",
+    "type": "instance",
+    "role": "the finished benchmark item: a spoken question about the past and its spoken answer",
+    "drawn_as": "two speech bubbles with loudspeaker icons below the third panel: light-blue question, grey answer",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Multi-Round Spoken Dialog",
+    "to": "GPT-4o with Generation Prompt",
+    "what": "the whole dialogue is the material the QA pairs are written from",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "GPT-4o with Generation Prompt",
+    "to": "O1-mini with Validation Prompt",
+    "what": "generated QA pairs go to validation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stage 1. Written-Form QA",
+    "to": "Stage 2. Spoken QA",
+    "what": "validated written QA pairs are converted to speech",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Spoken Question and Answer Generation with Speaker Adaptive TTS",
+    "to": "Automatic and Human Verification for Pronunciation Errors",
+    "what": "synthesised speech is verified",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Stage 2. Spoken QA",
+    "to": "question and answer bubbles",
+    "what": "the verified spoken QA is the result",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "dialogue bubbles",
+    "to": "question and answer bubbles",
+    "what": "the same bubble colours (light blue, grey) return for the question and the answer",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Multi-Round Spoken Dialog",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "the source conversation between two speakers as speech bubbles with ellipses for omitted turns, closed by a curly brace that points to Stage 1",
+    "verdict": "setting"
+   },
+   {
+    "label": "Stage 1. Written-Form QA",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "GPT-4o with a generation prompt writes QA pairs, a block arrow hands them to o1-mini with a validation prompt",
+    "verdict": "ours"
+   },
+   {
+    "label": "Stage 2. Spoken QA",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "speaker-adaptive TTS makes spoken QA, then automatic and human verification for pronunciation errors; the resulting spoken question and answer hang below",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Stage 1., Stage 2.",
+    "kind": "order",
+    "at": "titles of the second and third panels",
+    "what": "order the two construction stages"
+   },
+   {
+    "marker": "loudspeaker icon with red waves",
+    "kind": "identity",
+    "at": "question and answer bubbles",
+    "what": "marks the utterance as spoken audio rather than text"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "two women in flat colours, one in a light-blue coat and one in a blue top",
+    "stands_for": "the two speakers of the dialogue",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "hand holding a pencil",
+    "stands_for": "writing the QA pairs (Generation Prompt)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "clipboard checklist with ticks, crosses and a pencil",
+    "stands_for": "validating the QA pairs (Validation Prompt)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "OpenAI logo",
+    "stands_for": "GPT-4o and o1-mini",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "phone showing a letter with a loudspeaker",
+    "stands_for": "text-to-speech generation",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "person with headphones holding a sheet",
+    "stands_for": "human (and automatic) verification of pronunciation",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "loudspeaker with red sound waves",
+    "stands_for": "a spoken utterance",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a chat about music: 'Hi! So do you like music? I love rock music and well many other genre's.' answered by 'Yes, I'm the same! I love music....', with omitted turns",
+    "form": "alternating speech bubbles beside two speaker avatars",
+    "real_values": true
+   },
+   {
+    "what": "a past-recall QA pair: 'What genres of music did I say I liked?' answered by 'You said you like rock music and many other genres!'",
+    "form": "two speech bubbles with loudspeaker icons",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "speech bubbles with tails, one colour per speaker, beside two cartoon avatars; the same colours return on the final question and answer",
+    "parts": [
+     "avatars",
+     "bubbles",
+     "ellipsis bubbles"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "OpenAI logo in the corner of a box that names the model and its prompt role",
+    "parts": [
+     "model name",
+     "prompt role",
+     "logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "person-with-headphones icon beside the verification box that names human verification",
+    "parts": [
+     "person icon",
+     "verification box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the dialogue panel at left, follows the curly brace into Stage 1 (generation box, down arrow, validation box), crosses to Stage 2 (TTS box, verification box) and ends on the question and answer bubbles at the lower right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three blue-framed rounded panels of different widths in one row, each with a title tab at the top; a curly brace at the right edge of the first panel points to the second; the stage panels hold two stacked boxes each with an icon at left; two output bubbles hang below and outside the third panel.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.0,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4472c4",
+    "used_for": "outlines of the three stage panels"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "panel title tabs with white text"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "light-blue speech bubbles (first speaker, the question)"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "grey speech bubbles (second speaker, the answer)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "GPT-4o generation box"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "o1-mini validation box"
+   },
+   {
+    "hex": "#d8ecfe",
+    "used_for": "speaker-adaptive TTS box"
+   },
+   {
+    "hex": "#e6e9ed",
+    "used_for": "verification box"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy outlines of bubbles and the curly brace"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.75 pt blue panel outlines, 1 pt tinted outlines on process boxes, 0.5 pt navy bubble outlines and curly brace",
+  "font": "sans (Corbel), 6 pt for box and bubble text with bold keywords, 7.5 pt bold white titles on blue tabs",
+  "corners": "rounded",
+  "arrows": "one dark-grey block arrow inside Stage 1 and a navy curly brace between panels one and two; no other arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow = generation LLM, peach = validation LLM, light blue = speech generation, grey = verification; bubble colours follow the speaker (light blue first speaker and the question, grey second speaker and the answer); blue tabs and outlines = stage frames",
+  "line_style_means": "thick blue rounded outline = a stage panel; curly brace = the whole dialogue feeds the next stage; no dashed lines",
+  "shape_means": "speech bubble with tail = an utterance; rounded rectangle = process step; block arrow = hand-over",
+  "marker_means": "Stage 1 and Stage 2 order the construction; loudspeaker icon with red waves = spoken audio; ellipsis bubble = omitted turns",
+  "emphasis": "Saturated blue title tabs head each panel, and the finished spoken QA bubbles sit outside the frames so they read as the output.",
+  "reusable_patterns": [
+   "curly brace that collects a conversation and hands it to the next stage",
+   "bubble colours that follow the speaker and return on the final question and answer",
+   "loudspeaker icon on a bubble to mark spoken audio",
+   "ellipsis bubbles for omitted turns",
+   "stage box with a left icon and an LLM logo in the corner",
+   "output bubbles hanging below the last stage"
+  ],
+  "weaknesses": [
+   "no arrow joins Stage 1 to Stage 2 or the two boxes in Stage 2, so order rests on the titles",
+   "6 pt text in bubbles and boxes is small at column width"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a short music dialogue excerpt and its question and answer"
+  ],
+  "stock": [
+   "flat-colour cartoon speakers and process icons (pencil hand, clipboard, phone, headphones)",
+   "OpenAI logos",
+   "loudspeaker icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels and title tabs",
+   "process boxes",
+   "speech bubbles",
+   "curly brace and block arrow"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three blue-framed stage panels",
+   "two speaker avatars with speech bubbles",
+   "GPT-4o and o1-mini prompt boxes with OpenAI logos",
+   "TTS and verification boxes with icons",
+   "spoken question and answer bubbles with loudspeaker icons",
+   "curly brace"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "voice assistant",
+   "conversational memory",
+   "spoken QA",
+   "TTS",
+   "benchmark construction",
+   "past recall",
+   "multi-turn dialogue",
+   "GPT-4o"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "human-in-the-loop",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw a data-construction pipeline as titled stage panels with one icon and one model logo per step, and end with the finished sample as speech bubbles outside the frame, so the reader sees both the process and what one entry of the benchmark looks like.",
+  "suits": "benchmark or dataset papers whose data come from chained LLM and tool steps (generate, validate, synthesise, verify) and whose entries are conversations."
+ },
+ "tags": [
+  "three-panel row",
+  "title tabs",
+  "speech bubbles",
+  "flat icons",
+  "curly brace link",
+  "stage numbering"
+ ],
+ "provenance": {
+  "sections": [
+   "3 ContextDialog (p.3)"
+  ],
+  "evidence": [
+   "ContextDialog is constructed using MultiDialog (Park et al., 2024), a spoken dialog corpus featuring conversations between two speakers",
+   "then converted to speech via adaptive TTS and verified both automatically and manually"
+  ]
+ },
+ "summary": "ContextDialog is a benchmark for testing whether voice interaction models can recall what was said earlier in a conversation. Figure 1 shows how it is built from MultiDialog, a corpus of spoken two-speaker dialogues. Three blue-framed panels read left to right. The first shows a multi-round dialogue as speech bubbles between two cartoon speakers, and a curly brace passes it to Stage 1, where GPT-4o with a generation prompt writes past-recall QA pairs and o1-mini with a validation prompt checks them, joined by a block arrow. Stage 2 turns the validated QA into speech with speaker-adaptive TTS and verifies pronunciation automatically and by humans. The finished spoken question and answer hang below as two bubbles with loudspeaker icons.",
+ "summary_zh": "ContextDialog 用来检验语音助手能否记住前文。图一分三个蓝框面板：先是双人多轮语音对话，经 GPT-4o 生成、o1-mini 校验得到书面问答，再用说话人自适应 TTS 合成语音并经自动与人工核查，最后给出语音问答气泡。",
+ "confidence": "high",
+ "notes": "Prior kind stage-pipeline (data-construction) kept; worked-walkthrough added because the same music conversation runs from the source dialogue to the final question and answer. No arrows join Stage 1 to Stage 2 or the two boxes inside Stage 2; order comes from the titles and the layout. Whether the bubble texts are verbatim dataset items is not stated; they are marked as real values on the strength of their transcript-like wording. All ten bitmaps are icons, so pictures is empty.",
+ "venue": "ACL25"
+}

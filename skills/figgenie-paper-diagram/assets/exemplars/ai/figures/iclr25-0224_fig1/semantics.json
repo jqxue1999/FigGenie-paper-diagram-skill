@@ -1,0 +1,448 @@
+{
+ "paper_id": "iclr25-0224",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Cascaded Selective Evaluation",
+  "one_liner": "Judges pairwise LLM outputs with a cascade of increasingly strong LLM judges that escalate when not confident, with a provable guarantee of human agreement.",
+  "domain": [
+   "LLM-as-a-judge",
+   "selective evaluation",
+   "statistical guarantees"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "decision-flowchart",
+  "variant_note": "a left-to-right cascade of judge cards that each ask whether the judge is confident (yes drops to an evaluation, else moves on, last judge abstains), over a band that explains the check and a band that states the guarantee",
+  "argues": "Starting with a cheap judge and escalating only when its calibrated confidence is low keeps evaluation cheap while the calibrated thresholds guarantee human agreement at the user's risk level.",
+  "subject": "a cascade of judge cards gated by confidence checks, two procedure boxes behind the check, and the guarantee statement",
+  "elements": [
+   {
+    "name": "Cascaded Selective Evaluation",
+    "type": "label",
+    "role": "title of the method and of the upper part of the figure",
+    "drawn_as": "bold sans title at the top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Input x: Which is better? Generation 1: ... Generation 2: ...",
+    "type": "sample",
+    "role": "the pairwise comparison the judges must decide",
+    "drawn_as": "thin framed box with its title on the border, the question and two coloured chips, mint for Generation 1 and pink for Generation 2, text elided",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Weaker Judge M1 (Mistral-7B)",
+    "type": "module",
+    "role": "first and cheapest judge; checks whether it is confident, C_M1(x) >= lambda_1",
+    "drawn_as": "white rounded card with a cream tab holding a small robot and the light-weight name, body text and a large inequality",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stronger Judge M2 (GPT-3.5)",
+    "type": "module",
+    "role": "second judge, used when M1 is not confident",
+    "drawn_as": "same card with a medium robot and a bold name",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "...",
+    "type": "label",
+    "role": "stands for the judges between M2 and MN",
+    "drawn_as": "three bold dots on the dashed escalation arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Strongest Judge MN (GPT-4)",
+    "type": "module",
+    "role": "last judge; if it is not confident either, the case is abstained",
+    "drawn_as": "same card with the largest robot overlapping the tab and a bold name",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Evaluate with M1, M2, MN",
+    "type": "operation",
+    "role": "the verdict comes from the first judge that is confident",
+    "drawn_as": "bold text under each card at the end of a dotted vertical branch labelled If yes",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Else, abstain",
+    "type": "operation",
+    "role": "no verdict when even the strongest judge is not confident",
+    "drawn_as": "bold italic words at the right end of the last dashed arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Simulated Annotators (§2.2)",
+    "type": "module",
+    "role": "estimates the confidence C_Mi(x) by simulating annotators through in-context learning with each judge",
+    "drawn_as": "rounded frame with an italic title on its border, the symbol C_Mi(x) at the left and two lines of text",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Threshold Calibration (§2.1)",
+    "type": "module",
+    "role": "sets each judge's threshold lambda_i as a multiple testing problem on a small calibration set",
+    "drawn_as": "rounded frame with an italic title on its border, lambda_i at the left and two lines of text",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "C_Mi(x) >= lambda_i",
+    "type": "formula",
+    "role": "the confidence check that both procedures feed and that every judge card applies",
+    "drawn_as": "large serif inequality in the middle of the band with an arrow from each frame",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Human Agreement Guarantee",
+    "type": "label",
+    "role": "title of the lower part",
+    "drawn_as": "bold sans title at the left of the bottom band",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "alpha, delta: User defines risk tolerance alpha, error level delta",
+    "type": "data",
+    "role": "the user's two parameters",
+    "drawn_as": "outlined box with a judge-person emoji on its upper border",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Calibrated lambda_i s provide Human Agreement Guarantee: P(model-human agreement >= 1 - alpha) >= 1 - delta",
+    "type": "text-block",
+    "role": "states the guarantee that the calibrated thresholds give",
+    "drawn_as": "large rounded cream box with a robot on its top border; sentence in italic with the name in bold, formula below",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input x",
+    "to": "Weaker Judge M1",
+    "what": "the pair to judge",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Weaker Judge M1",
+    "to": "Stronger Judge M2",
+    "what": "Else, move to the next judge when not confident",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stronger Judge M2",
+    "to": "Strongest Judge MN",
+    "what": "Else, move to the next judge, through the ellipsis",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Strongest Judge MN",
+    "to": "Else, abstain",
+    "what": "no verdict when not confident",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each judge card",
+    "to": "Evaluate with M1, M2, MN",
+    "what": "If yes (confident), the judge evaluates",
+    "kind": "control",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Simulated Annotators (§2.2)",
+    "to": "C_Mi(x) >= lambda_i",
+    "what": "supplies the confidence C_Mi(x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Threshold Calibration (§2.1)",
+    "to": "C_Mi(x) >= lambda_i",
+    "what": "supplies the threshold lambda_i",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "C_Mi(x) >= lambda_i",
+    "to": "Check if Mi is confident (all judge cards)",
+    "what": "the same inequality is the check in every card; no arrow between the bands",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "alpha, delta box",
+    "to": "Human Agreement Guarantee box",
+    "what": "the user's risk level sets the guarantee; boxes sit side by side",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Cascaded Selective Evaluation",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "input pair through judges from weaker to strongest with confidence checks, plus the two procedures that make the check",
+    "verdict": "ours"
+   },
+   {
+    "label": "Human Agreement Guarantee",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "user-set risk tolerance and error level, and the guarantee statement that the calibrated thresholds provide",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "§2.1, §2.2",
+    "kind": "section",
+    "at": "titles of the two procedure boxes, in green",
+    "what": "point to the paper sections that describe them"
+   },
+   {
+    "marker": "M1, M2, MN and lambda_1, lambda_2, lambda_N",
+    "kind": "identity",
+    "at": "judge cards and inequalities",
+    "what": "name each judge and its threshold"
+   },
+   {
+    "marker": "?",
+    "kind": "identity",
+    "at": "end of each inequality in the cards",
+    "what": "marks the check as a yes or no question"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon robot head with a red body, shown small, medium and large",
+    "stands_for": "the LLM judges: size grows with strength; a medium one also tops the guarantee box for the calibrated judges",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "judge person with a gavel",
+    "stands_for": "the user who defines the risk tolerance",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a pairwise comparison input with two elided generations, and three named judges: Mistral-7B, GPT-3.5, GPT-4",
+    "form": "framed input card with coloured chips; model names in the card tabs",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head, scaled up for each stronger judge",
+    "parts": [
+     "robot head",
+     "red body"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "framed input card with the question and two colour-coded generation slots",
+    "parts": [
+     "question",
+     "Generation 1 chip",
+     "Generation 2 chip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "model-cascade",
+    "drawn_as": "judge cards in a row from weaker to strongest, each gated by a confidence check with a yes branch down and an else arrow to the next, ending in abstain",
+    "parts": [
+     "judge card",
+     "confidence check",
+     "yes branch",
+     "else arrow",
+     "abstain"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Input x box, then judge cards left to right with yes branches dropping to evaluations; the two procedure boxes below; the guarantee box last."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked bands on white: a top band with the Input x box and a left-to-right cascade of three judge cards joined by dashed arrows, a middle band with two titled procedure boxes either side of the shared inequality, and a bottom band with the user-parameter box beside the wide guarantee box. Two bold sans titles head the top and the bottom parts.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.99,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbf4ee",
+    "used_for": "cream model-name tabs and the guarantee box"
+   },
+   {
+    "hex": "#d0f3e4",
+    "used_for": "mint chip for Generation 1"
+   },
+   {
+    "hex": "#fde3da",
+    "used_for": "pink chip for Generation 2"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on cards and frames (0.5 pt on two); dashed and dotted black lines for the branches",
+  "font": "Helvetica Neue (light, medium, medium italic) sans at 4 to 9.5 pt; bold 9.5 pt section titles; STIX-style serif italics for the mathematics; judge names grow from 5 pt light to 6.5 pt bold",
+  "corners": "rounded",
+  "arrows": "thin black dashed arrows with small heads for else and escalation, dotted vertical lines for the yes branches, thin solid arrows in the middle band",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "mint and pink chips = the two candidate generations; cream = judge name tab and the guarantee statement; robots keep one red-bodied look everywhere; green section references (§2.1, §2.2)",
+  "line_style_means": "dashed arrow = else, escalate to the next judge; dotted vertical = if yes, evaluate; solid thin arrow = input to the shared inequality; frame with an italic border title = a named procedure",
+  "shape_means": "white rounded card with a tab = one judge; framed box with its title on the border = input or a procedure; large cream rounded box = the guarantee",
+  "marker_means": "subscripts i and N name judges and thresholds; a question mark turns the inequality into a check; § numbers point to sections",
+  "emphasis": "robot size grows with judge strength and the strongest robot overlaps its tab; the cascade title and the guarantee title are the only large bold type; the guarantee formula is the largest text in the bottom band",
+  "reusable_patterns": [
+   "cascade of cards with one pictogram scaled up at each stronger stage",
+   "if-yes branch dropping from each card to its result, else arrow continuing right, and a final abstain",
+   "frames whose titles sit on the border (Input x, Simulated Annotators, Threshold Calibration)",
+   "two procedure boxes feeding one shared inequality that is then the check in every card",
+   "guarantee statement as a wide rounded box with its formula, beside the user's parameters"
+  ],
+  "weaknesses": [
+   "branch labels (Else, move to; If yes) are 4 to 5 pt",
+   "the shared inequality in the middle band is tied to the checks in the cards above only by identical notation, not by a line"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "cartoon robot head icon",
+   "judge-person emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "judge cards and frames",
+   "dashed and dotted branch arrows",
+   "formulas",
+   "guarantee box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "input card with two generation chips",
+   "three judge cards with robot icons of growing size",
+   "confidence check inequality",
+   "dashed escalate arrows and dotted yes branches",
+   "two titled procedure boxes",
+   "guarantee box with formula and a judge-person icon"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "LLM-as-a-judge",
+   "selective evaluation",
+   "confidence calibration",
+   "human agreement guarantee",
+   "model cascade",
+   "abstention",
+   "simulated annotators",
+   "risk control"
+  ],
+  "tags": [
+   "model-pictogram",
+   "equation-boxes",
+   "claim-banner",
+   "prompt-template-card"
+  ],
+  "new_tags": [
+   {
+    "name": "icon-size-scale",
+    "what": "one pictogram repeated at growing sizes along a row so that size reads as model strength or cost (small robot for the weak judge, large robot for the strongest)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a cascade as identical cards in a row where a single pictogram grows with each stronger stage, a dotted yes branch drops from each card and a dashed else arrow continues right to a final abstain; then close with the guarantee as a formula box next to the user's parameters.",
+  "suits": "Model cascades, routing or escalation schemes with a confidence gate and a formal guarantee that can be stated as one formula."
+ },
+ "tags": [
+  "cascade-cards",
+  "robot-pictograms",
+  "dashed-branches",
+  "titled-frames",
+  "math-inline",
+  "sans-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Cascaded Selective Evaluation (p.5)"
+  ],
+  "evidence": [
+   "escalate to a stronger model only when the previous judge is not sufficiently confident",
+   "Given a list of judge models M, we start with a weaker yet cheaper model as an evaluator"
+  ]
+ },
+ "summary": "The paper gives LLM-based pairwise evaluation a provable guarantee of human agreement. Figure 1 illustrates Cascaded Selective Evaluation. An Input x box with two elided generations enters a row of judge cards: a weaker judge M1 (Mistral-7B), a stronger judge M2 (GPT-3.5) and a strongest judge MN (GPT-4), with a small, medium and large robot icon. Each card checks whether its confidence C(x) is at least its threshold lambda; if yes a dotted branch drops to Evaluate with that judge, otherwise a dashed arrow moves on, and the last judge abstains. Below, Simulated Annotators and Threshold Calibration feed the shared check, and a bottom band states the guarantee P(agreement at least 1 minus alpha) at least 1 minus delta.",
+ "summary_zh": "论文为 LLM 成对评估提供人类一致性保证。图 1：输入依次经弱、较强、最强评委，每个评委检查置信度，达标则评估，否则升级，最后可弃权；下方是置信度与阈值来源，底部给出保证公式。",
+ "confidence": "high",
+ "notes": "Prior pass counted two panels and stage-chain; kept two titled sections as panels (bold titles, no frames or tints) and used the decision-flowchart variant because the figure is a branching cascade drawn as cards. The symbols were read from the text strings and the preview; the emoji at the user box is rendered as a bitmap.",
+ "venue": "ICLR25"
+}

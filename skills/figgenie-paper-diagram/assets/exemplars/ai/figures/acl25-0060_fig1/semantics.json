@@ -1,0 +1,571 @@
+{
+ "paper_id": "acl25-0060",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SPECTRA",
+  "one_liner": "Training-free speculative decoding with a core module that mines guesses from the LLM itself and an optional retrieval module.",
+  "domain": [
+   "speculative decoding",
+   "LLM inference acceleration",
+   "n-gram guesses"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "an overview panel and a speedup chart on top; below, SPECTRA-CORE is paired with Lookahead decoding and SPECTRA-RETRIEVAL with REST in one drawing grammar, changed blocks labelled in red",
+  "argues": "Optimized internal (core) and external (retrieval) speculation replace the matching blocks of Lookahead and REST and give the largest speedups across models.",
+  "subject": "A HumanEval speedup chart, the SPECTRA overview and four sibling schematics pairing each earlier method with the proposed module.",
+  "elements": [
+   {
+    "name": "(a) Ours: SPECTRA",
+    "type": "container",
+    "role": "overview: an Input and a Guesses box feed the LLM, whose output is a stack of tokens; two modules supply the guesses",
+    "drawn_as": "top-right panel: blue Input box, peach Guesses box, white LLM box with network glyph, grey output stack, two white module boxes with blue small-caps names",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "SPECTRA-CORE Module / SPECTRA-RETRIEVAL Module",
+    "type": "module",
+    "role": "the two components that produce guesses",
+    "drawn_as": "two white boxes with blue outlines and blue text, curved arrows up to Guesses, dotted arrows down to (c) and (e)",
+    "container": "(a) Ours: SPECTRA",
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Lookahead decoding",
+    "type": "container",
+    "role": "baseline: the LLM produces lookahead candidates that feed an n-gram store, from which guesses are drawn",
+    "drawn_as": "panel with an orange title: Input, LLM with token strip, Lookahead Candidate, Guesses and N-gram Store in dotted boxes, grey and purple output stacks",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(c) SPECTRA-CORE",
+    "type": "container",
+    "role": "proposed core: a SPECTRA candidate pool, a multi-level n-gram store and bi-directional guesses",
+    "drawn_as": "panel with a blue title, same layout as (b), the three renamed blocks labelled in red",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(d) REST",
+    "type": "container",
+    "role": "baseline: a corpus is searched through a trie to get guesses",
+    "drawn_as": "panel with an orange title: Input, LLM with token strip, Trie, Guesses, Corpus cylinder, one output stack",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(e) SPECTRA-RETRIEVAL",
+    "type": "container",
+    "role": "proposed retrieval: same skeleton with a corpus refined by perplexity",
+    "drawn_as": "panel with a blue title, same layout as (d), Corpus Refined by Perplexity in red with a dark cylinder icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Input",
+    "type": "data",
+    "role": "the prompt tokens fed to the LLM",
+    "drawn_as": "light-blue rounded box, five times",
+    "container": "(a) to (e)",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM with token strip",
+    "type": "module",
+    "role": "the target LLM, which verifies guesses in one pass; the strip shows the input, candidate and guess tokens it receives",
+    "drawn_as": "white rounded box with a network glyph and bold LLM, a strip of blue, light-purple and peach cells beside it",
+    "container": "(b) to (e)",
+    "is_contribution": false
+   },
+   {
+    "name": "Guesses / Bi-directional Guesses",
+    "type": "data",
+    "role": "speculative tokens to be verified",
+    "drawn_as": "dotted rounded box holding a grid of peach cells",
+    "container": "(b) to (e)",
+    "is_contribution": null
+   },
+   {
+    "name": "N-gram Store / Multi-level N-gram Store",
+    "type": "module",
+    "role": "store of n-grams keyed by input tokens, updated with candidates",
+    "drawn_as": "dotted rounded box with a grid of blue key cells and peach continuation cells, a staircase of blue cells in the multi-level version",
+    "container": "(b), (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Lookahead Candidate / SPECTRA Candidate",
+    "type": "module",
+    "role": "pool of candidate tokens written by the LLM and used to update the store",
+    "drawn_as": "dotted rounded box with light-purple cells and a column of two dark-purple cells",
+    "container": "(b), (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Trie",
+    "type": "module",
+    "role": "index that turns corpus matches into guesses",
+    "drawn_as": "white box with a tree glyph",
+    "container": "(d), (e)",
+    "is_contribution": false
+   },
+   {
+    "name": "Corpus / Corpus Refined by Perplexity",
+    "type": "data",
+    "role": "external text source for retrieval, filtered by perplexity in SPECTRA",
+    "drawn_as": "white box with a database cylinder icon",
+    "container": "(d), (e)",
+    "is_contribution": true
+   },
+   {
+    "name": "output stacks",
+    "type": "data",
+    "role": "generated tokens: grey for the output, purple for candidate tokens",
+    "drawn_as": "offset stack of two rounded squares above the LLM",
+    "container": "(a) to (e)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input",
+    "to": "LLM with token strip",
+    "what": "prompt tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Guesses / Bi-directional Guesses",
+    "to": "LLM with token strip",
+    "what": "guesses appended for parallel verification",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "N-gram Store / Multi-level N-gram Store",
+    "to": "Guesses / Bi-directional Guesses",
+    "what": "n-grams matched on the input give guesses",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input",
+    "to": "N-gram Store / Multi-level N-gram Store",
+    "what": "input tokens used as the lookup key",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lookahead Candidate / SPECTRA Candidate",
+    "to": "LLM with token strip",
+    "what": "candidate tokens joined to the LLM input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "output stacks",
+    "to": "Lookahead Candidate / SPECTRA Candidate",
+    "what": "purple output tokens go into the candidate pool",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lookahead Candidate / SPECTRA Candidate",
+    "to": "N-gram Store / Multi-level N-gram Store",
+    "what": "candidates update the store",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Corpus / Corpus Refined by Perplexity",
+    "to": "Trie",
+    "what": "corpus text indexed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trie",
+    "to": "Guesses / Bi-directional Guesses",
+    "what": "retrieved guesses",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SPECTRA-CORE Module",
+    "to": "(c) SPECTRA-CORE",
+    "what": "the module is shown in detail in panel (c)",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "SPECTRA-RETRIEVAL Module",
+    "to": "(e) SPECTRA-RETRIEVAL",
+    "what": "the module is shown in detail in panel (e)",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "(b) Lookahead decoding",
+    "to": "(c) SPECTRA-CORE",
+    "what": "same skeleton, the changed blocks are renamed and labelled in red",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(d) REST",
+    "to": "(e) SPECTRA-RETRIEVAL",
+    "what": "same skeleton, the corpus is refined by perplexity",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Ours: SPECTRA",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "input and guesses into the LLM, guesses supplied by the core and retrieval modules",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Lookahead decoding",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "lookahead candidates, n-gram store and guesses around the LLM",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) SPECTRA-CORE",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "the core module drawn like (b) with SPECTRA candidate, multi-level store and bi-directional guesses in red",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) REST",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "corpus, trie and guesses around the LLM",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(e) SPECTRA-RETRIEVAL",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "the retrieval module drawn like (d) with a perplexity-refined corpus in red",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) to (e)",
+    "kind": "section",
+    "at": "coloured titles of the panels",
+    "what": "letter plus name heads each panel and is cited from the text as Figure 1a, 1c, 1e"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "grouped bar chart of speedup on HumanEval for Llama2-7B, Llama2-13B, CodeLlama-7B and CodeLlama-13B with REST, ANPD, Lookahead and SPECTRA (Ours), values such as 3.0x written over the bars",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "plotting-library look at the top left, legend row above, y axis Speedup, SPECTRA bar red and last in every group"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "node-and-edge network glyph",
+    "stands_for": "the LLM",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "tree glyph of connected nodes",
+    "stands_for": "a trie",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "database cylinder",
+    "stands_for": "the text corpus",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "offset stack of two rounded squares, grey or purple",
+    "stands_for": "a batch of generated tokens (grey output, purple candidates)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 7
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "white rounded box with a network glyph and bold LLM, a strip of coloured token cells beside it",
+    "parts": [
+     "box",
+     "network glyph",
+     "token strip"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "cells coloured by role: blue input, light-purple candidate, peach guess, in a strip beside the LLM and in grids inside the stores",
+    "parts": [
+     "strip cells",
+     "grid cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "dotted rounded box holding a grid of token cells, read by solid arrows and updated by dashed purple arrows",
+    "parts": [
+     "dotted box",
+     "grid",
+     "update arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "corpus cylinder feeding a trie box that yields a grid of guesses",
+    "parts": [
+     "corpus cylinder",
+     "trie",
+     "guesses"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts with the speedup chart at top left, then the overview (a) at top right, then the bottom row left to right from (b) to (e), reading (b) with (c) and (d) with (e) as pairs."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two bands split by a dashed horizontal line: the top band holds a speedup bar chart at left and the overview panel (a) at right; the bottom band is a row of four panels (b) to (e) separated by dashed vertical lines. Dotted curved arrows run from the module boxes in (a) down to (c) and (e).",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.08,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cce5ff",
+    "used_for": "Input boxes and blue key or input token cells"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "guess cells and the Guesses box"
+   },
+   {
+    "hex": "#e5ccff",
+    "used_for": "light-purple candidate cells"
+   },
+   {
+    "hex": "#cc99ff",
+    "used_for": "purple candidate stacks and dark candidate cells"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "grey output stacks"
+   },
+   {
+    "hex": "#007fff",
+    "used_for": "SPECTRA module names and the titles of the proposed panels"
+   },
+   {
+    "hex": "#ff3333",
+    "used_for": "red labels of the blocks new in SPECTRA and the SPECTRA name in (a)"
+   },
+   {
+    "hex": "#cc6600",
+    "used_for": "titles of the baseline panels (b) and (d)"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "grey arrows and box outlines"
+   },
+   {
+    "hex": "#9933ff",
+    "used_for": "dashed purple candidate and update arrows"
+   },
+   {
+    "hex": "#5b7fc3",
+    "approx": true,
+    "used_for": "REST bars of the chart"
+   },
+   {
+    "hex": "#d98e60",
+    "approx": true,
+    "used_for": "ANPD bars of the chart"
+   },
+   {
+    "hex": "#71bd6d",
+    "approx": true,
+    "used_for": "Lookahead bars of the chart"
+   },
+   {
+    "hex": "#c76b6b",
+    "approx": true,
+    "used_for": "SPECTRA (Ours) bars of the chart"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt grey and black outlines, dotted rounded boxes for stores and pools, dashed black panel separators, dashed purple arrows",
+  "font": "sans (embedded Type3 faces) 4.5-9 pt, mostly 5.5-6.5 pt labels; method names in small caps, coloured",
+  "corners": "rounded",
+  "arrows": "thin grey arrows with small heads, some curved; dashed purple curved arrows for candidate flow; dotted grey curved arrows from the overview to detail panels",
+  "rendering": "flat-vector",
+  "effects": "offset second card behind each output square as a pseudo-shadow",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue cells and Input boxes = input tokens, purple = candidate tokens produced by the LLM, peach = guess tokens to verify, grey stack = output; red labels = blocks new in SPECTRA relative to the paired baseline; orange title = prior method, blue title = SPECTRA module; chart: blue REST, orange ANPD, green Lookahead, red SPECTRA",
+  "line_style_means": "solid grey arrow = data flow; dashed purple curved arrow = candidate tokens written to the pool and used to update the store; dotted curved arrow = module zoomed into a detail panel; dotted rounded box = store or pool; dashed black line = panel separator",
+  "shape_means": "white rounded box with network glyph = LLM, dotted box with cell grid = store or pool of tokens, offset stack of squares = batch of tokens, cylinder = corpus, box with tree glyph = trie",
+  "marker_means": "letters (a) to (e); title colour tells baseline from proposed; value labels over bars give the speedup",
+  "emphasis": "red labels on the changed blocks inside panels drawn like their baselines, so the contribution is the visible difference; the red Ours bar is last in each chart group",
+  "reusable_patterns": [
+   "each baseline panel paired with the proposed panel in the same grammar, changed block labels in a highlight colour",
+   "overview panel whose module boxes point by dotted arrows to zoomed detail panels",
+   "grids of coloured cells for token stores and pools, colour giving the token role",
+   "speedup bar chart with the proposed method as the last, differently coloured bar and value labels",
+   "dashed separators instead of frames between panels",
+   "method name in small caps in the method colour"
+  ],
+  "weaknesses": [
+   "the roles of the blue, purple and peach cells are explained nowhere in the figure",
+   "the chart is a bitmap with its own palette, unlike the schematics",
+   "the dotted arrows from (a) to (c) and (e) cross the panel separators and a dashed line",
+   "panels (b) to (e) are dense for their size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured speedups on HumanEval (the bar chart)"
+  ],
+  "stock": [
+   "network glyph for the LLM",
+   "tree glyph for the trie",
+   "database cylinder icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes, token cells and stacks",
+   "arrows and dotted boxes",
+   "panel separators"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "speedup bar chart",
+   "LLM box with network glyph and token strip",
+   "peach guess grids",
+   "n-gram store in a dotted box",
+   "candidate pool with purple cells",
+   "trie and corpus cylinder",
+   "offset stacks of output cards"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "speculative decoding",
+   "LLM inference acceleration",
+   "n-gram",
+   "retrieval",
+   "speedup",
+   "lookahead decoding",
+   "training-free"
+  ],
+  "tags": [
+   "token-strip",
+   "memory-store",
+   "zoom-callout",
+   "model-pictogram",
+   "stacked-cards",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "baseline-ours-paired-panels",
+    "what": "each prior method drawn as a panel in the same grammar as the matching proposed module, with the changed blocks labelled in a highlight colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw each baseline and the matching proposed module in one identical grammar side by side and colour only the labels of the blocks that changed, so the contribution is the visible difference; tie an overview panel to its detail panels with dotted arrows.",
+  "suits": "Methods that upgrade specific components of a known pipeline (speculative decoding, retrieval, caching) where several baselines map onto the same skeleton."
+ },
+ "tags": [
+  "paired-baseline-panels",
+  "red-diff-labels",
+  "cell-grid-stores",
+  "dotted-zoom-arrows",
+  "small-caps-method-name",
+  "bitmap-chart-inset"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Overview of Spectra and comparison with other non-training SOTA approaches.",
+   "We introduce SPECTRA (Figure 1a), a speculative decoding method that improves generation speed without requiring any training",
+   "The results in the bar chart are measured on HumanEval."
+  ]
+ },
+ "summary": "SPECTRA speeds up LLM inference with speculative decoding that needs no training: a core module that mines guesses from the LLM's own predictions and an optional retrieval module. Figure 1 combines a HumanEval speedup bar chart (REST, ANPD, Lookahead and SPECTRA over four models, up to 3.0x) with a method overview (a) and four sibling schematics: SPECTRA-CORE (c) is paired with Lookahead decoding (b), SPECTRA-RETRIEVAL (e) with REST (d). All panels share one grammar of input, an LLM box with a token strip, guess grids, n-gram store or trie and corpus; blocks that are new in SPECTRA carry red labels, and dotted arrows tie the overview's modules to their detail panels.",
+ "summary_zh": "SPECTRA 是无需训练的推测解码方法。左上为加速比柱状图，右上为总览，下方四个子图把 SPECTRA-CORE 对应 Lookahead、SPECTRA-RETRIEVAL 对应 REST，同一画法，新增部分用红字，虚线箭头连到总览。",
+ "confidence": "high",
+ "notes": "The colour roles of the token cells (blue input, purple candidate, peach guess) are read from the drawing and the arrows; the paper text given does not define them. The bar chart is one 234 x 69 pt bitmap, so its colours are approximate. The speedup chart is recorded under pictures, not as a panel, because it has no letter or frame.",
+ "venue": "ACL25"
+}

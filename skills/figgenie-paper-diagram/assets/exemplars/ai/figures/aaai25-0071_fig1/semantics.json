@@ -1,0 +1,491 @@
+{
+ "paper_id": "aaai25-0071",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "JINTER Net",
+  "one_liner": "Neural auction that selects from the combined ads and organic items with an allocation network and a payment network.",
+  "domain": [
+   "ad auction design",
+   "e-commerce platforms",
+   "mechanism design with neural networks"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "one input column feeding two stacked tinted bands, an allocation network and a payment network, each drawn neuron by neuron",
+  "argues": "A single network that allocates slots over ads and organic items together, plus a payment network for the ads, designs the integrated auction jointly.",
+  "subject": "Stacks of volumes, slots and bids feed a blue allocation network (two softmax tensors) and a pink payment network.",
+  "elements": [
+   {
+    "name": "Volume (Ad g_1 … g_m, Org g_m+1 … g_m+n)",
+    "type": "data",
+    "role": "volumes of the m ads and the n organic items",
+    "drawn_as": "two stacks of offset peach-orange gradient cards labelled Ad and Org",
+    "container": "inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "Slots (β_1 … β_K)",
+    "type": "data",
+    "role": "the K slots",
+    "drawn_as": "row of light-green squares with an ellipsis",
+    "container": "inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "Bid (Ad b_1 … b_m, Org b_m+1 … b_m+n)",
+    "type": "data",
+    "role": "bids of the ads and the organic items",
+    "drawn_as": "two stacks of offset purple gradient cards labelled Ad and Org",
+    "container": "inputs",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) cyan and pink dashed input boxes with arrows",
+    "type": "other",
+    "role": "show which inputs go to which network: the cyan outer box holds Volume, Slots and Bid and points to the allocation network, the pink inner box holds Slots and Bid and points to the payment network",
+    "drawn_as": "rounded dashed boxes outlined in cyan and in pink, each with an arrow in its colour",
+    "container": "inputs",
+    "is_contribution": null
+   },
+   {
+    "name": "Allocation Network",
+    "type": "container",
+    "role": "determines the allocation probabilities for ads and organic items",
+    "drawn_as": "large pale blue band with the title above it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Input Layer (q_11 … q_(m+n)k, e_11 … e_(m+n)k, 𝕀_11 … 𝕀_(m+n)×(m+n))",
+    "type": "data",
+    "role": "input neurons of the allocation network",
+    "drawn_as": "column of gradient circles in peach, pink-purple and orange-pink groups, symbols to the left on a grey box",
+    "container": "Allocation Network",
+    "is_contribution": false
+   },
+   {
+    "name": "Activation Unit layers",
+    "type": "module",
+    "role": "fully connected hidden layers",
+    "drawn_as": "three columns of white-peach circular neurons with a blue curve glyph, all-to-all grey edges, ellipses for omitted units and layers",
+    "container": "Allocation Network",
+    "is_contribution": false
+   },
+   {
+    "name": "c_11 … c_(m+n)(k+1) / r_11 … r_(m+n)(k+1)",
+    "type": "data",
+    "role": "two groups of output neurons, one per softmax direction",
+    "drawn_as": "blue gradient circles in two dashed grey boxes, symbols on grey boxes to the right",
+    "container": "Allocation Network",
+    "is_contribution": false
+   },
+   {
+    "name": "Column-Wise Softmax / Row-Wise Softmax",
+    "type": "operation",
+    "role": "normalise the outputs over columns and over rows, giving the tensors c′ and r′",
+    "drawn_as": "two dashed grey boxes, each with a 3D slab stack in blue gradient and dimension labels k + 1 and m + n",
+    "container": "Allocation Network",
+    "is_contribution": true
+   },
+   {
+    "name": "x_11 … x_(m+n)(K+1)",
+    "type": "data",
+    "role": "allocation matrix, the output of the allocation network",
+    "drawn_as": "dashed grey box with four light-green circles at the corners and dots",
+    "container": "Allocation Network",
+    "is_contribution": true
+   },
+   {
+    "name": "Activation Unit / Sigmoid Unit",
+    "type": "label",
+    "role": "key for the two neuron glyphs",
+    "drawn_as": "two small circles with a blue ReLU-like curve and a black S-curve beside their names, top right of the blue band",
+    "container": "Allocation Network",
+    "is_contribution": false
+   },
+   {
+    "name": "Payment Network",
+    "type": "container",
+    "role": "calculates the payments for ads",
+    "drawn_as": "large pale pink band with the title below it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Input Layer (e_11, e_mk, e_(m+1)1, e_(m+n)k)",
+    "type": "data",
+    "role": "input neurons of the payment network",
+    "drawn_as": "column of pink-purple gradient circles with symbols on a grey box",
+    "container": "Payment Network",
+    "is_contribution": false
+   },
+   {
+    "name": "Activation Unit layers (payment)",
+    "type": "module",
+    "role": "fully connected hidden layers",
+    "drawn_as": "three columns of white circles with a blue curve glyph, all-to-all grey edges, ellipses",
+    "container": "Payment Network",
+    "is_contribution": false
+   },
+   {
+    "name": "o_1 … o_m",
+    "type": "data",
+    "role": "output neurons, one per ad",
+    "drawn_as": "blue gradient circles in a grey box with a vertical ellipsis",
+    "container": "Payment Network",
+    "is_contribution": false
+   },
+   {
+    "name": "Sigmoid Unit (payment)",
+    "type": "operation",
+    "role": "squashes each o_i",
+    "drawn_as": "small circle with an S curve on each output line",
+    "container": "Payment Network",
+    "is_contribution": null
+   },
+   {
+    "name": "p̃_1 … p̃_m",
+    "type": "data",
+    "role": "intermediate payment nodes that also receive the allocation outputs and dotted lines from the payment input layer (roles of the dotted inputs not stated)",
+    "drawn_as": "peach-pink circles at the right of the pink band",
+    "container": "Payment Network",
+    "is_contribution": null
+   },
+   {
+    "name": "p_1 … p_m",
+    "type": "data",
+    "role": "the payments of the m ads",
+    "drawn_as": "plain symbols at the end of arrows with a vertical ellipsis",
+    "container": "Payment Network",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "inputs (Volume, Slots, Bid)",
+    "to": "Allocation Network",
+    "what": "cyan arrow from the cyan dashed box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "inputs (Slots, Bid)",
+    "to": "Payment Network",
+    "what": "pink arrow from the pink dashed box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input Layer",
+    "to": "Activation Unit layers, then c and r output neurons",
+    "what": "fully connected layers, all-to-all edges",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "c group",
+    "to": "Column-Wise Softmax",
+    "what": "logits normalised over columns",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "r group",
+    "to": "Row-Wise Softmax",
+    "what": "logits normalised over rows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Column-Wise Softmax and Row-Wise Softmax",
+    "to": "x allocation matrix",
+    "what": "both tensors give the allocation entries",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_1(K+1) and x_(m+n)(K+1)",
+    "to": "p̃_1 and p̃_m",
+    "what": "allocation outputs feed the payment nodes (dotted blue curved arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Payment Input Layer",
+    "to": "p̃_1 and p̃_m",
+    "what": "dotted lines from the top and bottom of the input layer around the network into the nodes",
+    "kind": "data",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Payment Input Layer",
+    "to": "o_1 … o_m",
+    "what": "fully connected hidden layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "o_i",
+    "to": "Sigmoid Unit, p̃_i, p_i",
+    "what": "each output goes through a sigmoid, a payment node and the payment arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Volume and Bid stacks",
+    "to": "input neurons",
+    "what": "orange gradient on volumes and q neurons, purple gradient on bids and e neurons (colour match, no arrows)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "q, e, 𝕀, c, r, x, o, p̃, p with indices",
+    "kind": "identity",
+    "at": "next to each neuron, tensor and output",
+    "what": "name the inputs, logits, allocation entries and payments; indices range over m ads, n organic items and K slots"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "circle with a ReLU-like blue curve",
+    "stands_for": "activation unit neuron",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 22
+   },
+   {
+    "depicts": "circle with an S-curve",
+    "stands_for": "sigmoid unit",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "mlp-neuron-columns",
+    "drawn_as": "fully connected layers as columns of circular neurons with all-to-all edges, a function glyph inside hidden neurons and ellipses for omitted units and layers",
+    "parts": [
+     "input neurons",
+     "activation units",
+     "output neurons",
+     "edges"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "stacks of offset gradient cards labelled with the first and last index (g_1 … g_m, b_1 … b_m) for a set of inputs",
+    "parts": [
+     "card stack",
+     "index labels",
+     "Ad and Org captions"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "softmax-tensor-box",
+    "drawn_as": "a dashed grey box holding a 3D slab stack with its two dimensions written beside it",
+    "parts": [
+     "slab stack",
+     "dimension labels",
+     "dashed box"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the stacked inputs at the left, follows the cyan arrow into the top allocation network left to right to the allocation matrix x, then the pink arrow into the bottom payment network to the payments p at the right; dotted blue arrows carry x into the payment nodes."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "An input column at the left (two nested dashed boxes of stacked cards and slots) and two stacked tinted bands to its right: the Allocation Network (pale blue, title above) and the Payment Network (pale pink, title below), each running left to right from an input layer to its outputs.",
+  "panel_count": 1,
+  "lanes": "two stacked network bands (Allocation Network above, Payment Network below) fed from one input column",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.87,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e2eefa",
+    "used_for": "pale blue band of the Allocation Network (read off the picture)",
+    "approx": true
+   },
+   {
+    "hex": "#fdf2fb",
+    "used_for": "pale pink band of the Payment Network (read off the picture)",
+    "approx": true
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey edges and arrows (stroke)"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "dark teal curve glyphs and neuron outlines (stroke)"
+   },
+   {
+    "hex": "#c2f1c8",
+    "used_for": "light green slot squares and the circles of the allocation matrix x"
+   },
+   {
+    "hex": "#e8e8e8",
+    "used_for": "light grey boxes behind input-layer symbols and output groups"
+   },
+   {
+    "hex": "#46b1e1",
+    "used_for": "cyan arrow and cyan dashed outer input box (stroke)"
+   },
+   {
+    "hex": "#e59edd",
+    "used_for": "pink arrow and pink dashed inner input box (stroke)"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey dashed frames around outputs and tensors (stroke)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "gradient",
+  "stroke": "0.5 pt dark grey edges (71 shapes), 1 pt dark teal outlines (47 shapes), 9 dashed shapes (grey frames and the coloured input boxes), dotted blue arrows",
+  "font": "serif (Cambria Math and Times New Roman) 5.5-9 pt: 8 pt labels and symbols, 6 pt subscripts, 9 pt network titles",
+  "corners": "mixed",
+  "arrows": "thin dark-grey arrows with small heads along the fully connected edges; cyan and pink arrows from the inputs; dotted blue curved arrows between the networks",
+  "rendering": "flat-vector",
+  "effects": "gradient fills on neurons and cards; soft shadow behind the stacked cards; gradient fills are stored as bitmaps in the file",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue band = allocation network, pink band = payment network; the cyan dashed box and arrow = inputs that go to the allocation network, the pink dashed box and arrow = inputs that go to the payment network; orange gradient = volumes and q neurons, purple gradient = bids and e neurons; green = slots and allocation matrix x; blue neurons = c, r and o outputs",
+  "line_style_means": "thin dark edges = fully connected weights; dashed boxes = groups of inputs, outputs or tensors; dotted blue curved arrows = allocation entries feeding the payment network; cyan and pink arrows = which inputs go where",
+  "shape_means": "circle = neuron with a glyph for activation or sigmoid; stack of squares = a set of inputs; 3D slab stack with dimensions = tensor c′ or r′; green circles = entries of x; green squares = slots",
+  "marker_means": "indices 11, mk, (m+1)1, (m+n)k name entries; m ads, n organic items and K slots set the index ranges; the prime on c′ and r′ marks the softmax outputs",
+  "emphasis": "the allocation band is the larger top band; the two coloured arrows and dashed boxes at the left set the two paths; dotted blue arrows tie the networks together",
+  "reusable_patterns": [
+   "two tinted bands for two sub-networks fed from one input column, each linked by an arrow in the band's colour",
+   "dashed input boxes outlined in the colour of the network they feed",
+   "stacks of offset gradient cards labelled g_1 … g_m for sets of inputs, split into ad and organic stacks",
+   "neurons as gradient circles with a function glyph inside and a small key for the glyphs",
+   "ellipses and dots to compress layers and units",
+   "tensor drawn as a 3D slab stack with its dimension labels beside it",
+   "dotted curved arrows to couple one network's output into the other"
+  ],
+  "weaknesses": [
+   "dense bundles of edges in the first layers",
+   "5.5-8 pt symbols with tiny subscripts",
+   "the roles of the dotted lines into p̃ are not labelled",
+   "the glyph key sits in the blue band although the payment band uses the same glyphs"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "neurons, edges, bands and dashed boxes",
+   "stacked gradient cards",
+   "3D tensor slabs",
+   "legend glyphs"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "input stacks of gradient cards for volume and bid",
+   "green slot squares",
+   "fully connected neuron columns with activation glyphs",
+   "column-wise and row-wise softmax tensor boxes",
+   "green allocation matrix circles",
+   "pale blue and pale pink bands",
+   "dotted blue arrows into payment nodes"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "ad auction",
+   "e-commerce",
+   "allocation network",
+   "payment network",
+   "softmax",
+   "mechanism design",
+   "integrated ads and organic items",
+   "neural auction"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "stacked-cards",
+   "colour-coded-groups",
+   "notation-key"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-neuron-columns",
+    "what": "network layers drawn as columns of gradient-filled circular neurons with all-to-all edges, a function glyph inside each hidden neuron and ellipses for omitted layers and units"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Colour the dashed input boxes, the arrows and the bands of two sub-networks in matching hues (cyan and blue for one, pink for the other), so the reader sees at once which inputs feed which network; use stacks of offset cards for sets of inputs.",
+  "suits": "architectures with two coupled sub-networks (allocation and payment, actor and critic, generator and discriminator) that share inputs and are drawn neuron by neuron."
+ },
+ "tags": [
+  "two tinted bands",
+  "neuron-level network",
+  "gradient circles",
+  "stacked input cards",
+  "dashed coloured input boxes",
+  "serif math labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Overall Structure (p.4)"
+  ],
+  "evidence": [
+   "an allocation network that determines the allocation probabilities for ads and organic items",
+   "a payment network that calculates the payments for ads",
+   "where m ads, n organic items and K slots serve as input."
+  ]
+ },
+ "summary": "JINTER Net is a neural ad auction for e-commerce pages that mix ads and organic items: it selects from the combined set instead of ranking the two lists separately. The figure shows the network in one drawing. At the left, stacks of gradient cards stand for the volumes and bids of m ads and n organic items, and green squares stand for K slots; a cyan dashed box and arrow lead the inputs into the Allocation Network (blue band), a pink dashed box and arrow into the Payment Network (pink band). The allocation band draws fully connected layers of neurons ending in two groups of outputs, a column-wise and a row-wise softmax drawn as tensor stacks, and the allocation matrix x. The payment band ends in sigmoid units and the payments p, which are also fed by x through dotted blue arrows.",
+ "summary_zh": "JINTER Net 结构图：左侧卡片堆表示广告与自然条目的流量、出价，绿色方块表示展示位；青色、粉色虚线框和箭头把输入分别送入蓝色分配网络与粉色支付网络，分配矩阵 x 经蓝色虚线进入支付网络得到 p。",
+ "confidence": "medium",
+ "notes": "The context gives no definition of the symbols q, e, 𝕀, c, r or of the dotted lines from the payment input layer into p̃, so those roles are left open. The digest counts 105 bitmaps because gradient fills (neurons, cards, bands) are stored as images; they are not data samples, so pictures is empty. Icon counts are by eye.",
+ "venue": "AAAI25"
+}

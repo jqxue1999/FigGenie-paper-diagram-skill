@@ -1,0 +1,580 @@
+{
+ "paper_id": "neurips25-0073",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FastLongSpeech",
+  "one_liner": "A framework that lets a speech-language model process long speech efficiently by iteratively fusing similar adjacent speech frames, trained without long-speech data.",
+  "domain": [
+   "long-speech understanding",
+   "speech token compression",
+   "large speech-language models"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a bottom-up model stack with a dotted wedge into the extractor, plus a right panel that redraws one frame row after each fusion iteration",
+  "argues": "Merging runs of similar adjacent frames, weighted by content density, shrinks a long speech sequence to the LLM's speech window before the language model sees it.",
+  "subject": "The FastLongSpeech model stack and, beside it, iterative fusion followed on toy speech frames with similarity scores and content densities.",
+  "elements": [
+   {
+    "name": "Text Token / Speech Embedding / Speech Frame",
+    "type": "label",
+    "role": "key to the three kinds of items drawn as circles and bars",
+    "drawn_as": "small black-outlined rounded frame at top left holding a green circle, a blue bar and a green gradient bar with captions",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "FastLongSpeech",
+    "type": "module",
+    "role": "the speech-language model that generates the response from the condensed speech representations and the instruction",
+    "drawn_as": "large light-blue rounded box with the name in 12 pt, a flame icon in its corner and a headphone-wearing mascot",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "response text tokens",
+    "type": "data",
+    "role": "the generated response (caption: a response based on the input speech and text instruction)",
+    "drawn_as": "three green circles in a dashed box above the model box, unlabelled",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "instruction text tokens",
+    "type": "data",
+    "role": "the text instruction given with the speech",
+    "drawn_as": "two green circles in a dashed box beside the lower edge of the model box, unlabelled",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "speech embeddings",
+    "type": "data",
+    "role": "speech representations after the projector, as the legend names blue bars",
+    "drawn_as": "two blue vertical bars under the model box, unlabelled",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Projector",
+    "type": "module",
+    "role": "passes the condensed speech frames on towards the model as speech embeddings",
+    "drawn_as": "pale-green rounded box with a snowflake icon",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Extractor",
+    "type": "module",
+    "role": "condenses the speech representations h into h' with a CTC decoder and iterative fusion (paper text)",
+    "drawn_as": "white trapezoid that narrows in the flow direction, opened up by a dotted wedge",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Audio Encoder",
+    "type": "module",
+    "role": "turns the waveform into speech representations at 25 Hz (paper text)",
+    "drawn_as": "pale-blue rounded box with a snowflake icon",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "six speech frames",
+    "type": "data",
+    "role": "the long frame sequence entering the extractor",
+    "drawn_as": "six green gradient bars in a dashed box at the lower middle, unlabelled",
+    "container": "extractor zoom",
+    "is_contribution": false
+   },
+   {
+    "name": "Iterative Fusion (extractor part)",
+    "type": "module",
+    "role": "merges the frames into a shorter sequence",
+    "drawn_as": "orange rounded box with a curved arrow to the condensed frames",
+    "container": "extractor zoom",
+    "is_contribution": true
+   },
+   {
+    "name": "CTC Decoder",
+    "type": "module",
+    "role": "the CTC decoder of the extractor; a dashed arrow sends something from it to Iterative Fusion",
+    "drawn_as": "grey rounded box with a flame icon",
+    "container": "extractor zoom",
+    "is_contribution": false
+   },
+   {
+    "name": "two condensed frames",
+    "type": "data",
+    "role": "the condensed representations h' that fit the speech window",
+    "drawn_as": "two green gradient bars in a dashed box above Iterative Fusion, unlabelled",
+    "container": "extractor zoom",
+    "is_contribution": false
+   },
+   {
+    "name": "Iterative Fusion (right panel title)",
+    "type": "label",
+    "role": "heads the panel that details the strategy",
+    "drawn_as": "10 pt title above a column of frame rows",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "frame rows",
+    "type": "instance",
+    "role": "one toy run: six frames, then three after the first fusion, then two",
+    "drawn_as": "three rows of green gradient bars stacked bottom to top, joined by cyan up arrows",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Span",
+    "type": "container",
+    "role": "a group of consecutive most-similar frames that is merged into one frame (paper text)",
+    "drawn_as": "dotted rounded box round the grouped frames with the word Span below; three in total",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "similarity scores",
+    "type": "label",
+    "role": "similarity between adjacent frames (caption); the merged pairs are in red",
+    "drawn_as": "numbers 0.8, 0.2, 0.4, 0.7, 0.75 and 0.7, 0.2 between frames on double-headed arrows",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "content density numbers",
+    "type": "label",
+    "role": "content density below each frame (caption); weights for the merge (paper text)",
+    "drawn_as": "blue numbers 0.72, 0.78, 0.65, 0.62, 0.54, 0.44 then 0.74, 0.65, 0.52 under the frames",
+    "container": "right panel",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "speech waveform",
+    "to": "Audio Encoder",
+    "what": "input speech",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio Encoder",
+    "to": "Extractor",
+    "what": "speech representations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Extractor",
+    "to": "Projector",
+    "what": "condensed speech frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Projector",
+    "to": "speech embeddings",
+    "what": "blue bars stacked above the projector",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "speech embeddings and instruction text tokens",
+    "to": "FastLongSpeech",
+    "what": "inputs sit directly below the model box",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "FastLongSpeech",
+    "to": "response text tokens",
+    "what": "output sits directly above the model box",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Extractor",
+    "to": "six speech frames, Iterative Fusion, CTC Decoder, two condensed frames",
+    "what": "dotted wedge opens the extractor into its parts",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "six speech frames",
+    "to": "Iterative Fusion (extractor part)",
+    "what": "frames to be fused",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "six speech frames",
+    "to": "CTC Decoder",
+    "what": "same frames also go to the decoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CTC Decoder",
+    "to": "Iterative Fusion (extractor part)",
+    "what": "dashed arrow; the figure does not say what is sent",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Iterative Fusion (extractor part)",
+    "to": "two condensed frames",
+    "what": "shorter sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Iterative Fusion (extractor part)",
+    "to": "Iterative Fusion (right panel title)",
+    "what": "same name; the right panel details the strategy",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "bottom frame row",
+    "to": "middle frame row",
+    "what": "first fusion: spans are merged into single frames",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "middle frame row",
+    "to": "top frame row",
+    "what": "second fusion",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "frame i",
+    "to": "frame i+1",
+    "what": "similarity score between neighbours",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Span",
+    "to": "grouped frames",
+    "what": "frames inside one dotted box are merged",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "the model stack from waveform to the FastLongSpeech LLM, with the extractor opened up into iterative fusion and a CTC decoder",
+    "verdict": "ours"
+   },
+   {
+    "label": "Iterative Fusion",
+    "kind": "worked-walkthrough",
+    "axis": "zoom",
+    "shows": "one toy run of the fusion on frames with similarity scores and content densities, repeated until two frames remain",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Span",
+    "kind": "identity",
+    "at": "the dotted boxes in the right panel",
+    "what": "names each group of adjacent frames that is merged"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "input speech waveform",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "yellow-orange waveform with a dark outline, below the Audio Encoder with an arrow pointing up"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "white cartoon character with big eyes, headphones and a sound-wave halo",
+    "stands_for": "the FastLongSpeech speech-language model",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "orange-red flame",
+    "stands_for": "trainable module (not defined in the legend)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "light-blue snowflake",
+    "stands_for": "frozen module (not defined in the legend)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy run of iterative fusion: six frames with similarity scores between neighbours and content densities under them, fused to three frames, then to two",
+    "form": "three stacked rows of bars with numbers",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake icon in the corner of the Audio Encoder and Projector, flame icon in the corner of FastLongSpeech and CTC Decoder; no key",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "one large light-blue rounded box with the model name and a headphone-wearing mascot",
+    "parts": [
+     "rounded box",
+     "mascot",
+     "flame"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "speech frames as vertical gradient bars, speech embeddings as blue bars and text tokens as green circles, grouped in dashed boxes; dotted rounded boxes mark spans",
+    "parts": [
+     "frame bars",
+     "embedding bars",
+     "text-token circles",
+     "dashed box",
+     "span box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "sequence-compression-trapezoid",
+    "drawn_as": "the Extractor as a white trapezoid that narrows in the flow direction, between the Audio Encoder and the Projector",
+    "parts": [
+     "trapezoid"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the waveform bottom-left and climbs the stack through Audio Encoder, Extractor and Projector to the FastLongSpeech box; then the dotted wedge to the extractor's parts; then the right panel bottom-up, row by row."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "One light-grey rounded canvas split by a thin vertical line. The left panel (about 60% of the width) is a bottom-up model stack with a legend at the top left, text-token boxes above and below the model box, and a dotted wedge from the Extractor to an enlarged group (six frames, Iterative Fusion, CTC Decoder, two condensed frames) at the lower middle. The right panel has a title and a bottom-up stack of three frame rows joined by cyan arrows, with numbers between and under the frames.",
+  "panel_count": 2,
+  "lanes": "3 stacked frame rows in the right panel, one per fusion iteration",
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5f5f5",
+    "used_for": "light-grey canvas behind the whole figure"
+   },
+   {
+    "hex": "#cce5ff",
+    "used_for": "FastLongSpeech box"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "Audio Encoder box"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "Projector box and the light end of the speech-frame bars"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "CTC Decoder box"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "Iterative Fusion box"
+   },
+   {
+    "hex": "#66ffb3",
+    "used_for": "text-token circles"
+   },
+   {
+    "hex": "#1ba1e2",
+    "used_for": "speech-embedding bars"
+   },
+   {
+    "hex": "#33ffff",
+    "used_for": "cyan block arrows between fusion iterations"
+   },
+   {
+    "hex": "#0066cc",
+    "used_for": "content-density numbers"
+   },
+   {
+    "hex": "#ff6666",
+    "used_for": "similarity scores of the merged pairs"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "mixed",
+  "stroke": "0.5 pt black outlines on boxes, bars and circles, 1 pt black on the model box and the legend; dashed black token boxes, dotted black span boxes and zoom wedge",
+  "font": "sans (Arial): 4.5 pt for legend, numbers and token captions, 7-7.5 pt for module names, 10 pt panel title, 12 pt model name",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small filled heads, curved for the fusion branches, dashed from the CTC Decoder, double-headed for similarity scores, thick cyan block arrows between iterations",
+  "rendering": "flat-vector",
+  "effects": "green gradient on the speech-frame bars; none elsewhere",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "green circle = text token, blue bar = speech embedding, green gradient bar = speech frame (legend); the module fills (light blue, pale blue, pale green, grey, orange) tell the modules apart; red numbers = similarity of the pairs chosen for merging, blue numbers = content density",
+  "line_style_means": "dashed boxes = token or frame groups; dotted rounded boxes = spans; dotted wedge = zoom from the Extractor; dashed arrow = CTC Decoder to Iterative Fusion",
+  "shape_means": "trapezoid = the extractor that condenses the sequence; rounded box = a model module; circle = text token; vertical bar = speech frame or embedding; cyan block arrow = one fusion iteration",
+  "marker_means": "flame = trainable and snowflake = frozen (not defined in the legend); numbers between frames = similarity scores; numbers under frames = content density",
+  "emphasis": "the FastLongSpeech box is the largest object and carries the mascot; the orange Iterative Fusion box is the only orange object and its name is repeated as the right panel title",
+  "reusable_patterns": [
+   "snowflake and flame corner icons for frozen and trainable modules without a key",
+   "dotted wedge from one module to an enlarged group of its parts",
+   "state snapshots: the same frame row redrawn after each iteration, merged frames in dotted span boxes",
+   "numbers between and under frames so that the merging rule can be followed by hand",
+   "legend that uses the same glyphs as the drawing",
+   "cyan block arrows between iterations"
+  ],
+  "weaknesses": [
+   "no arrows join the token boxes or embeddings to the FastLongSpeech box, so inputs and output are read by position",
+   "the numbers are 4.5 pt, the smallest text in the figure",
+   "the meaning of the flame and snowflake icons is not in the legend"
+  ]
+ },
+ "resources": {
+  "own": [
+   "toy similarity and content-density values"
+  ],
+  "stock": [
+   "flame and snowflake icons"
+  ],
+  "generated": [
+   "headphone-wearing mascot with a sound-wave halo"
+  ],
+  "drawn": [
+   "module boxes and arrows",
+   "frame bars and span boxes",
+   "speech waveform",
+   "legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "audio waveform",
+   "Audio Encoder, Extractor and Projector stack",
+   "LLM box with a headphone mascot",
+   "green circles for text tokens",
+   "green gradient frame bars",
+   "dotted span boxes",
+   "similarity and density numbers",
+   "cyan up arrows"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "long speech",
+   "speech-language model",
+   "token compression",
+   "iterative fusion",
+   "CTC decoder",
+   "content density",
+   "frame similarity",
+   "Qwen2-Audio"
+  ],
+  "tags": [
+   "zoom-callout",
+   "toy-values-inline",
+   "token-strip",
+   "mascot-character",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Explain a compression step by redrawing the same row of frames after each iteration, with grouped frames in dotted span boxes and the deciding numbers written between and under the frames; tie that detail panel to the architecture with a dotted wedge from the module.",
+  "suits": "Sequence compression, token merging or pruning methods whose rule can be shown on a handful of frames with toy values."
+ },
+ "tags": [
+  "one grey rounded canvas",
+  "bottom-up stack",
+  "frame bars",
+  "snowflake and flame icons",
+  "headphone mascot",
+  "dotted zoom wedge",
+  "cyan block arrows",
+  "toy numbers"
+ ],
+ "provenance": {
+  "sections": [
+   "Method overview (p.4)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "numbers between adjacent frames denote similarity scores and numbers below frames represent content density",
+   "The consecutive identified frames are grouped into a span",
+   "an advanced extractor module, which features a CTC decoder and employs our proposed iterative fusion strategy"
+  ]
+ },
+ "summary": "FastLongSpeech extends a speech-language model built on Qwen2-Audio to long speech without long-speech training data, by compressing the speech representations with an iterative fusion strategy. Figure 1 has two panels on one grey canvas. The left panel is a bottom-up stack: a speech waveform goes through an Audio Encoder, an Extractor and a Projector into the FastLongSpeech box (flame icon, headphone mascot), with text-token boxes for the instruction and the response; a dotted wedge opens the Extractor into Iterative Fusion and a CTC Decoder. The right panel follows iterative fusion on toy frames: similarity scores between neighbours and content densities underneath pick spans that are merged, shrinking six frames to three and then two.",
+ "summary_zh": "FastLongSpeech 用迭代融合压缩长语音帧，使语音语言模型无需长语音训练数据即可处理长语音。图左自下而上画出音频编码器、提取器、投影器到 LLM，并用虚线放大提取器；图右用带相似度和内容密度数字的玩具帧演示逐轮合并。",
+ "confidence": "high",
+ "notes": "Two panels kept (the paper itself speaks of a left and a right panel). Flame and snowflake are not defined in the legend; reading them as trainable and frozen is the usual convention, not stated in the text given. What the dashed arrow from the CTC Decoder carries is not stated in the text given. The mascot's origin is judged from its style.",
+ "venue": "NeurIPS25"
+}

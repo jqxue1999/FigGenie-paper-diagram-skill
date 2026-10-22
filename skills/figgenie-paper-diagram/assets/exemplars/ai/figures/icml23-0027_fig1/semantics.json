@@ -1,0 +1,459 @@
+{
+ "paper_id": "icml23-0027",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ChainCoder",
+  "one_liner": "A program-synthesis language model that writes Python code in several passes from coarse to fine, using syntax-tree-derived subsequences as the prediction target.",
+  "domain": [
+   "code generation",
+   "program synthesis",
+   "coarse-to-fine decoding"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "one real LeetCode solution redrawn in four identical code windows, each highlighting a different token class, then turned into tile rows and concatenated into one target strip",
+  "argues": "Code is easier to generate when the target is reordered from outline to details: four syntax-guided subsequences, coarse to fine, are concatenated into one prediction target.",
+  "subject": "A LeetCode solution split into four syntax-based subsequences and concatenated into one coarse-to-fine target token sequence.",
+  "elements": [
+   {
+    "name": "Problem Description",
+    "type": "text-block",
+    "role": "the programming task: Merge Intervals (LeetCode 56, medium) with two input, output and explanation examples",
+    "drawn_as": "bold monospace heading over plain monospace text, outputs set in a right-hand column",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Solution Code",
+    "type": "sample",
+    "role": "the 16-line Python solution that is decomposed",
+    "drawn_as": "four identical mock editor windows in a row, each with a pale coloured glow border (pink, green, cyan, magenta)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Extreme Case Handling / Preprocessing / Variables Initialization / Core Algorithm Loop",
+    "type": "region",
+    "role": "four blocks of the solution, the outline levels of S1",
+    "drawn_as": "translucent colour bands over the lines of the first window: orange, yellow, light green, blue, with a bold black label on each",
+    "container": "first code window",
+    "is_contribution": true
+   },
+   {
+    "name": "S1, S2, S3, S4",
+    "type": "label",
+    "role": "names the four views of the code, each with an arrow down to its subsequence",
+    "drawn_as": "bold italic serif S with subscript beside a short black down arrow under each window",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Outline Subsequence",
+    "type": "data",
+    "role": "S1: four tokens s1 to s4, one per outline block",
+    "drawn_as": "row of four small square tiles in orange, yellow, light green and blue",
+    "container": "S1 column",
+    "is_contribution": true
+   },
+   {
+    "name": "Core Algorithm Hint Subsequence",
+    "type": "data",
+    "role": "S2: tokens of the core algorithm structure hint",
+    "drawn_as": "row of bright-green tiles s1, s2, ..., sM with an ellipsis tile",
+    "container": "S2 column",
+    "is_contribution": true
+   },
+   {
+    "name": "Layout Frame Subsequence",
+    "type": "data",
+    "role": "S3: tokens of the code layout frame",
+    "drawn_as": "row of light-cyan tiles s1, s2, ..., s(N+1)",
+    "container": "S3 column",
+    "is_contribution": true
+   },
+   {
+    "name": "Accessory subsequence",
+    "type": "data",
+    "role": "S4: the remaining tokens, such as names and constants",
+    "drawn_as": "row of pink tiles s1, s2, ..., sN",
+    "container": "S4 column",
+    "is_contribution": true
+   },
+   {
+    "name": "Coarse-To-Fine Prediction Target",
+    "type": "data",
+    "role": "the four subsequences concatenated by system-level PAD tokens into one target",
+    "drawn_as": "long strip of square tiles in the colours of the four subsequences with dark-green BOS, PAD and EOS tiles and ellipses",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "BOS / PAD / EOS",
+    "type": "data",
+    "role": "start token, separator tokens between subsequences, end token",
+    "drawn_as": "dark-green square tiles with white labels",
+    "container": "target strip",
+    "is_contribution": false
+   },
+   {
+    "name": "Outlining stages (coarse level) / Detailing stages (fine level)",
+    "type": "label",
+    "role": "groups S1 and S2 as the coarse level and S3 and S4 as the fine level",
+    "drawn_as": "two black curly braces under the target strip with a monospace label under each",
+    "container": "target strip",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Problem Description",
+    "to": "Solution Code",
+    "what": "the code solves the problem",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Solution Code (window 1)",
+    "to": "Outline Subsequence",
+    "what": "S1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Solution Code (window 2)",
+    "to": "Core Algorithm Hint Subsequence",
+    "what": "S2",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Solution Code (window 3)",
+    "to": "Layout Frame Subsequence",
+    "what": "S3",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Solution Code (window 4)",
+    "to": "Accessory subsequence",
+    "what": "S4",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "colour bands of window 1",
+    "to": "tiles of the Outline Subsequence",
+    "what": "each band becomes one tile of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "each subsequence row",
+    "to": "its segment of the Coarse-To-Fine Prediction Target",
+    "what": "placed in order and joined by PAD",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "window border and boxed tokens",
+    "to": "tiles and target segment of the same colour",
+    "what": "one colour per subsequence",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "S1 and S2 segments",
+    "to": "Outlining stages (coarse level)",
+    "what": "grouped by a brace",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "S3 and S4 segments",
+    "to": "Detailing stages (fine level)",
+    "what": "grouped by a brace",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "S1, S2, S3, S4",
+    "kind": "identity",
+    "at": "under the four code windows",
+    "what": "names the four subsequences, ordered coarse to fine"
+   },
+   {
+    "marker": "s with sub- and superscripts",
+    "kind": "identity",
+    "at": "token tiles of each subsequence",
+    "what": "index of the token within the subsequence"
+   },
+   {
+    "marker": "Problem Description, Solution Code, Coarse-To-Fine Prediction Target",
+    "kind": "section",
+    "at": "bold monospace headings at the left of each band",
+    "what": "head the three bands from top to bottom"
+   },
+   {
+    "marker": "1-16",
+    "kind": "identity",
+    "at": "line numbers inside each code window",
+    "what": "number the lines of the solution"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four screenshots of the same Merge Intervals solution in a mock editor window (red, yellow and green dots, line numbers 1-16, syntax-coloured Python)",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "identical code at the same position in each window with a pale coloured glow border; only the highlight differs: four colour bands in the first, dark-blue boxes around the tokens of the subsequence in the others, the rest of the code left pale"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "LeetCode 56 Merge Intervals: [[1,3],[2,6],[8,10],[15,18]] gives [[1,6],[8,10],[15,18]]; [[1,4],[4,5]] gives [[1,5]]",
+    "form": "monospace problem text with two input, output and explanation lines",
+    "real_values": true
+   },
+   {
+    "what": "the 16-line Python solution decomposed into S1-S4",
+    "form": "four code windows with bands or boxed tokens",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "square tiles coloured by subsequence, dark-green BOS, PAD and EOS tiles, ellipsis marks for omitted tokens",
+    "parts": [
+     "BOS",
+     "S1 tiles",
+     "PAD",
+     "S2 tiles",
+     "PAD",
+     "S3 tiles",
+     "PAD",
+     "S4 tiles",
+     "EOS"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "code-editor-window",
+    "drawn_as": "mock editor window with three coloured dots, line numbers and syntax-highlighted code",
+    "parts": [
+     "window dots",
+     "line numbers",
+     "code lines"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Top-down: the problem text, then the four code windows left to right, each arrowed (S1 to S4) to its row of tiles, then pale lines down to the target strip read left to right, with the coarse and fine braces below."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked full-width bands with bold monospace headings: problem text; four code windows in a row, each with its arrow, tile row and name; and a long target strip with two braces beneath. Pale coloured lines fan from each tile row to its slot in the strip.",
+  "panel_count": 1,
+  "lanes": "4 aligned columns, one per subsequence S1-S4: code window, labelled arrow, tile row, name, lines to the target",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.72,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ed7d31",
+    "used_for": "Extreme Case Handling band and its S1 tile (orange)",
+    "opacity": 0.6
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Preprocessing band and its S1 tile (yellow)",
+    "opacity": 0.59
+   },
+   {
+    "hex": "#92d050",
+    "used_for": "Variables Initialization band and its S1 tile (light green)",
+    "opacity": 0.66
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "Core Algorithm Loop band and its S1 tile (blue)",
+    "opacity": 0.75
+   },
+   {
+    "hex": "#00ff16",
+    "used_for": "S2 tiles and the glow of window 2 (bright green)"
+   },
+   {
+    "hex": "#02fcf9",
+    "used_for": "S3 tiles and the glow of window 3 (light cyan)",
+    "opacity": 0.21
+   },
+   {
+    "hex": "#f001ff",
+    "used_for": "S4 tiles and the border of window 4 (magenta, tiles pale)",
+    "approx": true
+   },
+   {
+    "hex": "#548235",
+    "used_for": "BOS, PAD and EOS tokens (dark green)"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "dark-blue outlines of the boxed tokens in windows 2-4"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark-blue boxes around tokens and thin tile outlines, 1 pt black arrows and braces, pale coloured wedge lines",
+  "font": "monospace (Menlo) for the problem text and bold 7.5 pt headings, 5.5 pt problem text; Calibri 4-6 pt for band labels and BOS/PAD/EOS; Cambria Math italics for S and s symbols",
+  "corners": "mixed",
+  "arrows": "short black arrows with filled heads under each window, pale coloured straight lines from tile rows to the target strip, black curly braces",
+  "rendering": "flat-vector",
+  "effects": "soft coloured glow around each code window; translucent colour bands",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "One colour per subsequence, kept on the window glow, the boxed tokens, the tiles and the target segment: S1 = four band colours (orange extreme cases, yellow preprocessing, light green variable initialisation, blue core loop), S2 = bright green, S3 = light cyan, S4 = pink or magenta; dark green = special tokens BOS, PAD, EOS.",
+  "line_style_means": "Black down arrows turn a window into a subsequence; pale coloured lines place a subsequence in the target; curly braces name coarse and fine stages; dark-blue boxes mark the tokens that belong to the subsequence (rest of the code stays pale).",
+  "shape_means": "Small square tiles = tokens; ellipsis tile = omitted tokens; macOS-style window = code listing.",
+  "marker_means": "S1-S4 name the four views, s with indices numbers the tokens of a subsequence, BOS, PAD and EOS are special tokens.",
+  "emphasis": "The same code is repeated four times so that only the highlight changes, and the colour continues from window to tiles to the final strip, so the reader can trace where a part of the code ends up.",
+  "reusable_patterns": [
+   "same real code redrawn in a row of identical windows, each highlighting a different token class by bands or boxes",
+   "one colour per view carried from window glow to tiles to the segment of the final sequence",
+   "pale lines fanning from each tile row to its slot in the concatenated target",
+   "dark special tokens (BOS, PAD, EOS) separating coloured token groups",
+   "braces under the final strip naming coarse and fine stages",
+   "problem text, solution and target stacked top-down with bold headings"
+  ],
+  "weaknesses": [
+   "the code inside the windows is bitmap text of about 3.5 pt, hard to read at print size",
+   "the pale wedge lines to the target are faint",
+   "windows 2-4 differ only by which small tokens are boxed, so they are hard to tell apart",
+   "the caption has to state that the boxed substrings only roughly indicate the tokens"
+  ]
+ },
+ "resources": {
+  "own": [
+   "LeetCode problem text with examples",
+   "the Python solution and its four highlighted screenshots"
+  ],
+  "stock": [
+   "mock editor window frame with three coloured dots"
+  ],
+  "generated": [],
+  "drawn": [
+   "colour bands and token boxes",
+   "token tiles and special tokens",
+   "arrows, wedge lines and braces"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "problem description text block",
+   "four syntax-highlighted code windows",
+   "colour bands over code lines",
+   "boxed token groups",
+   "tile rows S1 to S4",
+   "coarse-to-fine target token strip with BOS PAD EOS",
+   "pale lines to the target",
+   "braces for coarse and fine stages"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "code generation",
+   "coarse-to-fine decoding",
+   "abstract syntax tree",
+   "outline then detail",
+   "LeetCode",
+   "token subsequences",
+   "program synthesis",
+   "ChainCoder"
+  ],
+  "tags": [
+   "code-snippet-box",
+   "token-strip",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "task-definition",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "wedge-lines-to-target",
+    "what": "pale coloured lines fanning from each group of tiles down to its slot in a final concatenated sequence"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Explain a data-formulation idea by redrawing one real example (here a code listing) in a row of identical windows, each highlighting a different token class in its own colour, then carry that colour onto the tiles and the final concatenated strip so the reader sees what ends up where.",
+  "suits": "Methods that reorder, split or concatenate a sequence (code, text, tokens) into groups, where one concrete example can be recoloured per group."
+ },
+ "tags": [
+  "top-down bands",
+  "monospace font",
+  "code windows",
+  "four colour-coded columns",
+  "token tiles",
+  "glow borders",
+  "powerpoint-made",
+  "curly braces"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "3 Coarse-To-Fine Programming Language (p.5-6)"
+  ],
+  "evidence": [
+   "We therefore construct the prediction target into four subsequences.",
+   "These four subsequences are concatenated by the system-level <PAD> token.",
+   "the boxed substrings only roughly indicate the tokens"
+  ]
+ },
+ "summary": "ChainCoder generates Python code in several passes from coarse to fine. Figure 1 explains its prediction target on one LeetCode example, Merge Intervals. The problem text and the 16-line solution come first. The solution is then shown in four identical code windows, each highlighting a different part: coloured bands for the outline (extreme cases, preprocessing, variable initialisation, core loop), and boxed tokens for the core algorithm hint, the layout frame and the accessory tokens. Each window is arrowed (S1 to S4) to a row of colour-matched tiles, and pale lines place the four rows into one strip, joined by dark PAD tokens between BOS and EOS, with braces marking coarse and fine stages.",
+ "summary_zh": "ChainCoder 把代码由粗到细分多遍生成。图 1 以 Merge Intervals 为例：同一段解法在四个窗口中分别高亮大纲、核心算法提示、布局框架和附属成分，得到 S1 到 S4 子序列，再用 PAD 拼成预测目标。",
+ "confidence": "high",
+ "notes": "The figure draws no model, only the data formulation. The pre-screen counted four panels (the four code windows); here they are four aligned columns of one drawing, so panel_count is 1 and the lanes field carries them. The code text sits inside bitmaps; the boxed tokens are vector boxes. Which token classes go into S2, S3 and S4 is read from the names under the tile rows and the paper text, not from the boxes alone.",
+ "venue": "ICML23"
+}

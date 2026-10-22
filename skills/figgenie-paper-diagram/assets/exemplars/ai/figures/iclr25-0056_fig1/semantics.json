@@ -1,0 +1,396 @@
+{
+ "paper_id": "iclr25-0056",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DiffPuter",
+  "one_liner": "A diffusion model combined with the EM algorithm that imputes missing tabular values by alternating model fitting (M-step) and conditional sampling (E-step).",
+  "domain": [
+   "missing data imputation",
+   "diffusion models",
+   "tabular data"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "a toy table with missing cells is redrawn at every hand-off; the EM loop is two dashed boxes (M step, E step) joined by Sync arrows, and the path turns back along the bottom to the completed table",
+  "argues": "Imputation can be run as EM with a diffusion model: fit the model on observed plus current imputed data, then re-estimate the missing entries, for K iterations.",
+  "subject": "A small age, education, income table with missing cells followed through one-hot encoding, mean imputation, K EM iterations, argmax and decoding.",
+  "elements": [
+   {
+    "name": "x",
+    "type": "data",
+    "role": "the raw table with missing entries: columns age, education, income; rows such as 40, NaN, > 50K",
+    "drawn_as": "rounded-frame mini table; missing cells (NaN) in dashed boxes; '...' row and column for more data",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "One-hot encoding",
+    "type": "operation",
+    "role": "turns the categorical education column into edu1, edu2, edu3 (discrete to continuous, per the caption)",
+    "drawn_as": "label above an arrow and a table with columns age, edu1, edu2, edu3, income; NaN cells in dashed boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Base mean imputation",
+    "type": "operation",
+    "role": "initialises the missing entries with the mean of the observed values",
+    "drawn_as": "label above a table whose columns are tinted green (age), lilac (edu1 to edu3) and yellow (income), missing cells filled with boxes labelled mean",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "First iteration",
+    "type": "label",
+    "role": "marks the hand-over of the initialised table to the first M step",
+    "drawn_as": "label on a long curved black arrow into the loop",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "M step",
+    "type": "container",
+    "role": "fix x^mis and estimate the diffusion model parameters theta",
+    "drawn_as": "dashed rounded box with the title M step, a blue box 'Diffusion Model: p_theta(x)', a table (x^obs, x^mis) with pink cells and a caption 'Fix x^mis, estimate theta' on an upward arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "E step",
+    "type": "container",
+    "role": "fix theta and estimate x^mis by conditional sampling",
+    "drawn_as": "dashed rounded box with the title E step, a pink box 'Diffusion Model: p_theta(x)', a table (x^obs, x^mis) with blue cells and a caption 'Fix theta, estimate x^mis' on a downward arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sync theta / Sync x^mis",
+    "type": "operation",
+    "role": "pass the fitted parameters to the E step and the new estimates back to the M step",
+    "drawn_as": "two short labelled black arrows between the dashed boxes, one to the right at the top, one to the left at the bottom",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "K iterations",
+    "type": "label",
+    "role": "the M and E steps repeat K times",
+    "drawn_as": "label above the two dashed boxes",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "argmax",
+    "type": "operation",
+    "role": "turns the estimated one-hot probabilities into hard categories",
+    "drawn_as": "label on a black arrow running left along the bottom, to a table whose chosen cells (0 0 1 / 1 / 38) are blue",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "One-hot decoding",
+    "type": "operation",
+    "role": "maps the one-hot columns back to the original education values",
+    "drawn_as": "label on a black arrow running left to the last table",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "x*",
+    "type": "data",
+    "role": "the final imputed table, returned from the E step of the last iteration according to the caption",
+    "drawn_as": "rounded-frame mini table with the imputed entries (12th, > 50K, 38) on blue cells, at the lower left",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "x",
+    "to": "One-hot encoding",
+    "what": "raw table with missing cells",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "One-hot encoding",
+    "to": "Base mean imputation",
+    "what": "one-hot table, still with NaN cells",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Base mean imputation",
+    "to": "M step",
+    "what": "initialised table (x^obs, x^mis) for the first iteration",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M step table",
+    "to": "Diffusion Model (M step)",
+    "what": "fix x^mis, estimate theta",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M step",
+    "to": "E step",
+    "what": "Sync theta",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Diffusion Model (E step)",
+    "to": "E step table",
+    "what": "fix theta, estimate x^mis",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E step",
+    "to": "M step",
+    "what": "Sync x^mis",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M step table (left table of the loop)",
+    "to": "one-hot table",
+    "what": "argmax over the estimated one-hot probabilities",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "one-hot table",
+    "to": "x*",
+    "what": "one-hot decoding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "x, x*",
+    "kind": "identity",
+    "at": "above the first and the last table",
+    "what": "names the incomplete input and the imputed result"
+   },
+   {
+    "marker": "M step, E step",
+    "kind": "section",
+    "at": "titles of the two dashed boxes",
+    "what": "heads the two alternating stages of the loop"
+   },
+   {
+    "marker": "NaN, mean, ...",
+    "kind": "other",
+    "at": "table cells",
+    "what": "missing entry, mean-filled entry, more rows and columns"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy census-like table: ages 40, 28, 38 and 31, education Masters and 10th, income > 50K and <= 50K, with some cells missing and later filled",
+    "form": "mini tables with toy values redrawn after each operation; probabilities such as 0.4, 0.7, 0.6 in the soft one-hot cells",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "em-alternation",
+    "drawn_as": "two dashed rounded boxes side by side, M step and E step, each holding a diffusion-model box and a table, joined by Sync arrows in both directions under a K iterations label",
+    "parts": [
+     "M step box",
+     "E step box",
+     "Sync arrows",
+     "K iterations"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the table x at the top left, follows the top row to the right and the curved arrow into the M step, circles through M and E steps, then runs back along the bottom row from right to left to x*."
+ },
+ "layout": {
+  "arrangement": "other",
+  "arrangement_note": "A clockwise loop of small tables: the top row runs left to right (x, one-hot, mean imputation), a curved arrow enters the EM loop on the right where two tall dashed boxes (M step, E step) stand side by side, and the bottom row runs back right to left (decoded one-hot table, then x*). Each table sits under or beside a small caption; no panel frames.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.99,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae8fc",
+    "used_for": "blue diffusion-model box of the M step"
+   },
+   {
+    "hex": "#ffcccc",
+    "used_for": "pink diffusion-model box of the E step and pink imputed cells in the M-step table"
+   },
+   {
+    "hex": "#cce5ff",
+    "used_for": "blue imputed cells in the E-step table and in the decoded outputs"
+   },
+   {
+    "hex": "#cdeb8b",
+    "used_for": "green age column after mean imputation",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "lilac education columns and mean cells",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "yellow income column after mean imputation",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#000033",
+    "used_for": "dark navy frames of tables and boxes"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "text, arrows and dashed cell outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black and dark navy on table frames and boxes; dashed outlines on missing cells and on the EM boxes",
+  "font": "sans (Comic Sans-like and Arial) 3.5-5 pt; serif italics for p_theta(x), x^obs, x^mis and x*",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows with small heads, one curved arrow for the first iteration, labels on or above the arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue box = M-step diffusion model, pink box = E-step diffusion model; pink cells in the M-step table and blue cells in the E-step table and decoded tables mark the imputed entries at that point (not explained); tinted columns (green, lilac, yellow) = age, one-hot education group, income",
+  "line_style_means": "dashed rounded boxes = the two EM steps; dashed cell outlines = missing (NaN) entries; solid arrows = data flow",
+  "shape_means": "rounded-frame table = dataset; rectangular box = diffusion model; dashed rounded box = EM step",
+  "marker_means": "NaN = missing, mean = mean-imputed, '...' = more rows or columns, K iterations = loop count",
+  "emphasis": "the same small table redrawn at each hand-off with the changed cells tinted; the loop at the right is boxed by dashed lines and headed by K iterations",
+  "reusable_patterns": [
+   "one toy table redrawn after each operation with only the changed cells tinted",
+   "dashed outline for missing cells and a labelled 'mean' box for filled ones",
+   "two dashed boxes side by side for alternating steps with labelled Sync arrows both ways",
+   "formula captions 'Fix x^mis, estimate theta' and 'Fix theta, estimate x^mis' beside the arrows",
+   "return path along the bottom with argmax and decoding labels",
+   "tinted columns marking variable groups after one-hot encoding"
+  ],
+  "weaknesses": [
+   "3.5 pt text in the tables is hard to read",
+   "the cell colours (pink in the M step, blue in the E step) are not explained",
+   "the final x* sits at the end of a backwards bottom row, and its arrow leaves the left table of the loop rather than the E step"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a toy table with made-up age, education and income values"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "tables, dashed boxes and diffusion-model boxes",
+   "arrows and captions",
+   "tinted columns and cells"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "toy table with NaN cells",
+   "one-hot encoded table",
+   "mean-imputed table with tinted columns",
+   "dashed M step and E step boxes",
+   "diffusion-model boxes",
+   "Sync arrows",
+   "final imputed table"
+  ],
+  "sample_data": "table",
+  "keywords": [
+   "missing data imputation",
+   "diffusion model",
+   "EM algorithm",
+   "tabular data",
+   "one-hot encoding",
+   "mean imputation",
+   "conditional sampling",
+   "iterative refinement"
+  ],
+  "tags": [
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "table-state-snapshots",
+    "what": "the same small data table redrawn after each operation with only the changed cells tinted, so the pipeline can be followed by hand"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Follow one small toy table through the pipeline and redraw it after every operation with only the changed cells tinted (missing as dashed boxes, filled as 'mean', imputed as colour); box the iterative part in two dashed boxes with labelled Sync arrows.",
+  "suits": "data-processing or imputation methods on tables, and EM-style alternating optimisation, where each step visibly changes values."
+ },
+ "tags": [
+  "clockwise loop",
+  "mini tables",
+  "dashed EM boxes",
+  "tinted columns",
+  "labelled arrows",
+  "Comic Sans-like labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "DIFFPUTER utilizes one-hot encoding to transform discrete variables into continuous ones",
+   "use the mean of observed values to initialize the missing entries",
+   "The final imputation result x*is returned from the E-step of the last iteration."
+  ]
+ },
+ "summary": "DiffPuter is a diffusion model combined with Expectation-Maximization for missing data imputation on tabular data: it trains the model on observed plus current imputed data (M step), then updates the missing entries by conditional sampling (E step). Figure 1 follows one toy table of age, education and income with missing cells: one-hot encoding, base mean imputation, then K iterations of two dashed boxes, an M step with a blue diffusion-model box and an E step with a pink one, joined by Sync theta and Sync x^mis arrows. The result passes through argmax and one-hot decoding to the completed table x*. The table is redrawn at each hand-off with the changed cells tinted, so the numbers can be followed by hand.",
+ "summary_zh": "DiffPuter 把扩散模型和 EM 算法结合做表格缺失值填补。图1用含缺失值的玩具表格依次经独热编码、均值填补，进入 K 轮 M 步（训练模型）与 E 步（采样补值）的循环，最后经 argmax 和独热解码得补全表 x*。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (stage-pipeline closed-loop, worked-walkthrough). arrangement is other because the path is a clockwise loop with a return row. M step and E step are treated as containers of one drawing, not panels. The cell colours (pink in the M-step table, blue in the E-step table) and the source of the argmax arrow are read from the picture only; the caption says the result comes from the E step of the last iteration.",
+ "venue": "ICLR25"
+}

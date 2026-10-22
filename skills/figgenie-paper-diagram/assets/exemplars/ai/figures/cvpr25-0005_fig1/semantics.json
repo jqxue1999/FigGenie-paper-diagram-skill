@@ -1,0 +1,521 @@
+{
+ "paper_id": "cvpr25-0005",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "IterIS",
+  "one_liner": "Optimization-based LoRA merging with iterative inference-solving alignment, applied to text-to-image diffusion, vision-language models and LLMs.",
+  "domain": [
+   "LoRA merging",
+   "parameter-efficient fine-tuning",
+   "multi-task adapters"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "scope-overview"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "three lettered application cards, each showing two task LoRAs and their merged adapter on real prompts and outputs, plus a small merge schematic at the top left",
+  "argues": "One merging method works across modalities: two separately trained LoRAs become one adapter that does both tasks, for images, captions and chat.",
+  "subject": "Two LoRAs merged by IterIS into a unified adapter, shown on barn and cat images, negative and positive captions, and two question types.",
+  "elements": [
+   {
+    "name": "LoRA_1, LoRA_2",
+    "type": "module",
+    "role": "two separately trained low-rank adapters to be merged",
+    "drawn_as": "pairs of facing trapezoids, green and yellow, joined by a plus sign",
+    "container": "merge strip",
+    "is_contribution": false
+   },
+   {
+    "name": "IterIS",
+    "type": "operation",
+    "role": "the merging method that combines the LoRAs",
+    "drawn_as": "chunky blue block arrow with a navy outline and a bold label above",
+    "container": "merge strip",
+    "is_contribution": true
+   },
+   {
+    "name": "Unified Adapter",
+    "type": "module",
+    "role": "single adapter that results from the merge",
+    "drawn_as": "pink rounded box with a flexed-arm icon",
+    "container": "merge strip",
+    "is_contribution": true
+   },
+   {
+    "name": "(a) Multi-Concept Customization",
+    "type": "container",
+    "role": "text-to-image diffusion application: merge a barn LoRA and a cat LoRA",
+    "drawn_as": "grey rounded frame with a bold caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LoRA_barn / LoRA_cat",
+    "type": "module",
+    "role": "one LoRA per visual concept",
+    "drawn_as": "green and gold labels over a generated image and a prompt box: a [V1] barn, a [V2] cat",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Adapter_cat+barn",
+    "type": "module",
+    "role": "merged adapter that draws both concepts in one image",
+    "drawn_as": "orange label over the cat-by-barn image and the prompt a [V2] cat standing by a [V1] barn, right of a dashed vertical divider",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Multi-Style Caption",
+    "type": "container",
+    "role": "vision-language application: merge a negative-style and a positive-style captioning LoRA",
+    "drawn_as": "grey rounded frame with a bold caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LoRA_NEG / LoRA_POS",
+    "type": "module",
+    "role": "caption-style LoRAs",
+    "drawn_as": "green and gold labels over a photo and a caption box with a coloured NEG or POS tag",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Adapter_NEG+POS",
+    "type": "module",
+    "role": "merged adapter that gives both caption styles for one photo",
+    "drawn_as": "orange label beside a baseball photo and two caption boxes, below a dashed horizontal divider",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Multiple NLP Tasks Integration",
+    "type": "container",
+    "role": "LLM application: merge LoRAs for two chat question types",
+    "drawn_as": "grey rounded frame with a bold caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LoRA_A / LoRA_B",
+    "type": "module",
+    "role": "LoRAs for two question and answer types",
+    "drawn_as": "green and gold labels over grey template boxes: <Human>: {Question Type_A}, <Robot>: {Answer Type_A}",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Adapter_A+B",
+    "type": "module",
+    "role": "merged adapter that answers both question types",
+    "drawn_as": "orange label over a grey box with two question labels, an LLM box and two Answer labels with ticks, below a dashed divider",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "language model that receives both question types and answers them",
+    "drawn_as": "grey rounded box with a small robot icon and a bold label, grey arrows in and out",
+    "container": "(c)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "LoRA_1 + LoRA_2",
+    "to": "Unified Adapter",
+    "what": "two LoRAs are merged by IterIS",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LoRA_barn and LoRA_cat",
+    "to": "Adapter_cat+barn",
+    "what": "two concept LoRAs merged into one adapter; a dashed vertical line splits single from merged",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LoRA_NEG and LoRA_POS",
+    "to": "Adapter_NEG+POS",
+    "what": "two style LoRAs merged into one adapter; a dashed horizontal line splits single from merged",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LoRA_A and LoRA_B",
+    "to": "Adapter_A+B",
+    "what": "two task LoRAs merged into one adapter; a dashed horizontal line splits single from merged",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Question Type_A and Question Type_B",
+    "to": "LLM",
+    "what": "both question types are given to the LLM",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "two Answer labels",
+    "what": "one answer per question type, each ticked",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green and gold labels",
+    "to": "[V1], [V2], NEG, POS, Type_A, Type_B tokens",
+    "what": "colour ties each LoRA to its prompt placeholder, caption tag or question type",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "merge strip",
+    "to": "panels (a), (b), (c)",
+    "what": "the same merge motif is repeated per domain; no arrow joins them",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Multi-Concept Customization",
+    "kind": "side-by-side-contrast",
+    "axis": "modalities",
+    "shows": "Text-to-image: LoRA_barn and LoRA_cat each draw one concept, Adapter_cat+barn draws a cat standing by a barn.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Multi-Style Caption",
+    "kind": "side-by-side-contrast",
+    "axis": "modalities",
+    "shows": "Vision-language: LoRA_NEG and LoRA_POS caption two photos in one style each, Adapter_NEG+POS gives both styles for a baseball photo.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Multiple NLP Tasks Integration",
+    "kind": "stage-pipeline",
+    "axis": "modalities",
+    "shows": "LLM: two question-and-answer templates for LoRA_A and LoRA_B, and the merged adapter answering both question types with ticks.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "bold captions under the panels",
+    "what": "letter each application panel and give its title"
+   },
+   {
+    "marker": "subscripts barn, cat, NEG, POS, A, B, cat+barn, NEG+POS, A+B",
+    "kind": "identity",
+    "at": "LoRA and Adapter labels",
+    "what": "name each LoRA and each merged adapter"
+   },
+   {
+    "marker": "[V1], [V2]",
+    "kind": "identity",
+    "at": "text-to-image prompts",
+    "what": "placeholder tokens bound to the barn and cat concepts"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "text-to-image outputs: a barn, a cat, and a cat standing by a barn",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "56 x 56 pt tiles with a thin black frame above a grey prompt box"
+   },
+   {
+    "what": "photos to caption: a man on a couch with a laptop and a dog, a skier, baseball players on a field",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "photos with a thin black frame above or beside grey caption boxes"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "pair of facing trapezoids forming an hourglass",
+    "stands_for": "a LoRA adapter, green or yellow for the sources",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "flexed arm",
+    "stands_for": "the strong unified adapter",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small robot head",
+    "stands_for": "the LLM",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "green check-mark box",
+    "stands_for": "a correct answer",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "prompts a [V1] barn, a [V2] cat and a [V2] cat standing by a [V1] barn with their generated images",
+    "form": "image above a grey prompt box with coloured placeholder tokens",
+    "real_values": true
+   },
+   {
+    "what": "negative-style and positive-style captions: a dead man sitting on a couch with a laptop and a dog; a pretty woman in a red jacket skiing down a snowy hill; and both styles for a baseball photo",
+    "form": "photo with a caption box tagged NEG or POS in colour",
+    "real_values": true
+   },
+   {
+    "what": "chat templates <Human>: {Question Type_A} and <Robot>: {Answer Type_A}, and the same for B, then two ticked answers",
+    "form": "grey template boxes and a schematic LLM",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "two facing trapezoids forming an hourglass, coloured per LoRA, with no frozen weight block drawn",
+    "parts": [
+     "upper trapezoid",
+     "lower trapezoid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey box under each image holding Prompt: text with coloured slot tokens [V1] and [V2], and template lines with {Question Type} slots",
+    "parts": [
+     "prompt text",
+     "coloured slots"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "grey rounded box with a small robot icon and the label LLM",
+    "parts": [
+     "box",
+     "robot icon",
+     "label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the merge strip at the top left (LoRA_1 plus LoRA_2 to Unified Adapter), then panel (a) below it, then panels (b) and (c) to the right; inside a panel, from the single LoRAs to the dashed divider and the merged adapter."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three grey rounded panels side by side with bold lettered captions underneath. A small grey strip with the merge schematic sits above panel (a), outside its frame. Panel (a) splits left and right by a dashed vertical line, panels (b) and (c) split top and bottom by a dashed horizontal line, so the single LoRAs come first and the merged adapter last.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.35,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#70ad47",
+    "used_for": "green: first LoRA (LoRA_1, LoRA_barn, LoRA_NEG, LoRA_A) and its tokens [V1], NEG, Type_A"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "gold: second LoRA (LoRA_2, LoRA_cat, LoRA_POS, LoRA_B) and its tokens [V2], POS, Type_B"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange: labels of the merged adapters"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "green trapezoids of LoRA_1",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "yellow trapezoids of LoRA_2",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "Unified Adapter box",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "blue IterIS block arrow, outlined in navy"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "light grey tint behind the merge strip, prompt boxes, caption boxes and templates",
+    "opacity": 0.2
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "LLM box and its grey arrows"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "grey stroke of the rounded panel frames and dashed dividers"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt grey rounded frames and dashed dividers, thin black frames on photos, 1.25 pt navy outline on the blue arrow",
+  "font": "serif (Times New Roman), bold 8-9 pt module labels with 5 pt subscripts, 7.5 pt prompts and captions, a 15 pt bold plus sign, text coloured to match the LoRA it belongs to",
+  "corners": "mixed",
+  "arrows": "one chunky blue block arrow for the merge, thin grey down arrows around the LLM, a plus sign between the LoRAs",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = the first LoRA and every label tied to it (barn, NEG, [V1], Type_A), gold = the second LoRA and its labels (cat, POS, [V2], Type_B), orange = the merged adapter, pink = the Unified Adapter, light grey = prompt, caption and template boxes and the LLM box",
+  "line_style_means": "grey rounded frame = one application; dashed line inside a frame = separates the single LoRAs from the merged adapter; thin black frame = a photo or generated image",
+  "shape_means": "facing trapezoids = a LoRA; pink rounded box with a flexed arm = the unified adapter; blue block arrow = the IterIS merge; grey rounded box with a robot = the LLM",
+  "marker_means": "(a), (b), (c) letter the panels; subscripts name each adapter; [V1] and [V2] are concept placeholders; a green tick = a correct answer",
+  "emphasis": "colour continuity: the same colour follows a LoRA's label, its prompt token and its caption tag, so the merged result reads as the sum of the two colours",
+  "reusable_patterns": [
+   "one colour per source module kept on its label, prompt placeholder and caption tag",
+   "single-task results on one side of a dashed divider and the merged result on the other",
+   "the same merge motif repeated in three modality panels to show generality",
+   "small merge schematic (module plus module, method arrow, merged module) acting as a key to the panels",
+   "prompt or caption boxes under each image with coloured slot tokens",
+   "ticks under the answers to show that both tasks still work after merging"
+  ],
+  "weaknesses": [
+   "no legend: the green, gold and orange coding has to be inferred from the labels",
+   "the merge strip is set apart from the three panels and is not tied to them by arrows",
+   "panel (c) shows templates and ticks but no real answers"
+  ]
+ },
+ "resources": {
+  "own": [
+   "text-to-image outputs of the barn, cat and cat-by-barn adapters",
+   "photos with negative and positive captions",
+   "prompt, caption and chat templates"
+  ],
+  "stock": [
+   "flexed-arm emoji-like icon",
+   "robot icon",
+   "check-mark emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "LoRA trapezoid pairs",
+   "blue merge arrow",
+   "rounded panel frames and dashed dividers",
+   "LLM box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "green and gold LoRA trapezoid pairs",
+   "blue IterIS arrow into a Unified Adapter box with a flexed arm",
+   "barn and cat generated images with prompts",
+   "photos with negative and positive captions",
+   "chat template boxes",
+   "LLM box with robot icon and answer ticks",
+   "dashed dividers"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "LoRA merging",
+   "adapter fusion",
+   "text-to-image",
+   "image captioning",
+   "LLM",
+   "multi-concept customization",
+   "multi-style caption",
+   "multi-task"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "prompt-template-card",
+   "highlighted-text-spans",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "merge-motif-per-domain",
+    "what": "the same two-sources-to-merged-result motif repeated in each domain panel, split by a dashed divider, to show that a method is general across modalities"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show that a method is general, repeat one small motif (two specialised modules, then their merged result) in one panel per modality, keep one colour per source on every label, prompt token and caption tag, and add a tiny version of the motif with the method name as a key.",
+  "suits": "Method papers claiming generality across image, vision-language and text models, especially merging, ensembling or composition methods."
+ },
+ "tags": [
+  "three lettered cards",
+  "colour per module",
+  "serif labels",
+  "grey rounded frames",
+  "dashed dividers",
+  "photos with captions",
+  "small merge schematic"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "IterIS can be applied to (a) text-to-image diffusion models for multi-concept customization",
+   "LoRA-tuning can be effectively applied to various models, including text-to-image diffusion models, vision-language models, and large language models",
+   "we learn a single LoRA for each visual concept"
+  ]
+ },
+ "summary": "IterIS merges separately trained LoRA adapters into one unified adapter without access to their training data. Figure 1 first shows the idea in a small grey strip: LoRA1 plus LoRA2 go through a blue IterIS arrow into a Unified Adapter marked with a flexed arm. Three rounded panels then show the same merge in three domains: (a) multi-concept customization, where a barn LoRA and a cat LoRA are merged to draw a cat by a barn; (b) multi-style captions, where a negative-style and a positive-style LoRA caption a baseball photo in both styles; (c) multiple NLP tasks, where two question-type templates are answered through an LLM with check marks. Green, gold and orange follow the first LoRA, the second LoRA and the merged adapter.",
+ "summary_zh": "IterIS 在无需训练数据的情况下把多个LoRA合并成一个统一适配器。图1左上用小示意图说明合并，随后三个圆角面板分别展示文生图多概念定制、多风格图像描述和多NLP任务整合；绿、金、橙三色分别对应两个LoRA和合并后的适配器。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The merge strip at the top left is a tinted block without frame or title, so it is not counted as a panel; the three lettered cards are the panels. The check marks are emoji text. Panel (c) shows templates rather than real answers.",
+ "venue": "CVPR25"
+}

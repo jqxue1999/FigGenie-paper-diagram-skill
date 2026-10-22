@@ -1,0 +1,523 @@
+{
+ "paper_id": "neurips25-0185",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ThinkAct",
+  "one_liner": "A dual-system vision-language-action framework: an MLLM reasons, trained with GRPO and an action-aligned visual reward, and conditions a downstream action model.",
+  "domain": [
+   "vision-language-action",
+   "embodied reasoning",
+   "reinforcement learning"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "contribution-mosaic",
+   "worked-walkthrough"
+  ],
+  "variant": "fan-out",
+  "variant_note": "feedback box and a thinking robot on the left fan out into three aligned rows of capability, reasoning text and result",
+  "argues": "Reasoning reinforced by action-aligned visual feedback lets a robot think before acting and gain few-shot adaptation, long-horizon planning and self-correction.",
+  "subject": "A feedback box with two scored rollouts, a Thinking robot, and three rows pairing real reasoning text with its result.",
+  "elements": [
+   {
+    "name": "Reinforcement Reasoning",
+    "type": "label",
+    "role": "title of the training side",
+    "drawn_as": "bold hand-drawn style 9.5 pt title above the feedback box",
+    "container": "left",
+    "is_contribution": true
+   },
+   {
+    "name": "Action-Aligned Visual Feedback",
+    "type": "module",
+    "role": "scores each rollout by Goal Completion and Trajectory Alignment; the reward that reinforces reasoning",
+    "drawn_as": "rounded grey-framed box: two scene images with yellow trajectories, ticks or crosses beside both scores, the instruction Put the strawberry in the drawer. and a scale icon between them",
+    "container": "left",
+    "is_contribution": true
+   },
+   {
+    "name": "GRPO",
+    "type": "operation",
+    "role": "the RL algorithm that turns the feedback into a model update",
+    "drawn_as": "small label on a curved black arrow with an open head from the box title to the robot",
+    "container": "left",
+    "is_contribution": false
+   },
+   {
+    "name": "Thinking",
+    "type": "module",
+    "role": "the multimodal LLM that produces reasoning before acting",
+    "drawn_as": "cartoon white robot with teal eyes under a lightbulb thought bubble, bold caption Thinking",
+    "container": "centre-left",
+    "is_contribution": true
+   },
+   {
+    "name": "Few-Shot Adaptation",
+    "type": "label",
+    "role": "capability of row 1",
+    "drawn_as": "7 pt label left of the first dashed text box",
+    "container": "row 1",
+    "is_contribution": true
+   },
+   {
+    "name": "reasoning box 1",
+    "type": "text-block",
+    "role": "reasoning excerpt: analyse the image, identify the objects, notice the alphabet soup can on the floor and decide to pick it up",
+    "drawn_as": "dashed rounded box with 6.5 pt text, spans highlighted in light blue",
+    "container": "row 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Long-Horizon Planning",
+    "type": "label",
+    "role": "capability of row 2",
+    "drawn_as": "7 pt label left of the second dashed text box",
+    "container": "row 2",
+    "is_contribution": true
+   },
+   {
+    "name": "reasoning box 2",
+    "type": "text-block",
+    "role": "reasoning excerpt: break the task into steps, pick up the book, move it from left to right, place it in the back compartment",
+    "drawn_as": "dashed rounded box with 6.5 pt text, spans highlighted in light purple",
+    "container": "row 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Self-Correction",
+    "type": "label",
+    "role": "capability of row 3",
+    "drawn_as": "7 pt label left of the third dashed text box, hyphen-broken over two lines",
+    "container": "row 3",
+    "is_contribution": true
+   },
+   {
+    "name": "reasoning box 3",
+    "type": "text-block",
+    "role": "reasoning excerpt: notice that the cream cheese box has dropped from the arm and reconsider how to complete the task",
+    "drawn_as": "dashed rounded box with 6.5 pt text, spans highlighted in light green",
+    "container": "row 3",
+    "is_contribution": false
+   },
+   {
+    "name": "Acting",
+    "type": "module",
+    "role": "the acting side that executes in the environment",
+    "drawn_as": "bold 9.5 pt label beside a grey robot-arm icon at the right of the middle row",
+    "container": "right",
+    "is_contribution": false
+   },
+   {
+    "name": "10-shot on LIBERO",
+    "type": "chart",
+    "role": "result of row 1: ThinkAct (Ours) over OpenVLA with a gain of 25.1%",
+    "drawn_as": "dashed box with a two-bar chart, blue OpenVLA and green ThinkAct (Ours), red double-headed arrow and 25.1% with an up arrow",
+    "container": "row 1",
+    "is_contribution": true
+   },
+   {
+    "name": "long-horizon frames",
+    "type": "sample",
+    "role": "result of row 2: robot manipulation frames in order",
+    "drawn_as": "dashed box with two rows of frames, each two frames, a >> sign and one more frame",
+    "container": "row 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Dropped / Reflect & Correct",
+    "type": "label",
+    "role": "result of row 3: an object is dropped, then the robot reflects and corrects",
+    "drawn_as": "dashed box with a frame strip, red bold Dropped with a warning triangle, light-green bold Reflect & Correct with a dashed arrow and a second strip",
+    "container": "row 3",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Action-Aligned Visual Feedback",
+    "to": "Thinking",
+    "what": "reward feedback reinforces the reasoning model (GRPO)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Thinking",
+    "to": "the three capability rows",
+    "what": "the model's reasoning shows up as three capabilities; no line joins robot and rows",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "reasoning box 1",
+    "to": "10-shot on LIBERO",
+    "what": "reasoning leads to the few-shot result",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "reasoning box 2",
+    "to": "long-horizon frames",
+    "what": "the plan is carried out as the frame sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "reasoning box 3",
+    "to": "Dropped / Reflect & Correct",
+    "what": "reflection leads to a corrected attempt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "capability label",
+    "to": "reasoning box",
+    "what": "each label names the capability its excerpt shows",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "scores Goal Completion and Trajectory Alignment",
+    "to": "the two rollouts",
+    "what": "ticks for the good rollout, crosses for the bad one",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "highlight colour in reasoning box 3",
+    "to": "Reflect & Correct",
+    "what": "the self-correction green is repeated in the result label",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": ">>",
+    "kind": "order",
+    "at": "between frame groups in the long-horizon box",
+    "what": "time passes between frames"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two tabletop scenes with a basket and a drawer, with yellow trajectory lines and blue and red end dots",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails, one per rollout, ticks or crosses to their right"
+   },
+   {
+    "what": "bar chart of 10-shot success on LIBERO",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "two solid bars, blue OpenVLA and green ThinkAct (Ours), dashed top line, red double-headed arrow and red 25.1% with an up arrow"
+   },
+   {
+    "what": "robot manipulation frames of the long-horizon task",
+    "content": "video-frames",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "two rows of two adjacent frames, a >> sign, then one frame"
+   },
+   {
+    "what": "robot manipulation frames of the dropped-object recovery",
+    "content": "video-frames",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "a strip of three frames, then Dropped with a warning triangle, then a strip of three frames after Reflect & Correct"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon white round robot with teal eyes and ear pieces",
+    "stands_for": "the thinking MLLM",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "lightbulb in a thought bubble",
+    "stands_for": "an idea, thinking",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "grey robot arm",
+    "stands_for": "acting in the environment",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "black balance scale",
+    "stands_for": "weighing an outcome against the instruction (the reward)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "green check marks and red crosses in circles",
+    "stands_for": "goal completion and trajectory alignment met or failed",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "yellow warning triangle",
+    "stands_for": "the dropped-object alert",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "three reasoning excerpts: identifying objects in a scene, a step-by-step plan for moving a book, noticing a dropped cream cheese box and reconsidering",
+    "form": "dashed text boxes with spans highlighted in light blue, purple and green",
+    "real_values": true
+   },
+   {
+    "what": "two rollouts for the instruction Put the strawberry in the drawer. with goal completion and trajectory alignment marked by ticks and crosses",
+    "form": "two scene images with yellow trajectory lines, ticks, crosses and a scale icon",
+    "real_values": true
+   },
+   {
+    "what": "10-shot success on LIBERO: OpenVLA against ThinkAct (Ours), a gain of 25.1%",
+    "form": "two-bar chart with a red delta arrow",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon white robot with teal eyes under a lightbulb thought bubble, captioned Thinking",
+    "parts": [
+     "robot",
+     "thought bubble",
+     "caption"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "feedback box with rollouts scored by ticks and crosses and a curved arrow labelled GRPO into the model",
+    "parts": [
+     "scored rollouts",
+     "scale icon",
+     "curved GRPO arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "robot frames in short rows with >> signs between groups, no sprocket border",
+    "parts": [
+     "frames",
+     ">> signs"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the Reinforcement Reasoning title at top left, goes through the feedback box and the GRPO arrow to the Thinking robot, then across the three rows from capability label to reasoning text to result."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A grey-framed feedback box and the Thinking robot on the left; to the right three aligned rows, each a capability label, a dashed reasoning box, a big white outlined block arrow and a dashed result box; the Acting label and a robot arm sit between the reasoning boxes and the results.",
+  "panel_count": 1,
+  "lanes": "3 aligned rows: capability label, dashed reasoning box, block arrow, dashed result box",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.72,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cce5ff",
+    "used_for": "highlight of spans in reasoning box 1 (few-shot adaptation)"
+   },
+   {
+    "hex": "#e5ccff",
+    "used_for": "highlight of spans in reasoning box 2 (long-horizon planning)"
+   },
+   {
+    "hex": "#ccffcc",
+    "used_for": "highlight of spans in reasoning box 3 (self-correction)"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "grey rounded frame of the feedback box and small labels"
+   },
+   {
+    "hex": "#007fff",
+    "used_for": "OpenVLA bar"
+   },
+   {
+    "hex": "#009900",
+    "used_for": "ThinkAct (Ours) bar and green ticks"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red crosses, red double-headed arrow, 25.1% and Dropped"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, dashed outlines and titles"
+   },
+   {
+    "hex": "#97d077",
+    "used_for": "Reflect & Correct label",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black dashed outlines on the six text and result boxes; solid grey rounded frame on the feedback box; 0.75 pt black and red arrows",
+  "font": "hand-drawn style sans (Comic Sans MS) 6.5 pt reasoning text, 7 pt capability labels, bold 9.5 pt zone titles; Helvetica bold 5 to 6 pt in the chart",
+  "corners": "rounded",
+  "arrows": "curved black arrow with an open head; large white block arrows with black outlines; thin red double-headed arrow in the chart; dashed black arrow for Reflect & Correct",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "highlight colour marks the capability inside the reasoning text (blue few-shot adaptation, purple long-horizon planning, green self-correction); green tick and red cross are scores; chart: blue OpenVLA, green ThinkAct (Ours); red = emphasis (gain arrow, Dropped); the light green of Reflect & Correct repeats the self-correction highlight",
+  "line_style_means": "dashed boxes = excerpts of reasoning and result panels; solid rounded grey frame = the feedback module; big outlined block arrows = from reasoning to its result; curved black arrow = reward feedback; dashed arrow = reflect and correct",
+  "shape_means": "cartoon robot with lightbulb = the thinking model; grey robot arm = acting; balance scale = weighing the outcome against the instruction",
+  "marker_means": ">> means time passes between frames; tick and cross = goal completion or trajectory alignment met or failed; warning triangle = dropped object",
+  "emphasis": "bold hand-drawn titles Reinforcement Reasoning, Thinking and Acting; red 25.1% arrow; red Dropped label",
+  "reusable_patterns": [
+   "fan-out rows: capability label, dashed text box of real reasoning with highlighted spans, big outlined block arrow, dashed result box",
+   "feedback box with two rollouts scored by ticks and crosses and a scale icon, tied to the model by a curved arrow labelled with the RL algorithm",
+   "highlighter colours per capability inside the reasoning text",
+   "single headline bar chart with a red delta arrow",
+   "frame strips with >> between groups and a Dropped tag with a warning sign",
+   "cartoon robot with a lightbulb as the thinking model and a robot arm as the acting part"
+  ],
+  "weaknesses": [
+   "the Thinking robot and the capability labels are not joined by lines, so the fan-out is implied by position",
+   "6.5 pt reasoning text is dense",
+   "the Acting label sits between an arm icon and a block arrow, so which part acts is ambiguous"
+  ]
+ },
+ "resources": {
+  "own": [
+   "reasoning text excerpts",
+   "robot scene images and manipulation frames from experiments",
+   "10-shot LIBERO scores"
+  ],
+  "stock": [
+   "lightbulb thought bubble, scale, tick, cross and warning icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed boxes, block arrows and highlight spans",
+   "bar chart"
+  ],
+  "unknown": [
+   "origin of the cartoon robot and the robot-arm picture (stock or generated)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "cartoon robot with lightbulb thought bubble",
+   "feedback box with two scored rollouts and a scale icon",
+   "curved arrow labelled GRPO",
+   "three dashed reasoning boxes with coloured highlights",
+   "big outlined block arrows",
+   "bar chart with a red 25.1% arrow",
+   "frame strips with >> signs",
+   "dropped-object warning with Reflect & Correct"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "vision-language-action",
+   "reasoning before acting",
+   "GRPO",
+   "visual latent planning",
+   "few-shot adaptation",
+   "long-horizon planning",
+   "self-correction",
+   "LIBERO"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "verdict-marks",
+   "model-pictogram",
+   "plot-callouts",
+   "filmstrip",
+   "error-callouts"
+  ],
+  "new_tags": [
+   {
+    "name": "capability-rows-with-block-arrows",
+    "what": "each claimed capability is a row: label, dashed text box of real reasoning with highlighted spans, a big white outlined block arrow, and a dashed result box"
+   },
+   {
+    "name": "scale-icon-reward",
+    "what": "a balance-scale icon between two scored rollouts that stands for the reward comparing outcomes with the instruction"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show thinking before acting as a left-to-right fan-out: a feedback box with scored rollouts and a labelled curved arrow into a cartoon thinker, then one row per capability pairing real reasoning text with highlighted spans and its result through a big outlined arrow.",
+  "suits": "agent or embodied-AI papers that claim several emergent capabilities and can back each with a text excerpt and a small result."
+ },
+ "tags": [
+  "teaser",
+  "hand-drawn-font",
+  "dashed-boxes",
+  "block-arrows",
+  "cartoon-robot",
+  "highlighter-spans"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "ThinkAct adopts a dual-system architecture that connects structured reasoning with executable actions.",
+   "we incentivize MLLMs to perform long-horizon planning by advancing reinforcement learning with an action-aligned reward",
+   "ThinkAct enables capabilities of few-shot adaptation, long-horizon planning, and self-correction in embodied tasks."
+  ]
+ },
+ "summary": "ThinkAct is a dual-system vision-language-action framework in which a multimodal LLM reasons before an action model acts, trained with GRPO and an action-aligned visual reward. Figure 1 reads left to right. A grey-framed Action-Aligned Visual Feedback box scores two rollouts of Put the strawberry in the drawer with goal-completion and trajectory-alignment ticks and crosses around a scale icon, and a curved arrow labelled GRPO leads to a cartoon robot with a lightbulb, Thinking. Three aligned rows then pair a capability label (Few-Shot Adaptation, Long-Horizon Planning, Self-Correction) with a dashed box of real reasoning text with highlighted spans, a big outlined arrow, and a result: a 10-shot LIBERO bar chart with a 25.1% gain, frame strips, and a dropped-object recovery.",
+ "summary_zh": "ThinkAct 是先推理后行动的双系统视觉-语言-动作框架。图 1 自左向右：带对错标记的动作对齐视觉反馈框经 GRPO 箭头指向“思考”机器人，再分三行展示少样本适应、长程规划与自我纠正的推理文本、结果柱状图和机器人帧序列。",
+ "confidence": "high",
+ "notes": "Prior labels kept in order (stage-pipeline as fan-out, contribution-mosaic as capability rows, worked-walkthrough for the real reasoning text and frames). The fan-out from the Thinking robot to the three rows is implied by position; no line joins them. Panel count is 1 because the dashed boxes are untitled parts of three aligned rows. The digest counts no dashed shapes although the boxes are drawn dashed, so the dashes may be part of placed artwork. The origin of the cartoon robot and robot-arm picture (stock or generated) is unknown.",
+ "venue": "NeurIPS25"
+}

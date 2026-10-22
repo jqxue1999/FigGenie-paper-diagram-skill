@@ -1,0 +1,474 @@
+{
+ "paper_id": "iclr26-0093",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Q-RAG",
+  "one_liner": "A retrieval method that fine-tunes the embedder with value-based reinforcement learning so an agent picks chunks of a long context step by step using learned Q-values.",
+  "domain": [
+   "retrieval-augmented generation",
+   "multi-step retrieval",
+   "reinforcement learning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "an agent box above and an environment box below a row of document chunks, closed into a loop by arrows around the figure, with one step shown on a toy story",
+  "argues": "Multi-step retrieval is an RL episode: the agent embeds the state and every chunk, scores each chunk with a Q-function, a policy picks the next chunk, and the environment returns the reward and the extended state.",
+  "subject": "Q-RAG agent with state and action embedders, Q values and policy, a row of document chunks, and the environment with critic and next state.",
+  "elements": [
+   {
+    "name": "Q-RAG Agent",
+    "type": "container",
+    "role": "the learner that embeds the state and the chunks and selects the next chunk",
+    "drawn_as": "large white rounded box with a thick green outline and a grey title above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "State Embedder",
+    "type": "module",
+    "role": "embeds the current state, the query plus all previously selected chunks",
+    "drawn_as": "pale green rounded box with a thin green outline",
+    "container": "Q-RAG Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Embedder",
+    "type": "module",
+    "role": "embeds each chunk of the long context once at the start of the episode",
+    "drawn_as": "pale green rounded box below the state embedder",
+    "container": "Q-RAG Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "e_st, e_c0 ... e_c5",
+    "type": "data",
+    "role": "state embedding and chunk embeddings; a × stands where the embedding of the selected chunk c4 would be",
+    "drawn_as": "italic serif symbols on green connectors; vertical stubs from the action embedder",
+    "container": "Q-RAG Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Q values",
+    "type": "data",
+    "role": "utility of retrieving each chunk, Qθ(st, c0) to Qθ(st, c5)",
+    "drawn_as": "very pale green box with two formulas and a column of dots between them, grey caption above",
+    "container": "Q-RAG Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "π(·|st)",
+    "type": "operation",
+    "role": "policy that picks the next chunk with probability proportional to its Q value",
+    "drawn_as": "large serif formula at the end of a green arrow from the Q values",
+    "container": "Q-RAG Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "at = c3",
+    "type": "data",
+    "role": "the selected action, chunk c3, with its text",
+    "drawn_as": "large serif equation at the right with a yellow note below it reading '...that, he spent twenty minutes at a café...'",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "st = q {c4}",
+    "type": "data",
+    "role": "current state: the query q and the previously selected chunk c4",
+    "drawn_as": "equation with a pink note chip for q and a grey note chip for c4 inside braces",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Long-Context Document",
+    "type": "container",
+    "role": "the long text split into chunks c0 to c5 that the agent searches",
+    "drawn_as": "curly brace around a row of six sticky-note chunks, grey caption at the right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "chunk notes c0-c5",
+    "type": "sample",
+    "role": "text snippets of a story about John (office, home, pharmacy, café, keys, neighbor's place)",
+    "drawn_as": "yellow sticky notes with a folded corner and orange outline; c4 grey as already selected; each with an italic index c0 to c5 above",
+    "container": "Long-Context Document",
+    "is_contribution": false
+   },
+   {
+    "name": "Environment",
+    "type": "container",
+    "role": "the retrieval environment that answers an action with a reward and the next state",
+    "drawn_as": "white rounded box with a thick light-blue outline and a grey title below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "reward function / critic",
+    "type": "module",
+    "role": "computes the reward from the question and the answer",
+    "drawn_as": "solid blue box with black outline and white text",
+    "container": "Environment",
+    "is_contribution": null
+   },
+   {
+    "name": "Question and Answer notes",
+    "type": "sample",
+    "role": "the question 'Where could John have forgotten his keys?' (q) and the answer 'cafe, pharmacy' (y)",
+    "drawn_as": "pink note with magenta outline and blue note with blue outline, joined to the critic by dashed double-headed or single arrows",
+    "container": "Environment",
+    "is_contribution": false
+   },
+   {
+    "name": "st+1 = q {c3 c4}",
+    "type": "data",
+    "role": "next state after adding the chosen chunk c3 to the selected set",
+    "drawn_as": "equation with pink, yellow and grey chips on a pale blue panel",
+    "container": "Environment",
+    "is_contribution": null
+   },
+   {
+    "name": "rt+1, st+1 and Next timestep",
+    "type": "label",
+    "role": "reward and next state go back to the agent for the next step",
+    "drawn_as": "serif label under a black arrow that runs left to a tick mark and then up the left side to st",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "st = q {c4}",
+    "to": "State Embedder",
+    "what": "current state goes into the state embedder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "State Embedder",
+    "to": "Q values",
+    "what": "state embedding e_st",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "chunk notes c0-c5",
+    "to": "Action Embedder",
+    "what": "chunk texts to be embedded; c4 enters through a dark dashed arrow and is marked by × afterwards",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action Embedder",
+    "to": "Q values",
+    "what": "chunk embeddings e_c0 to e_c5",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q values",
+    "to": "π(·|st)",
+    "what": "scores define the selection probabilities",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "π(·|st)",
+    "to": "at = c3",
+    "what": "the policy selects chunk c3",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "at = c3",
+    "to": "st+1 = q {c3 c4}",
+    "what": "the action is sent to the environment and added to the state",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Question note",
+    "to": "reward function / critic and st+1",
+    "what": "q goes to the critic and stays in the state",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Answer note",
+    "to": "reward function / critic",
+    "what": "y, the reference answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "st+1",
+    "to": "reward function / critic",
+    "what": "new state is evaluated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "reward function / critic",
+    "to": "st",
+    "what": "rt+1 and st+1 return to the agent for the next timestep",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "c0 ... c5",
+    "kind": "identity",
+    "at": "above each chunk note and in the state chips",
+    "what": "indexes the document chunks"
+   },
+   {
+    "marker": "×",
+    "kind": "identity",
+    "at": "between e_c3 and e_c5",
+    "what": "stands for the embedding of the already selected chunk c4, which is not an available action (probable reading)"
+   },
+   {
+    "marker": "Next timestep",
+    "kind": "order",
+    "at": "tick on the left loop-back arrow",
+    "what": "the loop closes and the next step begins"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy multi-hop question about where John could have forgotten his keys, six story chunks, the selected chunk c3 and the answer 'cafe, pharmacy'",
+    "form": "sticky-note text snippets and state equations built from coloured chips",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "agent box above and environment box below; the action goes down the right side, reward and next state return along the bottom and up the left side to the state",
+    "parts": [
+     "agent",
+     "environment",
+     "at",
+     "rt+1, st+1"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "the document is a row of sticky-note chunks under a curly brace instead of a database cylinder; each chunk feeds the action embedder by its own arrow",
+    "parts": [
+     "chunk notes",
+     "brace",
+     "arrows to the embedder"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at st = q {c4} at the left, enters the State Embedder, moves via the embeddings to the Q values and π, reaches at = c3 at the right, descends to the Environment and returns left through the critic to Next timestep and up to st."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked bands: the Q-RAG Agent box on top, the row of document chunks in the middle, the Environment box at the bottom; arrows run up from the chunks to the action embedder, and loop arrows around the left and right sides close the cycle.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.11,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c7e8ac",
+    "used_for": "fill of the State Embedder and Action Embedder boxes"
+   },
+   {
+    "hex": "#e3fae3",
+    "used_for": "very pale green fill behind the Q values"
+   },
+   {
+    "hex": "#54c45e",
+    "used_for": "green outline of the agent box and green embedding arrows"
+   },
+   {
+    "hex": "#fcfcca",
+    "used_for": "yellow fill of the unselected chunk notes"
+   },
+   {
+    "hex": "#fc9432",
+    "used_for": "orange outlines of the chunk notes and the dashed arrows into the Action Embedder"
+   },
+   {
+    "hex": "#ced4db",
+    "used_for": "grey fill of the already selected chunk c4"
+   },
+   {
+    "hex": "#ffd6f5",
+    "used_for": "pale pink fill of the question note and the q chips"
+   },
+   {
+    "hex": "#d916a8",
+    "used_for": "magenta outline and dashed arrows of the question"
+   },
+   {
+    "hex": "#6db1ff",
+    "used_for": "blue critic box and the light-blue border of the Environment"
+   },
+   {
+    "hex": "#cfe4ff",
+    "used_for": "pale blue fill of the answer note and the st+1 panel"
+   },
+   {
+    "hex": "#1071e5",
+    "used_for": "blue outline of the answer note and the line into the critic"
+   },
+   {
+    "hex": "#979ea8",
+    "used_for": "grey captions: Q-RAG Agent, Environment, Next timestep, Long-Context Document"
+   },
+   {
+    "hex": "#4c535d",
+    "used_for": "dark slate loop arrows and the dashed arrow of the selected chunk"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt coloured outlines and connectors, 1-1.25 pt on the agent, environment and critic boxes",
+  "font": "sans (Nimbus Sans) 3.5 pt in notes, 5.5 pt module labels, 7 pt box titles; math symbols as italic serif glyph outlines",
+  "corners": "mixed",
+  "arrows": "orthogonal connectors with open triangular heads in the colour of their stream: dashed orange for chunk text, solid green for embeddings, dashed magenta and blue for question and answer, dark slate for the loop",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = agent and its embeddings; yellow note = a chunk still available; grey note = an already selected chunk (c4); pink = the question q; blue = environment, critic and answer; orange dashed = chunk text into the action embedder; magenta dashed = question; blue dashed = answer",
+  "line_style_means": "dashed = text passed as data (chunks, q, y); solid green = embeddings; solid dark = the state and action loop",
+  "shape_means": "sticky note with a folded corner = a text snippet; rounded rectangle = module or box; curly brace = the long document; × = chunk not scored",
+  "marker_means": "superscript indices c0 to c5 number the chunks; e_ci are their embeddings; st, at, rt+1, st+1 are the RL symbols; the tick marks Next timestep",
+  "emphasis": "Thick green and light-blue borders make agent and environment the two big units; the selected a_t = c3 and the new state st+1 = q {c3 c4} are set in large serif type.",
+  "reusable_patterns": [
+   "agent box above, environment box below and the long document as a row of notes between them, with loop arrows around the figure",
+   "sticky-note shapes for text chunks, the already selected one greyed and marked by × in the embedding row",
+   "state written as a small equation of coloured chips: st = q {c4}",
+   "one connector colour per data stream (orange chunks, magenta question, blue answer, green embeddings)",
+   "Q-value vector drawn as two formulas with vertical dots between them",
+   "RL symbols at, rt+1, st+1 as plain serif labels on the loop"
+  ],
+  "weaknesses": [
+   "note text is 3.5 pt",
+   "many orthogonal connectors in different colours meet near the action embedder",
+   "the meaning of the grey note and the × is not stated in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a toy multi-hop question, answer and story chunks (probably written for the figure)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "agent and environment boxes, embedder and critic boxes",
+   "sticky-note chunks and state equations",
+   "coloured connectors and loop arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "agent box with state and action embedders",
+   "Q-value vector and policy π",
+   "sticky-note document chunks c0-c5",
+   "question and answer notes",
+   "reward function / critic box",
+   "state equations with coloured chips",
+   "loop-back arrows"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "Q-RAG",
+   "multi-step retrieval",
+   "reinforcement learning",
+   "Q-function",
+   "embedder",
+   "long-context QA",
+   "RAG",
+   "state action reward"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "colour-coded-groups",
+   "equation-boxes"
+  ],
+  "new_tags": [
+   {
+    "name": "sticky-note-text-chunks",
+    "what": "text snippets drawn as sticky-note shapes with a folded corner, coloured by role: yellow candidates, grey already selected, pink question, blue answer"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw an RL method over text as one closed loop: agent box above, environment box below, the document as a row of sticky-note chunks between them, state and action as small equations of coloured chips, and side arrows that close the cycle.",
+  "suits": "RL or agentic methods over a text corpus (retrieval, search, tool use) where the state grows by chunks and agent, environment and data must be visible together."
+ },
+ "tags": [
+  "agent-environment-loop",
+  "sticky-notes",
+  "colour-coded-connectors",
+  "math-labels",
+  "sans-text",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption (p.3)",
+   "Appendix, State Embedding (p.24)"
+  ],
+  "evidence": [
+   "Q-RAG agent interacts with multi-step retrieval environment.",
+   "The policy πθ selects the next chunk from At with probability proportional to its Qθ(st, ci) value."
+  ]
+ },
+ "summary": "Q-RAG fine-tunes the embedder of a retrieval-augmented generator with value-based reinforcement learning so that an agent retrieves chunks of a long context step by step. Figure 1 draws one episode step as an agent-environment loop. In the green Q-RAG Agent box a State Embedder encodes the state (the query q and the already selected chunk c4) and an Action Embedder encodes every chunk; their embeddings give Q values for each chunk and a policy π that selects a_t = c3. A row of yellow sticky-note chunks c0 to c5 under a curly brace, the Long-Context Document, feeds the action embedder. In the blue Environment box a reward function or critic, a question note and an answer note produce r(t+1) and the new state, and arrows close the loop to the next timestep.",
+ "summary_zh": "Q-RAG用基于价值的强化学习微调嵌入器，让智能体逐步检索长上下文。图1把一步画成智能体-环境循环：状态与各文本块的嵌入得到Q值和策略π，选出块c3；黄色便签块组成长文档；蓝色环境框里的奖励函数/评判器返回奖励与新状态。",
+ "confidence": "high",
+ "notes": "Kinds: actor-interaction first as in the pre-screen, model-anatomy for the agent's internals, worked-walkthrough because one step is shown on a toy story. The grey note and the × are read as 'already selected chunk' and 'not scored'; the caption says Q is evaluated for chunks in At. The story about John's keys is likely written for the figure.",
+ "venue": "ICLR26"
+}

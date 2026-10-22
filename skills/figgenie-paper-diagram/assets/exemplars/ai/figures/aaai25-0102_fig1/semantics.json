@@ -1,0 +1,586 @@
+{
+ "paper_id": "aaai25-0102",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SemiDFL",
+  "one_liner": "A semi-supervised method for decentralized federated learning that builds consensus in data and model spaces through neighbour pseudo-labelling, consensus MixUp and adaptive aggregation.",
+  "domain": [
+   "decentralized federated learning",
+   "semi-supervised learning",
+   "pseudo-labeling"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "actor-interaction"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "six numbered chevron steps in a ring around a five-client miniature, with zoom insets only for the three contribution steps; panel (a) is the client topology",
+  "argues": "Decentralised clients with labelled, mixed or unlabelled data loop through six steps, three of them new (neighbourhood pseudo-labelling, consensus MixUp, adaptive aggregation), to reach consensus in data and model spaces.",
+  "subject": "ten-client communication topology and a six-step training ring with three zoom insets on the contribution steps",
+  "elements": [
+   {
+    "name": "Labeled Client",
+    "type": "actor",
+    "role": "client holding labeled data (clients 1 and 2)",
+    "drawn_as": "green person-above-base icon, base bar with two filled dots",
+    "container": "(a) Communication topology",
+    "is_contribution": false
+   },
+   {
+    "name": "Mixed Client",
+    "type": "actor",
+    "role": "client holding both labeled and unlabeled data (clients 3 and 4)",
+    "drawn_as": "blue person icon, base bar with filled and hollow dots",
+    "container": "(a) Communication topology",
+    "is_contribution": false
+   },
+   {
+    "name": "Unlabeled Client",
+    "type": "actor",
+    "role": "client holding only unlabeled data (clients 5 to 10)",
+    "drawn_as": "orange person icon, base bar with five hollow dots",
+    "container": "(a) Communication topology",
+    "is_contribution": false
+   },
+   {
+    "name": "Communication",
+    "type": "label",
+    "role": "links between neighbouring clients; no central server",
+    "drawn_as": "thin black double-headed arrows in a partial mesh, with a sample arrow in the legend row",
+    "container": "(a) Communication topology",
+    "is_contribution": false
+   },
+   {
+    "name": "Neighborhood Pseudo-Labeling",
+    "type": "operation",
+    "role": "step 1: uses neighbourhood information to improve pseudo labels for unlabeled data",
+    "drawn_as": "chevron-shaped ring segment, circled light-blue 1, bold serif title",
+    "container": "(b) ring",
+    "is_contribution": true
+   },
+   {
+    "name": "Generator Training",
+    "type": "operation",
+    "role": "step 2: trains the consensus generator (a diffusion model in the paper text)",
+    "drawn_as": "ring segment with a rainbow-node network glyph, circled purple 2",
+    "container": "(b) ring",
+    "is_contribution": false
+   },
+   {
+    "name": "Consensus MixUp",
+    "type": "operation",
+    "role": "step 3: mixes labeled, pseudo-labeled and generated data",
+    "drawn_as": "ring segment at the bottom, circled light-blue 3, bold title",
+    "container": "(b) ring",
+    "is_contribution": true
+   },
+   {
+    "name": "Classifier Training",
+    "type": "operation",
+    "role": "step 4: trains the classifier on the mixed data",
+    "drawn_as": "ring segment with a yellow-node network glyph, circled purple 4",
+    "container": "(b) ring",
+    "is_contribution": false
+   },
+   {
+    "name": "Classifier Evaluation",
+    "type": "operation",
+    "role": "step 5: evaluates the classifier",
+    "drawn_as": "ring segment with a yellow-node network glyph, circled light-blue 5",
+    "container": "(b) ring",
+    "is_contribution": false
+   },
+   {
+    "name": "Adaptive Aggregation",
+    "type": "operation",
+    "role": "step 6: aggregates neighbours' models with adaptive weights",
+    "drawn_as": "ring segment at the top left, circled purple 6, bold title",
+    "container": "(b) ring",
+    "is_contribution": true
+   },
+   {
+    "name": "five-client miniature",
+    "type": "region",
+    "role": "small decentralised network (clients 1-5) that the six steps circle around",
+    "drawn_as": "soft grey disc in the ring centre holding five client icons with double-headed arrows",
+    "container": "(b) ring",
+    "is_contribution": false
+   },
+   {
+    "name": "aggregation inset",
+    "type": "container",
+    "role": "zoom into step 6: a client and its neighbours, each model carrying a weight 0.1, 0.2, 0.3 or 0.4",
+    "drawn_as": "dashed box with green, orange and blue ellipses, each holding a data cylinder and network glyphs, joined by black arrows",
+    "container": "(b) right column",
+    "is_contribution": true
+   },
+   {
+    "name": "Variant 1 ... Variant k",
+    "type": "data",
+    "role": "variants of a dataset, each passed through a classifier",
+    "drawn_as": "blue cylinders numbered 1 and k with dots between",
+    "container": "pseudo-labelling inset",
+    "is_contribution": true
+   },
+   {
+    "name": "Classifier i ... Classifier j",
+    "type": "module",
+    "role": "classifiers that each turn a variant into a class distribution",
+    "drawn_as": "network glyphs followed by small green bar histograms",
+    "container": "pseudo-labelling inset",
+    "is_contribution": true
+   },
+   {
+    "name": "Neighbor filtering",
+    "type": "operation",
+    "role": "merges the predictions into one pseudo label",
+    "drawn_as": "curly brace plus hollow block arrow",
+    "container": "pseudo-labelling inset",
+    "is_contribution": true
+   },
+   {
+    "name": "Pseudo label",
+    "type": "data",
+    "role": "output of the pseudo-labelling step",
+    "drawn_as": "blue cylinder",
+    "container": "pseudo-labelling inset",
+    "is_contribution": true
+   },
+   {
+    "name": "Labeled, Pseudo, Generated, Mixed",
+    "type": "data",
+    "role": "three datasets united (union sign) and mixed into one",
+    "drawn_as": "green, blue, orange cylinders joined by union signs and a hollow arrow labelled MixUp into a multi-coloured cylinder",
+    "container": "MixUp inset",
+    "is_contribution": true
+   },
+   {
+    "name": "legend row",
+    "type": "container",
+    "role": "keys the three client colours and the communication arrow",
+    "drawn_as": "three client icons and a double-headed arrow with serif captions under the topology",
+    "container": "(a) Communication topology",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "client",
+    "to": "neighbouring client",
+    "what": "communication in a decentralized topology",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "steps 1 to 6",
+    "to": "next step",
+    "what": "clockwise cycle; step 6 returns to step 1",
+    "kind": "time",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Neighborhood Pseudo-Labeling",
+    "to": "pseudo-labelling inset",
+    "what": "zoom into the step",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Consensus MixUp",
+    "to": "MixUp inset",
+    "what": "zoom into the step",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Adaptive Aggregation",
+    "to": "aggregation inset",
+    "what": "zoom into the step",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "(a) client icons",
+    "to": "five-client miniature in (b)",
+    "what": "same icons, numbers and colours",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Variant 1 ... Variant k",
+    "to": "Classifier i ... Classifier j",
+    "what": "each variant goes through a classifier",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Classifier outputs",
+    "to": "Neighbor filtering",
+    "what": "class distributions merged by a brace",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Neighbor filtering",
+    "to": "Pseudo label",
+    "what": "pseudo label",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Labeled, Pseudo, Generated",
+    "to": "Mixed",
+    "what": "union, then MixUp",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "neighbour clients",
+    "to": "central client",
+    "what": "models carrying weights 0.1, 0.2, 0.3 and 0.4",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Communication topology",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "ten clients (1-10) coloured by data situation and joined by bidirectional communication arrows, legend row underneath",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Schematic diagram of SemiDFL",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "ring of six numbered steps around a five-client miniature, three dashed zoom insets at the right",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1 to 6 (circled)",
+    "kind": "order",
+    "at": "ring segments",
+    "what": "orders the six steps clockwise; the caption names 1, 3 and 6 as the contributions"
+   },
+   {
+    "marker": "1 to 10",
+    "kind": "identity",
+    "at": "client icons in (a) and in the ring centre",
+    "what": "names each client"
+   },
+   {
+    "marker": "0.1, 0.2, 0.3, 0.4",
+    "kind": "identity",
+    "at": "models in the aggregation inset",
+    "what": "aggregation weights, which sum to 1"
+   },
+   {
+    "marker": "i, j, k",
+    "kind": "identity",
+    "at": "pseudo-labelling inset",
+    "what": "indexes variants and classifiers"
+   },
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "titles under the two panels",
+    "what": "names the two panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "tiny green bar histograms beside the classifier glyphs",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "four bars each, one tall and three short, dark green outline, standing for a predicted distribution"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "person above a base bar with dots, in green, blue or orange",
+    "stands_for": "a client with labeled, mixed or unlabeled data",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 18
+   },
+   {
+    "depicts": "node-and-edge network glyph with yellow nodes",
+    "stands_for": "a classifier",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 10
+   },
+   {
+    "depicts": "node-and-edge network glyph with rainbow nodes",
+    "stands_for": "the generator",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "database cylinders in green, blue, orange or blended colours",
+    "stands_for": "datasets (labeled, pseudo, generated, mixed)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 10
+   }
+  ],
+  "examples": [
+   {
+    "what": "the ten-client topology used in the experiments",
+    "form": "ten numbered icons with double-headed arrows",
+    "real_values": true
+   },
+   {
+    "what": "toy aggregation weights 0.1, 0.2, 0.3, 0.4 on a client and its neighbours",
+    "form": "numbers beside models inside coloured ellipses",
+    "real_values": false
+   },
+   {
+    "what": "labeled, pseudo-labeled and generated datasets united and mixed",
+    "form": "coloured cylinders joined by union signs and a hollow arrow",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "federated-round",
+    "drawn_as": "client icons joined peer to peer by double-headed arrows with no server in the middle",
+    "parts": [
+     "client icons",
+     "double-headed arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "step-ring",
+    "drawn_as": "six chevron-shaped segments with circled numbers closing a ring around a miniature of the network",
+    "parts": [
+     "ring segments",
+     "circled numbers",
+     "grey centre disc"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "dataset-cylinder",
+    "drawn_as": "database cylinder, coloured by data type, standing for a dataset",
+    "parts": [
+     "cylinder",
+     "caption"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "classifier-glyph",
+    "drawn_as": "small node-and-edge network, yellow nodes for the classifier and rainbow nodes for the generator",
+    "parts": [
+     "node columns",
+     "edges"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the client topology in (a), moves to the ring in (b) and runs clockwise from step 1 at top right; the insets on the right are read top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side. (a) at the left is a ten-client topology with a legend row beneath. (b) holds a ring of six chevron steps around a grey disc, with a column of three dashed inset boxes to its right that are tied to steps 6, 1 and 3 by dashed leader lines.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.66,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#98cf34",
+    "used_for": "labeled clients, their ellipse and the labeled dataset"
+   },
+   {
+    "hex": "#338ae9",
+    "used_for": "mixed clients, the blue ellipse and pseudo-labeled data"
+   },
+   {
+    "hex": "#c77150",
+    "used_for": "unlabeled clients, the orange ellipse and generated data"
+   },
+   {
+    "hex": "#73d0ff",
+    "used_for": "circled numbers 1, 3, 5 and the cool end of the ring glow"
+   },
+   {
+    "hex": "#a38df8",
+    "used_for": "circled numbers 2, 4, 6 and the purple end of the ring glow"
+   },
+   {
+    "hex": "#d9d9d9",
+    "opacity": 0.2,
+    "used_for": "soft grey disc in the ring centre"
+   },
+   {
+    "hex": "#b4e5a2",
+    "used_for": "light green bars of the histograms",
+    "approx": true
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "dark green outline of the histogram bars",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black arrows and outlines, 1 pt coloured outlines on ellipses, 0.5 pt dashed black inset boxes",
+  "font": "serif (Times New Roman), 5.5-11.5 pt, bold step titles, italic indices i j k",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows with small heads (double-headed in (a)), hollow block arrows in the insets, chevron-shaped ring segments pointing clockwise",
+  "rendering": "flat-vector",
+  "effects": "soft gradient glow along the ring segments and the grey disc (bitmap pieces); no shadows elsewhere",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Client colour = data situation (green labeled, blue mixed, orange unlabeled, keyed in the legend row); the same three hues colour the datasets in the MixUp inset and the client ellipses in the aggregation inset; ring numbers alternate light blue and purple with no stated meaning.",
+  "line_style_means": "Dashed black boxes and long dashed lines = zoom insets and their leaders; solid thin double-headed lines = communication links.",
+  "shape_means": "person above a base bar = client; dot pattern on the base bar differs per client type (not explained, apparently the labeled share); cylinder = dataset; yellow-node glyph = classifier, rainbow-node glyph = generator; chevron segment = one step; bar histogram = class distribution; hollow block arrow = hand-over.",
+  "marker_means": "Circled 1-6 order the steps; plain 1-10 name the clients; 0.1-0.4 are aggregation weights; i, j, k index classifiers and variants.",
+  "emphasis": "Zoom insets exist only for steps 1, 3 and 6, the contributions named in the caption; steps 2, 4, 5 (general ideas) stay without an inset.",
+  "reusable_patterns": [
+   "ring of chevron segments with circled numbers around a miniature of the system",
+   "dashed zoom insets only for the contribution steps, each tied to its segment by one dashed leader line",
+   "client icon whose base-bar dots change with the data situation",
+   "toy numeric weights written on the aggregation inset (0.1-0.4, summing to 1)",
+   "coloured dataset cylinders joined by union signs and a hollow arrow labelled with the operation",
+   "legend row of icons directly under the topology panel"
+  ],
+  "weaknesses": [
+   "the leader lines are single thin dashed lines that run far, so matching inset to step needs care",
+   "inset text is 6.5 pt, the smallest in the figure",
+   "the meaning of the dot rows on the client icons is not explained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the ten-client topology used in the experiments"
+  ],
+  "stock": [
+   "person-above-base client icons",
+   "database cylinder icons",
+   "node-and-edge network glyphs"
+  ],
+  "generated": [],
+  "drawn": [
+   "ring segments and grey disc (glow effects)",
+   "dashed insets and leader lines",
+   "communication arrows",
+   "histogram glyphs",
+   "union signs and hollow arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "client icons in three colours",
+   "ten-client mesh of double-headed arrows",
+   "six-segment ring with circled numbers",
+   "grey disc with five clients",
+   "dashed zoom insets",
+   "dataset cylinders with union signs",
+   "bar histograms beside classifier glyphs"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "decentralized federated learning",
+   "semi-supervised learning",
+   "pseudo-labeling",
+   "MixUp",
+   "consensus",
+   "adaptive aggregation",
+   "diffusion generator",
+   "communication topology"
+  ],
+  "tags": [
+   "zoom-callout",
+   "colour-coded-groups",
+   "toy-values-inline",
+   "distribution-glyph",
+   "model-pictogram",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "ring-of-steps",
+    "what": "numbered chevron segments arranged in a circle around a miniature of the system, read clockwise as a loop"
+   },
+   {
+    "name": "contribution-only-zoom",
+    "what": "zoom insets are drawn only for the steps that are the paper's contributions, general steps stay unzoomed"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give detailed zoom insets only to the steps the paper claims as new and tie each to its ring segment with one dashed leader line, so the figure itself marks the contribution. Write toy numbers into the insets (weights that sum to 1) so an operation can be followed by hand.",
+  "suits": "Iterative multi-step training loops where only a few steps are new and a miniature of the topology can sit in the middle."
+ },
+ "tags": [
+  "circular-layout",
+  "dashed-insets",
+  "client-colour-icons",
+  "glyph-icons",
+  "two-panel",
+  "glow-bitmap-segments"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.3)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "which consists of six main steps as indexed",
+   "steps 1, 3 and 6 are the main contributions of our work",
+   "The detailed working flows are illustrated on the right of (b)."
+  ]
+ },
+ "summary": "SemiDFL is a semi-supervised method for decentralized federated learning, where clients without a server hold labeled, mixed or unlabeled data. Figure 1 has two panels. (a) is a ten-client topology whose icons are coloured by data situation and joined by double-headed arrows. (b) is a ring of six numbered chevron steps around a five-client miniature: pseudo-labeling, generator training, MixUp, classifier training, classifier evaluation and adaptive aggregation. Three dashed insets, tied to the ring by leader lines, open up only the three steps that the caption names as contributions: neighbour pseudo-labeling, consensus MixUp of labeled, pseudo and generated data, and aggregation with toy weights 0.1 to 0.4.",
+ "summary_zh": "SemiDFL 是面向去中心化联邦学习的半监督方法。图分两部分：(a) 十个客户端按数据情况着色、用双向箭头相连；(b) 六个编号步骤围成圆环，三处虚线放大框只展开论文声明的三个贡献步骤（邻域伪标签、共识 MixUp、自适应聚合）。",
+ "confidence": "high",
+ "notes": "The prior labels said two insets; there are three, tied by dashed leader lines to steps 6 (top), 1 (middle) and 3 (bottom), which fits their content. Panel (b)'s ring segments and the centre disc are bitmap pieces with glow effects (checked in the SVG: 70-88 pt rasters); histograms are vector. The meaning of the dot rows on client bases and of the light-blue / purple alternation of the step numbers is not stated.",
+ "venue": "AAAI25"
+}

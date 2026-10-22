@@ -1,0 +1,459 @@
+{
+ "paper_id": "icml26-0086",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "τ²-bench",
+  "one_liner": "Benchmark of conversational agents in a dual-control telecom environment where agent and simulated user both use tools on a shared world.",
+  "domain": [
+   "conversational agents",
+   "tool use",
+   "agent benchmark"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "two parallel lanes for agent and user, each with instruction, tools and database, joined by a cycle arrow and framed by one shared World outline",
+  "argues": "The agent is not alone in the world: the user also holds tools and a database, so agent and user must coordinate to change the shared state.",
+  "subject": "Agent and user each with an instruction card, tools and a database, inside one shared World.",
+  "elements": [
+   {
+    "name": "Agent Domain Policy",
+    "type": "text-block",
+    "role": "the agent's policy: current time and 'As a telecom agent, you can help users with technical support.'",
+    "drawn_as": "light-blue rounded card with bold title, body text and an ellipsis",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "User Instruction",
+    "type": "text-block",
+    "role": "scenario instruction for the simulated user: mobile data is slow and the user wants to fix it",
+    "drawn_as": "pink rounded card with bold title, body text and an ellipsis",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Agent",
+    "type": "actor",
+    "role": "the AI agent that resolves the user's request while following the policy",
+    "drawn_as": "blue robot icon with a BOT badge above a 8 pt label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "User",
+    "type": "actor",
+    "role": "the simulated user, played by another AI agent",
+    "drawn_as": "cartoon woman avatar above a 8 pt label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "circular arrows between Agent and User",
+    "type": "icon",
+    "role": "the two parties interact in a loop; the icon carries no label (the caption speaks of TAU interactions)",
+    "drawn_as": "black circular-arrows icon between the two party icons",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Agent Tools",
+    "type": "module",
+    "role": "the agent's tools, shown with one READ tool: get_customer_by_id",
+    "drawn_as": "peach card with crossed wrench and screwdriver icon and a monospace code listing",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "User Tools",
+    "type": "module",
+    "role": "the user's tools, shown with one WRITE tool: toggle_airplane_mode",
+    "drawn_as": "peach card with crossed wrench and screwdriver icon and a monospace code listing",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Agent DB",
+    "type": "data",
+    "role": "the agent-side database, shown as a customer record",
+    "drawn_as": "grey rounded card with a cylinder icon and key = value lines under [[customers]]",
+    "container": "World",
+    "is_contribution": false
+   },
+   {
+    "name": "User DB",
+    "type": "data",
+    "role": "the user-side database, shown as a device record",
+    "drawn_as": "grey rounded card with a cylinder icon and key = value lines under [device]",
+    "container": "World",
+    "is_contribution": true
+   },
+   {
+    "name": "World",
+    "type": "container",
+    "role": "the shared environment that holds both databases",
+    "drawn_as": "large rounded outline in light green with a bold 9 pt title between the two database cards",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "green circular arrows in World",
+    "type": "icon",
+    "role": "the shared state is dynamic and changes through both parties' actions",
+    "drawn_as": "bright-green circular-arrows icon between the two database cards",
+    "container": "World",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Agent Domain Policy",
+    "to": "Agent",
+    "what": "policy given to the agent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "User Instruction",
+    "to": "User",
+    "what": "scenario instruction given to the simulated user",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent",
+    "to": "User",
+    "what": "interaction loop between the two parties (circular arrows, unlabelled)",
+    "kind": "interaction",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Agent",
+    "to": "Agent Tools",
+    "what": "the agent uses its tools (tool card sits right of the icon, no arrow)",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "User",
+    "to": "User Tools",
+    "what": "the user uses its tools (tool card sits right of the icon, no arrow)",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Agent Tools",
+    "to": "Agent DB",
+    "what": "tools read the agent database (double-headed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "User Tools",
+    "to": "User DB",
+    "what": "tools read and write the user database (double-headed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent DB",
+    "to": "User DB",
+    "what": "both databases belong to one dynamic world (green circular arrows between them)",
+    "kind": "interaction",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "World",
+    "to": "Agent DB, User DB",
+    "what": "green outline contains both databases",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "ToolType.READ / ToolType.WRITE",
+    "kind": "identity",
+    "at": "first line of each code listing",
+    "what": "names the agent's tool as a read tool and the user's tool as a write tool"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "blue robot with a BOT badge on its chest",
+    "stands_for": "the AI agent",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon woman with dark hair and red top",
+    "stands_for": "the simulated user",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "crossed wrench and orange screwdriver",
+    "stands_for": "tools",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "dark-navy database cylinder",
+    "stands_for": "a database",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "black circular arrows",
+    "stands_for": "agent and user interacting in a loop",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "bright-green circular arrows",
+    "stands_for": "the shared world changing over time",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a telecom support case: the agent's READ tool fetches customer C1001 John Smith, the user's WRITE tool toggles airplane mode, and the device record reads airplane_mode = false, battery_level = 80",
+    "form": "tinted cards with real text, code listings and key = value records",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "blue robot icon with a BOT badge, labelled Agent",
+    "parts": [
+     "robot icon",
+     "label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "multi-agent",
+    "drawn_as": "agent robot and user avatar stacked in the centre, joined by a circular-arrows icon, each with its own instruction card, tool card and database card in a parallel lane",
+    "parts": [
+     "Agent",
+     "User",
+     "circular arrows",
+     "instruction cards"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "peach card per party with a crossed wrench and screwdriver icon and a monospace listing of one real tool, tied by a double-headed arrow to the database",
+    "parts": [
+     "wrench icon",
+     "code listing",
+     "double-headed arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "world-state-database",
+    "drawn_as": "grey rounded cards each with a dark cylinder icon, a label Agent DB or User DB and key = value lines, both inside one light-green World outline with green circular arrows between them",
+    "parts": [
+     "cylinder icon",
+     "key-value lines",
+     "World outline",
+     "green circular arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Agent Domain Policy card top-left, follows the arrow through Agent, tools and database; the User lane repeats below, and the World outline frames both databases."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two parallel lanes, Agent above and User below, each with four aligned slots: instruction card, party icon, tool card, database card; a circular-arrows icon sits between the two party icons and a green World outline spans both lanes on the right.",
+  "panel_count": 1,
+  "lanes": "2 aligned rows (Agent, User) with four aligned columns",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.72,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ddf2ff",
+    "used_for": "Agent Domain Policy card"
+   },
+   {
+    "hex": "#f3d7d7",
+    "used_for": "User Instruction card"
+   },
+   {
+    "hex": "#ffd8b2",
+    "used_for": "Agent Tools and User Tools cards",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "Agent DB and User DB cards",
+    "opacity": 0.8
+   },
+   {
+    "hex": "#c8ffd3",
+    "used_for": "light-green outline of the World container"
+   },
+   {
+    "hex": "#7ed957",
+    "used_for": "green circular-arrows icon between the databases (bitmap)",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no strokes in the SVG: cards are borderless tinted rounded rectangles",
+  "font": "sans (Arial, Helvetica Neue) 4-6 pt in cards with bold titles, 8-9 pt for Agent, User and World; monospace (Menlo) 4 pt for the code listings",
+  "corners": "rounded",
+  "arrows": "black outline arrows with open heads in a slightly sketchy style; double-headed between tools and databases",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue card = the agent's policy, pink card = the user's instruction, peach = tool cards of both parties, grey = databases, light-green outline = the shared World; green circular arrows = a world that changes, black circular arrows = agent and user interacting",
+  "line_style_means": "double-headed arrows = tools read and write the database; single arrow = an instruction given to a party",
+  "shape_means": "rounded tinted card = one text object (policy, instruction, tools, record); cylinder icon = database; wrench icon = tools",
+  "marker_means": "ToolType.READ and ToolType.WRITE tag the two tools; ellipses mark truncated text",
+  "emphasis": "the green World outline with a bold title encloses both databases to make the shared environment visible; Agent and User are the largest icons",
+  "reusable_patterns": [
+   "two parallel lanes for two parties with the same four slots: instruction card, party icon, tool card, database card",
+   "monospace listing of one real tool in a tinted card beside a wrench icon",
+   "database card with key = value lines and a cylinder icon",
+   "rounded outline enclosing both databases and titled World to show a shared environment",
+   "circular-arrows icon between two party icons for their conversation"
+  ],
+  "weaknesses": [
+   "4-5 pt code and card text is hard to read at print size",
+   "the circular-arrows icons carry no label, their meaning comes from the caption",
+   "large white margins around the drawing in the printed figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "telecom policy text",
+   "user instruction text",
+   "tool code listings",
+   "database records"
+  ],
+  "stock": [
+   "robot BOT icon",
+   "user avatar",
+   "crossed wrench and screwdriver icon",
+   "database cylinder icon",
+   "circular-arrows icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted cards",
+   "World outline",
+   "double-headed and single arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "agent robot icon",
+   "user avatar",
+   "policy and instruction text cards",
+   "tool cards with wrench icon and code",
+   "database cards with key-value fields",
+   "green World container with circular arrows",
+   "black cycle arrow"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "conversational agents",
+   "dual-control environment",
+   "tool use",
+   "telecom domain",
+   "Dec-POMDP",
+   "user simulator",
+   "benchmark"
+  ],
+  "tags": [
+   "code-snippet-box",
+   "annotated-record-card",
+   "model-pictogram",
+   "prompt-template-card"
+  ],
+  "new_tags": [
+   {
+    "name": "shared-world-container",
+    "what": "a rounded outline, here green and titled World, that encloses the databases of several parties to show one shared environment they both change"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a two-party environment as two parallel lanes with the same four slots (instruction card, party icon, tool card with a real code listing, database card with real fields), and enclose the databases in one titled outline so the shared world is visible.",
+  "suits": "Agent or interactive-environment benchmarks that must show who can act on what: agent versus user, client versus server, with their tools and state."
+ },
+ "tags": [
+  "two-lanes",
+  "tinted-cards",
+  "monospace-code",
+  "cylinder-db-icons",
+  "borderless-shapes",
+  "sketchy-arrows",
+  "wide-margins"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.4)"
+  ],
+  "evidence": [
+   "As illustrated in Figure 1, the Dec-POMDP in τ 2-bench involves two players: an agent and a user.",
+   "the user is simulated by another AI agent given a scenario-based instruction and a set of tools",
+   "where both agent and user make use of tools to act in a shared, dynamic environment"
+  ]
+ },
+ "summary": "τ²-bench evaluates conversational agents in a dual-control environment where both the agent and a simulated user use tools on a shared world. Figure 1 draws this as two parallel lanes. In the top lane a light-blue 'Agent Domain Policy' card feeds a robot icon labelled Agent, whose peach 'Agent Tools' card shows a READ tool as monospace code and links by a double-headed arrow to an 'Agent DB' card with customer fields. The bottom lane mirrors it with a pink 'User Instruction' card, a user avatar, 'User Tools' (a WRITE tool, toggle_airplane_mode) and 'User DB' with device fields. A black circular-arrows icon links agent and user, and a green rounded outline titled World encloses both databases with green circular arrows.",
+ "summary_zh": "τ²-bench 的双控环境图：上下两条泳道分别是智能体（领域策略、READ 工具、客户数据库）和用户（指令、WRITE 工具、设备数据库），两者之间有黑色循环箭头，两个数据库被绿色“World”轮廓框成共享世界。",
+ "confidence": "high",
+ "notes": "The printed figure has large blank margins above and at the sides of the drawing. The circular-arrows icons are unlabelled; their readings (agent-user interaction, changing shared state) come from the caption and abstract. The instruction text in the card reads 'You mobile data is not working properly' (typo in the figure). Strokes are absent in the SVG, so cards have no outlines.",
+ "venue": "ICML26"
+}

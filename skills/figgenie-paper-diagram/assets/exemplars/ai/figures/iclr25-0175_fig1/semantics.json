@@ -1,0 +1,618 @@
+{
+ "paper_id": "iclr25-0175",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "RDT-1B (Robotics Diffusion Transformer)",
+  "one_liner": "A 1B-parameter diffusion transformer policy for bimanual manipulation, conditioned on language and images, pre-trained on many robots' data with a unified action space.",
+  "domain": [
+   "bimanual robot manipulation",
+   "diffusion policy",
+   "robot foundation model"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "model-anatomy"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "two titled rounded frames (model sketch with a result bar chart, datasets) over a row of four captioned real-robot photo cards",
+  "argues": "A pre-trained 1B diffusion policy beats baselines (68.2% vs 34.8% from scratch) and shows dexterity, few-shot learning, instruction following and zero-shot generalisation on a real dual-arm robot.",
+  "subject": "RDT-1B model sketch with a unified action space and success-rate bars, the pre-training and fine-tuning data, and four real-robot capability photos.",
+  "elements": [
+   {
+    "name": "RDT-1B",
+    "type": "container",
+    "role": "frame for the model, its action space and its result chart",
+    "drawn_as": "rounded black frame with the bold title set into its top border",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Robotics Diffusion Transformer as Language-Visuomotor Policy",
+    "type": "label",
+    "role": "subtitle that spells out the name; the initials R, D and T are underlined",
+    "drawn_as": "serif 6 pt bold line under the title",
+    "container": "RDT-1B",
+    "is_contribution": null
+   },
+   {
+    "name": "Diffusion Transformer 1B",
+    "type": "module",
+    "role": "the policy backbone, a 1B-parameter diffusion transformer",
+    "drawn_as": "pale blue-grey rounded box inside a dashed grey box",
+    "container": "RDT-1B",
+    "is_contribution": true
+   },
+   {
+    "name": "T5",
+    "type": "module",
+    "role": "language input encoder for the language-conditioned policy (role from the 'language-visuomotor' title)",
+    "drawn_as": "small pale blue-grey rounded box under the transformer",
+    "container": "RDT-1B",
+    "is_contribution": false
+   },
+   {
+    "name": "SigLIP",
+    "type": "module",
+    "role": "image input encoder (role from the 'visuomotor' title)",
+    "drawn_as": "small pale blue-grey rounded box next to T5",
+    "container": "RDT-1B",
+    "is_contribution": false
+   },
+   {
+    "name": "Iterative Denoising",
+    "type": "operation",
+    "role": "repeated denoising of the output action tokens",
+    "drawn_as": "small curved loop arrow and a label above a row of four grey cells",
+    "container": "RDT-1B",
+    "is_contribution": null
+   },
+   {
+    "name": "Unified Action Space",
+    "type": "container",
+    "role": "shared vector in which the actions of different robots are placed; magenta cells mark the slots each robot uses",
+    "drawn_as": "dashed grey box with three robot pictures, each under a token strip joined to it by a translucent pink beam",
+    "container": "RDT-1B",
+    "is_contribution": true
+   },
+   {
+    "name": "Pre-Trained / From Scratch / Baselines",
+    "type": "label",
+    "role": "key of the bar chart: three swatches",
+    "drawn_as": "three small squares in blue-grey, pale and grey with serif labels",
+    "container": "RDT-1B",
+    "is_contribution": false
+   },
+   {
+    "name": "Pre-Training Boost by 33.4%",
+    "type": "label",
+    "role": "callout naming the gain of pre-training over training from scratch",
+    "drawn_as": "gold star and serif text with the number 33.4% in bold magenta",
+    "container": "RDT-1B",
+    "is_contribution": true
+   },
+   {
+    "name": "Datasets",
+    "type": "container",
+    "role": "frame for the pre-training and fine-tuning data",
+    "drawn_as": "rounded black frame with the bold title set into its top border and a dashed vertical rule in the middle",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Pre-Training",
+    "type": "container",
+    "role": "left half: 'A Collection of 46 Datasets' (1M episodes) and 'Multiple Robots'",
+    "drawn_as": "bold heading over two sub-columns: a photo collage with a white label, and cut-out robot pictures ending in a '...'",
+    "container": "Datasets",
+    "is_contribution": null
+   },
+   {
+    "name": "Fine-Tuning",
+    "type": "container",
+    "role": "right half: 'Dataset Created by Ourselves' (6K episodes) and 'Target Dual-Arm Robot'",
+    "drawn_as": "bold heading over a photo collage with a white label and one cut-out picture of the robot",
+    "container": "Datasets",
+    "is_contribution": null
+   },
+   {
+    "name": "1M Episodes / 6K Episodes",
+    "type": "label",
+    "role": "size of the pre-training and fine-tuning data",
+    "drawn_as": "bold text in a white box with thin black outline laid over each collage",
+    "container": "Datasets",
+    "is_contribution": null
+   },
+   {
+    "name": "Dexterity",
+    "type": "container",
+    "role": "capability card: the robot walks its pet dog",
+    "drawn_as": "bold title, one photo in a grey frame, plain caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Few-Shot Learning",
+    "type": "container",
+    "role": "capability card: handover and folding shorts after 5 or 1 demonstrations",
+    "drawn_as": "bold title, two stacked photos with tags 5-Shot and 1-Shot, caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Instruction Following",
+    "type": "container",
+    "role": "capability card: pour water to a specified level with the right or left hand",
+    "drawn_as": "bold title, two robot photos tagged Right Hand and Left Hand beside two jug photos tagged 2/3 and 1/3 with magenta arrows, caption below",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Zero-Shot Generalizability",
+    "type": "container",
+    "role": "capability card: unseen cups and unseen rooms",
+    "drawn_as": "bold title, 2 x 2 photos with tags Unseen Cups and Unseen Rooms, caption 'Unseen Objects & Scenes' below",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "T5, SigLIP",
+    "to": "Diffusion Transformer 1B",
+    "what": "the two encoders sit directly under the transformer box inside one dashed frame; no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Iterative Denoising",
+    "to": "top token strip",
+    "what": "a curved loop arrow beside the label marks repeated denoising of the strip above the transformer",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each robot picture",
+    "to": "its token strip",
+    "what": "a translucent pink beam joins robot and strip; magenta cells are the slots that robot uses",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Unified Action Space",
+    "to": "token strip near SigLIP",
+    "what": "two thin dashed lines run from the third robot's strip up to a strip in the model box",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Pre-Training",
+    "to": "Fine-Tuning",
+    "what": "a dashed vertical rule separates the large multi-robot data from the small own data",
+    "kind": "time",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "RDT bar in the chart",
+    "to": "Pre-Training Boost by 33.4%",
+    "what": "star callout beside the bar names the gap between its pre-trained and from-scratch parts (34.8% boxed)",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "RDT-1B and Datasets frames",
+    "to": "capability photo cards",
+    "what": "the bottom row shows what the model can do; no connectors",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "grey tags (5-Shot, Right Hand, Unseen Cups ...)",
+    "to": "photos",
+    "what": "each tag names the setting of the photo it sits on",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "RDT-1B",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "T5 and SigLIP with a 1B diffusion transformer and iterative denoising, a unified action space for three robots, and a bar chart of success rates",
+    "verdict": "ours"
+   },
+   {
+    "label": "Datasets",
+    "kind": "scope-overview",
+    "axis": "stages",
+    "shows": "pre-training on a collection of 46 datasets from multiple robots (1M episodes), fine-tuning on 6K own episodes on the target dual-arm robot",
+    "verdict": "setting"
+   },
+   {
+    "label": "Dexterity",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "dual-arm robot with a pet robot dog; caption 'Robot walks its pet dog'",
+    "verdict": null
+   },
+   {
+    "label": "Few-Shot Learning",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "5-shot and 1-shot photos of handing over and folding shorts",
+    "verdict": null
+   },
+   {
+    "label": "Instruction Following",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "pouring water to 2/3 or 1/3 of a jug with the right or left hand",
+    "verdict": null
+   },
+   {
+    "label": "Zero-Shot Generalizability",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "unseen cups and unseen rooms for the robot",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "5-Shot, 1-Shot, Right Hand, Left Hand, Unseen Cups, Unseen Rooms",
+    "kind": "identity",
+    "at": "top-left corner of the photos",
+    "what": "name the setting of each photo"
+   },
+   {
+    "marker": "2/3, 1/3",
+    "kind": "identity",
+    "at": "top-left of the two jug photos",
+    "what": "name the requested water level; a magenta arrow marks the level reached"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bar chart of success rates: RDT 68.2% (34.8% from scratch), ACT 12.2%, OpenVLA 1.7%, Octo 1.6%",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "five bars; the RDT bar is stacked with a pale lower segment and a blue-grey top segment; values printed above, legend at the right"
+   },
+   {
+    "what": "collage of frames from the 46 pre-training datasets: robot arms, tables, kitchens, objects",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "irregular overlapping stack of photos with soft shadows and a white label '1M Episodes' in the middle (count approximate)"
+   },
+   {
+    "what": "collage of frames from the authors' fine-tuning data on the target robot",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "overlapping stack like the pre-training one with a white label '6K Episodes' (count approximate)"
+   },
+   {
+    "what": "real-robot photo: dual-arm robot with a pet robot dog in a corridor",
+    "content": "natural-image",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "single photo in a thin grey frame under the bold card title"
+   },
+   {
+    "what": "real-robot photos of handover and folding shorts after 5 and 1 demonstrations",
+    "content": "natural-image",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two photos stacked in one frame with grey corner tags 5-Shot and 1-Shot"
+   },
+   {
+    "what": "real-robot photos of pouring water with the right and left hand, and the resulting jug at 2/3 and 1/3 full",
+    "content": "natural-image",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two wide robot photos each next to a narrow jug photo; grey corner tags; small magenta arrows at the water level"
+   },
+   {
+    "what": "real-robot photos with unseen cups and in unseen rooms",
+    "content": "natural-image",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "2 x 2 photos in one frame, grey corner tags Unseen Cups and Unseen Rooms"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cut-out pictures of six different robot arms and humanoids",
+    "stands_for": "the multiple robots in the pre-training data",
+    "style": "photo-cutout",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "cut-out picture of a white dual-arm robot on a mobile base",
+    "stands_for": "the target dual-arm robot",
+    "style": "photo-cutout",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cut-out pictures of three robots, each under a token strip",
+    "stands_for": "robots whose actions are mapped into the unified action space",
+    "style": "photo-cutout",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "gold star",
+    "stands_for": "highlight of the pre-training boost",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "four real-robot tasks with captions: 'Robot walks its pet dog', 'Handover & Fold Shorts', 'Pour water to specified level', 'Unseen Objects & Scenes'",
+    "form": "photo cards with a bold capability title above, small grey tags on the photos, plain caption beneath",
+    "real_values": true
+   },
+   {
+    "what": "success rates: RDT 68.2%, from scratch 34.8%, ACT 12.2%, OpenVLA 1.7%, Octo 1.6%, boost 33.4%",
+    "form": "bar labels, a boxed 34.8% and a star callout",
+    "real_values": true
+   },
+   {
+    "what": "data scale: 46 datasets and 1M episodes for pre-training, 6K own episodes for fine-tuning",
+    "form": "bold numbers in text and in white labels on the collages",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "an irregular stack of overlapping photos with a white label stating the episode count",
+    "parts": [
+     "photo collage",
+     "label '1M Episodes' or '6K Episodes'"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short rows of rounded grey cells; in the unified action space some cells are magenta and a translucent pink beam joins the strip to a robot",
+    "parts": [
+     "grey cells",
+     "magenta cells",
+     "pink beam"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "no chain of frames; only a small curved loop arrow labelled Iterative Denoising next to a token strip",
+    "parts": [
+     "loop arrow",
+     "label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "multi-robot-pictograms",
+    "drawn_as": "cut-out photos of different robots in a loose cluster with an ellipsis, standing for 'multiple robots'",
+    "parts": [
+     "six robot cut-outs",
+     "..."
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the 'RDT-1B' border title top left, runs through the model sketch and bar chart, crosses to the Datasets frame, then moves along the four photo cards in the bottom row."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Top band: two large rounded frames side by side, 'RDT-1B' (model sketch and bar chart) and 'Datasets' (pre-training and fine-tuning halves split by a dashed rule). Bottom band: four equal photo cards, each with a bold title above and a caption below.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.08,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ac0087",
+    "used_for": "magenta: used action slots in the strips, the 33.4% boost, water-level arrows; translucent pink beams at 0.2 opacity"
+   },
+   {
+    "hex": "#9db1cf",
+    "used_for": "Pre-Trained segment of the RDT bar and its legend swatch"
+   },
+   {
+    "hex": "#dfe5ef",
+    "used_for": "Diffusion Transformer 1B box; From Scratch segment of the RDT bar and its swatch"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "T5 and SigLIP boxes"
+   },
+   {
+    "hex": "#a1acbd",
+    "used_for": "baseline bars (ACT, OpenVLA, Octo) and legend swatch"
+   },
+   {
+    "hex": "#c9c9c9",
+    "used_for": "light grey token cells"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey cells and robot details in the strips"
+   },
+   {
+    "hex": "#f2f2f2",
+    "opacity": 0.4,
+    "used_for": "translucent grey tint inside the two dashed boxes"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey outlines of dashed boxes and photo frames"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "hairline 0.25 pt grey (#7f7f7f) outlines on photos and dashed boxes; about 0.5 pt black rounded frames for RDT-1B and Datasets and for the white count labels",
+  "font": "serif (Nimbus Roman, Times-like) throughout: 10 pt bold frame titles, 7.5 pt bold card titles, 6-6.5 pt body and captions, 4.5 pt chart labels",
+  "corners": "mixed",
+  "arrows": "one small curved loop arrow, two tiny magenta arrows on the jug photos, thin dashed leader lines; no flow arrows between modules",
+  "rendering": "flat-vector",
+  "effects": "soft shadows under the collage photos and translucent pink beams",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "magenta = the slots in use in the shared action vector, the headline gain and the water-level markers; in the bar chart blue-grey = pre-trained, pale = from scratch, grey = baselines; other parts are neutral grey",
+  "line_style_means": "dashed grey boxes group model parts and the unified action space; a dashed vertical rule splits pre-training from fine-tuning; thin dashed leaders tie the model's strip to the unified action space",
+  "shape_means": "rounded black frames with a border title = the two main blocks; grey pills = tokens; white boxed numbers = data sizes",
+  "marker_means": "star plus magenta number = pre-training boost; grey corner tags name the setting of a photo; 2/3 and 1/3 with magenta arrows give the water level",
+  "emphasis": "bold 10 pt titles set into the frame borders, the bold 68.2% above the tallest bar and the star callout",
+  "reusable_patterns": [
+   "frame title set into the top border of a rounded box",
+   "dataset collage of overlapping photos with a white label stating the episode count",
+   "cut-out photos of different robots as pictograms for 'multiple robots' and 'target robot'",
+   "stacked bar whose top segment is the gain, named by a star callout",
+   "capability cards: bold title, photo with small grey tags, caption beneath",
+   "translucent pink beam from each robot picture to its slots in a shared token vector",
+   "dashed vertical rule dividing pre-training from fine-tuning",
+   "underlined initials that spell the model name in a subtitle"
+  ],
+  "weaknesses": [
+   "the model sketch has no arrows, so the flow between T5, SigLIP, the transformer and the strips must be read from the text",
+   "4.5-6 pt labels are small at double-column width",
+   "the capability cards carry no numbers; results appear only in the small bar chart",
+   "what grey and magenta cells in the strips stand for is not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real-robot photos of four tasks",
+   "frames of the pre-training and fine-tuning datasets",
+   "measured success rates"
+  ],
+  "stock": [
+   "gold star icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded frames and dashed boxes",
+   "transformer, T5 and SigLIP boxes",
+   "token strips and pink beams",
+   "bar chart"
+  ],
+  "unknown": [
+   "source of the cut-out robot pictures (six in 'Multiple Robots', three in the unified action space)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "titled rounded frames (RDT-1B, Datasets)",
+   "T5 and SigLIP boxes with a Diffusion Transformer 1B box",
+   "token strips with magenta slots over robot pictures",
+   "stacked bar chart with star callout",
+   "overlapping photo collages with episode counts",
+   "cut-out robot pictures",
+   "four captioned real-robot photo cards"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "bimanual manipulation",
+   "diffusion transformer",
+   "robot foundation model",
+   "unified action space",
+   "pre-training",
+   "fine-tuning",
+   "few-shot",
+   "zero-shot generalization",
+   "language-conditioned policy"
+  ],
+  "tags": [
+   "stacked-cards",
+   "token-strip",
+   "plot-callouts",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "titled-border-frames",
+    "what": "rounded black frames whose title (model or section name) is set into the top border, interrupting the line"
+   },
+   {
+    "name": "cutout-robot-pictograms",
+    "what": "cut-out photos of real robots used as pictograms for 'multiple robots', 'target robot' or actions mapped to a shared space"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put the headline number inside the model overview with a stacked bar whose top segment is the gain and a star callout, and stand for datasets with overlapping photo collages labelled by episode count. Below, a row of equal photo cards with bold titles, small grey tags and one-line captions shows capabilities.",
+  "suits": "Foundation-model papers in robotics or embodied AI that must show the model, the data scale and several real-world abilities on one page."
+ },
+ "tags": [
+  "titled-border-frames",
+  "photo-cards-row",
+  "dataset-collage",
+  "bar-chart-inset",
+  "serif-labels",
+  "robot-photos"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 (p.2)",
+   "Appendix H, Calculation of Total Performance (p.24)"
+  ],
+  "evidence": [
+   "Overview of Robotics Diffusion Transformer with 1B-Parameters (RDT-1B), a language-conditioned visuomotor policy for bimanual manipulation",
+   "The general performance in Fig. 1 of each method is calculated in three steps.",
+   "we further introduce a Physically Interpretable Unified Action Space, which can unify the action representations of various robots"
+  ]
+ },
+ "summary": "RDT-1B is a 1B-parameter diffusion transformer policy for bimanual robot manipulation, conditioned on language and images, pre-trained on a large multi-robot collection and fine-tuned on the authors' own dual-arm data. Figure 1 is an overview sheet. Top left, a titled frame holds a sketch of the Diffusion Transformer 1B fed by T5 and SigLIP with an iterative-denoising loop, a Unified Action Space panel that maps three robots into shared token slots, and a bar chart: 68.2% pre-trained against 34.8% from scratch and 12.2%, 1.7% and 1.6% for ACT, OpenVLA and Octo, with a star callout 'Boost by 33.4%'. Top right, a Datasets frame shows photo collages for 46 datasets (1M episodes) and the 6K-episode fine-tuning set. A bottom row of four photo cards shows dexterity, few-shot learning, instruction following and zero-shot generalisation.",
+ "summary_zh": "RDT-1B 是面向双臂操作的 10 亿参数扩散 Transformer 策略。图 1 总览：左上为模型草图与成功率柱状图，右上为预训练与微调数据拼贴，下排四张真机照片展示灵巧、少样本、指令跟随和零样本泛化。",
+ "confidence": "high",
+ "notes": "The roles of T5 (language) and SigLIP (vision) are taken from the 'language-visuomotor policy' wording, not from a label. The meaning of the grey and magenta strip cells and of the dashed leader lines to the unified action space is read from the picture only. Picture counts for the two collages are approximate (the digest gives 44 bitmaps in all). The context file's abstract says 1.2B parameters while the figure says 1B.",
+ "venue": "ICLR25"
+}

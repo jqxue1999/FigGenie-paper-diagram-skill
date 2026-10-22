@@ -1,0 +1,584 @@
+{
+ "paper_id": "cvpr23-0015",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MMCL (tabular-imaging contrastive framework; label-as-a-feature variant LaaF)",
+  "one_liner": "A self-supervised contrastive framework that pairs images with tabular records to pretrain unimodal encoders, plus a label-as-a-feature variant for supervised contrastive learning.",
+  "domain": [
+   "multimodal contrastive learning",
+   "medical imaging",
+   "tabular data"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "model-anatomy",
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "paper-roadmap",
+  "variant_note": "graphical-abstract style: three numbered columns, one per contribution, each a small encoder-projector-embedding pipeline that ends in a latent-space sketch",
+  "argues": "One contrastive framework can pair images with tabular records; the figure shows a morphometric feature or the label shaping the shared latent space, which the caption says boosts downstream performance.",
+  "subject": "Three columns of image-plus-table contrastive pipelines: full clinical table, one morphometric feature, the label, each ending in a shaded latent space",
+  "elements": [
+   {
+    "name": "Smoking Status | Consumes Alcohol | ... | Physical Activity table",
+    "type": "data",
+    "role": "tabular clinical record of three subjects S1 to S3, the tabular input of the framework",
+    "drawn_as": "ruled table with grey header cells, 0/1 values, an ellipsis column and row labels coloured purple, orange, teal",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoders (f_θI, f_θT)",
+    "type": "module",
+    "role": "turn the images and the table columns into feature vectors, one encoder per modality",
+    "drawn_as": "image branch: three large then four small grey squares stacked with offset; table branch: two layers of three grey nodes joined by crossing arrows; bold row label 'Encoders' between the branches",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "feature-vector bars",
+    "type": "data",
+    "role": "encoder output of the three subjects, one bar each",
+    "drawn_as": "three offset horizontal bars in teal, orange and purple in each branch",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "Projectors (f_φI, f_φT)",
+    "type": "module",
+    "role": "map the encoder outputs to the embeddings that go into the shared space",
+    "drawn_as": "no box: formula label and a thick arrow in each branch, bold row label 'Projectors' between the branches",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "z1_i, z2_i, z3_i",
+    "type": "data",
+    "role": "image embeddings of S1, S2, S3",
+    "drawn_as": "three overlapping circles in purple, orange, teal",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "z1_t, z2_t, z3_t",
+    "type": "data",
+    "role": "tabular embeddings of S1, S2, S3",
+    "drawn_as": "three overlapping squares in purple, orange, teal",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": false
+   },
+   {
+    "name": "latent space with CLIP Loss",
+    "type": "region",
+    "role": "shared embedding space in which image (circle) and tabular (square) embeddings of the three subjects are compared by the CLIP loss",
+    "drawn_as": "kidney-shaped black outline with three circles, three squares, red and green double-headed arrows and the label 'CLIP Loss'",
+    "container": "1. Multimodal contrastive learning with tabular data",
+    "is_contribution": true
+   },
+   {
+    "name": "Ventricle Volume table",
+    "type": "data",
+    "role": "a single morphometric feature used as the whole tabular input",
+    "drawn_as": "one-column table with values 37 (cyan cell), 24 and 20 (yellow cells)",
+    "container": "2. The influence of morphometric features",
+    "is_contribution": true
+   },
+   {
+    "name": "f_θI → f_φI and f_θT → f_φT chains",
+    "type": "module",
+    "role": "the same encoder and projector as in column 1, reduced to formula labels between thick arrows",
+    "drawn_as": "formula labels in a vertical chain of arrows, no boxes, one chain per modality",
+    "container": "2. and 3.",
+    "is_contribution": false
+   },
+   {
+    "name": "Reduced Volume / Normal Volume latent space",
+    "type": "region",
+    "role": "embedding space ordered by ventricle volume: S2 and S3 embeddings in the upper region, S1 embeddings in the lower region",
+    "drawn_as": "blob filled with a smooth gradient from yellow (top, label 'Reduced Volume') to cyan (bottom, label 'Normal Volume') holding orange, teal and purple circles and squares",
+    "container": "2. The influence of morphometric features",
+    "is_contribution": true
+   },
+   {
+    "name": "+",
+    "type": "operation",
+    "role": "the label is appended to the tabular input as one more feature",
+    "drawn_as": "large black plus sign left of the label table",
+    "container": "3. Supervised contrastive learning with label as a feature",
+    "is_contribution": true
+   },
+   {
+    "name": "Infarction table",
+    "type": "data",
+    "role": "the ground-truth label used as a tabular feature",
+    "drawn_as": "one-column table with values 0 (green cell), 1 (red cell), 1 (red cell)",
+    "container": "3. Supervised contrastive learning with label as a feature",
+    "is_contribution": true
+   },
+   {
+    "name": "Infarction=1 / Infarction=0 latent space",
+    "type": "region",
+    "role": "embedding space grouped by label: S2 and S3 embeddings in the Infarction=1 patch, S1 embeddings in the Infarction=0 patch",
+    "drawn_as": "outlined blob with a pink cloud-shaped patch (label 'Infarction=1') and a green patch (label 'Infarction=0') holding the coloured circles and squares",
+    "container": "3. Supervised contrastive learning with label as a feature",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "cardiac MR image stack",
+    "to": "Encoders (f_θI, f_θT)",
+    "what": "images enter the image encoder f_θI",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Smoking Status | Consumes Alcohol | ... | Physical Activity table",
+    "to": "Encoders (f_θI, f_θT)",
+    "what": "three table columns each enter an input node of the tabular encoder f_θT",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoders (f_θI, f_θT)",
+    "to": "feature-vector bars",
+    "what": "encoder outputs of the three subjects",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "feature-vector bars",
+    "to": "Projectors (f_φI, f_φT)",
+    "what": "projection of each bar stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Projectors (f_φI, f_φT)",
+    "to": "z1_i, z2_i, z3_i",
+    "what": "image embeddings (circles), tabular embeddings (squares) in the other branch",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z1_i, z2_i, z3_i",
+    "to": "latent space with CLIP Loss",
+    "what": "same-colour circles reappear as markers in the latent space; no arrow between them",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "z1_t, z2_t, z3_t",
+    "to": "latent space with CLIP Loss",
+    "what": "same-colour squares reappear as markers in the latent space; no arrow between them",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "teal circle",
+    "to": "teal square",
+    "what": "same-subject (S3) image and tabular embeddings joined by green double-headed arrows",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circles and squares of different subjects",
+    "to": "CLIP Loss",
+    "what": "embeddings of different subjects joined by red double-headed arrows",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "subject colours (S1 purple, S2 orange, S3 teal)",
+    "to": "image borders, table rows, bars, embeddings, latent markers",
+    "what": "one colour per subject carried through the whole column",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Ventricle Volume table",
+    "to": "Reduced Volume / Normal Volume latent space",
+    "what": "cell colours (yellow for 24 and 20, cyan for 37) are repainted as the gradient of the latent space",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "+",
+    "to": "Infarction table",
+    "what": "label appended as a tabular feature",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Infarction table",
+    "to": "Infarction=1 / Infarction=0 latent space",
+    "what": "cell colours (red for 1, green for 0) are repainted as the patches of the latent space",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Ventricle Volume table",
+    "to": "f_θI → f_φI and f_θT → f_φT chains",
+    "what": "the single column passes through the tabular encoder and projector, then becomes square embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1. Multimodal contrastive learning with tabular data",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "the full framework: images and a clinical table go through separate encoders and projectors into a shared space under a CLIP loss",
+    "verdict": "ours"
+   },
+   {
+    "label": "2. The influence of morphometric features",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the same pipeline with only the ventricle volume column as tabular input; the latent space is shaded by volume",
+    "verdict": "finding"
+   },
+   {
+    "label": "3. Supervised contrastive learning with label as a feature",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "the same pipeline with the infarction label appended as the tabular input; the latent space splits into label patches",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1.  2.  3.",
+    "kind": "section",
+    "at": "bold column titles",
+    "what": "number and head the three columns: framework, morphometric features, label as a feature"
+   },
+   {
+    "marker": "S1, S2, S3",
+    "kind": "identity",
+    "at": "row labels of the first table",
+    "what": "name the three subjects; each colour is carried to images, bars, embeddings and latent markers"
+   },
+   {
+    "marker": "z1_i ... z3_i, z1_t ... z3_t",
+    "kind": "identity",
+    "at": "embedding circles and squares",
+    "what": "name the image (i) and tabular (t) embedding of each subject"
+   },
+   {
+    "marker": "f_θI, f_θT, f_φI, f_φT",
+    "kind": "identity",
+    "at": "beside the encoder and projector arrows",
+    "what": "name the image and tabular encoders and projectors"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "cardiac MR slices of three subjects",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "three stacks of three offset slices; each slice has a thick purple, orange or teal border that names the subject; one large stack in column 1, two small stacks in columns 2 and 3"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "clinical table of subjects S1 to S3 with Smoking Status, Consumes Alcohol, ..., Physical Activity and 0/1 values",
+    "form": "ruled mini table, grey header cells, row labels in subject colours",
+    "real_values": false
+   },
+   {
+    "what": "one-column Ventricle Volume table with 37, 24, 20",
+    "form": "ruled mini table whose value cells are coloured cyan (37) and yellow (24, 20)",
+    "real_values": false
+   },
+   {
+    "what": "one-column Infarction label table with 0, 1, 1",
+    "form": "ruled mini table whose value cells are coloured green (0) and red (1)",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "three offset MR slices with coloured borders standing for a batch of subjects; no count",
+    "parts": [
+     "slice thumbnails",
+     "coloured borders"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "cnn-stack",
+    "drawn_as": "grey square slabs stacked with offset: three large, then four smaller, for the image encoder",
+    "parts": [
+     "3 large squares",
+     "4 small squares"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "two layers of three grey round nodes joined all-to-all by thin crossing arrows, thick arrows in and out, for the tabular encoder",
+    "parts": [
+     "input nodes",
+     "crossing arrows",
+     "output nodes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "feature-vector-bars",
+    "drawn_as": "three offset horizontal bars in subject colours standing for the feature vectors of a batch",
+    "parts": [
+     "teal bar",
+     "orange bar",
+     "purple bar"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "kidney-shaped outline holding circles for image and squares for table embeddings in subject colours; shaded by a gradient in column 2 and by coloured patches in column 3",
+    "parts": [
+     "outline",
+     "circle markers",
+     "square markers",
+     "shading"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "red double-headed arrows between embeddings of different subjects and green ones between the same-subject teal pair, labelled CLIP Loss",
+    "parts": [
+     "red arrows",
+     "green arrows",
+     "CLIP Loss label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the bold title of column 1, runs down the image branch and the table branch to the latent blob, then jumps to columns 2 and 3, which repeat the same vertical flow and end on shaded blobs."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three numbered, titled columns side by side, separated by two black dashed vertical lines that stop above the latent blobs. Column 1 is about half the width and holds two parallel branches (images left, table right) that share the row labels Encoders and Projectors; columns 2 and 3 are narrow copies with one image branch and a one-column table. Each column is read top-down and ends with a latent-space blob.",
+  "panel_count": 3,
+  "lanes": "image branch and table branch as two parallel lanes in each column; stage rows (inputs, encoders, projectors, embeddings, latent space) roughly aligned across columns",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "other",
+   "whitespace",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.42,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#9999ff",
+    "used_for": "subject S1: image border, table row label, bar, embeddings, latent markers"
+   },
+   {
+    "hex": "#ffb366",
+    "used_for": "subject S2: image border, row label, embeddings, latent markers"
+   },
+   {
+    "hex": "#67ab9f",
+    "used_for": "subject S3: image border, row label, bar, embeddings, latent markers"
+   },
+   {
+    "hex": "#ff9933",
+    "used_for": "orange feature-vector bars"
+   },
+   {
+    "hex": "#cccccc",
+    "used_for": "encoder slabs and MLP nodes"
+   },
+   {
+    "hex": "#e6e6e6",
+    "used_for": "table header cells"
+   },
+   {
+    "hex": "#ffff00",
+    "opacity": 0.5,
+    "used_for": "yellow value cells (24, 20), top of the volume gradient"
+   },
+   {
+    "hex": "#33ffff",
+    "opacity": 0.2,
+    "used_for": "cyan value cell (37), bottom of the volume gradient"
+   },
+   {
+    "hex": "#ff3333",
+    "opacity": 0.2,
+    "used_for": "red label cells (1) and the Infarction=1 patch"
+   },
+   {
+    "hex": "#ff9999",
+    "opacity": 0.5,
+    "used_for": "pink shading of the Infarction=1 patch"
+   },
+   {
+    "hex": "#00ff00",
+    "opacity": 0.2,
+    "used_for": "green label cell (0) and the Infarction=0 patch"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "red double-headed arrows between different-subject embeddings (stroke)"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "green double-headed arrows between the same-subject pair (stroke)"
+   },
+   {
+    "hex": "#66ccee",
+    "approx": true,
+    "used_for": "bottom of the gradient inside the column 2 blob, read off the bitmap"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt black on table cells, slabs and nodes; 1.25 pt black thick arrows and blob outlines; 2.25 pt coloured borders on the large MR slices; black dashed vertical dividers",
+  "font": "sans (Liberation Sans) 5.5 to 8 pt, bold 8 pt column titles, bold 5.5 pt labels in the blobs; math symbols f, z with subscripts as serif-italic glyph outlines, not live text",
+  "corners": "square",
+  "arrows": "thick black vertical arrows with filled triangular heads; thin crossing arrows inside the MLP glyph; red and green double-headed curved arrows in the latent space",
+  "rendering": "flat-vector",
+  "effects": "a smooth yellow-to-cyan gradient inside the column 2 blob; cloud-shaped soft patches in the column 3 blob; otherwise none",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per subject (purple S1, orange S2, teal S3) kept from image border through table row, bar, embedding and latent marker; circle = image embedding, square = tabular embedding; table value colours (cyan or yellow, green or red) reappear as the shading of the latent space",
+  "line_style_means": "thick black arrows = data flow through encoder and projector; red double-headed = embeddings of different subjects, green double-headed = same-subject pair, both under the label CLIP Loss; black dashed vertical lines = dividers between columns",
+  "shape_means": "grey stacked squares = convolutional image encoder; nodes with crossing arrows = tabular MLP encoder; circle = image embedding; square = tabular embedding; kidney-shaped outline = embedding space",
+  "marker_means": "S1 to S3 name subjects; z with subscript i or t names image or tabular embeddings; 1., 2., 3. head the columns; + = the label is added as a tabular feature",
+  "emphasis": "each column ends on a latent blob whose shading shows what the added tabular feature does to the embedding; column 1 is the widest as the base framework and the only one that opens the encoders.",
+  "reusable_patterns": [
+   "same encoder-projector-embedding column repeated with only the tabular input changed (full table, one feature, the label)",
+   "one colour per sample carried from the input image border through table row, embedding and latent point",
+   "table cells coloured by value and the same colours painted as regions of the latent-space blob",
+   "circles for one modality and squares for the other so pairs can be matched in the shared space",
+   "kidney-shaped blob as embedding space with double-headed red and green arrows for the loss",
+   "bold numbered column titles with black dashed vertical dividers"
+  ],
+  "weaknesses": [
+   "the red and green arrows have no legend, so push and pull must be inferred",
+   "encoders and projectors are only formula labels in columns 2 and 3",
+   "formula labels are small glyph outlines that are hard to read at print size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "cardiac MR slices of three subjects",
+   "clinical feature names (Smoking Status, Consumes Alcohol, Physical Activity, Ventricle Volume, Infarction)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "encoder slab stacks and MLP node glyph",
+   "mini tables",
+   "latent-space blobs with markers and arrows",
+   "feature-vector bars"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "cardiac MR image stacks with coloured borders",
+   "clinical feature tables",
+   "grey slab-stack encoder",
+   "node-link MLP",
+   "colour-coded embedding circles and squares",
+   "kidney-shaped latent-space blobs",
+   "red and green double-headed arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal contrastive learning",
+   "tabular data",
+   "cardiac MRI",
+   "UK Biobank",
+   "CLIP loss",
+   "morphometric features",
+   "supervised contrastive learning",
+   "label as a feature"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "embedding-space-sketch",
+   "stacked-cards",
+   "toy-values-inline",
+   "positive-negative-pairs"
+  ],
+  "new_tags": [
+   {
+    "name": "input-colour-to-latent-shading",
+    "what": "colours of the input cells (by value or label) are repainted as gradient or patch shading of the embedding-space blob, so the reader sees what the feature does to the representation"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Run one minimal pipeline once per contribution and change a single input at a time, then repaint the changed input's colours onto the latent-space blob to show its effect; keep one colour per sample from input to embedding.",
+  "suits": "A base method plus a few findings or variants that alter one input or loss term and reorganise the learned embedding space, such as contrastive or multimodal pretraining."
+ },
+ "tags": [
+  "three numbered columns",
+  "dashed vertical dividers",
+  "subject colours throughout",
+  "kidney-shaped latent blob",
+  "sans text with glyph-outline math",
+  "draw.io look",
+  "stacked image thumbnails with coloured borders"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "We combine imaging and tabular data in a contrastive learning framework.",
+   "morphometric features, describing shape and size, are of outsized importance in multimodal contrastive training",
+   "By simply adding the label as a tabular feature we introduce a novel form of supervised contrastive learning"
+  ]
+ },
+ "summary": "The paper proposes a self-supervised contrastive framework that pretrains image and tabular encoders on cardiac MR slices paired with clinical tables, combining SimCLR and SCARF. Figure 1 is three numbered columns divided by dashed lines. Column 1 draws the full framework: a stack of MR slices through a slab-stack image encoder and projector, a clinical table through a small node-link MLP, and coloured embeddings (circles for images, squares for tables) placed in a kidney-shaped latent space with red and green arrows labelled CLIP Loss. Columns 2 and 3 repeat a minimal pipeline with a single table column, ventricle volume or the infarction label, and paint the latent space by that feature (a gradient, or red and green patches). One colour per subject, S1 to S3, runs through the whole figure.",
+ "summary_zh": "论文提出用心脏 MR 图像与临床表格做自监督对比学习。图分三列：第一列画完整框架，图像和表格各经编码器、投影头得到嵌入，在潜空间用 CLIP 损失比较；二、三列只换表格输入（心室容积、标签），潜空间随之着色。",
+ "confidence": "high",
+ "notes": "Primary kind changed from the prior side-by-side-contrast to contribution-mosaic (paper-roadmap): the three numbered columns are the paper's three contributions (framework, morphometric finding, label as a feature), not competing designs; columns 2 and 3 do vary one input at a time, so side-by-side-contrast stays as a secondary kind. System name taken from the repository URL (MMCL) and the abstract (LaaF). The red versus green arrows are read as different-subject versus same-subject pairs of the CLIP loss from their colour logic (green joins the teal pair) and from the label; the figure has no legend for them. The digest counts three bitmaps of about 100 x 103 pt, probably the three latent-space blobs; the nine small placements are the MR slices. Image encoder drawn as layer-stack; the table encoder is a network glyph.",
+ "venue": "CVPR23"
+}

@@ -1,0 +1,384 @@
+{
+ "paper_id": "neurips24-0113",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Inflationary Flows",
+  "one_liner": "Repurposes diffusion-based models, through their probability flow ODE, into invertible, neighbourhood-preserving maps to a low-dimensional Gaussian for calibrated Bayesian inference.",
+  "domain": [
+   "diffusion models",
+   "Bayesian inference",
+   "SDE-ODE duality"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "one two-moons toy set drawn in three snapshots along a diagonal in each of three columns (SDE, Fokker-Planck, pfODE), with the governing equation under each column",
+  "argues": "The SDE and the pfODE give the same marginals described by one Fokker-Planck equation, but the SDE is noisy and mixing while the pfODE is deterministic and neighbourhood-preserving.",
+  "subject": "a two-moons toy dataset taken from data to Gaussian under an SDE, as its density, and under a pfODE, with the three governing equations",
+  "elements": [
+   {
+    "name": "Diffusion Model",
+    "type": "container",
+    "role": "column for the forward (noising) SDE and its reverse",
+    "drawn_as": "bold sans title above three scatter snapshots and the SDE equation",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Fokker-Planck Equation",
+    "type": "container",
+    "role": "column for the marginal densities whose evolution is described by the FPE",
+    "drawn_as": "bold sans title above three density-contour snapshots and the FPE equation",
+    "container": "middle column",
+    "is_contribution": false
+   },
+   {
+    "name": "Probability Flow ODE",
+    "type": "container",
+    "role": "column for the deterministic flow that has the same marginals",
+    "drawn_as": "bold sans title above three scatter snapshots and the pfODE equation",
+    "container": "right column",
+    "is_contribution": true
+   },
+   {
+    "name": "\"Noising\" and \"Denoising\"",
+    "type": "operation",
+    "role": "direction of the SDE: from data to noise and back",
+    "drawn_as": "two parallel navy diagonal arrows with rotated bold labels, down-right and up-left",
+    "container": "left column",
+    "is_contribution": null
+   },
+   {
+    "name": "To Gaussian and To Original Data",
+    "type": "operation",
+    "role": "direction of the evolving density: towards a Gaussian and back to the data",
+    "drawn_as": "two parallel navy diagonal arrows with rotated bold labels",
+    "container": "middle column",
+    "is_contribution": null
+   },
+   {
+    "name": "\"Inflation\" and \"Generation\"",
+    "type": "operation",
+    "role": "direction of the pfODE: forward to a Gaussian and the reverse that generates data",
+    "drawn_as": "two parallel navy diagonal arrows with rotated bold labels",
+    "container": "right column",
+    "is_contribution": true
+   },
+   {
+    "name": "dx = f(x,t)dt + G(x,t) · dW",
+    "type": "formula",
+    "role": "the forward SDE defining the diffusion model",
+    "drawn_as": "typeset equation in one line under the left column",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "∂t pt(x) = ... (Fokker-Planck)",
+    "type": "formula",
+    "role": "the FPE that the marginal densities obey",
+    "drawn_as": "two-line typeset equation with sums over i, j, k under the middle column",
+    "container": "middle column",
+    "is_contribution": false
+   },
+   {
+    "name": "dx = { f(x,t) − ½∇·[GG^T] − ½GG^T ∇x log pt(x) } dt",
+    "type": "formula",
+    "role": "the pfODE, which contains the score function",
+    "drawn_as": "two-line typeset equation with a large brace under the right column",
+    "container": "right column",
+    "is_contribution": null
+   },
+   {
+    "name": "horizontal block arrows (four)",
+    "type": "other",
+    "role": "link each outer column to the middle one: SDE and pfODE both give rise to the same FPE; one pair at snapshot level, one pair at equation level",
+    "drawn_as": "thick navy block arrows pointing inwards",
+    "container": "between columns",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Diffusion Model",
+    "to": "Fokker-Planck Equation",
+    "what": "the forward SDE gives rise to marginal densities whose evolution the FPE describes",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Probability Flow ODE",
+    "to": "Fokker-Planck Equation",
+    "what": "the pfODE gives rise to the same FPE",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SDE equation",
+    "to": "FPE equation",
+    "what": "same correspondence at the level of the equations",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pfODE equation",
+    "to": "FPE equation",
+    "what": "same correspondence at the level of the equations",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "snapshot at t = 0",
+    "to": "snapshot at t = T",
+    "what": "data becomes Gaussian along the diagonal (Noising, To Gaussian, Inflation); the parallel arrow runs back (Denoising, To Original Data, Generation)",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left scatter snapshots",
+    "to": "right scatter snapshots",
+    "what": "same point colours, so the reader can follow which points go where under each map",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Diffusion Model",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "two-moons points are noised into a mixed Gaussian cloud in which the colours are scrambled",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Fokker-Planck Equation",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the marginal densities shared by both processes, as blue contours from two moons to a single blob",
+    "verdict": "setting"
+   },
+   {
+    "label": "Probability Flow ODE",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "the same marginals reached deterministically, with colours staying locally ordered",
+    "verdict": "used by the method"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "two-moons toy points under the SDE",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "scatter snapshots stepping down-right along a diagonal; points coloured by their starting position in a green-purple-yellow map; the last snapshot is a mixed cloud"
+   },
+   {
+    "what": "marginal densities of the two-moons toy set",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "filled blue contour plots from two curved ridges to a single round blob"
+   },
+   {
+    "what": "two-moons toy points under the pfODE",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "scatter snapshots on the same diagonal; the colour layout is preserved while the cloud inflates"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "two-moons toy dataset coloured by position",
+    "form": "nine scatter or density snapshots (3 per column) of the same synthetic data",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "three snapshots on a down-right diagonal from data to Gaussian with a parallel up-left arrow for the reverse, instead of a horizontal chain",
+    "parts": [
+     "data snapshot",
+     "intermediate snapshot",
+     "Gaussian snapshot",
+     "forward arrow",
+     "reverse arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the left column title, runs down its diagonal, jumps across the block arrow to the middle column, then to the right column; equations are read last, left to right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three unframed columns with bold titles; each holds three snapshots stepping down along a diagonal flanked by two parallel arrows, and an equation row below; thick block arrows between the outer columns and the middle one at the snapshot level and again at the equation level.",
+  "panel_count": 3,
+  "lanes": "three aligned columns, each with three diagonal snapshots and an equation row",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.8,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#002060",
+    "used_for": "navy: all arrows, diagonal and block"
+   },
+   {
+    "hex": "#fde725",
+    "used_for": "yellow end of the point colour map (tracer colours)",
+    "approx": true
+   },
+   {
+    "hex": "#21918c",
+    "used_for": "teal middle of the point colour map",
+    "approx": true
+   },
+   {
+    "hex": "#440154",
+    "used_for": "dark purple end of the point colour map",
+    "approx": true
+   },
+   {
+    "hex": "#08519c",
+    "used_for": "dense centre of the blue density contours",
+    "approx": true
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "pale outer contours of the density plots",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black rules in the equations; arrows are filled navy shapes",
+  "font": "bold sans (Calibri) 8-10 pt for column titles and arrow labels; Computer Modern serif for the equations",
+  "corners": "square",
+  "arrows": "thin navy diagonal arrows with small heads along each snapshot stack; thick navy block arrows between columns",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "point colour (green-purple-yellow map) = starting position on the moons, used as a tracer to see whether neighbours stay together; blue shades in the contour plots = probability density; navy = arrows",
+  "line_style_means": "diagonal arrow pair = direction of time (down-right towards a Gaussian, up-left back to data); thick horizontal arrow = gives rise to",
+  "shape_means": "none beyond the toy data shapes",
+  "marker_means": "quotation marks around Noising, Denoising, Inflation and Generation mark them as informal names",
+  "emphasis": "bold column titles; the colour tracer makes the mixing in the left column and the order in the right column visible at once",
+  "reusable_patterns": [
+   "the same toy dataset drawn at the same three times in every column, so columns differ only in treatment",
+   "tracer colouring of points to show neighbourhood preservation without a metric",
+   "equation under its column, joined to the next equation by the same arrow as the snapshots",
+   "arrow labels rotated to follow the diagonal arrows",
+   "inward-pointing block arrows from two outer columns to a shared middle column"
+  ],
+  "weaknesses": [
+   "the logic SDE -> FPE <- pfODE depends on the caption; the inward arrows carry no words",
+   "the text layer still holds hidden leftovers (an author name, a date, a section heading) that are not visible"
+  ]
+ },
+ "resources": {
+  "own": [
+   "simulated two-moons scatter and density plots"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "arrows and column titles",
+   "typeset equations"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two-moons scatter snapshots",
+   "blue density contour snapshots",
+   "diagonal arrows labelled Noising and Denoising",
+   "block arrows between columns",
+   "SDE, Fokker-Planck and pfODE equations"
+  ],
+  "sample_data": "other",
+  "keywords": [
+   "diffusion models",
+   "SDE",
+   "Fokker-Planck equation",
+   "probability flow ODE",
+   "score function",
+   "Bayesian inference",
+   "inflationary flows",
+   "two moons"
+  ],
+  "tags": [
+   "equation-boxes",
+   "small-multiples",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "tracer-colouring",
+    "what": "points of a toy dataset coloured by their starting position and redrawn in every snapshot, so mixing or order-preservation can be seen without a metric"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show that several descriptions of one process are equivalent but behave differently, draw the same coloured toy set at the same three times in each column and print each column's governing equation underneath; tracer colours make the qualitative difference visible.",
+  "suits": "theory-motivated papers where one object has several equivalent descriptions (SDE, PDE, ODE; primal, dual) and the difference is qualitative."
+ },
+ "tags": [
+  "three columns",
+  "diagonal snapshot stacks",
+  "navy block arrows",
+  "toy scatter plots",
+  "typeset equations",
+  "white ground"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 Background (p.3-4)"
+  ],
+  "evidence": [
+   "while both the SDE and the pfODE possess the same marginals, the former is noisy and mixing",
+   "this diffusive process gives rise to a series of marginal distributions pt(x) satisfying a Fokker-Planck equation",
+   "Unlike (1), this process is deterministic, and data points evolve smoothly"
+  ]
+ },
+ "summary": "Inflationary flows repurpose diffusion-based models for calibrated Bayesian inference, and Figure 1 explains the SDE-ODE duality behind them. Three columns each repeat three snapshots of a two-moons toy set along a diagonal with labelled arrows and the governing equation underneath: a diffusion model that noises the data into a mixed Gaussian cloud, the Fokker-Planck equation drawn as blue density contours, and the probability flow ODE whose scatter keeps its colour layout while it inflates. Thick block arrows from both outer columns point to the middle one, showing that SDE and pfODE give rise to the same marginals.",
+ "summary_zh": "图用三列说明扩散模型的 SDE-ODE 对偶：左列对双月数据加噪去噪，中列 Fokker-Planck 方程给出同一串边缘密度（蓝色等高线），右列概率流 ODE 让点云保持邻域结构；每列下方印有方程，箭头表示两侧导出同一 FPE。",
+ "confidence": "high",
+ "notes": "Prior kind kept; side-by-side-contrast added because the caption contrasts the noisy SDE with the deterministic pfODE. Nine snapshot tiles are visible, the digest counts 12 placed bitmaps (some may be overlay pieces). The text layer holds hidden leftovers (author name, date, '1 Introduction') that do not appear in the print.",
+ "venue": "NeurIPS24"
+}

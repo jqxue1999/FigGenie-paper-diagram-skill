@@ -1,0 +1,350 @@
+{
+ "paper_id": "iclr26-0116",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LoRA-Pre",
+  "one_liner": "A low-rank optimizer for LLM pre-training that views momentum EMA as an online linear regressor and stores momentum as two low-rank factors with closed-form updates.",
+  "domain": [
+   "optimizer memory efficiency",
+   "low-rank momentum",
+   "LLM pre-training"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "formal-diagram",
+  "variant_note": "an equivalence between the EMA rule and a least-squares loss, then a mirrored before/after pair across a big 'Low-Rank Compression' arrow",
+  "argues": "The EMA momentum update is the same as training a linear regressor by online gradient descent, so the momentum matrix can be stored as two low-rank factors with closed-form updates.",
+  "subject": "The momentum matrix m as an online linear learner, and its replacement by two low-rank factors m_B and m_A with their loss and update rules.",
+  "elements": [
+   {
+    "name": "Your Momentum is a Secret Online Linear Learner!",
+    "type": "label",
+    "role": "headline claim of the figure",
+    "drawn_as": "bold title text at the top left inside the dashed frame",
+    "container": "dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "m' ← β1·m + (1−β1)·g",
+    "type": "formula",
+    "role": "the usual EMA momentum update",
+    "drawn_as": "formula text at the top of the left half",
+    "container": "left half",
+    "is_contribution": false
+   },
+   {
+    "name": "Equivalent Form",
+    "type": "operation",
+    "role": "states that the EMA update and the loss below it are the same update",
+    "drawn_as": "light-blue double-headed vertical block arrow with a bold label beside it",
+    "container": "left half",
+    "is_contribution": true
+   },
+   {
+    "name": "L(m; g_t) = ½‖m − g_t‖²_F",
+    "type": "formula",
+    "role": "least-squares loss of a linear regressor on the current gradient",
+    "drawn_as": "formula text with a short up arrow from the matrix box",
+    "container": "left half",
+    "is_contribution": true
+   },
+   {
+    "name": "m",
+    "type": "data",
+    "role": "the momentum matrix, i.e. the online learner's state",
+    "drawn_as": "peach square box on the gradient stream",
+    "container": "left half",
+    "is_contribution": false
+   },
+   {
+    "name": "g_{t+1}, g_t, g_{t−1} … g_1",
+    "type": "data",
+    "role": "gradients arriving online; the current g_t is bold black, the others grey",
+    "drawn_as": "dash-dot arrow running through the matrix (drawn in both halves)",
+    "container": "both halves",
+    "is_contribution": null
+   },
+   {
+    "name": "Online Gradient Flow update: m' ← m − (1−β1)·∂L/∂m",
+    "type": "formula",
+    "role": "one gradient step on the loss that reproduces the EMA update",
+    "drawn_as": "bold lead-in 'update:' plus formula under the left half",
+    "container": "left half",
+    "is_contribution": true
+   },
+   {
+    "name": "Low-Rank Compression",
+    "type": "operation",
+    "role": "replaces the full momentum matrix by a pair of low-rank factors",
+    "drawn_as": "large mid-blue right-pointing block arrow in the centre with a bold label",
+    "container": "dashed frame",
+    "is_contribution": true
+   },
+   {
+    "name": "L(m_B, m_A; g_t) = ½‖m_B m_A − g_t‖²_F",
+    "type": "formula",
+    "role": "loss on the product of the two factors",
+    "drawn_as": "formula text above the factors with a short up arrow",
+    "container": "right half",
+    "is_contribution": true
+   },
+   {
+    "name": "m_B",
+    "type": "data",
+    "role": "first low-rank factor",
+    "drawn_as": "peach trapezoid, wide at the top, narrow end pointing down",
+    "container": "right half",
+    "is_contribution": true
+   },
+   {
+    "name": "m_A",
+    "type": "data",
+    "role": "second low-rank factor",
+    "drawn_as": "light-blue trapezoid, narrow end touching m_B, wide at the bottom",
+    "container": "right half",
+    "is_contribution": true
+   },
+   {
+    "name": "Online Gradient Flow update: m'_B and m'_A",
+    "type": "formula",
+    "role": "update of each factor with an inverse second-derivative term times the first derivative; the caption says closed form, no backpropagation (Theorem 3.1)",
+    "drawn_as": "two stacked formula lines under a bold 'update:' lead-in",
+    "container": "right half",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "m' ← β1·m + (1−β1)·g",
+    "to": "L(m; g_t)",
+    "what": "equivalent forms of the same update",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "m",
+    "to": "L(m; g_t)",
+    "what": "the loss is taken on the momentum matrix",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "g_{t+1}, g_t",
+    "to": "m",
+    "what": "gradients arrive one at a time; the current one in bold",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "m",
+    "to": "g_{t−1} … g_1",
+    "what": "the stream continues with greyed earlier gradients",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "m (left half)",
+    "to": "m_B, m_A (right half)",
+    "what": "Low-Rank Compression: the matrix becomes a product of two factors",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "m_B, m_A",
+    "to": "L(m_B, m_A; g_t)",
+    "what": "the loss is taken on the product of the factors",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "gradient stream (right half)",
+    "to": "m_B, m_A",
+    "what": "the same online gradient stream passes through the factor pair",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "update line (left half)",
+    "to": "update lines (right half)",
+    "what": "mirrored placement: same rows (loss, stream with matrix, update) on both sides of the big arrow",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "two trapezoids m_B (peach, wide top) and m_A (light blue, wide bottom) joined at their narrow ends like an hourglass, replacing a single square matrix box",
+    "parts": [
+     "m_B trapezoid",
+     "m_A trapezoid"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the title and the EMA formula at the top left, follows the Equivalent Form arrow down to the loss and the matrix box, then crosses the big Low-Rank Compression arrow to the mirrored right half."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "One beige dashed frame under a headline. Two mirrored halves joined by a large central block arrow: left half stacks EMA formula, equivalence arrow, loss, matrix box on a gradient stream and update rule; right half repeats the same rows with two factors and their updates.",
+  "panel_count": 1,
+  "lanes": "2 mirrored halves with aligned rows (loss formula, matrix on a gradient stream, update rule)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.07,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fffbf0",
+    "used_for": "beige ground inside the dashed frame"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "momentum matrix box m and the first factor m_B"
+   },
+   {
+    "hex": "#c1e5f5",
+    "used_for": "Equivalent Form double arrow and the second factor m_A"
+   },
+   {
+    "hex": "#83cbeb",
+    "used_for": "Low-Rank Compression block arrow"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt black outlines on the matrix box, trapezoids and block arrows, dash-dot 0.75 pt stream arrows, 1 pt dashed outer frame",
+  "font": "mixed: Comic Sans-style sans for the title and words, Cambria Math serif for formulas; 5-8.5 pt, bold for the title and lead-ins",
+  "corners": "square",
+  "arrows": "thin dash-dot stream arrows with small filled heads, short solid up arrows from matrix to loss, one light-blue double-headed block arrow and one large mid-blue block arrow",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach = the momentum matrix and its first factor m_B; light blue = the equivalence arrow and the second factor m_A; mid-blue = the compression operation; grey versus black gradient symbols = other time steps versus the current g_t",
+  "line_style_means": "dash-dot arrow = the gradient stream arriving online; the dashed outer frame groups the whole idea",
+  "shape_means": "square = full momentum matrix; two trapezoids touching at their narrow ends = the low-rank factor pair; block arrows = equivalence and compression",
+  "marker_means": "short up arrows tie a matrix to the loss defined on it; bold g_t marks the current gradient",
+  "emphasis": "title claim at the top, the large central Low-Rank Compression arrow, and the right half carrying the new formulas in the same layout as the left",
+  "reusable_patterns": [
+   "mirrored before/after halves with identical rows on both sides of one big block arrow",
+   "light-blue double-headed block arrow labelled 'Equivalent Form' between two equivalent formulas",
+   "dash-dot stream arrow whose current item is bold and whose earlier and later items are greyed",
+   "a square matrix replaced by two trapezoids joined at their narrow ends to show a low-rank factorisation",
+   "formula text printed next to each drawn object as its definition",
+   "claim sentence as the title inside a dashed beige frame"
+  ],
+  "weaknesses": [
+   "dense small formula text with 5-6.5 pt sub- and superscripts",
+   "the order of the gradient stream (t+1 on the left, 1 on the right) is not explained in the figure",
+   "no key for peach versus blue"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the paper's own formulas: EMA rule, least-squares losses, update rules"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "matrix box, trapezoid factors, block arrows, dash-dot streams, dashed frame"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "EMA update formula",
+   "light-blue double-headed block arrow",
+   "momentum matrix box",
+   "gradient stream with greyed neighbours",
+   "large Low-Rank Compression block arrow",
+   "two trapezoid factors",
+   "update-rule formulas"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "optimizer states",
+   "momentum",
+   "EMA",
+   "online linear regression",
+   "low-rank factorisation",
+   "Adam",
+   "Muon",
+   "memory-efficient pre-training"
+  ],
+  "tags": [
+   "equation-boxes",
+   "claim-banner"
+  ],
+  "new_tags": [
+   {
+    "name": "faded-stream-arrow",
+    "what": "a dash-dot arrow carrying a sequence of items in which the current item is bold and the earlier and later ones are greyed"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an equivalence and its compressed form as a mirrored pair: identical rows (loss, data stream with the object, update rule) on both sides of one big block arrow, so the only differences the eye finds are the contribution (one matrix box becomes two trapezoids, new update rules).",
+  "suits": "Theory-heavy methods where a derivation step such as an equivalence, a factorisation or a compression can be drawn as before and after of one object with its formulas."
+ },
+ "tags": [
+  "single dashed frame",
+  "pastel block arrows",
+  "formula-centred",
+  "mirrored halves",
+  "dash-dot stream",
+  "trapezoid factors"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.4)"
+  ],
+  "evidence": [
+   "the exponential moving average (EMA) update for optimizer momentum is mathematically equivalent to training a linear regressor",
+   "we propose compressing the optimizer states (i.e., the momenta) using low-rank matrices to reduce the memory footprint",
+   "the closed-form update rules for these matrices without requiring backpropagation are given by Theorem 3.1"
+  ]
+ },
+ "summary": "LoRA-Pre is a memory-saving optimizer for pre-training language models. The figure is one beige dashed frame headed by the claim 'Your Momentum is a Secret Online Linear Learner!'. The left half writes the EMA momentum update, joins it by a light-blue double-headed 'Equivalent Form' arrow to a least-squares loss on the momentum matrix, and shows the matrix as a peach box on a dash-dot stream of gradients with the online gradient-flow update underneath. A large blue 'Low-Rank Compression' arrow leads to a mirrored right half where the matrix becomes two trapezoids m_B and m_A, a loss on their product and closed-form update rules for each factor.",
+ "summary_zh": "LoRA-Pre 把动量的指数滑动平均看作在线线性回归，再把动量矩阵压缩成两个低秩因子。图是一个米色虚线框：左半是 EMA 公式、最小二乘损失和梯度流上的矩阵 m，中间是大箭头“低秩压缩”，右半对称地换成 m_B、m_A 及其闭式更新公式。",
+ "confidence": "high",
+ "notes": "No body paragraph mentions the figure; roles come from the caption, abstract and the figure itself. Pre-screen kinds kept. The update formula is transcribed as drawn (inverse second derivative times first derivative); the paper text provided does not describe it further.",
+ "venue": "ICLR26"
+}

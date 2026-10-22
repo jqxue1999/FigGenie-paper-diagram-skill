@@ -1,0 +1,486 @@
+{
+ "paper_id": "icml25-0040",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "An attack on Chatbot Arena: an adversary identifies which model wrote a response and votes to push a target model up the leaderboard.",
+  "domain": [
+   "LLM evaluation",
+   "voting-based leaderboards",
+   "adversarial attacks"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "actor-interaction",
+   "side-by-side-contrast"
+  ],
+  "variant": "scenario-narrative",
+  "variant_note": "cartoon users, an adversary and chatbot robots act out how votes are collected and how the leaderboard shifts, in three captioned scenes",
+  "argues": "Chatbot Arena's anonymous pairwise voting can be gamed: an adversary who tells which model wrote a response can vote it up and shift the leaderboard ranking.",
+  "subject": "A three-step cartoon of how Chatbot Arena collects votes and how an adversarial voter moves the leaderboard.",
+  "elements": [
+   {
+    "name": "four chatbot robot icons",
+    "type": "icon",
+    "role": "the candidate LLMs of the arena",
+    "drawn_as": "cartoon robot heads in red, blue, teal and olive, each with a chat bubble",
+    "container": "Step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Chatbot Arena",
+    "type": "module",
+    "role": "platform that picks two models for a prompt, shows blind responses and compiles votes",
+    "drawn_as": "grey rounded box in the middle of the scene",
+    "container": "Step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "five user avatars",
+    "type": "actor",
+    "role": "users who send prompts to the arena",
+    "drawn_as": "identical cartoon faces in a row",
+    "container": "Step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Anonymous Response 1 / Anonymous Response 2",
+    "type": "data",
+    "role": "the two blind responses shown to the user",
+    "drawn_as": "two light-blue cards, each with a grey circled robot at one end",
+    "container": "Step 2",
+    "is_contribution": false
+   },
+   {
+    "name": "thumbs-up votes",
+    "type": "icon",
+    "role": "the vote for one response",
+    "drawn_as": "two blue-cuffed thumbs-up hands beside the response cards",
+    "container": "Step 2",
+    "is_contribution": null
+   },
+   {
+    "name": "Normal user",
+    "type": "actor",
+    "role": "genuine voter who judges quality",
+    "drawn_as": "cartoon face with the quote This response is better, the word better in green",
+    "container": "Step 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Adversarial user",
+    "type": "actor",
+    "role": "attacker who recognises the response of their own model and votes for it",
+    "drawn_as": "red-horned devil face with trident and the quote This seems to be from my model, my model in red",
+    "container": "Step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Response Model Classifier",
+    "type": "module",
+    "role": "lets the adversary break anonymity by telling which model wrote a response",
+    "drawn_as": "magnifier over a chart-and-tree glyph with a red label",
+    "container": "Step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Before the attack leaderboard",
+    "type": "data",
+    "role": "ranking before the attack: No.1 teal, No.2 red, No.3 olive robot",
+    "drawn_as": "small table headed Chatbot Arena Leaderboard with rank cells and robot icons",
+    "container": "Step 3",
+    "is_contribution": null
+   },
+   {
+    "name": "After the attack that targets at upvoting",
+    "type": "data",
+    "role": "ranking after the attack: the red robot rises to No.1 and the teal robot drops to No.2",
+    "drawn_as": "same table with a green up arrow badge on the red robot and a red down arrow badge on the teal robot",
+    "container": "Step 3",
+    "is_contribution": null
+   },
+   {
+    "name": "Step 1 / Step 2 / Step 3 captions",
+    "type": "label",
+    "role": "name the three scenes",
+    "drawn_as": "black filled Step N chips leading a caption line along the bottom edge",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "five user avatars",
+    "to": "Chatbot Arena",
+    "what": "a user sends a query; the fourth user's line is thick blue",
+    "kind": "data",
+    "drawn": "line",
+    "step": 1
+   },
+   {
+    "from": "Chatbot Arena",
+    "to": "four chatbot robot icons",
+    "what": "two randomly selected models answer; thick blue curves go to the red and teal robots",
+    "kind": "interaction",
+    "drawn": "line",
+    "step": 1
+   },
+   {
+    "from": "Normal user",
+    "to": "Anonymous Response 1",
+    "what": "votes for the response judged better",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Adversarial user",
+    "to": "Anonymous Response 2",
+    "what": "votes for the response recognised as their own model",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Response Model Classifier",
+    "to": "Adversarial user",
+    "what": "classifier helps identify the model behind a response",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "Before the attack leaderboard",
+    "to": "After the attack that targets at upvoting",
+    "what": "ranking before and after the adversarial votes",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": 3
+   },
+   {
+    "from": "red robot in Step 1 and in the After-attack title",
+    "to": "red robot rising in the leaderboard",
+    "what": "the targeted model keeps its colour from the scene to the ranking",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Step 1: A user sends a query to Chatbot Arena",
+    "kind": "actor-interaction",
+    "axis": "stages",
+    "shows": "five users and four models tied to the arena box; one user and two randomly chosen models are highlighted",
+    "verdict": "setting"
+   },
+   {
+    "label": "Step 2: Two blind responses are presented to the user who selects their preference",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "a normal user and an adversarial user vote on the same two anonymous responses with different reasons",
+    "verdict": null
+   },
+   {
+    "label": "Step 3: The leaderboard of models is updated according to user votes",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "before and after leaderboards: the targeted model moves up, a competitor moves down",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Step 1, Step 2, Step 3",
+    "kind": "order",
+    "at": "caption chips along the bottom edge",
+    "what": "orders the three scenes"
+   },
+   {
+    "marker": "No.1, No.2, No.3",
+    "kind": "identity",
+    "at": "leaderboard rows",
+    "what": "names the rank of each model"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon robot heads with chat bubbles in red, blue, teal and olive, plus a grey one in a circle",
+    "stands_for": "the LLMs; the grey circled robot is a model whose identity is hidden",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 13
+   },
+   {
+    "depicts": "round cartoon user faces",
+    "stands_for": "ordinary users of the arena",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "red devil face with trident",
+    "stands_for": "the adversarial user",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "magnifier over a bar chart and a tree",
+    "stands_for": "the response model classifier",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "thumbs-up hand",
+    "stands_for": "a vote for a response",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "green up arrow and red down arrow in round badges",
+    "stands_for": "rank gained or lost",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "the two users' reactions to the blind responses",
+    "form": "short quotes under each avatar with the key words coloured (better in green, my model in red)",
+    "real_values": false
+   },
+   {
+    "what": "leaderboard before and after the attack",
+    "form": "two small tables with ranks No.1-No.3, robot icons as models and green up / red down badges",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon chatbot robot heads with a chat bubble, one colour per model",
+    "parts": [
+     "robot head",
+     "chat bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "cartoon faces who vote; a devil face with trident for the adversary",
+    "parts": [
+     "user face",
+     "devil face",
+     "thumbs-up"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "pairwise-vote",
+    "drawn_as": "two anonymised response cards with grey circled robot avatars, each beside a thumbs-up",
+    "parts": [
+     "Anonymous Response 1",
+     "Anonymous Response 2",
+     "thumbs-up"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "leaderboard-table",
+    "drawn_as": "ranked table with No.1-No.3 rows, a model icon per row and arrow badges for rank change, drawn before and after",
+    "parts": [
+     "header",
+     "rank cells",
+     "model icons",
+     "arrow badges"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the coloured robots at the top left, follows the thick blue curves to the arena and the user, then the two responses and the two voters in the middle, and ends at the before and after tables on the right; the step captions along the bottom order the scenes."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three unframed cartoon scenes left to right with a Step N caption for each along the bottom edge: a hub (arena box between four robots above and five users below), two response cards above a normal and an adversarial user, and two leaderboard tables side by side.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.87,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#efefef",
+    "used_for": "fill of the Chatbot Arena box and the leaderboard header cells"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "fill of the two anonymous response cards",
+    "opacity": 0.56
+   },
+   {
+    "hex": "#3c78d8",
+    "used_for": "thick curves that mark the path taken in this scenario"
+   },
+   {
+    "hex": "#9e9e9e",
+    "used_for": "thin grey connector lines and table borders"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red text and labels for the adversary and the attack (Adversarial, my model, Response Model Classifier, After the attack)"
+   },
+   {
+    "hex": "#38761d",
+    "used_for": "green text for the normal user's honest judgement (better)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "fill of the Step N chips (white text on black)"
+   },
+   {
+    "hex": "#e8383d",
+    "used_for": "red robot, the targeted model",
+    "approx": true
+   },
+   {
+    "hex": "#17b3a3",
+    "used_for": "teal robot, the competitor that loses its rank",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt grey connectors and table borders; the three blue curves and the Chatbot Arena box outline are about 1.25-1.5 pt",
+  "font": "sans (IBM Plex Sans), 5.5-7.5 pt; bold for the Arena labels, user labels and step captions, with red and green bold spans",
+  "corners": "mixed",
+  "arrows": "thin curved lines without heads for the Step 1 links, thin straight lines with small heads from the users to the thumbs-up, round green and red arrow badges for rank change",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "robot colour = model identity, kept from Step 1 to the leaderboards (red = the targeted model); red text = the adversary; green text = the normal user's honest judgement; blue curves = the path taken in this run",
+  "line_style_means": "thin grey lines = possible links, thick blue lines = the links active in this run (one user, two randomly chosen models)",
+  "shape_means": "robot head = model, round cartoon face = user, devil face = adversary, thumbs-up = vote, grey circled robot = hidden identity, table = leaderboard",
+  "marker_means": "black Step N chips order the scenes; No.1-No.3 name ranks; green up and red down badges show the rank change",
+  "emphasis": "red is reserved for the attacker (devil, my model, classifier label, target robot, After the attack), so the adversarial path reads at a glance, and the before / after tables show the damage",
+  "reusable_patterns": [
+   "caption strip along the bottom edge with black Step N chips",
+   "thin grey lines for all possible links, thick coloured lines for the ones taken in the scenario",
+   "anonymised items drawn as grey circled avatars",
+   "before / after tables with rank-change arrow badges",
+   "one reserved colour for the adversary across icon, label and text",
+   "quote of each user's thought under the avatar with key words coloured"
+  ],
+  "weaknesses": [
+   "the Step 1 curves have no arrowheads, so the direction comes from the caption only",
+   "the link between the adversary's my model and the red robot is carried by colour alone",
+   "the scenes are not joined by arrows; order is given only by the chips"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "cartoon robot, user, devil, thumbs-up, magnifier-chart and arrow-badge icons from a flat icon set"
+  ],
+  "generated": [],
+  "drawn": [
+   "Chatbot Arena box and connector curves",
+   "response cards",
+   "leaderboard tables",
+   "Step N caption chips",
+   "coloured text spans"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four coloured chatbot robot icons",
+   "Chatbot Arena box with curves to models and users",
+   "five cartoon user avatars",
+   "two anonymous response cards with thumbs-up",
+   "devil adversary with classifier magnifier",
+   "before and after leaderboard tables with rank arrows"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "Chatbot Arena",
+   "leaderboard manipulation",
+   "adversarial voting",
+   "LLM evaluation",
+   "de-anonymization",
+   "response classifier",
+   "human preference voting",
+   "Elo ranking"
+  ],
+  "tags": [
+   "problem-only",
+   "model-pictogram",
+   "mascot-character",
+   "human-in-the-loop",
+   "verdict-marks",
+   "highlighted-text-spans",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "step-caption-strip",
+    "what": "one caption per column along the bottom edge, each led by a black filled Step N chip, instead of numbers inside the drawing"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Stage an attack as captioned cartoon scenes: thin grey lines for every possible link and thick colour lines for the ones used, one reserved colour (red) for the adversary on icon, label and text, and a before / after table at the end to show the damage.",
+  "suits": "Threat-model or failure-mode illustrations of interactive platforms (leaderboards, marketplaces, annotation or feedback loops) where one actor's behaviour changes a ranking or a dataset."
+ },
+ "tags": [
+  "cartoon-icons",
+  "step-chips",
+  "scenario-scenes",
+  "grey-and-blue-links",
+  "before-after-tables",
+  "red-for-adversary"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "2 De-anonymization of Model Responses (p.2)"
+  ],
+  "evidence": [
+   "Chatbot Arena compiles a model leaderboard using crowdsourced user votes and is therefore vulnerable to manipulation through adversarial voting.",
+   "genuine users vote based on quality, while adversarial users may exploit classifiers to break anonymity",
+   "the voting results are incorporated into the leaderboard and the model identities are revealed"
+  ]
+ },
+ "summary": "The paper shows that voting-based LLM leaderboards such as Chatbot Arena can be manipulated by adversarial votes. Figure 1 acts the attack out in three captioned scenes with cartoon characters. Step 1: five users and four coloured chatbot robots are tied to a central Chatbot Arena box, with thick blue curves marking the one user and the two randomly chosen models of this run. Step 2: two anonymous response cards are voted on by a normal user, who judges quality, and a devil-faced adversarial user, who uses a response model classifier to spot their own model. Step 3: before and after leaderboards show the targeted red robot rising from No.2 to No.1 while the teal robot falls.",
+ "summary_zh": "论文指出 Chatbot Arena 这类投票榜单可被恶意投票操纵。图 1 用三幕卡通场景讲述攻击：用户发起查询并随机抽两个模型，正常用户按质量投票，恶魔形象的攻击者借助分类器认出自己的模型，最后前后两张榜单显示目标模型从第二升到第一。",
+ "confidence": "high",
+ "notes": "Prior kinds worked-walkthrough / actor-interaction kept; side-by-side-contrast added for normal vs adversarial voter and the before / after leaderboards. The meaning of the thick blue curves (the path of this run) is read from the caption, which says two models are randomly selected. Icon counts are read off the picture (13 robots including the grey circled ones; the digest counts 25 placed bitmaps in all). The rank-change badges fit none of the marker kinds and are described in encoding instead. The robot hexes are approximate.",
+ "venue": "ICML25"
+}

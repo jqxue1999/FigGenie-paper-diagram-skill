@@ -1,0 +1,414 @@
+{
+ "paper_id": "icml26-0081",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "POLAR (program-of-layers)",
+  "one_liner": "Training-free program-of-layers: pretrained LLM layers are skipped or looped per input, with a lightweight network predicting the program.",
+  "domain": [
+   "dynamic-depth LLM inference",
+   "layer skipping and recurrence",
+   "program prediction"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "unrolled-chain",
+  "variant_note": "the same layer chain drawn once per input, with a green looped group, dashed skipped layers and a pseudocode box for each program underneath",
+  "argues": "Different inputs call for different programs over the same frozen layers, with some layers skipped and some looped; fixed-depth execution covers only a narrow part.",
+  "subject": "One chain of frozen layers drawn twice, once per input, with skip and loop routes and the matching pseudocode.",
+  "elements": [
+   {
+    "name": "x0 and x1",
+    "type": "data",
+    "role": "two different inputs, one per row",
+    "drawn_as": "tall sky-blue rounded box with a white inner box and a rotated label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Layer 0, Layer 1, …, Layer d, Layer d+1, Layer d+2, …, Layer D − 1",
+    "type": "module",
+    "role": "the D frozen pretrained layer functions, drawn as a chain",
+    "drawn_as": "tall white rounded boxes with rotated labels, each with a snowflake at its top right; an ellipsis stands for omitted layers",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Output",
+    "type": "data",
+    "role": "result of the program",
+    "drawn_as": "tall peach rounded box with a white inner box and a rotated label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "dashed layer (Layer d+1 in the top row, Layer 0 in the bottom row)",
+    "type": "module",
+    "role": "a skipped layer",
+    "drawn_as": "layer box with a dashed outline, dashed arrows run through it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "looped group (Layers 0 and 1; Layers d to d+2)",
+    "type": "region",
+    "role": "layers that are executed repeatedly",
+    "drawn_as": "pale-green rounded rectangle around the looped layers with a loop-back arrow arching above it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Recurrent: reuse one or more layers for iterative refinement",
+    "type": "label",
+    "role": "names the loop-back arrow above the looped group",
+    "drawn_as": "6.5 pt label set above the top row beside a teal bracket-shaped arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Skip: omit one or more layers",
+    "type": "label",
+    "role": "names the bypass arrow that jumps from Layer d to Layer d+2",
+    "drawn_as": "6.5 pt label above the skip arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Set of Frozen Pretrained Layer Functions",
+    "type": "label",
+    "role": "names the whole layer set; 'Frozen' is in bold",
+    "drawn_as": "italic label under a curly bracket spanning the top chain",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "pseudocode of the x0 program",
+    "type": "text-block",
+    "role": "Input x0; loops Layer1(Layer0(h)) twice (recurrence), then layers 2 to D−1 with layer d+1 skipped (skip) and the rest kept",
+    "drawn_as": "dashed-border box with typeset pseudocode and blue ▷ comments",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "pseudocode of the x1 program",
+    "type": "text-block",
+    "role": "Input x1; keeps layers 1 to d−1 and skips layer 0, loops Layer d+2(Layer d+1(Layer d(h))) twice (recurrence), then keeps layers d+3 to D−1",
+    "drawn_as": "box with typeset pseudocode and blue ▷ comments, solid left side and dashed outline",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "x0",
+    "to": "Layer 0",
+    "what": "input enters the first layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer 0, Layer 1, …, Layer d",
+    "to": "Layer d+2, …, Layer D − 1",
+    "what": "default left-to-right order through the chain",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer 1",
+    "to": "Layer 0",
+    "what": "recurrence: the pair is reused (loop-back arrow above the green group)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer d",
+    "to": "Layer d+2",
+    "what": "skip: bypass arrow over the dashed Layer d+1",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer d",
+    "to": "Layer d+2 through Layer d+1",
+    "what": "dashed arrows run through the skipped layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x1",
+    "to": "Layer 1",
+    "what": "skip layer 0: arrow arches over the dashed Layer 0",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer d+2",
+    "to": "Layer d",
+    "what": "recurrence: the triple d, d+1, d+2 is reused (loop-back arrow above the green group)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer D − 1",
+    "to": "Output",
+    "what": "last layer to the output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pseudocode boxes",
+    "to": "the two rows",
+    "what": "the left box restates the x0 program and the right box the x1 program; matching input names and layer indices tie them together",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "blue comments recurrence, skip, keep",
+    "to": "loop-back arrows, dashed layers, solid arrows",
+    "what": "name the three kinds of route",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Set of Frozen Pretrained Layer Functions",
+    "to": "all layers of the top chain",
+    "what": "curly bracket under the whole chain",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "0, 1, d, d+1, d+2, D − 1",
+    "kind": "identity",
+    "at": "Layer labels",
+    "what": "names each layer function"
+   },
+   {
+    "marker": "x0, x1",
+    "kind": "identity",
+    "at": "input boxes",
+    "what": "names the two inputs"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "light-blue snowflake with dark outline",
+    "stands_for": "a frozen pretrained layer",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 12
+   }
+  ],
+  "examples": [
+   {
+    "what": "two toy programs over the same layers: for x0 loop layers 0 and 1 twice and skip layer d+1; for x1 skip layer 0 and loop layers d, d+1, d+2 twice",
+    "form": "layer chains with loop and skip routes plus matching pseudocode",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a snowflake at the corner of every layer box, no fire or trainable counterpart",
+    "parts": [
+     "snowflake"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "layer-skip-loop-chain",
+    "drawn_as": "a row of layer boxes with a bypass arrow arching over a dashed skipped layer and a loop-back arrow arching over a green group of repeated layers",
+    "parts": [
+     "layer boxes",
+     "dashed skipped layer",
+     "bypass arrow",
+     "green looped group",
+     "loop-back arrow"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at x0 on the top row, follows the chain to Output, repeats on the bottom row for x1, then reads the two pseudocode boxes underneath."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two aligned rows separated by a thin dashed line, one per input, each with input block, the same chain of layer boxes and an output block; two dashed pseudocode boxes sit side by side beneath both rows.",
+  "panel_count": 1,
+  "lanes": "2 aligned rows (input x0 and input x1) with the same layer chain, plus 2 pseudocode boxes below",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.19,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#61cbf4",
+    "used_for": "input boxes x0 and x1"
+   },
+   {
+    "hex": "#f2aa84",
+    "used_for": "Output boxes"
+   },
+   {
+    "hex": "#d9f2d0",
+    "used_for": "rounded regions around the looped layers"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "teal arrows and the outline of the looped regions"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark outlines of layer and input boxes"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "layer boxes and the inner boxes of input and output"
+   },
+   {
+    "hex": "#0000ff",
+    "used_for": "blue comment words recurrence, skip, keep in the pseudocode (bitmap)",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 to 0.75 pt dark outlines on layer boxes, 1 pt teal arrows, dashed outlines for skipped layers and the pseudocode boxes",
+  "font": "sans (Calibri) 6.5 pt for labels, 5 pt for subscripts, Cambria Math for symbols; pseudocode in a serif face inside raster boxes",
+  "corners": "rounded",
+  "arrows": "thin teal arrows with small filled heads; dashed arrows through skipped layers; orthogonal bracket-shaped bypass and loop-back arrows above the chain",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "sky blue = input, peach = output, pale-green region = layers that are looped, teal = flow through the layers; snowflake = frozen pretrained layer; blue comment words in the pseudocode name the route type",
+  "line_style_means": "dashed outline = skipped layer, dashed arrow = connection through a skipped layer, arch above the chain going forward = skip, arch going backward = recurrence",
+  "shape_means": "tall rounded box with rotated label = one layer function; green rounded rectangle = looped group; curly bracket = the set of frozen layer functions",
+  "marker_means": "subscripts 0, 1, d, d+1, d+2, D-1 name layers; blue triangle comments name route types",
+  "emphasis": "the green group and the dashed layers show where the two programs differ; the pseudocode restates each route line by line",
+  "reusable_patterns": [
+   "the same layer chain drawn once per input with only the route changed",
+   "snowflake on every layer to state that the weights are frozen",
+   "bypass arrow above the chain for skip and loop-back arrow above it for recurrence, each with a direct label",
+   "dashed pseudocode box under each chain with blue comment words naming the route",
+   "curly bracket under the chain naming the set of frozen layer functions"
+  ],
+  "weaknesses": [
+   "rotated layer labels are harder to read",
+   "the pseudocode boxes are small raster images with tiny text in a single-column figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the two example programs (layer indices) and their pseudocode"
+  ],
+  "stock": [
+   "snowflake icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "layer boxes",
+   "input and output boxes",
+   "loop-back and bypass arrows",
+   "green looped regions",
+   "curly bracket",
+   "dashed separator"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "row of vertical layer boxes with snowflakes",
+   "green rounded looped region",
+   "dashed skipped layer",
+   "input and output blocks",
+   "two dashed pseudocode boxes",
+   "curly bracket under the layer set"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "program of layers",
+   "layer skipping",
+   "layer looping",
+   "recurrent depth",
+   "frozen LLM",
+   "dynamic depth",
+   "pseudocode"
+  ],
+  "tags": [
+   "module-state-coding",
+   "pseudocode-box",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "route-over-layer-chain",
+    "what": "skip and recurrence drawn as bypass and loop-back arrows arching over a row of layer boxes, with a tinted region marking the looped group and dashed outlines marking skipped layers"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the same layer chain once per input and change only the route: dashed outline for a skipped layer, a green region plus a loop-back arrow for repeated layers, a snowflake on every frozen layer, and a small pseudocode box under the rows that restates each route with colour-coded comments.",
+  "suits": "Dynamic-depth, layer-routing, early-exit or looped-transformer papers that must show per-input execution paths over a fixed set of layers."
+ },
+ "tags": [
+  "two-lane-chain",
+  "snowflake-frozen",
+  "dashed-skip",
+  "green-loop-region",
+  "pseudocode-boxes",
+  "single-column",
+  "teal-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "the dynamic inference of POLAR executes an inputspecific program π = (i1, . . . , iK) that calls the functions with layer skipping and recurrence.",
+   "Skip: omit one or more layers",
+   "Recurrent: reuse one or more layers for iterative refinement"
+  ]
+ },
+ "summary": "POLAR (program-of-layers) shows that the frozen layers of a pretrained LLM can be skipped or looped to form an input-specific program, and trains a lightweight network to predict such programs. Figure 1 is a single-column diagram of the same layer chain drawn twice, once per input. In the top row, input x0 passes Layers 0 and 1 twice inside a pale-green looped region and skips a dashed Layer d+1; in the bottom row, input x1 skips Layer 0 and loops Layers d to d+2. Every layer carries a snowflake for frozen weights, outputs are peach boxes, and a curly bracket names the set of frozen pretrained layer functions. Two dashed boxes below give matching pseudocode with blue comments recurrence, skip and keep.",
+ "summary_zh": "POLAR 让冻结的预训练层按输入被跳过或循环，形成每个输入专属的“层程序”。图 1 把同一条层链画两遍，上行循环层 0–1 并跳过层 d+1，下行跳过层 0 并循环层 d 到 d+2，下方伪代码逐行标注。",
+ "confidence": "high",
+ "notes": "The two pseudocode boxes are raster images, so their text is not in the digest; it was read from the preview. The prior kind model-anatomy is kept as primary and side-by-side-contrast added because the two rows differ only in the route. The bottom-right pseudocode box has a solid left edge and a dashed outline, the left box is fully dashed.",
+ "venue": "ICML26"
+}

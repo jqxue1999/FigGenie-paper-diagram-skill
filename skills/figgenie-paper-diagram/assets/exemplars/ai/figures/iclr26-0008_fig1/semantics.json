@@ -1,0 +1,459 @@
+{
+ "paper_id": "iclr26-0008",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "A benchmark that audits how much privacy differentially private LLM adaptations really give, using membership inference and canary extraction while the adaptation data shifts from overlapping to out-of-distribution.",
+  "domain": [
+   "differential privacy",
+   "membership inference auditing",
+   "LLM adaptation"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "data sources feed one LLM box that an outside auditor queries before a membership-inference verdict",
+  "argues": "A DP-adapted LLM should be audited from outside by an auditor who queries it, with private adaptation data varied from overlapping to in-distribution, out-of-distribution and canary.",
+  "subject": "Pretraining data and four private adaptation sets feeding a DP-adapted LLM that an auditor queries before MIA verdict cards.",
+  "elements": [
+   {
+    "name": "Pretrained dataset",
+    "type": "data",
+    "role": "the LLM's pretraining data",
+    "drawn_as": "cylinder icon (light-blue top, four green slices) over a white rounded label box, inside a dotted pale-blue region",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Private adaptation datasets",
+    "type": "container",
+    "role": "groups the four adaptation data sets whose distance to the pretraining data is varied",
+    "drawn_as": "dotted pale-pink region with a white pill label outlined in pink",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Overlap",
+    "type": "data",
+    "role": "adaptation data that exactly overlaps the pretraining data (abstract)",
+    "drawn_as": "light-blue cylinder, bold label",
+    "container": "Private adaptation datasets",
+    "is_contribution": true
+   },
+   {
+    "name": "IID",
+    "type": "data",
+    "role": "in-distribution adaptation data",
+    "drawn_as": "dark-green cylinder, bold label",
+    "container": "Private adaptation datasets",
+    "is_contribution": true
+   },
+   {
+    "name": "OOD",
+    "type": "data",
+    "role": "out-of-distribution adaptation data",
+    "drawn_as": "orange cylinder, bold label",
+    "container": "Private adaptation datasets",
+    "is_contribution": true
+   },
+   {
+    "name": "Canary",
+    "type": "data",
+    "role": "canary samples added to the adaptation set to measure extraction exposure",
+    "drawn_as": "yellow cylinder with a small canary bird perched on top, bold label",
+    "container": "Private adaptation datasets",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM container",
+    "type": "container",
+    "role": "the model being pretrained and then adapted",
+    "drawn_as": "large light-blue dotted rounded box with teal outline, unlabelled",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "the language model under audit",
+    "drawn_as": "white rounded box with the OpenAI logo above the word LLM",
+    "container": "LLM container",
+    "is_contribution": false
+   },
+   {
+    "name": "Adaptation",
+    "type": "operation",
+    "role": "the (DP) adaptation step applied to the model",
+    "drawn_as": "light-blue (#caeefb) rounded box with teal outline at the foot of the LLM container",
+    "container": "LLM container",
+    "is_contribution": null
+   },
+   {
+    "name": "flame icons",
+    "type": "icon",
+    "role": "mark the two data-to-model arrows as training steps (usual fire = trained reading, unlabelled)",
+    "drawn_as": "two small flame clip-arts sitting on the arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(ε, δ)-DP",
+    "type": "label",
+    "role": "privacy guarantee under which the private data adapt the model",
+    "drawn_as": "serif-math text beside the upward arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Auditor",
+    "type": "actor",
+    "role": "outside party that queries the adapted model and examines its answers",
+    "drawn_as": "green-outlined rounded box with a judge icon (wig, gavel, scales) and a white label box",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "MIA",
+    "type": "module",
+    "role": "membership inference attack that yields the verdict on the audit",
+    "drawn_as": "orange-outlined rounded box with two hands holding a green check sign and a red cross sign above a white label box",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Pretrained dataset",
+    "to": "LLM",
+    "what": "pretraining data (flame on the arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Private adaptation datasets",
+    "to": "Adaptation",
+    "what": "private adaptation data under (ε, δ)-DP (flame on the arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Auditor",
+    "to": "LLM container",
+    "what": "Query",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM container",
+    "to": "Auditor",
+    "what": "Answer",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Auditor",
+    "to": "MIA",
+    "what": "audit results handed to the membership inference attack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM and Adaptation",
+    "to": "LLM container",
+    "what": "both modules sit inside one tinted container",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Overlap",
+    "to": "Pretrained dataset",
+    "what": "same light-blue cylinder; possibly hints that Overlap data are also in the pretraining set",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "database cylinders",
+    "stands_for": "the pretraining dataset and the four private adaptation datasets, one colour each",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "OpenAI blossom logo in a white rounded box",
+    "stands_for": "the LLM",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "flame",
+    "stands_for": "training of the model on the data on that arrow",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "judge with wig, gavel and scales of justice",
+    "stands_for": "the Auditor",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "canary bird",
+    "stands_for": "canary samples (a pun on the term)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two hands holding up round signs, one green check and one red cross",
+    "stands_for": "the two possible verdicts of the membership inference attack",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "white rounded box carrying the OpenAI logo and the word LLM, placed inside a larger tinted container that also holds the Adaptation box",
+    "parts": [
+     "logo",
+     "LLM label",
+     "Adaptation box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-cylinder",
+    "drawn_as": "database cylinder per dataset, each in its own colour with a bold name beneath; the pretraining set is a taller stack of slices",
+    "parts": [
+     "cylinder",
+     "bold label",
+     "grouping region"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "only the fire half: a flame sits on the arrows that carry training data into the model; nothing is marked frozen",
+    "parts": [
+     "flame on arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "judge-auditor",
+    "drawn_as": "judge cartoon with gavel and scales standing for the auditor, joined to the model by a dotted query arrow and a dashed answer arrow",
+    "parts": [
+     "judge icon",
+     "Query arrow",
+     "Answer arrow"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "verdict-signs",
+    "drawn_as": "two hands each holding a round sign, green check and red cross, above the MIA label",
+    "parts": [
+     "check sign",
+     "cross sign",
+     "hands"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Pretrained dataset (top left), follows its flame arrow into the LLM, takes the upward (ε, δ)-DP feed from the four cylinders, then goes right to the Auditor's Query and Answer and down to MIA."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "The light-blue LLM container sits in the centre. The pretrained dataset enters from the left, a strip of four cylinders under a pink dotted region feeds it from below, and on the right an Auditor box stacked over an MIA box exchanges query and answer arrows with it.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.52,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#caeefb",
+    "used_for": "Adaptation box fill (light blue)"
+   },
+   {
+    "hex": "#e5b600",
+    "used_for": "Canary cylinder body and outline (yellow)"
+   },
+   {
+    "hex": "#efd366",
+    "used_for": "Canary cylinder top (light yellow)"
+   },
+   {
+    "hex": "#084f6a",
+    "used_for": "dark-teal outlines of the pretrained label, LLM container and Overlap cylinder"
+   },
+   {
+    "hex": "#196b24",
+    "used_for": "green outlines of the IID cylinder and the pretrained-dataset slices"
+   },
+   {
+    "hex": "#275317",
+    "used_for": "dark-green outline of the Auditor boxes"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "orange outlines of the OOD cylinder and the MIA boxes"
+   },
+   {
+    "hex": "#e59edd",
+    "used_for": "pink outline of the Private adaptation datasets frame"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.5 pt coloured outlines (teal, green, orange, pink) on rounded boxes; black 0.5 pt arrows",
+  "font": "sans (Arial) 7-8.5 pt, bold 8.5 pt for the four dataset names; Cambria Math for (ε, δ)",
+  "corners": "rounded",
+  "arrows": "straight black arrows with small filled heads; solid for data, dotted for the query, dashed for the answer; flame icons sit on the data arrows",
+  "rendering": "mixed",
+  "effects": "none; dotted pattern fills on the three tinted regions, shaded bitmap clip-art cylinders",
+  "model_depiction": "logo",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "each dataset keeps its own colour (Overlap blue, IID dark green, OOD orange, Canary yellow, pretrained blue and green); outline colours (teal, pink, green, orange) tell the pretrained region, private-data region, Auditor and MIA boxes apart; no key",
+  "line_style_means": "solid = data feeding the model, dotted = Query from the auditor, dashed = Answer from the model",
+  "shape_means": "cylinder = dataset; rounded box = module, party or group; judge icon = auditor",
+  "marker_means": "flame = a training or adaptation step on that arrow; green check and red cross signs = the two outcomes of the membership inference (likely member / non-member), unlabelled",
+  "emphasis": "The (ε, δ)-DP label with its flame on the private-data arrow, the bold dataset names under their cylinders and the larger LLM container make the adaptation under DP the visual centre.",
+  "reusable_patterns": [
+   "data cylinders in distinct colours with bold names, grouped inside a dotted tinted region with a pill label",
+   "flame clip-art on an arrow to say the data trains the model",
+   "dotted query arrow and dashed answer arrow between an auditor and the model",
+   "judge icon for an auditor and sign-holding hands for verdicts",
+   "model logo in a white rounded box nested in a larger tinted container"
+  ],
+  "weaknesses": [
+   "the flame and the check / cross signs are not explained in the figure",
+   "what the Auditor passes to MIA is not labelled",
+   "unlabelled LLM container makes it unclear whether Adaptation is part of the model or a step"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "OpenAI logo",
+   "flame clip-art",
+   "judge with gavel and scales icon",
+   "canary bird clip-art",
+   "hands holding check and cross signs",
+   "database cylinder icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded boxes and dotted tinted regions",
+   "arrows with Query / Answer / (ε, δ)-DP labels",
+   "dataset names and group label"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dataset cylinders",
+   "pretrained dataset",
+   "four adaptation datasets",
+   "LLM logo box",
+   "auditor judge icon",
+   "flame arrows",
+   "canary bird",
+   "check and cross sign cards"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "differential privacy",
+   "membership inference",
+   "RMIA",
+   "LLM adaptation",
+   "canary",
+   "privacy auditing",
+   "distribution shift",
+   "benchmark"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "verdict-marks",
+   "flow-type-arrows",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "pun-icons",
+    "what": "clip-art chosen as a pun on the term it stands for, such as a canary bird for canary data and a judge for an auditor"
+   },
+   {
+    "name": "dotted-pattern-regions",
+    "what": "pale regions filled with a dotted pattern and outlined in a matching colour, used to group data sources"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a threat-model or audit setup as an actor loop: colour-coded data cylinders feed the model with a training mark, and an outside auditor icon trades dotted Query and dashed Answer arrows before verdict signs.",
+  "suits": "Evaluation or threat-model setups where a model, several data sources and an external evaluator interact, and one factor such as data distribution is varied."
+ },
+ "tags": [
+  "icon-driven",
+  "clip-art",
+  "dotted-pattern-regions",
+  "colour-coded-cylinders",
+  "single-column",
+  "labelled-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Figure 1: Setup for Privacy Auditing of private LLM Adaptations.",
+   "A general overview of privacy auditing for adapted LLMs is provided in Figure 1."
+  ]
+ },
+ "summary": "The paper benchmarks how much privacy differentially private adaptations of LLMs actually give, using robust membership inference and canary extraction while the adaptation data moves from exact overlap with pretraining data to in-distribution and out-of-distribution. Figure 1 is the setup diagram. A pretrained dataset (cylinder) trains the LLM along a flame-marked arrow. Four colour-coded cylinders named Overlap, IID, OOD and Canary, grouped as Private adaptation datasets, feed the Adaptation box inside the LLM container through an arrow labelled (ε, δ)-DP. On the right an Auditor, drawn as a judge, sends dotted Query arrows and receives dashed Answer arrows, then passes the outcome to an MIA box with green-check and red-cross signs. A small single-column figure built from clip-art, rounded outlined boxes and dotted tinted regions.",
+ "summary_zh": "该论文评测差分隐私适配的大模型实际保护了多少隐私。图1为审计设置：预训练数据集与Overlap、IID、OOD、Canary四类私有适配数据喂入LLM，右侧法官形象的审计者与模型交换Query/Answer，再由MIA给出判定。",
+ "confidence": "medium",
+ "notes": "Prior kinds kept (actor-interaction, stage-pipeline). Flames sit on the data arrows (fire half only, no snowflake), so state_marker is other. The meaning of the check and cross signs (member / non-member) and of the flames is read from convention, not from the text. The Overlap cylinder shares the blue of the pretrained cylinder top, which may be deliberate. The dotted regions are pattern fills. The preview crop cuts the caption.",
+ "venue": "ICLR26"
+}

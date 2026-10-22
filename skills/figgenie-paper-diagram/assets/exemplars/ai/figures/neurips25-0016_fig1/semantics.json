@@ -1,0 +1,543 @@
+{
+ "paper_id": "neurips25-0016",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AUGUSTUS",
+  "one_liner": "An LLM-driven multimodal agent whose graph-structured contextual memory follows a human-memory loop: encode, store, retrieve, act.",
+  "domain": [
+   "agent memory",
+   "multimodal assistants",
+   "human memory analogy"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "analogy",
+  "variant_note": "the agent's four-stage loop drawn above a mirrored human-memory loop, matching parts at matching positions",
+  "argues": "AUGUSTUS' encode-store-retrieve-act loop mirrors human memory: the limited in-context memory plays working memory and a ~infinite-size external memory plays long-term memory.",
+  "subject": "Two mirrored four-stage memory loops, the agent's above and a human's below, with matching inputs, memory stores and retrieval routes.",
+  "elements": [
+   {
+    "name": "AUGUSTUS",
+    "type": "actor",
+    "role": "the multimodal agent system whose loop fills the upper lane",
+    "drawn_as": "stack of bold capital letters A-U-G-U-S-T-U-S down the left edge, beside a cyan robot character",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(1) Encode",
+    "type": "operation",
+    "role": "understands the inputs",
+    "drawn_as": "left part of a pale-blue bar along the outer edge of the lane (pale orange in the human lane)",
+    "container": "AUGUSTUS lane",
+    "is_contribution": null
+   },
+   {
+    "name": "(2) Store in Memory",
+    "type": "operation",
+    "role": "saves important information",
+    "drawn_as": "middle part of the same bar, reached by a short arrow from Encode",
+    "container": "AUGUSTUS lane",
+    "is_contribution": null
+   },
+   {
+    "name": "(3) Retrieve",
+    "type": "operation",
+    "role": "searches memory for relevant context",
+    "drawn_as": "right part of the same bar, reached by a short arrow from Store",
+    "container": "AUGUSTUS lane",
+    "is_contribution": null
+   },
+   {
+    "name": "(4) Act",
+    "type": "operation",
+    "role": "performs the task",
+    "drawn_as": "full-width bar on the inner edge of each lane, facing the function chips",
+    "container": "AUGUSTUS lane",
+    "is_contribution": null
+   },
+   {
+    "name": "Audio / Image / Text / Video",
+    "type": "data",
+    "role": "the four input modalities that Encode takes in",
+    "drawn_as": "2x2 grid split by a thin black cross; each cell a navy icon (headphones, picture frame, speech bubble, video camera) with a caption",
+    "container": "AUGUSTUS lane, left column",
+    "is_contribution": null
+   },
+   {
+    "name": "In-Context Memory (limited size)",
+    "type": "module",
+    "role": "the limited context length of the LLM, used as working memory",
+    "drawn_as": "white rounded box with a thick navy outline, top of the memory frame",
+    "container": "AUGUSTUS lane, memory frame",
+    "is_contribution": false
+   },
+   {
+    "name": "~Infinite Size",
+    "type": "container",
+    "role": "the long-term (external) memory that holds the two stores",
+    "drawn_as": "dashed navy rectangle with its title cut into the top-left edge",
+    "container": "AUGUSTUS lane, memory frame",
+    "is_contribution": null
+   },
+   {
+    "name": "Recall Memory",
+    "type": "module",
+    "role": "one of the two stores in the external memory",
+    "drawn_as": "grey database cylinder with navy outline",
+    "container": "~Infinite Size",
+    "is_contribution": null
+   },
+   {
+    "name": "Contextual Memory",
+    "type": "module",
+    "role": "one of the two stores in the external memory; the abstract names a graph-structured multimodal contextual memory as the proposal",
+    "drawn_as": "grey database cylinder with navy outline",
+    "container": "~Infinite Size",
+    "is_contribution": true
+   },
+   {
+    "name": "Conversation Search / CoPe Search",
+    "type": "operation",
+    "role": "two ways of retrieving from memory",
+    "drawn_as": "two cells split by a thin black line: overlapping chat bubbles above a caption, and a small org-tree icon with its caption below",
+    "container": "AUGUSTUS lane, right column",
+    "is_contribution": null
+   },
+   {
+    "name": "HUMAN",
+    "type": "actor",
+    "role": "the human memory system that AUGUSTUS is aligned with",
+    "drawn_as": "stack of bold capital letters H-U-M-A-N down the left edge, beside a cartoon boy",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Acoustic / Visual / Tactile / Semantic",
+    "type": "data",
+    "role": "the human counterpart of the four input modalities",
+    "drawn_as": "same 2x2 grid with a cross: sound wave, glasses, touching hand, thought cloud, each with a caption",
+    "container": "HUMAN lane, left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Working Memory (limited size)",
+    "type": "module",
+    "role": "human counterpart of In-Context Memory",
+    "drawn_as": "same white rounded box as In-Context Memory",
+    "container": "HUMAN lane, memory frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Episodic Memory",
+    "type": "module",
+    "role": "human long-term store, placed where Recall Memory sits",
+    "drawn_as": "grey database cylinder inside the dashed ~Infinite Size region",
+    "container": "HUMAN lane, memory frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Semantic Memory",
+    "type": "module",
+    "role": "human long-term store, placed where Contextual Memory sits",
+    "drawn_as": "grey database cylinder inside the dashed ~Infinite Size region",
+    "container": "HUMAN lane, memory frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Recall / Recognition",
+    "type": "operation",
+    "role": "the human ways of retrieving, placed where the two searches sit",
+    "drawn_as": "two cells split by a thin black line: circular-arrows icon with caption, magnifying-glass icon with caption",
+    "container": "HUMAN lane, right column",
+    "is_contribution": false
+   },
+   {
+    "name": "Function-call chips",
+    "type": "label",
+    "role": "names of function calls shown between the two Act bars; the figure does not link them to any part",
+    "drawn_as": "six monospace rectangles in two staggered rows (encode_message(), encode_image(), encode_audio(), encode_video(), generate_image(), send_message()) with a row of six dots for more",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "(1) Encode",
+    "to": "(2) Store in Memory",
+    "what": "encoded input goes on to storage",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(2) Store in Memory",
+    "to": "(3) Retrieve",
+    "what": "stored memory is then searched",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(3) Retrieve",
+    "to": "(4) Act",
+    "what": "retrieved context is carried to acting",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(4) Act",
+    "to": "(1) Encode",
+    "what": "the loop closes back at the first stage",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "AUGUSTUS lane",
+    "to": "HUMAN lane",
+    "what": "every part sits at the same place as its human counterpart, the lower lane being a mirror image of the upper one",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "In-Context Memory (limited size)",
+    "to": "Working Memory (limited size)",
+    "what": "limited context used as working memory",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Recall Memory / Contextual Memory",
+    "to": "Episodic Memory / Semantic Memory",
+    "what": "external stores against human long-term stores",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Audio / Image / Text / Video",
+    "to": "Acoustic / Visual / Tactile / Semantic",
+    "what": "agent input modalities against human senses",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Conversation Search / CoPe Search",
+    "to": "Recall / Recognition",
+    "what": "agent retrieval routes against human retrieval",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "~Infinite Size",
+    "to": "Recall Memory / Contextual Memory",
+    "what": "the dashed region holds the two cylinders",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Function-call chips",
+    "to": "(4) Act",
+    "what": "function names listed between the two Act bars, with no line to either",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "(1) (2) (3) (4)",
+    "kind": "order",
+    "at": "the stage bars of both lanes",
+    "what": "the four stages in loop order, numbered the same in both lanes"
+   },
+   {
+    "marker": "A U G U S T U S / H U M A N",
+    "kind": "identity",
+    "at": "left edge of each lane",
+    "what": "names the lane, set as stacked capital letters"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cyan chibi robot with a heart on its chest",
+    "stands_for": "the AUGUSTUS agent",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon boy in an orange jacket",
+    "stands_for": "the human",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "headphones, picture frame, speech bubble with dots, video camera",
+    "stands_for": "audio, image, text and video inputs",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "sound wave, glasses, touching hand, thought cloud",
+    "stands_for": "acoustic, visual, tactile and semantic input of a human",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "overlapping chat bubbles; small org tree",
+    "stands_for": "Conversation Search and CoPe Search",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "circular arrows; magnifying glass",
+    "stands_for": "human Recall and Recognition",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "six function names of the system: encode_message, encode_image, encode_audio, encode_video, generate_image, send_message",
+    "form": "monospace rectangles between the two lanes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "four stage bars frame the lane (three on the outer edge, Act on the inner edge), joined by short arrows and a rectangular return line, instead of a circle around the agent",
+    "parts": [
+     "Encode",
+     "Store in Memory",
+     "Retrieve",
+     "Act",
+     "return line"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "a rounded limited-size box above a dashed ~Infinite Size region holding two database cylinders, all inside a navy double frame",
+    "parts": [
+     "limited-size box",
+     "dashed region",
+     "two cylinders"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a robot character stands for the whole agent system; no LLM box is drawn",
+    "parts": [
+     "robot character"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "modality-grid",
+    "drawn_as": "a 2x2 grid of icon-and-caption cells split by a thin black cross",
+    "parts": [
+     "four cells",
+     "cross divider"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the blue (1) Encode bar top-left, runs right along the bar and down the right edge to (4) Act, then back up the left edge; the orange lane is read as the mirrored echo of it."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two horizontal lanes mirrored about the middle: the blue AUGUSTUS loop on top, the orange HUMAN loop below. Each lane is a stage-bar frame (Encode, Store in Memory, Retrieve on the outer edge, Act on the inner edge, closed by a rectangular loop arrow) around three columns split by dashed lines: a 2x2 input grid, a memory frame with a limited-size box over a dashed region of two cylinders, and a two-cell retrieval column. A staggered row of function-call chips sits between the two Act bars.",
+  "panel_count": 1,
+  "lanes": "2 mirrored lanes (agent above, human below), each with the same 3 content columns and 4 stage bars",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.47,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#99ccff",
+    "used_for": "stage bars of the AUGUSTUS lane"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "stage bars of the HUMAN lane"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey ground of the three columns in both lanes"
+   },
+   {
+    "hex": "#f7f7f7",
+    "used_for": "tops of the four cylinders"
+   },
+   {
+    "hex": "#002060",
+    "used_for": "outlines, loop arrows, dashed regions, text and the icon line colour"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "thin cross dividers inside the input grids and retrieval columns"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "1.25 pt navy on loop arrows and memory frames, 0.75 pt black on cross dividers, dashed navy on the ~Infinite Size boxes and the column separators",
+  "font": "sans (Tahoma) 5.5-6 pt for labels, 4.5 pt for '(limited size)'; bold monospace 6 pt for stage titles; monospace 6 pt in the chips; bold 8.5 pt for the stacked lane letters",
+  "corners": "mixed",
+  "arrows": "navy line arrows with open chevron heads: short straight ones inside the stage bars, a rectangular loop line round each lane",
+  "rendering": "mixed",
+  "effects": "none; the two characters carry their own soft shading as bitmaps",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = the AUGUSTUS lane, orange = the human lane; navy is the line colour of both; grey = lane ground",
+  "line_style_means": "dashed = the ~Infinite Size region and the separators between the three columns; thick solid frame = the memory block",
+  "shape_means": "cylinder = a memory store; rounded box = limited-size memory; monospace rectangle = a function call; wide coloured bar = a loop stage",
+  "marker_means": "(1)-(4) give the stage order, identical in both lanes",
+  "emphasis": "no part is singled out; the mirror layout and the blue / orange pair make the reader compare each agent part with its human counterpart",
+  "reusable_patterns": [
+   "mirrored lanes with matching parts at matching positions to state an analogy",
+   "stage bars as a frame round the content, closed by one rectangular loop arrow",
+   "2x2 icon grid split by a thin cross for modalities",
+   "row of function-call chips between two lanes",
+   "stacked capital letters as the lane title beside a character"
+  ],
+  "weaknesses": [
+   "the function-call chips are tied to nothing by a line, so their link to the Act stage is only implied",
+   "labels at 5.5-6 pt are small for a full-width figure",
+   "stacked-letter lane names read slowly"
+  ]
+ },
+ "resources": {
+  "own": [
+   "function-call names from the system's own interface",
+   "the paper's names for its memory parts"
+  ],
+  "stock": [
+   "navy line-icon set for the modalities, senses and search routes (headphones, picture, speech bubble, camera, sound wave, glasses, hand, thought cloud, chat bubbles, org tree, cycle arrows, magnifier)"
+  ],
+  "generated": [
+   "cyan chibi robot character",
+   "cartoon boy character"
+  ],
+  "drawn": [
+   "stage bars and loop arrows",
+   "memory frames, dashed regions and cylinders",
+   "cross dividers",
+   "function chips",
+   "stacked-letter lane names"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "robot mascot",
+   "cartoon boy",
+   "2x2 modality icon grid",
+   "memory cylinders in a dashed box",
+   "limited-size memory box",
+   "four stage bars forming a loop",
+   "function-call chips",
+   "stacked-letter lane titles"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "multimodal agent",
+   "user memory",
+   "human memory analogy",
+   "encode store retrieve act",
+   "working memory",
+   "long-term memory",
+   "LLM agent",
+   "context window",
+   "contextual memory"
+  ],
+  "tags": [
+   "mascot-character",
+   "colour-coded-groups",
+   "memory-store",
+   "visual-metaphor"
+  ],
+  "new_tags": [
+   {
+    "name": "mirrored-analogy-lanes",
+    "what": "the method and its human counterpart drawn as two mirror-image lanes, matching parts at matching positions"
+   },
+   {
+    "name": "stacked-letter-title",
+    "what": "a lane's name set as vertical stacked capital letters beside its character"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State an analogy by redrawing the human counterpart as a mirror-image lane that reuses the method's own layout, so each part is compared with its counterpart by position and colour alone; close a cycle with stage bars as a frame and one rectangular loop arrow.",
+  "suits": "Methods modelled on a human or biological process (memory, perception, learning) where each module has a named human counterpart."
+ },
+ "tags": [
+  "mirrored lanes",
+  "blue-orange pair",
+  "stage-bar frame",
+  "icon grid",
+  "cartoon characters",
+  "navy line icons",
+  "dashed regions",
+  "monospace chips"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.4)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "AUGUSTUS first encodes information for storage into long-term (external) memory",
+   "using the limited context length in LLMs as working memory",
+   "an agent system aligned with the ideas of the human memory system in cognitive science"
+  ]
+ },
+ "summary": "AUGUSTUS is an LLM-driven multimodal agent that keeps a graph-structured contextual memory and works in a loop of encode, store in memory, retrieve and act, modelled on human memory. Figure 1 draws two mirrored lanes: a blue upper lane for AUGUSTUS (robot mascot) and an orange lower lane for a human (cartoon boy). Both have the same four numbered stage bars closed by a rectangular loop arrow and the same three columns: a 2x2 grid of icons for inputs (Audio, Image, Text, Video against Acoustic, Visual, Tactile, Semantic), a memory frame with a limited-size box over a dashed ~Infinite Size region of two cylinders, and a two-cell retrieval column. A row of monospace function-call chips sits between the two Act bars.",
+ "summary_zh": "AUGUSTUS 是带上下文用户记忆的多模态 LLM 智能体。图用上下两条镜像泳道对照智能体与人类记忆：同样的编码、存储、检索、行动四步循环，同样的输入网格、有限与无限记忆、检索列，中间一排函数调用标签。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (analogy primary); the prior pass counted two panels, but the lanes are not separately framed or lettered, so they are recorded as lanes of one drawing. The 14 bitmaps are the two characters and 12 icons; icon origin (stock) and character origin (generated) are judged from style only. The role of the function-call chips is only implied by position.",
+ "venue": "NeurIPS25"
+}

@@ -1,0 +1,552 @@
+{
+ "paper_id": "neurips25-0339",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FuXi-Ocean",
+  "one_liner": "Data-driven global ocean forecasting model with six-hourly steps at 1/12 degree down to 1500 m, whose Mixture-of-Time module weights predictions from several temporal contexts per channel.",
+  "domain": [
+   "global ocean forecasting",
+   "spatiotemporal forecasting",
+   "weather and climate"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a wide pipeline for panel (a) with two tinted zoom panels below it that open the prediction module (b) and the Mixture-of-Time block (c)",
+  "argues": "Four past ocean states go through shared encoders, a prediction module and decoders, and a channel-wise Mixture-of-Time block merges the four decoder outputs into the next-step state.",
+  "subject": "Encoder, fusion, attention-based prediction and decoder pipeline for ocean maps, with enlarged views of the prediction module and of the MoT selection.",
+  "elements": [
+   {
+    "name": "X^{t-3} to X^t",
+    "type": "data",
+    "role": "sequential ocean states fed to the model",
+    "drawn_as": "four stacks of offset ocean-map tiles cascading down and to the right, one row per time step",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "E",
+    "type": "module",
+    "role": "shared encoder that transforms each input state into a latent representation",
+    "drawn_as": "four light-blue rounded trapezoids narrowing to the right, bold serif E",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "F^{t-3} to F^t",
+    "type": "data",
+    "role": "latent features of each time step",
+    "drawn_as": "isometric cuboids, pale grey for older steps and bluer for newer",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "S, M and F_S",
+    "type": "module",
+    "role": "network M turns S into spatiotemporal features F_S that modulate the encoders and decoders",
+    "drawn_as": "teal trapezoid M with arrows from S below and a teal slab F_S above, a top bus line with drop arrows into every E and D",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Fusion",
+    "type": "module",
+    "role": "fuses the four feature volumes before prediction",
+    "drawn_as": "tall narrow blue bar with rotated bold label",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Prediction Module",
+    "type": "module",
+    "role": "captures temporal evolution with stacked attention blocks",
+    "drawn_as": "teal-blue rounded box, bold serif label",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "⊕ with F^{t-3} to F^t",
+    "type": "operation",
+    "role": "adds the matching features to each prediction branch before decoding (skip connections)",
+    "drawn_as": "circled plus on four rows, each with the F label and a short down arrow above it",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "D",
+    "type": "module",
+    "role": "decoders with skip connections that reconstruct variables",
+    "drawn_as": "four light-blue rounded trapezoids widening to the right, bold serif D",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "X-bar^{t+1}_{t-3} to X-bar^{t+1}_t",
+    "type": "data",
+    "role": "four decoder outputs from different temporal contexts",
+    "drawn_as": "four serif labels with overbar, each on an arrow into MoT",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "MoT",
+    "type": "module",
+    "role": "Mixture-of-Time: channel-wise selection and weighting of the four outputs",
+    "drawn_as": "tall narrow light-blue bar with rotated bold label",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "X-hat^{t+1}",
+    "type": "data",
+    "role": "predicted ocean state at the next step",
+    "drawn_as": "stack of three ocean-map tiles at the right end",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention Block, FFN, AdaLN, ⊕, ×N",
+    "type": "module",
+    "role": "inside of the prediction module: attention, feed-forward and adaptive layer norm with residual sums, repeated N times",
+    "drawn_as": "tall white rounded bars with rotated text and a white AdaLN box, circled plus nodes, skip lines, inside a teal-blue rounded panel",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "MAE, Softmax, V, Top K",
+    "type": "operation",
+    "role": "spatially averaged MAE per channel feeds a softmax update of matrix V; top-K of V gives a selection mask",
+    "drawn_as": "dashed dark-red MAE box, small Softmax box, then two small tables (V with decimals, mask with 0 and 1) joined by arrows",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Multiplication, Sum, ×1/K",
+    "type": "operation",
+    "role": "mask times the four outputs, summed and scaled by 1/K to form the final prediction",
+    "drawn_as": "two tall narrow white boxes with rotated labels and an output arrow",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Addition (legend)",
+    "type": "label",
+    "role": "key for the circled plus glyph",
+    "drawn_as": "tiny circled plus with the word Addition at the top right",
+    "container": "(a)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "X^{t-k}",
+    "to": "E",
+    "what": "input state of each time step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E",
+    "to": "F^{t-k}",
+    "what": "encoded features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F^{t-k}",
+    "to": "Fusion",
+    "what": "four feature volumes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fusion",
+    "to": "Prediction Module",
+    "what": "fused representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "S",
+    "to": "M and Prediction Module",
+    "what": "S goes up into M and down into the prediction module",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F_S",
+    "to": "every E and D",
+    "what": "spatiotemporal features modulate encoders and decoders",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prediction Module",
+    "to": "⊕ then D (four rows)",
+    "what": "predictions per temporal context, with F^{t-k} added",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "D",
+    "to": "MoT",
+    "what": "four decoder outputs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MoT",
+    "to": "X-hat^{t+1}",
+    "what": "final next-step prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "F^{t-k} label at encoder",
+    "to": "F^{t-k} label above ⊕",
+    "what": "the skip connection is shown by the same symbol repeated, not by a line",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "four outputs (c)",
+    "to": "MAE",
+    "what": "red dashed arrows send each output to the MAE, which is compared with x^{t+1}",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MAE",
+    "to": "V",
+    "what": "mean along spatial dims, Softmax, then update of V",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V",
+    "to": "Multiplication",
+    "what": "Top K gives the 0/1 mask that selects outputs",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prediction Module and MoT in (a)",
+    "to": "panels (b) and (c)",
+    "what": "zoom panels are tinted like the block they open and share its name",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "main pipeline: four ocean states, shared encoders, fusion, prediction module, decoders and the MoT block",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "inside the prediction module: attention block, FFN and AdaLN with residual sums, repeated N times",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "inside MoT: per-channel reliability matrix V from MAE and softmax, top-K mask, weighted sum of the four decoder outputs",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "below the top band and at the top of each lower panel",
+    "what": "names the overview and the two zoom panels"
+   },
+   {
+    "marker": "t-3, t-2, t-1, t",
+    "kind": "identity",
+    "at": "super and subscripts of X, F and X-bar",
+    "what": "time step of each state, feature and decoder output"
+   },
+   {
+    "marker": "S, F, V, x^{t+1}",
+    "kind": "identity",
+    "at": "arrow starts and matrices",
+    "what": "names input features and the reliability matrix"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "global ocean-state maps, input states for four time steps",
+    "content": "map",
+    "role": "sample-input",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "each state is a stack of three offset map tiles; stacks cascade down and to the right so every time step has its own row"
+   },
+   {
+    "what": "predicted next-step ocean map",
+    "content": "map",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one stack of three offset tiles at the right end of the pipeline"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "isometric cuboid slab",
+    "stands_for": "latent feature volume F^t of one time step",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   },
+   {
+    "depicts": "flat teal slab above a teal trapezoid M",
+    "stands_for": "spatiotemporal features F_S and the network that produces them",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "toy values in the reliability matrix V and in the 0/1 top-K mask",
+    "form": "two small tables with decimals and bits inside the MoT zoom",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "rounded trapezoids narrowing to the right (E) and widening to the right (D), one pair per time step",
+    "parts": [
+     "E",
+     "D"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "Attention Block and FFN as tall white bars, AdaLN box, circled plus residuals, x N",
+    "parts": [
+     "Attention Block",
+     "FFN",
+     "AdaLN",
+     "⊕",
+     "×N"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mixture-of-time-selection",
+    "drawn_as": "MAE to softmax to matrix V to Top K mask, multiplied with the four outputs and summed with 1/K",
+    "parts": [
+     "MAE",
+     "Softmax",
+     "V",
+     "Top K",
+     "Multiplication",
+     "Sum"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the upper-left ocean stack, runs right through E, Fusion, Prediction Module, D and MoT to the output map, then drops to (b) and (c) at the bottom."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One full-width band on top for panel (a), a dashed horizontal rule, and two tinted rounded zoom panels (b) and (c) side by side below, split by a dashed vertical rule; time steps in (a) are four rows of a staggered cascade.",
+  "panel_count": 3,
+  "lanes": "4 horizontal rows, one per time step t-3 to t, running from input to decoder output",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 2.26,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#6cbad8",
+    "opacity": 0.7,
+    "used_for": "Prediction Module box and the tinted background of zoom panel (b)"
+   },
+   {
+    "hex": "#cce5ff",
+    "used_for": "tinted background of zoom panel (c)"
+   },
+   {
+    "hex": "#d9e4f7",
+    "used_for": "encoder E and decoder D shapes"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "Fusion and MoT bars"
+   },
+   {
+    "hex": "#bad3e4",
+    "used_for": "feature cuboids"
+   },
+   {
+    "hex": "#6fc9c8",
+    "used_for": "network M and the F_S slab"
+   },
+   {
+    "hex": "#990000",
+    "used_for": "dashed MAE box and red dashed arrows in (c)"
+   },
+   {
+    "hex": "#6c8ebf",
+    "used_for": "outlines of E and D"
+   },
+   {
+    "hex": "#10739e",
+    "used_for": "dark teal outlines of the cuboids and M"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines and arrows; coloured outlines on E, D and the teal items; dark-red dashed outline on the MAE box",
+  "font": "serif (Times New Roman) for symbols and block names, 7.5 pt bold for E, D and Prediction Module, 4.5 pt for Fusion, FFN, AdaLN, 1 to 3 pt inside the zoom panel (c)",
+  "corners": "mixed",
+  "arrows": "thin black orthogonal arrows with small filled heads, long bus lines across the top with drop arrows, red dashed arrows for the MAE path, dashed separators between panels",
+  "rendering": "flat-vector",
+  "effects": "isometric cuboids for features, offset tile stacks for maps",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue family for network blocks (E, D, Fusion, MoT, Prediction Module), teal for the spatiotemporal-feature path (M and F_S), dark red for the MAE reliability path in (c); each zoom panel is tinted like the block it opens; cuboid shade deepens from pale grey to blue towards the newest step",
+  "line_style_means": "solid black = data flow; red dashed = MAE and update path that builds V; dashed black rules = separators between (a), (b) and (c)",
+  "shape_means": "trapezoid narrowing right = encoder, widening right = decoder; teal trapezoid = M; cuboid = feature volume; tile stack = ocean state; tall narrow bar = a merge point (Fusion, MoT); circled plus = addition",
+  "marker_means": "(a) (b) (c) name panels; super and subscripts give the time step; the circled plus is keyed as Addition at the top right",
+  "emphasis": "MoT, the paper's core module, is a tall bar at the right end of (a) and is opened in (c), the only panel with a red dashed path and small tables",
+  "reusable_patterns": [
+   "zoom panels below an overview, tinted like the block they enlarge and tied to it by name only",
+   "a staggered cascade of input stacks so each time step has its own row",
+   "skip connections shown as the same symbol repeated (F^{t-k} above each plus) instead of long lines",
+   "a top bus line with drop arrows broadcasting one feature to every encoder and decoder",
+   "map thumbnails as offset tile stacks for input and output states",
+   "tiny toy-value tables inside a zoom to suggest the selection mechanism",
+   "red dashed arrows for a metric or update path against black solid data arrows"
+  ],
+  "weaknesses": [
+   "digits in the V matrix and mask are set at 1 pt and are unreadable at print size",
+   "text in panel (c) is 1 to 3 pt against 7.5 pt block names",
+   "skip connections are only implied by repeated labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "ocean-state map renders (three bitmaps reused for all stacks)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "blocks, trapezoids and cuboids",
+   "arrows and bus lines",
+   "small tables and matrices"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "stacked ocean map thumbnails",
+   "E and D trapezoids",
+   "feature cuboids",
+   "Fusion bar",
+   "Prediction Module box",
+   "MoT bar",
+   "attention, FFN and AdaLN chain",
+   "MAE to top-K matrix chain"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "ocean forecasting",
+   "sub-daily",
+   "mixture of time",
+   "attention block",
+   "AdaLN",
+   "autoregressive",
+   "encoder-decoder",
+   "skip connections",
+   "spatiotemporal"
+  ],
+  "tags": [
+   "stacked-cards",
+   "toy-values-inline",
+   "flow-type-arrows",
+   "notation-key"
+  ],
+  "new_tags": [
+   {
+    "name": "zoom-panel-colour-match",
+    "what": "zoomed-in panels below an overview are tinted in the colour of the block they enlarge and tied to it only by name and colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Keep the overview readable by moving internals into tinted zoom panels below it, tinted in the colour of the block they open and carrying its name, so no leader lines are needed; show repeated time steps as a staggered cascade of rows.",
+  "suits": "Forecasting or sequence architectures with several time-step branches and one or two blocks whose internals matter, such as attention stacks or a gating module."
+ },
+ "tags": [
+  "overview-plus-zoom",
+  "staggered-cascade",
+  "map-thumbnails",
+  "tinted-zoom-panels",
+  "serif-labels",
+  "drawio-palette"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.4-5)"
+  ],
+  "evidence": [
+   "(a) The main pipeline consists of a shared encoder E that transforms input states into latent representations",
+   "(c) The Mixture-of-Time (MoT) module performs channel-wise selection across the four decoder outputs",
+   "Our model processes sequential ocean states Xt−3 through Xt to predict bX t+1."
+  ]
+ },
+ "summary": "FuXi-Ocean is a data-driven global ocean forecasting model that predicts six-hourly states at 1/12 degree down to 1500 m, built around a Mixture-of-Time (MoT) module. Figure 1 is an overview with two zooms. Panel (a) follows four stacked ocean-map states from t-3 to t through shared encoders E, feature cuboids, a Fusion bar, a Prediction Module and four decoders D, with spatiotemporal features F_S from network M broadcast along a top line, then a tall MoT bar that yields the next-step map. Panel (b) opens the prediction module as attention blocks, FFN and AdaLN repeated N times; panel (c) opens MoT as an MAE, softmax and top-K selection over the four decoder outputs, followed by multiply, sum and 1/K.",
+ "summary_zh": "FuXi-Ocean 是全球海洋六小时预报模型，核心是时间混合 MoT 模块。(a) 总览：四时刻海洋图经共享编码器、融合、预测模块、解码器，再由 MoT 合成下一步；(b) 放大注意力块；(c) 放大 MoT 的 top-K 选择。",
+ "confidence": "high",
+ "notes": "The index labels the figure chart/box; it is a block diagram. The 15 placed map bitmaps are three images reused, read as five stacks of three tiles (four inputs, one output). The dashed rules between panels are drawn as lines, so the digest reports no dashed shapes.",
+ "venue": "NeurIPS25"
+}

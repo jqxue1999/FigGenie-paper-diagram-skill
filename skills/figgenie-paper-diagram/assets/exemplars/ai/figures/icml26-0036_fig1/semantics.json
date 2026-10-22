@@ -1,0 +1,577 @@
+{
+ "paper_id": "icml26-0036",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "A systematic study of four ways to supervise a vision-language-action model with image-based or action-based latent actions under one unified baseline.",
+  "domain": [
+   "vision-language-action models",
+   "latent actions",
+   "robot manipulation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "design-family",
+  "variant_note": "left panel fixes the shared VLA framework, right panel groups four sibling strategy schematics under two numbered perspectives",
+  "argues": "Latent actions can supervise a VLA from two perspectives, regularizing the trajectory or unifying the target space, realised by four comparable integration strategies.",
+  "subject": "A unified VLA framework, the latent-action machinery of two perspectives and four strategy schematics showing where latent actions attach to the VLM.",
+  "elements": [
+   {
+    "name": "VLA Framework",
+    "type": "label",
+    "role": "title of the left panel",
+    "drawn_as": "blue title above two cards",
+    "container": "VLA Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "LATENT ACTIONs (Move, Grip)",
+    "type": "data",
+    "role": "latent actions, discrete motion primitives such as Move and Grip",
+    "drawn_as": "pink rounded card with a four-way arrow icon and a gripper icon",
+    "container": "VLA Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "ACTIONs [Δx, Δθ, Δg]",
+    "type": "data",
+    "role": "the robot's real actions as continuous deltas",
+    "drawn_as": "pale-yellow rounded card with a robot-arm icon",
+    "container": "VLA Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "VLM",
+    "type": "module",
+    "role": "the backbone of the VLA",
+    "drawn_as": "large blue-grey rounded box with the word VLM",
+    "container": "VLA Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "Multi Observation / Task Instruction / Action Placeholders",
+    "type": "data",
+    "role": "the three kinds of input of the VLA",
+    "drawn_as": "three black line icons (picture, guide book, document with magnifier) with captions",
+    "container": "VLA Framework",
+    "is_contribution": null
+   },
+   {
+    "name": "VLM Supervision",
+    "type": "label",
+    "role": "title of the right panel",
+    "drawn_as": "grey tab at its top right corner",
+    "container": "VLM Supervision",
+    "is_contribution": null
+   },
+   {
+    "name": "1 Regularizing Trajectory via Image-based Latent Actions",
+    "type": "label",
+    "role": "heading of perspective 1",
+    "drawn_as": "circled 1 and a blue heading with the key term in purple",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "O_t and O_t+δ",
+    "type": "data",
+    "role": "two robot observation frames at times t and t+δ",
+    "drawn_as": "two photos with orange frames and caption chips",
+    "container": "VLM Supervision",
+    "is_contribution": false
+   },
+   {
+    "name": "Latent Action Model",
+    "type": "module",
+    "role": "takes the two frames and yields a discrete latent action from a codebook",
+    "drawn_as": "blue square box with arrows in from both photos and an arrow down",
+    "container": "VLM Supervision",
+    "is_contribution": null
+   },
+   {
+    "name": "Codebook",
+    "type": "data",
+    "role": "discrete latent action codes; a thought cloud names Move Right, Pick, Place",
+    "drawn_as": "two rows of small orange squares with one purple square, a thought cloud with glyphs beside it",
+    "container": "VLM Supervision",
+    "is_contribution": null
+   },
+   {
+    "name": "Strategy 1: Implicit Representation Alignment",
+    "type": "container",
+    "role": "V+L features reach the Action Representation through a purple dashed Regulated Path",
+    "drawn_as": "grey V+L box, purple dashed funnel with arrows, teal Action Representation box",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "Strategy 2: Explicit Direct Decoding",
+    "type": "container",
+    "role": "V+L features are decoded directly to Latent Actions",
+    "drawn_as": "grey V+L box, arrow, purple Latent Actions box",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "Strategy 3: Explicit Conditional Decoding",
+    "type": "container",
+    "role": "V+L features decode Latent Actions that then condition the Action Representation",
+    "drawn_as": "grey V+L box, arrow into a dashed box with a purple Latent Actions box over a teal Action Representation box",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "2 Unifying Target Space via Action-based Latent Actions",
+    "type": "label",
+    "role": "heading of perspective 2",
+    "drawn_as": "circled 2 and a blue heading with the key term in gold",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Space 1 / Action Space 2 / Other Spaces ...",
+    "type": "sample",
+    "role": "robot scenes with different action spaces",
+    "drawn_as": "three photos with red frames and caption bars",
+    "container": "VLM Supervision",
+    "is_contribution": false
+   },
+   {
+    "name": "VLM Token Space with Latent Action Tokens",
+    "type": "region",
+    "role": "common token space into which the different action spaces are mapped",
+    "drawn_as": "grey ellipse holding a yellow oval, reached by dashed arrows from the three photos",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   },
+   {
+    "name": "Strategy 4: Action-to-Token Mapping",
+    "type": "container",
+    "role": "Latent Actions in the VLM space are tied to the Action Representation",
+    "drawn_as": "grey VLM Space box with a V+L oval, arrow down to a yellow Latent Actions box, arrow in from a teal Action Representation box",
+    "container": "VLM Supervision",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "O_t",
+    "to": "Latent Action Model",
+    "what": "frame at time t",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "O_t+δ",
+    "to": "Latent Action Model",
+    "what": "frame at time t+δ",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent Action Model",
+    "to": "Codebook",
+    "what": "discrete latent action codes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VLM",
+    "to": "VLM Supervision panel",
+    "what": "grey block arrow from the framework into the supervision panel",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V+L (Strategy 1)",
+    "to": "Action Representation",
+    "what": "through the purple dashed Regulated Path",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V+L (Strategy 2)",
+    "to": "Latent Actions",
+    "what": "direct decoding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V+L (Strategy 3)",
+    "to": "Latent Actions",
+    "what": "decoding, then Latent Actions feed the Action Representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action Space 1 / Action Space 2 / Other Spaces ...",
+    "to": "Latent Action Tokens in the VLM Token Space",
+    "what": "each action space is mapped into the shared token space",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V+L (Strategy 4)",
+    "to": "Latent Actions",
+    "what": "arrow down inside the VLM Space",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action Representation (Strategy 4)",
+    "to": "Latent Actions",
+    "what": "arrow in from the right",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "purple (perspective 1 heading, strategies 2 and 3) and gold (perspective 2 heading, strategy 4)",
+    "to": "Latent Actions boxes",
+    "what": "purple marks image-based latent actions, gold marks action-based ones",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "teal box",
+    "to": "every Action Representation",
+    "what": "the same teal box in strategies 1, 3 and 4",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "LATENT ACTIONs and ACTIONs cards",
+    "to": "VLM",
+    "what": "cards sit above the VLM box, the three input icons below it; no arrows are drawn",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "VLA Framework",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "latent actions and actions cards, the VLM and its three inputs",
+    "verdict": "setting"
+   },
+   {
+    "label": "VLM Supervision",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "two numbered perspectives with the latent-action machinery and four aligned strategy schematics",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2 (circled)",
+    "kind": "section",
+    "at": "headings of the two perspectives",
+    "what": "heads Regularizing Trajectory and Unifying Target Space"
+   },
+   {
+    "marker": "Strategy 1 to 4",
+    "kind": "identity",
+    "at": "orange titles at the right edge",
+    "what": "names the four integration strategies"
+   },
+   {
+    "marker": "O_t, O_t+δ",
+    "kind": "identity",
+    "at": "caption chips on the two photos",
+    "what": "names the observation at time t and at t+δ"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two robot observation frames at time t and t+δ",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same tabletop scene twice with orange frames and small caption chips at the lower left"
+   },
+   {
+    "what": "robot scenes for different action spaces: a single arm at a table, a dual-arm scene, other robots",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "photos with red frames and translucent caption bars Action Space 1, Action Space 2, Other Spaces ..."
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "four-way arrow cross and a gripper",
+    "stands_for": "latent action primitives Move and Grip",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "robot arm",
+    "stands_for": "real robot actions",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "picture frame, guide book with a gear, document with a magnifier",
+    "stands_for": "multi observation, task instruction and action placeholders",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "arrow and gripper glyphs inside a thought cloud",
+    "stands_for": "the meaning of codes such as Move Right and Pick",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "Latent action vocabulary Move Right, Pick, Place named for the codebook",
+    "form": "thought cloud with small glyphs and words",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "Latent Action Model box fed by two frames, an arrow down to a two-row grid of small orange squares with one purple square labelled Codebook, a thought cloud naming the codes",
+    "parts": [
+     "Latent Action Model",
+     "codebook cells",
+     "thought cloud"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "vlm",
+    "drawn_as": "large blue-grey box labelled VLM with three line-icon inputs below and two coloured cards above",
+    "parts": [
+     "VLM box",
+     "input icons",
+     "latent action card",
+     "action card"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "grey ellipse VLM Token Space holding a yellow oval Latent Action Tokens, reached by dashed arrows from three robot photos",
+    "parts": [
+     "ellipse",
+     "oval",
+     "dashed arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the VLA Framework title at top left, then jumps to perspective 1 with the two frames, model and codebook, and its strategies 1 to 3 at the right edge, then perspective 2 with the photos, the token space and strategy 4."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two dashed panels side by side: a narrow left panel for the framework (two cards above a VLM box above three input icons) and a wide right panel with two stacked numbered perspectives; the left part of each draws the latent-action machinery and the right edge holds the four strategy schematics in one column.",
+  "panel_count": 2,
+  "lanes": "four strategy schematics stacked in one aligned column at the right edge, each with a V+L box at the left and the supervised target at the right",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.3,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey V+L boxes, VLM Space box and the VLM Supervision tab"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "blue-grey VLM box"
+   },
+   {
+    "hex": "#d4f4f2",
+    "used_for": "teal Action Representation boxes"
+   },
+   {
+    "hex": "#e54c5e",
+    "used_for": "red frames around the action-space photos"
+   },
+   {
+    "hex": "#ee822f",
+    "used_for": "orange photo frames, Strategy titles and codebook cells"
+   },
+   {
+    "hex": "#fadbdf",
+    "used_for": "pink LATENT ACTIONs card"
+   },
+   {
+    "hex": "#fff2ca",
+    "used_for": "pale-yellow ACTIONs card"
+   },
+   {
+    "hex": "#d7b7ff",
+    "used_for": "purple image-based Latent Actions boxes, one codebook cell, regulated path"
+   },
+   {
+    "hex": "#fee695",
+    "used_for": "yellow action-based Latent Actions box and the Latent Action Tokens oval"
+   },
+   {
+    "hex": "#2e54a1",
+    "used_for": "blue titles and perspective headings"
+   },
+   {
+    "hex": "#fce6d5",
+    "used_for": "peach codebook cells"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "dashed grey frames for the two panels, a dashed black box in Strategy 3, thin black arrows; cards have no outlines",
+  "font": "rounded hand-style sans (Comic Sans MS) 7-9 pt for labels, 12 pt for VLM, Arial for the perspective headings",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small heads, dashed black curved arrows from the photos to the token space, one grey block arrow from VLM into the right panel, a purple dashed funnel for the regulated path",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "purple = image-based latent actions (heading term, Latent Actions boxes of strategies 2 and 3, regulated path, one codebook cell); gold = action-based latent actions (heading term, strategy 4 box, token oval); teal = Action Representation; grey = V+L and VLM space; pink card = latent actions and pale-yellow card = actions in the left panel; orange frames = image observations, red frames = action-space photos",
+  "line_style_means": "solid thin arrows = data flow; dashed black arrows = mapping of many action spaces into one token space; dashed black box = the conditional pairing of strategy 3; purple dashed funnel = regulated path",
+  "shape_means": "rounded card = data type; blue box = latent action model; grid of small squares = codebook; thought cloud = what the codes mean; grey ellipse = VLM token space",
+  "marker_means": "circled 1 and 2 head the two perspectives; orange Strategy 1 to 4 names the four strategies",
+  "emphasis": "orange strategy titles at the right edge line the four alternatives up, and each perspective heading colours its key term like the boxes that follow",
+  "reusable_patterns": [
+   "design-family rows that share one V+L box and change only the target and arrows",
+   "perspective headings with the key term coloured like the boxes that follow",
+   "one fixed colour per module (V+L grey, Action Representation teal) across all variants",
+   "thought cloud beside a codebook to show what the discrete codes mean",
+   "photos from different domains mapped by dashed arrows into one token-space ellipse",
+   "left panel for the shared framework, right panel for the variants"
+  ],
+  "weaknesses": [
+   "strategy rows are only 7 pt and tightly stacked",
+   "Latent Actions changes between purple and gold, explained only by the heading colours",
+   "the grey block arrow from VLM into the right panel does not say what flows"
+  ]
+ },
+ "resources": {
+  "own": [
+   "robot observation frames and action-space photos"
+  ],
+  "stock": [
+   "line icons for move, grip, robot arm, picture, guide book and document search"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards, boxes, arrows, codebook cells, token-space ellipse and strategy schematics"
+  ],
+  "unknown": [
+   "whether the robot photos are simulator renders or real captures"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "VLM box",
+   "latent action and action cards",
+   "robot observation photos",
+   "latent action model with codebook",
+   "thought cloud of primitives",
+   "four strategy schematics",
+   "VLM token space ellipse"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "vision-language-action",
+   "latent actions",
+   "VLM supervision",
+   "action tokens",
+   "robot manipulation",
+   "codebook",
+   "representation alignment",
+   "action space"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "option-catalog",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "thought-cloud-gloss",
+    "what": "a thought-bubble cloud tied by two small circles to a codebook cell, naming in words and glyphs what the discrete codes mean"
+   },
+   {
+    "name": "strategy-column-aligned-rows",
+    "what": "four alternative schematics stacked in one aligned column at the panel edge, each titled Strategy N in a colour and sharing the same input box"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Fix the shared framework in a left panel and stack the variants as aligned rows that share the same input box in a right panel; give each module one colour that never changes so only the changing target stands out, and group the rows under numbered perspective headings whose key terms are coloured like the boxes.",
+  "suits": "Systematic studies comparing several ways to plug one extra supervision signal into a shared model, with a few shared components and several variants."
+ },
+ "tags": [
+  "dashed-panels",
+  "design-family-rows",
+  "hand-style-labels",
+  "pastel-cards",
+  "robot-photos",
+  "circled-section-numbers"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "4 Methodology (p.4)"
+  ],
+  "evidence": [
+   "Left: a unified VLA pipeline; right: our two perspectives and four integration strategies.",
+   "(1) Regularizing the Trajectory, where we leverage imagebased latent actions to provide high-level visual plans",
+   "These perspectives form four distinct supervision strategies for the VLM."
+  ]
+ },
+ "summary": "The paper studies how to supervise vision-language-action models with latent actions under one unified baseline. Figure 1 is a two-panel overview. The left dashed panel, VLA Framework, shows a pink LATENT ACTIONs card and a pale-yellow ACTIONs card above a VLM box, with three line-icon inputs below. The right panel, VLM Supervision, has two numbered perspectives: image-based latent actions, where two robot frames feed a Latent Action Model and a codebook of codes such as Move Right, Pick and Place, and action-based latent actions, where photos from several action spaces map into a VLM token space. Four aligned strategy schematics at the right edge show where latent actions attach to the V+L features, with one colour per module.",
+ "summary_zh": "论文在统一基线下比较用潜在动作监督 VLA 模型的方法。图一左侧是 VLA 框架，右侧分两种视角：基于图像的潜在动作（帧对、潜在动作模型、码本）与基于动作的潜在动作（多动作空间映射到词元空间），右缘并列四种策略。",
+ "confidence": "high",
+ "notes": "Prior side-by-side-contrast and model-anatomy kept; concept-schematic added for the codebook and token-space pictures. Panels are the two dashed frames; the four strategies are titled rows, not framed panels. No arrows are drawn inside the left panel, so the input and target roles of its cards come from layout only. The purple dashed Regulated Path is read from its label and shape.",
+ "venue": "ICML26"
+}

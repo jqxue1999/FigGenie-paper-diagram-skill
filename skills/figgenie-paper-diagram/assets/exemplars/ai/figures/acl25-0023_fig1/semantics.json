@@ -1,0 +1,394 @@
+{
+ "paper_id": "acl25-0023",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MAGNET",
+  "one_liner": "Adapts decoder-only LLMs to also learn representations and infill missing spans, with an attention mask mixing causal and bidirectional attention.",
+  "domain": [
+   "decoder-only LLMs",
+   "representation learning",
+   "text infilling"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "design-family",
+  "variant_note": "four sibling columns in one grammar, a capability checklist above a token-row attention sketch, the proposed model last",
+  "argues": "Only MAGNET offers text generation, text infilling and representation learning together, by combining unidirectional and bidirectional attention.",
+  "subject": "Four model types (LLM, Infilling LLM, Encoder LLM, MAGNET LLM) shown by supported capabilities and the attention between input x and output y.",
+  "elements": [
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "baseline decoder-only LLM: can generate text but neither infill nor represent",
+    "drawn_as": "column title over a rule, blue token rows, dark-grey causal attention lines",
+    "container": "column 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Infilling LLM",
+    "type": "module",
+    "role": "baseline adapted for infilling: generation and infilling but no representation learning",
+    "drawn_as": "column title, yellow token rows, dark-grey causal lines, x labels reordered with brackets",
+    "container": "column 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder LLM",
+    "type": "module",
+    "role": "baseline trained as a text encoder: representation learning only",
+    "drawn_as": "column title, green token rows, light-grey all-to-all lines",
+    "container": "column 3",
+    "is_contribution": false
+   },
+   {
+    "name": "MAGNET LLM",
+    "type": "module",
+    "role": "the proposed adaptation: generation, infilling and representation learning together",
+    "drawn_as": "column title, red token rows, mixed dark-grey and light-grey lines",
+    "container": "column 4",
+    "is_contribution": true
+   },
+   {
+    "name": "capability lists",
+    "type": "text-block",
+    "role": "Text Generation, Text Infilling, Representation Learning, each with a tick or cross; missing ones are greyed and struck through",
+    "drawn_as": "three centred serif lines per column with colour emoji marks",
+    "container": "each column",
+    "is_contribution": null
+   },
+   {
+    "name": "y1 ... y6 token row",
+    "type": "data",
+    "role": "output positions of the model",
+    "drawn_as": "row of 6 touching rounded squares in the column colour, labelled y1-y6 above",
+    "container": "each column",
+    "is_contribution": null
+   },
+   {
+    "name": "x1 ... x6 token row",
+    "type": "data",
+    "role": "input positions of the model",
+    "drawn_as": "row of 6 touching rounded squares in the column colour, labelled x1-x6 below",
+    "container": "each column",
+    "is_contribution": null
+   },
+   {
+    "name": "attention lines",
+    "type": "operation",
+    "role": "which input positions each output position attends to; dark lines unidirectional, light grey lines bidirectional",
+    "drawn_as": "straight lines between the two rows, a triangular fan, an all-to-all mesh or a mix",
+    "container": "each column",
+    "is_contribution": true
+   },
+   {
+    "name": "span brackets",
+    "type": "operation",
+    "role": "marks the two reordered input spans x5-x6 and x3-x4 of the infilling model",
+    "drawn_as": "two small square brackets under the x row joined by a curved double-headed arrow",
+    "container": "column 2",
+    "is_contribution": false
+   },
+   {
+    "name": "top bracket line",
+    "type": "operation",
+    "role": "derives Infilling LLM, Encoder LLM and MAGNET LLM from the base LLM",
+    "drawn_as": "thin grey line from the LLM title up, across the top, down with arrowheads onto the other three titles",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "LLM",
+    "to": "Infilling LLM, Encoder LLM, MAGNET LLM",
+    "what": "the base LLM adapted in three different ways",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x1 ... x6 token row",
+    "to": "y1 ... y6 token row",
+    "what": "attention: dark lines unidirectional (causal), light grey lines bidirectional",
+    "kind": "attention",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "capability lists",
+    "to": "attention lines",
+    "what": "what each model can do sits above the attention pattern that goes with it",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "span brackets",
+    "to": "x1 ... x6 token row",
+    "what": "x3-x4 and x5-x6 are swapped in the infilling column",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "column fill colour",
+    "to": "token rows",
+    "what": "one colour per model on both its rows",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "LLM",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "generation only, causal attention",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Infilling LLM",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "generation and infilling, causal attention over reordered spans",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Encoder LLM",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "representation learning only, bidirectional attention",
+    "verdict": "baseline"
+   },
+   {
+    "label": "MAGNET LLM",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "all three capabilities, mixed causal and bidirectional attention",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "y1 ... y6, x1 ... x6",
+    "kind": "identity",
+    "at": "above the top row and below the bottom row of every column",
+    "what": "name the output and input positions; the infilling column shows x1 x2 x5 x6 x3 x4"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "green check-mark emoji",
+    "stands_for": "capability supported",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "red cross-mark emoji",
+    "stands_for": "capability not supported",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "two rows of six touching rounded squares per column, filled with the model's colour, labelled with indexed y and x",
+    "parts": [
+     "input row x",
+     "output row y",
+     "index labels"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "straight lines between the two token rows: triangular fan for causal, full mesh for bidirectional, mix for MAGNET; grey level tells the direction",
+    "parts": [
+     "dark causal lines",
+     "light bidirectional lines"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "capability-checklist",
+    "drawn_as": "three lines per model with emoji tick or cross; unsupported capabilities greyed and struck through",
+    "parts": [
+     "capability names",
+     "tick",
+     "cross",
+     "strike-through"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the top bracket and the LLM column at the left, then moves right across the four columns; inside a column the eye goes title, checklist, token rows."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Four identically built columns side by side, separated only by whitespace and a rule under each title: title, three capability lines with tick or cross, then two rows of six token boxes joined by attention lines, with y labels above and x labels below. A thin bracket line along the top edge runs from the first title to the other three.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.36,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a4c2f4",
+    "used_for": "token boxes of the plain LLM"
+   },
+   {
+    "hex": "#ffe599",
+    "used_for": "token boxes of the Infilling LLM"
+   },
+   {
+    "hex": "#b6d7a8",
+    "used_for": "token boxes of the Encoder LLM"
+   },
+   {
+    "hex": "#ea9999",
+    "used_for": "token boxes of MAGNET LLM"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "outlines of token boxes, title rules and the dark unidirectional attention lines"
+   },
+   {
+    "hex": "#b7b7b7",
+    "used_for": "light-grey bidirectional attention lines"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "greyed and struck-through unsupported capability text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt throughout: dark grey on token boxes and causal lines, light grey on bidirectional lines",
+  "font": "serif (Times New Roman) 7.5-8.5 pt for titles and capability names; bold monospace (Courier New) 7 pt for x and y labels with 4.5 pt subscripts; colour emoji for ticks and crosses",
+  "corners": "mixed",
+  "arrows": "thin grey bracket line with small arrowheads along the top; attention lines have no heads; one curved double-headed arrow under the swapped spans",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pastel fill per model kept on its two token rows (blue LLM, yellow Infilling LLM, green Encoder LLM, red MAGNET LLM); line grey level = attention direction",
+  "line_style_means": "dark grey line between rows = unidirectional (causal) attention, light grey line = bidirectional attention; struck-through grey text = capability the model lacks",
+  "shape_means": "rounded square = one token position; lower row = input x, upper row = output y",
+  "marker_means": "green tick = capability supported, red cross = capability missing; y1-y6 and x1-x6 index positions; swapped x labels with brackets = reordered spans for infilling",
+  "emphasis": "MAGNET is the last column with three ticks and a line pattern that mixes the two earlier ones; the contrast is carried by the repeated sketch rather than by a highlight",
+  "reusable_patterns": [
+   "the same small token-row sketch repeated per method with only the attention lines changed",
+   "capability checklist above each sketch, missing capabilities greyed, struck through and crossed",
+   "attention direction told by line grey level, explained in the caption",
+   "one fill colour per method carried onto its token boxes",
+   "bracket line along the top deriving the variants from the base model"
+  ],
+  "weaknesses": [
+   "the dark versus light line meaning is only in the caption, there is no key",
+   "in the MAGNET column the crossing lines are too dense to read which positions attend causally",
+   "the curved arrow under the infilling column is unlabelled"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "colour emoji tick and cross marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "token boxes",
+   "attention lines",
+   "span brackets",
+   "bracket line along the top"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four model columns",
+   "capability lists with ticks and crosses",
+   "two rows of six colour-coded token boxes",
+   "dark and light grey attention line fans",
+   "span-swap brackets",
+   "bracket line along the top"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "decoder-only LLM",
+   "bidirectional attention",
+   "causal attention",
+   "text infilling",
+   "representation learning",
+   "attention mask",
+   "text encoder"
+  ],
+  "tags": [
+   "attention-mask-grid",
+   "token-strip",
+   "verdict-marks",
+   "small-multiples",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "struck-through-checklist",
+    "what": "per-method capability list where missing capabilities are greyed, struck through and marked with a cross, supported ones in black with a tick"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Repeat one tiny sketch (two token rows joined by lines) once per method and change only the line pattern and grey level, with a tick-and-cross capability list above, so the contrast reads at a glance and the proposed method's mix of both patterns shows.",
+  "suits": "Design-comparison teasers where methods differ in a connectivity pattern (attention masks, wiring, routing) and in a short list of capabilities."
+ },
+ "tags": [
+  "four-column-teaser",
+  "emoji-ticks-and-crosses",
+  "monospace-token-labels",
+  "serif-titles",
+  "pastel-per-model-colours",
+  "google-slides-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "unidirectional attention between the input x and output y (depicted by black lines)",
+   "However, as shown in Figure 1, methods that enhance LLMs for text infilling fail to make them effective text encoders,"
+  ]
+ },
+ "summary": "MAGNET adapts decoder-only LLMs so that they also learn representations and fill in missing text spans, using three self-supervised objectives and an attention mask that mixes causal and bidirectional attention. Figure 1 is a four-column teaser: LLM, Infilling LLM, Encoder LLM and MAGNET LLM. Each column lists three capabilities (text generation, text infilling, representation learning) with tick or cross emoji, unsupported ones greyed and struck through, above two rows of six token boxes joined by attention lines: dark lines for unidirectional attention, light grey for bidirectional. Only the last column, in red, has three ticks and mixes both line types. A bracket line along the top derives the three variants from the base LLM.",
+ "summary_zh": "MAGNET 让只做生成的解码器大模型也能做表征学习和文本填充。图分四列：LLM、填充 LLM、编码器 LLM、MAGNET，各列用对勾叉号列出三种能力，词元行间深灰线为单向注意力、浅灰线为双向，只有 MAGNET 三项全有并混用两种线。",
+ "confidence": "high",
+ "notes": "The prior pass's model-anatomy kind is kept as secondary although the anatomy shown is only attention connectivity between two token rows. The swap of x3-x4 and x5-x6 under the infilling column is read from the reordered labels; the paper text given does not explain it.",
+ "venue": "ACL25"
+}

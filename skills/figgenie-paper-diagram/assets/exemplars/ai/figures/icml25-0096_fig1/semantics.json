@@ -1,0 +1,476 @@
+{
+ "paper_id": "icml25-0096",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "RE-Bench",
+  "one_liner": "A benchmark of seven ML research-engineering environments where human experts and AI agents work under the same conditions and are scored the same way.",
+  "domain": [
+   "AI R&D automation",
+   "agent benchmark",
+   "human expert baseline"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "one environment drawn in the abstract: resources copied to the agent's machine, the agent submits, a scoring function answers, with three numbered narration callouts at the sides",
+  "argues": "Humans and AI agents are put into the same scored environment: same resources, same machine, and feedback from the scoring function at any time.",
+  "subject": "The structure of one RE-Bench environment: resources, agent environment, scoring loop and score records.",
+  "elements": [
+   {
+    "name": "1 Agent environment is set up",
+    "type": "text-block",
+    "role": "narrates the first phase",
+    "drawn_as": "cream rounded callout with a circled number on its top edge",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "2 Agent Starts",
+    "type": "text-block",
+    "role": "narrates how humans and AI agents begin: Humans connect via SSH + VSCode, AI Agents run scaffolding code launched in the environment",
+    "drawn_as": "cream callout with a person emoji and a robot emoji, separated by a rule",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "3 Agents take actions",
+    "type": "text-block",
+    "role": "narrates what the agent may do: edit files and run code as the agent user, score its own progress at any point",
+    "drawn_as": "cream callout with a terminal icon and a chart-window icon",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Environment Resources",
+    "type": "container",
+    "role": "everything an environment supplies: Instructions, Datasets, Starting Solution and the Scoring Function",
+    "drawn_as": "large pink rounded box with a heading in monospace and four salmon cards",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Instructions",
+    "type": "data",
+    "role": "task text such as Increase the accuracy of the provided model ...",
+    "drawn_as": "salmon card with a quoted line and a document icon",
+    "container": "Environment Resources",
+    "is_contribution": null
+   },
+   {
+    "name": "Datasets",
+    "type": "data",
+    "role": "data given to the agent",
+    "drawn_as": "salmon card with a folder icon",
+    "container": "Environment Resources",
+    "is_contribution": null
+   },
+   {
+    "name": "Starting Solution",
+    "type": "data",
+    "role": "the code the agent starts from",
+    "drawn_as": "salmon card with a .py file icon and a folder icon",
+    "container": "Environment Resources",
+    "is_contribution": null
+   },
+   {
+    "name": "Scoring Function",
+    "type": "module",
+    "role": "scores submissions, sends a message back to the agent and writes score records",
+    "drawn_as": "salmon box at the right end of the resources box, with outgoing arrows",
+    "container": "Environment Resources",
+    "is_contribution": true
+   },
+   {
+    "name": "resource bundle",
+    "type": "data",
+    "role": "the files copied from the resources into the agent environment",
+    "drawn_as": "small pink rounded box with document, folder and .py icons on the arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Agent Environment",
+    "type": "container",
+    "role": "the machine the agent works on: GPU (H100), network access, and the task files",
+    "drawn_as": "large blue rounded box with a monospace heading, a GPU tile, a globe tile and a column of file icons",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Agent works on task",
+    "type": "label",
+    "role": "two-way exchange between the files and the agent",
+    "drawn_as": "two opposed thin blue arrows with a label",
+    "container": "Agent Environment",
+    "is_contribution": null
+   },
+   {
+    "name": "human OR robot agent",
+    "type": "actor",
+    "role": "the agent under test, either a human expert or an AI agent",
+    "drawn_as": "violet-outlined rounded box holding a person emoji, the word OR and a robot emoji",
+    "container": "Agent Environment",
+    "is_contribution": null
+   },
+   {
+    "name": "Submission trained_model/",
+    "type": "label",
+    "role": "what the agent sends to the scoring function",
+    "drawn_as": "light blue rounded label with a monospace folder name on the blue upward arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Scorer message for agent {val_acc: 0.8}",
+    "type": "label",
+    "role": "feedback the scoring function returns to the agent",
+    "drawn_as": "light pink rounded label on the red-brown return arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Score Records",
+    "type": "data",
+    "role": "log of scores with val_acc, test_acc, score and timestamp",
+    "drawn_as": "stack of three grey cards with monospace text",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Environment Resources",
+    "to": "Agent Environment",
+    "what": "resources are copied into the agent's machine (resource bundle on the arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "human OR robot agent",
+    "to": "Agent Environment files",
+    "what": "Agent works on task: two-way exchange",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "human OR robot agent",
+    "to": "Scoring Function",
+    "what": "Submission trained_model/",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Scoring Function",
+    "to": "human OR robot agent",
+    "what": "Scorer message for agent {val_acc: 0.8}",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Scoring Function",
+    "to": "Score Records",
+    "what": "each score is written to the records",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "numbered callouts",
+    "to": "parts of the diagram",
+    "what": "the callout numbers 1, 2, 3 name the phases but are not tied to the drawing by lines",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3",
+    "kind": "order",
+    "at": "circles on the top edge of the three callouts",
+    "what": "orders the phases: environment set up, agent starts, agents take actions"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "person with a wrench (emoji-like)",
+    "stands_for": "the human expert",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "robot face (emoji-like)",
+    "stands_for": "the AI agent",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "document, folder and .py file icons",
+    "stands_for": "instructions, datasets and code files",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 10
+   },
+   {
+    "depicts": "GPU tile with the text (H100) and a globe tile",
+    "stands_for": "the compute and network access of the agent machine",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "terminal window with a folder, and a window with a rising chart",
+    "stands_for": "editing files and running code; scoring one's own progress",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one illustrative scored attempt: task instruction, submission folder, scorer message and a score record",
+    "form": "monospace snippets: the quoted instruction Increase the accuracy of the provided model, trained_model/, {val_acc: 0.8}, and a record with val_acc, test_acc, score and timestamp",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "agent box exchanging with its files by two-way arrows and with a scoring function by a submission arrow up and a scorer-message arrow back",
+    "parts": [
+     "agent",
+     "environment",
+     "scoring function",
+     "submission",
+     "scorer message"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "robot-face emoji standing for the AI agent, shown next to a person emoji",
+    "parts": [
+     "robot emoji"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-or-ai-agent",
+    "drawn_as": "one violet-outlined box holding a person emoji, the word OR and a robot emoji",
+    "parts": [
+     "person emoji",
+     "OR",
+     "robot emoji"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at callout 1 at the top left, moves to the pink Environment Resources box, down the resource arrow into the Agent Environment, then up the submission arrow to the Scoring Function and around the red-brown arrow back to the agent; callouts 2 and 3 are read on the way."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A central stack of two tinted boxes (resources above, agent environment below) with a vertical loop of arrows on the right, Score Records at the top right, and numbered cream callouts down the left edge and at the bottom right.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.12,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fcf0de",
+    "used_for": "cream fill of the three numbered callouts"
+   },
+   {
+    "hex": "#d49b63",
+    "used_for": "tan rim of the callouts"
+   },
+   {
+    "hex": "#ffd1c9",
+    "used_for": "pink fill of the Environment Resources box"
+   },
+   {
+    "hex": "#ce9091",
+    "used_for": "muted red rim of the resources box"
+   },
+   {
+    "hex": "#ffaa9d",
+    "used_for": "salmon cards and the Scoring Function"
+   },
+   {
+    "hex": "#ffe0e0",
+    "used_for": "very light pink payload labels (resource bundle, scorer message)"
+   },
+   {
+    "hex": "#c2d9fb",
+    "used_for": "light blue fill of the Agent Environment box"
+   },
+   {
+    "hex": "#b1c1ee",
+    "used_for": "blue-violet tiles: GPU, globe, file column and the agent box"
+   },
+   {
+    "hex": "#9190ce",
+    "used_for": "violet-blue arrows and the rim of the agent box"
+   },
+   {
+    "hex": "#e6f1ff",
+    "used_for": "Submission label fill"
+   },
+   {
+    "hex": "#a73c3e",
+    "used_for": "red-brown arrows sent by the environment"
+   },
+   {
+    "hex": "#731611",
+    "used_for": "dark red-brown circled numbers and arrow shafts"
+   },
+   {
+    "hex": "#e8e1e1",
+    "used_for": "grey stacked Score Records cards"
+   },
+   {
+    "hex": "#fbedc2",
+    "used_for": "yellow folder icons"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no thin strokes; coloured rims and thick arrows about 2 pt are drawn as filled shapes",
+  "font": "two voices: rounded humanist sans in the callouts and labels (6-16 pt), bold monospace-style headings and snippets in the technical boxes (5.5-10.5 pt)",
+  "corners": "rounded",
+  "arrows": "thick arrows with open V-shaped heads, dark red-brown for what the environment sends and violet-blue for what the agent sends",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under boxes, cards and labels",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink and red-brown = the environment's resources and what the scorer sends; blue and violet = the agent's side and what it sends; cream = narration callouts; grey = recorded scores",
+  "line_style_means": "thick red-brown arrows = sent by the environment (resource copy, scorer message, score records); blue arrows = sent by the agent (work, submission)",
+  "shape_means": "pink box = resources, blue box = the agent's machine, small rounded labels on arrows = the payload, stacked grey cards = a log",
+  "marker_means": "circled numbers 1, 2, 3 on the callouts order the three phases",
+  "emphasis": "two large tinted boxes fill the centre and the human OR robot box is the only element in the blue box with a violet outline; the callouts frame the diagram at the edges",
+  "reusable_patterns": [
+   "numbered cream callouts flanking the diagram narrate the phases instead of numbering the arrows",
+   "payload labels: small rounded boxes sitting on arrows that show what is passed",
+   "arrow colour tells who sends (red = environment, blue = agent)",
+   "person emoji OR robot emoji in one box to say the agent is either",
+   "stack of grey cards for a log of records",
+   "file-type icons (document, folder, .py) as the contents of resource cards"
+  ],
+  "weaknesses": [
+   "the callouts carry numbers but no leader lines to the parts they describe",
+   "two type voices (monospace and rounded sans) plus emoji in one figure",
+   "the seven environments named in the caption are not shown"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the real structure of an environment: resources, scoring function, record fields, H100 setup"
+  ],
+  "stock": [
+   "person and robot emoji",
+   "document, folder, .py, globe, terminal and chart-window icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes, arrows, payload labels and callouts"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "numbered cream callouts",
+   "Environment Resources box with four cards",
+   "Agent Environment box with GPU tile, globe and file column",
+   "human OR robot agent box",
+   "payload labels on arrows",
+   "stack of Score Records cards"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "AI R&D agents",
+   "research engineering benchmark",
+   "human expert baseline",
+   "scoring function",
+   "H100 GPU environment",
+   "agent evaluation",
+   "submission and score feedback",
+   "RE-Bench"
+  ],
+  "tags": [
+   "task-definition",
+   "annotated-record-card",
+   "stacked-cards",
+   "model-pictogram",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "payload-labels-on-arrows",
+    "what": "small rounded boxes sitting on arrows that show the artefact being passed: file icons, a folder name or a message snippet"
+   },
+   {
+    "name": "numbered-callout-boxes",
+    "what": "cream callout boxes with a circled number on the top edge flank the diagram and narrate its phases without leader lines"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Let arrow colour say who sends (environment or agent) and put small payload labels on the arrows so the protocol reads without extra text; add numbered narration callouts at the edges for the phases.",
+  "suits": "Benchmark or environment-protocol figures where a human or AI agent works inside a harness that supplies resources and scores submissions."
+ },
+ "tags": [
+  "emoji-agents",
+  "pink-and-blue-boxes",
+  "drop-shadows",
+  "callout-numbers",
+  "monospace-headings",
+  "payload-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "RE-Bench is a collection of seven hand-crafted environments intended to test the AI R&D capabilities of current AI systems.",
+   "Humans and AI agents are tested under the same conditions.",
+   "given a starting solution, access to a machine with 1–6 H100 GPUs, and a way to score their progress"
+  ]
+ },
+ "summary": "RE-Bench is a benchmark of seven hand-crafted ML research-engineering environments in which human experts and AI agents are tested under the same conditions. Figure 1 shows one environment in the abstract. A pink Environment Resources box holds the instructions, datasets, starting solution and a scoring function; a copy is passed to a blue Agent Environment with an H100 GPU, network access and the files, where a person or a robot agent works on the task. The agent's submission (trained_model/) goes up to the scoring function, which sends back a scorer message and writes score records. Three numbered cream callouts at the sides narrate setting up, starting (SSH + VSCode for humans, scaffolding code for AI agents) and acting.",
+ "summary_zh": "RE-Bench 让人类专家和 AI 智能体在同样条件下做机器学习研发任务。图 1 以一个环境为例：粉色资源框含说明、数据集、起始方案和评分函数，蓝色环境含 H100 GPU，人或机器人在其中工作，提交后收到评分反馈并写入记录。",
+ "confidence": "high",
+ "notes": "No paragraph that mentions the figure was available; everything is read from the caption, abstract and the figure's own labels. The prior kinds are kept. The three callouts are treated as narration of one drawing, not as panels (the prior pass counted three panels). The seven environments of the caption are not drawn. Palette roles are inferred from the area histogram and the picture.",
+ "venue": "ICML25"
+}

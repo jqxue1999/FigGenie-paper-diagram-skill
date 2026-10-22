@@ -1,0 +1,418 @@
+{
+ "paper_id": "icml25-0027",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Cross-Environment Cooperation (CEC)",
+  "one_liner": "Self-play RL on a large distribution of procedurally generated environments, yielding agents that coordinate zero-shot with new partners on new problems.",
+  "domain": [
+   "zero-shot coordination",
+   "multi-agent reinforcement learning",
+   "procedural environment generation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "actor-interaction"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two training regimes drawn with identical geometry (agent, partners, environments) with the many/one quantities swapped, followed by a verdict table",
+  "argues": "Training with one partner across many environments, not many partners in one environment, gives zero-shot coordination with new partners and new environments; PBT fails on novel environments.",
+  "subject": "Training setups of PBT and CEC as a learning agent with its partners and environments, and a table of which coordination conditions each succeeds in.",
+  "elements": [
+   {
+    "name": "Learning Agent (PBT)",
+    "type": "actor",
+    "role": "the agent being trained",
+    "drawn_as": "green robot head with the label Learning Agent",
+    "container": "Population-Based Training (PBT)",
+    "is_contribution": false
+   },
+   {
+    "name": "Many Partners",
+    "type": "actor",
+    "role": "the population of partners the agent trains with in PBT",
+    "drawn_as": "three overlapping robot heads (blue, red, orange)",
+    "container": "Population-Based Training (PBT)",
+    "is_contribution": false
+   },
+   {
+    "name": "One Environment",
+    "type": "instance",
+    "role": "the single environment the PBT agent trains on",
+    "drawn_as": "one top-down game layout screenshot",
+    "container": "Population-Based Training (PBT)",
+    "is_contribution": false
+   },
+   {
+    "name": "Trains to cooperate with / on (PBT)",
+    "type": "label",
+    "role": "names the two training relations of the agent",
+    "drawn_as": "three-line text beside each of two thin arrows",
+    "container": "Population-Based Training (PBT)",
+    "is_contribution": null
+   },
+   {
+    "name": "Learning Agent (CEC)",
+    "type": "actor",
+    "role": "the agent being trained",
+    "drawn_as": "green robot head with the label Learning Agent",
+    "container": "Cross-Environment Cooperation (CEC)",
+    "is_contribution": true
+   },
+   {
+    "name": "One Partner",
+    "type": "actor",
+    "role": "the single partner the CEC agent trains with",
+    "drawn_as": "one blue robot head",
+    "container": "Cross-Environment Cooperation (CEC)",
+    "is_contribution": true
+   },
+   {
+    "name": "Many Environments",
+    "type": "instance",
+    "role": "the distribution of environments the CEC agent trains on",
+    "drawn_as": "stack of four offset game layout screenshots",
+    "container": "Cross-Environment Cooperation (CEC)",
+    "is_contribution": true
+   },
+   {
+    "name": "Trains to cooperate with / on (CEC)",
+    "type": "label",
+    "role": "names the two training relations of the agent",
+    "drawn_as": "three-line text beside each of two thin arrows",
+    "container": "Cross-Environment Cooperation (CEC)",
+    "is_contribution": null
+   },
+   {
+    "name": "Coordination Task | PBT | CEC",
+    "type": "container",
+    "role": "evaluation table with one row per generalisation condition and one column per method",
+    "drawn_as": "ruled table, header row without lines, three framed rows",
+    "container": "Evaluation",
+    "is_contribution": null
+   },
+   {
+    "name": "Novel Partners, Same Environment",
+    "type": "label",
+    "role": "first condition: PBT and CEC both reach zero-shot coordination",
+    "drawn_as": "table row label, the word Novel in italics",
+    "container": "Evaluation",
+    "is_contribution": null
+   },
+   {
+    "name": "Same Partner, Novel Environments",
+    "type": "label",
+    "role": "second condition: PBT fails, CEC reaches zero-shot coordination",
+    "drawn_as": "table row label, the word Novel in italics",
+    "container": "Evaluation",
+    "is_contribution": null
+   },
+   {
+    "name": "Novel Partners, Novel Environments",
+    "type": "label",
+    "role": "third condition: PBT fails, CEC reaches zero-shot coordination",
+    "drawn_as": "table row label, the word Novel in italics",
+    "container": "Evaluation",
+    "is_contribution": null
+   },
+   {
+    "name": "Zero-shot Coordination / Coordination Failure cells",
+    "type": "label",
+    "role": "outcome of each method in each condition, with a tick or a cross",
+    "drawn_as": "two-line cell text followed by a green tick or red cross emoji",
+    "container": "Evaluation",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Learning Agent (PBT)",
+    "to": "Many Partners",
+    "what": "Trains to cooperate with",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Learning Agent (PBT)",
+    "to": "One Environment",
+    "what": "Trains to cooperate on",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Learning Agent (CEC)",
+    "to": "One Partner",
+    "what": "Trains to cooperate with",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Learning Agent (CEC)",
+    "to": "Many Environments",
+    "what": "Trains to cooperate on",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "PBT and CEC panels",
+    "to": "PBT and CEC columns of the table",
+    "what": "the method name repeated as a column header links each training setup to its results",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "PBT and CEC panels",
+    "to": "each other",
+    "what": "same agent, partner and environment slots in the same positions, with many and one swapped",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Population-Based Training (PBT)",
+    "kind": "actor-interaction",
+    "axis": "alternatives",
+    "shows": "a learning agent trains with many partners on one environment",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Cross-Environment Cooperation (CEC)",
+    "kind": "actor-interaction",
+    "axis": "alternatives",
+    "shows": "the same agent trains with one partner on many environments",
+    "verdict": "ours"
+   },
+   {
+    "label": "Evaluation",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "table of three coordination conditions against PBT and CEC with tick or cross",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "green tick",
+    "kind": "identity",
+    "at": "table cells",
+    "what": "the method reaches zero-shot coordination in that condition"
+   },
+   {
+    "marker": "red cross",
+    "kind": "identity",
+    "at": "table cells",
+    "what": "the method shows coordination failure in that condition"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "top-down game layouts of the cooperative environment (brown floor, beige paths, small chef sprites)",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "one tile for the single environment, four tiles stacked with a diagonal offset for many environments"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "green robot head with antenna and ear panels",
+    "stands_for": "the learning agent",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "blue, red and orange robot heads of the same design",
+    "stands_for": "partner agents (one blue partner in CEC, three overlapping partners in PBT)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "robot-head avatars; three overlapping heads in different colours for a population of partners, one head for a single partner",
+    "parts": [
+     "blue robot",
+     "red robot",
+     "orange robot"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "four environment screenshots offset diagonally as a stack standing for a distribution of environments",
+    "parts": [
+     "four layout tiles"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts with the PBT title at the top left, follows the two arrows from the green agent to its partners and environment, repeats in the CEC column, then ends at the table on the right, read row by row."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three titled columns separated by vertical dashed rules: PBT and CEC share one geometry (agent at left, partners at the top right, environments at the bottom right) and the third column is a ruled evaluation table.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.62,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#1e8f2e",
+    "used_for": "green learning-agent robot and the green tick",
+    "approx": true
+   },
+   {
+    "hex": "#0a3cff",
+    "used_for": "blue partner robot",
+    "approx": true
+   },
+   {
+    "hex": "#ff1a1a",
+    "used_for": "red partner robot and the red cross",
+    "approx": true
+   },
+   {
+    "hex": "#ffa500",
+    "used_for": "orange partner robot",
+    "approx": true
+   },
+   {
+    "hex": "#a0541e",
+    "used_for": "brown floor of the environment screenshots",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black for table rules, arrows and the dashed vertical dividers; no outlines on icons",
+  "font": "serif, bold panel titles, upright labels with italic Novel; text is outlined, so sizes are only readable from the picture (about 7-10 pt); tick and cross are 9 pt emoji",
+  "corners": "mixed",
+  "arrows": "thin straight black arrows with small heads, one text label beside each",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "robot colour names the agent: green = the learning agent in both lanes, blue / red / orange = different partners; green tick = success, red cross = failure",
+  "line_style_means": "solid arrows = training relation; dashed vertical lines = divider between panels",
+  "shape_means": "robot head = agent; brown tile = environment; offset stack of tiles = a distribution of environments; overlapping robots = a population of partners",
+  "marker_means": "tick = zero-shot coordination, cross = coordination failure; italic Novel flags a held-out partner or environment",
+  "emphasis": "the mirrored geometry makes the swap (many partners and one environment versus one partner and many environments) the only visible difference, and the CEC column of the table is all ticks",
+  "reusable_patterns": [
+   "two lanes with identical geometry so only the swapped quantity changes",
+   "single tile for 'one' versus offset screenshot stack for 'many'",
+   "overlapping coloured avatars for a population",
+   "verdict table with emoji tick and cross closing the contrast",
+   "italic word Novel to flag held-out conditions",
+   "arrows labelled in words (Trains to cooperate with / on)"
+  ],
+  "weaknesses": [
+   "robot colours are not keyed",
+   "the same words Zero-shot Coordination repeat in every cell while the tick carries the verdict"
+  ]
+ },
+ "resources": {
+  "own": [
+   "screenshots of the generated environment layouts"
+  ],
+  "stock": [
+   "flat robot head icons",
+   "tick and cross emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "thin arrows and their labels",
+   "ruled table",
+   "dashed panel dividers"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "green learning-agent robot",
+   "blue, red and orange partner robots",
+   "single environment layout screenshot",
+   "stack of four layout tiles",
+   "labelled arrows Trains to cooperate with / on",
+   "ruled evaluation table with tick and cross emoji"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "zero-shot coordination",
+   "cross-environment cooperation",
+   "population-based training",
+   "self-play",
+   "multi-agent RL",
+   "partner generalisation",
+   "procedural environments",
+   "human-compatible AI"
+  ],
+  "tags": [
+   "verdict-marks",
+   "comparison-table",
+   "stacked-cards",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw the two training regimes with identical geometry (agent left, partners above, environments below) and swap only the many / one glyphs, using overlapping avatars for a population and an offset screenshot stack for a distribution; then close with a small tick-and-cross table over the generalisation conditions so the contrast ends in a verdict.",
+  "suits": "Papers that argue a change in the training distribution (data, partners, tasks) and can state the result as which generalisation conditions succeed or fail."
+ },
+ "tags": [
+  "google-slides-made",
+  "mirrored-lanes",
+  "robot-avatars",
+  "emoji-ticks",
+  "dashed-dividers",
+  "screenshot-stack"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "By training agents in self-play on a large distribution of environments",
+   "agents develop the ability to coordinate with novel partners and novel problems",
+   "prior work which suggests self-play is insufficient for learning general norms for cooperation"
+  ]
+ },
+ "summary": "The paper trains cooperative agents by self-play on a huge distribution of procedurally generated environments (Cross-Environment Cooperation, CEC) and shows that they coordinate zero-shot with new partners and new problems. Figure 1 is a three-column contrast. On the left, Population-Based Training: a green learning-agent robot trains with many partners (blue, red and orange robots) on one environment screenshot. In the middle, CEC: the same agent trains with one blue partner on a stack of many layouts. On the right, an Evaluation table lists three conditions (novel partners, novel environments, both) with emoji ticks and crosses: PBT fails on novel environments, CEC succeeds in all three. It is a flat Google Slides drawing with robot icons, game screenshots, thin arrows and dashed dividers.",
+ "summary_zh": "对比图：左栏群体训练（PBT）让学习智能体与多个伙伴在单一环境中训练，中栏跨环境合作（CEC）让它与单一伙伴在大量环境中训练；右栏评估表用对勾和叉号表明，PBT 在新环境中协作失败，CEC 在三种情形下都能零样本协作。",
+ "confidence": "high",
+ "notes": "Prior label side-by-side-contrast / paired-lanes kept; actor-interaction added for the cast of agent, partners and environments. Palette hexes are read off the bitmaps (approximate) because the SVG fills are only black. The panel text is outlined, so the digest lists no strings except the emoji.",
+ "venue": "ICML25"
+}

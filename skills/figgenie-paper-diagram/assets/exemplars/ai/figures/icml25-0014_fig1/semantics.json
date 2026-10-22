@@ -1,0 +1,486 @@
+{
+ "paper_id": "icml25-0014",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "BACDL",
+  "one_liner": "An incomplete multi-view clustering algorithm that bifurcates feature clusters into shared and specific determinants, couples views by distribution learning and has linear overhead.",
+  "domain": [
+   "incomplete multi-view clustering",
+   "distribution learning",
+   "efficient clustering"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "four titled dashed stage frames in a row, crossed by three colour-coded view lanes that turn grey where the views are fused",
+  "argues": "Per-view feature clusters are split into shared and specific determinants, alienated by mutual exclusion, tied through one association D to sample clusters, then reordered and weighted into one common clustering embedding.",
+  "subject": "Three incomplete views flowing through feature clusters, an association block, per-view sample clusters and adaptive weighting into a common embedding and results.",
+  "elements": [
+   {
+    "name": "View 1 Data, View r Data, View v Data",
+    "type": "data",
+    "role": "the incomplete data of each view; dashed empty bars stand for missing samples",
+    "drawn_as": "three frames with a 1.25 pt outline in the view colour (green, pink, purple), each holding vertical coloured bars and dashed empty bars, vertical ellipses between them",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "VG (P_1, P_r, P_v)",
+    "type": "module",
+    "role": "view guidance that is coupled into the feature clusters by distribution learning",
+    "drawn_as": "rounded squares tinted in the view colour, each holding a circle with P and a subscript; label VG below",
+    "container": "Feature Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "C (PDD)",
+    "type": "module",
+    "role": "the perspective-shared determinant, fed by all views",
+    "drawn_as": "grey circle labelled C with the caption PDD, inside the blue dashed sub-frame",
+    "container": "Feature Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "C_1, C_r, C_v (PCD)",
+    "type": "module",
+    "role": "the perspective-specific determinants, one per view",
+    "drawn_as": "octagons in the three view colours with the caption PCD, inside the orange dashed sub-frame",
+    "container": "Feature Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "ME",
+    "type": "operation",
+    "role": "mutual exclusion learning that alienates shared and specific determinants to enlarge their discrimination",
+    "drawn_as": "a blue block arrow pointing left and an orange block arrow pointing right, label ME below, at the top and bottom of the frame",
+    "container": "Feature Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "Feature Clusters",
+    "type": "container",
+    "role": "first stage: feature clusters bifurcated into shared (blue dashed sub-frame) and specific (orange dashed sub-frame) determinants",
+    "drawn_as": "black dashed rounded frame with a bold italic grey title at the bottom",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "D (Association)",
+    "type": "module",
+    "role": "the association between feature clusters and sample clusters that bridges all views",
+    "drawn_as": "grey-blue rounded square holding a darker circle labelled D, inside a dashed frame titled Association",
+    "container": "Association",
+    "is_contribution": true
+   },
+   {
+    "name": "IV1SC, IVRSC, IVVSC",
+    "type": "data",
+    "role": "sample clusters of incomplete view 1, r and v",
+    "drawn_as": "grids with coloured rows alternating with white rows (green, pink, purple), caption under each",
+    "container": "Sample Clusters",
+    "is_contribution": false
+   },
+   {
+    "name": "Space 1, Space r, Space v",
+    "type": "module",
+    "role": "latent subspaces in which the sample clusters are reordered",
+    "drawn_as": "navy-framed boxes with small 3D axes and a faint curved arrow in the view colour",
+    "container": "Sample Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "AW",
+    "type": "module",
+    "role": "adaptive weighting of the reordered sample clusters",
+    "drawn_as": "grey-blue rounded square holding a darker circle labelled AW",
+    "container": "Sample Clusters",
+    "is_contribution": true
+   },
+   {
+    "name": "CSC",
+    "type": "data",
+    "role": "common sample clusters, the single mapped result",
+    "drawn_as": "grey grid with a bold caption",
+    "container": "Sample Clusters",
+    "is_contribution": false
+   },
+   {
+    "name": "Embedding",
+    "type": "data",
+    "role": "the clustering embedding built from the common sample clusters",
+    "drawn_as": "tilted pale plane with 3D axes and a few green, pink and purple squares, soft shadow, bold caption",
+    "container": "Sample Clusters",
+    "is_contribution": false
+   },
+   {
+    "name": "Results",
+    "type": "container",
+    "role": "final clustering results",
+    "drawn_as": "dashed frame holding four navy-outlined rounded cards, each with a few green, pink and purple squares",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "View 1 Data, View r Data, View v Data",
+    "to": "VG (P_1, P_r, P_v)",
+    "what": "each view enters its view-guidance node",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "View 1 Data, View r Data, View v Data",
+    "to": "C_1, C_r, C_v (PCD)",
+    "what": "each view also reaches its own specific determinant by a long line over the stage",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VG (P_1, P_r, P_v)",
+    "to": "C (PDD)",
+    "what": "the guidance of all views feeds the shared determinant",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "C (PDD)",
+    "to": "C_1, C_r, C_v (PCD)",
+    "what": "ME: shared and specific determinants are pushed apart",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature Clusters",
+    "to": "D (Association)",
+    "what": "one coloured arrow per view enters the association",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "D (Association)",
+    "to": "IV1SC, IVRSC, IVVSC",
+    "what": "one coloured arrow per view leaves to its sample clusters",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "IV1SC, IVRSC, IVVSC",
+    "to": "Space 1, Space r, Space v",
+    "what": "sample clusters are reordered in a latent subspace",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Space 1, Space r, Space v",
+    "to": "AW",
+    "what": "the three view lanes merge into adaptive weighting",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "AW",
+    "to": "CSC",
+    "what": "weighted mapping to one common set",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CSC",
+    "to": "Embedding",
+    "what": "clustering embedding is formed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sample Clusters",
+    "to": "Results",
+    "what": "clustering results",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green, pink and purple of data, nodes, arrows, tables and result squares",
+    "to": "View 1, View r, View v",
+    "what": "one colour per view kept from input to result; grey where the views are fused",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, r, v (subscripts)",
+    "kind": "identity",
+    "at": "P, C, View, Space and IV..SC labels",
+    "what": "name the first, the r-th and the last view"
+   },
+   {
+    "marker": "VG, PDD, PCD, ME, D, AW, IV1SC, IVRSC, IVVSC, CSC",
+    "kind": "identity",
+    "at": "captions of the nodes and tables",
+    "what": "abbreviations of the modules and data, defined only in the caption"
+   },
+   {
+    "marker": "Feature Clusters, Association, Sample Clusters, Results",
+    "kind": "section",
+    "at": "bottom of the dashed stage frames",
+    "what": "title the four stages"
+   },
+   {
+    "marker": "vertical ellipses",
+    "kind": "identity",
+    "at": "between the three view lanes",
+    "what": "more views in between"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "small 3D axes with a curved arrow in a framed box",
+    "stands_for": "the latent subspace of one view in which sample clusters are reordered",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "tilted plane with 3D axes and scattered coloured squares",
+    "stands_for": "the clustering embedding",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "pair of block arrows, blue pointing left and orange pointing right",
+    "stands_for": "mutual exclusion between shared and specific determinants",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "a tilted plane with 3D axes and a few green, pink and purple squares as the clustering embedding",
+    "parts": [
+     "plane",
+     "axes",
+     "coloured squares"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "incomplete-view-matrix",
+    "drawn_as": "a view's data as a frame of vertical coloured bars with dashed empty bars for missing samples",
+    "parts": [
+     "coloured bars",
+     "dashed empty bars"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "multi-view-lanes",
+    "drawn_as": "three horizontal lanes in green, pink and purple with vertical ellipses between them, running through every stage",
+    "parts": [
+     "view lanes",
+     "ellipses"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at View 1 Data at the top left, follows the green lane (with the pink and purple lanes below) through Feature Clusters, Association and Sample Clusters, then the grey fused path AW, CSC, Embedding to the Results cards."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Four black dashed stage frames in a row (Feature Clusters, Association, Sample Clusters, Results), each titled in bold italic grey at its bottom. Three view lanes (green, pink, purple, with vertical ellipses) run through them left to right, fuse into the grey D, AW and CSC blocks and end in four result cards. Inside Feature Clusters a blue dashed frame holds the shared side and an orange dashed frame the specific side, linked by pairs of ME block arrows.",
+  "panel_count": 1,
+  "lanes": "3 aligned view lanes (View 1, View r, View v) through all four stages",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.21,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b8dbb3",
+    "used_for": "view 1 lane: data bars, VG node, octagon C_1, IV1SC rows, result squares"
+   },
+   {
+    "hex": "#facccd",
+    "used_for": "view r lane: data bars, VG node, octagon C_r, IVRSC rows, result squares"
+   },
+   {
+    "hex": "#b380b3",
+    "used_for": "view v lane: data bars, VG node, octagon C_v, IVVSC rows, result squares"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "grey-blue rounded backgrounds of D and AW"
+   },
+   {
+    "hex": "#adb9ca",
+    "used_for": "inner circles of D, AW and the shared determinant C"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "cells of the CSC table"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "blue ME arrow and the blue dashed sub-frame"
+   },
+   {
+    "hex": "#cc9980",
+    "used_for": "orange-brown ME arrow and the orange dashed sub-frame"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy outlines of the Space boxes and result cards"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt navy or black outlines, 1.25 pt view-coloured frames around the data, black dashed stage frames",
+  "font": "Calibri sans, mostly bold, 5.5-9.5 pt, Cambria Math italic subscripts; stage titles in bold italic grey",
+  "corners": "mixed",
+  "arrows": "thin orthogonal arrows in the view colour; grey arrows after fusion; blue and orange block arrows for ME",
+  "rendering": "flat-vector",
+  "effects": "soft shadow under the Embedding plane",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per view: green = view 1, pink = view r, purple = view v, kept on its data, VG node, specific determinant, arrows, sample-cluster table, subspace and result squares; grey = fused or shared parts (C, D, AW, CSC); blue dashed frame = shared determinants; orange dashed frame = specific determinants",
+  "line_style_means": "black dashed rectangles = pipeline stages; blue and orange dashed rectangles = the two kinds of determinants; coloured thin arrows = a view's data flow; grey arrows = fused flow; dashed empty bars in the data = missing samples",
+  "shape_means": "rounded square with a circle = view guidance node; octagon = view-specific cluster centre; grey circle = shared or fused unit; striped grid = sample clusters of an incomplete view; framed axes = latent subspace",
+  "marker_means": "subscripts 1, r, v name the views; abbreviations are decoded in the caption; vertical ellipses stand for more views",
+  "emphasis": "the three colour lanes and the grey fusion blocks; the bold italic stage titles",
+  "reusable_patterns": [
+   "three colour-coded view lanes through all stages, turning grey where fused",
+   "dashed stage frames with italic titles at the bottom",
+   "incomplete data drawn as bars with dashed empty bars",
+   "pair of opposed block arrows labelled ME between two dashed sub-frames",
+   "striped grids whose coloured rows mark present samples",
+   "small framed axes for latent subspaces and a tilted plane for the embedding",
+   "vertical ellipses between lanes to say that there are v views"
+  ],
+  "weaknesses": [
+   "the abbreviations are defined only in the caption",
+   "the long coloured lines from each view to its specific determinant cross the whole first stage",
+   "5.5-9.5 pt text with many small glyphs"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "stage frames, nodes, tables and arrows",
+   "bar matrices of incomplete data",
+   "result cards"
+  ],
+  "unknown": [
+   "the small axis glyphs, the embedding plane and the ME block arrows are bitmaps of unknown origin (clip art or drawn elsewhere)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "three view data frames with coloured bars and dashed missing bars",
+   "VG nodes P1 Pr Pv",
+   "shared determinant C with PDD",
+   "octagon cluster centres C1 Cr Cv with PCD",
+   "ME arrow pairs",
+   "association block D",
+   "striped sample-cluster tables IV1SC IVRSC IVVSC",
+   "latent subspace axis boxes",
+   "AW block",
+   "CSC table",
+   "embedding plane",
+   "four result cards",
+   "dashed stage frames"
+  ],
+  "sample_data": "table",
+  "keywords": [
+   "incomplete multi-view clustering",
+   "coupled distribution learning",
+   "linear overhead",
+   "feature clusters",
+   "sample clusters",
+   "mutual exclusion",
+   "view guidance",
+   "adaptive weighting",
+   "association"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "matrix-cell-grid",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "colour-lanes-merge-to-grey",
+    "what": "each view keeps one colour as a lane through every stage and the colour gives way to grey where the lanes are fused"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each view a colour that runs as a lane through every stage and turns grey where the views are fused; frame the stages with dashed rectangles titled at the bottom, and draw incomplete data as bars with dashed gaps.",
+  "suits": "Multi-view, multi-modal or multi-client pipelines where parallel streams of the same kind are processed separately and then fused."
+ },
+ "tags": [
+  "colour-lanes",
+  "dashed-stage-frames",
+  "pastel-nodes",
+  "striped-grids",
+  "dense-small-glyphs",
+  "left-right-pipeline"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "It firstly bifurcates feature clusters on each incomplete view and magnifies the discrimination between determinants via mutual exclusion learning.",
+   "all sample clusters are reordered in latent subspace and, following adaptive weighting, mapped to a common one"
+  ]
+ },
+ "summary": "BACDL is an incomplete multi-view clustering algorithm that bifurcates the feature clusters of each view into perspective-shared and perspective-specific determinants, alienates them by mutual exclusion, couples view guidance into the clusters by distribution learning, and bridges the views through an association between feature and sample clusters, at linear cost. Figure 1 draws the pipeline as four dashed stage frames (Feature Clusters, Association, Sample Clusters, Results) crossed by three colour-coded view lanes: green View 1, pink View r and purple View v, each starting as a bar matrix with dashed missing bars. The lanes turn grey where they are fused: the shared determinant C, the association block D, the adaptive-weighting block AW and the common table CSC, which leads to an embedding and four result cards.",
+ "summary_zh": "BACDL是不完整多视图聚类算法：把特征簇分为视角共享与特有的决定因素，用互斥学习拉开差异，经关联块D连接各视图，线性开销。图1用四个虚线阶段框和绿、粉、紫三条视图色带表示，色带在C、D、AW、CSC处融合为灰色。",
+ "confidence": "high",
+ "notes": "The four dashed stage frames are treated as stage containers of one pipeline (panel_count 1, with three view lanes) rather than as panels. The roles of the ME arrow pair and of the lines from the VG nodes to C are read from the caption and the drawn arrows. The index lists 7 small bitmaps (axis glyphs, embedding plane, block arrows).",
+ "venue": "ICML25"
+}

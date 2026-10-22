@@ -1,0 +1,511 @@
+{
+ "paper_id": "cvpr25-0026",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "IncEventGS",
+  "one_liner": "Incremental pose-free 3D Gaussian Splatting reconstruction from a single event camera that jointly optimises Gaussians and a continuous camera trajectory.",
+  "domain": [
+   "event cameras",
+   "3D Gaussian splatting",
+   "pose-free reconstruction"
+  ],
+  "subfield": "vision",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "a differentiable-rendering loop drawn as one scene: Gaussians and a continuous camera trajectory render two brightness images whose log difference is compared with accumulated events by a loss, with black operation arrows, blue gradient arrows and a bootstrapping loop with a depth model",
+  "argues": "Gaussians and a continuous camera trajectory are optimised jointly from chunks of an event stream by comparing rendered with measured brightness change, bootstrapped by a pretrained depth model.",
+  "subject": "An event-stream chunk, the 3D Gaussian scene, a camera trajectory with control knots, rendered brightness images, event losses and a depth-model bootstrapping loop",
+  "elements": [
+   {
+    "name": "3D Gaussians G_θ",
+    "type": "module",
+    "role": "scene representation that is rendered and optimised by gradients",
+    "drawn_as": "large greyscale Gaussian splat of a room made of dots, label with a blue italic G_θ",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Input Event Stream",
+    "type": "data",
+    "role": "asynchronous events, cut into chunks along time",
+    "drawn_as": "dark-outlined cuboid filled with red and blue dots under a Time arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "chunk between t_k and t_k+Δt",
+    "type": "region",
+    "role": "the events integrated for one pair of close timestamps",
+    "drawn_as": "orange-outlined sub-cuboid inside the event stream, timestamps labelled under it",
+    "container": "Input Event Stream",
+    "is_contribution": null
+   },
+   {
+    "name": "Accumulation",
+    "type": "operation",
+    "role": "integrates the events of the chunk into an image",
+    "drawn_as": "circled Σ on a black down arrow from the event stream to E(x)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "E(x)",
+    "type": "data",
+    "role": "measured event image of the chunk",
+    "drawn_as": "image of a room in red and blue edges, bold label below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Ê(x)",
+    "type": "data",
+    "role": "event image synthesised from the two rendered brightness images",
+    "drawn_as": "image of the room in red and blue edges next to E(x), bold label with a hat",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "MSE/SSIM Loss",
+    "type": "operation",
+    "role": "photometric loss between the synthesised and the measured brightness change (caption)",
+    "drawn_as": "red circled minus between E(x) and Ê(x), with L_event and L_SSIM below on a black down arrow and a blue up arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Î_k and Î_k+Δt",
+    "type": "data",
+    "role": "two brightness images rendered from the Gaussians at the two poses",
+    "drawn_as": "greyscale room renders on the image planes of two camera frustums",
+    "container": "Continuous Camera Trajectory Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Log Difference",
+    "type": "operation",
+    "role": "difference of the two rendered images in the log domain",
+    "drawn_as": "black circled minus between the two frustums",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Continuous Camera Trajectory Model",
+    "type": "module",
+    "role": "continuous camera path defined by learnable control knots; two sampled points give the poses T_k and T_k+Δt",
+    "drawn_as": "thick black curve with red control-knot dots labelled T_n-2, T_n-1, T_n in blue, black sampled points, a thin dashed curve with red dots for the initialised path",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Boot-Strapping",
+    "type": "operation",
+    "role": "loop between the Gaussians and a depth model that initialises the system",
+    "drawn_as": "two blue curved arrows around the bold word",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Pretrained Marigold Model",
+    "type": "module",
+    "role": "pretrained depth estimation model that predicts depth from the rendered image during initialisation (caption)",
+    "drawn_as": "five vertical dark-teal bars forming a U, caption under it; dashed arrows in and out",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "key: Initialization, Operation Flow, Gradient Flow, Optimized Traj., Initialized Traj., X Learnable, Control Knot, Sampled Point, Accumulation, Log Difference, MSE/SSIM Loss",
+    "type": "label",
+    "role": "decodes arrow styles, point glyphs and operator glyphs",
+    "drawn_as": "unframed column of eleven sample marks with words at the right edge",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Event Stream",
+    "to": "E(x)",
+    "what": "the chunk is accumulated into an image through the circled Σ",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D Gaussians G_θ",
+    "to": "Î_k and Î_k+Δt",
+    "what": "images rendered at the two camera poses; two black arrows down to the frustums",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Î_k and Î_k+Δt",
+    "to": "3D Gaussians G_θ",
+    "what": "gradient flow back to the Gaussians, blue arrows parallel to the black ones",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Continuous Camera Trajectory Model",
+    "to": "Î_k and Î_k+Δt",
+    "what": "the frustums sit on two sampled points of the curve, which give the render poses",
+    "kind": "control",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Î_k and Î_k+Δt",
+    "to": "Ê(x)",
+    "what": "the log difference of the two renders gives the synthesised event image; black arrow towards Ê(x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "E(x)",
+    "to": "MSE/SSIM Loss",
+    "what": "measured side of the comparison",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Ê(x)",
+    "to": "MSE/SSIM Loss",
+    "what": "synthesised side of the comparison",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "MSE/SSIM Loss",
+    "to": "Ê(x)",
+    "what": "gradient flow back from L_event and L_SSIM (blue up arrow) and on to the rendered images (blue right arrow)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Î_k+Δt",
+    "to": "Pretrained Marigold Model",
+    "what": "initialisation: the rendered image is passed to the depth model, dashed arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pretrained Marigold Model",
+    "to": "3D Gaussians G_θ",
+    "what": "the predicted depth map initialises the Gaussians, dashed arrows via the depth map",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "t_k, t_k+Δt",
+    "kind": "identity",
+    "at": "under the orange chunk of the event stream",
+    "what": "name the two close timestamps that bound the chunk"
+   },
+   {
+    "marker": "T_k, T_k+Δt, T_n-2, T_n-1, T_n",
+    "kind": "identity",
+    "at": "on the trajectory",
+    "what": "name the poses at the sampled points and the control knots"
+   },
+   {
+    "marker": "Î_k, Î_k+Δt, E(x), Ê(x)",
+    "kind": "identity",
+    "at": "beside the images",
+    "what": "name the rendered brightness images and the measured and synthesised event images"
+   },
+   {
+    "marker": "L_event, L_SSIM",
+    "kind": "identity",
+    "at": "under the loss node",
+    "what": "name the loss terms"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "3D Gaussian splat of a room (door, window, sofa, ottomans) as grey dots",
+    "content": "point-cloud",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "193 x 150 pt greyscale render, no frame, the largest item"
+   },
+   {
+    "what": "event stream drawn as a box of red and blue dots",
+    "content": "other",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "dark-outlined cuboid along a Time arrow with an orange chunk"
+   },
+   {
+    "what": "event images of the room: measured E(x) and synthesised Ê(x), red and blue edges on white",
+    "content": "other",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two same-sized tiles side by side with a red minus node between them"
+   },
+   {
+    "what": "rendered brightness images of the room at two poses",
+    "content": "3d-render",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "greyscale renders on the image planes of two black camera frustums"
+   },
+   {
+    "what": "colour depth map of the room",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "warm-to-cool depth map at the top right above the depth network"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "five vertical bars forming a U",
+    "stands_for": "the pretrained Marigold depth model",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "circle with Σ, circle with a minus, red circle with a minus",
+    "stands_for": "accumulation, log difference, MSE/SSIM loss",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "camera frustum: a pyramid with an image plane",
+    "stands_for": "a camera at a sampled pose",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "point-cloud",
+    "drawn_as": "greyscale Gaussian splat render of a room in dots as the central scene",
+    "parts": [
+     "dot cloud"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "red circled minus as the loss node between measured and synthesised images, with blue arrows running back along the links next to the black operation arrows",
+    "parts": [
+     "loss node",
+     "L_event and L_SSIM",
+     "blue gradient arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "five vertical bars of falling then rising height as a glyph for the depth network, no box",
+    "parts": [
+     "bars"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "blue symbols (G_θ, T_n-2 to T_n) for learnable parameters, decoded by the key entry X Learnable; no frozen marker",
+    "parts": [
+     "blue labels",
+     "key entry"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the label 3D Gaussians G_θ and the event stream at the left, goes down through accumulation to E(x) and the loss, along the frustums on the trajectory at the bottom right, and finally up to the bootstrapping loop and depth model; the key at the right decodes the arrows."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A single free-form drawing: the large greyscale Gaussian scene fills the upper middle, the event stream with its Time arrow sits at the left, below it the measured and synthesised event images and the loss, the camera trajectory curves along the bottom right under two frustums, the bootstrapping loop with the depth model is at the upper right, and a key of arrow and symbol styles runs down the right edge.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.96,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c00000",
+    "used_for": "control knots, the MSE/SSIM loss symbol, trajectory dots"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "gradient-flow arrows and the blue learnable labels (G_θ, T_n-2 to T_n)"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "dark-teal bars of the Marigold depth model"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "bright blue curved arrows of the bootstrapping loop"
+   },
+   {
+    "hex": "#008dc1",
+    "used_for": "second blue of the bootstrapping arrows"
+   },
+   {
+    "hex": "#ff9400",
+    "used_for": "orange outline of the event chunk (stroke)"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy outline of the event-stream cuboid (stroke)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "operation-flow arrows, frustum lines, trajectory curve (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt black arrows and frustum lines, 1.75 pt for the orange chunk and the cuboid edges, 0.25 to 0.5 pt for the dashed initialised curve and thin lines",
+  "font": "sans (Microsoft YaHei) 8 pt labels, 6 pt subscripts, bold 8 pt for Boot-Strapping, 11 pt minus signs; Cambria Math italics for the symbols, the learnable ones in blue",
+  "corners": "square",
+  "arrows": "black solid arrows with filled heads for operation flow, parallel blue arrows for gradient flow, black dashed arrows for initialisation, two blue curved arrows for the bootstrapping loop",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "other",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue = learnable parameters (G_θ, control-knot poses) and gradient flow; red = control knots and the MSE/SSIM loss symbol; orange outline = the event chunk between two timestamps; red and blue dots in the event images are the two event types (not decoded in the key); dark teal = the pretrained depth network",
+  "line_style_means": "black solid arrow = operation flow; blue solid arrow = gradient flow; black dashed arrow = initialization; thick black curve with red dots = optimized trajectory; thin dashed curve with red dots = initialized trajectory",
+  "shape_means": "cuboid = event stream over time; pyramid with an image plane = camera frustum at a pose; circled Σ = accumulation; circled minus = log difference (black) or the loss (red); five bars in a U = pretrained depth network",
+  "marker_means": "t_k and t_k+Δt = two timestamps; T_k and T_k+Δt = poses at them; T_n-2, T_n-1, T_n in blue = learnable control knots; Î = rendered brightness image; E(x) and Ê(x) = measured and synthesised event images; L_event and L_SSIM = loss terms",
+  "emphasis": "The large Gaussian scene dominates the centre; blue gradient arrows and the red minus node mark where optimisation happens; the bootstrapping loop is the only pair of curved arrows.",
+  "reusable_patterns": [
+   "key at the right edge decoding arrow styles, point glyphs and operator glyphs",
+   "black operation arrow and blue gradient arrow drawn in parallel on the same link",
+   "event stream as a cuboid along a Time arrow with an orange chunk between two timestamps",
+   "camera frustums with rendered images attached to sampled points of a curved trajectory with red control knots",
+   "optimised trajectory as a thick curve and initialised trajectory as a thin dashed curve with red knots",
+   "circled operator glyphs on arrows, the loss one in red",
+   "two curved arrows around a bold word for a bootstrapping loop",
+   "greyscale Gaussian point-cloud render as the central scene"
+  ],
+  "weaknesses": [
+   "the eleven-entry key uses tiny glyphs that are hard to match to the drawing",
+   "the loss labels L_event and L_SSIM sit below the images, far from the red minus node they belong to"
+  ]
+ },
+ "resources": {
+  "own": [
+   "event stream box and event images",
+   "Gaussian splat render of a room",
+   "rendered brightness images",
+   "depth map"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "frustums, trajectory curves, arrows and operator glyphs",
+   "depth-network bar glyph",
+   "key"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "greyscale 3D Gaussian point-cloud scene",
+   "event stream cuboid with an orange chunk",
+   "event images E(x) and Ê(x) in red and blue",
+   "camera frustums with rendered images on a curved trajectory",
+   "circled operators Σ and minus",
+   "bootstrapping loop with depth-model bars and depth map",
+   "key of arrow and symbol styles"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "event camera",
+   "3D Gaussian splatting",
+   "pose-free",
+   "camera trajectory",
+   "bootstrapping",
+   "depth estimation",
+   "photometric loss",
+   "tracking and mapping"
+  ],
+  "tags": [
+   "notation-key",
+   "flow-type-arrows",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "camera-frustums-on-trajectory",
+    "what": "camera frustums drawn as pyramids with image planes attached to sampled points of a curved camera path with marked control knots"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a render-and-compare method as one scene: the learned scene in the middle, the measured input and the synthesised output side by side with a loss node, black operation arrows and blue gradient arrows in parallel along each link, and every arrow and glyph decoded in a key at the edge.",
+  "suits": "Methods trained by rendering and comparing, such as NeRF, 3D Gaussian splatting, SLAM or inverse graphics, where gradients flow back through a renderer to scene and camera parameters."
+ },
+ "tags": [
+  "single free-form scene",
+  "large greyscale point cloud",
+  "key column at the right",
+  "black and blue parallel arrows",
+  "red and blue event images",
+  "sans labels with italic symbols",
+  "camera frustums"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "IncEventGS processes incoming event stream by dividing it into chunks and representing the camera trajectory as a continuous model.",
+   "Two brightness images are rendered from 3D-GS at the corresponding poses",
+   "a pre-trained depth estimation model estimates depth from the rendered images to bootstrap the system"
+  ]
+ },
+ "summary": "IncEventGS is an incremental, pose-free 3D Gaussian Splatting reconstruction algorithm that uses a single event camera. Figure 1 draws its pipeline as one scene. A large greyscale Gaussian render of a room sits in the middle. At the left, an event-stream cuboid along a Time arrow has an orange chunk between two timestamps that is accumulated into an event image E(x). At the lower right, a continuous camera trajectory with red control knots carries two camera frustums whose rendered brightness images are subtracted in the log domain to give a synthesised event image, compared with E(x) through an MSE/SSIM loss. Black arrows are operations, blue arrows gradients and dashed arrows initialisation through a bootstrapping loop with a pretrained Marigold depth model, all decoded in a key.",
+ "summary_zh": "IncEventGS 用单个事件相机增量重建 3D 高斯。图以灰度高斯点云为中心：左侧事件流累积成 E(x)，右下轨迹上的两个视锥渲染亮度图并取对数差，与 E(x) 比较损失；黑箭头运算、蓝箭头梯度、虚线为深度初始化。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (model-anatomy, stage-pipeline) with the objective-graph variant. The red and blue dots in the event stream and the event images are not decoded in the key (probably the two event polarities). The digest's 13 bitmaps include the Gaussian render (193 x 150 pt), the depth map, the event-stream box, the event images and the rendered images; the key's small glyphs are bitmaps of 11 to 13 pt. The Marigold depth network is a five-bar glyph, not a labelled box. The index calls the type diagram/workflow; the drawing is one scene rather than a flowchart.",
+ "venue": "CVPR25"
+}

@@ -1,0 +1,648 @@
+{
+ "paper_id": "neurips25-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LAGER",
+  "one_liner": "A post-hoc, plug-and-play framework that aggregates cross-layer score-token logits of a frozen LLM judge into an expected score aligned with human ratings.",
+  "domain": [
+   "LLM-as-a-judge",
+   "evaluation alignment",
+   "internal representations"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "a problem panel on two scoring prompts, then a decoder-only LLM chain with one block zoomed into its layers and read out through a shared LM head",
+  "argues": "Equal vanilla scores hide different score distributions, so reading all layers' score-token logits and taking the expected score judges responses more finely and closer to human scores.",
+  "subject": "Two prompts with the same vanilla score but different score histograms, then LAGER's layer-wise logit aggregation inside a decoder-only LLM.",
+  "elements": [
+   {
+    "name": "Scoring Evaluation Prompt A",
+    "type": "data",
+    "role": "a judging prompt: instruction, response and a request for a score from 1 to 9",
+    "drawn_as": "dashed black text box under a blue document icon; instruction in green, response in orange",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Scoring Evaluation Prompt B",
+    "type": "data",
+    "role": "the same instruction as A with a different response",
+    "drawn_as": "same dashed text box and icon; response in blue",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "unlabelled robot head (the LLM judge)",
+    "type": "module",
+    "role": "reads a prompt and returns a score",
+    "drawn_as": "grey-blue robot head with an antenna and cyan eyes, once in the middle and once beside each output score",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Score: 7",
+    "type": "data",
+    "role": "the vanilla score returned for each prompt",
+    "drawn_as": "white box with a black outline beside each output robot, with a thick down arrow below it",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "The same score but a big distribution gap !!!",
+    "type": "label",
+    "role": "states what the two histograms show",
+    "drawn_as": "bold dark-blue text between the two histograms",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Reference Score / Vanilla Score boxes",
+    "type": "instance",
+    "role": "compare the vanilla score with the reference score: 7 and 7 under the left case (tick), 5 and 7 under the right case (cross)",
+    "drawn_as": "two small dashed blue boxes in a pale-blue dashed band with a document-and-magnifier icon between them; green tick and red cross badges at the box corners",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "a scoring evaluation prompt",
+    "type": "data",
+    "role": "input of the judge in the framework",
+    "drawn_as": "blue document icon with a blue arrow to the robot; a Score: 7 box above the robot",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Inference process",
+    "type": "container",
+    "role": "what happens inside the judge LLM when it gives a score",
+    "drawn_as": "grey rounded frame with a navy outline and a navy title tag on its top edge",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "Decoder-only Model",
+    "type": "container",
+    "role": "the LLM backbone, kept frozen according to the abstract",
+    "drawn_as": "light-green outlined frame with a title tag, holding Embedding, N x Decoder Layer, LM_Head and Soft-max",
+    "container": "Inference process",
+    "is_contribution": false
+   },
+   {
+    "name": "generated tokens: Score:",
+    "type": "data",
+    "role": "tokens generated so far; the next token is the score",
+    "drawn_as": "dashed green box with a blue arrow into Embedding",
+    "container": "Decoder-only Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Embedding",
+    "type": "module",
+    "role": "first block of the model chain",
+    "drawn_as": "blue gradient trapezoid",
+    "container": "Decoder-only Model",
+    "is_contribution": false
+   },
+   {
+    "name": "N × Decoder Layer",
+    "type": "module",
+    "role": "the stack of decoder layers; opened up below by a dashed wedge",
+    "drawn_as": "green box",
+    "container": "Decoder-only Model",
+    "is_contribution": false
+   },
+   {
+    "name": "LM_Head (in the model chain)",
+    "type": "module",
+    "role": "maps the last hidden state to vocabulary logits",
+    "drawn_as": "orange gradient trapezoid",
+    "container": "Decoder-only Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Soft-max",
+    "type": "operation",
+    "role": "turns the last logits into token probabilities; the vanilla path ends in the score token 7",
+    "drawn_as": "tall grey rectangle",
+    "container": "Decoder-only Model",
+    "is_contribution": false
+   },
+   {
+    "name": "the score token: 7",
+    "type": "data",
+    "role": "the single token the vanilla path outputs",
+    "drawn_as": "dashed green box holding 7",
+    "container": "Inference process",
+    "is_contribution": false
+   },
+   {
+    "name": "Decoder Layer 1 ... Decoder Layer L with h_n^0 ... h_n^L",
+    "type": "module",
+    "role": "the layer chain opened up; the hidden state after every layer is kept",
+    "drawn_as": "pale-green rounded frame holding green boxes joined by blue arrows, hidden-state symbols between them and an ellipsis in the middle",
+    "container": "zoom of N × Decoder Layer",
+    "is_contribution": true
+   },
+   {
+    "name": "LM_Head (wide)",
+    "type": "module",
+    "role": "applies the head to the hidden states of all layers",
+    "drawn_as": "wide orange gradient trapezoid under the layer chain, fed by four dotted arrows",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Extracting the logits of candidate scores 𝕊 (1 to 9)",
+    "type": "operation",
+    "role": "picks the logits of the candidate score tokens out of the vocabulary logits",
+    "drawn_as": "wide grey bar with dotted arrows leaving it towards z_0, z_1, z_i, z_L",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "z_0, z_1, z_i, z_L",
+    "type": "data",
+    "role": "candidate-score logits of the layers",
+    "drawn_as": "bold symbols at the ends of four dotted arrows",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "z = Σ w_l z_l, P(s) = [SoftMax(z)]_s",
+    "type": "formula",
+    "role": "weighted sum of the layers' logits, then softmax gives the distribution over scores",
+    "drawn_as": "formula inside an orange dashed rounded box",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Final Score = E_{s~P(s)}[s]",
+    "type": "formula",
+    "role": "the expected score under that distribution is the fine-grained final score",
+    "drawn_as": "formula in an orange-outlined rounded box with a gold star icon",
+    "container": "(b)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Scoring Evaluation Prompt A / B",
+    "to": "unlabelled robot head (the LLM judge)",
+    "what": "prompt text, labelled input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "unlabelled robot head (the LLM judge)",
+    "to": "Score: 7",
+    "what": "one output score per prompt, labelled output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Score: 7",
+    "to": "probability histograms",
+    "what": "the probabilities of all candidate score tokens behind each score",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "probability histograms",
+    "to": "Reference Score / Vanilla Score boxes",
+    "what": "each case is checked against its reference score, tick for the left, cross for the right",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "a scoring evaluation prompt",
+    "to": "unlabelled robot head (the LLM judge)",
+    "what": "prompt text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "unlabelled robot head (the LLM judge)",
+    "to": "Inference process",
+    "what": "opens up the judge's inference",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "generated tokens: Score:",
+    "to": "the score token: 7",
+    "what": "forward pass through Embedding, N × Decoder Layer, LM_Head and Soft-max",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "N × Decoder Layer",
+    "to": "Decoder Layer 1 ... Decoder Layer L with h_n^0 ... h_n^L",
+    "what": "zoom into the layers",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "h_n^0 ... h_n^L",
+    "to": "LM_Head (wide)",
+    "what": "hidden state after each layer is read out by the same head",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LM_Head (wide)",
+    "to": "Extracting the logits of candidate scores 𝕊 (1 to 9)",
+    "what": "vocabulary logits of every layer",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Extracting the logits of candidate scores 𝕊 (1 to 9)",
+    "to": "z_0, z_1, z_i, z_L",
+    "what": "candidate-score logits per layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_0, z_1, z_i, z_L",
+    "to": "z = Σ w_l z_l, P(s) = [SoftMax(z)]_s",
+    "what": "logits are weighted and summed over layers",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "z = Σ w_l z_l, P(s) = [SoftMax(z)]_s",
+    "to": "Final Score = E_{s~P(s)}[s]",
+    "what": "expectation over the score distribution",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Better evaluation requires going beyond surface-level outputs",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "two responses get the same vanilla score 7 but have very different score histograms and different reference scores",
+    "verdict": "fails"
+   },
+   {
+    "label": "(b) The overview of the overall framework of LAGER",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "hidden states of all layers go through the LM head, their candidate-score logits are weighted and summed, softmax and expectation give the final score",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A / B",
+    "kind": "identity",
+    "at": "titles of the two prompts",
+    "what": "names the two scoring prompts"
+   },
+   {
+    "marker": "(a) / (b)",
+    "kind": "section",
+    "at": "captions under the two panels",
+    "what": "heads the problem panel and the framework panel, each followed by a sentence"
+   },
+   {
+    "marker": "Layer 1, Layer 2, Layer L; h_n^0 ... h_n^L; z_0 ... z_L",
+    "kind": "identity",
+    "at": "the zoomed layer chain and its read-outs",
+    "what": "names the layers and their hidden states and logits"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bar histograms of the probability of each candidate score token for scores 1 to 9, for prompts A and B",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "each in a dashed rounded frame with a pale grey-blue tint, cyan bars and tiny axes; the left one has a single tall bar at 7, the right one a flatter spread with 7 only slightly above its neighbours"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue document with text lines",
+    "stands_for": "the scoring evaluation prompt",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "grey-blue robot head with an antenna and cyan eyes",
+    "stands_for": "the LLM judge",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "document with a magnifying glass",
+    "stands_for": "checking the vanilla score against the reference",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "green check badge and red cross badge",
+    "stands_for": "vanilla score right or wrong",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "gold star",
+    "stands_for": "the final score",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a real judging prompt: the instruction 'How to improve work efficiency?', two different responses and the request to score from 1 to 9",
+    "form": "two dashed text boxes with coloured spans",
+    "real_values": true
+   },
+   {
+    "what": "reference versus vanilla scores: 7 against 7 (tick) and 5 against 7 (cross)",
+    "form": "two small dashed boxes with tick and cross badges",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "dashed black text box holding the whole prompt, with the instruction and the response in different text colours",
+    "parts": [
+     "task sentence",
+     "Instruction",
+     "Response",
+     "scoring request"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a cartoon robot head with an antenna stands for the judge; in (b) the same judge is opened up as a decoder-only model",
+    "parts": [
+     "robot head"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "decoder-only model as a left-to-right chain of Embedding trapezoid, a single 'N × Decoder Layer' box, LM_Head trapezoid and Soft-max; the layer box is expanded by a dashed wedge into Decoder Layer 1 ... L",
+    "parts": [
+     "Embedding",
+     "N × Decoder Layer",
+     "LM_Head",
+     "Soft-max",
+     "expanded layer chain"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "output-distribution-histogram",
+    "drawn_as": "a bar histogram of candidate-token probabilities placed under each model output",
+    "parts": [
+     "score axis 1-9",
+     "probability axis",
+     "bars"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "layer-readout",
+    "drawn_as": "dotted arrows from the hidden state after every layer down to one shared LM_Head, then to extracted score logits",
+    "parts": [
+     "hidden states h_n^0 ... h_n^L",
+     "LM_Head",
+     "logit extraction bar",
+     "z_0 ... z_L"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at prompt A in (a), follows the input arrows into the robot, the output arrows to Score: 7 and the histograms, then the tick and cross; (b) starts at the prompt icon, runs through the model chain, down the zoomed layers, the wide LM_Head and the logit bar to the formulas and the Final Score."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side, split by a vertical dashed line. (a) is a symmetric top-down problem scene: prompts A and B feed one robot, which hands the same score to two outputs, each above its own histogram, with a verdict band underneath. (b) is a top-down method: prompt and robot on top, a decoder-only chain inside a rounded frame, a dashed wedge opening one block into a layer chain, dotted arrows to a wide LM_Head, a logit bar, a formula box and the final score.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.8,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4472c4",
+    "used_for": "solid and dotted arrows, document icons, curved input and output lines"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "decoder-layer boxes (half opacity), outline of the Decoder-only Model frame, dashed token boxes, instruction text"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "pale-green frame of the expanded layer chain"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey rounded frame of the Inference process"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "Soft-max box and the logit-extraction bar"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "outlines of the formula box and the Final Score box, orange head blocks"
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "response A text"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "response B text"
+   },
+   {
+    "hex": "#1f4e79",
+    "used_for": "bold dark-blue statement and tag text"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy outline of the Inference process frame and tag"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "pale-blue dashed band under the histograms"
+   },
+   {
+    "hex": "#22d3d3",
+    "used_for": "histogram bars inside the bitmaps",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.75 pt dashed black on prompt boxes and histogram frames, 0.5-0.75 pt coloured outlines (navy, green, orange) on frames and boxes, 0.5 pt blue dotted arrows",
+  "font": "serif (Times New Roman / Nimbus Roman) 3.5-6 pt, mostly 4.5 pt, bold for titles and labels; bold italic math symbols (Cambria Math)",
+  "corners": "mixed",
+  "arrows": "blue solid arrows with filled heads for the forward pass, blue dotted arrows for per-layer read-outs and logit extraction, curved blue lines labelled input and output, thick block arrows from score to histogram",
+  "rendering": "flat-vector",
+  "effects": "gradient fills on the Embedding and LM_Head trapezoids; none elsewhere",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = prompt documents and arrows; green = the decoder-only model and its layers; orange = the LM head and the aggregation formulas that end in the final score; grey = softmax and logit extraction; text colours split the instruction (green) from response A (orange) and response B (blue)",
+  "line_style_means": "dashed black = text boxes and histogram frames; dashed green = token boxes; dashed wedge = zoom from one block to the layer chain; blue dotted arrows = read-out of every layer and logit extraction; solid blue = forward flow; orange dashed box = the aggregation formula",
+  "shape_means": "trapezoid = embedding and LM head; green rectangle = decoder layer; grey rectangle = softmax and logit extraction; rounded frame = scope of a process or model; robot head = the LLM judge",
+  "marker_means": "green tick = vanilla score equals the reference; red cross = it does not; (a) and (b) head the panels; A and B name the prompts",
+  "emphasis": "(a) names the problem in bold blue text and a tick and cross pair; in (b) the new parts are the wide LM_Head, the logit bar and the two orange boxes, and the star marks the final answer",
+  "reusable_patterns": [
+   "two prompts differing only in the response, giving the same score, to expose a hidden difference",
+   "histogram under each output to show the distribution behind a single score",
+   "tick and cross pair under the cases, against a reference value",
+   "dashed wedge opening one block of a model chain into its layer-by-layer chain",
+   "dotted arrows from every layer to one shared head",
+   "formula boxes stacked as a derivation ending in the final score with a star",
+   "colour-coded text spans for instruction and responses"
+  ],
+  "weaknesses": [
+   "3.5-4.5 pt text and symbols are tiny at print size",
+   "the wide LM_Head repeats the name of the small one with no visual cue that they are the same head",
+   "no arrows join the z labels, the formula box and the Final Score box, so that sequence is read by position"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real judging prompt with instruction and two responses",
+   "probability histograms of score tokens",
+   "the method's formulas"
+  ],
+  "stock": [
+   "blue document icon",
+   "robot head icon",
+   "document-with-magnifier icon",
+   "green check and red cross badges",
+   "gold star"
+  ],
+  "generated": [],
+  "drawn": [
+   "prompt boxes",
+   "model chain with gradient trapezoids",
+   "zoom wedge and layer chain",
+   "dotted read-out arrows",
+   "formula boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two dashed prompt boxes with coloured spans",
+   "robot head judge",
+   "score-token histograms",
+   "tick and cross badges",
+   "decoder-only model chain",
+   "zoomed layer chain with hidden states",
+   "wide LM_Head trapezoid",
+   "formula boxes with a star"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "LLM-as-a-judge",
+   "score distribution",
+   "cross-layer logits",
+   "expected score",
+   "human alignment",
+   "decoder-only",
+   "LM head",
+   "vanilla score"
+  ],
+  "tags": [
+   "prompt-template-card",
+   "highlighted-text-spans",
+   "distribution-glyph",
+   "verdict-marks",
+   "claim-banner",
+   "zoom-callout",
+   "layer-probe-taps",
+   "equation-boxes",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Expose a hidden difference with a two-case problem panel: two cases with the same surface output, a small histogram under each output, and a tick or cross against the reference. Then draw the fix as one model chain, a zoom wedge opening the repeated block, and dotted taps from every layer to a shared head.",
+  "suits": "Methods that read internal states or output distributions of a model, where a single surface output hides informative signal."
+ },
+ "tags": [
+  "two panels split by a dashed line",
+  "problem-then-method",
+  "dashed text boxes",
+  "histogram bitmaps",
+  "zoom wedge",
+  "Office colour scheme",
+  "serif text",
+  "tick-cross badges"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.3)",
+   "Method (p.4)"
+  ],
+  "evidence": [
+   "vanilla score overlooks informative score distributions by relying solely on the top-probability score token",
+   "instead of relying on a single token, the full probability distribution over score candidates can be leveraged",
+   "LAGER fully considers candidate score probabilities and aggregates cross-layer logits"
+  ]
+ },
+ "summary": "LAGER is a post-hoc, plug-and-play framework that improves how well an LLM judge's point-wise scores agree with human scores, without changing the frozen backbone. Figure 1 has two panels split by a dashed line. In (a), two prompts that differ only in the response go through one robot judge and both return Score: 7; histograms of the score-token probabilities underneath look very different, and a tick and a cross compare the vanilla score with the reference score. In (b), the decoder-only model is drawn as a chain (embedding, N decoder layers, LM head, softmax); a dashed wedge opens the layers, dotted arrows send every layer's hidden state to one LM head, candidate-score logits are extracted, weighted and summed, and the final score is the expected value.",
+ "summary_zh": "LAGER 是用 LLM 内部各层表示改进「LLM 评委」打分的后处理框架。图左(a)用两个同为 7 分、概率分布却迥异的提示说明问题；图右(b)展开解码器各层，取各层候选分数 logits 加权求和，再以期望得到最终分数。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The Embedding and LM_Head trapezoids are gradient-filled bitmaps in the extraction; they are modules, so they are listed as elements, not icons. The reference and vanilla score boxes are tied to prompts A and B by position only.",
+ "venue": "NeurIPS25"
+}

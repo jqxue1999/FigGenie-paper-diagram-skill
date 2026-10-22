@@ -1,0 +1,528 @@
+{
+ "paper_id": "icml25-0107",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Cur-MGAE",
+  "one_liner": "A masked graph autoencoder that scores edges by reconstruction difficulty and masks them from easy to hard on a self-paced schedule.",
+  "domain": [
+   "graph self-supervised learning",
+   "masked graph autoencoder",
+   "curriculum learning"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "three tinted regions (scheduler, curriculum masking, masked autoencoder) linked by redrawings of the same five-node toy graph at every step",
+  "argues": "Masking edges by a learned difficulty score, easy first and then harder as training proceeds, gives the graph autoencoder a better pretext task than random masking.",
+  "subject": "One toy graph passing through the mask scheduler, the curriculum masking module and the structure-aware masked autoencoder.",
+  "elements": [
+   {
+    "name": "Scheduler",
+    "type": "operation",
+    "role": "orders the curriculum from Easy to Hard while the schedule parameters increase",
+    "drawn_as": "thick black ruler arrow with five ticks, labelled Easy, Hard and the symbols for increasing",
+    "container": "Self-paced Mask Scheduler",
+    "is_contribution": true
+   },
+   {
+    "name": "five scheduler snapshots",
+    "type": "instance",
+    "role": "the edge set at successive stages: more and more edges become solid red",
+    "drawn_as": "five dashed rounded boxes in a row with the toy graph, joined by thin arrows",
+    "container": "Self-paced Mask Scheduler",
+    "is_contribution": true
+   },
+   {
+    "name": "Input Graph (A)",
+    "type": "instance",
+    "role": "the original graph",
+    "drawn_as": "dashed box with the toy graph in black solid edges and blue nodes",
+    "container": "Self-paced Mask Scheduler",
+    "is_contribution": false
+   },
+   {
+    "name": "Residual Graph (R = A - A_re)",
+    "type": "instance",
+    "role": "per-edge reconstruction residual used as the difficulty score",
+    "drawn_as": "same graph with a number between 0.1 and 0.9 printed on each edge",
+    "container": "Self-paced Mask Scheduler",
+    "is_contribution": true
+   },
+   {
+    "name": "Curriculum Edge Set (A^(t))",
+    "type": "instance",
+    "role": "the edges chosen for the current training stage",
+    "drawn_as": "same graph with chosen edges in solid red and the rest dashed black",
+    "container": "Self-paced Mask Scheduler",
+    "is_contribution": true
+   },
+   {
+    "name": "mask ratio upper-bound",
+    "type": "data",
+    "role": "limits how many edges may be masked",
+    "drawn_as": "small grey dashed box",
+    "container": "Complexity-guided Curriculum Masking",
+    "is_contribution": null
+   },
+   {
+    "name": "split ratio",
+    "type": "data",
+    "role": "divides the mask budget between the two selection routes",
+    "drawn_as": "blue rounded box with arrows up and down",
+    "container": "Complexity-guided Curriculum Masking",
+    "is_contribution": null
+   },
+   {
+    "name": "1 Difficulty-based Edge Selection",
+    "type": "module",
+    "role": "picks edges by difficulty: the curriculum set A^(t) becomes A_DES",
+    "drawn_as": "pink rounded box with two toy graphs and an arrow between them",
+    "container": "Complexity-guided Curriculum Masking",
+    "is_contribution": true
+   },
+   {
+    "name": "2 Random-based Edge Selection",
+    "type": "module",
+    "role": "picks random edges from the remaining ones: A - A_DES becomes A_RES",
+    "drawn_as": "grey-lavender rounded box with two toy graphs and an arrow between them",
+    "container": "Complexity-guided Curriculum Masking",
+    "is_contribution": true
+   },
+   {
+    "name": "Masked Edge Set (A_mask = A_DES + A_RES)",
+    "type": "instance",
+    "role": "the union of both selections, the edges to hide",
+    "drawn_as": "dashed box with the toy graph in gold edges",
+    "container": "Complexity-guided Curriculum Masking",
+    "is_contribution": true
+   },
+   {
+    "name": "Input (A~ = A - A_mask)",
+    "type": "instance",
+    "role": "the graph with masked edges removed, fed to the autoencoder",
+    "drawn_as": "dashed box with orange solid edges and black dashed masked edges",
+    "container": "Structure-aware Masked Autoencoder",
+    "is_contribution": false
+   },
+   {
+    "name": "First Layer ... Last Layer",
+    "type": "module",
+    "role": "GNN encoder layers producing node embeddings",
+    "drawn_as": "two dashed boxes (orange then blue nodes) with small three-cell embedding stacks, separated by an ellipsis",
+    "container": "Structure-aware Masked Autoencoder",
+    "is_contribution": null
+   },
+   {
+    "name": "Cross-correlation decoder",
+    "type": "module",
+    "role": "turns node embeddings into edge predictions; includes an MLP",
+    "drawn_as": "dashed box with purple, blue and orange embedding stacks, crossing lines and a grey MLP box",
+    "container": "Structure-aware Masked Autoencoder",
+    "is_contribution": true
+   },
+   {
+    "name": "Reconstructed Graph (A_re)",
+    "type": "instance",
+    "role": "the predicted graph, with the predicted edges in purple",
+    "drawn_as": "dashed box with salmon nodes, orange and purple edges and a purple Predict label",
+    "container": "Structure-aware Masked Autoencoder",
+    "is_contribution": false
+   },
+   {
+    "name": "Reconstruction Loss",
+    "type": "operation",
+    "role": "compares the reconstructed graph with the input graph",
+    "drawn_as": "grey dashed double-headed arrow at the left edge with a grey label",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Graph (A)",
+    "to": "Residual Graph (R = A - A_re)",
+    "what": "encoder decoder: the graph is reconstructed and subtracted",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Residual Graph (R = A - A_re)",
+    "to": "Curriculum Edge Set (A^(t))",
+    "what": "sorted: edges ordered by residual",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "five scheduler snapshots",
+    "to": "Curriculum Edge Set (A^(t))",
+    "what": "the scheduler fixes how many edges are active at this stage",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Curriculum Edge Set (A^(t))",
+    "to": "mask ratio upper-bound",
+    "what": "the chosen set enters the masking module",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mask ratio upper-bound",
+    "to": "split ratio",
+    "what": "budget handed on",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "split ratio",
+    "to": "1 Difficulty-based Edge Selection and 2 Random-based Edge Selection",
+    "what": "splits the budget between the two routes",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "1 Difficulty-based Edge Selection",
+    "to": "2 Random-based Edge Selection",
+    "what": "the remaining edges A - A_DES",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "1 Difficulty-based Edge Selection and 2 Random-based Edge Selection",
+    "to": "Masked Edge Set (A_mask = A_DES + A_RES)",
+    "what": "both selections are united",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Masked Edge Set (A_mask = A_DES + A_RES)",
+    "to": "Input (A~ = A - A_mask)",
+    "what": "MASK: the selected edges are removed",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input (A~ = A - A_mask)",
+    "to": "Reconstructed Graph (A_re)",
+    "what": "through First Layer, Last Layer and the cross-correlation decoder, right to left",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reconstructed Graph (A_re)",
+    "to": "Input Graph (A)",
+    "what": "Reconstruction Loss",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Self-paced Mask Scheduler",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "Easy-to-Hard schedule snapshots and the path from input graph to residual graph to curriculum edge set",
+    "verdict": "ours"
+   },
+   {
+    "label": "Complexity-guided Curriculum Masking",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "mask ratio and split ratio feeding difficulty-based and random-based edge selection into the masked edge set",
+    "verdict": "ours"
+   },
+   {
+    "label": "Structure-aware Masked Autoencoder",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "masked input, first and last layer, cross-correlation decoder and reconstructed graph with the reconstruction loss",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2",
+    "kind": "order",
+    "at": "titles of the two edge-selection blocks",
+    "what": "difficulty-based selection first, random selection takes the remaining edges"
+   },
+   {
+    "marker": "A, R, A^(t), A_DES, A_RES, A_mask, A~, A_re",
+    "kind": "identity",
+    "at": "captions under every graph snapshot",
+    "what": "names which version of the adjacency matrix is shown"
+   },
+   {
+    "marker": "Easy, Hard",
+    "kind": "section",
+    "at": "ends of the Scheduler ruler",
+    "what": "marks the direction of the curriculum"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one five-node, seven-edge toy graph followed through the whole method",
+    "form": "the same node layout redrawn in about 20 dashed boxes, with solid, dashed and coloured edges, printed residual scores 0.1-0.9 and set names underneath",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "five blue nodes with straight edges; each GNN layer is another copy of the graph with node embeddings drawn as small three-cell stacks",
+    "parts": [
+     "nodes",
+     "edges",
+     "embedding stacks"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "ruler arrow with ticks labelled Easy and Hard above five snapshots that gain solid edges",
+    "parts": [
+     "ruler arrow",
+     "five snapshots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "chain of dashed rounded boxes from the masked input through first layer and last layer to a cross-correlation decoder and the reconstructed graph, flowing right to left",
+    "parts": [
+     "input",
+     "first layer",
+     "last layer",
+     "decoder",
+     "reconstruction"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "grey dashed double-headed arrow labelled Reconstruction Loss between the reconstructed graph and the input graph",
+    "parts": [
+     "dashed arrow",
+     "label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "grey rectangle labelled MLP inside the decoder with an arrow from the embedding stacks",
+    "parts": [
+     "MLP box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the Scheduler ruler at the top left, runs along the Input, Residual and Curriculum Edge Set graphs, crosses to the masking module on the right, goes down the MASK arrow, and then reads the bottom band from right to left to the reconstructed graph."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three tinted titled regions: the scheduler at top left, the curriculum masking module at top right, and the autoencoder as a full-width band below; the flow is U-shaped, left to right on top, down the MASK arrow, then right to left along the bottom, with a dashed loss arrow back up on the left.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.45,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dbe9e3",
+    "used_for": "green tint of the autoencoder region",
+    "opacity": 0.52
+   },
+   {
+    "hex": "#f6ecf8",
+    "used_for": "lavender tint of the scheduler region",
+    "opacity": 0.57
+   },
+   {
+    "hex": "#fce5d7",
+    "used_for": "peach tint of the curriculum masking region",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#fe817d",
+    "used_for": "pink block of the difficulty-based selection and salmon edges of A - A_DES",
+    "opacity": 0.29
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "blue-grey tint behind the random-based selection and the split ratio box",
+    "opacity": 0.34
+   },
+   {
+    "hex": "#2878b5",
+    "used_for": "blue nodes of the toy graphs"
+   },
+   {
+    "hex": "#c82423",
+    "used_for": "red edges chosen into the curriculum set"
+   },
+   {
+    "hex": "#d07a38",
+    "used_for": "orange edges of the unmasked input and the first-layer graph"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "dark blue edges and outlines of the last layer and the split ratio box"
+   },
+   {
+    "hex": "#b883d4",
+    "used_for": "purple predicted edges and decoder embedding stacks"
+   },
+   {
+    "hex": "#f0988c",
+    "used_for": "salmon nodes of the first layer and the reconstructed graph"
+   },
+   {
+    "hex": "#cfeaf1",
+    "used_for": "light cyan nodes of the last layer"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey MLP box and mask ratio upper-bound box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "dashed 0.5 pt dark-grey outlines on the snapshot boxes, solid 0.5-1 pt edges in the graphs coloured by role, thin black arrows",
+  "font": "sans (Calibri) 4.5-8.5 pt with bold 8.5 pt region titles; math serif (Cambria Math) for the matrix symbols",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads between boxes, one thick black arrow from the scheduler, a teal block arrow between the two selections, a grey dashed double-headed arrow for the loss",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red edges = edges in the curriculum set; pink block = difficulty-based selection and blue-grey block = random selection; gold edges = the masked edge set; orange = visible edges and first-layer features; blue = nodes and last-layer features; purple = predicted edges and decoder embeddings; region tints: lavender scheduler, peach masking, green autoencoder",
+  "line_style_means": "solid edge = edge in the current set; dashed edge = not in the set (unselected or masked); dashed rounded boxes = one snapshot or module; grey dashed double arrow = reconstruction loss",
+  "shape_means": "dashed rounded box = one graph snapshot or one module; three-cell vertical stack = node embedding; grey rectangle = MLP; blue rounded box = split ratio",
+  "marker_means": "1 and 2 = the two edge-selection routes in order; Easy to Hard ruler with the schedule symbols increasing; numbers on the residual graph = per-edge difficulty scores",
+  "emphasis": "the same toy graph returns in every step with only the edge styling changed; bold region titles and tints separate the three components; the thick black arrow and the teal block arrow are the only heavy arrows",
+  "reusable_patterns": [
+   "the same toy graph redrawn at every step with only the edge styling changed",
+   "Easy-to-Hard ruler arrow above a row of snapshots with a growing number of solid edges",
+   "edge scores printed on the residual graph",
+   "tinted titled regions with a U-shaped flow whose return row runs right to left",
+   "dashed grey double-headed arrow for a reconstruction loss between output and input",
+   "dashed rounded box around every snapshot",
+   "colour by role: red selected edges, orange visible edges, purple predicted edges"
+  ],
+  "weaknesses": [
+   "text as small as 4.5 pt",
+   "the bottom band flows right to left, which reverses the reading direction",
+   "the arrow from the Curriculum Edge Set to the mask ratio box is thin and easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "graph snapshots, dashed boxes, arrows and region tints",
+   "embedding stacks and decoder"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "five-node toy graph redrawn per step",
+   "Easy-to-Hard scheduler ruler with five snapshots",
+   "residual graph with edge scores",
+   "difficulty-based and random-based selection blocks",
+   "masked edge set box",
+   "layer graphs with embedding stacks",
+   "cross-correlation decoder with MLP",
+   "dashed reconstruction-loss arrow"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "masked graph autoencoder",
+   "curriculum learning",
+   "edge masking",
+   "self-supervised learning",
+   "graph representation",
+   "difficulty score",
+   "mask scheduler",
+   "link reconstruction"
+  ],
+  "tags": [
+   "small-multiples",
+   "toy-values-inline",
+   "equation-boxes",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "easy-to-hard-ruler",
+    "what": "a ruler-like arrow with ticks labelled Easy and Hard above a row of snapshots that gain solid edges, showing a curriculum schedule"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Follow one toy graph through every stage, redrawing it at the same position and changing only the edge styling (solid, dashed, coloured) with a score or set name printed underneath, so each module's effect on the data is visible; add an Easy-to-Hard ruler above a row of snapshots to show a curriculum.",
+  "suits": "Graph or structure-learning methods (masking, sampling, pruning, curriculum) where each module edits a set of edges or nodes of the same small graph."
+ },
+ "tags": [
+  "tinted-regions",
+  "dashed-snapshot-boxes",
+  "toy-graph",
+  "u-shaped-flow",
+  "office-look",
+  "math-captions"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Method (p.2)"
+  ],
+  "evidence": [
+   "a structure-aware masked autoencoder, a complexity-guided curriculum masking module, and a self-paced mask scheduler",
+   "each edge is assigned a difficulty score based on its reconstruction residual error",
+   "we design a self-paced mask scheduler to dynamically schedule the masking curriculum according to the training stage"
+  ]
+ },
+ "summary": "Cur-MGAE is a masked graph autoencoder that masks edges from easy to hard. Figure 1 follows one five-node toy graph through three tinted regions. In the lavender Self-paced Mask Scheduler, an Easy-to-Hard ruler sits above five snapshots with more and more solid edges, while the input graph becomes a residual graph with printed edge difficulty scores and then a sorted curriculum edge set. In the peach Complexity-guided Curriculum Masking, a mask-ratio upper bound and a split ratio feed difficulty-based and random-based edge selection, whose union is the masked edge set. In the green Structure-aware Masked Autoencoder, the masked graph passes the first layer, the last layer and a cross-correlation decoder to the reconstructed graph, tied back to the input by a dashed reconstruction-loss arrow.",
+ "summary_zh": "Cur-MGAE 按由易到难的顺序遮盖图的边。图 1 用同一张五节点小图贯穿三个色块：自步调度器给出由易到难的边集，课程遮盖模块按难度和随机两路选边形成遮盖边集，掩码自编码器重建图并以虚线箭头回到输入计算重建损失。",
+ "confidence": "high",
+ "notes": "Prior kind model-anatomy / end-to-end-network kept as primary; stage-pipeline and worked-walkthrough (state snapshots of the toy graph) added. The digest's strings for the formulas are garbled (math glyphs), so symbols were read from the picture. The three tinted titled regions are counted as panels although they are not framed. The SVG's drawn extent runs far outside the canvas (x from -7.7 to 610), probably clipped or hidden shapes; the preview shows only the figure.",
+ "venue": "ICML25"
+}

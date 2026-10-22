@@ -1,0 +1,661 @@
+{
+ "paper_id": "acl23-0032",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CTC-NAST",
+  "one_liner": "Non-autoregressive speech translation with two CTC-guided encoders plus prediction-aware encoding, cross-layer attention and curriculum learning.",
+  "domain": [
+   "speech translation",
+   "non-autoregressive generation",
+   "connectionist temporal classification"
+  ],
+  "subfield": "audio",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "(a) base two-encoder network, (b) a pair of Transformer layers with the added cross-layer attention, (c) the prediction-aware encoding computed on toy CTC distributions, with a key",
+  "argues": "An encoder-only speech translation model guided by CTC on source and target sides, made stronger by feeding predictions back (PAE), cross-layer attention for reordering, and mixing in ground truth.",
+  "subject": "Base two-encoder network, a Transformer layer pair with cross-layer attention, and prediction-aware encoding on toy CTC distributions.",
+  "elements": [
+   {
+    "name": "Speech Features",
+    "type": "data",
+    "role": "input speech feature sequence x",
+    "drawn_as": "plain text under an upward arrow",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Acoustic Encoder",
+    "type": "module",
+    "role": "encodes the speech; guided by the source CTC",
+    "drawn_as": "pale blue rounded box in a blue-outlined frame",
+    "container": "(a) source frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Source CTC",
+    "type": "module",
+    "role": "CTC head that predicts the source transcription",
+    "drawn_as": "pale yellow rounded box",
+    "container": "(a) source frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Source Sequence: I say hello world",
+    "type": "data",
+    "role": "transcription that the source CTC is trained against",
+    "drawn_as": "serif text at the top of the source frame",
+    "container": "(a) source frame",
+    "is_contribution": false
+   },
+   {
+    "name": "CTC Loss",
+    "type": "label",
+    "role": "loss between the Source CTC output and the source sequence",
+    "drawn_as": "label beside a double-headed vertical arrow",
+    "container": "(a) source frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Textual Encoder",
+    "type": "module",
+    "role": "second encoder, stacked on the acoustic one; guided by the target CTC (XCTC)",
+    "drawn_as": "salmon rounded box in a salmon-outlined frame",
+    "container": "(a) target frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Target CTC",
+    "type": "module",
+    "role": "CTC head that predicts the target translation",
+    "drawn_as": "mint green rounded box",
+    "container": "(a) target frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Target Sequence: Ich sage hallo welt",
+    "type": "data",
+    "role": "translation that the target CTC is trained against",
+    "drawn_as": "serif text at the top of the target frame",
+    "container": "(a) target frame",
+    "is_contribution": false
+   },
+   {
+    "name": "XCTC Loss",
+    "type": "label",
+    "role": "loss between the Target CTC output and the target sequence",
+    "drawn_as": "label beside a double-headed vertical arrow",
+    "container": "(a) target frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer k",
+    "type": "container",
+    "role": "an earlier encoder layer whose output feeds the cross-layer attention (as drawn)",
+    "drawn_as": "black rounded frame with title Layer k",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer j",
+    "type": "container",
+    "role": "a later layer of the textual encoder that gets the extra module",
+    "drawn_as": "black rounded frame with title Layer j",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Self-Attn (x2)",
+    "type": "module",
+    "role": "self-attention of each layer",
+    "drawn_as": "pale blue rounded box with a small three-arrow fan under it; in Layer j inside a dotted grey box",
+    "container": "Layer k, Layer j",
+    "is_contribution": false
+   },
+   {
+    "name": "Cross-Layer Attn",
+    "type": "module",
+    "role": "mimics decoder cross-attention; inserted between self-attention and feed-forward in chosen layers of the textual encoder",
+    "drawn_as": "salmon rounded box fed by a peach curve from the stream below Layer k",
+    "container": "Layer j",
+    "is_contribution": true
+   },
+   {
+    "name": "FFN (x2)",
+    "type": "module",
+    "role": "feed-forward module of each layer",
+    "drawn_as": "pale yellow rounded box with a residual loop",
+    "container": "Layer k, Layer j",
+    "is_contribution": false
+   },
+   {
+    "name": "...",
+    "type": "label",
+    "role": "the layers between k and j",
+    "drawn_as": "three dots on the vertical stream",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Word embedding",
+    "type": "data",
+    "role": "embedding of each vocabulary word (blank phi, Ich, Sage, Hallo, Welt)",
+    "drawn_as": "lilac circles in a column beside each distribution, with a times sign",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "CTC Predicted Distribution",
+    "type": "data",
+    "role": "predicted word probabilities for four positions",
+    "drawn_as": "four white columns of small blue squares of varied size on a blue-tinted grey panel, top value printed (0.8, 0.7, 0.6, 0.7)",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Reference Distribution",
+    "type": "data",
+    "role": "ground-truth alignment distribution for the same positions",
+    "drawn_as": "four columns of salmon squares on a salmon-tinted grey panel with dotted outline; positions 1 and 4 in red dashed outline",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Predicted Representation (1)",
+    "type": "data",
+    "role": "sum over words of embedding times predicted probability, one vector per position",
+    "drawn_as": "pink strip of four blue circles with a circled number 1",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Mixed Representation (2)",
+    "type": "data",
+    "role": "curriculum mix: positions 1 and 4 take the reference-based vector, 2 and 3 keep the predicted one",
+    "drawn_as": "pink strip of blue circles with two red-dashed salmon circles, circled number 2",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Softmax",
+    "type": "module",
+    "role": "turns the intermediate representation into the CTC distribution",
+    "drawn_as": "pale blue rounded box with a wide pale-blue arrow into the predicted distribution",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Layer Norm",
+    "type": "module",
+    "role": "normalises the intermediate representation before softmax and the residual",
+    "drawn_as": "mint green rounded box",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "unlabelled yellow circles",
+    "type": "data",
+    "role": "intermediate-layer representation h_l entering the module (named in the text, not in the figure)",
+    "drawn_as": "four yellow circles on a pink strip",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "circled plus with '1 or 2'",
+    "type": "operation",
+    "role": "adds the predicted (1) or mixed (2) representation to the residual stream",
+    "drawn_as": "circled plus fed by the two circled numbers and by a black loop from Layer Norm",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "key box",
+    "type": "container",
+    "role": "defines the glyphs: word embedding, the two distributions, the two sum-of-products circles, representations 1 and 2",
+    "drawn_as": "dotted frame at the top right of (c) with swatches and labels",
+    "container": "(c)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Speech Features",
+    "to": "Acoustic Encoder",
+    "what": "speech features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Acoustic Encoder",
+    "to": "Source CTC",
+    "what": "acoustic representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Source CTC",
+    "to": "Source Sequence: I say hello world",
+    "what": "CTC loss against the transcription",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "source frame",
+    "to": "Textual Encoder",
+    "what": "acoustic encoding passed on",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Textual Encoder",
+    "to": "Target CTC",
+    "what": "textual representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Target CTC",
+    "to": "Target Sequence: Ich sage hallo welt",
+    "what": "XCTC loss against the translation",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Self-Attn (Layer k)",
+    "to": "FFN (Layer k)",
+    "what": "layer stream, with residual loops around both",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer k",
+    "to": "Layer j",
+    "what": "stream continues through the omitted layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "stream below Layer k",
+    "to": "Cross-Layer Attn",
+    "what": "representation from the earlier layer enters the new attention (three heads)",
+    "kind": "attention",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Self-Attn (Layer j)",
+    "to": "Cross-Layer Attn",
+    "what": "stream continues to the new module, then to FFN",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "unlabelled yellow circles",
+    "to": "Layer Norm",
+    "what": "intermediate representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer Norm",
+    "to": "Softmax",
+    "what": "normalised representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Softmax",
+    "to": "CTC Predicted Distribution",
+    "what": "gives the predicted word probabilities",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Word embedding, CTC Predicted Distribution",
+    "to": "Predicted Representation (1)",
+    "what": "weighted sum of embeddings over the predicted distribution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Word embedding, Reference Distribution",
+    "to": "Mixed Representation (2)",
+    "what": "reference-based vectors replace positions 1 and 4 (red dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Predicted Representation (1)",
+    "to": "Mixed Representation (2)",
+    "what": "positions 2 and 3 keep the predicted vector (black dotted links)",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Predicted Representation (1), Mixed Representation (2)",
+    "to": "circled plus",
+    "what": "either one is added",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer Norm",
+    "to": "circled plus",
+    "what": "residual path",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "key box",
+    "to": "circles and squares in (c)",
+    "what": "glyph meanings",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "base architecture: acoustic encoder with source CTC, textual encoder with target CTC, both with losses",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "two Transformer layers; the cross-layer attention module sits between self-attention and FFN of the later one",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "prediction-aware encoding on toy distributions and the curriculum mixing variant, with a key",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2 (circled)",
+    "kind": "identity",
+    "at": "pink strips, key box and beside the circled plus",
+    "what": "name the predicted and mixed representations; the text refers to them as 1 and 2"
+   },
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "centred under each panel",
+    "what": "name the panels used in the caption"
+   },
+   {
+    "marker": "Layer j, Layer k",
+    "kind": "identity",
+    "at": "top right of each layer frame",
+    "what": "name the two layers"
+   },
+   {
+    "marker": "0.6 to 0.9",
+    "kind": "identity",
+    "at": "highlighted cell of each distribution column",
+    "what": "toy top probability of each position"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "source 'I say hello world' and target 'Ich sage hallo welt'",
+    "form": "serif text in the frames of (a) and as row labels (phi, Ich, Sage, Hallo, Welt) in (c)",
+    "real_values": true
+   },
+   {
+    "what": "toy CTC distributions over four positions with the top probability printed (0.6 to 0.9), predicted in blue and reference in salmon",
+    "form": "columns of small squares of varied size with numbers",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "each layer a black rounded frame with Self-Attn (blue) then FFN (yellow) stacked bottom-up and residual connections as black elbow loops on the right; layer normalisation left out",
+    "parts": [
+     "Self-Attn",
+     "FFN",
+     "residual loops",
+     "Layer k / Layer j frames"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "Cross-Layer Attn as a salmon box with three arrow heads fed by a peach curve from the stream under Layer k",
+    "parts": [
+     "Cross-Layer Attn box",
+     "peach curve",
+     "three input arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of four circles in pink strips standing for per-position vectors: yellow hidden states, blue predicted and salmon reference-based representations",
+    "parts": [
+     "pink strips",
+     "circles",
+     "red dashed replaced positions"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Speech Features at the bottom of (a), upwards; then (b) bottom-up through two layers; then (c) from the yellow circles via Softmax to the distributions and the circled plus."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three lettered panels side by side with letters centred underneath: (a) a narrow column of two framed encoder groups, (b) a narrow column of two layer frames, (c) the widest panel with two stacked grey distribution panels, two pink representation strips, a right-hand column (circled plus, Softmax, Layer Norm, yellow circles) and a dotted key box at the top right. Every panel flows upward.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.98,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c6def3",
+    "used_for": "blue modules: Acoustic Encoder, Self-Attn, Softmax; swatch of the CTC predicted distribution"
+   },
+   {
+    "hex": "#aed0ee",
+    "used_for": "outline of the blue modules and of the source frame; blue circles"
+   },
+   {
+    "hex": "#d6e8f6",
+    "used_for": "tint behind the predicted-distribution columns in (c)"
+   },
+   {
+    "hex": "#f7c1b4",
+    "used_for": "salmon modules: Textual Encoder, Cross-Layer Attn; reference distribution squares"
+   },
+   {
+    "hex": "#f3a694",
+    "used_for": "outline of the target frame and salmon modules; reference-based circles"
+   },
+   {
+    "hex": "#f9d3c9",
+    "used_for": "tint behind the reference-distribution columns in (c)"
+   },
+   {
+    "hex": "#fce3e7",
+    "used_for": "pink strips holding the representation circles"
+   },
+   {
+    "hex": "#fedea7",
+    "used_for": "yellow modules: Source CTC and FFN"
+   },
+   {
+    "hex": "#fed081",
+    "used_for": "outline of the yellow modules and the yellow hidden-state circles (inferred from area)"
+   },
+   {
+    "hex": "#c8e2d9",
+    "used_for": "green modules: Target CTC and Layer Norm"
+   },
+   {
+    "hex": "#cfbddb",
+    "used_for": "lilac circles: word embeddings"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey panels behind the distributions in (c) and the dotted box round Self-Attn in (b)"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red dashed outlines and dotted links on the positions replaced by the reference"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black for arrows, layer frames and columns; 0.5 pt coloured outlines on pastel boxes; a few thicker 1.25-1.5 pt strokes; dotted frames for the key and the upper panel, red dashed for replaced positions",
+  "font": "TikZ serif (Nimbus Roman, Computer Modern) 7 pt labels, 9 pt panel letters, 14.5 pt double-arrow glyphs; italic math symbols for phi, j, k",
+  "corners": "rounded",
+  "arrows": "black arrows with open line heads, elbow residual loops, double-headed vertical arrows for losses, peach curved arrows for cross-layer inputs, one wide pale-blue arrow from Softmax",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Pastel fill marks the role of a module inside a panel: blue = acoustic encoder, self-attention, softmax and the predicted distribution; yellow = CTC head and FFN; salmon = textual encoder, cross-layer attention and the reference distribution; mint = target CTC and layer norm; lilac = word embeddings; red dashed = positions replaced by the reference.",
+  "line_style_means": "Dotted frame = key box, the upper reference panel and the grouped self-attention; red dashed outline = replaced position; black elbow = residual path; peach curve = cross-layer input; double-headed arrow = loss between a head and its target text.",
+  "shape_means": "Rounded rectangle = module; large rounded frame = layer or encoder group; circle = vector; small square = probability cell; circled plus = addition.",
+  "marker_means": "Circled 1 and 2 name the predicted and mixed representations; letters (a)-(c) name panels; the printed 0.6-0.9 mark the top probability of each position.",
+  "emphasis": "The new blocks get their own panels and salmon or red accents (Cross-Layer Attn in (b); circled 1, 2 and the plus in (c)); the key box lets the diagram stay unlabelled.",
+  "reusable_patterns": [
+   "base architecture panel plus lettered zoom panels for each new block",
+   "dotted key box that defines glyph formulas (circle = sum of embedding times distribution)",
+   "toy probability cells with the top value printed",
+   "red dashed outlines on the positions replaced by ground truth",
+   "layer pair with an ellipsis between and a coloured curve from the earlier layer into the new module",
+   "double-headed vertical arrow between a head and its target text for a loss"
+  ],
+  "weaknesses": [
+   "the zoom panels are not tied to (a) by leader lines; the caption does the matching",
+   "the matrix glyphs of (c) cannot be read without the key",
+   "(c) packs two operations (prediction-aware encoding and curriculum mixing) into one drawing"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a source and target sentence pair"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "TikZ boxes, frames and arrows",
+   "probability-cell glyphs with toy values",
+   "key box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "stacked encoder boxes with CTC heads and loss arrows",
+   "Transformer layers with a cross-layer attention box",
+   "columns of probability squares with toy values",
+   "word-embedding circles",
+   "pink representation strips with circled numbers",
+   "circled plus",
+   "dotted key box"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "non-autoregressive speech translation",
+   "CTC",
+   "cross-layer attention",
+   "prediction-aware encoding",
+   "curriculum learning",
+   "XCTC loss",
+   "encoder-only",
+   "MuST-C"
+  ],
+  "tags": [
+   "notation-key",
+   "toy-values-inline",
+   "matrix-cell-grid",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "loss-double-arrow",
+    "what": "a double-headed vertical arrow with a loss name between a prediction head and its target sequence"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each new block its own lettered zoom panel beside the base architecture, and teach a vector operation once as a small matrix picture (embedding circles times probability cells give a coloured circle) with a dotted key, so the main drawing can use those circles unlabelled.",
+  "suits": "Architectures with one or two small new blocks whose computation is a weighted mixture of vectors and where toy numbers make the operation checkable."
+ },
+ "tags": [
+  "TikZ look",
+  "three lettered panels",
+  "bottom-up flow",
+  "pastel serif",
+  "toy matrix glyphs",
+  "dotted key box"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Ctc-Nast (p.3-5)"
+  ],
+  "evidence": [
+   "Overview of our CTC-NAST model.",
+   "The base architecture consisting of two CTC-guided encoders",
+   "The cross-layer attention module, where the layer normalization is omitted for simplification"
+  ]
+ },
+ "summary": "CTC-NAST is an encoder-only non-autoregressive speech translation model in which an acoustic encoder and a textual encoder are each guided by a CTC head, one for the source transcription and one for the translation. Three panels show it. (a) is the base architecture, drawn bottom-up with two framed encoder groups and loss arrows to the source and target sentences. (b) zooms into two Transformer layers and shows the cross-layer attention module between self-attention and FFN, fed from an earlier layer by a peach curve. (c) draws prediction-aware encoding: word-embedding circles times toy probability columns give a predicted representation, and a curriculum variant replaces some positions by reference-based vectors; a dotted key defines the glyphs.",
+ "summary_zh": "CTC-NAST 图 1 含三图：(a) 两个由 CTC 引导的编码器及源/目标损失；(b) 展开两层 Transformer，在自注意力与 FFN 间插入跨层注意力；(c) 用词嵌入圆点乘玩具概率列画出预测感知编码及课程混合，附图例。",
+ "confidence": "high",
+ "notes": "Prior label kept (model-anatomy, overview-plus-zoom). Panels (b) and (c) are matched to (a) through the caption only, there are no leader lines. The yellow circles at the bottom right of (c) are unlabelled and read as the intermediate-layer representation h_l named in the text. The paper text calls the circled numbers 1 (prediction) and 2 (ground truth); the legend names them Predicted and Mixed Representation. Colours are reused with different meanings from panel to panel, so they are described per panel.",
+ "venue": "ACL23"
+}

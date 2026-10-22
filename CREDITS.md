@@ -35,8 +35,12 @@ The skill also ships material taken from published papers, as style references f
 figures in [`assets/exemplars/figures/`](skills/figgenie-paper-diagram/assets/exemplars/figures/) and 2,764 parts in
 [`assets/symbols/`](skills/figgenie-paper-diagram/assets/symbols/) that were cut out of corpus figures, and the seven
 figures of the named style `charon` in [`assets/exemplars/styles/`](skills/figgenie-paper-diagram/assets/exemplars/styles/),
-from *Charon* (Yang et al., MLSys 2026). This material belongs to the papers' authors and publishers and is not covered
-by the MIT License.
+from *Charon* (Yang et al., MLSys 2026). For AI-venue figures it also ships 3,210 Figure 1s of ICLR, ICML, NeurIPS,
+CVPR, ACL and AAAI papers in [`assets/exemplars/ai/`](skills/figgenie-paper-diagram/assets/exemplars/ai/) (all as
+thumbnails, 792 in full) and 998 parts cut out of 271 of them. This material belongs to the papers' authors and
+publishers and is not covered by the MIT License. The AI-venue papers were found through the
+[Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) by qwdwqfwq (MIT-licensed index): its paper list, titles, authors
+and links are the starting point of our AI corpus, and 779 of the thumbnails were made from its images.
 [SOURCES.md](SOURCES.md) lists every paper it comes from, with authors, venue and link, and the Creative Commons
 licence where the paper states one.
 

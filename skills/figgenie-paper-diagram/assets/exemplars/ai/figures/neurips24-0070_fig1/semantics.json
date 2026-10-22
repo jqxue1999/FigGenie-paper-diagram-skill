@@ -1,0 +1,557 @@
+{
+ "paper_id": "neurips24-0070",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CoTaEval",
+  "one_liner": "An evaluation framework for copyright takedown methods in language models: similarity to blocklisted text, retained factual utility, and overhead.",
+  "domain": [
+   "copyright takedown",
+   "language models",
+   "evaluation framework"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "worked-walkthrough",
+   "side-by-side-contrast"
+  ],
+  "variant": "paper-roadmap",
+  "variant_note": "a Harry Potter question and takedown scenario on the left; five section-numbered grey boxes on the right act as the paper outline",
+  "argues": "A good takedown stops the model from regurgitating blocklisted text yet keeps facts and stays cheap; the rest of the figure outlines causes, methods, benchmark and results.",
+  "subject": "A regurgitation scenario fixed by a copyright takedown, beside a section-numbered outline of causes, desired behaviour, benchmark, methods and results.",
+  "elements": [
+   {
+    "name": "Who is Lily Potter?",
+    "type": "sample",
+    "role": "the user's prompt",
+    "drawn_as": "light-blue rounded bubble beside a person-at-laptop icon",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Language Model",
+    "type": "module",
+    "role": "the model that answers, here by copying a book passage",
+    "drawn_as": "robot head icon with a red exclamation mark on its screen, bold caption beneath",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Regurgitation!",
+    "type": "label",
+    "role": "names the failure: the output reproduces the book text",
+    "drawn_as": "bold red word beside a red siren icon",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Mrs Dursley had a sister called Lily Potter. She and her husband James Potter had a son called Harry Potter...",
+    "type": "sample",
+    "role": "the regurgitated passage",
+    "drawn_as": "pink rounded box with large light sans text",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Copyright Takedown",
+    "type": "operation",
+    "role": "the intervention applied to the model, leading to the second robot",
+    "drawn_as": "bold green label on a long black down arrow from the Language Model",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Low similarity / High utility / Low Overhead",
+    "type": "label",
+    "role": "the three goals of a takedown, each marked as met",
+    "drawn_as": "three captions in a row, each with a green tick",
+    "container": "takedown scenario",
+    "is_contribution": true
+   },
+   {
+    "name": "robot with shield",
+    "type": "module",
+    "role": "the model after takedown",
+    "drawn_as": "robot head icon with a green shield and tick",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "Lily Potter is the mother of Harry Potter.",
+    "type": "sample",
+    "role": "answer after takedown: a fact, not copied text",
+    "drawn_as": "green rounded box with light sans text",
+    "container": "takedown scenario",
+    "is_contribution": false
+   },
+   {
+    "name": "§ 2 What causes regurgitation?",
+    "type": "container",
+    "role": "section 2 box listing two causes: Memorization and Retrieval augmentation",
+    "drawn_as": "grey box; robot with dotted trail to a cloud holding the book, and robot with a two-way arrow to a WWW globe labelled Retrieve",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "§ 3 Desired behavior",
+    "type": "container",
+    "role": "section 3 box: what a takedown should achieve",
+    "drawn_as": "grey box with three checkbox lines: Low similarity (to blocklisted content), High utility, Low overhead",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "§ 3 Our benchmark: CoTaEval",
+    "type": "container",
+    "role": "section 3 box: what the benchmark contains",
+    "drawn_as": "grey box with three checkbox lines: Corpus: News Articles & Books, 8 Similarity Metrics, Utility & Efficiency Eval, with italic and bold key words",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "§ 2 Takedown Methods",
+    "type": "container",
+    "role": "section 2 box: the families of methods that are tested",
+    "drawn_as": "grey box with three checkbox lines: Generic Prevention: system prompt, Decoding-time: MemFree, R-CAD, Training-time: unlearning",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "§ 4 Results & takeaways",
+    "type": "container",
+    "role": "section 4 unit: the outcome of the evaluation",
+    "drawn_as": "three light-purple block arrows, each pointing to a sad face with a red cross; no grey box",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Who is Lily Potter?",
+    "to": "Language Model",
+    "what": "the prompt put to the model",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Language Model",
+    "to": "pink passage",
+    "what": "the model's reply copies the book",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Harry Potter book cover",
+    "to": "pink passage",
+    "what": "the passage matches the copyrighted book",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Language Model",
+    "to": "robot with shield",
+    "what": "Copyright Takedown is applied",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "robot with shield",
+    "to": "Lily Potter is the mother of Harry Potter.",
+    "what": "the answer after takedown",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Memorization robot",
+    "to": "cloud with book",
+    "what": "the model holds the book text in memory",
+    "kind": "other",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Retrieval augmentation robot",
+    "to": "WWW globe",
+    "what": "Retrieve: the model fetches a document from outside",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "§ 4 arrows",
+    "to": "sad faces with red crosses",
+    "what": "each arrow ends in a negative outcome",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "a Harry Potter question answered with copied text, then a takedown robot gives a factual answer under three green ticks",
+    "verdict": "setting"
+   },
+   {
+    "label": "§ 2 What causes regurgitation?",
+    "axis": "narrative",
+    "shows": "two causes drawn with robots: memorization and retrieval augmentation",
+    "verdict": "setting"
+   },
+   {
+    "label": "§ 3 Desired behavior",
+    "axis": "narrative",
+    "shows": "three goals as checkboxes: low similarity, high utility, low overhead",
+    "verdict": "setting"
+   },
+   {
+    "label": "§ 3 Our benchmark: CoTaEval",
+    "axis": "narrative",
+    "shows": "corpus of news articles and books, 8 similarity metrics, utility and efficiency evaluation",
+    "verdict": "ours"
+   },
+   {
+    "label": "§ 2 Takedown Methods",
+    "axis": "narrative",
+    "shows": "system prompt, decoding-time MemFree and R-CAD, training-time unlearning",
+    "verdict": "baseline"
+   },
+   {
+    "label": "§ 4 Results & takeaways",
+    "axis": "narrative",
+    "shows": "three arrows leading to sad faces with red crosses",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "§ 2, § 2, § 3, § 3, § 4",
+    "kind": "section",
+    "at": "heading of each right-hand unit",
+    "what": "purple paper section numbers; they run 2, 2, 3, 3, 4 in column order"
+   },
+   {
+    "marker": "1 2 (circled)",
+    "kind": "identity",
+    "at": "Memorization and Retrieval augmentation",
+    "what": "number the two causes of regurgitation; they do not order steps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "Harry Potter book cover",
+    "content": "document",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one cover thumbnail reused at three sizes as the token of copyrighted text: beside the Language Model, inside a cloud for memorised data, under the Retrieve arrow for a retrieved document"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "person at a laptop",
+    "stands_for": "the user asking",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot head with a red exclamation mark on its screen",
+    "stands_for": "the language model that regurgitates",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "robot head with a green shield and tick",
+    "stands_for": "the model after copyright takedown",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red alarm siren",
+    "stands_for": "the regurgitation alert",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "light-blue cloud",
+    "stands_for": "memorised training text",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "globe with WWW sign and a magnifier",
+    "stands_for": "the outside corpus used for retrieval",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "green ticks",
+    "stands_for": "a goal is met",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "sad face with a red cross",
+    "stands_for": "an unsatisfying result",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "user asks Who is Lily Potter?; the model copies a Harry Potter passage; after takedown it answers Lily Potter is the mother of Harry Potter.",
+    "form": "speech bubbles with text snippets inside a framed scenario",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "light-blue user bubble with a person icon; model replies in pink and green bubbles without avatars",
+    "parts": [
+     "user bubble",
+     "bad reply bubble",
+     "good reply bubble"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head with a screen face; red exclamation when it regurgitates, green shield and tick after takedown",
+    "parts": [
+     "robot head",
+     "screen",
+     "state glyph"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "robot and WWW globe joined by a two-way arrow labelled Retrieve with a magnifier; the retrieved book under the arrow",
+    "parts": [
+     "robot",
+     "globe",
+     "double arrow",
+     "book"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memorization-cloud",
+    "drawn_as": "dotted trail from the robot to a cloud holding the book cover",
+    "parts": [
+     "robot",
+     "dots",
+     "cloud",
+     "book"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Eye starts at the question bubble at top left, runs down the scenario to the green answer, then reads the right-hand outline column by column from the section 2 box."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A tall framed scenario on the left, then two columns of grey boxes: section 2 causes over section 2 methods, and section 3 desired behaviour over section 3 benchmark over a frameless section 4 results unit. Headings sit above their boxes.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.84,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f3f3f3",
+    "used_for": "grey boxes of the section outline"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "user question bubble"
+   },
+   {
+    "hex": "#f4cccc",
+    "used_for": "pink bubble with the regurgitated passage"
+   },
+   {
+    "hex": "#d9ead3",
+    "used_for": "green bubble with the answer after takedown"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "light-blue robot faces and the cloud"
+   },
+   {
+    "hex": "#9900ff",
+    "used_for": "section numbers (§ 2, § 3, § 4)"
+   },
+   {
+    "hex": "#b4a7d6",
+    "used_for": "block arrows of the results unit"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "Regurgitation! text"
+   },
+   {
+    "hex": "#6aa84f",
+    "used_for": "Copyright Takedown label"
+   },
+   {
+    "hex": "#1155cc",
+    "used_for": "Retrieve label"
+   },
+   {
+    "hex": "#1f1f1f",
+    "used_for": "body text"
+   },
+   {
+    "hex": "#b7b7b7",
+    "used_for": "outline of the scenario box"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.75 pt black arrows; one thin grey outline around the scenario box; no outline on the grey boxes",
+  "font": "light sans (Helvetica Neue, IBM Plex Sans Condensed) 5.5 to 6 pt for bubbles and lists; serif (Lora) 6.5 pt for section headings with bold purple section numbers",
+  "corners": "rounded",
+  "arrows": "thin black straight arrows with small heads (one long vertical, one double-headed); thick light-purple block arrows in the results",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "pink = copied copyrighted text, green = acceptable answer after takedown, light blue = user question; red word = the problem, green label and ticks = takedown and goals met; purple = paper section numbers and result arrows",
+  "line_style_means": "solid black arrow = the takedown intervention; double arrow = retrieval; small dots = text held in the model's memory",
+  "shape_means": "robot head = language model; robot with shield and tick = model after takedown; cloud = memorised data; globe = web corpus; checkbox bullets = criteria and options",
+  "marker_means": "purple section numbers cite the paper section behind each box; circled 1 and 2 enumerate the two causes; green tick = goal met; sad face with red cross = unsatisfying result",
+  "emphasis": "the red Regurgitation! with a siren is the strongest alarm; the green Copyright Takedown label and ticks mark the target; the left scenario is the only framed unit",
+  "reusable_patterns": [
+   "scenario box with a bad answer in pink and the fixed answer in green, joined by a labelled arrow",
+   "robot icon whose badge changes between red exclamation and green shield",
+   "outline of grey boxes headed by purple section numbers beside a teaser",
+   "rows of sad faces with red crosses as a results teaser",
+   "one book-cover thumbnail reused as the token of copyrighted content"
+  ],
+  "weaknesses": [
+   "the results unit does not say which result each arrow gives",
+   "section numbers run 2, 2, 3, 3, 4 across two columns, so the outline order is not obvious",
+   "the three ticks at the lower left repeat the Desired behavior box"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the Lily Potter question and passage"
+  ],
+  "stock": [
+   "Harry Potter book cover thumbnail",
+   "person-at-laptop icon",
+   "robot head icons",
+   "siren, globe and magnifier icons",
+   "sad-face emoji, tick and cross marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "bubbles, grey boxes and block arrows",
+   "checkbox lists",
+   "cloud"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "user question bubble with person icon",
+   "robot head icons with red exclamation or green shield",
+   "pink regurgitated passage and green fixed answer",
+   "Harry Potter book cover thumbnails",
+   "grey outline boxes with purple section numbers",
+   "checkbox lists",
+   "sad faces with red crosses"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "copyright takedown",
+   "regurgitation",
+   "memorization",
+   "retrieval augmentation",
+   "blocklist",
+   "unlearning",
+   "decoding-time filtering",
+   "CoTaEval"
+  ],
+  "tags": [
+   "verdict-marks",
+   "model-pictogram",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "section-number-outline",
+    "what": "a teaser scenario beside grey boxes headed by the paper's section numbers, so the figure doubles as a table of contents"
+   },
+   {
+    "name": "before-after-bubbles",
+    "what": "a bad answer in a pink bubble and the corrected answer in a green bubble, linked by a labelled intervention arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Pair a one-glance scenario (pink bad answer, labelled arrow, green good answer, three ticks) with an outline of boxes headed by the paper's section numbers, so one figure states the problem and previews the paper.",
+  "suits": "evaluation or position papers whose contribution is a framework plus findings, which must show a failure case and a roadmap in one figure."
+ },
+ "tags": [
+  "paper-roadmap",
+  "scenario-box",
+  "chat-bubbles",
+  "robot-icons",
+  "grey-boxes",
+  "section-numbers"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "Effective takedown methods should prevent models from generating text matching the blocklisted content (low similarity)",
+   "(3) ensure the efficiency of the model (low overhead) (see Figure 1)"
+  ]
+ },
+ "summary": "CoTaEval is an evaluation framework for copyright takedown methods in language models: a takedown should stop the model from regurgitating blocklisted text while keeping uncopyrightable facts and staying efficient. Figure 1 pairs a framed scenario on the left (the question Who is Lily Potter? gets a pink bubble copied from the book, flagged Regurgitation! with a siren; after Copyright Takedown a shielded robot gives a green factual answer under three ticks) with five grey boxes on the right headed by purple section numbers: causes, desired behaviour, the benchmark, takedown methods, and results that end in sad faces with red crosses.",
+ "summary_zh": "CoTaEval 评估语言模型的版权下架方法：既要避免复述受保护文本，又要保留事实并控制开销。图 1 左侧用 Lily Potter 问答演示复述与下架后的回答，右侧五个灰色章节框依次给出成因、期望、基准、方法与结果。",
+ "confidence": "high",
+ "notes": "Prior labels listed scope-overview (benchmark-dashboard); the small CoTaEval box is a three-line list, not a dashboard, so that kind is dropped. A 5 pt text item in the digest (Low similarity High utility Low Overhead) is the three ticked captions at the lower left. The results unit is read as negative takeaways from the sad faces and the abstract (no tested method excels across all metrics); the figure does not say which result each arrow stands for.",
+ "venue": "NeurIPS24"
+}

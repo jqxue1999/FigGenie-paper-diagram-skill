@@ -1,0 +1,496 @@
+{
+ "paper_id": "iclr25-0241",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "An empirical study of diffusion planning in offline RL that lays out four design components and the choices compared for each.",
+  "domain": [
+   "diffusion planning",
+   "offline reinforcement learning",
+   "decision making"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "taxonomy-map",
+  "variant_note": "(a) a noise-to-plan denoising pipeline shown on a 3-joint robot arm; (b) a four-branch tree of design components with candidate boxes and red stars on the preferred ones",
+  "argues": "A diffusion planner can be described by four design components, each with candidate choices, and the starred choices (jump-step planning, Transformer, inverse dynamics, sampling with selection) are the preferred ones.",
+  "subject": "denoising noise into a robot-arm plan, and a four-branch tree of design choices with starred preferred options",
+  "elements": [
+   {
+    "name": "Gaussian Noise, Shape=[H, N^s]",
+    "type": "data",
+    "role": "the noisy plan the diffusion process starts from; H planning steps by N^s state dimension",
+    "drawn_as": "grey 3 by 5 heat-map grid with row labels s3, s2, s1, a vertical colour bar and t to t+H-1 under it",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Robot trajectory dataset (demonstrations)",
+    "type": "data",
+    "role": "offline demonstrations the denoising network is trained on",
+    "drawn_as": "rounded black frame holding two strips of five small robot-arm trajectory sketches and a bold caption",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Training",
+    "type": "label",
+    "role": "the dataset trains the network",
+    "drawn_as": "red word above a red-outlined white block arrow pointing into the orange box",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Denoising Network",
+    "type": "module",
+    "role": "turns noise into a plan, applied step by step",
+    "drawn_as": "orange rounded box with white text, vertical dots, outlined down arrows in and out",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Trajectory Plan, Shape=[H, N^s]",
+    "type": "data",
+    "role": "the denoised plan over H future steps",
+    "drawn_as": "grey grid with smooth gradient, same rows and a colour bar, below the network",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "robot arm poses of the plan",
+    "type": "sample",
+    "role": "the plan shown as five successive arm configurations",
+    "drawn_as": "strip of five soft green blurred arm sketches under the plan grid",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Future environment step in the plan (current actual step is t)",
+    "type": "label",
+    "role": "time axis of the plan from t to t+H-1",
+    "drawn_as": "purple arrow with t at the left and t+H-1 at the right, purple caption",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Robot Illustration",
+    "type": "icon",
+    "role": "the 3-joint arm whose joint angles s1, s2, s3 are the state",
+    "drawn_as": "grey three-link arm with joint circles, dashed reference lines and angle arcs labelled s1, s2, s3",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Planning Strategy: Dense-step planning, Jump-step planning (star)",
+    "type": "container",
+    "role": "how plan steps are laid out in time; Jump-step is preferred",
+    "drawn_as": "purple root box with elbow lines to two white boxes with purple outline, red star on the jump-step box",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Denoising Network Backbone: Transformer (star), U-Net",
+    "type": "container",
+    "role": "which network denoises; Transformer is preferred",
+    "drawn_as": "orange root box with a faint block-diagram icon, elbow lines to two white boxes with orange outline and an architecture thumbnail each, red star on Transformer",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Action Generation: Learn joint distribution of state and action, Learn and use inverse dynamics (star)",
+    "type": "container",
+    "role": "how actions come out of the planner; inverse dynamics is preferred",
+    "drawn_as": "green root box with two white option boxes, each over a pale green-grey panel with a mini block diagram (Diffusion model, s and a sequences, Inverse dynamics, a_t); red star on inverse dynamics",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Guided Sampling Algorithms: Classifier guidance, Classifier-free guidance, Monte Carlo Sampling with Selection (star), Unconditional",
+    "type": "container",
+    "role": "how plans are sampled; Monte Carlo Sampling with Selection is preferred",
+    "drawn_as": "blue root box with a vertical bracket line to four white boxes with blue outline, red star on the third",
+    "container": "(b)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Gaussian Noise",
+    "to": "Denoising Network",
+    "what": "noisy plan goes in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Robot trajectory dataset (demonstrations)",
+    "to": "Denoising Network",
+    "what": "training data",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Denoising Network",
+    "to": "Trajectory Plan",
+    "what": "denoised plan comes out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trajectory Plan",
+    "to": "robot arm poses of the plan",
+    "what": "each column of the plan is one arm configuration",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Robot Illustration",
+    "to": "rows s1, s2, s3 of both grids",
+    "what": "joint angles of the arm are the state dimensions",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "each root box in (b)",
+    "to": "its option boxes",
+    "what": "component to candidate choices",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "colour of each component in (b)",
+    "to": "matching parts of (a)",
+    "what": "the caption says each colour is one component; the orange network box and the purple time arrow in (a) repeat the orange backbone and purple planning roots",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "red stars",
+    "to": "Jump-step planning, Transformer, Learn and use inverse dynamics, Monte Carlo Sampling with Selection",
+    "what": "preferred choice per component",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "generation of a plan by denoising Gaussian noise with a network trained on robot trajectories, on a 3-joint robot arm example",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "tree of four components with candidate choices and stars on the preferred ones",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "top left of each panel, 11 pt",
+    "what": "name the two panels"
+   },
+   {
+    "marker": "red star",
+    "kind": "identity",
+    "at": "corner of one option box per branch",
+    "what": "the choice preferred in the experiments"
+   },
+   {
+    "marker": "s1, s2, s3",
+    "kind": "identity",
+    "at": "grid rows and arm joints",
+    "what": "the three joint states"
+   },
+   {
+    "marker": "t, t+H-1",
+    "kind": "order",
+    "at": "ends of the grids and the purple arrow",
+    "what": "first and last future step of the plan"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "noise grid and plan grid",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "grey-scale 3 by 5 cell grids with a vertical colour bar; the noise grid is high-contrast random, the plan grid a smooth gradient"
+   },
+   {
+    "what": "trajectory sketches of the dataset",
+    "content": "other",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two strips of five small grey robot-arm trajectory sketches inside a rounded frame"
+   },
+   {
+    "what": "plan as arm poses",
+    "content": "other",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "five soft green blurred arm sketches in a row"
+   },
+   {
+    "what": "robot arm illustration",
+    "content": "other",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grey three-link arm with joint circles and angle arcs"
+   },
+   {
+    "what": "Transformer and U-Net architecture thumbnails",
+    "content": "other",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "tiny block-diagram thumbnails at the left of the option boxes"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "faint block-diagram glyph",
+    "stands_for": "the denoising network backbone",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a 3-joint robot arm as the toy system: its three joint angles form the state, the plan is a sequence of poses over t to t+H-1",
+    "form": "grey arm illustration, state grids and a green pose strip",
+    "real_values": false
+   },
+   {
+    "what": "the state and action sequences of the two action-generation options (s_t, s_t+1, ... and a_t, a_t+1, ...)",
+    "form": "mini block diagrams in pale green-grey panels",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a vertical chain from a noise grid through one denoising network box to a plan grid, with the iteration only hinted by dots in the box",
+    "parts": [
+     "noise grid",
+     "denoising network",
+     "plan grid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "unet",
+    "drawn_as": "tiny U-Net architecture thumbnail in the U-Net option box",
+    "parts": [
+     "thumbnail"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "rounded black frame with ten small trajectory sketches and a bold two-line caption",
+    "parts": [
+     "frame",
+     "trajectory sketches",
+     "caption"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "design-choice-tree",
+    "drawn_as": "coloured root box per component with elbow or bracket lines to white option boxes outlined in the same colour, a red star on the preferred one",
+    "parts": [
+     "root box",
+     "option box",
+     "elbow line",
+     "star"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "(a) top to bottom from the noise grid through the denoising network to the plan; then the four trees of (b), each root before its options."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side with large serif letters: (a) is a vertical flow of noise grid, orange network box and plan grid with the dataset frame at the left, a pose strip and a robot illustration below; (b) is four small trees scattered in the panel (planning strategy top right, backbone upper middle, action generation lower middle, guided sampling right), each with a coloured root and white option boxes.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e97132",
+    "used_for": "Denoising Network box in (a) and the Denoising Network Backbone root in (b)"
+   },
+   {
+    "hex": "#196b24",
+    "used_for": "Action Generation root and the mini diagrams' arrows and outlines"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "Guided Sampling Algorithms root and its option outlines"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "Planning Strategy root, its option outlines and the time arrow in (a)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "Training arrow outline and the preferred-choice stars"
+   },
+   {
+    "hex": "#e8e8e8",
+    "used_for": "light grey of grid cells and the colour bars"
+   },
+   {
+    "hex": "#808080",
+    "used_for": "grey outlines and the robot arm"
+   },
+   {
+    "hex": "#ccd4cc",
+    "opacity": 0.9,
+    "used_for": "pale green-grey panels behind the action-generation mini diagrams"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.75 pt thin outlines in each component's colour; 1.25 pt black rounded frame for the dataset; dashed grey reference lines on the arm",
+  "font": "Aptos and Arial sans at 3 to 7 pt, 11 pt serif panel letters, Cambria Math italics for symbols, bold small caption on the dataset",
+  "corners": "mixed",
+  "arrows": "white outlined block arrows pointing down between the stages, a red-outlined block arrow for Training, a thin purple time arrow, small green arrows inside the mini diagrams, elbow lines as tree branches",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per framework component, shared by (a) and (b): orange = denoising network backbone, purple = planning strategy (time axis), green = action generation, blue = guided sampling; red = Training arrow and the preferred-choice stars; grey scale = grid values",
+  "line_style_means": "elbow and bracket lines = component to candidate choices; thin dashed grey lines = joint-angle references on the arm",
+  "shape_means": "colour-filled rectangle = a design component; white rectangle with a coloured outline = a candidate choice; rounded black frame = dataset; orange rounded box = network",
+  "marker_means": "red star = choice preferred in the experiments; s1, s2, s3 = joint states; t to t+H-1 = plan horizon; H and N^s = shape symbols",
+  "emphasis": "four red stars, one per branch, and the colour per component that repeats from (a) into (b)",
+  "reusable_patterns": [
+   "design-space tree: coloured root per component, white option boxes outlined in that colour, red star on the preferred option",
+   "component colours repeated on the pipeline drawing so the reader sees where each choice acts",
+   "mini block diagrams inside option boxes for the choices that need an explanation",
+   "noise and plan shown as two grey heat-map grids with colour bars around the network box",
+   "toy 3-joint robot arm to ground an abstract state vector"
+  ],
+  "weaknesses": [
+   "mini diagrams in the action-generation options use 3 to 4.5 pt text",
+   "the link between the colours in (a) and the trees in (b) is explained only in the caption",
+   "the four trees are placed irregularly, so the order in which to read them is not obvious"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "Transformer and U-Net architecture thumbnails",
+   "block-diagram glyph in the backbone box"
+  ],
+  "generated": [],
+  "drawn": [
+   "noise and plan grids with colour bars",
+   "robot arm illustration, pose strip and trajectory sketches",
+   "tree boxes and mini block diagrams",
+   "block arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "noise and plan grids with colour bars",
+   "orange denoising network box",
+   "robot trajectory dataset frame with arm sketches",
+   "grey 3-joint robot arm illustration",
+   "green robot pose strip",
+   "design-choice tree with four coloured roots",
+   "red stars on preferred options"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "diffusion planning",
+   "offline RL",
+   "decision making",
+   "design space",
+   "guided sampling",
+   "inverse dynamics",
+   "denoising network",
+   "planning strategy"
+  ],
+  "tags": [
+   "option-catalog",
+   "colour-coded-groups",
+   "matrix-cell-grid",
+   "verdict-marks"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Lay out a design space as small trees with one colour per component, white option boxes outlined in that colour and a red star on the preferred choice, and repeat the component colours on the pipeline drawing beside it so each choice can be located.",
+  "suits": "Empirical or design-space studies that compare several choices per component and want to mark the recommended configuration."
+ },
+ "tags": [
+  "design-space-tree",
+  "colour-per-component",
+  "star-marks",
+  "grey-heat-maps",
+  "toy-robot-arm",
+  "two-panel"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Design components of diffusion planning (p.3)"
+  ],
+  "evidence": [
+   "we begin by listing key design components (excluding common deep learning hyperparameters such as learning rates)",
+   "Each color corresponds to one component in the framework. A star indicates the preferred choice in experiments."
+  ]
+ },
+ "summary": "The paper studies what makes a good diffusion planner for offline decision making. Figure 1(a) shows the framework: a grey Gaussian-noise grid goes through an orange Denoising Network, trained on a robot trajectory dataset (demonstrations), and becomes a trajectory plan grid over steps t to t+H-1, illustrated with a grey 3-joint robot arm and a strip of green arm poses. Figure 1(b) is a design space as four small trees, one colour per component: Planning Strategy, Denoising Network Backbone, Action Generation and Guided Sampling Algorithms, each with white option boxes and mini diagrams, and a red star on the preferred option: jump-step planning, Transformer, inverse dynamics and Monte Carlo sampling with selection.",
+ "summary_zh": "论文研究什么样的扩散规划器适合离线决策。图 1(a) 用三关节机械臂示例展示高斯噪声经去噪网络（由轨迹示范数据训练）变为轨迹规划；(b) 用四棵彩色决策树列出规划策略、骨干网络、动作生成和引导采样的候选项，红星标出实验中偏好的选择。",
+ "confidence": "high",
+ "notes": "The system name is null: the visible text does not name the proposed baseline. Colour links between (a) and (b) are inferred from the caption (each colour is one component) and the matching orange network box and purple time arrow; the green pose strip is not confirmed to belong to Action Generation. Prior pass listed scope-overview and stage-pipeline; worked-walkthrough is added for the toy robot-arm instance in (a).",
+ "venue": "ICLR25"
+}

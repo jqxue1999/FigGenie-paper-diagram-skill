@@ -1,0 +1,489 @@
+{
+ "paper_id": "icml25-0083",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MaAS",
+  "one_liner": "Optimises an agentic supernet, a probabilistic distribution of agentic architectures, and samples a query-dependent multi-agent system from it.",
+  "domain": [
+   "multi-agent systems",
+   "agentic workflow search",
+   "adaptive inference cost"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "an operator key and a layered supernet of operator nodes from which three queries sample sub-networks that unfold into workflows of rising complexity",
+  "argues": "One supernet yields tailored multi-agent systems: easy queries get a small workflow, hard queries a larger one, instead of one fixed system for everything.",
+  "subject": "The operator building blocks, the layered agentic supernet and the sub-network and workflow sampled for each of three example queries.",
+  "elements": [
+   {
+    "name": "Building Blocks key",
+    "type": "label",
+    "role": "names the eight operator types by colour: CoT, Reflexion, ReAct, Debate, I/O, Web search, Evaluator-optimizer, Exit",
+    "drawn_as": "eight ring nodes with tinted fills and a name beside each, in four rows",
+    "container": "Building Blocks",
+    "is_contribution": null
+   },
+   {
+    "name": "Debate block",
+    "type": "module",
+    "role": "operator internals: layers of green, purple and blue boxes fully connected to the next layer, each ending in an output arrow",
+    "drawn_as": "dashed rounded box with a 3 by 3 grid of small boxes and crossing arrows",
+    "container": "Building Blocks",
+    "is_contribution": false
+   },
+   {
+    "name": "Reflexion block",
+    "type": "module",
+    "role": "operator internals: a loop of output and critique between two boxes",
+    "drawn_as": "dashed rounded box with two green boxes joined by dashed curved arrows labelled output and critique",
+    "container": "Building Blocks",
+    "is_contribution": false
+   },
+   {
+    "name": "CoT block",
+    "type": "module",
+    "role": "operator internals: a chain of reasoning steps",
+    "drawn_as": "dashed rounded box with three red boxes joined by arrows",
+    "container": "Building Blocks",
+    "is_contribution": false
+   },
+   {
+    "name": "ReAct block",
+    "type": "module",
+    "role": "operator internals: reasoning step, tool call and execution with a loop back",
+    "drawn_as": "dashed rounded box with a green box, a Tools cylinder and a yellow execution box",
+    "container": "Building Blocks",
+    "is_contribution": false
+   },
+   {
+    "name": "...... ......",
+    "type": "label",
+    "role": "says that more building blocks exist",
+    "drawn_as": "two rows of dots under the blocks",
+    "container": "Building Blocks",
+    "is_contribution": null
+   },
+   {
+    "name": "Agentic Supernet",
+    "type": "module",
+    "role": "the distribution of architectures to sample from: layers of candidate operators joined between layers",
+    "drawn_as": "large rounded box with a hatched ground, four layers of five coloured ring nodes joined by grey lines",
+    "container": "right half",
+    "is_contribution": true
+   },
+   {
+    "name": "Simple arithmetic / Highschool Physics / Complex Coding",
+    "type": "sample",
+    "role": "three example queries of rising difficulty",
+    "drawn_as": "three titled cards (green, red, blue) with a small subject icon; the cards grow taller from top to bottom",
+    "container": "right half",
+    "is_contribution": null
+   },
+   {
+    "name": "sampled sub-networks",
+    "type": "instance",
+    "role": "the architecture sampled for each query: chosen nodes are solid and joined by black arrows, unused nodes are dashed grey circles",
+    "drawn_as": "three rounded boxes with a coloured hatched ground holding the same node grid with two, three and four layers",
+    "container": "right half",
+    "is_contribution": true
+   },
+   {
+    "name": "I/O + ReAct / I/O+Reflexion+Debate / Complicated system",
+    "type": "instance",
+    "role": "the multi-agent workflow produced for each query, from Task to solution, increasingly complex",
+    "drawn_as": "three boxes with a coloured title bar holding small coloured agent boxes, Tool cylinders, an if-else diamond, feedback loops and a solution arrow",
+    "container": "right half",
+    "is_contribution": null
+   },
+   {
+    "name": "gradient block arrows",
+    "type": "other",
+    "role": "lead from the supernet to each query and from each sampled sub-network to its workflow",
+    "drawn_as": "teal, red and blue arrows fading from white to the lane colour",
+    "container": "right half",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Building Blocks key",
+    "to": "Agentic Supernet",
+    "what": "operator colours reappear as the node colours of the supernet",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Agentic Supernet",
+    "to": "Simple arithmetic / Highschool Physics / Complex Coding",
+    "what": "the supernet is applied to each query (curved teal, red and blue arrows)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "query card",
+    "to": "sampled sub-network",
+    "what": "the architecture sampled for that query",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "sampled sub-network",
+    "to": "workflow box",
+    "what": "the sampled nodes unfold into a multi-agent workflow",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task",
+    "to": "solution",
+    "what": "inside each workflow, the query passes through operator boxes (with feedback, tool and branch loops) to a solution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "output",
+    "to": "critique",
+    "what": "Reflexion cycle between two boxes",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Building Blocks",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "operator key plus the mini wiring of Debate, Reflexion, CoT and ReAct",
+    "verdict": "setting"
+   },
+   {
+    "label": "Agentic Supernet",
+    "kind": "stage-pipeline",
+    "axis": "examples",
+    "shows": "supernet fanning out to three queries, each with its sampled sub-network and resulting workflow",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "ring nodes in red, blue, yellow, orange, green, brown, purple and grey",
+    "stands_for": "the eight operator types",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 8
+   },
+   {
+    "depicts": "calculator, atom and computer screen",
+    "stands_for": "query subject: arithmetic, physics, coding",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "small horizontal cylinder labelled Tool or Tools",
+    "stands_for": "tool calls",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "yellow diamond labelled if-else",
+    "stands_for": "conditional branch in a workflow",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "three example queries",
+    "form": "cards with the texts 12 x 21 =?, a capacitor work question (10 uF to 100 V) in monospace, and a request to build a yelp.com style review website",
+    "real_values": true
+   },
+   {
+    "what": "three sampled workflows of rising complexity",
+    "form": "titled boxes I/O + ReAct, I/O+Reflexion+Debate and Complicated system with Task, operator boxes and solution",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "nas-supernet",
+    "drawn_as": "layered grid of candidate operator nodes, fully connected between adjacent layers, with the sampled sub-path redrawn per query",
+    "parts": [
+     "layers",
+     "operator nodes",
+     "grey connections",
+     "sampled path"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "multi-agent",
+    "drawn_as": "small coloured boxes standing for agent steps wired by arrows into workflows from Task to solution",
+    "parts": [
+     "agent boxes",
+     "arrows",
+     "solution"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "Reflexion as two boxes joined by dashed curved arrows output and critique; ReAct as a box, a Tools cylinder and an execution box with a loop-back arrow",
+    "parts": [
+     "output",
+     "critique",
+     "Tools",
+     "execution"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "Tool or Tools cylinder placed between agent boxes in the workflows",
+    "parts": [
+     "cylinder",
+     "arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "titled card with a subject icon holding the query text, monospace for the long ones",
+    "parts": [
+     "title bar",
+     "icon",
+     "query text"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "curriculum-ladder",
+    "drawn_as": "three queries ordered from simple to complex, with card, sampled grid and workflow all growing taller",
+    "parts": [
+     "three lanes"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at Building Blocks at the top left, crosses the thick divider to the Agentic Supernet, then follows the arrows along each of three lanes (query card, sampled sub-network, workflow) from top to bottom."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "One gold-outlined rounded frame split by a thick vertical bar: a catalogue of operators on the left, and on the right the supernet with three parallel lanes of query card, sampled grid and workflow that grow taller from top to bottom.",
+  "panel_count": 2,
+  "lanes": "3 aligned rows on the right, one per query: query card, sampled sub-network, workflow",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.98,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff2cc",
+    "used_for": "very light yellow wash over the whole ground",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#d6b656",
+    "used_for": "gold outline of the outer frame and of the ReAct node"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "CoT nodes and boxes, physics card and lane fill"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "red outlines of CoT and of the physics lane"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "Reflexion nodes and boxes, coding card and lane fill"
+   },
+   {
+    "hex": "#6c8ebf",
+    "used_for": "blue outlines of Reflexion and of the coding lane"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "I/O nodes and boxes, arithmetic card and lane fill"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "green outlines of I/O and of the arithmetic lane"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "Debate nodes"
+   },
+   {
+    "hex": "#d79b00",
+    "used_for": "orange outlines of Debate"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "Evaluator-optimizer nodes and boxes"
+   },
+   {
+    "hex": "#9673a6",
+    "used_for": "purple outlines of Evaluator-optimizer"
+   },
+   {
+    "hex": "#707070",
+    "used_for": "Exit nodes and dark grey details"
+   },
+   {
+    "hex": "#9c9c9c",
+    "used_for": "thin grey connections between supernet layers"
+   },
+   {
+    "hex": "#ffff88",
+    "used_for": "execution box and if-else diamond"
+   },
+   {
+    "hex": "#67ab9f",
+    "used_for": "teal title bar and arrow of the first lane"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.25-0.5 pt black and grey lines, 1.25 pt coloured outlines on nodes, cards and sampled-grid boxes, dashed outlines around operator internals",
+  "font": "serif (Georgia, Times New Roman), 3.5-10.5 pt with bold 10.5 pt headings; Courier New for the long query texts at 4.5 pt",
+  "corners": "mixed",
+  "arrows": "thin black orthogonal arrows inside workflows, dashed curved arrows for cycles, thick gradient block arrows between the stages of a lane",
+  "rendering": "flat-vector",
+  "effects": "hatch textures behind the node grids, gradient fades on the block arrows",
+  "model_depiction": "network-glyph",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "node and block colour = operator type (red CoT, blue Reflexion, yellow ReAct, orange Debate, green I/O, brown Web search, purple Evaluator-optimizer, grey Exit); lane colour (green, red, blue, teal title for the first) = which query a row belongs to",
+  "line_style_means": "grey thin lines = candidate connections between supernet layers; black arrows between solid nodes = the sampled connections; dashed circles = nodes not sampled; dashed curved arrows = a feedback cycle; dashed boxes = the inside of one operator",
+  "shape_means": "ring node = operator, small square box = agent step inside a workflow, cylinder = tools, diamond = if-else branch, rounded card = query",
+  "marker_means": null,
+  "emphasis": "the supernet is the centre, a large box with a bold heading, and lane height grows with query difficulty so that complexity reads as size; a thick vertical bar separates the catalogue from the method",
+  "reusable_patterns": [
+   "operator key whose colours are reused for supernet nodes, sampled nodes and workflow boxes",
+   "the same node grid redrawn per query with the sampled nodes solid and the rest dashed grey",
+   "lane height grows with query difficulty: card, sampled grid and workflow all taller",
+   "gradient block arrows in the lane colour between stages",
+   "titled coloured query cards with a tiny subject icon",
+   "dashed rounded boxes that open each building block into its mini wiring"
+  ],
+  "weaknesses": [
+   "text of 3.5-4.5 pt in the workflows and the queries",
+   "the same palette codes both operator type and query lane, which can be read as one code",
+   "workflow diagrams use sharp boxes, cylinders and diamonds while the grids use rings, so two drawing grammars meet"
+  ]
+ },
+ "resources": {
+  "own": [
+   "three example queries and their workflows"
+  ],
+  "stock": [
+   "small calculator, atom and computer icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "supernet grid and operator ring nodes",
+   "workflow diagrams",
+   "dashed operator blocks",
+   "gradient block arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "operator key of coloured ring nodes",
+   "dashed operator blocks (Debate, Reflexion, CoT, ReAct)",
+   "layered supernet grid",
+   "three titled query cards",
+   "sampled sub-network grids with dashed circles",
+   "workflow diagrams from Task to solution",
+   "gradient block arrows"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "agentic supernet",
+   "multi-agent system",
+   "architecture search",
+   "query-dependent sampling",
+   "agentic operators",
+   "workflow",
+   "inference cost",
+   "LLM agents"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "option-catalog",
+   "notation-key",
+   "module-state-coding",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "difficulty-scaled-lanes",
+    "what": "parallel example lanes whose cards, sampled structures and results grow taller with the difficulty of the query, so complexity reads as height"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show input-adaptive structure by drawing the same node grid once as the full space and once per example with only the sampled nodes solid; let each lane grow with the difficulty of its query and keep the operator key colours on every later drawing of an operator.",
+  "suits": "Papers that choose a different architecture, route or workflow per input (routing, architecture search, agentic workflow search) and want to show that cost scales with difficulty."
+ },
+ "tags": [
+  "draw-io-look",
+  "hatch-textures",
+  "serif-labels",
+  "gold-frame",
+  "gradient-block-arrows",
+  "three-lanes"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "the agentic supernet adaptively samples tailored multi-agent architecture in a query-dependent manner",
+   "samples query-dependent agentic systems from the supernet, delivering high-quality solutions and tailored resource allocation",
+   "optimizing the agentic supernet, a probabilistic and continuous distribution of agentic architectures"
+  ]
+ },
+ "summary": "MaAS replaces a single hand-built multi-agent system with an agentic supernet, a probabilistic distribution over agentic architectures from which a query-specific system is sampled. The figure sits in one gold-outlined rounded frame. The left side, Building Blocks, is a colour key of eight operators (CoT, Reflexion, ReAct, Debate, I/O, Web search, Evaluator-optimizer, Exit) with dashed mini-diagrams of Debate, Reflexion, CoT and ReAct. The right side shows a layered grid of coloured operator nodes, the supernet, fanning out to three example queries of rising difficulty: simple arithmetic, high-school physics and complex coding. Each query gets a sampled sub-grid with solid chosen nodes and dashed unused ones, then a workflow diagram that grows from I/O + ReAct to a complicated system.",
+ "summary_zh": "MaAS 用智能体超网（对智能体架构的概率分布）取代单一的多智能体系统，并按查询采样。图左是八种算子的颜色图例和算子内部小图，右侧超网分出三条由易到难的查询（算术、物理、编程），各自显示被选中的子网络和逐步复杂的工作流。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper that mentions the figure was available, so the arrows from the supernet to the queries are read as per-query sampling from the caption only. Two panels are counted because of the thick divider and the caption's Left and Right; the right half has a heading only over the supernet. model-anatomy was considered as a kind but the supernet is a distribution over multi-agent architectures, not a neural model. The prior kinds were kept and worked-walkthrough added for the three concrete queries. Colours of the sampled nodes do not always sit in the same columns as in the supernet, so no column-to-operator rule is claimed.",
+ "venue": "ICML25"
+}

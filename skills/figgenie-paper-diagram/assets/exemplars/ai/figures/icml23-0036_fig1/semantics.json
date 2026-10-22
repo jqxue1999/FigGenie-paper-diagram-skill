@@ -1,0 +1,623 @@
+{
+ "paper_id": "icml23-0036",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LM-DESIGN",
+  "one_liner": "Reprograms a sequence-based protein language model into a structure-based protein designer with a lightweight structural adapter and iterative refinement.",
+  "domain": [
+   "protein design",
+   "protein language models",
+   "inverse folding"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "multi-branch-fusion",
+  "variant_note": "a structure encoder and a protein language model decoder joined by a structural adapter, with a problem case study and the two background families drawn beside it",
+  "argues": "A protein language model with a structural adapter and iterative refinement designs sequences for a fold better than purely structure-based models, especially in flexible, structurally non-deterministic regions.",
+  "subject": "Case study and evidence, the two model families with their data sizes, and the LM-DESIGN architecture with its refinement loop.",
+  "elements": [
+   {
+    "name": "CATH structures (~2×10^4)",
+    "type": "data",
+    "role": "structure database behind structure-based design models; small, about 2×10^4 entries",
+    "drawn_as": "database icon with a bold title and the size written with a red exponent, curved arrows to a structure picture and to a token strip",
+    "container": "D",
+    "is_contribution": false
+   },
+   {
+    "name": "structure-based sequence design models (GNNs, ProteinMPNN, GVP, PiFold, IPA, etc.)",
+    "type": "module",
+    "role": "maps a protein structure to a sequence",
+    "drawn_as": "pale pink rounded box with a small node-link glyph, a protein structure going in and red T G R Y bars coming out",
+    "container": "D",
+    "is_contribution": false
+   },
+   {
+    "name": "UniRef-50 sequences (~5×10^7)",
+    "type": "data",
+    "role": "sequence database behind protein language models; large, about 5×10^7 entries",
+    "drawn_as": "database icon with sliders, bold title with a red exponent, a curved arrow to a stack of coloured token bars",
+    "container": "E",
+    "is_contribution": false
+   },
+   {
+    "name": "protein language models (pLMs) (ESM-1b, ESM-2 series)",
+    "type": "module",
+    "role": "language models of protein sequences",
+    "drawn_as": "pale green rounded box holding a white Transformer layer box with x N",
+    "container": "E",
+    "is_contribution": false
+   },
+   {
+    "name": "Transformer layer / Multihead ATTN + FFN × N",
+    "type": "module",
+    "role": "standard stacked layers of the pLM",
+    "drawn_as": "white rounded box with two lines of text, x N written at its right edge",
+    "container": "E, F",
+    "is_contribution": false
+   },
+   {
+    "name": "structure encoder (GNNs, ProteinMPNN, GVP, IPA, etc.)",
+    "type": "module",
+    "role": "encodes the protein backbone structure; any existing encoder can be used",
+    "drawn_as": "pale pink rounded box with a node-link glyph, fed from below by a rainbow ribbon picture",
+    "container": "F",
+    "is_contribution": false
+   },
+   {
+    "name": "sequence decoder: pLM (ESM series, etc)",
+    "type": "container",
+    "role": "the protein language model that writes the sequence",
+    "drawn_as": "pale green rounded box holding the Transformer layers and the structural adapter",
+    "container": "F",
+    "is_contribution": true
+   },
+   {
+    "name": "structural adapter",
+    "type": "module",
+    "role": "lightweight block that gives the pLM access to structure features",
+    "drawn_as": "pale pink box with two white boxes, FFN above Multihead ATTN, placed above the Transformer layers inside the decoder",
+    "container": "sequence decoder: pLM",
+    "is_contribution": true
+   },
+   {
+    "name": "[cls]YKTVRAGRLGSISRSLER[eos] and [cls]MKTVRQERLKSIVRILER[eos]",
+    "type": "data",
+    "role": "input sequence at the bottom with some residues underlined in red, refined output sequence at the top with residues in blue",
+    "drawn_as": "two monospace strings with [cls] and [eos] tokens, coloured residue letters",
+    "container": "F",
+    "is_contribution": false
+   },
+   {
+    "name": "iteratively refine ×T",
+    "type": "operation",
+    "role": "the output sequence is fed back as the next input, T times",
+    "drawn_as": "long black arrow from the output string around the right edge to the input string, circular-arrows icon and bold label with a red T",
+    "container": "F",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "CATH structures (~2×10^4)",
+    "to": "protein structure picture and T G R Y tokens",
+    "what": "structures and their sequences are drawn from the database",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "protein structure picture",
+    "to": "structure-based sequence design models",
+    "what": "structure in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "structure-based sequence design models",
+    "to": "T G R Y bars",
+    "what": "sequence out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "UniRef-50 sequences (~5×10^7)",
+    "to": "token bar stack",
+    "what": "sequences",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "token bar stack",
+    "to": "protein language models (pLMs)",
+    "what": "training sequences",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "structure-based sequence design models (D)",
+    "to": "structure encoder (F)",
+    "what": "its structure encoder is reused",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "protein language models (E)",
+    "to": "sequence decoder: pLM (F)",
+    "what": "the pLM is reused as the decoder",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "protein structure picture",
+    "to": "structure encoder",
+    "what": "backbone structure",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "structure encoder",
+    "to": "structural adapter",
+    "what": "structure features into Multihead ATTN",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input sequence",
+    "to": "Transformer layer",
+    "what": "sequence in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformer layer",
+    "to": "structural adapter",
+    "what": "hidden states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "structural adapter",
+    "to": "output sequence",
+    "what": "refined prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "output sequence",
+    "to": "input sequence",
+    "what": "iteratively refine ×T",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "bracket on the ribbon in A",
+    "to": "alignment box in B",
+    "what": "the bracketed activation loop is shown as sequences",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "pink boxes in D and F",
+    "to": "green boxes in E and F",
+    "what": "structure branch in pink, sequence branch in green, kept in both panels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Case study: ribbon diagram of Tyrosine kinase coloured by AlphaFold2 pLDDT, activation loop bracketed, four-swatch legend",
+    "verdict": "setting"
+   },
+   {
+    "label": "B",
+    "kind": "concept-schematic",
+    "axis": "zoom",
+    "shows": "Kinase Activation Loop: aligned natural sequences against ProteinMPNN (invalid repeats) and LM-Design predictions",
+    "verdict": "contrast"
+   },
+   {
+    "label": "C",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Preliminary study: sequence recovery against mask ratio for ESM-1b refinement versus the ProteinMPNN and LM-Design levels",
+    "verdict": "motivation"
+   },
+   {
+    "label": "D",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "Neural structure-based sequence design: CATH structures train structure-based design models",
+    "verdict": "baseline"
+   },
+   {
+    "label": "E",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "Protein language models trained on UniRef-50 sequences",
+    "verdict": "baseline"
+   },
+   {
+    "label": "F",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Overall illustration of LM-DESIGN: structure encoder, pLM decoder with structural adapter, iterative refinement",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A-F",
+    "kind": "section",
+    "at": "bold capital letters at the top-left of each panel, F drawn larger",
+    "what": "letter the panels"
+   },
+   {
+    "marker": "× N",
+    "kind": "identity",
+    "at": "right edge of each Transformer layer box",
+    "what": "the Transformer layer is repeated N times"
+   },
+   {
+    "marker": "× T",
+    "kind": "identity",
+    "at": "label of the return arrow",
+    "what": "the refinement is repeated T times"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "ribbon diagram of Tyrosine kinase coloured by AlphaFold2 pLDDT (dark blue 90-100, cyan 70-90, yellow 50-70, orange 0-50)",
+    "content": "molecule",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "pasted render with a four-swatch legend underneath and a bracket at the activation loop tied to B by thin grey wedge lines"
+   },
+   {
+    "what": "alignment snippet of the kinase activation loop: five aligned natural sequences, the ProteinMPNN and the LM-Design predictions",
+    "content": "document",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "white framed box of coloured bold monospace letters, one colour per amino-acid class, grey X for unknown residues, rows titled in plain sans"
+   },
+   {
+    "what": "line plot of sequence recovery (%) against mask ratio for ESM-1b refinement (all and only mask) with ProteinMPNN and LM-Design levels",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue squares with a light-blue area, orange triangles with a light-orange area, black dashed baseline, purple dashed line on top, values printed at the points, broken y axis, legend box inside the plot"
+   },
+   {
+    "what": "protein structure pictures used as input: a small helix pictogram in D and a rainbow ribbon in F",
+    "content": "molecule",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small coloured renders under or beside the model boxes, the one in F credited to RFDiffusion in the caption"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "screen over a database cylinder, one showing structure drawings and one showing sliders",
+    "stands_for": "the CATH structure database and the UniRef-50 sequence database",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "small node-link glyph with blue and red nodes",
+    "stands_for": "a GNN-type structure model or encoder",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "stacked coloured bars with the letters T G R Y beneath",
+    "stands_for": "protein sequences as tokens",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "two curved arrows chasing each other in a circle",
+    "stands_for": "iterative refinement",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "kinase activation loop: aligned RLIEDNEYTARQGAKFPIK, ProteinMPNN RKEKDKNXKKKKNEKYDPR, LM-Design RLIEDAAYXASAGAKFPIK",
+    "form": "coloured monospace letters, one row per source",
+    "real_values": true
+   },
+   {
+    "what": "input sequence [cls]YKTVRAGRLGSISRSLER[eos] with red-underlined residues and the refined output [cls]MKTVRQERLKSIVRILER[eos] with residues in blue",
+    "form": "two monospace strings at the bottom and the top of F",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "white rounded box with the lines Transformer layer and Multihead ATTN + FFN, 'x N' at its right edge",
+    "parts": [
+     "Transformer layer",
+     "Multihead ATTN + FFN",
+     "x N"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "adapter-module",
+    "drawn_as": "pink box labelled structural adapter holding FFN and Multihead ATTN boxes, placed above the Transformer layers inside the green decoder box, fed by the structure encoder through an elbow arrow",
+    "parts": [
+     "structural adapter",
+     "FFN",
+     "Multihead ATTN",
+     "elbow arrow from the encoder"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "structure encoder and sequence decoder as rounded boxes, the structure joined to the decoder through the adapter",
+    "parts": [
+     "structure encoder",
+     "sequence decoder: pLM"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "tiny node-link glyph of blue and red nodes standing for a GNN or structure encoder, not a graph example",
+    "parts": [
+     "nodes",
+     "links"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "database icon with the dataset name and size in scientific notation with a red exponent",
+    "parts": [
+     "database icon",
+     "name",
+     "size"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "bars labelled T G R Y for sequences, and monospace strings with [cls] and [eos] and coloured residues",
+    "parts": [
+     "token bars",
+     "[cls]",
+     "[eos]",
+     "coloured residues"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "iterative-refinement-loop",
+    "drawn_as": "long arrow from the output sequence around the right edge back to the input sequence with a circular-arrows icon and the label iteratively refine x T",
+    "parts": [
+     "return arrow",
+     "loop icon",
+     "label"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at A top-left with B to its right and C below; then D and E at the top right, with hollow block arrows leading down into the large panel F, read from the structure encoder and input sequence upward through the decoder and around the refinement loop."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Six lettered panels: A and B side by side at top-left with C beneath, D and E side by side at the top right, and a large shadowed frame F at the bottom right that receives hollow block arrows from D and E.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 4,
+  "legend": "per-panel",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.06,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff1f1",
+    "used_for": "pale pink fill: structure-based design models, structure encoder, structural adapter"
+   },
+   {
+    "hex": "#f8fdf5",
+    "used_for": "pale green fill: protein language models and the sequence decoder"
+   },
+   {
+    "hex": "#daf6fd",
+    "used_for": "light cyan screens of the database icons"
+   },
+   {
+    "hex": "#535353",
+    "used_for": "dark grey outlines, arrows and text"
+   },
+   {
+    "hex": "#c34441",
+    "used_for": "red underlines of the changed residues in the input sequence (stroke); red exponents and the T of x T"
+   },
+   {
+    "hex": "#a7a7a7",
+    "used_for": "light grey wedge lines and the panel divider (stroke)"
+   },
+   {
+    "hex": "#0053d6",
+    "used_for": "pLDDT 90-100 in the ribbon of A (AlphaFold standard colours, read off a bitmap)",
+    "approx": true
+   },
+   {
+    "hex": "#ffdb13",
+    "used_for": "pLDDT 50-70 in the ribbon of A (read off a bitmap)",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75-1 pt dark grey outlines on rounded boxes and arrows, 0.25 pt for fine lines, thin grey wedge lines",
+  "font": "sans (Optima), 4-10.5 pt, bold panel letters 10.5 pt (F 16.5 pt), monospace for the residue strings, small-caps ATTN",
+  "corners": "rounded",
+  "arrows": "thin black arrows with filled heads, some elbow; curved arrows from the database icons; large hollow pale block arrows from D and E into F; one long black return arrow",
+  "rendering": "mixed",
+  "effects": "soft drop shadow around the frame of F",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Pink = structure branch (design models in D, structure encoder and structural adapter in F); green = sequence branch (pLMs in E, sequence decoder in F); in A the AlphaFold pLDDT colours; in B residues coloured by amino-acid class; in C blue = ESM-1b refinement (all), orange = (only mask), purple dashed = LM-Design, black dashed = ProteinMPNN; red = dataset-size exponents, changed residues and the T.",
+  "line_style_means": "Thin black arrows carry data; hollow pale block arrows bring the model family from D and E into F; the long black arrow from output to input marks iterative refinement; grey wedge lines tie the bracket in A to B.",
+  "shape_means": "Rounded rectangles = models and modules; the large framed rounded rectangle = the LM-DESIGN overview; node-link glyph = GNN-type model; screen over a cylinder = database; stacked bars with letters = sequences.",
+  "marker_means": "Capital letters A-F name the panels (F drawn larger); x N and x T give repeat counts; [cls] and [eos] mark the ends of a sequence; red underline marks residues that change.",
+  "emphasis": "F is the largest panel and the only one with a shadowed frame, and the pink and green tints of D and E reappear inside it, so the method reads as a join of the two families.",
+  "reusable_patterns": [
+   "two background boxes, one per model family and each with its own tint, whose tints reappear inside the overview panel",
+   "large hollow block arrows from background panels into the overview panel",
+   "database icon with the dataset name and size in scientific notation",
+   "bracket on a structure picture tied by wedge lines to a sequence box",
+   "input and output sequences with changed residues underlined or coloured",
+   "long return arrow with a circular-arrows icon and x T for iterative refinement",
+   "plot with filled areas, dashed reference lines and values printed on the points"
+  ],
+  "weaknesses": [
+   "text in F is only 4-6.5 pt and the elbow arrows into and out of the structural adapter run close together",
+   "the case-study and plot panels on the left look unrelated to the method drawing",
+   "the grey wedge lines from A to B are very faint",
+   "the legend of C sits inside the plot over the data",
+   "the bypass line around the structural adapter is not labelled"
+  ]
+ },
+ "resources": {
+  "own": [
+   "AlphaFold-coloured kinase ribbon diagram",
+   "alignment snippet with the two predictions",
+   "measured sequence-recovery plot",
+   "example residue sequences"
+  ],
+  "stock": [
+   "database, node-link and circular-arrow icons",
+   "protein structure image credited to RFDiffusion"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded boxes and arrows",
+   "dataset names and sizes",
+   "residue strings and token bars"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "pLDDT-coloured protein ribbon with legend",
+   "alignment box with coloured residues",
+   "sequence-recovery line plot",
+   "database icons with dataset sizes",
+   "structure-based design models box",
+   "protein language model box with Transformer layer",
+   "structure encoder and structural adapter inside the pLM decoder",
+   "iterative refinement return arrow"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "protein design",
+   "protein language model",
+   "structural adapter",
+   "inverse folding",
+   "ESM-1b",
+   "ProteinMPNN",
+   "iterative refinement",
+   "CATH",
+   "UniRef-50"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "zoom-callout",
+   "highlighted-text-spans",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "dataset-icon-with-size",
+    "what": "a database icon labelled with the dataset name and its size in scientific notation, with curved arrows to the models trained on it"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the two model families you join as small background boxes with their own tints and data-size badges, then reuse those tints inside one large shadowed overview panel so the new model reads as their join; add a long return arrow with a loop icon for iterative inference.",
+  "suits": "Methods that graft one model family onto another (adapter, bridge, fusion) and need to show both origins, the data behind each and an iterative inference loop."
+ },
+ "tags": [
+  "six lettered panels",
+  "pink and green module families",
+  "large shadowed overview panel",
+  "database icons",
+  "colourful residue letters",
+  "hollow block arrows",
+  "sans text",
+  "mixed bitmap and vector"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "3 Reprogramming pLMs for Structure-based (p.4)"
+  ],
+  "evidence": [
+   "(F) Overall illustration of LM-DESIGN, where the wonderful colored protein structure image is credited to RFDiffusion",
+   "a lightweight structural adapter is implanted to endow pLMs with structural awareness",
+   "During inference, iterative refinement is performed to optimize the generated protein sequence"
+  ]
+ },
+ "summary": "LM-DESIGN turns a sequence-based protein language model (pLM) into a designer for a given fold by adding a lightweight structural adapter and refining the sequence iteratively. Figure 1 is a six-panel overview. A to C present the problem: a pLDDT-coloured kinase with a flexible activation loop, an alignment where ProteinMPNN produces invalid repeats, and a plot of pLM refinement. D and E show the two background families, structure-based design models trained on CATH structures (pink) and pLMs trained on UniRef-50 sequences (green), with their sizes. Panel F, the largest, joins them: a structure encoder feeds an adapter inside the pLM decoder, and a return arrow marked x T refines the sequence.",
+ "summary_zh": "LM-DESIGN 给序列蛋白语言模型加入轻量结构适配器，并迭代精修序列。图 1 共六个面板：A 到 C 展示激酶活化环的问题与初步实验，D 和 E 画出两类已有模型及其数据规模，F 是结构编码器、带适配器的解码器和 ×T 迭代回路。",
+ "confidence": "high",
+ "notes": "The pre-screen listed only model-anatomy; side-by-side-contrast (problem then fix: A-C diagnose, D-E show two families, F is the remedy) and concept-schematic (A-C) were added. The digest suggests that A and B form one pasted bitmap, the plot C another, and the shadowed frame of F a third; this is inferred from placed sizes. The bypass line around the structural adapter has no label, so no role is given. The sequence strings in F may be illustrative, hence real_values null.",
+ "venue": "ICML23"
+}

@@ -1,0 +1,547 @@
+{
+ "paper_id": "cvpr26-0015",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PR-IQA",
+  "one_liner": "Partial-reference image quality assessment that scores diffusion-generated novel views against references from other poses, and guides 3DGS training with the quality maps.",
+  "domain": [
+   "image quality assessment",
+   "novel view synthesis",
+   "3D Gaussian splatting"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "three lettered tinted panels as consecutive stages (generate views, assess their quality, train 3DGS with the maps), all on one statue scene",
+  "argues": "A dense quality map predicted from unaligned references, close to full-reference metrics and needing no ground truth, lets 3DGS train only on trustworthy regions of diffusion-made views.",
+  "subject": "A statue scene carried from reference views through diffusion-made novel views, quality maps of several IQA methods, and 3DGS renders.",
+  "elements": [
+   {
+    "name": "Reference View",
+    "type": "sample",
+    "role": "sparse input views of the scene",
+    "drawn_as": "two photos framed in blue with an ellipsis between them",
+    "container": "(a) Diffusion-Based Image Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Dense Stereo",
+    "type": "module",
+    "role": "recovers the scene geometry and camera frusta from the reference views",
+    "drawn_as": "white box with a bold title holding a point-cloud render with blue and pink camera frusta",
+    "container": "(a) Diffusion-Based Image Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Point-rendered Novel View",
+    "type": "data",
+    "role": "views rendered from the point cloud at new poses, with unobserved holes",
+    "drawn_as": "stack of three offset images with a pink frame and a yellow label Unobserved",
+    "container": "(a) Diffusion-Based Image Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Video Diffusion Model",
+    "type": "module",
+    "role": "inpaints the holes of the point-rendered views",
+    "drawn_as": "grey bow-tie shape of two trapezoids with the name written inside",
+    "container": "(a) Diffusion-Based Image Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Refined Novel View",
+    "type": "data",
+    "role": "generated pseudo-ground-truth view",
+    "drawn_as": "image in a black rounded frame with a yellow label Inpainted",
+    "container": "(a) Diffusion-Based Image Generation",
+    "is_contribution": false
+   },
+   {
+    "name": "Ground Truth, Query Image, Reference Image",
+    "type": "sample",
+    "role": "the three images an IQA method may see: the true view, the generated query and a reference from another pose",
+    "drawn_as": "three equal photos, the query framed green and the reference framed orange-yellow",
+    "container": "(b) Image Quality Assessment",
+    "is_contribution": false
+   },
+   {
+    "name": "Only Query Image: FR-IQA DINOv2, NR-IQA PIQE",
+    "type": "container",
+    "role": "full-reference and no-reference baselines that see only the query",
+    "drawn_as": "black-outlined rounded box under a black pill, two heat maps with white tags FR-IQA and NR-IQA",
+    "container": "(b) Image Quality Assessment",
+    "is_contribution": false
+   },
+   {
+    "name": "Only Overlapped Region: CR-IQA MEt3R",
+    "type": "container",
+    "role": "cross-reference baseline that scores only the region overlapped with the reference",
+    "drawn_as": "black-outlined rounded box under a black pill, one map with a blue-purple area outside the overlap",
+    "container": "(b) Image Quality Assessment",
+    "is_contribution": false
+   },
+   {
+    "name": "Query + Reference Images + Patch-level: CrossScore, PuzzleSim",
+    "type": "container",
+    "role": "cross-reference baselines using query and reference at patch level",
+    "drawn_as": "black-outlined rounded box under a black pill with coloured words, two maps tagged CR-IQA",
+    "container": "(b) Image Quality Assessment",
+    "is_contribution": false
+   },
+   {
+    "name": "Query + Ref. + Pixel-level: Ours",
+    "type": "container",
+    "role": "the proposed PR-IQA map at pixel level",
+    "drawn_as": "black-outlined rounded box under a black pill with coloured words, one map tagged CR-IQA captioned Ours",
+    "container": "(b) Image Quality Assessment",
+    "is_contribution": true
+   },
+   {
+    "name": "Quality-Conditioned Sampling: Aligned, Misaligned",
+    "type": "container",
+    "role": "image-level selection of candidate pseudo-ground-truths by quality",
+    "drawn_as": "two thumbnails with yellow labels, a green tick under Aligned and a red cross under Misaligned",
+    "container": "(c) Quality-Aware 3DGS Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Masked Training Loss: Quality Map, Loss Mask",
+    "type": "container",
+    "role": "pixel-level filtering: the quality map becomes a binary mask that restricts the loss",
+    "drawn_as": "rainbow heat map beside a black-and-white mask with captions below",
+    "container": "(c) Quality-Aware 3DGS Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Ground Truth, Vanilla 3DGS, PuzzleSim, Ours",
+    "type": "container",
+    "role": "3DGS renders from training with no filtering, a baseline filter and the proposed filter, next to the true view",
+    "drawn_as": "two-by-two grid of equal renders with captions",
+    "container": "(c) Quality-Aware 3DGS Optimization",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Reference View",
+    "to": "Dense Stereo",
+    "what": "reference views are turned into geometry",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Dense Stereo",
+    "to": "Point-rendered Novel View",
+    "what": "novel views are rendered from the point cloud",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Point-rendered Novel View",
+    "to": "Video Diffusion Model",
+    "what": "views with unobserved holes enter the diffusion model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Video Diffusion Model",
+    "to": "Refined Novel View",
+    "what": "holes are inpainted",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a) Diffusion-Based Image Generation",
+    "to": "(b) Image Quality Assessment",
+    "what": "the generated views are the query images to be scored; no arrow joins the panels",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(b) Image Quality Assessment",
+    "to": "(c) Quality-Aware 3DGS Optimization",
+    "what": "the proposed quality map feeds the sampling and the loss mask; no arrow joins the panels",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Quality Map",
+    "to": "Loss Mask",
+    "what": "the dense map is thresholded into a binary confidence mask",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "frame colour of the Query Image and Reference Image",
+    "to": "coloured words Query and Reference in the black pills",
+    "what": "green marks the query and orange-yellow the reference wherever they are named",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Aligned and Misaligned thumbnails",
+    "to": "green tick and red cross",
+    "what": "aligned candidates are kept, misaligned ones rejected",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Diffusion-Based Image Generation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "Reference views go through dense stereo to point-rendered novel views, which a video diffusion model inpaints into refined novel views.",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Image Quality Assessment",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "Ground truth, query and reference photos, then quality maps of full-, no- and cross-reference methods against Ours, grouped by the inputs each uses.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Quality-Aware 3DGS Optimization",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "Aligned against misaligned candidates, quality map to loss mask, and renders from Ground Truth, Vanilla 3DGS, PuzzleSim and Ours.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "bold titles at the top left of each panel",
+    "what": "letter the three stages and name them"
+   },
+   {
+    "marker": "FR-IQA, NR-IQA, CR-IQA",
+    "kind": "identity",
+    "at": "white tags on the quality maps",
+    "what": "name the type of each method: full-reference, no-reference, cross-reference"
+   },
+   {
+    "marker": "Unobserved, Inpainted, Aligned, Misaligned",
+    "kind": "identity",
+    "at": "yellow labels on the thumbnails",
+    "what": "name the state of each generated view"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photos of a statue in a courtyard: reference views, ground truth, query and reference images",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "equal-size thumbnails; reference views framed blue in (a); in (b) the ground truth unframed, the query framed green and the reference framed orange-yellow"
+   },
+   {
+    "what": "dense-stereo reconstruction with camera frusta",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "point-cloud render of the courtyard on a white box, blue frusta for the reference views and pink frusta for new viewpoints joined by a dotted red line"
+   },
+   {
+    "what": "point-rendered novel views with holes",
+    "content": "3d-render",
+    "role": "data-thumbnail",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three offset cards stacked with a pink frame, yellow label Unobserved"
+   },
+   {
+    "what": "inpainted refined novel view",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo in a black rounded frame, yellow label Inpainted"
+   },
+   {
+    "what": "quality maps of six IQA methods: DINOv2, PIQE, MEt3R, CrossScore, PuzzleSim, Ours",
+    "content": "dense-map",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "rainbow heat maps of the scene, each with a white pill tag FR-IQA, NR-IQA or CR-IQA and a caption below, in black-outlined boxes with black header pills"
+   },
+   {
+    "what": "aligned and misaligned generated views",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "thumbnails with yellow labels, a green tick under the first and a red cross under the second"
+   },
+   {
+    "what": "quality map and binary loss mask",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "heat map beside a black-and-white mask, captions below"
+   },
+   {
+    "what": "3DGS renders: Ground Truth, Vanilla 3DGS, PuzzleSim, Ours",
+    "content": "3d-render",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "two-by-two grid of equal renders with captions below"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "green check mark and red cross",
+    "stands_for": "an aligned candidate that is kept and a misaligned one that is rejected",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "grey bow-tie of two trapezoids",
+    "stands_for": "the video diffusion model",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one courtyard-statue scene followed through generation, quality maps of six methods, loss mask and four 3DGS renders",
+    "form": "the same scene redrawn as photos, point-cloud render, heat maps, mask and renders in all three panels",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "grey bow-tie made of two trapezoids touching at their narrow ends, with the model name written across it",
+    "parts": [
+     "left trapezoid",
+     "right trapezoid",
+     "label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "a point-cloud render of the courtyard with camera frusta for the reference and the new views",
+    "parts": [
+     "point cloud",
+     "blue frusta",
+     "pink frusta",
+     "dotted line"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the Reference Views at the top left of (a), follows the elbow arrows down to the refined view, then continues with (b) from the three photos to the groups of quality maps ending in Ours, and finishes in (c) with the mask and the renders."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three tinted rounded panels side by side, each with a bold lettered title at the top left: grey (a), light blue (b), cream (c). Panel (a) is a vertical chain of boxes joined by black elbow arrows. Panel (b) has a row of three photos above four black-outlined groups of heat maps in a two-by-two arrangement, each under a black header pill. Panel (c) has two small thumbnail rows above a two-by-two grid of renders. No arrows join the panels.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.28,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f3f3f3",
+    "used_for": "tint of panel (a)"
+   },
+   {
+    "hex": "#ebf3fb",
+    "used_for": "tint of panel (b)"
+   },
+   {
+    "hex": "#fdf9e9",
+    "used_for": "tint of panel (c)"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey bow-tie shape of the Video Diffusion Model"
+   },
+   {
+    "hex": "#76acd0",
+    "used_for": "blue frames of the reference views and blue camera frusta"
+   },
+   {
+    "hex": "#ebb0b8",
+    "used_for": "pink frame of the point-rendered view stack and pink camera frusta"
+   },
+   {
+    "hex": "#47d45a",
+    "used_for": "green frame of the Query Image and the word Query in the black pills; the tick is #47cf3d"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "orange-yellow frame of the Reference Image and the words Reference and Ref. in the pills"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "yellow labels on thumbnails: Unobserved, Inpainted, Aligned, Misaligned"
+   },
+   {
+    "hex": "#ff4f4f",
+    "used_for": "red cross for the misaligned candidate"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "black rounded outlines, header pills, arrows and the loss-mask background"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1.5 pt coloured frames on photos (blue, green, orange-yellow), black rounded outlines on the groups of maps, 0.75 pt black arrows",
+  "font": "sans (Trade Gothic Next Rounded), bold 7-7.5 pt panel titles, 6 pt captions, 4-4.5 pt tags and header pills, white text on black pills with coloured words",
+  "corners": "rounded",
+  "arrows": "thin black elbow arrows with small filled heads, a short dash before the arrow into the diffusion model, no arrows between panels",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "frame colour and the matching word colour tie inputs to roles: green = query image, orange-yellow = reference image, blue = reference views in (a), pink = point-rendered unobserved views and the new-view frusta; black pills state the inputs a method uses; panel tints separate the three stages; heat maps use rainbow colours",
+  "line_style_means": "thin black arrows = data flow; dotted red line between the pink frusta = the path of the new viewpoints; solid black rounded outline = one family of IQA methods",
+  "shape_means": "grey bow-tie = the video diffusion model; stack of offset cards = a set of candidate views; white pill tag FR-IQA, NR-IQA or CR-IQA = the type of method; black header pill = the inputs those methods use",
+  "marker_means": "yellow labels on images name their state (Unobserved, Inpainted, Aligned, Misaligned); green tick and red cross = candidate kept or rejected; (a), (b), (c) letter the stages",
+  "emphasis": "Ours sits last in (b) under the most specific header pill; the quality map and loss mask are the centre of (c); the proposed render comes last in the grid",
+  "reusable_patterns": [
+   "three lettered tinted panels as consecutive stages with no arrows between them",
+   "frame colour of an input photo repeated as the colour of the word that names it in a header pill",
+   "groups of heat maps in black outlined boxes with black header pills stating which inputs the methods use",
+   "green tick and red cross under kept and rejected candidates",
+   "the same scene carried through every panel",
+   "stack of offset cards for a set of candidate views",
+   "method-type tags on every result tile"
+  ],
+  "weaknesses": [
+   "4-4.5 pt tags and pills are tiny at print size",
+   "no arrows between panels, so the dependence of (c) on (b) is only implied by the letters and the caption",
+   "the colour scale of the heat maps is not explained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos of a statue scene and the generated views",
+   "quality maps of six IQA methods and the loss mask",
+   "3DGS renders of four training variants"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "tinted panels",
+   "black pills and outlines",
+   "elbow arrows",
+   "bow-tie model shape",
+   "tick and cross marks"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted lettered panels",
+   "statue photos with coloured frames",
+   "dense stereo point cloud with camera frusta",
+   "stack of point-rendered views",
+   "grey bow-tie diffusion model",
+   "heat maps in black outlined groups with header pills",
+   "tick and cross under thumbnails",
+   "grid of 3DGS renders"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "image quality assessment",
+   "novel view synthesis",
+   "diffusion models",
+   "3D Gaussian splatting",
+   "partial reference",
+   "quality map",
+   "pseudo ground truth",
+   "cross-reference IQA"
+  ],
+  "tags": [
+   "verdict-marks",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "small-multiples",
+   "saliency-heatmap",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "input-pills-on-method-groups",
+    "what": "black header pills over groups of result tiles stating which inputs each method uses, with the input names coloured like the frames of the input photos"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "When methods differ by the inputs they use, group their output tiles in outlined boxes under a black pill that names the inputs, and colour the input words like the frames of the input photos, so the reader sees what each method gets without reading a table.",
+  "suits": "Evaluation or quality-assessment papers where several baselines differ by which inputs or references they use, shown on one scene."
+ },
+ "tags": [
+  "three tinted lettered panels",
+  "same scene throughout",
+  "coloured photo frames",
+  "black header pills",
+  "heat-map grids",
+  "stacked cards",
+  "rounded sans type"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 PR-IQA-Guided 3D Gaussian Splatting (p.5)"
+  ],
+  "evidence": [
+   "Diffusion models generate novel views (pseudo-GTs) from sparse inputs, which often contain photometric or geometric artifacts.",
+   "This quality map enables a dual-filtering strategy (image selection and pixel masking) for 3DGS training",
+   "its dense quality map creates a binary confidence mask"
+  ]
+ },
+ "summary": "PR-IQA scores diffusion-generated novel views against reference views from other poses, without ground truth, and uses the quality maps to train 3D Gaussian Splatting only on trustworthy regions. Figure 1 shows three tinted lettered panels on one statue scene. (a) Reference views go through dense stereo to point-rendered novel views with unobserved holes, which a video diffusion model inpaints. (b) Photos framed green for the query and orange for the reference, then quality maps of full-, no- and cross-reference methods (DINOv2, PIQE, MEt3R, CrossScore, PuzzleSim) against Ours, grouped under black pills that name the inputs each uses. (c) Aligned and misaligned candidates with a tick and a cross, the quality map and loss mask, and 3DGS renders from Ground Truth, Vanilla 3DGS, PuzzleSim and Ours.",
+ "summary_zh": "PR-IQA 无需真值，用其他位姿的参考图评估扩散生成的新视角，并据质量图只在可信区域训练3DGS。图1用三个字母编号的彩色面板在同一尊雕像场景上依次展示：扩散生成视图、各类IQA质量图对比（含Ours）、质量感知的3DGS训练与渲染结果。",
+ "confidence": "high",
+ "notes": "The prior primary kind contribution-mosaic is dropped: the lettered panels are consecutive stages (generate, assess, train) on one scene, so stage-pipeline leads, side-by-side-contrast covers the method comparisons in (b) and (c), and worked-walkthrough the single scene carried through. The yellow state labels are live text on the images. The colour scale of the heat maps is not explained in the figure.",
+ "venue": "CVPR26"
+}

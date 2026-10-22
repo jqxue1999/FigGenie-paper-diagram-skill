@@ -1,0 +1,419 @@
+{
+ "paper_id": "icml26-0365",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Linear probes on layer-wise hidden states test how well vision-only, vision-language and multimodal models encode latitude and longitude.",
+  "domain": [
+   "geospatial representations",
+   "linear probing",
+   "vision-language models"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "a residual-stream row of layers from input image to output caption, with one tap per layer dropping into a separate linear-probe box (activation vector, ridge regression, predicted-versus-true plot)",
+  "argues": "Whether a model encodes geolocation can be tested by fitting a ridge-regression probe on each layer's [CLS] or last-token residual and scoring latitude/longitude predictions with R².",
+  "subject": "An image through a residual layer stack whose per-layer activations feed a ridge-regression probe of latitude and longitude.",
+  "elements": [
+   {
+    "name": "vision-only/vision-language model",
+    "type": "container",
+    "role": "the model under study, whichever family",
+    "drawn_as": "light-blue tinted band (#4e95d9 at 0.15) with a robot icon at its top left and the name above it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Layer 1 ... Layer L",
+    "type": "module",
+    "role": "the L layers of the model, drawn in sequence",
+    "drawn_as": "dark-navy (#163e64) tall rounded boxes with rotated white labels Layer 1 to Layer 5, an ellipsis, then Layer L",
+    "container": "vision-only/vision-language model",
+    "is_contribution": false
+   },
+   {
+    "name": "⊕",
+    "type": "operation",
+    "role": "adds each layer's output to the residual stream",
+    "drawn_as": "circled plus after every layer, fed by a skip line that runs under the layer and up into the circle",
+    "container": "vision-only/vision-language model",
+    "is_contribution": false
+   },
+   {
+    "name": "A(1), A(2), A(3), A(4), …, A(L–1), A(L)",
+    "type": "data",
+    "role": "residual activations after each layer, read out for probing",
+    "drawn_as": "bold italic navy A with superscript, each beside a long black arrow that drops from a ⊕ into the pink box, ellipsis in the middle",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "model output",
+    "type": "sample",
+    "role": "the model's own text for the input image: a caption naming the landmark and its location",
+    "drawn_as": "stack of four peach (#fbe3d6) rounded cards, front one holding the quoted caption with the landmark and place in bold orange",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Linear Probing",
+    "type": "container",
+    "role": "the probing analysis fitted on the tapped activations",
+    "drawn_as": "pink tinted box (#e59edd at 0.15) under the model with a bold dark-purple title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "A(l)",
+    "type": "data",
+    "role": "the [CLS] or last-token residual of layer l, input of the probe",
+    "drawn_as": "horizontal strip of six magenta (#d86ecc) cells with a bold italic label above",
+    "container": "Linear Probing",
+    "is_contribution": null
+   },
+   {
+    "name": "Ridge Regression",
+    "type": "module",
+    "role": "fits a linear map W from A(l) to latitude and longitude",
+    "drawn_as": "dark-purple (#78206e) rounded box with white two-line text",
+    "container": "Linear Probing",
+    "is_contribution": true
+   },
+   {
+    "name": "Ŵ = arg min_W ||Y – A(l)W||²_F + λ||W||²_F",
+    "type": "formula",
+    "role": "the ridge objective solved by the probe",
+    "drawn_as": "purple serif-math line under the strip and the regressor",
+    "container": "Linear Probing",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input image",
+    "to": "Layer 1",
+    "what": "image enters the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Layer k",
+    "to": "⊕ after Layer k",
+    "what": "layer output joins the residual stream",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "⊕ after Layer k",
+    "to": "Layer k+1",
+    "what": "residual stream feeds the next layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "stream before Layer k",
+    "to": "⊕ after Layer k",
+    "what": "skip connection that runs under the layer and up into the circle",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "⊕ after each layer",
+    "to": "A(1) to A(L) and the Linear Probing box",
+    "what": "activations tapped after every layer and sent down into the probe",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "last ⊕",
+    "to": "model output",
+    "what": "final stream becomes the model's text output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "A(l)",
+    "to": "Ridge Regression",
+    "what": "activation vector of one layer is the regressor's input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Ridge Regression",
+    "to": "predicted vs true lat/lon scatter",
+    "what": "predicted coordinates are compared with the true ones, scored by R²",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "objective formula",
+    "to": "Ridge Regression",
+    "what": "the formula sits right under the regressor and states what it minimises",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "(1), (2), (3), (4), (L–1), (L)",
+    "kind": "identity",
+    "at": "superscripts of A beside the tap arrows",
+    "what": "name which layer each tapped activation comes from; (l) names a generic layer inside the probe"
+   },
+   {
+    "marker": "Layer 1 ... Layer L",
+    "kind": "order",
+    "at": "rotated labels on the layer boxes",
+    "what": "position of each layer in the depth order"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "stack of four photos; the front one is the Step Pyramid of Djoser under a blue sky, the ones behind show blue sky, trees and figures",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "offset stack, each photo shifted up and right with a white outline, front photo about 115 x 78 pt, caption input image below"
+   },
+   {
+    "what": "scatter of predicted versus true latitude/longitude with a fitted line and R² = 0.75",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "pink dots around a dark-purple diagonal line on tick-less axes labelled predicted lat/lon and true lat/lon, R² printed at the lower right"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small robot with an antenna, a display face and a pulse line on its body",
+    "stands_for": "the vision-only / vision-language model",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a photo of the Step Pyramid of Djoser and the model's caption 'The image depicts the Step Pyramid of Djoser, located in Saqqara.'",
+    "form": "stacked photo input and a stacked output card with the landmark and place in bold orange",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "residual-stream",
+    "drawn_as": "a row of layer boxes, each followed by a circled plus fed by a skip line that runs under the layer",
+    "parts": [
+     "layer boxes",
+     "circled plus",
+     "skip lines",
+     "ellipsis for omitted layers"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "linear-probe",
+    "drawn_as": "a tapped activation strip goes into a dark Ridge Regression box and then a predicted-versus-true scatter with R²",
+    "parts": [
+     "activation strip",
+     "regressor box",
+     "scatter with fit line",
+     "objective formula"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a short row of six magenta cells standing for one layer's residual vector rather than tokens",
+    "parts": [
+     "six cells"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the stacked input photos at the left, follows the black arrow through the blue-tinted layers with ⊕ nodes to the output cards at the right, then follows the taps down into the pink Linear Probing box and reads it left to right: vector, Ridge Regression, scatter."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "The forward pass runs left to right along the top (input photos, a blue band of layers, output cards); a pink Linear Probing box sits under the middle of the band and is fed by one long down arrow per layer, and reads left to right itself (vector, regressor, scatter).",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.97,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#163e64",
+    "used_for": "navy layer boxes and the A(1) to A(L) labels at the taps"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "light-blue tint of the model band",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#e59edd",
+    "used_for": "pink tint of the Linear Probing box",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "peach model-output cards"
+   },
+   {
+    "hex": "#d86ecc",
+    "used_for": "magenta activation-vector cells and scatter dots"
+   },
+   {
+    "hex": "#78206e",
+    "used_for": "dark-purple Ridge Regression box, title and fit line"
+   },
+   {
+    "hex": "#c9561b",
+    "used_for": "bold orange entity words in the output caption",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1-1.25 pt black arrows and skip lines, 0.5 pt on small shapes, white 1 pt outlines on the stacked photos and cards, no outline on the tinted regions",
+  "font": "sans (Helvetica Neue Light, bold for A and titles, Cambria Math for the formula) 5-11 pt: 8.5 pt labels and Linear Probing title, 7.5 pt caption and formula, 5.5 pt layer names, 6.5 pt axis labels",
+  "corners": "mixed",
+  "arrows": "straight black orthogonal arrows with small filled heads: forward flow, skip lines that turn up into the circled plus, long down arrows from each plus into the probe box",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = the model under study (navy for its layers and tapped activations), pink / magenta / dark purple = the linear probe (box, vector, regressor, scatter, formula), peach with orange bold words = the model's text output",
+  "line_style_means": "solid black arrows = forward flow and taps; lines under the layers = residual skip connections; white offsets = stacked samples",
+  "shape_means": "tall rotated-label boxes = layers; circled plus = residual addition; row of six cells = activation vector; dark rounded box = probe; stacked cards = a batch of images or outputs",
+  "marker_means": "superscripts (1) to (L) say which layer a tap comes from; (l) is a generic layer; R² = 0.75 is the probe's score",
+  "emphasis": "the pink probe box with its bold title and dark regressor box carries the contribution, all taps converge into it; the pyramid photo is the largest picture",
+  "reusable_patterns": [
+   "residual-stream row of layers with circled-plus nodes and one tap per layer dropping into a single probe box below",
+   "probe pipeline inside a tinted box: activation strip, regressor box, predicted-versus-true scatter with R²",
+   "offset stacks of photos and of output cards to say a batch of images and captions",
+   "bold orange entity words inside the generated caption",
+   "robot pictogram beside the tinted band that stands for the model"
+  ],
+  "weaknesses": [
+   "the caption says [CLS] or last-token residuals but the figure draws a generic cell strip, so the choice of token is only in the caption",
+   "the ellipsis between A(4) and A(L–1) is made of small dots and is easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the model's generated caption",
+   "the probing formula and the R² value"
+  ],
+  "stock": [
+   "robot icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "layer row with circled plus nodes and skip lines",
+   "Linear Probing box with strip and regressor",
+   "schematic scatter with fit line",
+   "tap arrows and tinted regions"
+  ],
+  "unknown": [
+   "origin of the stacked photos (dataset samples or web photos)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "stack of landmark photos",
+   "robot icon with tinted model band",
+   "row of layer boxes with circled plus nodes",
+   "tap arrows labelled A(1) to A(L)",
+   "pink Linear Probing box",
+   "activation vector strip",
+   "Ridge Regression box",
+   "predicted-versus-true lat/lon scatter with R²"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "linear probing",
+   "geolocation",
+   "latitude longitude",
+   "residual stream",
+   "vision-language models",
+   "ridge regression",
+   "layer-wise representations",
+   "R-squared"
+  ],
+  "tags": [
+   "layer-probe-taps",
+   "schematic-plot",
+   "stacked-cards",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "model-pictogram",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw an analysis setup as the model's own residual-stream row with one tap per layer dropping into a separate tinted probe box, then spell the probe out in three beats (vector, regressor, predicted-versus-true plot with its score) plus its formula.",
+  "suits": "probing or interpretability studies that read hidden states from many layers and report one fit score per layer."
+ },
+ "tags": [
+  "tinted containers",
+  "residual-stream row",
+  "tap arrows",
+  "stacked photos",
+  "sans text",
+  "pink probe box",
+  "schematic scatter"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Schematic illustration of our linear probing analysis setup.",
+   "We fit ridge regression models W on the [CLS] or last token residuals A(l) from each layer l"
+  ]
+ },
+ "summary": "The paper analyses how well vision-only models (ViT), vision-language models (CLIP) and multimodal foundation models (LLaVA, Qwen, Gemma) encode geolocation, and finds that textual supervision helps. Figure 1 is a schematic of the linear-probing setup. An input image (a stack of photos, the front one the Step Pyramid of Djoser) enters a blue-tinted model drawn as a row of layers joined by residual circled-plus nodes, marked by a robot icon, and the model outputs a caption naming the pyramid and Saqqara in orange. From each layer a tap A(1) to A(L) drops into a pink Linear Probing box: an activation vector goes into a Ridge Regression box, giving a predicted-versus-true lat/lon scatter with R² = 0.75, with the ridge objective written below.",
+ "summary_zh": "论文分析视觉模型、视觉语言模型与多模态大模型对地理位置的编码，发现文本监督有帮助。图为线性探测的示意：输入图片经带残差的多层模型，每层激活 A(l) 向下接入粉色探测框，岭回归预测经纬度并以 R²=0.75 的散点示意。",
+ "confidence": "high",
+ "notes": "The prior attribute panels=2 was not followed: the blue model band and the pink probe box are tinted containers in one drawing, not framed panels. The scatter is vector (the five bitmaps are four photos and the robot); R² = 0.75 is printed on it but the dots look schematic. The text layer splits Layer into L + ayer and holds one text item per scatter dot; none of that shows in the print.",
+ "venue": "ICML26"
+}

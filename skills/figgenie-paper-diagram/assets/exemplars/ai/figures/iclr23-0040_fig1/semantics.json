@@ -1,0 +1,421 @@
+{
+ "paper_id": "iclr23-0040",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SchemaNet (schema inference)",
+  "one_liner": "An image classifier that predicts by matching the instance's graph of visual ingredients to a learned graph for each category.",
+  "domain": [
+   "interpretable image classification",
+   "graph matching",
+   "visual concepts"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "one elephant photo followed from coloured patches to two weighted graphs, a matcher and a summed class score",
+  "argues": "A class score can be read as the sum of evidence from matched local structures of the image's ingredient graph and the category graph, so the prediction is explainable.",
+  "subject": "One elephant image: ingredient overlay, instance and category IR-Graphs, matched local structures of #198 and #150, and the score 21.25.",
+  "elements": [
+   {
+    "name": "Represent",
+    "type": "operation",
+    "role": "the photo is represented by ingredients, shown as coloured patch cells",
+    "drawn_as": "curved arrow with a serif label from the small photo up to the patch overlay",
+    "container": "left strip",
+    "is_contribution": true
+   },
+   {
+    "name": "Ingredient Visualization",
+    "type": "container",
+    "role": "shows what each ingredient looks like through example patches, under colour-coded index numbers 3, 46, 107, 121, 133, 150, 198",
+    "drawn_as": "ruled table with a title, a coloured header row and seven columns of five tiny patches",
+    "container": "left strip",
+    "is_contribution": true
+   },
+   {
+    "name": "Instance IR-Graph",
+    "type": "container",
+    "role": "graph of the image's ingredients: vertices are visual semantics, edges their interactions",
+    "drawn_as": "rounded box with a serif title and five circled vertices (#46, #25, #198, #133, #150) joined by weighted grey edges",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Category IR-Graph",
+    "type": "container",
+    "role": "the learned imagination of the class: the same kind of graph built for the category",
+    "drawn_as": "larger rounded box with seven vertices (#121, #107, #198, #150, #3, #133, #46) and thirteen weighted edges",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "vertices #3 ... #198 with numbers",
+    "type": "data",
+    "role": "ingredients with an index and a number below it; coloured outline for the ones that matter (#198 orange, #150 purple, #133 red, #46 green, #25 blue), grey for the rest",
+    "drawn_as": "circles with the id on top and the number below; edge numbers sit on the grey edges",
+    "container": "both IR-Graphs",
+    "is_contribution": null
+   },
+   {
+    "name": "Matcher",
+    "type": "operation",
+    "role": "compares the instance graph with the category graph through their joint vertices",
+    "drawn_as": "large pale-green block arrow pointing right, serif label above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Local structure of #198 / Local structure of #150",
+    "type": "region",
+    "role": "the neighbourhood of a joint vertex in the instance (row Instance) and in the category graph (row Category), compared by aggregating neighbours",
+    "drawn_as": "four black ovals in a 2 by 2 arrangement, titles in the vertex colour, small arrows from neighbours into the centre vertex",
+    "container": "right area",
+    "is_contribution": true
+   },
+   {
+    "name": "Instance / Category",
+    "type": "label",
+    "role": "name the two rows of local structures",
+    "drawn_as": "rotated serif words at the left of the ovals",
+    "container": "right area",
+    "is_contribution": null
+   },
+   {
+    "name": "Elephant: 18.60 (#198) + 2.65 (#150) = 21.25",
+    "type": "formula",
+    "role": "the class score for Elephant as the sum of the evidence of the two matched local structures",
+    "drawn_as": "one line of serif text with the two terms in orange and purple",
+    "container": "right area",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "small elephant photo",
+    "to": "patch overlay on the large photo",
+    "what": "Represent: the image is expressed as ingredients",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "patch overlay and Ingredient Visualization",
+    "to": "vertices of the IR-Graphs",
+    "what": "each ingredient keeps its colour as a vertex",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Instance IR-Graph and Category IR-Graph",
+    "to": "local structures of #198 and #150",
+    "what": "the Matcher compares the joint vertices",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "neighbour vertices inside an oval",
+    "to": "centre vertex of that oval",
+    "what": "information is aggregated from the neighbours",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ovals of #198 (Instance and Category)",
+    "to": "18.60 (#198)",
+    "what": "evidence from the pair of local structures of #198",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ovals of #150 (Instance and Category)",
+    "to": "2.65 (#150)",
+    "what": "evidence from the pair of local structures of #150",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "18.60 (#198) and 2.65 (#150)",
+    "to": "21.25",
+    "what": "the final prediction is the sum of all evidence",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "each ingredient colour",
+    "to": "its cells, header index, vertices, title and score term",
+    "what": "one colour per ingredient is kept everywhere",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Represent / Ingredient Visualization",
+    "axis": "stages",
+    "shows": "Left strip ruled off from the rest: an elephant photo with a coloured patch overlay, a small photo tied to it by Represent, and a table of example patches per ingredient.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Instance IR-Graph / Category IR-Graph",
+    "axis": "stages",
+    "shows": "Two framed graph boxes, instance above and category below, with coloured weighted vertices.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Matcher",
+    "axis": "stages",
+    "shows": "Ovals around the local structures of #198 and #150 in the instance and category graphs, and the sum of their evidence as the class score 21.25.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "#3, #25, #46, #107, #121, #133, #150, #198",
+    "kind": "identity",
+    "at": "vertices, header row of the table and titles",
+    "what": "ingredient indices; the colour of the id matches the cells on the photo"
+   },
+   {
+    "marker": "numbers on vertices and edges (0.40, 0.239 ...)",
+    "kind": "identity",
+    "at": "below each vertex id and on each edge",
+    "what": "weights; the figure does not say what they measure"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "elephant photo overlaid with a grid of translucent coloured cells, one colour per ingredient",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo cut by a thin light grid, cells tinted at 0.75 opacity in orange, purple, red, green and blue"
+   },
+   {
+    "what": "small elephant photo that Represent points from",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail under the overlay with a curved arrow up to it"
+   },
+   {
+    "what": "35 tiny patches, five per ingredient in seven columns, showing what each ingredient looks like (animal skin, grass, soil, sky)",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 35,
+    "medium": "bitmap",
+    "treatment": "tight grid of 9 pt squares under colour-coded index numbers in a ruled table"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "an elephant image classified through two matched local structures: 18.60 for #198 and 2.65 for #150 give the class score 21.25, with weights written on every vertex and edge",
+    "form": "photo, patch overlay, weighted graphs and a score equation",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "the photo cut by a light grid into patch cells, each cell tinted by the ingredient it belongs to instead of becoming a token",
+    "parts": [
+     "photo",
+     "grid",
+     "tinted cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "weighted node-link graphs with circled coloured vertices; local structures drawn as ovals with small arrows from neighbours into the centre vertex to show aggregation",
+    "parts": [
+     "vertices",
+     "weighted edges",
+     "ovals",
+     "neighbour arrows"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the photo with the patch overlay at top left, goes to the table below it, then the two graph boxes, the Matcher arrow, the local-structure ovals and the sum line at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "One rounded outer frame in three column groups: a narrow left strip ruled off by a vertical line (photo with overlay above, ingredient table below), a middle column of two stacked rounded graph boxes, and a wide right area with the Matcher arrow, a 2 by 2 set of ovals (rows Instance and Category, columns #198 and #150) and the score line.",
+  "panel_count": 3,
+  "lanes": "2 rows (Instance, Category) by 2 columns (#198, #150) of local structures",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.01,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fcd186",
+    "opacity": 0.75,
+    "used_for": "orange-yellow: ingredient #198 cells over the photo (vertex outlines and arrows use #ff8000)"
+   },
+   {
+    "hex": "#8d86fc",
+    "opacity": 0.75,
+    "used_for": "purple: ingredient #150 cells, vertex outlines and arrows"
+   },
+   {
+    "hex": "#97d077",
+    "opacity": 0.75,
+    "used_for": "green: ingredient #46 cells and vertices"
+   },
+   {
+    "hex": "#1ba1e2",
+    "opacity": 0.75,
+    "used_for": "blue: ingredient #25 cells and vertex"
+   },
+   {
+    "hex": "#fc0b03",
+    "opacity": 0.75,
+    "used_for": "red: ingredient #133 cells and vertices"
+   },
+   {
+    "hex": "#ff8000",
+    "used_for": "orange outlines of the #198 vertices and the arrows into 18.60"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "pale green Matcher block arrow"
+   },
+   {
+    "hex": "#a1a1a1",
+    "used_for": "grey vertices (#3, #107, #121) and thin grey edges (also #666666)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.5 pt grey graph edges, 1 pt black frames, ovals and graph boxes, 1 pt coloured vertex outlines",
+  "font": "serif (Times New Roman) 4 to 6 pt; italic for Elephant; vertex ids in their colour",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads from neighbours into the centre vertex; long orange and purple arrows from the ovals to the score terms; one big pale-green block arrow; a curved arrow labelled Represent",
+  "rendering": "flat-vector",
+  "effects": "small grey drop shadow behind the centre vertex of each local structure",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "One colour per ingredient: orange #198, purple #150, red #133, green #46, blue #25, grey for the others. The colour marks its cells on the photo, its index in the table header, its vertices in both graphs, the local-structure title and the arrows and terms of the score.",
+  "line_style_means": "thin grey lines = graph edges carrying weights; small black arrows inside ovals = neighbours feeding the centre vertex; long orange and purple arrows = evidence passed to the score",
+  "shape_means": "circle = a vertex (ingredient); oval = a local structure; rounded box = a graph; big pale-green block arrow = the matcher",
+  "marker_means": "#n is an ingredient index; numbers on vertices and edges are weights; 18.60 + 2.65 = 21.25 is the class score",
+  "emphasis": "Only #198 and #150 are coloured thick and circled while the rest are grey, so the two matched structures stand out; the score line closes the figure.",
+  "reusable_patterns": [
+   "one colour per discrete concept carried from a patch overlay on the photo through graph vertices to the terms of the final score",
+   "two titled graph boxes (Instance and Category) joined to the next stage by a big labelled block arrow",
+   "ovals around a vertex and its neighbours to show local structure aggregation",
+   "equation line with colour-coded terms that sum evidence into the class score",
+   "table of patch thumbnails under colour-coded index numbers to show what each ingredient looks like"
+  ],
+  "weaknesses": [
+   "4 pt numbers on vertices and edges are hard to read",
+   "the figure does not say what the vertex and edge numbers measure",
+   "the Matcher arrow shows which structures are paired only through colour"
+  ]
+ },
+ "resources": {
+  "own": [
+   "an elephant photo with its ingredient assignment",
+   "35 patch thumbnails",
+   "graph weights from the model"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "graphs and ovals",
+   "arrows and the block arrow",
+   "frames and the table rules"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "elephant photo with a coloured patch overlay",
+   "table of ingredient patch thumbnails with coloured indices",
+   "instance and category graphs with coloured weighted vertices",
+   "pale green Matcher block arrow",
+   "ovals around local structures",
+   "score line 18.60 + 2.65 = 21.25"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "interpretable image classification",
+   "schema inference",
+   "ingredient graph",
+   "graph matching",
+   "image patches",
+   "class evidence",
+   "visual words"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "categorical-patch-overlay",
+    "what": "translucent colour-coded cells over a photo's patch grid, one colour per discrete visual word, reused as the node colours of the graphs"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Fix one colour per discrete concept and carry it from the image overlay through the table of examples and the graph vertices to the terms of the final score, so a prediction can be traced to its evidence. Show the matcher as a big labelled arrow between graph boxes and enlarge the matched local structures in ovals.",
+  "suits": "Interpretable or prototype-matching models that predict by comparing an instance structure with class structures, where which parts matched and with what weight is the story."
+ },
+ "tags": [
+  "left-strip-plus-main",
+  "graph-boxes",
+  "ovals-for-local-structure",
+  "colour-per-ingredient",
+  "numeric-weights-on-edges",
+  "serif-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "the desired outputs from schema inference contribute only from the relationship of visual words, as shown in Figure 1.",
+   "The final prediction is defined as the sum of all evidence."
+  ]
+ },
+ "summary": "SchemaNet classifies by matching graphs instead of using deep features: an image is split into feature ingredients (visual words) that form an instance ingredient-relation graph, which is matched against each category's learned graph. Figure 1 walks one elephant image through this. At left, a photo with a colour-coded patch overlay and a table of patch thumbnails show the ingredients. In the middle sit an Instance IR-Graph and a Category IR-Graph with coloured, weighted vertices. A pale green Matcher arrow leads to ovals around the local structures of #198 and #150 in each graph, whose evidence 18.60 and 2.65 sums to the class score 21.25.",
+ "summary_zh": "SchemaNet 用图匹配代替深层特征分类：图像拆成成分，组成实例图，再与类别想象图匹配。图 1 以大象图为例：左侧着色补丁与成分示例，中间为加权图，右侧经 Matcher 对 #198、#150 的局部结构求和，得分 21.25。",
+ "confidence": "high",
+ "notes": "Prior labels kept (worked-walkthrough, stage-pipeline). Panels are three column groups; only the left strip is ruled off by a line, the two graph boxes are framed and titled. The figure does not say what the numbers on vertices and edges measure. The digest counts 37 placed bitmaps: the photo with overlay (72 pt), the small photo (25 pt) and 35 patch thumbnails (9 pt).",
+ "venue": "ICLR23"
+}

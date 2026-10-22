@@ -1,0 +1,559 @@
+{
+ "paper_id": "cvpr25-0086",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FeaSpect (Feature Spectrum learning)",
+  "one_liner": "Remote-sensing change detection that removes pseudo-changes by a trainable spectrum transformation in feature space, with learnable extraction boxes.",
+  "domain": [
+   "remote sensing change detection",
+   "pseudo-change and style alignment",
+   "frequency-domain transformation"
+  ],
+  "subfield": "vision",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "panels (a)-(d) show the pseudo-change, two prior fixes and the two drawbacks of the second; panel (e) shows the proposed fix",
+  "argues": "GAN style transfer leaves artefacts, spectrum transformation has a mismatched space and a blind parameter search, and FeaSpect fixes both by matching the space and learning the search.",
+  "subject": "A pair of aerial images with pseudo-change, how GANs and spectrum transformation align them, two abstract drawbacks of the latter, and the proposed method.",
+  "elements": [
+   {
+    "name": "pseudo-change/ style difference",
+    "type": "label",
+    "role": "names what the red-boxed regions of the two images show",
+    "drawn_as": "grey rounded box between the two images, joined to both red boxes by a bracket line",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "coloured rectangles on the images",
+    "type": "region",
+    "role": "mark pseudo-change (dark red), lost semantic detail (salmon) and GAN artefacts (orange)",
+    "drawn_as": "unfilled rectangles in 1 pt outline drawn on the photos",
+    "container": "(a), (b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "GANs",
+    "type": "module",
+    "role": "prior method that transforms the two images into one style",
+    "drawn_as": "light-grey rounded box with bold italic name, two inputs xt1 and xt2 on its left",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Original ST",
+    "type": "module",
+    "role": "spectrum transformation with a fixed extraction box",
+    "drawn_as": "light-grey rounded box with bold italic name, same wiring as the GANs box",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "pixel of x t2 / feature of x t2",
+    "type": "data",
+    "role": "a pixel and its feature taken at one location of the transformed image",
+    "drawn_as": "green and blue dots in a small dashed box with curved arrows to two italic labels",
+    "container": "(d) Drawback 1",
+    "is_contribution": null
+   },
+   {
+    "name": "at the same coordinates",
+    "type": "label",
+    "role": "pixel and feature are transformed at the same position",
+    "drawn_as": "underlined italic label on the path from the red dot to the blobs",
+    "container": "(d) Drawback 1",
+    "is_contribution": null
+   },
+   {
+    "name": "mismatched",
+    "type": "region",
+    "role": "the transformation space of ST and the space the task needs overlap badly",
+    "drawn_as": "two overlapping amoeba blobs, blue and pale yellow, with red, blue and green dots joined by arrows and a bold tilted caption",
+    "container": "(d) Drawback 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Drawback 1 / Limited transformation space",
+    "type": "label",
+    "role": "heading and verdict of the upper half of (d)",
+    "drawn_as": "bold orange heading at left, red cross and plain title at right",
+    "container": "(d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Amplitude of x t1",
+    "type": "label",
+    "role": "caption of the Fourier amplitude picture",
+    "drawn_as": "caption under a grey amplitude image carrying a gold box M and a brace beta",
+    "container": "(d) Drawback 2",
+    "is_contribution": false
+   },
+   {
+    "name": "with optimal hyper-parameter",
+    "type": "operation",
+    "role": "the box size beta has to be set by hand",
+    "drawn_as": "underlined italic text that leads to the search blob",
+    "container": "(d) Drawback 2",
+    "is_contribution": false
+   },
+   {
+    "name": "try 1 ... try N",
+    "type": "operation",
+    "role": "blind trials of the box setting, ending in M with try N",
+    "drawn_as": "star of arrows from an open gold circle to labelled tries inside a dashed gold blob",
+    "container": "(d) Drawback 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Drawback 2 / Inefficient parameter search",
+    "type": "label",
+    "role": "heading and verdict of the lower half of (d)",
+    "drawn_as": "bold blue heading at left, red cross and plain title at right",
+    "container": "(d)",
+    "is_contribution": false
+   },
+   {
+    "name": "Our FeaSpect",
+    "type": "module",
+    "role": "proposed learnable feature spectrum transformation",
+    "drawn_as": "rounded box with pale-yellow gradient, bold italic name, inputs xt1 and xt2 on its left",
+    "container": "(e)",
+    "is_contribution": true
+   },
+   {
+    "name": "Matched transformation space",
+    "type": "region",
+    "role": "the space where original pixel, discriminative feature and style-aligned feature line up",
+    "drawn_as": "pale-yellow amoeba blob with a blue dot, a dark-green dot and a light-green dot joined by arrows",
+    "container": "(e)",
+    "is_contribution": true
+   },
+   {
+    "name": "Efficient parameter search",
+    "type": "region",
+    "role": "learned search that advances adaptively from the initial parameter to M",
+    "drawn_as": "small dashed blob with a red-cross path from an open gold circle to M, caption beneath",
+    "container": "(e)",
+    "is_contribution": true
+   },
+   {
+    "name": "optimize via backpropagation",
+    "type": "label",
+    "role": "FeaSpect and its search are trained by gradients",
+    "drawn_as": "dark-red bold text on a dashed red arrow into the FeaSpect box with red dashed arrows up and down",
+    "container": "(e)",
+    "is_contribution": true
+   },
+   {
+    "name": "Style alignment / Matched transform / Efficient search",
+    "type": "text-block",
+    "role": "properties FeaSpect achieves",
+    "drawn_as": "dashed box with three ticked lines",
+    "container": "(e)",
+    "is_contribution": true
+   },
+   {
+    "name": "dot key: initial parameter, original pixel, optimally stylized pixel, discriminative feature, style-aligned discriminative feature",
+    "type": "label",
+    "role": "explains the marker shapes and colours used in (d) and (e)",
+    "drawn_as": "dashed box with a gold open circle and four coloured dots",
+    "container": "(e)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "red-boxed regions of both images",
+    "to": "pseudo-change/ style difference",
+    "what": "the boxed regions differ only by imaging conditions",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "xt1 and xt2",
+    "to": "GANs",
+    "what": "the two images",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GANs",
+    "to": "style-aligned image pair",
+    "what": "transformed image above, reference image below",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "xt1 and xt2",
+    "to": "Original ST",
+    "what": "the two images",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original ST",
+    "to": "style-aligned image pair",
+    "what": "transformed image above, reference image below",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red dot on the stylised image",
+    "to": "mismatched",
+    "what": "pixel and feature are placed at the same coordinates, then compared in two non-matching spaces",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Amplitude of x t1",
+    "to": "try 1 ... try N",
+    "what": "the box setting is found by trying values",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "xt1 and xt2",
+    "to": "Our FeaSpect",
+    "what": "the two images",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Our FeaSpect",
+    "to": "Matched transformation space",
+    "what": "transformation lands in a matched space",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Our FeaSpect",
+    "to": "Efficient parameter search",
+    "what": "parameters are searched adaptively",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "optimize via backpropagation",
+    "to": "Our FeaSpect",
+    "what": "gradients train the transformation and the extraction box",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "two aerial images of one place at two times, with red boxes on regions that only look different (pseudo-change)",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "GANs map the pair to one style; orange boxes mark artefacts in the result",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "spectrum transformation maps the pair to one style with fewer artefacts",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(d)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "two stacked sub-diagrams: a mismatched transformation space and a blind parameter search",
+    "verdict": "fails"
+   },
+   {
+    "label": "(e)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "FeaSpect with a matched space, an adaptive search, backpropagation and a tick list",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) to (e)",
+    "kind": "section",
+    "at": "below each column",
+    "what": "name the five panels, left to right"
+   },
+   {
+    "marker": "Drawback 1, Drawback 2",
+    "kind": "section",
+    "at": "left of the two halves of (d)",
+    "what": "name the two failure causes of spectrum transformation"
+   },
+   {
+    "marker": "try 1 ... try N",
+    "kind": "order",
+    "at": "arrows of the search star in (d)",
+    "what": "trials of the box setting, one after another"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bitemporal aerial images of one site (building, trees, path)",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square photos stacked, with coloured boxes marking pseudo-change and lost semantic detail"
+   },
+   {
+    "what": "the later image xt1 repeated under each method",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same photo at the bottom of (b) and (c) so the columns line up"
+   },
+   {
+    "what": "style-aligned image from GANs, from ST, and the ST result in (d)",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "square photo above each method box; orange boxes mark GAN artefacts"
+   },
+   {
+    "what": "Fourier amplitude spectrum of the later image",
+    "content": "other",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grey frequency image with a gold extraction box M and a brace beta"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one aerial scene before and after, with its pseudo-change boxes and the same scene after GAN and ST alignment",
+    "form": "photo grid in panels (a) to (c)",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "irregular amoeba blobs holding coloured dots joined by arrows; two overlapping blobs for a mismatch, one yellow blob for the matched space",
+    "parts": [
+     "blob",
+     "dots",
+     "arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "dark-red dashed arrows labelled optimize via backpropagation entering and leaving the method box",
+    "parts": [
+     "dashed arrow",
+     "label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at (a) top-left, runs right through (b) and (c), then (d) top then bottom, ending at (e) and its tick list."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Five lettered columns divided by dotted vertical lines: three narrow ones (a)-(c) with a top image, a method box and a bottom image, then a wide (d) split by a dotted horizontal line into two drawbacks, then (e) with the proposed method.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "dashed-boxes",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.75,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#3b3838",
+    "used_for": "text, arrows and box outlines"
+   },
+   {
+    "hex": "#edeef0",
+    "used_for": "fill of the GANs, Original ST and pseudo-change boxes"
+   },
+   {
+    "hex": "#d4eaef",
+    "used_for": "blue blob in the mismatched space"
+   },
+   {
+    "hex": "#fff6d6",
+    "used_for": "yellow blobs and the FeaSpect box tint",
+    "opacity": 0.63
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "pseudo-change boxes, red crosses, backpropagation arrows and caption"
+   },
+   {
+    "hex": "#eb685a",
+    "used_for": "salmon semantic-loss boxes and the optimally stylised pixel dot"
+   },
+   {
+    "hex": "#efa253",
+    "used_for": "orange boxes on GAN artefacts and the Drawback 1 heading"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "extraction box M, dashed search blob, initial-parameter circle"
+   },
+   {
+    "hex": "#eeb41b",
+    "used_for": "outline of the yellow blobs and the FeaSpect box"
+   },
+   {
+    "hex": "#248ea8",
+    "used_for": "outline of the blue blob; Drawback 2 heading is blue"
+   },
+   {
+    "hex": "#6882b3",
+    "used_for": "original pixel dots"
+   },
+   {
+    "hex": "#84bf5f",
+    "used_for": "style-aligned discriminative feature dots"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-1 pt dark-grey arrows and outlines, 1 pt coloured rectangles on photos, dashed outlines for key, checklist and search blobs",
+  "font": "serif (Times) 4-7 pt with italic symbols and math, bold italic method names, 11 pt M",
+  "corners": "rounded",
+  "arrows": "thin dark-grey arrows with small filled heads; dashed red arrows for backpropagation; dashed black arrows inside the matched space",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "dark red = pseudo-change region and the training signal; salmon = lost semantic detail; orange = GAN artefacts; gold = extraction box and the parameter search; blue and yellow blobs = two spaces; dot colours follow the key at lower right",
+  "line_style_means": "dashed red = backpropagation; dotted lines = panel dividers; dashed gold blob = search space; dashed boxes = key and checklist",
+  "shape_means": "grey rounded box = existing method; yellow-outlined box with a gradient = proposed method; amoeba blob = a space",
+  "marker_means": "red cross = a drawback; tick = a property that FeaSpect achieves; try k = a search trial; letters name the panels",
+  "emphasis": "Our FeaSpect is the only yellow box with italic bold name and the only part with red dashed arrows; a tick list closes the last panel",
+  "reusable_patterns": [
+   "the same photo pair repeated per method with coloured rectangles on the failure regions",
+   "drawbacks headed by a coloured word and a red cross, then answered by a tick list in the last panel",
+   "amoeba blobs for abstract spaces with coloured dots and arrows",
+   "blind search drawn as a star of try arrows against a learned path labelled advance adaptively",
+   "dot key in a dashed box that explains marker colours"
+  ],
+  "weaknesses": [
+   "symbols such as xt and x st are only 4-5 pt",
+   "dot colours must be read against a key placed in the last panel"
+  ]
+ },
+ "resources": {
+  "own": [
+   "aerial image pair and the GAN and ST outputs",
+   "Fourier amplitude image"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "blobs, boxes, arrows and braces",
+   "tick list and dot key"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "aerial image pair with coloured boxes",
+   "GANs and Original ST boxes",
+   "overlapping blobs with dots",
+   "Fourier amplitude image with extraction box",
+   "try 1 to try N star",
+   "Our FeaSpect box with red dashed arrows",
+   "tick list and dot key"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "change detection",
+   "remote sensing",
+   "pseudo-change",
+   "style alignment",
+   "spectrum transformation",
+   "GAN",
+   "feature space",
+   "backpropagation"
+  ],
+  "tags": [
+   "verdict-marks",
+   "error-callouts",
+   "embedding-space-sketch",
+   "flow-type-arrows",
+   "small-multiples",
+   "notation-key",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Diagnose in lettered panels: show the same photos under each earlier method with coloured boxes on the failure regions, give each remaining drawback its own red-cross heading and a tiny schematic, then answer both in the last panel and end with a tick list.",
+  "suits": "A paper that fixes a known two-part weakness of an existing technique and wants to show cause and cure in one figure."
+ },
+ "tags": [
+  "lettered panels",
+  "dotted dividers",
+  "red cross and tick",
+  "amoeba blobs",
+  "photo columns",
+  "serif math labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "Caption: (a) pseudo-change, (b) GAN results, (c) spectrum transformation results, (d) two drawbacks of ST, (e) FeaSpect.",
+   "Introduction: the two drawbacks are a limited transformation space and an inefficient parameter search.",
+   "Introduction: orange rectangles in (b) show artefacts; pink rectangles in (a) to (c) show lost semantic information."
+  ]
+ },
+ "summary": "FeaSpect handles pseudo-changes in remote-sensing change detection by making the spectrum transformation trainable in feature space. Figure 1 is a problem-then-fix row of five lettered panels. (a) shows an aerial image pair with boxes on regions that only look different; (b) and (c) show the same photos after GAN and spectrum-transformation style alignment, with coloured rectangles on artefacts and lost detail; (d) holds two abstract drawbacks, a mismatched transformation space drawn as overlapping blobs and a blind hand-tuned search drawn as a star of trials; (e) shows the proposed box feeding a matched space and an adaptive search, trained by backpropagation, with a tick list and a dot key.",
+ "summary_zh": "FeaSpect 用可训练的特征频谱变换消除遥感变化检测中的伪变化。图中五个字母分栏：同一对航拍图依次展示伪变化、GAN与频谱变换的结果、频谱变换的两个缺陷，最后一栏给出方法、反向传播箭头和打勾清单。",
+ "confidence": "high",
+ "notes": "Panel titles are only in the caption; the figure carries letters. The mapping of blob colours to pixel space and task space is not stated, so the blobs are described as two overlapping spaces. The bottom caption text is partly cropped into the preview and was ignored.",
+ "venue": "CVPR25"
+}

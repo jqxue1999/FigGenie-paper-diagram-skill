@@ -1,0 +1,447 @@
+{
+ "paper_id": "icml26-0315",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ParetoPO",
+  "one_liner": "Two-stage multi-objective RL for tool-using LLM agents: hypervolume-guided dynamic scalarization, then Pareto-ranking advantages, to trade accuracy against tool-use efficiency.",
+  "domain": [
+   "multi-objective reinforcement learning",
+   "tool-integrated LLM agents",
+   "Pareto optimization"
+  ],
+  "subfield": "agents",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "an illustrative accuracy-efficiency plane in which the two method stages are coloured trajectories relative to the frontier and its convex hull",
+  "argues": "Stage 1 (dynamic scalarization) covers the convex hull; Stage 2 (Pareto ranking) then reaches non-convex Pareto-stationary points that linear weighting cannot.",
+  "subject": "Accuracy-efficiency plane with the true Pareto frontier, its convex hull, and the green Stage 1 and purple Stage 2 trajectories.",
+  "elements": [
+   {
+    "name": "Low / High Accuracy, Low / High Efficiency",
+    "type": "label",
+    "role": "the two objectives of the trade-off plane",
+    "drawn_as": "black arrow axes at the left and bottom with 7 pt end labels, y label rotated, no ticks",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "True Pareto Frontier",
+    "type": "other",
+    "role": "the set of best accuracy-efficiency trade-offs",
+    "drawn_as": "thick blue (#0f9ed5) non-convex curve with a pale glow, falling from the top left, bending down, flattening, then sloping to the bottom right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Convex Hull Boundary",
+    "type": "other",
+    "role": "what linear weighting can reach of the frontier",
+    "drawn_as": "straight dashed orange line between two orange dots, from Stage 1 End to the lower-right end of the frontier",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Non-Convex Region (Inaccessible by Linear Weighting)",
+    "type": "region",
+    "role": "the part of the frontier lying between the hull line and the curve that scalarization cannot reach",
+    "drawn_as": "unshaded gap between hull line and frontier, named by a bold label with a black pointer arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Stage 1 Start",
+    "type": "instance",
+    "role": "where the Stage 1 trajectory begins",
+    "drawn_as": "orange dot at the left of the plane with a text label",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Stage 1 Trajectory (w1 to w5)",
+    "type": "other",
+    "role": "dynamic scalarization steps that move the policy toward the frontier, one weight setting per leg",
+    "drawn_as": "green (#3b7d23) zigzag of five arrows labelled w1 to w5",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 1 End",
+    "type": "instance",
+    "role": "where Stage 1 reaches the frontier",
+    "drawn_as": "orange dot on the blue curve, label above it",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Stage 2 Trajectory",
+    "type": "other",
+    "role": "Pareto-ranking stage that continues from Stage 1 End along the frontier",
+    "drawn_as": "thick purple (#a02b93) path with an arrowhead, running down the curve",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Pareto Stationary Point",
+    "type": "instance",
+    "role": "where Stage 2 ends",
+    "drawn_as": "yellow star with a bold label and a black pointer arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Gradient Fields",
+    "type": "other",
+    "role": "named only in the legend",
+    "drawn_as": "small pale-blue dashed arrows pointing right, spread over the lower half of the plane",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Rank Contours",
+    "type": "other",
+    "role": "level lines of the Pareto rank used in Stage 2",
+    "drawn_as": "faint pale-blue dotted contour curves with a blue text label at the bottom",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Stage 1: Convex Hull Coverage (Dynamic Scalarization)",
+    "type": "label",
+    "role": "names what Stage 1 does",
+    "drawn_as": "bold title with a plain subtitle and a pale-green shaded block arrow beside it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Stage 2: Pareto Stationarity (Pareto Ranking)",
+    "type": "label",
+    "role": "names what Stage 2 does",
+    "drawn_as": "bold title with a plain subtitle and a pale-pink pointer arrow coming from the purple path",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "legend box",
+    "type": "container",
+    "role": "key to the lines and paths",
+    "drawn_as": "semi-transparent white framed box at the top right with five rows, each starting with a colour word written in that colour",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Stage 1 Start",
+    "to": "Stage 1 End",
+    "what": "five green legs w1 to w5, one per scalarization weight setting, zigzagging up to the frontier",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stage 1 End",
+    "to": "Pareto Stationary Point",
+    "what": "the purple Stage 2 path slides down the frontier to the star",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Convex Hull Boundary",
+    "to": "True Pareto Frontier",
+    "what": "the straight hull line cuts across the curve; the gap between them is the non-convex region",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Non-Convex Region label",
+    "to": "gap between hull line and frontier",
+    "what": "points the label at the region",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pareto Stationary Point label",
+    "to": "yellow star",
+    "what": "points the label at the star",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stage 1 title",
+    "to": "green path",
+    "what": "pale-green block arrow beside the title echoes the path colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "purple path",
+    "to": "Stage 2 title",
+    "what": "pale-pink pointer arrow runs from the path to the title",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "legend rows",
+    "to": "lines and paths in the plane",
+    "what": "each row's colour word matches a drawn line colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "w1 ... w5",
+    "kind": "order",
+    "at": "the five green arrows",
+    "what": "the successive scalarization weight settings of Stage 1, in order from start to end"
+   },
+   {
+    "marker": "orange dots",
+    "kind": "identity",
+    "at": "left of the plane, on the frontier, lower-right end of the hull line",
+    "what": "mark Stage 1 Start and Stage 1 End; the lower-right dot ends the hull line and is unlabelled"
+   },
+   {
+    "marker": "yellow star",
+    "kind": "identity",
+    "at": "end of the purple path",
+    "what": "marks the Pareto Stationary Point"
+   },
+   {
+    "marker": "Stage 1: ... / Stage 2: ...",
+    "kind": "section",
+    "at": "bold titles at the top left and the middle right",
+    "what": "head the explanation of each stage"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two bitmap layers behind the vector lines: a smooth peach-to-light-blue diagonal gradient ground and a second layer of soft effects",
+    "content": "schematic-plot",
+    "role": "background",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "222 x 134 pt and 159 x 107 pt, together covering the plot area; the frontier, paths, labels and legend are vector on top"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "pareto-frontier",
+    "drawn_as": "a glowing blue non-convex curve on a tick-less accuracy-efficiency plane, a dashed straight convex-hull line and the unreachable gap between them",
+    "parts": [
+     "frontier curve",
+     "convex hull line",
+     "non-convex region",
+     "axes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contour-landscape",
+    "drawn_as": "faint dotted contour curves with small dashed arrows pointing along the improvement direction",
+    "parts": [
+     "rank contours",
+     "gradient-field arrows"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the Stage 1 title and Stage 1 Start dot at the left, follows the green zigzag up to Stage 1 End on the blue curve, then the purple path down to the yellow star; the legend and the Non-Convex Region label explain the rest."
+ },
+ "layout": {
+  "arrangement": "single",
+  "arrangement_note": "One plot-shaped drawing: a tick-less accuracy-efficiency plane fills the figure, a legend box sits inside its top-right corner, stage titles at the top left and middle right, and curves, paths and labels lie over a gradient ground.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.49,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#0f9ed5",
+    "used_for": "true Pareto frontier curve and the words Solid Blue Line in the legend"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "dashed convex hull line and the orange dots"
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "Stage 1 green path and its legend words"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "Stage 2 purple path and its legend words"
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "light-blue accents such as the glow around the frontier",
+    "approx": true
+   },
+   {
+    "hex": "#83cbeb",
+    "used_for": "pale-blue rank contours and gradient-field arrows"
+   },
+   {
+    "hex": "#d9f2d0",
+    "used_for": "pale-green block arrow by the Stage 1 title"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "outline of the legend box"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "near-black pointer arrows to the non-convex region and the star"
+   },
+   {
+    "hex": "#fde6dc",
+    "used_for": "peach end of the ground gradient (bottom left)",
+    "approx": true
+   },
+   {
+    "hex": "#cdebf8",
+    "used_for": "light-blue end of the ground gradient (top right)",
+    "approx": true
+   }
+  ],
+  "ground": "gradient",
+  "fill": "gradient",
+  "stroke": "0.25-0.5 pt for contours, legend box and pointers, 1-1.25 pt for the frontier and the paths, black axes",
+  "font": "sans (Arial, Arial Bold) 4-7 pt: 7 pt axis end labels, 6 pt bold stage titles, 5.5 pt legend and labels; Cambria Math italic for the w symbols",
+  "corners": "rounded",
+  "arrows": "thin green zigzag arrows labelled w1-w5, a thick purple arrow with a tapering head, small pale-blue dashed gradient-field arrows, black pointer arrows to labels, pale shaded block arrows by the stage titles, black axis arrows",
+  "rendering": "mixed",
+  "effects": "soft light-blue glow around the frontier, shaded pale-green and pale-pink block arrows, gradient ground, 58%-opaque white legend panel",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = true Pareto frontier, orange = convex hull and its anchor dots, green = Stage 1 trajectory, purple = Stage 2 trajectory, pale blue = rank contours and gradient fields; the ground fades from peach to light blue without a stated meaning",
+  "line_style_means": "thick solid = frontier, dashed = convex hull boundary, thin dotted pale blue = rank contours, small dashed pale-blue arrows = gradient fields, thin solid green arrows = Stage 1 legs",
+  "shape_means": "orange dot = start, end and hull anchor points, yellow star = Pareto stationary point, pale block arrows = pointers beside the stage titles",
+  "marker_means": "w1 to w5 number the scalarization weight settings of Stage 1 in order",
+  "emphasis": "thick glowing frontier and saturated green and purple paths against pale contours; bold stage titles with tinted arrows; the yellow star is the destination",
+  "reusable_patterns": [
+   "illustrative objective-space plane without ticks showing the target frontier, its convex hull and the unreachable gap",
+   "method stages drawn as differently coloured paths over the same plane, the second starting where the first ends",
+   "legend whose rows begin with the colour name written in that colour",
+   "pale tinted block arrows beside stage titles echoing the trajectory colours",
+   "black pointer arrows from bold labels to a region and to a marked point"
+  ],
+  "weaknesses": [
+   "the pale shaded block arrows beside the stage titles are decorative and point only loosely",
+   "the lower-right orange dot is unlabelled",
+   "rank contours and gradient-field arrows carry the Stage 2 idea but are very faint"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "axes and plane",
+   "frontier, hull line and trajectories",
+   "legend box",
+   "pointer and block arrows",
+   "gradient ground and glow layers (PowerPoint effects)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "accuracy-efficiency plane with axis end labels",
+   "glowing true Pareto frontier curve",
+   "dashed convex hull line",
+   "green five-leg weight zigzag",
+   "purple path ending at a star",
+   "faint rank contours and gradient arrows",
+   "legend box with coloured words",
+   "pale tinted stage-title arrows"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "Pareto frontier",
+   "multi-objective RL",
+   "tool-integrated agents",
+   "dynamic scalarization",
+   "Pareto ranking",
+   "convex hull",
+   "accuracy-efficiency trade-off",
+   "hypervolume"
+  ],
+  "tags": [
+   "schematic-plot",
+   "flow-type-arrows",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "objective-space-trajectories",
+    "what": "optimisation stages drawn as coloured polyline paths with start, end and goal markers over an illustrative objective-space plane"
+   },
+   {
+    "name": "colour-word-legend",
+    "what": "legend rows that begin with the colour name written in that colour, followed by the thing it names"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Explain a multi-stage optimiser on one illustrative objective plane: draw the target set (frontier), what the baseline can reach (convex hull) and each stage as a differently coloured path that starts where the previous one ends, with tinted pointers beside the stage titles.",
+  "suits": "optimisation or multi-objective learning methods whose stages move through a trade-off space, where the geometry of reachable versus unreachable points is the argument."
+ },
+ "tags": [
+  "single plot-shaped drawing",
+  "gradient ground",
+  "coloured trajectories",
+  "colour-word legend",
+  "tick-less axes",
+  "sans text"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Approach (p.4)"
+  ],
+  "evidence": [
+   "Figure 1 illustrates trajectories of the two stages in multiobjective optimization.",
+   "Stage 1 adopts a dynamic scalarization strategy to generate a diverse set of policies with different trade-offs among objectives.",
+   "Two-stage multi-objective RL: Accuracy vs. Efficiency."
+  ]
+ },
+ "summary": "ParetoPO aligns tool-using LLM agents under competing objectives such as accuracy and tool-use efficiency in two stages: hypervolume-guided dynamic scalarization, then Pareto-ranking advantage computation. Figure 1 is one illustrative plane with accuracy on the x axis and efficiency on y, without ticks. A glowing blue curve is the true, non-convex Pareto frontier and a dashed orange line is its convex hull; the gap between them is labelled the non-convex region that linear weighting cannot reach. A green zigzag of five weight legs (w1 to w5) climbs from Stage 1 Start to Stage 1 End on the frontier, then a purple path slides down it to a yellow star, the Pareto stationary point. Faint rank contours, gradient-field arrows and a legend with coloured words complete the sketch.",
+ "summary_zh": "ParetoPO 分两阶段对齐工具型 LLM 智能体：先动态标量化覆盖凸包，再用 Pareto 排序到达非凸区域的驻点。图是一张准确率-效率示意平面：蓝色真前沿、橙色虚线凸包、绿色阶段一折线、紫色阶段二路径与黄色星标。",
+ "confidence": "high",
+ "notes": "The two bitmap layers (222 x 134 pt and 159 x 107 pt) lie behind the vector lines; only the gradient ground and soft effects are evident, the exact split between the two is not known. The digits in w1 to w5 are subscript glyphs in the text layer. The caption is only a title; stage roles come from the figure labels, the abstract and the one paragraph that mentions the figure.",
+ "venue": "ICML26"
+}

@@ -1,0 +1,599 @@
+{
+ "paper_id": "icml25-0076",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MCU (Minecraft Universe)",
+  "one_liner": "An evaluation framework in Minecraft with 3,452 composable atomic tasks, LLM-generated task configs and a VLM-based evaluator for open-ended game agents.",
+  "domain": [
+   "Minecraft agents",
+   "agent evaluation",
+   "benchmark construction"
+  ],
+  "subfield": "agents",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview",
+   "stage-pipeline"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "five lettered tiles of unequal size: a pipeline, a data-source-to-taxonomy panel and three small result charts",
+  "argues": "MCU offers diverse verified tasks and a cheap VLM-based evaluator for open-ended Minecraft agents, and exposes weaknesses of SOTA agents in creativity, error recognition and harder task variants.",
+  "subject": "Composite overview of the MCU benchmark: pipeline, task sources and taxonomy, and three result charts.",
+  "elements": [
+   {
+    "name": "Atomic Task",
+    "type": "data",
+    "role": "the pool of atomic tasks grouped by category (MINE, CRAFT, DIET, COMBAT, DECORATION, BUILD) with example task names",
+    "drawn_as": "tall blue gradient rounded box with a vertical list, a pixel-art item icon per category",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM-based Task Config Generator",
+    "type": "module",
+    "role": "turns an atomic task into a configuration with description, prerequisites and random factors",
+    "drawn_as": "stack of four offset grey cards, the front one holding a monospace config",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "task config text",
+    "type": "text-block",
+    "role": "a real configuration: task_description and custom_init_commands with #necessary and #random tags",
+    "drawn_as": "monospace listing, keys blue, values orange, tags green italic",
+    "container": "a",
+    "is_contribution": null
+   },
+   {
+    "name": "MineStudio",
+    "type": "module",
+    "role": "environment simulator and agent interface: runs the init commands, verifies configs, runs agents",
+    "drawn_as": "block-cluster logo, gradient wordmark and the tagline A Streamlined Package for Minecraft AI Agent Development",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "Agent Set",
+    "type": "container",
+    "role": "agents that attempt the tasks: VPT, STEVE-1, GROOT, MineDojo, with More Agents in the future",
+    "drawn_as": "white rounded box with a green outline holding logos and a mascot",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "VLM-based Evaluator",
+    "type": "module",
+    "role": "rates each trajectory video on several dimensions with evidence and a grade",
+    "drawn_as": "stack of four offset lavender cards, the front one with bulleted monospace lines",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "arrow labels",
+    "type": "label",
+    "role": "name what each arrow carries: Task sets, Task descriptions, Commands as env initialization, Refine config, New tasks, Trajectory video",
+    "drawn_as": "plain text beside thin blue arrows",
+    "container": "a",
+    "is_contribution": null
+   },
+   {
+    "name": "Data Source",
+    "type": "container",
+    "role": "where atomic tasks come from: Wiki, Simulator, Benchmarks, Brainstorm",
+    "drawn_as": "column of four tabbed cards, each with one sample",
+    "container": "b",
+    "is_contribution": true
+   },
+   {
+    "name": "Real-world Challenges",
+    "type": "text-block",
+    "role": "what each task category stands for in real life: Precise Control, Strategic Planning, Knowledge Application, Artistic Creation, Spatial Awareness, Logical Reasoning",
+    "drawn_as": "bold headings with two or three skill lines each, behind a curly bracket",
+    "container": "b",
+    "is_contribution": null
+   },
+   {
+    "name": "chart legends",
+    "type": "label",
+    "role": "key to agents (VPT (RL), VPT (BC), Steve-I, GROOT) and to difficulty (Simple, Medium, Hard)",
+    "drawn_as": "small colour keys under the radar and inside the GROOT / steve-I bar chart",
+    "container": "c, d",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Atomic Task",
+    "to": "LLM-based Task Config Generator",
+    "what": "Task sets",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM-based Task Config Generator",
+    "to": "VLM-based Evaluator",
+    "what": "Task descriptions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM-based Task Config Generator",
+    "to": "MineStudio",
+    "what": "Commands as env initialization",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MineStudio",
+    "to": "LLM-based Task Config Generator",
+    "what": "Refine config, marked with a red cross: configs that fail the simulator check go back",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MineStudio",
+    "to": "Agent Set",
+    "what": "New tasks, marked with a green tick: verified tasks go on to the agents",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent Set",
+    "to": "VLM-based Evaluator",
+    "what": "Trajectory video",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Data Source cards",
+    "to": "task category sunburst",
+    "what": "the four sources supply the atomic task set",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "task category sunburst",
+    "to": "Real-world Challenges",
+    "what": "categories explained by the real-world skill each asks for",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Benchmarking pipeline: atomic tasks, LLM-based task config generator checked in MineStudio, agent set, VLM-based evaluator",
+    "verdict": "ours"
+   },
+   {
+    "label": "b",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "Task category distribution: four data sources bracketed into a two-ring sunburst, beside the real-world challenges",
+    "verdict": "ours"
+   },
+   {
+    "label": "c",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "Multi-dimensional capabilities: radar of four agents on six axes (Task Progress, Action, Error Recog., Creative, Efficiency, Material)",
+    "verdict": "finding"
+   },
+   {
+    "label": "d",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "Intra-task generalizability: task progress of GROOT and steve-I on two tasks each at Simple, Medium and Hard difficulty",
+    "verdict": "finding"
+   },
+   {
+    "label": "e",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "Human vs AutoEval: cost in USD and time in minutes for labelling the same samples",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a, b, c, d, e",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "letters name the five panels"
+   },
+   {
+    "marker": "Wiki, Simulator, Benchmarks, Brainstorm",
+    "kind": "identity",
+    "at": "tabs on the data-source cards",
+    "what": "names each source of atomic tasks"
+   },
+   {
+    "marker": "#necessary, #random",
+    "kind": "identity",
+    "at": "init commands inside the task config",
+    "what": "tags each command as a fixed prerequisite or a random factor"
+   },
+   {
+    "marker": "red cross and green tick",
+    "kind": "identity",
+    "at": "Refine config and New tasks arrows",
+    "what": "rejected configs loop back, accepted ones continue to the agents"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "sunburst of task categories: inner ring 11 major categories, outer ring 41 subcategories, labels rotated along the wedges",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "the largest picture, centred in panel b between two curly brackets, one hue family per major category"
+   },
+   {
+    "what": "four data-source cards: Minecraft wiki potion-brewing screenshot, simulator JSON of paraphrased prompts for craft_item:golden_helmet, MineDojo and SkillForge filtered task list, brainstorm idea clouds",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "cards with soft shadows stacked in one column, each under a blue-grey tab naming the source"
+   },
+   {
+    "what": "radar chart of four agents over six capability axes with translucent polygons",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "round grid with axis names outside and a colour legend underneath"
+   },
+   {
+    "what": "grouped bar charts of task progress by difficulty for GROOT (Sleeping in Bed, Mine Grass) and steve-I (Build Pillar, Craft to Cake)",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "three blue shades for Simple, Medium, Hard, value printed above each bar"
+   },
+   {
+    "what": "bar charts of cost (USD) and time (minutes) for Human against Auto",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two bars each, salmon for Human and steel blue for Auto"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "Minecraft dirt block, pickaxe, raw beef, sheep face, flower and door",
+    "stands_for": "the task categories MINE, CRAFT, DIET, COMBAT, DECORATION, BUILD",
+    "style": "pixel-art",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "black badge with a swirl (VPT), round Steve-like badge (STEVE-1), GROOT tree with eyes, word-cloud Steve with the MINEDOJO wordmark",
+    "stands_for": "the agents of the Agent Set",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "cluster of isometric blocks with a gradient wordmark",
+    "stands_for": "MineStudio",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "MINEDOJO and SkillForge wordmarks",
+    "stands_for": "existing benchmarks used as a task source",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "light bulb above clouds with BRAINSTORM word art",
+    "stands_for": "brainstorming sessions as a task source",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red cross badge and green tick badge",
+    "stands_for": "rejected config (refine) and accepted tasks",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a task configuration for use iron pickaxe to mine redstone ore",
+    "form": "monospace listing on stacked grey cards: task_description and custom_init_commands (/give, /execute), keys blue, values orange, #random and #necessary tags green italic",
+    "real_values": true
+   },
+   {
+    "what": "an evaluator report for the same task",
+    "form": "bulleted monospace lines on stacked lavender cards: Evidence, Overall Excellent, Action Control Excellent, Material Usage",
+    "real_values": true
+   },
+   {
+    "what": "example tasks per category",
+    "form": "six categories with two example task names each, such as Mine Dirt, Craft oak planks, Eat beef, Combat a wolf, Decorate the wall, Build a house",
+    "real_values": true
+   },
+   {
+    "what": "one sample per data source",
+    "form": "wiki potion screenshot, simulator JSON of paraphrased prompts, benchmark task list, brainstorm ideas such as Trap sheep with a boat",
+    "real_values": true
+   },
+   {
+    "what": "real-world skills behind the categories",
+    "form": "text list with headings Precise Control, Strategic Planning, Knowledge Application, Artistic Creation, Spatial Awareness, Logical Reasoning",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "radar-chart",
+    "drawn_as": "hexagonal radar of four agents on six capability axes, translucent filled polygons with coloured outlines",
+    "parts": [
+     "axes",
+     "polygons",
+     "legend"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "taxonomy-sunburst",
+    "drawn_as": "two-ring sunburst, inner ring major categories and outer ring subcategories, coloured per category with rotated labels",
+    "parts": [
+     "inner ring",
+     "outer ring",
+     "wedge labels"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the Atomic Task box at the top left and follows the blue arrows through the generator and the evaluator, then the MineStudio loop and agent set below; next panel b from the source cards through the sunburst to the challenge list; last the strip c, d, e left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked full-width bands: the pipeline (a) with an upper row of three stages and a lower row for MineStudio and the agent set, the source-sunburst-challenges row (b), and a bottom strip of three chart panels (c, d, e).",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 0.93,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#2c292a",
+    "used_for": "main text and thin lines"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "blue arrows and curly brackets"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "Atomic Task box (blue gradient, lower end)"
+   },
+   {
+    "hex": "#9dc3e6",
+    "used_for": "Atomic Task box (blue gradient, upper end)"
+   },
+   {
+    "hex": "#dcdddf",
+    "used_for": "stacked cards of the task config generator"
+   },
+   {
+    "hex": "#f2f2f3",
+    "used_for": "front card of the config generator"
+   },
+   {
+    "hex": "#dad3e9",
+    "used_for": "stacked cards of the VLM-based evaluator"
+   },
+   {
+    "hex": "#e8e3f0",
+    "used_for": "front card of the evaluator"
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "orange-brown sample values in the config, simulator JSON and benchmark list"
+   },
+   {
+    "hex": "#b43136",
+    "used_for": "red Refine config label and cross"
+   },
+   {
+    "hex": "#445936",
+    "used_for": "green New tasks and More Agents text, tick"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "yellow brainstorm cloud"
+   },
+   {
+    "hex": "#eec1d3",
+    "used_for": "pink brainstorm cloud"
+   },
+   {
+    "hex": "#bbbfee",
+    "used_for": "lavender brainstorm cloud"
+   },
+   {
+    "hex": "#64bca3",
+    "used_for": "radar polygon of VPT (RL)",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#f5896c",
+    "used_for": "radar polygon of VPT (BC) and the Human bars in e",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#8599c1",
+    "used_for": "radar polygon of Steve-I",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#d686b8",
+    "used_for": "radar polygon of GROOT",
+    "opacity": 0.1
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "thin 0.25-0.75 pt lines; blue arrows and brackets; white separators between sunburst wedges",
+  "font": "sans (Calibri, Arial) 4-11.5 pt with bold headings, monospace (Consolas Bold) about 5.5 pt for configs and evaluator text, bold 11.5 pt panel letters",
+  "corners": "rounded",
+  "arrows": "thin blue straight arrows with small heads and a text label beside each, curly brackets for fan-in, red cross and green tick badges on the loop arrows",
+  "rendering": "mixed",
+  "effects": "soft shadows under the source cards and stacked cards; gradient on the Atomic Task box and the MineStudio wordmark",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "sunburst: one hue family per major category; radar: green VPT (RL), orange VPT (BC), blue Steve-I, pink GROOT; bar shades = Simple, Medium, Hard; e: salmon = Human, steel blue = Auto; config text: blue keys, orange values, green tags; red = refine, green = accepted",
+  "line_style_means": "blue arrows = flow between pipeline parts; curly brackets = the sources produce this taxonomy and the taxonomy stands for these challenges",
+  "shape_means": "stack of offset cards = many configs or many reports; green-outlined rounded box = set of agents; tabbed cards = data sources; wedge = task (sub)category",
+  "marker_means": "red cross on Refine config = rejected config goes back; green tick on New tasks = accepted tasks continue; #necessary and #random = fixed versus random init command; letters a-e = panels",
+  "emphasis": "panel a is the largest and sits first; the sunburst is the biggest picture and the centre of panel b; the result strip at the bottom is small, each chart answering one claim of the caption",
+  "reusable_patterns": [
+   "pipeline stages drawn as stacks of offset cards that hold a real text sample",
+   "feedback loop as an up arrow with a red cross and a forward arrow with a green tick",
+   "tabbed source cards stacked in a column and joined to the central chart by a curly bracket",
+   "central sunburst bracketed to a text list of what each category stands for in the real world",
+   "bottom strip of small result charts, one per claim",
+   "code-style listing with coloured keys, values and tags",
+   "row of agent logos in one rounded box ending with More Agents in the future"
+  ],
+  "weaknesses": [
+   "text as small as 4 pt; the caption itself says Best viewed zoomed in",
+   "the source cards and the challenge list sit far from the Atomic Task box they describe",
+   "the result charts are raster strips whose fonts and colours differ from the pipeline above"
+  ]
+ },
+ "resources": {
+  "own": [
+   "task categories and example tasks",
+   "a real task config and evaluator report",
+   "result charts (radar, difficulty bars, cost and time bars)",
+   "task sunburst",
+   "wiki screenshot, simulator JSON and brainstorm cards"
+  ],
+  "stock": [
+   "Minecraft item icons",
+   "agent and benchmark logos (VPT badge, STEVE-1, GROOT, MineDojo, SkillForge, MineStudio)",
+   "light bulb and cloud clip art",
+   "red cross and green tick badges"
+  ],
+  "generated": [],
+  "drawn": [
+   "pipeline boxes, stacked cards and arrows",
+   "curly brackets",
+   "text lists"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "blue Atomic Task box with pixel-art icons",
+   "stacked config cards with code text",
+   "MineStudio logo with refine loop",
+   "Agent Set with agent logos",
+   "stacked evaluator cards",
+   "tabbed source cards and curly bracket",
+   "task sunburst",
+   "radar and bar chart strip"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "Minecraft",
+   "open-ended agents",
+   "benchmark",
+   "task generation",
+   "VLM evaluation",
+   "MineStudio",
+   "task taxonomy",
+   "AutoEval"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "code-snippet-box",
+   "stacked-cards",
+   "radar-chart",
+   "verdict-marks",
+   "highlighted-text-spans"
+  ],
+  "new_tags": [
+   {
+    "name": "taxonomy-sunburst",
+    "what": "two-ring sunburst of major categories and subcategories, coloured per category with rotated labels, used as the coverage picture of a benchmark"
+   },
+   {
+    "name": "source-cards-bracket",
+    "what": "column of tabbed source cards joined by a curly bracket to the central taxonomy chart, with a second bracket to a text list at the other side"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Compose a benchmark overview as lettered bands: the pipeline with real text samples on stacked cards on top, a central taxonomy chart bracketed between its data sources and the real-world meaning of its categories, and a strip of small result charts that each back one claim. A cross and tick on loop arrows shows verify-and-refine without extra boxes.",
+  "suits": "Benchmark or evaluation-framework papers that must show construction, coverage and headline results in a single figure."
+ },
+ "tags": [
+  "lettered-composite",
+  "stacked-card-stages",
+  "pixel-art-icons",
+  "curly-brackets",
+  "monospace-config",
+  "result-chart-strip"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "3 Experiments (p.7-8)"
+  ],
+  "evidence": [
+   "MCU includes two main components: task generation and trajectory evaluation.",
+   "The atomic task set is sourced from the Minecraft wiki, in-game data, existing benchmarks, and brainstorming sessions.",
+   "The automatic evaluation (AutoEval) of MCU is 8.1× more cost-effective and 4.8× more efficient in labeling 30 samples."
+  ]
+ },
+ "summary": "MCU (Minecraft Universe) is an evaluation framework for open-ended game agents. Figure 1 is a five-panel composite. Panel a draws the benchmarking pipeline: atomic task lists feed an LLM-based task config generator, shown as a stack of cards holding a real config, whose commands are checked in MineStudio with a refine loop (red cross) and a new-tasks path (green tick) to a set of agents (VPT, STEVE-1, GROOT, MineDojo); their trajectory videos go to a VLM-based evaluator. Panel b brackets four data-source cards into a two-ring sunburst of task categories beside a list of real-world challenges. Panels c to e are small charts: a radar of agents over six capabilities, bars of task progress by difficulty, and human versus automatic cost and time.",
+ "summary_zh": "MCU 是面向开放式游戏智能体的评测框架。图 1 含五个面板：a 为评测流程（任务配置生成、MineStudio 校验、智能体、VLM 评估），b 为数据来源与任务类别旭日图，c 到 e 为雷达图、难度柱图和人机评测成本对比。",
+ "confidence": "high",
+ "notes": "Kinds follow the prior pass but the variant is bento-highlights (the prior's benchmark-dashboard is a scope-overview variant and fits panel b). The digest's text strings for panels b to e are garbled (unmapped glyphs), so labels and chart values were read from the picture. Colour roles of #445936 and the other greens are inferred. The charts c to e probably come as one wide raster (a 3180x780 px bitmap is placed at the bottom), which is inferred from the bitmap sizes in the SVG.",
+ "venue": "ICML25"
+}

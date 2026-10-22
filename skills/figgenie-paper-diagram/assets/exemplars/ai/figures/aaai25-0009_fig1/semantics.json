@@ -1,0 +1,576 @@
+{
+ "paper_id": "aaai25-0009",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GenAL",
+  "one_liner": "Two LLM agents, a global one that updates learner profiles and reflects and a local one that recommends exercises with educational tools, for adaptive learning.",
+  "domain": [
+   "education",
+   "learning path recommendation",
+   "LLM agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "two role-named agents in stacked tinted regions, with the learner outside on the left and a closed loop of answers, recommendations, feedback and reflection",
+  "argues": "A global agent that reflects on the learner's history and a local agent that picks the next exercise with teaching tools cooperate in one loop with the learner.",
+  "subject": "Learner, Global Thinking Agent (log memory, reflector) and Local Teaching Agent (answer, recommender) exchanging answers, feedback, reflections, exercises.",
+  "elements": [
+   {
+    "name": "Learner",
+    "type": "actor",
+    "role": "answers exercises and receives the recommended ones",
+    "drawn_as": "cartoon student reading, with a light bulb, label below",
+    "container": "outside both agents",
+    "is_contribution": false
+   },
+   {
+    "name": "Exercise",
+    "type": "data",
+    "role": "the exercise handed to the learner",
+    "drawn_as": "blue open-book icon with a label, under the learner",
+    "container": "outside both agents",
+    "is_contribution": false
+   },
+   {
+    "name": "Answer (e_t, a_t)",
+    "type": "data",
+    "role": "the learner's answer a_t to exercise e_t entering the local agent",
+    "drawn_as": "yellow-bordered box with an orange document, pencil and tick icon",
+    "container": "Local Teaching Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "Teaching Tools",
+    "type": "module",
+    "role": "educational tools used by the Recommender",
+    "drawn_as": "mint-bordered box with a mint double-headed arrow to the Recommender",
+    "container": "Local Teaching Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Recommender",
+    "type": "module",
+    "role": "selects the most suitable next exercise from the answer record and prior knowledge with the teaching tools",
+    "drawn_as": "teal-bordered box holding a Mem tile and an LLM tile joined by a double arrow",
+    "container": "Local Teaching Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Recommendation (e_t+1)",
+    "type": "data",
+    "role": "the exercise chosen for the next step",
+    "drawn_as": "label with a blackboard icon on the thick return arrow along the bottom",
+    "container": "Local Teaching Agent",
+    "is_contribution": false
+   },
+   {
+    "name": "Log Memory",
+    "type": "module",
+    "role": "keeps the learner's history records",
+    "drawn_as": "yellow-bordered box holding four overlapping answer cards, three with ticks and one with a cross",
+    "container": "Global Thinking Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Edu Tools",
+    "type": "module",
+    "role": "educational tools used by the Global Thinking Agent",
+    "drawn_as": "mint-bordered box with a mint double-headed arrow to Log Memory",
+    "container": "Global Thinking Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Reflector",
+    "type": "module",
+    "role": "reflects on recommendation outcomes from the logs",
+    "drawn_as": "teal-bordered box holding a Mem tile and an LLM tile joined by a double arrow",
+    "container": "Global Thinking Agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Explanations (F_t+1) & Predictions (A_t+1)",
+    "type": "data",
+    "role": "explanations and the predicted learner response, requested from the recommender and sent to the log",
+    "drawn_as": "label with a blackboard icon on the long black arrow that runs up the right edge and across the top",
+    "container": "Global Thinking Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Feedback",
+    "type": "data",
+    "role": "feedback from the answer into the log, shown with a smiling and a frowning face",
+    "drawn_as": "short red dashed arrow pointing up, faces beside it",
+    "container": "between the agents",
+    "is_contribution": null
+   },
+   {
+    "name": "Reflection",
+    "type": "data",
+    "role": "reflection passed from the Reflector to the Recommender",
+    "drawn_as": "short red dashed arrow pointing down",
+    "container": "between the agents",
+    "is_contribution": true
+   },
+   {
+    "name": "Mem",
+    "type": "module",
+    "role": "working memory of an LLM module",
+    "drawn_as": "orange rounded tile; three copies including the legend",
+    "container": "Reflector, Recommender, legend",
+    "is_contribution": null
+   },
+   {
+    "name": "(OpenAI logo tile) Freeze LLM",
+    "type": "module",
+    "role": "frozen LLM",
+    "drawn_as": "green-grey rounded tile with the OpenAI logo; three copies including the legend",
+    "container": "Reflector, Recommender, legend",
+    "is_contribution": false
+   },
+   {
+    "name": "Global Thinking Agent",
+    "type": "container",
+    "role": "updates profiles and recommended strategies from the learner's history records",
+    "drawn_as": "pale green tinted region with a dashed green border and a mortarboard icon at the title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Local Teaching Agent",
+    "type": "container",
+    "role": "selects the most suitable exercise",
+    "drawn_as": "pale blue tinted region with a dashed blue border and a mortarboard icon at the title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Forward / Backward / Use tools / Working memory / Freeze LLM",
+    "type": "label",
+    "role": "legend of the arrow types and the two tile types",
+    "drawn_as": "black-framed strip along the bottom with a sample arrow or tile per entry",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Learner",
+    "to": "Answer (e_t, a_t)",
+    "what": "the learner's answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Answer (e_t, a_t)",
+    "to": "Recommender",
+    "what": "answer record",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Recommender",
+    "to": "Exercise",
+    "what": "Recommendation (e_t+1) on a thick arrow that runs down and left along the bottom",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Exercise",
+    "to": "Learner",
+    "what": "the recommended exercise belongs to the learner (icon under the learner)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Recommender",
+    "to": "Log Memory",
+    "what": "Explanations (F_t+1) and Predictions (A_t+1) on a long arrow up the right edge and across the top",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Answer (e_t, a_t)",
+    "to": "Log Memory",
+    "what": "Feedback, a red dashed arrow with smiling and frowning faces",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Log Memory",
+    "to": "Reflector",
+    "what": "history records for reflection",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reflector",
+    "to": "Recommender",
+    "what": "Reflection, a red dashed arrow",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Edu Tools",
+    "to": "Log Memory",
+    "what": "use tools (double-headed mint arrow)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Teaching Tools",
+    "to": "Recommender",
+    "what": "use tools (double-headed mint arrow)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mem",
+    "to": "LLM tile",
+    "what": "read and write inside the Reflector and the Recommender (double teal arrow)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Global Thinking Agent",
+    "to": "Edu Tools, Log Memory, Reflector",
+    "what": "the top region contains these modules",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Local Teaching Agent",
+    "to": "Answer, Teaching Tools, Recommender",
+    "what": "the bottom region contains these modules",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "e_t, a_t, e_t+1, F_t+1, A_t+1",
+    "kind": "identity",
+    "at": "Answer, Recommendation and Explanations labels",
+    "what": "name the exercise, answer, next exercise, explanation and predicted answer at steps t and t+1"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "graduation cap with diploma",
+    "stands_for": "the teaching role of each agent",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "student reading, with a light bulb",
+    "stands_for": "the learner",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "open book",
+    "stands_for": "the exercise",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "document with pencil and a tick or cross",
+    "stands_for": "an answer record, correct or wrong",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   },
+   {
+    "depicts": "smiling and frowning faces",
+    "stands_for": "positive and negative feedback",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "person at a blackboard",
+    "stands_for": "teaching output: explanations and the recommendation",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "OpenAI logo on a green-grey tile",
+    "stands_for": "the frozen LLM",
+    "style": "logo",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "a learner's history of four answer records, three correct (ticks) and one wrong (cross)",
+    "form": "overlapping document cards inside the Log Memory box",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "two agents as stacked tinted regions titled by role with a mortarboard icon, wired by black and red dashed arrows",
+    "parts": [
+     "Global Thinking Agent region",
+     "Local Teaching Agent region",
+     "arrows between them"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "an OpenAI logo on a green-grey tile next to an orange Mem tile, joined by a double arrow",
+    "parts": [
+     "logo tile",
+     "Mem tile",
+     "double arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "a titled yellow-bordered box holding a row of small answer cards with ticks and a cross",
+    "parts": [
+     "Log Memory box",
+     "answer cards"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a mint-bordered tool box beside the module, joined by a double-headed arrow",
+    "parts": [
+     "Edu Tools or Teaching Tools box",
+     "double-headed arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a legend entry pairs the logo tile with 'Freeze LLM' and the orange tile with 'Working memory'; no snowflake marks on the modules",
+    "parts": [
+     "legend tiles"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a cartoon learner outside the agents who answers, gives feedback and receives exercises",
+    "parts": [
+     "learner avatar",
+     "exercise book"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the learner on the left, follows the black arrow to Answer and Recommender in the lower band, then the long arrow up the right edge and across to Log Memory and Reflector, down the red reflection arrow; the bottom return arrow brings the exercise back."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two stacked tinted regions (Global Thinking Agent on top, Local Teaching Agent below, the lower one starting after the learner column), the learner and the exercise book in a white column on the left, and a framed legend strip along the bottom; a thick black loop arrow frames the right and bottom edges.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.69,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e5fba9",
+    "used_for": "tint of the Global Thinking Agent region",
+    "opacity": 0.19
+   },
+   {
+    "hex": "#a0c4fb",
+    "used_for": "tint of the Local Teaching Agent region",
+    "opacity": 0.13
+   },
+   {
+    "hex": "#f6a623",
+    "used_for": "orange Mem tiles and the answer document icons"
+   },
+   {
+    "hex": "#74aa9c",
+    "used_for": "green-grey tile behind the OpenAI logo (frozen LLM)"
+   },
+   {
+    "hex": "#02002b",
+    "used_for": "dark navy of the learner avatar and line icons"
+   },
+   {
+    "hex": "#428bf9",
+    "used_for": "blue Exercise book"
+   },
+   {
+    "hex": "#55d1ad",
+    "used_for": "mint tool-use arrows and tool-box borders"
+   },
+   {
+    "hex": "#40a597",
+    "used_for": "teal borders of Reflector and Recommender (stroke)"
+   },
+   {
+    "hex": "#efd26e",
+    "used_for": "yellow borders of Log Memory and Answer (stroke)"
+   },
+   {
+    "hex": "#d81e06",
+    "used_for": "red dashed backward arrows and the cross on a wrong answer (from the measured palette)"
+   },
+   {
+    "hex": "#809626",
+    "used_for": "olive ticks on correct answer cards"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "2 pt rounded coloured borders on modules and thick black arrows; 0.5-1 pt on icons; pale dashed borders on the two agent regions; red dashed backward arrows",
+  "font": "serif (Times New Roman) 8-12 pt: 12 pt agent titles, 10.5 pt labels, 9.5 pt legend; Cambria Math for the symbols e, a, F, A with subscripts",
+  "corners": "rounded",
+  "arrows": "thick black straight and orthogonal arrows with triangular heads; red dashed short arrows; mint and teal double-headed block arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "green tint = Global Thinking Agent, blue tint = Local Teaching Agent; yellow border = memory or record boxes, mint border = tool boxes, teal border = LLM modules; orange tile = working memory, green-grey logo tile = frozen LLM; red = backward flow and wrong answers",
+  "line_style_means": "black solid arrow = forward; red dashed arrow = backward (feedback, reflection); mint double-headed arrow = use tools; teal double arrow = Mem and LLM; dashed pale border = agent region",
+  "shape_means": "rounded box = module; tinted dashed region = agent; double-headed arrow = tool access; document with tick or cross = correct or wrong answer record",
+  "marker_means": "ticks and a cross mark correct and wrong records; smiling and frowning faces mark the sign of feedback; e, a, F, A with subscripts name what is passed at steps t and t+1",
+  "emphasis": "two large titled regions with role icons, and the thick black loop that frames the whole figure",
+  "reusable_patterns": [
+   "agents as two stacked tinted regions with role titles and role icons, the user kept outside on the left",
+   "legend strip along the bottom with a sample arrow or tile for every convention",
+   "memory drawn as a titled box holding a row of small record cards with tick or cross",
+   "tool boxes tied to the agent by a double-headed block arrow",
+   "module drawn as a Mem tile plus an LLM logo tile joined by a double arrow",
+   "one long thick return arrow framing the figure to close the loop"
+  ],
+  "weaknesses": [
+   "the thick return arrow runs through the title 'Local Teaching Agent', leaving a gap between Local and Teaching",
+   "the long arrow around the right edge is far from the modules it connects",
+   "the Feedback arrow starts at the Answer box but its label sits beside the faces, away from the source"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "OpenAI logo",
+   "flat-colour icon-library style clip art: graduation cap, learner with light bulb, book, documents with pencil and tick, faces, blackboard teacher"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted agent regions, module boxes and tiles",
+   "forward, backward and tool arrows",
+   "the legend strip"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two stacked tinted agent regions",
+   "learner avatar with light bulb",
+   "log memory box with answer cards",
+   "Mem tile and OpenAI logo tile",
+   "tool boxes with mint double arrows",
+   "legend strip of arrows and tiles",
+   "red dashed feedback and reflection arrows",
+   "mortarboard role icons"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "adaptive learning",
+   "learning path recommendation",
+   "generative agent",
+   "LLM",
+   "reflection",
+   "educational tools",
+   "memory",
+   "exercise recommendation"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "brand-logo-icon",
+   "module-state-coding",
+   "verdict-marks",
+   "memory-store",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "agent-role-regions",
+    "what": "each agent drawn as a tinted dashed region titled by its role with a small role icon, stacked so the agents read as layers"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each agent its own tinted region titled by role, put the user outside in a white column, and close the loop with one thick return arrow; a framed legend strip then explains every arrow type and tile in one line.",
+  "suits": "LLM systems with two or three cooperating agents and a user, where a few typed flows (forward, backward, tool use) must be told apart."
+ },
+ "tags": [
+  "agent regions",
+  "legend strip",
+  "cartoon icons",
+  "red dashed backward arrows",
+  "serif labels",
+  "tinted bands"
+ ],
+ "provenance": {
+  "sections": [
+   "Framework (p.3)"
+  ],
+  "evidence": [
+   "Global Thinking Agent, which aims to update profiles and recommended strategies from learners’ history records.",
+   "Additionally, we asked for explanations (Ft+1) and predictions of the learner’s response (At+1).",
+   "the Global Thinking Agent (GTA) and the Local Teaching Agent (LTA)"
+  ]
+ },
+ "summary": "GenAL recommends learning paths with two cooperating LLM agents instead of indexed items: a Global Thinking Agent that keeps the learner's log, reflects on outcomes and updates profiles, and a Local Teaching Agent that picks the next exercise using teaching tools. The figure draws the agents as two stacked tinted regions, green on top and blue below, each holding tool, memory and LLM boxes, with a cartoon learner outside on the left. Thick black arrows carry answers, recommendations and explanations round the loop; red dashed arrows carry feedback and reflection; mint double arrows mark tool use. A legend strip names the arrows and the Mem and frozen-LLM tiles; answer cards with ticks and a cross show the log.",
+ "summary_zh": "GenAL 的总览图：绿色的全局思考智能体与蓝色的局部教学智能体上下叠放，内部是工具、记忆和冻结 LLM 方块，学习者在左侧；黑色实线、红色虚线和青绿色双向箭头分别表示正向流、反馈与反思、工具调用，底部图例说明各种箭头和图块。",
+ "confidence": "high",
+ "notes": "Kind kept as the prior (actor-interaction, multi-agent-organization); the loop also resembles a closed-loop pipeline but the agents are the protagonists. The icons are vector paths; the five small PNGs in the file are equal-height strips (probably formula text lines). 'Feedback' is read as feedback from the answer to the log (red arrow from the Answer box with faces); the paper text given does not describe it.",
+ "venue": "AAAI25"
+}

@@ -1,0 +1,446 @@
+{
+ "paper_id": "icml25-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CodeI/O",
+  "one_liner": "Training-data construction that turns raw code into input/output prediction tasks answered with natural-language chain-of-thought, verified by re-execution.",
+  "domain": [
+   "code reasoning",
+   "synthetic training data",
+   "chain-of-thought"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "data-construction",
+  "variant_note": "raw code becomes reference code, input generator and query, is executed into I/O pairs, then into two colour-coded prediction questions with chain-of-thought answers and a grey dashed verification loop",
+  "argues": "Diverse raw code can be turned into verified input-output prediction data with natural-language reasoning chains, with an optional revision round to improve the chains.",
+  "subject": "Data-construction pipeline from raw code files to chain-of-thought input/output prediction samples, with a re-execution check.",
+  "elements": [
+   {
+    "name": "Raw Code",
+    "type": "data",
+    "role": "source code files gathered from various sources",
+    "drawn_as": "vertical stack of three source logos (LeetCode, GitHub, a teal mark) with the caption Raw Code below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "whale logo (LLM converting raw code)",
+    "type": "module",
+    "role": "LLM that transforms the raw code into the unified format",
+    "drawn_as": "blue whale logo between the logo stack and the three pills",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Reference Code (func)",
+    "type": "data",
+    "role": "transformed code that holds the main function",
+    "drawn_as": "mauve rounded pill with a nested violet pill labelled func",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Input Generator",
+    "type": "module",
+    "role": "generates the inputs that are sampled for the function",
+    "drawn_as": "mauve rounded pill with a two-line label",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Query",
+    "type": "text-block",
+    "role": "the problem statement given to the model",
+    "drawn_as": "mauve pill holding a white pill with italic quoted text You are given ...",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "I/O x N",
+    "type": "data",
+    "role": "N sampled inputs paired with the outputs obtained by executing the code",
+    "drawn_as": "capsule with a purple I half and a blue O half split by a slash, x N beside it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Execute",
+    "type": "operation",
+    "role": "runs the reference code on a sampled input to get the output",
+    "drawn_as": "Python logo and the word Execute between two short vertical arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "What is the input? / What is the output?",
+    "type": "text-block",
+    "role": "the two prediction questions asked of the LLM",
+    "drawn_as": "two large text lines without a box, the words input (blue) and output (purple) coloured",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "whale logo (LLM writing the chains of thought)",
+    "type": "module",
+    "role": "DeepSeek-V2.5 answers each question with a natural-language chain of thought",
+    "drawn_as": "blue whale logo between the two questions",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "<Chain of Thought> answer boxes",
+    "type": "data",
+    "role": "reasoning chain followed by the final answer in JSON, input or output",
+    "drawn_as": "two lavender rounded rectangles, each with three '... <Chain of Thought> ...' lines and a coloured JSON line",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Verification: Re-Execute",
+    "type": "operation",
+    "role": "predictions are checked by re-executing the code",
+    "drawn_as": "grey dashed loop-back along the top and right edge with a Python logo on its label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Revision (optional)",
+    "type": "operation",
+    "role": "optional revision round that improves the chains after verification",
+    "drawn_as": "grey dashed arrow from the Reference Code box to the input question, '(optional)' in grey",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Raw Code",
+    "to": "whale logo (LLM converting raw code)",
+    "what": "raw code files",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "whale logo (LLM converting raw code)",
+    "to": "Reference Code (func), Input Generator, Query",
+    "what": "code rewritten into the unified format",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input Generator",
+    "to": "I/O x N",
+    "what": "Sample: inputs drawn from the generator",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reference Code (func)",
+    "to": "I/O x N",
+    "what": "Execute: the code is run on the sampled inputs and the pairs come back",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reference Code, O half, Query",
+    "to": "What is the input?",
+    "what": "material for predicting the input (blue lines)",
+    "kind": "data",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Reference Code, I half, Query",
+    "to": "What is the output?",
+    "what": "material for predicting the output (purple lines)",
+    "kind": "data",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "What is the input? / What is the output?",
+    "to": "<Chain of Thought> answer boxes",
+    "what": "LLM answers with a chain of thought (blue and purple block arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "<Chain of Thought> answer boxes",
+    "to": "Reference Code (func)",
+    "what": "predicted input or output is re-executed for verification",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reference Code (func)",
+    "to": "What is the input?",
+    "what": "optional revision round (the figure does not say what is fed back)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "I",
+    "kind": "identity",
+    "at": "I/O capsule",
+    "what": "input half of a sampled pair; its line goes to the output question"
+   },
+   {
+    "marker": "O",
+    "kind": "identity",
+    "at": "I/O capsule",
+    "what": "output half of a sampled pair; its line goes to the input question"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "LeetCode, GitHub and a teal geometric logo",
+    "stands_for": "the sources of raw code",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "blue whale (DeepSeek logo)",
+    "stands_for": "the LLM that converts the code and the LLM that writes the chains of thought",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "Python logo",
+    "stands_for": "code execution (Execute, Re-Execute)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "query template: the problem statement given to the model",
+    "form": "white pill with italic quoted text You are given ...",
+    "real_values": false
+   },
+   {
+    "what": "answer template: three chain-of-thought lines then a JSON answer",
+    "form": "two lavender boxes whose last line is {\"input\": <the input>} or {\"output\": <the output>} in the task colour",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "DeepSeek whale logo, used twice: once for the model that converts the code and once for the model that writes the chains of thought",
+    "parts": [
+     "whale logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "the questions are set as large unboxed text with the key word coloured (input blue, output purple), next to a white pill holding the query text",
+    "parts": [
+     "What is the input?",
+     "What is the output?",
+     "Query pill"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "code-executor",
+    "drawn_as": "Python logo placed beside the verb Execute or Re-Execute",
+    "parts": [
+     "Python logo",
+     "label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chain-of-thought-block",
+    "drawn_as": "box with repeated '... <Chain of Thought> ...' placeholder lines above a JSON answer line",
+    "parts": [
+     "three placeholder lines",
+     "JSON answer line"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the stacked source logos on the left, runs right through the whale to three branching pills, then along the colour-coded line bundle to the two questions and answer boxes; the grey dashed loops on top are read last."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A left-to-right row: source logos, whale, then three stacked pills (Reference Code, Input Generator, Query) with the I/O capsule under the first; six coloured lines cross to two question-and-answer rows on the right (blue above purple); grey dashed loops run over the top edge.",
+  "panel_count": 1,
+  "lanes": "two aligned rows on the right: input prediction (blue) above output prediction (purple)",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.64,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9fc",
+    "used_for": "fill of the two chain-of-thought answer boxes"
+   },
+   {
+    "hex": "#e6d9ea",
+    "used_for": "fill of the Reference Code, Input Generator and Query pills"
+   },
+   {
+    "hex": "#7e2d8b",
+    "used_for": "purple = output-prediction branch: I half of the capsule, lines, block arrow, JSON output line"
+   },
+   {
+    "hex": "#3d32f4",
+    "used_for": "blue = input-prediction branch: O half of the capsule, lines, block arrow, JSON input line"
+   },
+   {
+    "hex": "#967dbc",
+    "used_for": "func pill nested inside Reference Code"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "dashed verification and revision loops, the word (optional)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no outline on boxes; thin black connectors (about 0.75 pt) and coloured lines; the loop-backs are grey dashed",
+  "font": "bold sans (DengXian) 7.5-9.5 pt, 15 pt for the I and O letters; serif italic (Cambria Math) for x N",
+  "corners": "rounded",
+  "arrows": "orthogonal elbow connectors with small filled heads, two thick block arrows into the answer boxes, grey dashed loop-backs",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = input-prediction task, purple = output-prediction task (each half of the I/O capsule takes the colour of the task that uses it); mauve = artifacts made from raw code; lavender = LLM answers; grey = optional loops",
+  "line_style_means": "solid = main data flow; grey dashed = verification by re-execution and optional revision",
+  "shape_means": "pill = artifact produced from raw code, capsule = sampled input-output pair, lavender rounded rectangle = model answer",
+  "marker_means": "I and O name the two halves of a sampled pair; x N says how many pairs are drawn per function",
+  "emphasis": "the blue/purple pairing runs through lines, question keyword, block arrows and answer boxes, while the optional loops are pushed to the grey top edge",
+  "reusable_patterns": [
+   "one hue per paired task kept on lines, keyword, arrow and answer box",
+   "bundle of parallel coloured lines converging into the prompt",
+   "grey dashed loop-back along the outer edge with a tool logo on its label",
+   "vertical stack of source logos under one caption",
+   "answer boxes as placeholder chain-of-thought lines plus a JSON answer line",
+   "one logo reused for the same LLM at two stages"
+  ],
+  "weaknesses": [
+   "six parallel coloured lines cross in the middle and are hard to trace back to their sources",
+   "the revision arrow starts at Reference Code but what it feeds back is not labelled",
+   "the third source logo carries no name"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the query wording and the JSON answer format of the paper"
+  ],
+  "stock": [
+   "LeetCode and GitHub logos and a third teal source logo",
+   "DeepSeek whale logo",
+   "Python logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "pills, capsule, connectors and block arrows",
+   "answer boxes with placeholder lines",
+   "dashed loops"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "source-logo stack",
+   "whale logo",
+   "reference-code pill with nested func",
+   "input generator pill",
+   "query pill",
+   "I/O capsule x N",
+   "blue and purple line bundles",
+   "answer boxes with chain-of-thought lines"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "code reasoning",
+   "input-output prediction",
+   "chain-of-thought",
+   "synthetic data",
+   "code execution",
+   "verification",
+   "DeepSeek",
+   "data construction"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "colour-coded-groups",
+   "flow-type-arrows",
+   "highlighted-text-spans"
+  ],
+  "new_tags": [
+   {
+    "name": "parallel-coloured-line-bundle",
+    "what": "several parallel orthogonal connectors of two hues run from different sources into one prompt block, one hue per task"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each of two paired tasks one hue and keep it on the data half, the connector bundle, the keyword of the question, the block arrow and the answer box, so that many crossing lines stay traceable; push verification and optional revision into a grey dashed loop around the edge.",
+  "suits": "LLM data-synthesis pipelines where one source yields two paired training tasks and an execution or verification loop should not disturb the main path."
+ },
+ "tags": [
+  "powerpoint-made",
+  "pills",
+  "colour-pairing",
+  "logo-icons",
+  "elbow-connectors",
+  "grey-dashed-loop"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 CodeI/O (p.2)"
+  ],
+  "evidence": [
+   "Raw code files are gathered from various sources and converted into a unified format.",
+   "natural language CoTs for predictions are collected from DeepSeek-V2.5",
+   "The verified CoTs can undergo optional revisions to further enhance reasoning chains."
+  ]
+ },
+ "summary": "CodeI/O builds LLM training data from raw code. The figure follows the data from left to right: logos of code sources feed a DeepSeek whale that rewrites each file as reference code, an input generator and a query; sampled inputs are executed to give I/O pairs, which fill two questions, What is the input? and What is the output?, answered by a second LLM with natural-language chains of thought. Two hues, blue for input prediction and purple for output prediction, are carried through lines, arrows and answer boxes. Grey dashed loops along the top show verification by re-execution and an optional revision round. It is a flat PowerPoint drawing with pills and three stock logos.",
+ "summary_zh": "CodeI/O 的数据构造流程图：原始代码经 DeepSeek 转成参考代码、输入生成器和查询，执行后得到输入输出对，再由 LLM 写出思维链来预测输入或输出。蓝色和紫色分别对应输入预测与输出预测，灰色虚线回路表示重新执行验证和可选修订。",
+ "confidence": "high",
+ "notes": "Prior label stage-pipeline / data-construction kept. The teal third source logo is not identified. The dashed Revision arrow starts at the Reference Code box and points at the input question; the figure does not label what is fed back.",
+ "venue": "ICML25"
+}

@@ -1,0 +1,535 @@
+{
+ "paper_id": "cvpr26-0027",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SR3R",
+  "one_liner": "Feed-forward 3D super-resolution that predicts high-resolution 3D Gaussian splats directly from as few as two low-resolution views with a learned cross-scene mapping.",
+  "domain": [
+   "3D super-resolution",
+   "3D Gaussian splatting",
+   "feed-forward reconstruction"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "contribution-mosaic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two existing-versus-ours lane pairs on top (pipeline, training objective) over an output comparison of five renders with zoom crops",
+  "argues": "Predicting HR 3DGS directly from sparse LR views replaces per-scene optimisation and changes where the high-frequency knowledge comes from, giving sharper renders.",
+  "subject": "Existing and proposed 3DSR pipelines and training objectives, and renders of one bedroom from ground truth and four methods with magnified crops.",
+  "elements": [
+   {
+    "name": "Existing Methods: LR Dense Views (more than 100)",
+    "type": "module",
+    "role": "input of the per-scene pipeline",
+    "drawn_as": "green dashed rounded box with bold title and two lines",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "3DGS Self-Optimization",
+    "type": "operation",
+    "role": "per-scene optimisation of the HR Gaussians",
+    "drawn_as": "red-orange dashed rounded box",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "HR 3DGS (existing lane)",
+    "type": "data",
+    "role": "high-resolution Gaussian splat output of the existing pipeline",
+    "drawn_as": "blue dashed rounded box",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "x Sparse Views / x Scene Zero-Shot / x Fast Reconstruction",
+    "type": "text-block",
+    "role": "what existing methods cannot do",
+    "drawn_as": "red list with cross marks at the right of the lane",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Ours (SR3R): LR Sparse Views (as few as 2)",
+    "type": "module",
+    "role": "input of the proposed pipeline",
+    "drawn_as": "green dashed rounded box with bold title and two lines",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Network Direct Prediction",
+    "type": "module",
+    "role": "learned network that predicts HR Gaussians in one pass",
+    "drawn_as": "red-orange dashed rounded box, same size as the optimisation box above",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "HR 3DGS (ours lane)",
+    "type": "data",
+    "role": "high-resolution Gaussian splat output of SR3R",
+    "drawn_as": "blue dashed rounded box",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "tick Sparse Views / tick Scene Zero-Shot / tick Fast Reconstruction",
+    "type": "text-block",
+    "role": "what SR3R can do",
+    "drawn_as": "green list with check marks under the red list",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Single Scene LR Dense Views / 2DSR / Pseudo-HR Dense Views",
+    "type": "operation",
+    "role": "existing objective: a 2D super-resolution model turns dense LR views of one scene into pseudo-HR views used for training",
+    "drawn_as": "two ellipses of tiny thumbnails joined by a yellow arrow labelled 2DSR",
+    "container": "(b) Existing Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Single Scene HR 3DGS",
+    "type": "data",
+    "role": "Gaussians fitted to one scene",
+    "drawn_as": "glowing cluster of coloured ellipsoids, red title, yellow Train arrows into it",
+    "container": "(b) Existing Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "psi",
+    "type": "module",
+    "role": "the generalised mapping function learned across scenes",
+    "drawn_as": "golden funnel shape with a red letter psi, blue Predict arrow to the right, yellow Train arrow from below",
+    "container": "(b) Ours (SR3R)",
+    "is_contribution": true
+   },
+   {
+    "name": "Large-scale Scenes LR Sparse Views",
+    "type": "data",
+    "role": "multi-scene training data of the mapping function",
+    "drawn_as": "yellow ellipse with three thumbnails and dots",
+    "container": "(b) Ours (SR3R)",
+    "is_contribution": true
+   },
+   {
+    "name": "Scene Scaleable HR 3DGS",
+    "type": "data",
+    "role": "Gaussians predicted for a scene by the learned mapping",
+    "drawn_as": "larger glowing cluster of coloured ellipsoids, red title",
+    "container": "(b) Ours (SR3R)",
+    "is_contribution": true
+   },
+   {
+    "name": "Input 2 Views",
+    "type": "label",
+    "role": "the two LR views fed to all methods",
+    "drawn_as": "peach rounded box with two small bedroom photos, title above",
+    "container": "bottom comparison",
+    "is_contribution": null
+   },
+   {
+    "name": "Ground Truth / NopoSplat / Ours (NopoSplat) / DepthSplat / Ours (DepthSplat)",
+    "type": "label",
+    "role": "column titles of the render comparison; Ours means SR3R on top of that feed-forward backbone",
+    "drawn_as": "serif titles over five renders, the word Ours in red",
+    "container": "bottom comparison",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "LR Dense Views",
+    "to": "3DGS Self-Optimization",
+    "what": "dense views are optimised per scene",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3DGS Self-Optimization",
+    "to": "HR 3DGS (existing lane)",
+    "what": "result of the optimisation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LR Sparse Views",
+    "to": "Network Direct Prediction",
+    "what": "sparse views go into the network",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Network Direct Prediction",
+    "to": "HR 3DGS (ours lane)",
+    "what": "direct prediction of the HR Gaussians",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Single Scene LR Dense Views",
+    "to": "Pseudo-HR Dense Views",
+    "what": "2DSR upsamples the views",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pseudo-HR Dense Views",
+    "to": "Single Scene HR 3DGS",
+    "what": "used to train Gaussians of one scene",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Large-scale Scenes LR Sparse Views",
+    "to": "psi",
+    "what": "multi-scene training of the mapping function",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Single Scene LR Sparse Views",
+    "to": "Scene Scaleable HR 3DGS",
+    "what": "psi predicts the Gaussians in one pass",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red cross list and green check list",
+    "to": "the existing and ours lanes of (a)",
+    "what": "properties lacking in existing methods and gained by SR3R",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "yellow box on each render",
+    "to": "enlarged crop below",
+    "what": "the boxed headboard and pillows are magnified",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Input 2 Views",
+    "to": "five renders",
+    "what": "all columns are reconstructed from the same two views",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Novel Paradigm: directly predict HR 3DGS parameters",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "existing three-box pipeline against SR3R's three-box pipeline, with red crosses against green checks",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Novel Objective: learn generalized mapping function psi",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "existing single-scene training with 2DSR pseudo labels against cross-scene training of psi",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "same two input views and five reconstructions of one bedroom with a zoom crop under each",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "captions under the two top panels",
+    "what": "name the paradigm panel and the objective panel"
+   },
+   {
+    "marker": "psi",
+    "kind": "identity",
+    "at": "golden funnel shape in (b)",
+    "what": "names the learned mapping function"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two low-resolution bedroom views",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "stacked small photos inside a peach rounded box at the left"
+   },
+   {
+    "what": "ground-truth view and renders of NopoSplat, Ours (NopoSplat), DepthSplat and Ours (DepthSplat)",
+    "content": "3d-render",
+    "role": "result",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "five equal squares in a row, a yellow box on the headboard art and a red box on the window of each"
+   },
+   {
+    "what": "magnified crops of the headboard art and pillows",
+    "content": "3d-render",
+    "role": "result",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "yellow-framed squares under each render, joined to the yellow box by two yellow lines in a wedge"
+   },
+   {
+    "what": "tiny room thumbnails inside ellipses (dense LR, pseudo-HR, sparse LR, large-scale scenes)",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 11,
+    "medium": "bitmap",
+    "treatment": "rows of two or three thumbnails with dots at both ends to suggest more"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "glowing cluster of coloured ellipsoids",
+    "stands_for": "an HR 3D Gaussian splat scene",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "golden funnel with a red letter psi",
+    "stands_for": "the learned mapping network",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one bedroom scene: two LR views, ground truth and four reconstructions with a magnified crop of flowers and pillows",
+    "form": "row of renders with a crop row under it",
+    "real_values": true
+   },
+   {
+    "what": "scene counts as annotations: more than 100 dense views against as few as 2 sparse views",
+    "form": "bracketed text under the input titles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "soft ellipse holding a row of tiny thumbnails and dots, titled by scene type and view count",
+    "parts": [
+     "ellipse",
+     "thumbnails",
+     "dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "3D Gaussians drawn as a glowing cluster of coloured ellipsoids, larger for the scalable version",
+    "parts": [
+     "glowing ellipsoids"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left Existing Methods lane, then the Ours lane, crosses to panel (b) left then right, and ends with the render row and its crops from Ground Truth to Ours (DepthSplat)."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A top band of two tinted panels, (a) pale yellow with two pipeline lanes and (b) pale purple split by a dashed divider, over a pale-blue band with an Input box and five aligned method columns, each a render over its magnified crop.",
+  "panel_count": 3,
+  "lanes": "two paired lanes (Existing Methods, Ours) in (a) and (b); five aligned method columns in the bottom band",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.77,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffff00",
+    "used_for": "ground tint of (a) at 5% opacity; yellow zoom boxes, crop frames and wedge lines",
+    "opacity": 0.05
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "ground tint of (b)",
+    "opacity": 0.05
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "ground tint of the bottom band",
+    "opacity": 0.05
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "peach box around the input views"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "block arrows between boxes and the psi funnel"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "green dashed input boxes"
+   },
+   {
+    "hex": "#ff3300",
+    "used_for": "red-orange dashed boxes for the method step"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue dashed boxes for HR 3DGS and the words Train and Predict"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red boxes on the windows, the word Ours and the cross list"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt dashed coloured outlines on boxes, 0.5-1 pt yellow and red frames on the renders, thin dashed grey outlines on the panels",
+  "font": "serif (Times New Roman), 4.5-9 pt; bold for lane titles, 9 pt for render titles, Cambria Math for psi",
+  "corners": "rounded",
+  "arrows": "fat yellow block arrows between pipeline boxes, one thin blue arrow for Predict, yellow wedge lines for the zoom",
+  "rendering": "mixed",
+  "effects": "glow around the Gaussian clusters and a gradient on the psi funnel",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "dashed box colour by role, kept in both lanes: green = input views, red-orange = the method step, blue = HR 3DGS output; red words and boxes = ours or the second highlight; green check and red cross = verdict on a capability; yellow = zoom",
+  "line_style_means": "dashed outlines = the three kinds of blocks; dashed vertical divider = existing against ours in (b); yellow wedge lines = magnification",
+  "shape_means": "ellipse of thumbnails = a set of views; golden funnel = learned mapping; glowing cluster = HR 3DGS",
+  "marker_means": "cross list and check list name what existing methods lack and what SR3R gains; psi names the mapping; (a) and (b) letter the panels",
+  "emphasis": "the word Ours in red over its columns, the green check list, the large golden psi shape and sharper crops",
+  "reusable_patterns": [
+   "paired lanes in one box grammar with box colour by role and a red-cross against green-check list beside them",
+   "ellipse holding a row of tiny thumbnails and dots for a set of views, with its size written under the title",
+   "yellow box on each render opened into an enlarged crop by a wedge, repeated across all method columns",
+   "second red box on the same renders to draw the eye to another region",
+   "glowing ellipsoid cluster for the 3D representation",
+   "tint per panel: pale yellow, pale purple, pale blue"
+  ],
+  "weaknesses": [
+   "thumbnails in the (b) ellipses are tiny",
+   "4.5 pt text in the ellipses",
+   "red box on the window is not explained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "bedroom views: ground truth, LR inputs and renders of four methods",
+   "zoom crops",
+   "scene thumbnails"
+  ],
+  "stock": [],
+  "generated": [
+   "glowing Gaussian cluster illustrations"
+  ],
+  "drawn": [
+   "dashed boxes and block arrows",
+   "panel tints and ellipses",
+   "psi funnel",
+   "zoom boxes and wedges"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "dashed pipeline lanes, existing against ours",
+   "red-cross and green-check lists",
+   "ellipses of LR view thumbnails",
+   "golden funnel with psi",
+   "glowing Gaussian clusters",
+   "five bedroom renders with yellow zoom wedge and crops"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "3D Gaussian splatting",
+   "super-resolution",
+   "feed-forward reconstruction",
+   "sparse views",
+   "cross-scene generalization",
+   "NopoSplat",
+   "DepthSplat",
+   "per-scene optimization"
+  ],
+  "tags": [
+   "verdict-marks",
+   "zoom-callout",
+   "colour-coded-groups",
+   "small-multiples",
+   "claim-banner",
+   "illustration-style"
+  ],
+  "new_tags": [
+   {
+    "name": "thumbnail-ellipse-set",
+    "what": "a soft ellipse holding a row of tiny thumbnails flanked by dots, standing for a set of views or scenes, titled above and sized in a subtitle"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a paradigm shift with paired lanes in one box grammar, colour the boxes by role, put a red-cross against green-check property list beside them, then close with a render comparison where every column repeats the same yellow box and enlarged crop in a wedge.",
+  "suits": "Method papers that replace an optimisation-based pipeline with a feed-forward one and need to show both the pipeline change and the visual quality gain."
+ },
+ "tags": [
+  "paired lanes",
+  "dashed boxes",
+  "tinted panels",
+  "zoom wedge",
+  "render comparison",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "Caption: (a) existing methods need dense views and per-scene optimisation, while the proposed method predicts HR 3DGS from as few as two LR views.",
+   "Caption: (b) the reformulation changes how 3DSR acquires high-frequency knowledge, learned across scenes instead of inherited from 2DSR models.",
+   "Introduction: SR3R is plug-and-play with any feed-forward 3DGS reconstruction backbone."
+  ]
+ },
+ "summary": "SR3R reformulates 3D super-resolution as a feed-forward mapping from as few as two low-resolution views to high-resolution 3D Gaussian splats. Figure 1 has two tinted panels on top and a render comparison below. Panel (a) pairs an existing lane, dense views, per-scene self-optimisation, HR 3DGS, with a red-cross list, against SR3R's lane, sparse views, direct prediction, HR 3DGS, with a green-check list. Panel (b) contrasts training on 2DSR pseudo labels for one scene with training a mapping function, drawn as a golden funnel with the letter psi, on many scenes. The bottom band shows two input views and five bedroom renders with yellow zoom wedges to sharper crops under the Ours columns.",
+ "summary_zh": "SR3R 把3D超分辨率改为从两张低分辨率视图直接前馈预测高分辨率3D高斯。图上方两栏对比现有方法与SR3R的流程和训练目标，红叉与绿勾列出能力差异；下方五列卧室渲染图配黄框放大对比，Ours更清晰。",
+ "confidence": "high",
+ "notes": "The bottom comparison has no letter; the caption refers to it as the bottom row. The red box on the window of each render is not explained in the caption. The caption text is partly cropped into the preview.",
+ "venue": "CVPR26"
+}

@@ -1,0 +1,465 @@
+{
+ "paper_id": "cvpr25-0095",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Apollo",
+  "one_liner": "A study of what drives video understanding in large multimodal models (sampling, encoder, data mix, training schedule, evaluation), leading to the Apollo family of video-LMMs.",
+  "domain": [
+   "video understanding",
+   "large multimodal models",
+   "design-space study"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "model-anatomy"
+  ],
+  "variant": "hub-and-spoke",
+  "variant_note": "a plain video-LMM sketch (LLM bar, token squares, encoder, frames) with five colour-coded design questions attached to the parts they concern",
+  "argues": "Many video-specific design choices of a video-LMM, from frame sampling to evaluation, are open questions that the paper examines one by one.",
+  "subject": "A video-LMM sketch with sampled dog-video frames, an encoder and connector, token squares under an LLM bar, and five design questions.",
+  "elements": [
+   {
+    "name": "Large Language Model",
+    "type": "module",
+    "role": "language model that consumes video and text tokens",
+    "drawn_as": "wide light-grey bar with a dark outline across the left two thirds",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "video token squares",
+    "type": "data",
+    "role": "tokens produced from the video, resampled by the connector (inferred from the question beside them)",
+    "drawn_as": "row of 11 light-blue squares with blue outlines under the LLM bar",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "text token squares",
+    "type": "data",
+    "role": "tokens of the text query (inferred from the query box below)",
+    "drawn_as": "row of 7 grey squares with dark outlines under the LLM bar",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "How to resample the video tokens? / Do we need video-based encoder?",
+    "type": "text-block",
+    "role": "two open design questions on token resampling and on the video encoder",
+    "drawn_as": "blue italic questions in a pale-blue rounded box",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Connector",
+    "type": "module",
+    "role": "turns encoder output into tokens for the LLM; its question is about resampling",
+    "drawn_as": "blue rectangle at the right end of the first question",
+    "container": "pale-blue question box",
+    "is_contribution": null
+   },
+   {
+    "name": "Encoder",
+    "type": "module",
+    "role": "video encoder that reads the sampled frames",
+    "drawn_as": "blue trapezoid at the right end of the second question",
+    "container": "pale-blue question box",
+    "is_contribution": null
+   },
+   {
+    "name": "How should videos be sampled?",
+    "type": "text-block",
+    "role": "design question on frame sampling, asked over four sample frames",
+    "drawn_as": "green italic line at the bottom of a pale-green rounded box holding the frames",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "What is the object the dog playing with?",
+    "type": "text-block",
+    "role": "example text query that goes with the video",
+    "drawn_as": "plain serif text in a white box with a dashed grey outline, under the grey token squares",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "What's the optimal mixture of text, image, and video data for training?",
+    "type": "text-block",
+    "role": "design question on data composition, with three data-type icons",
+    "drawn_as": "orange italic text in a pale-peach rounded box under the text query",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Training Schedule",
+    "type": "text-block",
+    "role": "heads the question on the number of stages and on freezing parts",
+    "drawn_as": "bold heading above a yellow rounded box with orange italic text, a calendar icon and two inline emoji",
+    "container": "grey side panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Evaluation Protocol",
+    "type": "text-block",
+    "role": "heads the question on cost-effective and comprehensive evaluation",
+    "drawn_as": "bold heading above a pale-purple rounded box with purple italic text and a bar-chart icon",
+    "container": "grey side panel",
+    "is_contribution": null
+   },
+   {
+    "name": "grey side panel",
+    "type": "container",
+    "role": "groups the two questions that do not sit on the model sketch",
+    "drawn_as": "pale-grey rounded panel at the right with a soft shadow",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "sampled dog-video frames",
+    "to": "Encoder",
+    "what": "frames go up into the encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder / Connector box",
+    "to": "video token squares",
+    "what": "tokens sit directly above the box that makes them",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "video token squares and text token squares",
+    "to": "Large Language Model",
+    "what": "tokens are read by the LLM",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "What is the object the dog playing with?",
+    "to": "text token squares",
+    "what": "the text query becomes the grey tokens",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "each coloured question box",
+    "to": "the part of the sketch it concerns",
+    "what": "sampling over the frames, resampling and encoder over the encoder box, data mixture under the text query",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "text, image and video icons",
+    "to": "data mixture question",
+    "what": "the three data types being mixed, joined by plus signs",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Training Schedule / Evaluation Protocol",
+    "kind": "section",
+    "at": "bold headings over the yellow and purple boxes",
+    "what": "name the two topics shown in the side panel"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four frames of a dog playing on a floor",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "each frame skewed in perspective with a pale dashed-grey plane behind it, a film-strip-like row, an arrow from each frame up to the encoder"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "document, picture and clapperboard",
+    "stands_for": "text, image and video data of the mixture",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "calendar",
+    "stands_for": "the training schedule",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "bar chart",
+    "stands_for": "the evaluation protocol",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "snowflake and flame",
+    "stands_for": "freeze and unfreeze a part of the model",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a text query about the dog video, with sampled frames of that video",
+    "form": "plain text box beside a row of frames",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "wide light-grey bar labelled Large Language Model",
+    "parts": [
+     "bar"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of 11 light-blue squares for video tokens and a row of 7 grey squares for text tokens under the LLM bar",
+    "parts": [
+     "video tokens",
+     "text tokens"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "vlm",
+    "drawn_as": "video encoder and connector below, LLM above, tokens between them; text enters beside the video path",
+    "parts": [
+     "Encoder",
+     "Connector",
+     "Large Language Model"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "four frames skewed in perspective along a row, each with a transparent dashed plane",
+    "parts": [
+     "skewed frames"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "snowflake and flame emoji set inline in the sentence Freeze or unfreeze each part",
+    "parts": [
+     "snowflake",
+     "flame"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the LLM bar top-left, runs down through the token rows to the blue and green boxes, then the query and orange box, and ends in the grey side panel at the right."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "An LLM bar and two token rows span the left two thirds; below them three columns: blue question box above the green frame box, a dashed query box above the orange data box, and a grey side panel holding the yellow and purple boxes.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.56,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dceaf7",
+    "used_for": "pale-blue box of the resampling and encoder questions",
+    "opacity": 0.59
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "Connector and Encoder boxes"
+   },
+   {
+    "hex": "#caeefb",
+    "used_for": "video token squares"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "blue outlines and blue italic text"
+   },
+   {
+    "hex": "#d9f2d0",
+    "used_for": "pale-green box of the sampling question",
+    "opacity": 0.59
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "green outline and green italic text"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "pale-peach box of the data-mixture question",
+    "opacity": 0.59
+   },
+   {
+    "hex": "#ffe35a",
+    "used_for": "yellow box of the training-schedule question",
+    "opacity": 0.28
+   },
+   {
+    "hex": "#f2cfee",
+    "used_for": "pale-purple box of the evaluation question",
+    "opacity": 0.59
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "purple outline and purple italic text"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "LLM bar and grey side panel"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "grey token squares and dashed grey frames",
+    "opacity": 0.47
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt coloured outlines on every box, dashed grey outlines for the query box and the frame planes, dark outline on the LLM bar",
+  "font": "serif italic (Georgia) 9.5-10.5 pt for the questions, serif (Times) for labels and bold headings",
+  "corners": "rounded",
+  "arrows": "four short thin black arrows with small solid heads from the frames to the encoder",
+  "rendering": "mixed",
+  "effects": "perspective skew with translucent planes on the frames; soft shadow on the grey side panel",
+  "model_depiction": "banner",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "one colour per design question: green = sampling, blue = encoder and connector, orange = data mixture, yellow = training schedule, purple = evaluation; light-blue squares = video tokens, grey squares = text tokens",
+  "line_style_means": "dashed grey = the example query and the planes behind the frames; solid coloured = question boxes",
+  "shape_means": "bar = LLM, trapezoid = encoder, rectangle = connector, square = token",
+  "marker_means": "snowflake = freeze, flame = unfreeze; plus signs join the three data icons; question marks mark open questions",
+  "emphasis": "the five coloured question boxes carry the figure while the model sketch stays plain grey and blue",
+  "reusable_patterns": [
+   "research questions as colour-coded italic boxes attached to the parts of a plain model sketch",
+   "token squares coloured by modality under an LLM bar",
+   "frames drawn as skewed planes with arrows into the encoder",
+   "data-type icons joined by plus signs for a mixture",
+   "snowflake and flame emoji inline in a sentence for freeze and unfreeze"
+  ],
+  "weaknesses": [
+   "token colours are not labelled",
+   "long italic questions in coloured boxes make the figure text-heavy"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames of a dog video",
+   "the example question about the dog"
+  ],
+  "stock": [
+   "document, picture, clapperboard, calendar and bar-chart icons",
+   "snowflake and flame emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "LLM bar and token squares",
+   "question boxes",
+   "connector and encoder shapes",
+   "arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "LLM bar with token squares",
+   "Connector and Encoder boxes",
+   "skewed dog-video frames",
+   "five colour-coded question boxes",
+   "text, image and video icons joined by plus signs",
+   "snowflake and flame inline icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video understanding",
+   "large multimodal models",
+   "design space",
+   "video sampling",
+   "encoder",
+   "data mixture",
+   "training schedule",
+   "evaluation protocol"
+  ],
+  "tags": [
+   "claim-banner",
+   "option-catalog",
+   "colour-coded-groups",
+   "token-strip",
+   "pictogram-chain",
+   "filmstrip"
+  ],
+  "new_tags": [
+   {
+    "name": "question-annotated-model",
+    "what": "research questions in coloured italic boxes attached to the parts of a plain model sketch that they ask about"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To map the axes of a study, keep the model sketch plain and attach each design question as a colour-coded italic box on the part it concerns; use inline emoji such as a snowflake and a flame to say freeze or unfreeze inside the sentence.",
+  "suits": "Empirical or analysis papers that vary several design axes of one system and want a single-glance map of the questions."
+ },
+ "tags": [
+  "coloured question boxes",
+  "italic text",
+  "pastel",
+  "icons",
+  "rounded frames"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 caption",
+   "Abstract"
+  ],
+  "evidence": [
+   "Caption: a schematic of the exploration of video-specific design choices, from video sampling and model architecture to training schedules and data compositions.",
+   "Abstract: the study covers video sampling, architectures, data composition and training schedules."
+  ]
+ },
+ "summary": "Apollo is a study of what drives video understanding in large multimodal models, ending in a family of video-LMMs. Figure 1 is a map of the design space on a plain model sketch. A grey LLM bar sits over a row of light-blue video-token squares and a row of grey text-token squares. Under them four skewed dog-video frames feed an encoder and connector, and a dashed box holds a text query. Five colour-coded italic boxes ask the open questions: how to sample videos (green), how to resample tokens and whether a video encoder is needed (blue), the best data mixture shown by text, image and video icons (orange), how many training stages and what to freeze (yellow), and how to evaluate (purple).",
+ "summary_zh": "Apollo 研究视频理解在大型多模态模型中由什么驱动。图用一个简单的模型草图承载五个彩色提问框：视频采样、编码器与连接器、数据配比、训练计划（冻结与解冻）、评测协议，并配有狗视频帧、令牌方块和图标。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper mentions the figure, so roles come from the caption, abstract and drawing. The meaning of the two token-square colours is inferred from the neighbouring boxes. The five question boxes could also be read as a paper roadmap (contribution-mosaic), but they pose questions and carry no findings. The preview has empty space at the top and the caption cut off at the bottom.",
+ "venue": "CVPR25"
+}

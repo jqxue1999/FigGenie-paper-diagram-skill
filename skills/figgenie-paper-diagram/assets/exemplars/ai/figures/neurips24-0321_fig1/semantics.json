@@ -1,0 +1,491 @@
+{
+ "paper_id": "neurips24-0321",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MambaLRP",
+  "one_liner": "A Layer-wise Relevance Propagation method for Mamba models that restores relevance conservation at the components where basic LRP breaks it.",
+  "domain": [
+   "explainable AI",
+   "state space models",
+   "layer-wise relevance propagation"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "panel a sets the starting point (LRP equals Gradient x Input), panel b shows basic LRP breaking conservation across two Mamba blocks with a noisy heatmap, panel c repeats the same blocks with repaired components, equal numbers and a focused heatmap",
+  "argues": "Basic LRP breaks relevance conservation in some Mamba components and yields noisy explanations; reworking the propagation there restores conservation and gives faithful explanations.",
+  "subject": "a small network with backward relevance, then two Mamba blocks under basic LRP and under MambaLRP with relevance numbers and dog-image heatmaps",
+  "elements": [
+   {
+    "name": "small network with R_i and R_j",
+    "type": "module",
+    "role": "concept sketch of relevance flowing back from the output f(x) to lower-layer neurons",
+    "drawn_as": "white circles R_i, a red circle R_j, two pink circles and an output circle f(x); thin black connections, thick red arrows pointing back from f(x)",
+    "container": "a)",
+    "is_contribution": false
+   },
+   {
+    "name": "∇f ⊙ x (Gradient x Input)",
+    "type": "formula",
+    "role": "the explanation that basic LRP is equivalent to (per the caption)",
+    "drawn_as": "large serif formula below the network, tied to it by a double-headed vertical arrow",
+    "container": "a)",
+    "is_contribution": false
+   },
+   {
+    "name": "BASIC LRP",
+    "type": "label",
+    "role": "title of the baseline lane with a long red arrow pointing left (direction of relevance propagation)",
+    "drawn_as": "sans title above a long muted-red arrow with its head at the left",
+    "container": "b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Block 5 and Block 6 (basic LRP)",
+    "type": "module",
+    "role": "two Mamba blocks through which relevance is propagated; conservation breaks",
+    "drawn_as": "black-outlined rounded squares holding a branching line diagram with parallel-bar glyphs, black dots and a grey square",
+    "container": "b)",
+    "is_contribution": false
+   },
+   {
+    "name": "relevance numbers 1.578, -0.996, -1.496, -20.182",
+    "type": "label",
+    "role": "relevance sums at the block boundaries; unequal on the two sides of each block",
+    "drawn_as": "small 5 pt numbers beside pink bars of different thickness at the block borders",
+    "container": "b)",
+    "is_contribution": null
+   },
+   {
+    "name": "conservation break",
+    "type": "label",
+    "role": "names the failure at Block 5",
+    "drawn_as": "red text under the block with a red curved arrow to the noisy heatmap",
+    "container": "b)",
+    "is_contribution": null
+   },
+   {
+    "name": "noisy explanations",
+    "type": "label",
+    "role": "outcome of basic LRP",
+    "drawn_as": "black caption beside the dog photo and its noisy heatmap",
+    "container": "b)",
+    "is_contribution": null
+   },
+   {
+    "name": "MAMBA LRP wordmark",
+    "type": "icon",
+    "role": "name of the proposed method as title of its lane",
+    "drawn_as": "green bold MAMBA and purple-outlined LRP letters with a small cartoon snake above, over a long red arrow pointing left",
+    "container": "c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Block 5 and Block 6 (MambaLRP)",
+    "type": "module",
+    "role": "the same two Mamba blocks with reworked relevance propagation",
+    "drawn_as": "same rounded squares with green wrench icons on three components of each block",
+    "container": "c)",
+    "is_contribution": true
+   },
+   {
+    "name": "relevance numbers -0.09, -0.0026",
+    "type": "label",
+    "role": "equal sums on both sides of each block: -0.09 around Block 5, -0.0026 around Block 6",
+    "drawn_as": "small 5 pt numbers beside pink bars of equal thickness",
+    "container": "c)",
+    "is_contribution": true
+   },
+   {
+    "name": "conservation",
+    "type": "label",
+    "role": "names the repaired property",
+    "drawn_as": "green text under Block 5 with a green curved arrow to the faithful heatmap",
+    "container": "c)",
+    "is_contribution": true
+   },
+   {
+    "name": "faithful explanations",
+    "type": "label",
+    "role": "outcome of MambaLRP",
+    "drawn_as": "black caption beside the dog photo and its focused heatmap",
+    "container": "c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "network in a)",
+    "to": "∇f ⊙ x",
+    "what": "basic LRP is equivalent to Gradient x Input",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f(x)",
+    "to": "R_j and the other hidden neurons",
+    "what": "relevance flows back from the output",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Block 6",
+    "to": "Block 5",
+    "what": "relevance propagates from right to left, shown by the long arrow above each lane",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Block 5 (basic LRP)",
+    "to": "noisy explanations",
+    "what": "conservation break leads to a noisy heatmap",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Block 5 (MambaLRP)",
+    "to": "faithful explanations",
+    "what": "conservation leads to a focused heatmap",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Block 5 and Block 6 in b)",
+    "to": "Block 5 and Block 6 in c)",
+    "what": "same blocks before and after the fix; wrenches mark the reworked components",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "colour of arrows and labels",
+    "to": "state of the lane",
+    "what": "red marks the failure, green marks the repair",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "starting point: LRP on a small network, equal to Gradient x Input",
+    "verdict": "setting"
+   },
+   {
+    "label": "b) BASIC LRP",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "two Mamba blocks where relevance sums differ across each block, and a noisy dog heatmap",
+    "verdict": "fails"
+   },
+   {
+    "label": "c) MAMBA LRP",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "the same blocks with repaired components, equal sums, and a focused dog heatmap",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a), b), c)",
+    "kind": "section",
+    "at": "top-left of each panel, bold blue",
+    "what": "head the three conceptual design steps named in the caption"
+   },
+   {
+    "marker": "R_i, R_j, f(x)",
+    "kind": "identity",
+    "at": "nodes of the small network",
+    "what": "relevance of lower and upper neurons and the model output"
+   },
+   {
+    "marker": "Block 5, Block 6",
+    "kind": "identity",
+    "at": "above each Mamba block",
+    "what": "names the two blocks shown"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "dog photo",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square photo of a puppy held in a hand, black frame, repeated in b) and c)"
+   },
+   {
+    "what": "explanation heatmaps of the dog photo",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "translucent blue-to-red relevance overlay on the photo in a black frame; scattered red dots for basic LRP, a concentrated red patch for MambaLRP"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon green snake",
+    "stands_for": "Mamba (the model family) as the mascot of the MambaLRP wordmark",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "dark-green wrench",
+    "stands_for": "a component whose relevance propagation was reworked",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "rounded square with branching lines, parallel-bar glyphs, black dots and a grey square",
+    "stands_for": "the internals of a Mamba block",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "relevance sums at the boundaries of two blocks",
+    "form": "numbers 1.578, -0.996, -1.496, -20.182 under basic LRP and -0.09, -0.0026 under MambaLRP",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention-map",
+    "drawn_as": "translucent relevance heat-map painted over the photo, shown beside the plain photo",
+    "parts": [
+     "photo",
+     "heat-map overlay"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "long red arrow pointing left over each lane and red arrows from the output back to the neurons, for relevance instead of gradient",
+    "parts": [
+     "long red arrow",
+     "thick pink bars"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mamba-block",
+    "drawn_as": "rounded square with two parallel branches, parallel-bar glyphs, black dots at merge points and a grey square",
+    "parts": [
+     "rounded square",
+     "branches",
+     "grey square"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "network-glyph",
+    "drawn_as": "three columns of circles joined by thin lines, with the output circle f(x) at the right",
+    "parts": [
+     "R_i circles",
+     "R_j circle",
+     "f(x) circle"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at panel a) at the left, then reads b) from the long red arrow to the block numbers, the conservation break tag and the noisy heatmap, then repeats the same path in c) and compares."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three panels in a row separated by thick black vertical rules; a) is a small network with a formula under it; b) and c) have the same layout: title with a long left arrow, two blocks, a tag under the first block, a curved arrow to a photo-and-heatmap pair at the bottom.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.07,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f10d0a",
+    "used_for": "red: relevance arrows in a), the conservation break tag and its curved arrow"
+   },
+   {
+    "hex": "#df605d",
+    "used_for": "muted red: BASIC LRP long arrow and the arrow over the MambaLRP lane"
+   },
+   {
+    "hex": "#f83131",
+    "opacity": 0.5,
+    "used_for": "thick translucent pink-red strokes standing for relevance flow across block borders",
+    "approx": true
+   },
+   {
+    "hex": "#216d00",
+    "used_for": "green: conservation label, curved arrow and MAMBA letters"
+   },
+   {
+    "hex": "#165034",
+    "used_for": "dark green: wrench icons and the green curved arrow"
+   },
+   {
+    "hex": "#5e17eb",
+    "used_for": "purple outline of the LRP letters in the wordmark"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey squares inside the Mamba blocks"
+   },
+   {
+    "hex": "#0a4aa8",
+    "used_for": "bold blue panel letters a), b), c)",
+    "approx": true
+   },
+   {
+    "hex": "#000000",
+    "used_for": "block outlines, text and the vertical rules between panels"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black outlines on blocks and network, 1.5 pt coloured arrows, 2.25 to 3 pt thick pink bars and black vertical rules",
+  "font": "sans (DM Sans, Canva Sans) 5-10 pt; bold 12 pt panel letters; 9 pt block names; 5 pt relevance numbers; black-weight sans in the wordmark",
+  "corners": "mixed",
+  "arrows": "long thick red arrows pointing left over each lane, curved red or green arrows to the heatmaps, thin black arrows in the network",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "red = relevance flow and the failure (conservation break); green = the repair (wrenches, conservation label, MAMBA lettering); pink bars = relevance carried across a block border; blue letters = panel names",
+  "line_style_means": "long left-pointing arrow = direction of relevance propagation (backward); thin black lines in a) = network connections; thick black vertical rules = panel separators",
+  "shape_means": "rounded square = Mamba block; circle = neuron; grey square inside a block = an unlabelled core component; wrench = reworked component",
+  "marker_means": "numbers at block borders = relevance sums; equal numbers on both sides = conserved, unequal = broken",
+  "emphasis": "red versus green tags and arrows between the otherwise identical lanes; the wordmark at the head of c)",
+  "reusable_patterns": [
+   "the same two blocks drawn before and after the fix with the conserved quantity printed at every boundary, so the break shows as unequal numbers",
+   "a red versus green curved arrow from the block to the output image, each tagged with the cause",
+   "tool icons pinned to the components that were repaired",
+   "photo and heatmap pair under each lane as the output comparison",
+   "a long left-pointing arrow over each lane to show backward propagation",
+   "wordmark with a small mascot as the title of the proposed-method panel"
+  ],
+  "weaknesses": [
+   "relevance numbers are 5 pt",
+   "the thickness of the pink bars is not explained and does not follow the printed values",
+   "the grey square and the black dots inside the block diagram are not labelled"
+  ]
+ },
+ "resources": {
+  "own": [
+   "dog photo and the two heatmaps from basic LRP and MambaLRP",
+   "relevance values"
+  ],
+  "stock": [
+   "wrench icons"
+  ],
+  "generated": [
+   "the snake mascot and MambaLRP wordmark (illustrated logo)"
+  ],
+  "drawn": [
+   "Mamba block diagrams",
+   "small network and formula",
+   "relevance bars, arrows and tags"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "small network with red relevance flow",
+   "gradient-times-input formula",
+   "two Mamba block diagrams with relevance numbers",
+   "pink relevance bars",
+   "green wrench icons",
+   "dog photo with two heatmaps",
+   "MambaLRP wordmark with snake"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "layer-wise relevance propagation",
+   "Mamba",
+   "state space models",
+   "explainability",
+   "relevance conservation",
+   "gradient times input",
+   "heatmap",
+   "faithful explanation"
+  ],
+  "tags": [
+   "saliency-heatmap",
+   "error-callouts",
+   "verdict-marks",
+   "toy-values-inline",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "repair-badges",
+    "what": "small tool icons pinned to the components of a drawn model that the method changes, set against the same model drawn without them"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the same blocks twice, before and after the method, and print the quantity that should be conserved at every boundary; equal against unequal numbers make the fix visible at a glance, and a photo and heatmap pair closes each lane.",
+  "suits": "explainability or analysis methods where an invariant (conservation, sum, norm) is broken by some components and repaired by the proposed rule."
+ },
+ "tags": [
+  "three panels",
+  "thick vertical rules",
+  "red versus green",
+  "numbers at block borders",
+  "photo and heatmap pairs",
+  "wordmark with mascot"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction",
+   "4 LRP for Mamba (p.3)"
+  ],
+  "evidence": [
+   "Conceptual steps involved in the design of MambaLRP.",
+   "Our analysis reveals three components in the Mamba architecture where conservation breaks",
+   "Rework the relevance propagation strategy at those layers to achieve conservation."
+  ]
+ },
+ "summary": "MambaLRP extends Layer-wise Relevance Propagation to Mamba models by restoring relevance conservation where basic LRP breaks it. Figure 1 shows the three conceptual design steps in three panels. Panel a) sketches relevance flowing back through a small network, equal to Gradient x Input. Panel b) draws two Mamba blocks under basic LRP with relevance numbers that differ across each block, a red conservation break tag and a noisy dog heatmap. Panel c) draws the same blocks under the MambaLRP wordmark with green wrenches on the reworked components, equal numbers on both sides, a green conservation tag and a focused heatmap.",
+ "summary_zh": "MambaLRP 让 LRP 在 Mamba 模型中保持相关性守恒。图分三格：a 为小网络与梯度×输入，b 为基础 LRP 的两个 Mamba 块，边界数值不等并给出嘈杂热图，c 为同样的块加绿色扳手修复，数值相等，热图聚焦。",
+ "confidence": "high",
+ "notes": "Prior kinds kept with concept-schematic added for panel a). The scale of the pink bars is not stated, and which printed number belongs to which border is read from the picture. The grey square inside the blocks is probably the selective SSM but is not labelled in the figure.",
+ "venue": "NeurIPS24"
+}

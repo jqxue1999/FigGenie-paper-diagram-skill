@@ -1,0 +1,626 @@
+{
+ "paper_id": "aaai25-0120",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WebPilot",
+  "one_liner": "A multi-agent system that plans web tasks globally and executes each subtask with a tailored MCTS, using reflection to adapt.",
+  "domain": [
+   "web agents",
+   "Monte Carlo tree search",
+   "LLM multi-agent systems"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "robot-avatar agents in a global zone and a local zone, four small trees for the MCTS phases, and two wedge-linked boxes that unroll them on a real web task",
+  "argues": "Splitting web-task execution into a global plan refined by reflection and a local MCTS that explores and scores actions lets LLM agents handle uncertain web environments.",
+  "subject": "two optimization zones of a web agent: robot agents, a task plan, four MCTS-phase trees and two zoomed examples",
+  "elements": [
+   {
+    "name": "Web Env",
+    "type": "container",
+    "role": "the web environment that holds the task and shows its page as an Actree",
+    "drawn_as": "rounded pale-blue frame with a stacked task card and a document thumbnail",
+    "container": "Global Optimization",
+    "is_contribution": false
+   },
+   {
+    "name": "Invite David to Project A and tell me his email address",
+    "type": "instance",
+    "role": "the example web task",
+    "drawn_as": "stack of three pale-blue rounded cards with a soft shadow",
+    "container": "Web Env",
+    "is_contribution": false
+   },
+   {
+    "name": "Planner",
+    "type": "actor",
+    "role": "breaks the task into subtasks (HTD) and refines the plan",
+    "drawn_as": "robot icon holding a clipboard, in front of a pale-green rectangle tagged HTD",
+    "container": "Global Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Controller",
+    "type": "actor",
+    "role": "judges whether the subtask is complete and passes a reflection to the Planner (RTA)",
+    "drawn_as": "robot icon with a control panel, on a light-blue rectangle tagged RTA",
+    "container": "Global Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Finished Subtasks",
+    "type": "data",
+    "role": "list of completed subtasks, here T_1: Navigate to Project A",
+    "drawn_as": "stack of rounded light-blue cards inside a light-blue frame",
+    "container": "Global Optimization",
+    "is_contribution": false
+   },
+   {
+    "name": "Current Plan",
+    "type": "data",
+    "role": "the plan of subtasks, here T_i: Navigate to 'Members' and T_n: Extract the email",
+    "drawn_as": "stack of rounded light-blue cards inside a light-blue frame",
+    "container": "Global Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Extractor",
+    "type": "actor",
+    "role": "extracts the requested information (Info Extraction)",
+    "drawn_as": "robot icon holding a magnifier",
+    "container": "Global Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Verifier",
+    "type": "actor",
+    "role": "checks an action before it is sent to the web environment",
+    "drawn_as": "robot icon with a case and gear next to the Web Env arrows",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "Explorer",
+    "type": "actor",
+    "role": "searches the subtask with MCTS and proposes actions",
+    "drawn_as": "robot icon with a megaphone, with a bracket over four small trees",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "GOS",
+    "type": "operation",
+    "role": "Goal-Oriented Selection (MCTS selection, per the caption)",
+    "drawn_as": "small tree of circles with a blue arrow path to a dashed leaf",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "RENE",
+    "type": "operation",
+    "role": "Reflection-Enhanced Node Expansion",
+    "drawn_as": "small tree with two glowing child nodes",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "DES",
+    "type": "operation",
+    "role": "Dynamic Evaluation and Simulation",
+    "drawn_as": "small tree with one glowing node and a dashed node",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "MVB",
+    "type": "operation",
+    "role": "Maximal Value Backpropagation",
+    "drawn_as": "small tree with gold nodes along a path from leaf to root",
+    "container": "Local Optimization",
+    "is_contribution": true
+   },
+   {
+    "name": "R_sim (Simulation)",
+    "type": "text-block",
+    "role": "simulation reflection attached to a simulated page",
+    "drawn_as": "light-blue rounded box under a 'Simulation' page snapshot, linked by a thick light-blue dashed arrow",
+    "container": "left zoom box",
+    "is_contribution": true
+   },
+   {
+    "name": "R_st (For Sibling)",
+    "type": "text-block",
+    "role": "sibling reflection: after clicking 'Settings', 'Members' is not visible, so do not click it again",
+    "drawn_as": "peach rounded box with text",
+    "container": "left zoom box",
+    "is_contribution": true
+   },
+   {
+    "name": "R_ct (For child)",
+    "type": "text-block",
+    "role": "child reflection: there is a 'Members' link that leads to the target page",
+    "drawn_as": "pale-green rounded box with text, reached by a thick dark-green dashed arrow",
+    "container": "left zoom box",
+    "is_contribution": true
+   },
+   {
+    "name": "Controller / Explorer chat",
+    "type": "container",
+    "role": "the controller says the subtask is not yet complete and the explorer starts a one-step forward simulation",
+    "drawn_as": "two green speech bubbles with small robot avatars in a pale cyan rounded region",
+    "container": "right zoom box",
+    "is_contribution": true
+   },
+   {
+    "name": "Appraiser",
+    "type": "actor",
+    "role": "scores the executed action and the new observation; the state score is their mean",
+    "drawn_as": "robot icon beside green speech bubbles with the questions in plain text and the scores 8 and 9, ending in 0.5x8 + 0.5x9 = 8.5",
+    "container": "right zoom box",
+    "is_contribution": true
+   },
+   {
+    "name": "legend of arrow styles",
+    "type": "container",
+    "role": "names six arrow styles: State Transition, Reflection Generation, Sibling Reflection, Simulation, Child Reflection, Simulation Reflection",
+    "drawn_as": "six short sample arrows with sans captions in two columns at the bottom of the global zone",
+    "container": "Global Optimization",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Web Env",
+    "to": "Planner",
+    "what": "the task goal",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Planner",
+    "to": "Current Plan",
+    "what": "Plan Generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Current Plan",
+    "to": "Local Optimization zone",
+    "what": "Next Subtask T_i",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Local Optimization zone",
+    "to": "Controller",
+    "what": "Completeness Assessment",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Controller",
+    "to": "Planner",
+    "what": "Subtask Reflection R_sub",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Planner",
+    "to": "Current Plan",
+    "what": "Plan Refinement",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "Controller",
+    "to": "Finished Subtasks",
+    "what": "completed subtask recorded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Current Plan",
+    "to": "Extractor",
+    "what": "Info Extraction for the last subtask T_n",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Explorer",
+    "to": "Verifier",
+    "what": "Action Verification",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Verifier",
+    "to": "Web Env",
+    "what": "Action",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Web Env",
+    "to": "Verifier",
+    "what": "Observation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Explorer",
+    "to": "GOS, RENE, DES, MVB",
+    "what": "the explorer runs the four search phases",
+    "kind": "control",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "RENE tree",
+    "to": "left zoom box",
+    "what": "zoom into expansion with reflections on page snapshots",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "DES tree",
+    "to": "right zoom box",
+    "what": "zoom into evaluation: chat with scores",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "page snapshots in the left zoom box",
+    "to": "each other",
+    "what": "state transitions labelled with actions click link 'Settings' and click link 'Members'",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "reflection boxes R_ct, R_st, R_sim",
+    "to": "legend arrow styles",
+    "what": "box colour repeats the colour of the matching legend arrow",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Global Optimization",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "task goes to the Planner, a plan of subtasks is generated, the next subtask is handed to the local side, and the plan is refined after reflection",
+    "verdict": "ours"
+   },
+   {
+    "label": "Local Optimization",
+    "kind": "actor-interaction",
+    "axis": "stages",
+    "shows": "Verifier and Explorer act on the web environment; four small trees stand for the MCTS phases; two zoom boxes show page snapshots, reflections and a scoring chat",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "I. II. III. IV. V.",
+    "kind": "order",
+    "at": "labels on the main arrows",
+    "what": "orders the five global steps: Plan Generation, Next Subtask, Completeness Assessment, Subtask Reflection, Plan Refinement; the order crosses into the local zone and back"
+   },
+   {
+    "marker": "HTD, RTA",
+    "kind": "identity",
+    "at": "tags behind the Planner and the Controller",
+    "what": "Hierarchical Task Decomposition and Reflective Task Adjustment (caption)"
+   },
+   {
+    "marker": "GOS, RENE, DES, MVB",
+    "kind": "identity",
+    "at": "titles of the four trees",
+    "what": "names the four search phases (caption)"
+   },
+   {
+    "marker": "T_1, T_i, T_n",
+    "kind": "identity",
+    "at": "subtask cards",
+    "what": "names the subtasks of the plan"
+   },
+   {
+    "marker": "R_sub, R_sim, R_st, R_ct",
+    "kind": "identity",
+    "at": "arrow label and reflection boxes",
+    "what": "names the reflection types"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "text snapshots of web pages (accessibility-tree dumps with coloured highlights), one labelled Actree",
+    "content": "document",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "small page-like thumbnails with tiny monospace text; one beside the task, four inside the left zoom box, joined by thin arrows"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon robot with a role prop (clipboard, control panel, magnifier, case and gear, megaphone, gauge)",
+    "stands_for": "the agents Planner, Controller, Extractor, Verifier, Explorer and Appraiser",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 8
+   }
+  ],
+  "examples": [
+   {
+    "what": "a web task, its plan and finished subtask: Invite David to Project A and tell me his email address; T_1 Navigate to Project A; T_i Navigate to 'Members'; T_n Extract the email",
+    "form": "stacked cards with text",
+    "real_values": true
+   },
+   {
+    "what": "reflections and scoring on that task: child and sibling reflections, a controller-explorer-appraiser chat, scores 8 and 9 combined into 8.5",
+    "form": "coloured text boxes and speech bubbles with a one-line formula",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "six robot avatars with role props, wired by labelled arrows and placed in a global zone and a local zone",
+    "parts": [
+     "Planner",
+     "Controller",
+     "Extractor",
+     "Verifier",
+     "Explorer",
+     "Appraiser"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "search-tree",
+    "drawn_as": "four small circle-and-line trees redrawn once per search phase with the changed nodes highlighted (path, glow, dashed leaf, gold backward path)",
+    "parts": [
+     "GOS",
+     "RENE",
+     "DES",
+     "MVB"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "green speech bubbles with small robot avatars, one bubble per utterance, plus plain question lines between them",
+    "parts": [
+     "avatars",
+     "bubbles",
+     "score formula"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "plan, act and reflect cycle spread across agents: plan generation, next subtask, completeness assessment, reflection, refinement",
+    "parts": [
+     "Planner",
+     "Controller",
+     "Explorer"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Web Env task card at top left, goes down to the Planner and along arrows I to V (the second one leads into the local zone, the third comes back), then across to Verifier, Explorer and the four trees, and last down into the two zoom boxes."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two tinted zones side by side inside one outer frame: a grey Global Optimization zone at left (title at the bottom) and a pale green Local Optimization zone at right (title at the top right). In the local zone the agents and four trees sit on top and two large framed boxes below are tied to the RENE and DES trees by thin wedge lines. A six-arrow legend sits at the bottom of the global zone.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.95,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9f2d0",
+    "opacity": 0.2,
+    "used_for": "very pale green tint of the Local Optimization zone"
+   },
+   {
+    "hex": "#d1d1d1",
+    "opacity": 0.2,
+    "used_for": "pale grey tint of the Global Optimization zone"
+   },
+   {
+    "hex": "#caeefb",
+    "used_for": "pale blue cards: task, current plan, finished subtasks, Web Env frame"
+   },
+   {
+    "hex": "#84e291",
+    "used_for": "green speech bubbles in the right zoom box"
+   },
+   {
+    "hex": "#84e291",
+    "opacity": 0.2,
+    "used_for": "pale green rectangle behind the Planner (HTD)"
+   },
+   {
+    "hex": "#c2f1c8",
+    "used_for": "child reflection box R_ct"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "sibling reflection box R_st"
+   },
+   {
+    "hex": "#96dcf8",
+    "used_for": "simulation reflection box R_sim and its dashed arrow"
+   },
+   {
+    "hex": "#61cbf4",
+    "opacity": 0.2,
+    "used_for": "pale cyan tint behind the Controller (RTA) and the controller-explorer chat"
+   },
+   {
+    "hex": "#aeaeae",
+    "opacity": 0.2,
+    "used_for": "pale grey tint of the Appraiser area"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "dark teal main flow arrows"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "grey outlines of tree nodes and boxes"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dark grey outlines on boxes and tree nodes, 1 pt on thick dashed reflection arrows",
+  "font": "sans (Aptos), 3-7.5 pt: 7.5 pt for arrow labels and titles, 5 pt for agent names and bubble text; Cambria Math for symbols; bold only on the two zone titles",
+  "corners": "rounded",
+  "arrows": "straight dark-teal arrows with small heads for the main flow, labelled with numerals; six legend styles from solid grey-blue to thick dashed green, peach and light blue",
+  "rendering": "flat-vector",
+  "effects": "soft shadows under stacked cards and a grey glow on highlighted tree nodes",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Zone tint: grey = global, pale green = local. Reflections are colour-coded to the legend arrows: peach = sibling reflection, pale green = child reflection, light blue = simulation reflection. Green bubbles = agent utterances; gold nodes in the MVB tree = backpropagated path; dark teal arrows = main flow.",
+  "line_style_means": "Legend: solid grey-blue = state transition; thick dark-green dashed = reflection generation; peach dashed = sibling reflection; thin pale-green dashed = simulation; pale-green dashed = child reflection; thick light-blue dashed = simulation reflection.",
+  "shape_means": "Robot with a prop = agent role; stack of rounded cards = task, plan or list; small circle-and-line tree = MCTS tree; speech bubble = utterance; thin wedge = zoom.",
+  "marker_means": "Roman numerals order the global steps; HTD, RTA, GOS, RENE, DES, MVB are caption abbreviations; T and R symbols name subtasks and reflections.",
+  "emphasis": "Two bold zone titles and the two large wedge-linked boxes; coloured reflection boxes stand out against the pale zones; no single contribution is highlighted.",
+  "reusable_patterns": [
+   "two tinted zones (global and local) with bold zone titles inside one outer frame",
+   "robot avatar per role with a prop that hints at its job, reused inside the zoom box",
+   "four small trees, one per search phase, with the changed nodes highlighted, under a bracket from the agent that runs them",
+   "thin wedge from a tree to a framed box that unrolls it into page snapshots, reflections and a chat",
+   "legend of six dashed arrow styles whose colours are reused on the matching boxes",
+   "stacked rounded cards for task, plan and finished subtasks",
+   "a scoring chat that ends in a one-line formula (0.5 x 8 + 0.5 x 9 = 8.5)"
+  ],
+  "weaknesses": [
+   "5 pt text inside the zoom boxes and under the robots is small at print size",
+   "the Roman-numbered steps cross between zones, so their order is hard to follow",
+   "several pale greens and blues in the legend and boxes are hard to tell apart",
+   "the zoom boxes are tied to the trees only by thin grey wedge lines"
+  ]
+ },
+ "resources": {
+  "own": [
+   "text snapshots of real web pages",
+   "a real task, plan and agent dialogue"
+  ],
+  "stock": [
+   "flat cartoon robot icons, one per agent role"
+  ],
+  "generated": [],
+  "drawn": [
+   "zones, cards and boxes",
+   "four small search trees",
+   "arrows and legend",
+   "wedge lines and speech bubbles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "robot agents with props",
+   "global and local zones",
+   "four small search trees",
+   "stacked plan cards",
+   "page snapshot thumbnails",
+   "reflection boxes in three colours",
+   "chat bubbles with scores",
+   "arrow-style legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "web agent",
+   "multi-agent system",
+   "Monte Carlo tree search",
+   "hierarchical task decomposition",
+   "reflection",
+   "WebArena",
+   "plan refinement",
+   "LLM agents"
+  ],
+  "tags": [
+   "search-tree",
+   "zoom-callout",
+   "flow-type-arrows",
+   "mascot-character",
+   "stacked-cards",
+   "colour-coded-groups",
+   "toy-values-inline"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each agent role its own robot avatar with a prop, put two levels of the method in two tinted zones, and zoom the new search phases into framed boxes that show a real example. Reuse the legend arrow colours as the fill of the boxes they describe.",
+  "suits": "Multi-agent LLM systems with a high-level planner and a low-level search or executor, where an example episode and several kinds of reflection must be shown."
+ },
+ "tags": [
+  "robot-avatars",
+  "two-zone-layout",
+  "pale-tints",
+  "wedge-zoom",
+  "dense-small-text",
+  "sans-serif"
+ ],
+ "provenance": {
+  "sections": [
+   "1 LMU Munich (section label in the index; no paragraph mentions the figure)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "the Global Optimization phase involves generating a high-level plan by breaking down tasks into manageable subtasks",
+   "the Local Optimization phase executes each subtask using a tailored MCTS designed for complex environments",
+   "GOS: Goal-Oriented Selection; RENE: Reflection-Enhanced Node Expansion; DES: Dynamic Evaluation and Simulation; MVB: Maximal Value Backpropagation"
+  ]
+ },
+ "summary": "WebPilot is a multi-agent system for web tasks that couples a global plan with a local Monte Carlo tree search. Figure 1 puts both on one canvas. At left, a grey Global Optimization zone shows cartoon-robot agents (Planner, Controller, Extractor) turning a task card into a plan, handing each subtask to the local side and refining the plan after reflection, along arrows numbered I to V. At right, a pale green Local Optimization zone has Verifier and Explorer agents acting on a web environment and four small trees (GOS, RENE, DES, MVB) for the MCTS phases. Two wedge-linked boxes show real page snapshots, colour-coded reflections and a chat in which an Appraiser scores an action 8 and a page 9, giving 8.5. A legend names six arrow styles.",
+ "summary_zh": "WebPilot 是把全局规划与局部蒙特卡洛树搜索结合的多智能体网页任务系统。图中左侧灰色“全局优化”区由卡通机器人规划、控制并提取信息，右侧绿色“局部优化”区有验证者、探索者和四棵搜索树，下方两个放大框展示页面快照、彩色反思和评分对话。",
+ "confidence": "medium",
+ "notes": "No paragraph mentions the figure, so roles rest on the caption, the abstract and the drawing. Which tree each zoom box belongs to (RENE for the left, DES for the right) is read from where the wedge lines start; the exact target of arrow II inside the local zone is not drawn. Treating the two titled zones as panels is a choice (the index says one panel). The drawn content spans beyond the canvas in the SVG, which does not change the printed figure.",
+ "venue": "AAAI25"
+}

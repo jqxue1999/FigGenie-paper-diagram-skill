@@ -1,0 +1,521 @@
+{
+ "paper_id": "icml24-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DITTO (Diffusion Inference-Time T-Optimization)",
+  "one_liner": "Controls a pre-trained text-to-music diffusion model at inference time by optimising the initial noise latent through any differentiable feature-matching loss.",
+  "domain": [
+   "music generation",
+   "diffusion inference-time control",
+   "noise optimisation"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "a left-to-right forward chain from noise to loss with a red dashed gradient path laid backwards over it to the noise, and circled numbers 1 to 5 that run back to the starting variable",
+  "argues": "A frozen diffusion model can be steered by optimising only its initial noise: a feature-matching loss is back-propagated through the checkpointed sampling chain to the noise.",
+  "subject": "Initial noise, frozen sampler, spectrogram, feature loss against a target, and the gradient path back to the noise.",
+  "elements": [
+   {
+    "name": "x_T ∼ N(0, I)",
+    "type": "data",
+    "role": "initial noise latent that is optimised",
+    "drawn_as": "large maths label with a thin leader line to a black dot inside a nested pink blob",
+    "container": "noise blob",
+    "is_contribution": true
+   },
+   {
+    "name": "x_T^*",
+    "type": "data",
+    "role": "the optimised initial noise",
+    "drawn_as": "red dot at the end of short red arrows inside the blob, red label with a leader line",
+    "container": "noise blob",
+    "is_contribution": true
+   },
+   {
+    "name": "noise blob",
+    "type": "region",
+    "role": "latent space of the initial noise, shown with contour levels",
+    "drawn_as": "organic blob of three nested pink-red contours with grey outlines",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Input: “Upbeat jazz music”",
+    "type": "data",
+    "role": "text prompt that conditions the model",
+    "drawn_as": "bold italic quoted text with a black arrow into the Diffusion box",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "type": "module",
+    "role": "frozen pre-trained diffusion sampler that turns the noise and prompt into a spectrogram, with gradient checkpointing",
+    "drawn_as": "light-blue rounded box with a small padlock, bold title above, bold text inside",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_{t−1}",
+    "type": "data",
+    "role": "intermediate sampling state fed back into the sampler",
+    "drawn_as": "white rounded box below the Diffusion box with an arrow up into it and a black line back from it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_0",
+    "type": "data",
+    "role": "final sample of the chain",
+    "drawn_as": "white rounded box right of the Diffusion box",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "f(x_0)",
+    "type": "module",
+    "role": "feature extractor applied to the generated spectrogram",
+    "drawn_as": "light-blue rounded box with a small padlock",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Matching Loss L(f(x_0), y)",
+    "type": "operation",
+    "role": "compares the extracted feature with the target feature",
+    "drawn_as": "white rounded box with the formula, bold title above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Target Feature y: Editing, Control",
+    "type": "data",
+    "role": "target that the output is steered towards, with an Editing group and a Control group",
+    "drawn_as": "large light-blue rounded box with a padlock, bold title, two icon groups with a label under each",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "red dashed arrows with ∇",
+    "type": "other",
+    "role": "gradient flowing backwards from the loss through f, the spectrogram, the sampler and its x_{t-1} loop to the noise",
+    "drawn_as": "red dashed arrows pointing left, each marked with a red outlined triangle (nabla)",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "x_T ∼ N(0, I)",
+    "to": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "what": "initial noise",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input: “Upbeat jazz music”",
+    "to": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "what": "text condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_{t−1}",
+    "to": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "what": "previous state into the next sampling step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "to": "x_{t−1}",
+    "what": "next state of the sampling loop",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "to": "x_0",
+    "what": "final sample",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "x_0",
+    "to": "Music Spectrogram",
+    "what": "decoded spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Music Spectrogram",
+    "to": "f(x_0)",
+    "what": "spectrogram into the feature extractor",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f(x_0)",
+    "to": "Feature Matching Loss L(f(x_0), y)",
+    "what": "extracted feature",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Target Feature y: Editing, Control",
+    "to": "Feature Matching Loss L(f(x_0), y)",
+    "what": "target feature",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Feature Matching Loss L(f(x_0), y)",
+    "to": "f(x_0)",
+    "what": "gradient (∇)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f(x_0)",
+    "to": "Music Spectrogram and x_0",
+    "what": "gradient (∇)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Music Spectrogram and x_0",
+    "to": "Text-to-Spectrogram: Diffusion (Checkpointed)",
+    "what": "gradient (∇)",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text-to-Spectrogram: Diffusion (Checkpointed) and x_{t−1}",
+    "to": "noise blob",
+    "what": "gradient (∇) through the sampling loop to the initial noise",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_T ∼ N(0, I)",
+    "to": "x_T^*",
+    "what": "the noise moves by short red arrows to its optimised value",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1",
+    "kind": "order",
+    "at": "left of the label x_T ∼ N(0, I)",
+    "what": "start: the initial noise (reading of the position)"
+   },
+   {
+    "marker": "2",
+    "kind": "order",
+    "at": "above the Text-to-Spectrogram title",
+    "what": "the frozen diffusion sampler produces the spectrogram (reading of the position)"
+   },
+   {
+    "marker": "3",
+    "kind": "order",
+    "at": "above f(x_0) between Music Spectrogram and Feature Matching Loss",
+    "what": "features of the generated spectrogram (reading of the position)"
+   },
+   {
+    "marker": "4",
+    "kind": "order",
+    "at": "under the arrow from Target Feature y to the loss",
+    "what": "comparison with the target feature (reading of the position)"
+   },
+   {
+    "marker": "5",
+    "kind": "order",
+    "at": "below the red dot x_T^*",
+    "what": "result: the optimised noise (reading of the position)"
+   },
+   {
+    "marker": "∇",
+    "kind": "identity",
+    "at": "on every red dashed arrow",
+    "what": "marks a gradient flowing backwards"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "music spectrogram of the generated audio",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small green-yellow-blue spectrogram tile between x_0 and f(x_0), bold title above"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "grey padlock",
+    "stands_for": "the module is frozen, not trained",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "rainbow equaliser bars, a circular arrow and a paintbrush, grouped under the label Editing",
+    "stands_for": "editing-type target features (the abstract names inpainting, outpainting, looping)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "music staff with notes and a small line plot with five points, grouped under the label Control",
+    "stands_for": "control-type target features (the abstract names intensity, melody, musical structure)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "text prompt “Upbeat jazz music”",
+    "form": "bold italic quoted text with an arrow into the sampler",
+    "real_values": true
+   },
+   {
+    "what": "optimisation of an initial noise: a black start dot x_T moves by red arrows to the red dot x_T^* inside nested contours",
+    "form": "two dots and three short red arrows on a contour blob",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "grey padlock at the corner of every frozen module (sampler, feature extractor, target feature); the optimised noise has none",
+    "parts": [
+     "padlock icons"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "a loss box with red dashed arrows marked by a nabla triangle running backwards over the forward chain",
+    "parts": [
+     "Feature Matching Loss",
+     "red dashed arrows",
+     "nabla marks"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "noise into one Diffusion box with an x_{t-1} recurrence box and an x_0 output, instead of a strip of frames",
+    "parts": [
+     "x_T",
+     "Diffusion box",
+     "x_{t-1}",
+     "x_0"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "nested pink contour blob with a black start dot, a red end dot and red arrows between them",
+    "parts": [
+     "contour layers",
+     "start dot",
+     "end dot",
+     "red arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "bold italic quoted prompt with an arrow, no box",
+    "parts": [
+     "label Input:",
+     "quoted prompt"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at circled 1 on x_T at the left, follows black arrows right through the diffusion sampler, x_0, spectrogram and feature extractor to the loss, with the target feature joining from below; the red dashed arrows then lead back to the noise blob and x_T^* (5)."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "One wide left-to-right chain: noise blob at the left, the Diffusion box with an x_{t-1} box under it, x_0, spectrogram, f(x_0) and the loss at the right, a large Target Feature box under the right half; red dashed arrows run right to left over the chain and five circled numbers sit around it.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.82,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b3cefb",
+    "used_for": "frozen pre-trained parts: Diffusion (Checkpointed), f(x_0) and the Target Feature y box"
+   },
+   {
+    "hex": "#e7caca",
+    "used_for": "outer contour of the noise blob"
+   },
+   {
+    "hex": "#e79393",
+    "used_for": "middle contour of the noise blob"
+   },
+   {
+    "hex": "#e77373",
+    "used_for": "inner contour of the noise blob"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "gradient path and result: red dashed arrows, nabla marks, red dot and label x_T^*"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey outlines of the blob contours (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark outlines on boxes, 1 pt black arrows, 1.25 pt red dashed arrows",
+  "font": "bold italic sans (Arial, Fira Sans) 6.5-8 pt for titles and labels; Computer Modern maths 10-16 pt for x_T, x_0, f and L",
+  "corners": "rounded",
+  "arrows": "black straight arrows with filled heads, a few elbow lines; red dashed arrows each marked with an outlined red triangle; short solid red arrows inside the blob",
+  "rendering": "flat-vector",
+  "effects": "semi-transparent padlock icons; no shadows",
+  "model_depiction": "box",
+  "state_marker": "padlock"
+ },
+ "encoding": {
+  "color_means": "Light blue = frozen pre-trained parts with a padlock (sampler, feature extractor, target feature); white = variables and the loss; pink-red nested blob = the latent space of the initial noise being optimised; red = gradient path and the optimised result.",
+  "line_style_means": "Solid black = forward computation; red dashed with a nabla triangle = gradient flowing backwards to the initial noise; short solid red arrows inside the blob = movement of the noise.",
+  "shape_means": "Rounded rectangles = modules (blue) and variables or loss (white); organic blob with contour levels = latent space of the noise; dots = noise values.",
+  "marker_means": "Circled 1 to 5 order the steps and end back at x_T^*; nabla = gradient; padlock = frozen; Editing and Control name the two families of target features.",
+  "emphasis": "The red dashed backward path is the only dashed red element and covers the whole chain, so the unusual idea (optimise the input noise, not the model) is seen first; only the noise blob carries no padlock.",
+  "reusable_patterns": [
+   "forward chain in black with a parallel red dashed backward path marked by nabla signs",
+   "padlock icons on frozen modules while the optimised variable is left unlocked",
+   "nested-contour blob with a start dot and an end dot joined by red arrows for optimisation in input space",
+   "circled numbers around the chain so the order closes back at the starting variable",
+   "box of icon groups (Editing, Control) standing for the kinds of target feature",
+   "bold italic text with an arrow for a prompt input"
+  ],
+  "weaknesses": [
+   "the circled numbers carry no text and are not in left-to-right order, so each meaning comes from position only",
+   "red backward arrows run close to the black forward arrows near the Diffusion box and x_{t-1}",
+   "the caption is cut in the context file, so the full claim is not available",
+   "the individual icons in the Target Feature box have no labels of their own"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a generated music spectrogram",
+   "the text prompt Upbeat jazz music"
+  ],
+  "stock": [
+   "padlock icons",
+   "equaliser bars, circular arrow, paintbrush and music staff icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes and arrows",
+   "nested contour blob with dots",
+   "red dashed gradient arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "nested-contour noise blob with start and end dots",
+   "Diffusion (Checkpointed) box with padlock",
+   "x_{t-1} recurrence box",
+   "music spectrogram tile",
+   "feature extractor f(x_0)",
+   "Feature Matching Loss box",
+   "Target Feature box with Editing and Control icons",
+   "red dashed gradient arrows with nabla"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "diffusion inference-time optimization",
+   "music generation",
+   "initial noise",
+   "feature matching loss",
+   "backpropagation through sampling",
+   "gradient checkpointing",
+   "frozen model",
+   "text-to-music"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "embedding-space-sketch",
+   "option-catalog"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "When the optimised variable is the input and not the model, draw the forward chain in black, lay a red dashed backward path with nabla signs over it, mark frozen parts with padlocks, and show the optimised input as a start dot and an end dot on a contour blob; number the steps so that the order closes back at the input.",
+  "suits": "Inference-time optimisation or guidance methods (noise optimisation, prompt tuning, latent search) that back-propagate a loss through a frozen model."
+ },
+ "tags": [
+  "single wide drawing",
+  "circled step numbers",
+  "red dashed backward arrows",
+  "padlocks on frozen blocks",
+  "light-blue modules",
+  "contour blob sketch",
+  "bold italic labels",
+  "icon box"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "We propose DITTO, or Diffusion Inference-Time T -Optimization, a general-purpose framework to control pre-trained diffusion",
+   "controlling pre-trained text-to-music diffusion models at inference-time via optimizing initial noise latents"
+  ]
+ },
+ "summary": "DITTO controls a pre-trained text-to-music diffusion model at inference time by optimising its initial noise latent, so no fine-tuning is needed. Figure 1 draws this as one wide chain. A noise x_T ~ N(0, I), shown as a dot in a nested pink blob, and the prompt Upbeat jazz music enter a frozen, checkpointed Diffusion box with an x_{t-1} recurrence; the output x_0 becomes a spectrogram, passes a frozen feature extractor f and meets a Target Feature y (Editing and Control icons) in a Feature Matching Loss. Red dashed arrows marked with nabla run backwards over the chain to the blob, where red arrows lead to the optimised x_T^*. Circled numbers 1 to 5 order the steps.",
+ "summary_zh": "DITTO 在推理时优化初始噪声来控制预训练的文本到音乐扩散模型。图 1 是一条长链：噪声和提示进入冻结的采样器，得到频谱，经特征提取与目标特征比较算损失，红色虚线 ∇ 箭头反向回到噪声，圆圈数字 1 到 5 标顺序。",
+ "confidence": "medium",
+ "notes": "The caption in the context file is cut after the first sentence and no paragraph mentions the figure, so roles come from the figure and the abstract only. The meaning of the circled numbers is read from where they sit. The pre-screen listed model-anatomy first; stage-pipeline (closed loop) is primary here because no model internals are drawn, only a frozen black box inside an optimisation loop. The icon-to-task mapping in the Target Feature box is at group level (Editing, Control), not per glyph.",
+ "venue": "ICML24"
+}

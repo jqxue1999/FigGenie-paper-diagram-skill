@@ -1,0 +1,503 @@
+{
+ "paper_id": "iclr26-0125",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ThinKV",
+  "one_liner": "A thought-adaptive KV cache compression framework for reasoning models that assigns precision by thought importance and progressively evicts tokens of less critical thoughts.",
+  "domain": [
+   "KV cache compression",
+   "large reasoning models",
+   "efficient inference"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast"
+  ],
+  "variant": "design-family",
+  "variant_note": "five sibling token-eviction grids (four prior method groups and ThinKV) followed by an accuracy versus latency scatter plot",
+  "argues": "Prior eviction methods decide per token and lose accuracy or speed; ThinKV types tokens by thought type and lands in the accurate, fast corner of the plot.",
+  "subject": "Toy token grids showing which cached tokens each KV cache compression method keeps or evicts while decoding, and a scatter of accuracy against time per output token.",
+  "elements": [
+   {
+    "name": "SnapKV, RocketKV",
+    "type": "instance",
+    "role": "prior methods; eviction marks (X) sit only in the prefill columns, the decode part stays cached",
+    "drawn_as": "lower-triangular grid of unit cells with a dashed prefill/decode line and a cache-snapshot row below",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "H20, RaaS",
+    "type": "instance",
+    "role": "prior decode-stage methods; evicted cells are scattered through the decode region",
+    "drawn_as": "same triangular grid with scattered X cells and a snapshot row with gaps",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "LazyEviction",
+    "type": "instance",
+    "role": "prior method that tracks the last activation of tokens in an observation window before evicting",
+    "drawn_as": "same grid with pale-yellow numbered cells inside orange-outlined windows and curved orange arrows",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "R-KV",
+    "type": "instance",
+    "role": "prior method that also removes redundant tokens",
+    "drawn_as": "same grid with pink cells for redundant tokens next to X cells",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Prefill / Decode",
+    "type": "label",
+    "role": "splits each grid into prompt tokens and generated tokens",
+    "drawn_as": "bracket arrows above the first grid and a dashed vertical line through every grid",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Evicted Token / Cached Token / Current Token",
+    "type": "label",
+    "role": "names the three cell states",
+    "drawn_as": "serif callout labels with thin arrows pointing at one example cell each, beside the first grid",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Timestep of last activation / Observation window",
+    "type": "label",
+    "role": "explain the numbers and orange boxes of the LazyEviction grid",
+    "drawn_as": "callout labels with arrows into the grid",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Redundant tokens",
+    "type": "label",
+    "role": "explains the pink cells of the R-KV grid",
+    "drawn_as": "callout label with two arrows into pink cells",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "cache-snapshot rows",
+    "type": "data",
+    "role": "what remains in the cache at the last step for each method",
+    "drawn_as": "a single row of cells under each grid: blue kept, gaps where evicted, green current, pale-yellow for LazyEviction",
+    "container": "(a) and (b)",
+    "is_contribution": null
+   },
+   {
+    "name": "ThinKV (Ours)",
+    "type": "instance",
+    "role": "the proposed scheme: tokens carry a thought type letter, some groups are quantized and evicted progressively",
+    "drawn_as": "same triangular grid with R, E and T letters inside cells, X cells in later rows, a hatched snapshot row",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Reasoning Thoughts / Execution Thoughts / Transition Thoughts",
+    "type": "label",
+    "role": "names the three thought types behind the letters R, E and T",
+    "drawn_as": "callout labels with arrows into the R, E and T cells",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Group Quantization",
+    "type": "label",
+    "role": "marks a group of tokens that is quantized together",
+    "drawn_as": "callout label with an arrow to an orange-outlined group of cells",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Refresh Period",
+    "type": "label",
+    "role": "marks the period at the bottom of the grid after which the cache is refreshed (meaning from the label only)",
+    "drawn_as": "plain label under the last grid row",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Accurate / Fast",
+    "type": "icon",
+    "role": "points to the better direction in the plot: up is more accurate, left is faster",
+    "drawn_as": "two green gradient block arrows with bold green labels inside the plot",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "method labels in the scatter",
+    "type": "label",
+    "role": "ThinKV (Ours), SnapKV, R-KV, FullKV, LazyEviction, RaaS, H2O, ScissorHands next to their markers",
+    "drawn_as": "serif labels beside coloured circles, a star for ThinKV (Ours)",
+    "container": "(c)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "triangular grids (a)",
+    "to": "ThinKV grid (b)",
+    "what": "same grid grammar; (b) adds typed tokens and group quantization",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Evicted Token, Cached Token, Current Token",
+    "to": "X, blue and green cells",
+    "what": "names the cell states",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Timestep of last activation",
+    "to": "numbered cells",
+    "what": "explains the numbers",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Observation window",
+    "to": "orange-outlined cells",
+    "what": "explains the boxes",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Redundant tokens",
+    "to": "pink cells",
+    "what": "explains the pink fill",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reasoning, Execution, Transition Thoughts",
+    "to": "R, E, T cells",
+    "what": "names the thought types",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Group Quantization",
+    "to": "orange-outlined group of cells",
+    "what": "tokens quantized together",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each grid row",
+    "to": "next grid row",
+    "what": "one more generated token per row and the cache state redrawn",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "grid",
+    "to": "cache-snapshot row",
+    "what": "cache content at the last step",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "methods in (a) and (b)",
+    "to": "markers in (c)",
+    "what": "each method appears as a named marker",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "four groups of existing methods drawn as the same triangular token grid, each with its eviction pattern and a snapshot row",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b)",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "ThinKV on the same grid with R, E and T thought letters, group quantization and refresh period",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "other",
+    "axis": "other",
+    "shows": "scatter of LiveCodeBench accuracy against time per output token for GPT-OSS-20B, all methods named at their points",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "panel corners",
+    "what": "letters head the three panels"
+   },
+   {
+    "marker": "R, E, T",
+    "kind": "identity",
+    "at": "cells of the ThinKV grid",
+    "what": "thought type of each token: reasoning, execution, transition"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "scatter of LiveCodeBench accuracy (0-80 %) against time per output token (0-30 ms) for eight methods",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "dotted light grid, one coloured circle per method with its name beside it, a grey star for ThinKV (Ours), two green gradient arrows inside the plot"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy generation of about eleven tokens with typed thoughts such as R R R X X E X T R R T",
+    "form": "letters written into the cells of the ThinKV triangular grid",
+    "real_values": false
+   },
+   {
+    "what": "toy timesteps of last activation (1 to 7) in the LazyEviction window cells",
+    "form": "small numbers in pale-yellow cells",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "attention-map",
+    "drawn_as": "lower-triangular grid of unit cells: rows are generation steps, columns cached token positions, cells blue, green on the diagonal or crossed when evicted",
+    "parts": [
+     "triangular grid",
+     "diagonal current-token cells",
+     "X cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a single row of cells under each grid for the final cache: blue kept, green current, gaps where evicted",
+    "parts": [
+     "snapshot row"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Along the top row (a) over the four prior methods, down to (b) ThinKV, then right to the scatter (c) where the star sits at the upper left."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Panel (a) runs across the top with four equal grids; below it (b) at the left and the scatter plot (c) at the right, split by two thick black rules (one horizontal, one vertical) instead of frames.",
+  "panel_count": 3,
+  "lanes": "4 aligned grid columns in (a), each with a snapshot row beneath",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.1,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae8fc",
+    "used_for": "cached-token cells and their borders"
+   },
+   {
+    "hex": "#76b900",
+    "used_for": "current-token cells and the Accurate and Fast gradient arrows",
+    "opacity": 0.6
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "evicted-token cells with an X"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "numbered window cells and the pale cells of the snapshot rows"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "redundant-token cells in the R-KV grid"
+   },
+   {
+    "hex": "#ff8000",
+    "used_for": "orange outlines of the observation windows and the quantization group"
+   },
+   {
+    "hex": "#1f77b4",
+    "used_for": "FullKV marker",
+    "approx": true
+   },
+   {
+    "hex": "#ff7f0e",
+    "used_for": "SnapKV marker",
+    "approx": true
+   },
+   {
+    "hex": "#e377c2",
+    "used_for": "R-KV marker",
+    "approx": true
+   },
+   {
+    "hex": "#8c564b",
+    "used_for": "LazyEviction marker",
+    "approx": true
+   },
+   {
+    "hex": "#d62728",
+    "used_for": "RaaS marker",
+    "approx": true
+   },
+   {
+    "hex": "#9467bd",
+    "used_for": "H2O marker",
+    "approx": true
+   },
+   {
+    "hex": "#2ca02c",
+    "used_for": "ScissorHands marker",
+    "approx": true
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "ThinKV star",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 pt black cell borders, 0.5 pt orange boxes, 1 pt black rules between panels",
+  "font": "serif (Times New Roman) 3.5-9.5 pt, panel letters 9.5 pt, method names 6-6.5 pt, 3.5 pt for X marks and numbers; sans (Helvetica) for the plot's ticks",
+  "corners": "square",
+  "arrows": "thin black arrows with small heads, some ending in a dot on a cell, curved orange arrows inside the LazyEviction window, two large green gradient block arrows in the plot",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue = cached token, green = current token, grey with X = evicted, pink = redundant (R-KV), pale yellow with numbers = tokens tracked by last activation (LazyEviction); in (b) letters R, E, T type the tokens and hatched or pale-orange cells appear in the snapshot row (not explained); in (c) one marker colour per method and a grey star for ThinKV",
+  "line_style_means": "dashed vertical line = prefill/decode boundary; orange outline = observation window or quantization group; thick black rules = panel boundaries",
+  "shape_means": "triangle of unit cells = tokens over generation steps (row = step); row of cells below = final cache; star = ours, circles = baselines",
+  "marker_means": "X in a cell = evicted token; small numbers in LazyEviction cells = timestep of last activation; letters R, E, T = reasoning, execution, transition thought; green arrows 'Accurate' and 'Fast' = better direction",
+  "emphasis": "bold 'ThinKV (Ours)' labels, the typed letters that only panel (b) has, and the star in the corner of the plot that the two green arrows point to",
+  "reusable_patterns": [
+   "the same triangular token grid redrawn once per method so that only the eviction pattern changes",
+   "callout labels with thin arrows to one example cell act as the key for cell states",
+   "a snapshot row of cells under each grid showing what is left in the cache",
+   "green gradient block arrows 'Accurate' (up) and 'Fast' (left) inside a scatter plot to mark the good corner",
+   "a star marker for the proposed method among circles for baselines",
+   "thick black rules splitting panels instead of frames"
+  ],
+  "weaknesses": [
+   "X marks and the numbers in cells are 3.5 pt and barely legible",
+   "hatching and the pale-orange cells in the snapshot row of (b) are not explained in the figure",
+   "labels in (c) crowd the SnapKV and FullKV markers"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured accuracy and time-per-output-token values for eight methods (GPT-OSS-20B on LiveCodeBench)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "triangular token grids, callouts, arrows and rules (draw.io metadata)",
+   "scatter plot with default-looking coloured markers"
+  ],
+  "unknown": [
+   "whether the two green gradient arrows are clip art or drawn (they are placed as small bitmaps)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "triangular token grids",
+   "evicted, cached and current token cells",
+   "observation window boxes with numbers",
+   "R E T thought letters",
+   "cache-snapshot cell rows",
+   "accuracy versus TPOT scatter plot",
+   "green Accurate and Fast arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "KV cache compression",
+   "reasoning models",
+   "token eviction",
+   "quantization",
+   "thought-adaptive",
+   "TPOT",
+   "LiveCodeBench",
+   "PagedAttention"
+  ],
+  "tags": [
+   "attention-mask-grid",
+   "small-multiples",
+   "module-state-coding",
+   "token-strip",
+   "toy-values-inline",
+   "plot-callouts"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw every compared method on one identical grid (rows = generation steps) with a snapshot row beneath, so the eye sees only the eviction pattern change; end with a latency-accuracy scatter whose green 'Accurate' and 'Fast' arrows mark the corner where the proposed method sits.",
+  "suits": "Comparisons of token-level policies (eviction, sparsification, masking) over a generation or sequence axis, where a toy grid per method makes the policy difference visible."
+ },
+ "tags": [
+  "triangular token grids",
+  "callout key",
+  "ruled panel dividers",
+  "serif labels",
+  "green gradient arrows",
+  "scatter with star marker"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "Illustrative comparison of KV cache compression methods as tokens are generated",
+   "Most, however, focus on the prefill phase of long-input tasks (Li et al., 2024) (Figure 1(a))",
+   "ThinKV achieves near-lossless accuracy with under 5% of the original KV cache"
+  ]
+ },
+ "summary": "ThinKV compresses the KV cache of large reasoning models by typing each generated token with the kind of thought it belongs to (reasoning, execution, transition), giving tokens precision by thought importance and evicting those of less critical thoughts. Panel (a) draws the same triangular token grid, one row per generated token, for four groups of existing methods (SnapKV and RocketKV, H2O and RaaS, LazyEviction, R-KV): blue cells are cached, green is the current token, crossed grey cells are evicted, with callouts for the LazyEviction window and R-KV's redundant tokens. Panel (b) redraws the grid for ThinKV with R, E and T letters and group quantization. Panel (c) is a scatter of LiveCodeBench accuracy against time per output token with green 'Accurate' and 'Fast' arrows, ThinKV a star at the upper left.",
+ "summary_zh": "ThinKV 按思维类型（推理、执行、过渡）压缩推理模型的 KV 缓存。(a) 用同一三角形词元网格画四类现有方法的驱逐模式，(b) 是带 R/E/T 字母的 ThinKV，(c) 是准确率对每词元耗时的散点图，星标在左上最优角。",
+ "confidence": "high",
+ "notes": "Prior kind kept (side-by-side-contrast, design-family); the scatter is a result plot inside the contrast rather than a separate kind. The two placed bitmaps in the digest are taken to be the green gradient arrows. Meaning of hatched and pale-orange cells in the snapshot row of (b) is not given by the caption or the paragraphs. Refresh Period and Group Quantization are described from their labels only.",
+ "venue": "ICLR26"
+}

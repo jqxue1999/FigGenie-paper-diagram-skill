@@ -1,0 +1,482 @@
+{
+ "paper_id": "acl25-0039",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "gist token-based context compression (empirical study)",
+  "one_liner": "A study of gist-token context compression architectures, how well they replace full attention and how they fail, with two fixes.",
+  "domain": [
+   "context compression",
+   "KV cache",
+   "long-context LLMs"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "scope-overview"
+  ],
+  "variant": "design-family",
+  "variant_note": "three sibling token-level schematics (a)-(c) reached through two question pills; the fourth combination is left out",
+  "argues": "Gist compression architectures differ along two choices, memory location and gist granularity, which give three designs built from the same token grid.",
+  "subject": "Full-attention token grid split into segments, two design questions, and three gist-token compression schematics with their attention lines.",
+  "elements": [
+   {
+    "name": "Full Attention",
+    "type": "module",
+    "role": "starting point: every token attends to all earlier tokens, shown as a grid of circles with attention lines",
+    "drawn_as": "light-blue tinted grid of 8 columns by 3 rows of circles, a blue line marking the full range",
+    "container": "blue frame",
+    "is_contribution": false
+   },
+   {
+    "name": "Split for Segment-wise Compression",
+    "type": "operation",
+    "role": "cuts the sequence into fixed-length segments",
+    "drawn_as": "thick blue block arrow with a blue label above",
+    "container": "blue frame",
+    "is_contribution": null
+   },
+   {
+    "name": "Segment 1 / Segment 2",
+    "type": "data",
+    "role": "the first segments of the split sequence, continued by dots",
+    "drawn_as": "two light-blue grids of 4 columns by 3 rows of circles",
+    "container": "blue frame",
+    "is_contribution": null
+   },
+   {
+    "name": "Memory Location?",
+    "type": "operation",
+    "role": "first design question: where the compressed memory lives",
+    "drawn_as": "light-blue pill with a lightbulb-question icon above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Gist Granularity?",
+    "type": "operation",
+    "role": "second design question: how the gist tokens are placed",
+    "drawn_as": "light-yellow pill with a lightbulb-question icon above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(a) Coarse-grained, Recurrent Memory",
+    "type": "container",
+    "role": "gist tokens at the end of a segment; their last hidden state is passed on as memory",
+    "drawn_as": "purple-framed panel with purple-tinted token grids over Segment 1 and Segment 2",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Fine-grained, KV Cache",
+    "type": "container",
+    "role": "a gist token after every few natural tokens; their KV cache is retained and accumulated",
+    "drawn_as": "top half of an orange frame with orange gist squares interleaved with circles",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Coarse-grained, KV Cache",
+    "type": "container",
+    "role": "gist tokens at the end of a segment; their KV cache is retained and accumulated",
+    "drawn_as": "bottom half of the orange frame with orange gist squares in a block at the segment end",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Natural Tokens",
+    "type": "data",
+    "role": "ordinary input tokens",
+    "drawn_as": "light-blue circles with dark outlines in 3 rows, bracket and label below",
+    "container": "(a), (b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Gist Tokens [GT]",
+    "type": "data",
+    "role": "special tokens that carry the compressed context",
+    "drawn_as": "squares, purple in (a) and orange in (b) and (c), often in dashed black boxes",
+    "container": "(a), (b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "attention lines",
+    "type": "operation",
+    "role": "which earlier tokens each gist token can attend to; the maximum range is highlighted in colour",
+    "drawn_as": "light-grey fans with soft shading and purple or orange lines for the maximum range",
+    "container": "(a), (b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "KV Cache Retention / Accumulated with New Cache",
+    "type": "operation",
+    "role": "keeps the gist KV cache of a segment and adds the next segment's cache to it",
+    "drawn_as": "curved orange arrows above the grids with orange labels",
+    "container": "(b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Last hidden state as memory / Accumulated with Previous Outputs",
+    "type": "operation",
+    "role": "passes the last hidden state of the gist tokens to the next segment as previous outputs",
+    "drawn_as": "purple elbow lines from the dashed box of Segment 1 to Segment 2 and along the bottom",
+    "container": "(a)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Full Attention",
+    "to": "Segment 1 / Segment 2",
+    "what": "the sequence is split into segments",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "blue frame",
+    "to": "Memory Location?",
+    "what": "the segment-wise setting poses the design question",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Memory Location?",
+    "to": "Gist Granularity?",
+    "what": "option KV Cache",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Memory Location?",
+    "to": "(a) Coarse-grained, Recurrent Memory",
+    "what": "option Recurrent Memory",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gist Granularity?",
+    "to": "(b) Fine-grained, KV Cache",
+    "what": "option Fine-grained",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gist Granularity?",
+    "to": "(c) Coarse-grained, KV Cache",
+    "what": "option Coarse-grained",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gist Tokens [GT]",
+    "to": "Natural Tokens",
+    "what": "attention of each gist token over the segment, maximum range highlighted",
+    "kind": "attention",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Segment 1",
+    "to": "Segment 2",
+    "what": "gist KV cache or last hidden state carried forward and accumulated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "branch arrow colour",
+    "to": "panel frame colour",
+    "what": "purple branch leads to the purple panel, orange branches to the orange frame",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "full attention over the whole sequence and the same tokens split into segments",
+    "verdict": "setting"
+   },
+   {
+    "label": "(a) Coarse-grained, Recurrent Memory",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "gist tokens at segment end, last hidden state passed to the next segment",
+    "verdict": "studied"
+   },
+   {
+    "label": "(b) Fine-grained, KV Cache",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "gist tokens interleaved with natural tokens, KV cache retained",
+    "verdict": "studied"
+   },
+   {
+    "label": "(c) Coarse-grained, KV Cache",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "gist tokens at segment end, KV cache retained",
+    "verdict": "studied"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "bold titles under or in the three design frames",
+    "what": "letter plus design name heads each variant"
+   },
+   {
+    "marker": "Segment 1, Segment 2",
+    "kind": "order",
+    "at": "under each token grid",
+    "what": "time order of the compressed chunks"
+   },
+   {
+    "marker": "[GT]",
+    "kind": "identity",
+    "at": "under the gist-token column in (b)",
+    "what": "names the gist tokens"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "lightbulb with a question mark",
+    "stands_for": "an open design question",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "natural tokens as light-blue circles and gist tokens as coloured squares in columns over three rows, with brackets and labels under them",
+    "parts": [
+     "natural-token circles",
+     "gist-token squares",
+     "dashed boxes",
+     "brackets"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "grey fans of lines from each token to earlier tokens in the row below, with the maximum range of a gist token in purple or orange",
+    "parts": [
+     "grey fans",
+     "coloured range lines"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "design-question-node",
+    "drawn_as": "pill-shaped question with a lightbulb-question icon, coloured branch arrows labelled with the options",
+    "parts": [
+     "pill",
+     "lightbulb icon",
+     "labelled branch arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the full-attention block at top left, follows the arrow into the segments, down to the Memory Location? pill, across to Gist Granularity?, then branches to (a), (b) and (c)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two columns of framed units: at left a blue input frame above a purple panel (a), at right one orange frame split by a dash-dot line into (b) above and (c). The two question pills sit in the gap in the middle, with coloured, labelled arrows running down to (a) and out to (b) and (c).",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.26,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dceaf7",
+    "used_for": "light-blue tint of the full-attention and segment grids and the input frame"
+   },
+   {
+    "hex": "#c1e5f5",
+    "used_for": "Memory Location? pill"
+   },
+   {
+    "hex": "#fef2d6",
+    "used_for": "Gist Granularity? pill"
+   },
+   {
+    "hex": "#fbe3d6",
+    "opacity": 0.69,
+    "used_for": "orange tint behind the KV-cache panels (b) and (c)"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "orange gist tokens, retention arrows, option labels and frame outline"
+   },
+   {
+    "hex": "#f2cfee",
+    "opacity": 0.4,
+    "used_for": "purple tint behind panel (a)"
+   },
+   {
+    "hex": "#e59edd",
+    "used_for": "purple gist tokens in (a)"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "purple frame outline and recurrent-memory text"
+   },
+   {
+    "hex": "#46b1e1",
+    "used_for": "blue highlight lines and arrows in the input frame"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "light-grey attention lines"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark outlines of token circles and the block arrow"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.25 pt light-grey attention lines (about 450 shapes), 0.5 pt black and coloured outlines; dashed black boxes around gist-token groups, a dash-dot orange divider",
+  "font": "serif (Times New Roman) 4-5 pt, bold for panel titles and segment names; bold-italic sans for the option labels on the arrows",
+  "corners": "rounded",
+  "arrows": "thin orange and blue arrows with small heads between nodes, curved orange arrows for cache retention, purple elbow lines for the recurrent memory, one thick blue block arrow",
+  "rendering": "flat-vector",
+  "effects": "soft translucent gradient shading inside the attention fans (thin bitmap strips)",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = full attention and the shared segmented input; purple = the recurrent-memory design; orange = the two KV-cache designs; circle = natural token, coloured square = gist token in its design's colour; pill tint tells the two questions apart",
+  "line_style_means": "grey fan = attention among tokens; purple or orange line = maximum range a gist token can attend to; curved orange arrow = KV-cache retention and accumulation; dashed black box = retained gist tokens; dash-dot orange line = divider between (b) and (c)",
+  "shape_means": "circle = natural token, square = gist token, pill = design question, rounded frame = a design family, lightbulb with question mark = open question",
+  "marker_means": "(a)(b)(c) name the variants, Segment 1 and 2 give the order of chunks, [GT] names gist tokens, dots = more segments follow",
+  "emphasis": "the two question pills sit in the middle as a hub, and the branch colour is repeated on the frame and gist tokens of the design it leads to",
+  "reusable_patterns": [
+   "question pills whose coloured, labelled branch arrows lead to colour-matched sibling panels",
+   "one token grid redrawn per design, changing only the gist-token placement and highlighted lines",
+   "grey attention fans with the maximum range of the special token picked out in colour",
+   "dashed box around retained tokens plus a curved arrow carrying them to the next segment",
+   "full-attention grid split into segments by a block arrow as the shared starting point",
+   "dash-dot divider between two sibling panels inside one frame"
+  ],
+  "weaknesses": [
+   "text is only 4-5 pt",
+   "overlapping attention fans are dense and hard to read",
+   "the fourth combination (recurrent memory with fine-grained gists) is not drawn and nothing in the figure says it is skipped",
+   "orange and purple small labels have low contrast on their tints"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "lightbulb-with-question-mark icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "token grids",
+   "attention fans",
+   "question pills",
+   "frames and arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "full-attention token grid",
+   "segment 1 and 2 token grids",
+   "two question pills with lightbulb icons",
+   "natural-token circles and gist-token squares",
+   "attention line fans",
+   "KV-cache retention arrows",
+   "dashed boxes around gist tokens"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "gist tokens",
+   "context compression",
+   "KV cache",
+   "recurrent memory",
+   "full attention",
+   "granularity",
+   "long context",
+   "segment-wise compression"
+  ],
+  "tags": [
+   "option-catalog",
+   "token-strip",
+   "attention-mask-grid",
+   "colour-coded-groups",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "decision-question-nodes",
+    "what": "pill-shaped design questions, with a lightbulb icon, joined by labelled coloured arrows to colour-matched panels of the options"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Turn a design space into a figure by chaining question pills whose coloured branch arrows lead to colour-matched sibling schematics, and reuse one token-grid drawing for every variant, changing only the special-token placement and the highlighted lines.",
+  "suits": "Overviews of a family of architectures or strategies that differ along two or three design choices."
+ },
+ "tags": [
+  "decision-tree-layout",
+  "colour-matched-branches",
+  "serif-tiny-text",
+  "token-grid-schematic",
+  "powerpoint-look",
+  "dense-lines"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Preliminaries (p.2)",
+   "2 Preliminaries (p.3)"
+  ],
+  "evidence": [
+   "Overview of gist token-based context compression architectures.",
+   "mainly explore the remaining three combinations in this work, as illustrated in Figure 1."
+  ]
+ },
+ "summary": "The paper studies gist token-based context compression: how well it can replace full attention and where it fails. Figure 1 maps the architectures. A full-attention token grid is split into segments; two question pills, Memory Location? and Gist Granularity?, joined by labelled coloured arrows, lead to three sibling schematics: (a) coarse-grained recurrent memory in purple, and (b) fine-grained and (c) coarse-grained KV cache in orange. Each schematic redraws the same grid of natural-token circles and gist-token squares over two segments, with grey attention fans, coloured lines for the maximum attention range, dashed boxes for retained gists and curved arrows carrying the cache forward.",
+ "summary_zh": "论文研究基于 gist 词元的上下文压缩。图先把全注意力词元网格切成段，再经「记忆位置？」「gist 粒度？」两个问题节点，用彩色分支引向三种并列方案：粗粒度循环记忆（紫）、细粒度与粗粒度 KV 缓存（橙），每种都画出词元与注意力线。",
+ "confidence": "high",
+ "notes": "The index counted 3 panels and the prior pass 4; the blue input frame is separately framed but untitled and is counted as a fourth panel with label null. The 28 bitmaps in the digest appear to be thin gradient strips (shading of the attention fans) and the two lightbulb icons, not data pictures. The paper text says only three of the four combinations are explored; the fourth is not drawn.",
+ "venue": "ACL25"
+}

@@ -1,0 +1,550 @@
+{
+ "paper_id": "acl26-0026",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TRACE",
+  "one_liner": "Prompting method that has an MLLM write a structured text scene description (meta context, trajectory, entities) before answering spatial questions on egocentric video.",
+  "domain": [
+   "3D spatial reasoning",
+   "egocentric video",
+   "MLLM prompting"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "scene-in-three-forms",
+  "variant_note": "one office scene shown as video frames with a question, as a person's description plus a top-down map, and as the TRACE text; matching colours tie the three forms together",
+  "argues": "Humans reason about a room via an allocentric layout that text can describe; TRACE gives MLLMs the same kind of structured text trace (meta context, trajectory, entity registry).",
+  "subject": "One office scene as video with a spatial question, a person's text-plus-map description, and TRACE's structured text.",
+  "elements": [
+   {
+    "name": "(a) The Challenge: Spatial Reasoning from Egocentric Video",
+    "type": "container",
+    "role": "problem panel: a spatial question about a video",
+    "drawn_as": "pink-tinted rounded frame (#fef2f2 at 60%, #ff6467 outline) with its caption beneath",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "If I am standing by the trash can and facing the telephone, is the cup to my front-left, front-right, back-left, or back-right?",
+    "type": "instance",
+    "role": "the spatial QA query the MLLM must answer from the video",
+    "drawn_as": "italic serif paragraph at the top of panel (a); 'front-right' in green and 'Cartesian Plane' in red",
+    "container": "(a) The Challenge: Spatial Reasoning from Egocentric Video",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Human Insight: A textual description capturing the room layout",
+    "type": "container",
+    "role": "shows how a person would describe the room, in words and on a map",
+    "drawn_as": "purple-tinted rounded frame (#faf5ff at 60%, #a684ff outline) with its caption beneath",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "three passages starting 'Facing a whiteboard, the camera captures a trash can...'",
+    "type": "text-block",
+    "role": "a person's walk-through of the camera's moves and the objects in view, one passage per camera pose",
+    "drawn_as": "three serif passages, each between a pair of curly braces in light, mid and dark orange; object nouns coloured and set in bold italic",
+    "container": "(b) Human Insight: A textual description capturing the room layout",
+    "is_contribution": false
+   },
+   {
+    "name": "front / right axes and N / W letters",
+    "type": "label",
+    "role": "names the viewer's axes and the room's compass directions on the map",
+    "drawn_as": "short red solid arrow 'right' and green dotted arrow 'front' at a camera cone; small indigo N and yellow W beside the desk",
+    "container": "(b) Human Insight: A textual description capturing the room layout",
+    "is_contribution": false
+   },
+   {
+    "name": "(c) Our Method: TRACE",
+    "type": "container",
+    "role": "the method panel: the structured text the MLLM writes and reasons over",
+    "drawn_as": "amber-tinted rounded frame (#fffbeb at 60%, #ffb93b outline), the tallest panel, at the right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt: .. a structured textual description ..., including meta context..., camera trajectory..., and entity registry... And then answer the question based on ...",
+    "type": "text-block",
+    "role": "instruction that asks the MLLM for the three-part description before it answers",
+    "drawn_as": "italic serif paragraph with bold-italic key terms at the top of panel (c)",
+    "container": "(c) Our Method: TRACE",
+    "is_contribution": true
+   },
+   {
+    "name": "Meta Context:",
+    "type": "data",
+    "role": "room layout and coordinate system: room topology, grid direction, initial position",
+    "drawn_as": "heading plus three dash-led lines in a hand-written-style sans font; 'Rectangular Office' in bright blue, 'north' indigo, 'west' yellow",
+    "container": "(c) Our Method: TRACE",
+    "is_contribution": true
+   },
+   {
+    "name": "Trajectory:",
+    "type": "data",
+    "role": "camera path sampled over time, one record per step with time, position, facing and action",
+    "drawn_as": "step0 and step1 records in braces, then an ellipsis; the step labels are light and mid orange",
+    "container": "(c) Our Method: TRACE",
+    "is_contribution": true
+   },
+   {
+    "name": "Entity Registry:",
+    "type": "data",
+    "role": "one record per object with location, visual signature and spatial relation",
+    "drawn_as": "four dash-led entries trash_can_01, desk_01, telephone_01, cup_01, each id in the colour of its object",
+    "container": "(c) Our Method: TRACE",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "If I am standing by the trash can and facing the telephone, is the cup to my front-left, front-right, back-left, or back-right?",
+    "to": "film strip of three video frames",
+    "what": "the question is asked about the video drawn beneath it",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(a) The Challenge",
+    "to": "(b) Human Insight, then (c) Our Method",
+    "what": "narrative order challenge, insight, method; carried by the panel letters and the placement only, there are no arrows",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "words in the three passages: whiteboard, trash can, desk, telephone, cup",
+    "to": "top-down room map",
+    "what": "each noun has the colour of its object on the map (whiteboard grey, trash can green, desk pink, telephone lavender, cup light blue)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "orange brace pairs (light, mid, dark)",
+    "to": "camera cones on the map and step0 / step1 in Trajectory",
+    "what": "each passage is one camera pose; its brace shade is reused for the cone and for the trajectory step (read from the colours)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "the three passages in (b)",
+    "to": "Entity Registry in (c)",
+    "what": "object names keep their colours (trash_can_01 green, desk_01 pink, telephone_01 lavender, cup_01 light blue)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "room outline and N / W letters on the map",
+    "to": "Meta Context",
+    "what": "'Rectangular Office' is bright blue like the room outline; 'north' is indigo and 'west' yellow like the N and W letters",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Prompt",
+    "to": "Meta Context, Trajectory, Entity Registry",
+    "what": "the three bold-italic terms in the prompt name the three sections written below it",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) The Challenge: Spatial Reasoning from Egocentric Video",
+    "axis": "narrative",
+    "shows": "a spatial question and a film strip of three egocentric frames of an office",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Human Insight: A textual description capturing the room layout",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "three passages in which a person describes the camera's moves and the objects, beside a top-down room map in matching colours",
+    "verdict": "reference"
+   },
+   {
+    "label": "(c) Our Method: TRACE",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "the TRACE prompt and the three sections the MLLM writes for the scene: Meta Context, Trajectory, Entity Registry",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "bold letters at the start of each caption under a panel",
+    "what": "name the three panels and give the order challenge, human insight, method"
+   },
+   {
+    "marker": "step0, step1",
+    "kind": "order",
+    "at": "Trajectory in (c)",
+    "what": "number the camera steps; coloured light and mid orange like the first two brace pairs and cones"
+   },
+   {
+    "marker": "trash_can_01, desk_01, telephone_01, cup_01",
+    "kind": "identity",
+    "at": "Entity Registry in (c)",
+    "what": "entity ids, each in the colour of the object it names in (b)"
+   },
+   {
+    "marker": "front, right, N, W",
+    "kind": "identity",
+    "at": "top-down room map in (b)",
+    "what": "name the viewer's axes and the compass directions of the room grid"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "three egocentric video frames of an office: whiteboard with a fan and a red bin, desk with a blue chair, desk with monitors, a bottle and a cup",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "equal-size photo tiles inside a black film strip with sprocket holes top and bottom; '...' glyphs between tiles mark omitted frames"
+   },
+   {
+    "what": "top-down map of the same room: door, window, desk with phone and cup, trash-can disc, three camera cones, axis arrows, N and W letters",
+    "content": "map",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "room as a bright-blue box seen in perspective with two grey trapezoids on the top and bottom walls; small bitmap fixtures (desk, phone, cup, trash can) sit on it; camera poses are cones in light, mid and dark orange"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "small picture-frame glyph, head-and-bulb glyph and light bulb",
+    "stands_for": "decorate the captions of (a), (b) and (c): challenge, human insight, method",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "pink desk with a telephone and a cup, green trash-can disc",
+    "stands_for": "the objects desk_01, telephone_01, cup_01 and trash_can_01 on the room map",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "outlined cones in light, mid and dark orange",
+    "stands_for": "camera poses at successive trajectory steps",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "brown door and a window with panes",
+    "stands_for": "the entrance and the window, which fixes the grid direction ('north faces window')",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a spatial question about the office video (quadrant of the cup for a viewer by the trash can facing the telephone)",
+    "form": "italic text block with a green and a red coloured span",
+    "real_values": true
+   },
+   {
+    "what": "a person's three-passage description of where the camera goes and which objects it sees",
+    "form": "serif passages with braces and colour-coded object nouns",
+    "real_values": true
+   },
+   {
+    "what": "a TRACE trace of the same scene: room topology, grid direction, two trajectory steps and four entity records",
+    "form": "JSON-like indented text with coloured slot values and ellipses",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "black strip with white sprocket holes along the top and bottom edges holding three photo frames, '...' glyphs between them",
+    "parts": [
+     "sprocket holes",
+     "frames",
+     "ellipsis glyphs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a tinted card whose top paragraph is the prompt (bold-italic key terms) and whose body is the structured output with colour-highlighted slots",
+    "parts": [
+     "prompt paragraph",
+     "section headings",
+     "slot values"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "floor-plan-map",
+    "drawn_as": "room box in perspective with a door, a window, a desk with objects, camera cones and axis arrows",
+    "parts": [
+     "room outline",
+     "fixtures",
+     "camera cones",
+     "axis arrows",
+     "compass letters"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the question in (a) at top-left, runs down the film strip to (b), then crosses to the tall (c) at the right, matching colours back to (b)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two columns: the left holds panel (a) above panel (b), each a tinted rounded frame with its caption below; the tall panel (c) fills the right third. No arrows between panels: letters give the order and shared colours give the correspondence.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.91,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fef2f2",
+    "opacity": 0.6,
+    "used_for": "fill of panel (a)"
+   },
+   {
+    "hex": "#ff6467",
+    "opacity": 0.6,
+    "used_for": "outline of panel (a), 1.25 pt"
+   },
+   {
+    "hex": "#faf5ff",
+    "opacity": 0.6,
+    "used_for": "fill of panel (b)"
+   },
+   {
+    "hex": "#a684ff",
+    "opacity": 0.6,
+    "used_for": "outline of panel (b), 1.25 pt"
+   },
+   {
+    "hex": "#fffbeb",
+    "opacity": 0.6,
+    "used_for": "fill of panel (c)"
+   },
+   {
+    "hex": "#ffb93b",
+    "opacity": 0.6,
+    "used_for": "outline of panel (c), 1.25 pt"
+   },
+   {
+    "hex": "#47d45a",
+    "used_for": "trash can (words in (b) and (c)), the green span in the question, head of the front-axis arrow"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "the red span 'Cartesian Plane' and the 'right' axis arrow"
+   },
+   {
+    "hex": "#f68bc8",
+    "used_for": "desk (words in (b) and (c))"
+   },
+   {
+    "hex": "#a6aae7",
+    "used_for": "telephone (words in (b))"
+   },
+   {
+    "hex": "#a2dfff",
+    "used_for": "cup (words in (b))"
+   },
+   {
+    "hex": "#ddd6ff",
+    "used_for": "paler tint, probably telephone_01 in (c)"
+   },
+   {
+    "hex": "#b8ebff",
+    "used_for": "paler tint, probably cup_01 in (c)"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "whiteboard (word in (b))"
+   },
+   {
+    "hex": "#7c86ff",
+    "used_for": "north (words in (c))"
+   },
+   {
+    "hex": "#ffdf20",
+    "used_for": "west (word in (c))"
+   },
+   {
+    "hex": "#24a6ff",
+    "used_for": "room outline on the map and 'Rectangular Office'"
+   },
+   {
+    "hex": "#ffcc99",
+    "used_for": "camera step 0: first brace pair, first cone, 'step0'"
+   },
+   {
+    "hex": "#ff9933",
+    "used_for": "camera step 1: second brace pair, second cone, 'step1'"
+   },
+   {
+    "hex": "#cc6600",
+    "used_for": "camera step 2: third brace pair and third cone"
+   },
+   {
+    "hex": "#331a00",
+    "used_for": "door on the map"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "the two grey trapezoids on the map (outlined #666666)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1.25 pt coloured outlines (60% opaque) on the three rounded panel frames and the braces; about 0.6 pt outlines on the map parts; black film strip",
+  "font": "serif (Times New Roman) 7.5 pt for the question, passages and captions with bold or italic key terms; hand-written-style sans (Comic Sans MS) 7 pt for the TRACE text; map labels 4.5 to 5 pt",
+  "corners": "mixed",
+  "arrows": "none between panels; two short axis arrows on the map (solid red 'right', dotted green 'front')",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Object colours link the three views: trash can green, desk pink, telephone lavender, cup light blue, whiteboard grey; north indigo, west yellow; room blue; the three camera steps light, mid and dark orange (braces, cones, step labels). The panel tints pink, purple and amber only separate the panels.",
+  "line_style_means": "solid coloured rounded frames bound the panels; curly braces in graded orange group each passage; the film-strip border says video; the red solid and green dotted arrows on the map are the viewer's right and front axes.",
+  "shape_means": "film strip = video input; tinted rounded frame = panel; cone = camera pose; coloured disc or rectangle = object; brace pair = one camera pose in the text.",
+  "marker_means": "(a)(b)(c) letters head the panels; step0 and step1 order the camera steps; ids such as trash_can_01 name entities; front, right, N and W name axes on the map.",
+  "emphasis": "The method panel is the tallest and comes last; the multicoloured object names that recur in (b), the map and (c) draw the eye to the correspondence, while the method itself carries no extra highlight.",
+  "reusable_patterns": [
+   "same colour for the same object in a human description, a map and a structured record",
+   "film strip with ellipses standing for a video",
+   "curly braces in graded shades marking successive steps, with the same shades on map markers and step labels",
+   "prompt card whose body shows the generated structured output with colour-highlighted slots",
+   "caption under each frame with a small icon",
+   "translucent tinted rounded frames, one hue per panel"
+  ],
+  "weaknesses": [
+   "the colour correspondences are not explained in the caption, the reader has to match hues",
+   "pale colours (telephone_01, cup_01, step0, west) have low contrast on the tinted ground",
+   "panel (c) is dense 7 pt text",
+   "no arrow shows how (b) leads to (c)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames from an egocentric indoor video",
+   "the question and the TRACE text for this scene"
+  ],
+  "stock": [
+   "small emoji-like caption icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "film-strip border",
+   "top-down room map with cones, axes, door and window",
+   "tinted frames and braces",
+   "colour-coded text"
+  ],
+  "unknown": [
+   "origin of the desk, phone, cup and trash-can bitmaps on the map (clip-art look)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "film strip of three video frames",
+   "spatial question text with coloured spans",
+   "colour-coded description passages with orange braces",
+   "top-down room map with camera cones",
+   "structured prompt card (Meta Context, Trajectory, Entity Registry)",
+   "small caption icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "spatial reasoning",
+   "egocentric video",
+   "allocentric representation",
+   "multimodal LLM",
+   "prompting",
+   "textual representation",
+   "room layout",
+   "VSI-Bench"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "filmstrip",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "top-down-room-map",
+    "what": "a perspective-box floor plan of the scene with object glyphs, camera cones and axis arrows, shown as the allocentric counterpart of a video"
+   },
+   {
+    "name": "graded-brace-steps",
+    "what": "curly braces in successive shades of one hue mark successive steps; the shades reappear on map markers and step labels"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Carry one concrete scene through every panel and give each object a fixed colour that reappears in the human description, the map and the structured record, so the correspondence reads without arrows. End with the method as a prompt card whose slots keep those colours.",
+  "suits": "Motivation figures for methods that turn a raw modality (video, 3D scene, table) into structured text, where one worked scene makes the abstraction concrete."
+ },
+ "tags": [
+  "motivation-figure",
+  "three-panel",
+  "translucent-tinted-frames",
+  "colour-linked-text",
+  "film-strip",
+  "prompt-card",
+  "text-heavy"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "such allocentric representations can be vividly described using text alone, as demonstrated in Fig. 1(b)",
+   "TRACE encodes meta-context, camera trajectory, and entities, serving as an intermediate reasoning trace for spatial QA with MLLMs.",
+   "Meta Context describing the room layout and coordinate system, camera Trajectory sampled over temporal windows"
+  ]
+ },
+ "summary": "TRACE (Textual Representation of Allocentric Context from Egocentric Video) is a prompting method that has a multimodal LLM write a structured text description of a 3D scene before answering a spatial question about egocentric video. Figure 1 motivates it with one office scene shown three ways. Panel (a) poses a quadrant question over a film strip of three video frames. Panel (b) shows how a person would describe the room in three short passages next to a top-down map with a desk, trash can, phone, cup and camera cones. Panel (c) shows the TRACE prompt and its sections: Meta Context, Trajectory and Entity Registry. Object names keep the same colour across (b), the map and (c), and three orange shades link the camera steps. The panels are pastel rounded frames with captions below.",
+ "summary_zh": "TRACE 动机图：同一办公室场景分三个面板——(a) 空间提问加三帧视频胶片，(b) 人的房间文字描述加俯视图，(c) TRACE 的结构化文本（元上下文、轨迹、实体登记）。物体在三处用同一颜色对应，不画箭头。",
+ "confidence": "high",
+ "notes": "The prior pass listed concept-schematic (analogy) first; worked-walkthrough is first here because one scene with real values runs through all panels and the human-insight panel is an analogue inside it. The colour correspondences (objects, compass letters, three orange shades for brace pairs, cones and step labels) are read from the figure and its SVG, not stated in the caption. The paper text provided does not say what the green 'front-right' and red 'Cartesian Plane' spans in the question mean. The caption icons are tiny; the head-and-bulb reading of the (b) icon is a guess. The map's desk, phone, cup and trash-can discs are small masked bitmaps; cones, door, window and room outline are vector.",
+ "venue": "ACL26"
+}

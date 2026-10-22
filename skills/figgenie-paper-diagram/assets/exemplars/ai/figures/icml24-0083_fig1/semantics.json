@@ -1,0 +1,504 @@
+{
+ "paper_id": "icml24-0083",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PruneX",
+  "one_liner": "A data-driven logic synthesis heuristic paradigm that learns a generalizable classifier to skip ineffective node-level transformations, with a circuit domain generalization framework.",
+  "domain": [
+   "logic synthesis",
+   "chip design (EDA)",
+   "out-of-distribution generalization"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast"
+  ],
+  "variant": "decision-flowchart",
+  "variant_note": "a classic top-down flowchart whose node-set extraction step is expanded sideways into the default version (green) and the PruneX version (orange)",
+  "argues": "Traditional logic synthesis heuristics transform every node of the circuit; PruneX replaces the full node set with an effective node set chosen by a learned pruning model, leaving the loop unchanged.",
+  "subject": "A flowchart of a node-level logic synthesis heuristic whose node-set extraction step is expanded into the default version and the PruneX version.",
+  "elements": [
+   {
+    "name": "Start",
+    "type": "operation",
+    "role": "entry of the heuristic",
+    "drawn_as": "rounded rectangle, white, at the top of the central column",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Input: Original Circuit",
+    "type": "data",
+    "role": "the circuit (a DAG) to be optimised",
+    "drawn_as": "white rectangle with a bold 'Input:' lead-in",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Extract Node Id Set N",
+    "type": "operation",
+    "role": "chooses the set of node ids to which transformations will be applied; the step that PruneX changes",
+    "drawn_as": "white rectangle with bold text, two dashed leader pairs (green left, orange right) pointing to the insets",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Node Index i=N[0]",
+    "type": "operation",
+    "role": "starts the loop at the first node of the set",
+    "drawn_as": "white rectangle",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Optimization For Loop",
+    "type": "container",
+    "role": "scope of the per-node optimisation loop",
+    "drawn_as": "thin blue rectangle with the title at its top-left edge",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "i=|N|?",
+    "type": "operation",
+    "role": "decision: have all nodes of the set been processed? Y leaves to the output, N goes on to transform node N[i]",
+    "drawn_as": "blue diamond (#8faadc)",
+    "container": "Optimization For Loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Transform Node N[i]",
+    "type": "operation",
+    "role": "applies the heuristic's transformation to the subgraph rooted at node N[i]",
+    "drawn_as": "white rectangle",
+    "container": "Optimization For Loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Gain>0?",
+    "type": "operation",
+    "role": "decision: did the transformation improve the circuit? Y updates the circuit, N skips to the next index",
+    "drawn_as": "blue diamond",
+    "container": "Optimization For Loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Update Circuit",
+    "type": "operation",
+    "role": "keeps the improved circuit",
+    "drawn_as": "white rectangle at the right of the loop",
+    "container": "Optimization For Loop",
+    "is_contribution": false
+   },
+   {
+    "name": "i+=1",
+    "type": "operation",
+    "role": "moves to the next node index and returns to the i=|N|? test",
+    "drawn_as": "white rectangle at the top right of the loop",
+    "container": "Optimization For Loop",
+    "is_contribution": false
+   },
+   {
+    "name": "Out: Optimized Circuit",
+    "type": "data",
+    "role": "result of the heuristic",
+    "drawn_as": "white rectangle with a bold 'Out:' lead-in, reached by a route around the left of the loop",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "End",
+    "type": "operation",
+    "role": "exit of the heuristic",
+    "drawn_as": "rounded rectangle, white, at the bottom",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Default Heuristic",
+    "type": "container",
+    "role": "how a traditional heuristic extracts the node set",
+    "drawn_as": "green open bracket frame at the left, plain title, two green boxes joined by an arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Get All Nodes",
+    "type": "module",
+    "role": "takes every node of the circuit",
+    "drawn_as": "green box (#a9d18e)",
+    "container": "Default Heuristic",
+    "is_contribution": false
+   },
+   {
+    "name": "Full Node Id Set N",
+    "type": "data",
+    "role": "the complete set of node ids",
+    "drawn_as": "green box (#a9d18e)",
+    "container": "Default Heuristic",
+    "is_contribution": false
+   },
+   {
+    "name": "Our PruneX Heuristic",
+    "type": "container",
+    "role": "how PruneX extracts the node set",
+    "drawn_as": "orange open bracket frame at the right, bold title, three orange boxes joined by arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Node Features Extraction",
+    "type": "module",
+    "role": "computes features of each node",
+    "drawn_as": "orange box (#f4b183)",
+    "container": "Our PruneX Heuristic",
+    "is_contribution": true
+   },
+   {
+    "name": "Node Pruning Model",
+    "type": "module",
+    "role": "the learned classifier that predicts which nodes are ineffective",
+    "drawn_as": "orange box (#f4b183)",
+    "container": "Our PruneX Heuristic",
+    "is_contribution": true
+   },
+   {
+    "name": "Effective Node Id Set N",
+    "type": "data",
+    "role": "the reduced set of node ids kept after pruning",
+    "drawn_as": "orange box (#f4b183)",
+    "container": "Our PruneX Heuristic",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Start",
+    "to": "Input: Original Circuit",
+    "what": "control flow",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input: Original Circuit",
+    "to": "Extract Node Id Set N",
+    "what": "the circuit is given to the extraction step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Extract Node Id Set N",
+    "to": "Node Index i=N[0]",
+    "what": "the node id set N is passed on",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Node Index i=N[0]",
+    "to": "i=|N|?",
+    "what": "enter the loop",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "i=|N|?",
+    "to": "Transform Node N[i]",
+    "what": "N: nodes remain",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transform Node N[i]",
+    "to": "Gain>0?",
+    "what": "test the result of the transformation",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gain>0?",
+    "to": "Update Circuit",
+    "what": "Y: the transformation helped",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gain>0?",
+    "to": "i+=1",
+    "what": "N: skip the update",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Update Circuit",
+    "to": "i+=1",
+    "what": "continue with the next node",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "i+=1",
+    "to": "i=|N|?",
+    "what": "loop back to the test",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "i=|N|?",
+    "to": "Out: Optimized Circuit",
+    "what": "Y: all nodes processed, route down the left side",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Out: Optimized Circuit",
+    "to": "End",
+    "what": "finish",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Extract Node Id Set N",
+    "to": "Default Heuristic",
+    "what": "the step expanded as the traditional version",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Extract Node Id Set N",
+    "to": "Our PruneX Heuristic",
+    "what": "the step expanded as the PruneX version",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Get All Nodes",
+    "to": "Full Node Id Set N",
+    "what": "all nodes become the id set",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Node Features Extraction",
+    "to": "Node Pruning Model",
+    "what": "features go into the classifier",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Node Pruning Model",
+    "to": "Effective Node Id Set N",
+    "what": "nodes predicted effective are kept",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green frame, boxes and leaders / orange frame, boxes and leaders",
+    "to": "Default Heuristic / Our PruneX Heuristic",
+    "what": "one colour per variant keeps frame, boxes and leader lines together",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "overview",
+    "shows": "the unified paradigm of node-level LS heuristics as a flowchart from Start to End with an optimisation loop",
+    "verdict": "setting"
+   },
+   {
+    "label": "Default Heuristic",
+    "kind": "stage-pipeline",
+    "axis": "zoom",
+    "shows": "the extraction step of a traditional heuristic: Get All Nodes gives the full node id set",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Our PruneX Heuristic",
+    "kind": "stage-pipeline",
+    "axis": "zoom",
+    "shows": "the extraction step of PruneX: node features, a pruning model, an effective node id set",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Y, N",
+    "kind": "identity",
+    "at": "exits of the two decision diamonds",
+    "what": "label the yes and no outcomes"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [],
+  "reading_order": "Starts at Start at the top centre, goes down the central column; at Extract Node Id Set N the eye is led sideways by dashed leaders to the green and orange boxes, then returns to the loop and follows the Y / N branches to Out and End."
+ },
+ "layout": {
+  "arrangement": "pipeline-column",
+  "arrangement_note": "A central top-down flowchart (terminal, process boxes, two blue decision diamonds inside a thin blue loop frame) with two coloured bracket-shaped insets at the left and right of the Extract Node Id Set N step, each tied to it by a pair of dashed leader lines of its own colour. The loop returns through arrows on the right; the Y exit runs around the left edge down to the output.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "column",
+  "aspect": 2.07,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a9d18e",
+    "used_for": "boxes of the Default Heuristic inset"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "frame of the Default Heuristic inset"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "boxes, frame and leaders of the PruneX inset"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "decision diamonds and the thin Optimization For Loop frame"
+   },
+   {
+    "hex": "#303030",
+    "used_for": "thin dark outlines of flow boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark outlines and arrows on flow boxes; 0.75 pt coloured frames; dashed coloured leader lines",
+  "font": "sans (Arial) 4-5.5 pt; bold for Extract Node Id Set N, Input and Out lead-ins and the PruneX title",
+  "corners": "mixed",
+  "arrows": "thin black straight orthogonal arrows with small filled heads; dashed coloured leader lines for the zoom",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = the default heuristic's own steps; orange = the PruneX steps (ours); blue = the optimisation loop (frame and decision diamonds); white = ordinary shared flow steps",
+  "line_style_means": "solid thin black arrows = control flow; dashed green and orange pairs from Extract Node Id Set N = that step is expanded in the inset of the same colour; thin blue rectangle = loop scope",
+  "shape_means": "rounded rectangle = start and end; rectangle = process or data; diamond = decision; open coloured bracket frame = inset",
+  "marker_means": "Y and N label the exits of the decision diamonds",
+  "emphasis": "the bold Extract Node Id Set N is the only bold process step and the only one with leaders; the orange inset has a bold title",
+  "reusable_patterns": [
+   "a classic flowchart with one step expanded sideways into two colour-coded alternatives by dashed leaders (default versus ours)",
+   "open-sided coloured brackets as insets that point at the step they expand",
+   "a titled thin coloured frame around the loop part of a flowchart",
+   "alternative steps (green default, orange ours) as short box chains of the same shape",
+   "Y and N labels on diamond exits"
+  ],
+  "weaknesses": [
+   "4-5.5 pt text is very small at print size",
+   "the saving in runtime is only implied by the smaller node set, not drawn"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "flowchart boxes, diamonds and arrows",
+   "coloured bracket insets and dashed leaders"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "flowchart boxes with Start and End",
+   "decision diamonds i=|N|? and Gain>0?",
+   "Optimization For Loop frame",
+   "Default Heuristic inset in green",
+   "Our PruneX Heuristic inset in orange",
+   "dashed leader lines from Extract Node Id Set N"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "logic synthesis",
+   "chip design",
+   "node pruning",
+   "circuit optimization",
+   "domain generalization",
+   "flowchart",
+   "heuristic",
+   "PruneX",
+   "out-of-distribution"
+  ],
+  "tags": [
+   "zoom-callout",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "open-bracket-insets",
+    "what": "zoom insets drawn as thick coloured brackets open towards the step they expand, tied to it by dashed leaders of the same colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To contrast a baseline with a proposed variant of one step in a standard algorithm, draw the whole flowchart once and expand only the changed step sideways into two colour-coded brackets (green default, orange ours) joined by dashed leaders, so everything else stays shared.",
+  "suits": "Methods that replace or insert one component in an established algorithm or heuristic: pruning, learned filters, learned selectors, learned cost models."
+ },
+ "tags": [
+  "flowchart",
+  "decision-diamonds",
+  "dashed-leaders",
+  "green-orange-blue",
+  "bracket-insets",
+  "small-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "4 Methods (p.4)"
+  ],
+  "evidence": [
+   "We illustrate a unified paradigm of these LS heuristics as shown in Figure 1.",
+   "PruneX uses the learned classifier to predict ineffective nodes to accelerate the X heuristic in the online phase."
+  ]
+ },
+ "summary": "PruneX is a data-driven paradigm for logic synthesis heuristics such as Resub and Mfs2, which apply a transformation to the subgraph at every node of a circuit DAG although many are ineffective. It trains a classifier, helped by a circuit domain generalization framework, to predict and skip ineffective nodes on unseen circuits. Figure 1 draws the unified paradigm as a top-down flowchart: Start, Input: Original Circuit, Extract Node Id Set N, an Optimization For Loop with the decisions i=|N|? and Gain>0?, Update Circuit, Out: Optimized Circuit, End. Dashed leaders expand the extraction step into a green Default Heuristic (Get All Nodes, Full Node Id Set N) and an orange Our PruneX Heuristic (Node Features Extraction, Node Pruning Model, Effective Node Id Set N).",
+ "summary_zh": "PruneX是面向逻辑综合启发式的数据驱动范式，学习分类器跳过无效节点变换。图1是自上而下的流程图，“提取节点集N”一步用虚线展开为绿色默认版（取全部节点）和橙色PruneX版（特征、剪枝模型、有效节点集），循环共用。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The main flowchart is counted as an unlabelled overview panel and the two coloured brackets as zoom panels, although only the brackets are framed and titled. The preview includes a strip of body text at its right edge that is not part of the figure.",
+ "venue": "ICML24"
+}

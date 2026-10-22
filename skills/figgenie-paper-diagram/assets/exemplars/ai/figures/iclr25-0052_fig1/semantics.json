@@ -1,0 +1,461 @@
+{
+ "paper_id": "iclr25-0052",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DeFT",
+  "one_liner": "A hardware-efficient attention algorithm (Decoding with Flash Tree-attention) for tree-structured LLM inference, with prefix-aware, load-balanced KV cache partitions.",
+  "domain": [
+   "LLM inference",
+   "tree-structured decoding",
+   "KV cache sharing"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "four numbered mini decoding trees in one cream box, set under an unconnected sequence-based baseline and a colour key, all in one tall single column",
+  "argues": "Many LLM workloads decode as trees whose shared prefixes (blue) could share one KV cache, unlike sequence-based decoding where every pair stands alone.",
+  "subject": "Prompt and generation nodes of sequence-based decoding and of four tree-structured workloads, coloured by whether their KV cache is shareable.",
+  "elements": [
+   {
+    "name": "Sequence-based decoding",
+    "type": "container",
+    "role": "baseline: independent prompt-generation pairs with nothing shared",
+    "drawn_as": "dashed grey box holding Prompt 1 and Generation 1, Prompt 2 and Generation 2 as unconnected green and yellow rounded boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Notations",
+    "type": "container",
+    "role": "colour key: shareable KV cache, non-shareable prompt, non-shareable generation",
+    "drawn_as": "solid grey-framed box with three labels and a blue, a green and a yellow swatch",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Tree-based decoding",
+    "type": "container",
+    "role": "holds the four tree-structured workloads",
+    "drawn_as": "large cream box with a dashed outline and a bold title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "P (Prompt)",
+    "type": "data",
+    "role": "the shared prompt prefix whose KV cache can be reused by all branches",
+    "drawn_as": "blue rounded box with a plain 'Prompt' label to its left; fans out with black arrows",
+    "container": "Tree-based decoding",
+    "is_contribution": null
+   },
+   {
+    "name": "G1, G2 / P1, P2 / P1.1, P1.2, P2.1, P2.2",
+    "type": "data",
+    "role": "non-shareable prompts (green) and generations (yellow) at the leaves of the trees; subscripts index the branch",
+    "drawn_as": "green and yellow rounded boxes with bold letters and 4.5 pt subscripts, joined by short arrows",
+    "container": "Tree-based decoding",
+    "is_contribution": null
+   },
+   {
+    "name": "Few-shot examples",
+    "type": "data",
+    "role": "shared few-shot context in front of P1 and P2",
+    "drawn_as": "blue rounded box with two arrows to P1 and P2",
+    "container": "2) Few-shot prompting",
+    "is_contribution": null
+   },
+   {
+    "name": "Search History",
+    "type": "data",
+    "role": "shared search history that precedes the deeper prompts in the tree of thoughts",
+    "drawn_as": "two blue rounded boxes, each with two arrows to green P boxes",
+    "container": "3) Multi-step reasoning (e.g. Tree-of-thoughts)",
+    "is_contribution": null
+   },
+   {
+    "name": "Draft models/heads",
+    "type": "actor",
+    "role": "propose a token tree in speculative decoding",
+    "drawn_as": "bold label with a pink block arrow marked '1.token tree generation'",
+    "container": "4) Multi-model/head coordination (e.g. Speculative decoding)",
+    "is_contribution": null
+   },
+   {
+    "name": "token tree t0 to t4",
+    "type": "data",
+    "role": "draft tokens proposed by the draft models, to be verified",
+    "drawn_as": "five pink boxes t0, t1, t2, t3, t4 joined by arrows inside a red dashed frame",
+    "container": "4) Multi-model/head coordination (e.g. Speculative decoding)",
+    "is_contribution": null
+   },
+   {
+    "name": "t0 t2 t4",
+    "type": "data",
+    "role": "the verified tokens that are kept",
+    "drawn_as": "row of three adjacent pink cells under a pink block arrow marked '2.verify', then a pink curved arrow marked '3.keep KV cache'",
+    "container": "4) Multi-model/head coordination (e.g. Speculative decoding)",
+    "is_contribution": null
+   },
+   {
+    "name": "Step history, Step 1(G1), Step 2(G2), Step 3(G3)",
+    "type": "data",
+    "role": "the steps of the coordinated generation: blue shared step history before each yellow generation step",
+    "drawn_as": "blue and yellow rounded boxes fanned out from P; the last row sits in a red box with the red label 'Current Step'",
+    "container": "4) Multi-model/head coordination (e.g. Speculative decoding)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "P (self-consistency)",
+    "to": "G1, G2",
+    "what": "two generations continue from one shared prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Few-shot examples",
+    "to": "P1, P2",
+    "what": "two prompts share the same few-shot examples",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P1, P2",
+    "to": "G1, G2",
+    "what": "each prompt leads to its generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P (multi-step reasoning)",
+    "to": "P1, Search History, P2, Search History",
+    "what": "branches of the tree of thoughts that share the root prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Search History",
+    "to": "P1.1, P1.2 / P2.1, P2.2",
+    "what": "deeper prompts share the search history",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Draft models/heads",
+    "to": "token tree t0 to t4",
+    "what": "step 1: token tree generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "token tree t0 to t4",
+    "to": "t0 t2 t4",
+    "what": "step 2: verify",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "t0 t2 t4",
+    "to": "Step history (current step)",
+    "what": "step 3: keep KV cache of the verified tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Notations swatches",
+    "to": "nodes in all trees",
+    "what": "blue = shareable KV cache, green = non-shareable prompt, yellow = non-shareable generation",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Sequence-based decoding",
+    "to": "Tree-based decoding",
+    "what": "unconnected pairs set above the tree workloads",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Sequence-based decoding",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "two independent prompt-generation pairs, no shareable parts",
+    "verdict": "baseline"
+   },
+   {
+    "label": "1) Self-consistency",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "one shared prompt P fans out to two generations G1 and G2",
+    "verdict": "setting"
+   },
+   {
+    "label": "2) Few-shot prompting",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "shared few-shot examples in front of two prompt-generation pairs",
+    "verdict": "setting"
+   },
+   {
+    "label": "3) Multi-step reasoning (e.g. Tree-of-thoughts)",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "a deeper tree with shared Search History nodes between prompt levels",
+    "verdict": "setting"
+   },
+   {
+    "label": "4) Multi-model/head coordination (e.g. Speculative decoding)",
+    "kind": "stage-pipeline",
+    "axis": "examples",
+    "shows": "draft token tree, verification and kept KV cache feeding the current step",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1) 2) 3) 4)",
+    "kind": "section",
+    "at": "underlined captions of the four workloads",
+    "what": "numbers and names the tree-based workloads"
+   },
+   {
+    "marker": "1.token tree generation, 2.verify, 3.keep KV cache",
+    "kind": "order",
+    "at": "next to the pink arrows in workload 4",
+    "what": "orders the speculative decoding steps"
+   },
+   {
+    "marker": "P1, G1.1, P2.2, t0 to t4, Step 1 to Step 3",
+    "kind": "identity",
+    "at": "inside the nodes",
+    "what": "names the prompts, generations, draft tokens and steps"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "decoding-tree",
+    "drawn_as": "prompt, history and generation nodes as rounded boxes joined by thin arrows from a shared blue root to green and yellow leaves",
+    "parts": [
+     "blue shared node",
+     "green prompt leaves",
+     "yellow generation leaves",
+     "arrows"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "three adjacent pink cells labelled t0, t2, t4 for the verified draft tokens",
+    "parts": [
+     "t0",
+     "t2",
+     "t4"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "shared-prefix-colouring",
+    "drawn_as": "the nodes whose KV cache can be shared are blue, in every tree, against green and yellow non-shareable nodes",
+    "parts": [
+     "blue nodes",
+     "Notations key"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Sequence-based decoding box and the Notations key at the top, then goes down through the four numbered workloads in the cream box, ending with the pink speculative-decoding steps and the red Current Step box."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "One tall single-column figure: a top row of two boxes side by side (dashed grey Sequence-based decoding at the left, framed Notations key at the right), under it one large cream box titled Tree-based decoding holding four numbered mini trees stacked in a column; the first two are drawn side by side in one band, the last two take a band each. Underlined numbered captions sit below each mini tree.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "numbers",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 0.61,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f9f7ed",
+    "used_for": "cream ground of the Tree-based decoding box"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "light-grey ground of the Sequence-based decoding and Notations boxes"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "blue nodes: shareable KV cache (shared prefixes)"
+   },
+   {
+    "hex": "#6c8ebf",
+    "used_for": "outline of blue nodes"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "green nodes: non-shareable prompts"
+   },
+   {
+    "hex": "#82b366",
+    "used_for": "outline of green nodes"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "yellow nodes: non-shareable generations"
+   },
+   {
+    "hex": "#d6b656",
+    "used_for": "outline of yellow nodes"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "pink draft-token nodes and block arrows of speculative decoding"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "outline of pink nodes"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "red Current Step box and dashed token-tree frame"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "frame of the Notations box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt throughout: coloured outlines on nodes, black arrows, grey or red dashed frames",
+  "font": "sans (Arial), 4.5-6 pt; bold node labels, plain 5.5-6 pt labels, underlined 6 pt workload captions",
+  "corners": "rounded",
+  "arrows": "thin straight black arrows with small heads for tree edges; pink block arrows for the speculative decoding steps",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue = shareable KV cache (shared prefix), green = non-shareable prompt, yellow = non-shareable generation (all defined in Notations); pink = speculative draft tokens (not in the key); red outline = current step and draft token tree",
+  "line_style_means": "dashed boxes group the sequence-based part, the tree-based part and the draft token tree; solid red box marks the current step; black arrows run from a shared parent to its continuations",
+  "shape_means": "rounded rectangle = prompt, history or generation node; pink block arrow = speculative decoding step; row of three pink cells = accepted tokens",
+  "marker_means": "1) to 4) number the workloads; subscripts index branches; 1. 2. 3. order the speculative decoding steps",
+  "emphasis": "the blue nodes recur in every tree and stand for reusable KV cache; the unconnected pairs of the sequence-based box give the contrast; the red Current Step box closes the figure",
+  "reusable_patterns": [
+   "Notations box that defines node colours once, then the same colours reused in every mini diagram",
+   "one node grammar (prompt, history, generation) redrawn for four workloads so only the tree shape changes",
+   "sequential baseline drawn as unconnected pairs above the structured workloads",
+   "red box and red label to mark the current step",
+   "underlined numbered caption beneath each mini diagram",
+   "pink block arrows with numbered labels inside one mini diagram"
+  ],
+  "weaknesses": [
+   "the pink colour of speculative draft tokens is not defined in the Notations key",
+   "4.5 pt subscripts are hard to read",
+   "tall single-column drawing with many small boxes"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all nodes, arrows and boxes in draw.io default colours",
+   "the Notations key"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "prompt and generation nodes",
+   "blue shared-prefix nodes",
+   "Notations key box",
+   "four mini decoding trees",
+   "Search History nodes",
+   "pink token tree in a red dashed frame"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "tree-structured decoding",
+   "KV cache sharing",
+   "shared prefix",
+   "self-consistency",
+   "few-shot prompting",
+   "tree-of-thoughts",
+   "speculative decoding",
+   "LLM inference"
+  ],
+  "tags": [
+   "notation-key",
+   "colour-coded-groups",
+   "search-tree"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Define the node colours once in a Notations box (shareable versus non-shareable), then redraw the same node grammar for each application so the shared blue parts stand out across different tree shapes; put the sequential baseline above as unconnected pairs.",
+  "suits": "systems or inference papers whose point is a structural property, such as shared prefixes or reuse, common to several workloads."
+ },
+ "tags": [
+  "single tall column",
+  "draw.io default colours",
+  "mini trees",
+  "notations key",
+  "cream container box",
+  "numbered underlined captions"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "many applications are now designed to process sequences with an internal tree structure",
+   "We need a more efficient decoding algorithm in response to this interaction paradigm change from sequence-based decoding to tree-based decoding.",
+   "An illustration of Sequence-based decoding and Tree-based decoding."
+  ]
+ },
+ "summary": "DeFT is a hardware-efficient attention algorithm for tree-structured LLM inference, where many generation calls share prefixes whose KV cache can be reused. Figure 1 sets sequence-based decoding, two unconnected prompt-generation pairs, above tree-based decoding. A Notations box defines blue as shareable KV cache, green as non-shareable prompt and yellow as non-shareable generation. A cream box then redraws these colours as four numbered mini trees: self-consistency, few-shot prompting, multi-step reasoning such as Tree-of-thoughts with search-history nodes, and speculative decoding, where pink block arrows show draft token-tree generation, verification and keeping the KV cache. Flat draw.io-style boxes and thin arrows in one tall single column carry the idea.",
+ "summary_zh": "DeFT 面向树状 LLM 推理，核心是复用共享前缀的 KV 缓存。图1上方用两对互不相连的提示与生成表示序列式解码，下方在米色框中画出四种树状负载（自洽、少样本、多步推理、推测解码），蓝色节点表示可共享的 KV 缓存。",
+ "confidence": "high",
+ "notes": "Prior kinds scope-overview and side-by-side-contrast kept; variant changed from taxonomy-map to example-gallery because the four workloads are mini decoding trees, not a category tree; concept-schematic added for the structural idea. Panels: the four numbered workloads and the sequence-based box are counted; the Tree-based decoding box is their container and the Notations box is treated as a legend. The pink draft-token colour is not in the key. The idioms decoding-tree and shared-prefix-colouring are coined.",
+ "venue": "ICLR25"
+}

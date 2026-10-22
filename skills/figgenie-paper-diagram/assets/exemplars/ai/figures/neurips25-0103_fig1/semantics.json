@@ -1,0 +1,366 @@
+{
+ "paper_id": "neurips25-0103",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LeMiCa",
+  "one_liner": "A training-free cache scheduler for diffusion video generation that picks the cached steps as a lexicographic minimax path in an error-weighted DAG.",
+  "domain": [
+   "video diffusion acceleration",
+   "feature caching",
+   "cache scheduling"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "output-comparison",
+  "variant_note": "a mechanism band (legend, timestep DAG, three cache-schedule rows) above a 3 x 3 grid of generated frames for Original, TeaCache and LeMiCa",
+  "argues": "Choosing the cached steps from a global error-weighted path keeps generated videos close to the original while running faster than local greedy caching.",
+  "subject": "How LeMiCa's global cache path differs from traditional local caching, and the generated frames each produces on three prompts.",
+  "elements": [
+   {
+    "name": "No Cache / Local-Greedy Cache / Global Outcome-Aware Cache",
+    "type": "label",
+    "role": "key to the three cell colours",
+    "drawn_as": "three colour swatches (blue, teal, orange) with bold captions at the top left",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "x_T, x_{T-1}, x_{T-2}, ..., x_0",
+    "type": "data",
+    "role": "the states along the denoising trajectory, one per timestep",
+    "drawn_as": "black circles with italic labels and a '...' gap, joined by short blue arrows",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "orange skip arrows with w_ij",
+    "type": "operation",
+    "role": "each edge is a candidate cache segment; its weight w_ij is the error of reusing the steps it jumps over (paper text)",
+    "drawn_as": "curved orange arrows from a node to a later node, one labelled w_ij in orange italics",
+    "container": "top band",
+    "is_contribution": true
+   },
+   {
+    "name": "Directed Acyclic Graph (DAG)",
+    "type": "label",
+    "role": "names the graph of nodes and candidate segments",
+    "drawn_as": "bold caption under the graph",
+    "container": "top band",
+    "is_contribution": true
+   },
+   {
+    "name": "Timesteps (x_T to x_0)",
+    "type": "label",
+    "role": "the time axis of the three cache rows",
+    "drawn_as": "long black arrow with x_T at the left, x_0 at the right and the word Timesteps above",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Original (B = 30)",
+    "type": "instance",
+    "role": "no caching: every one of the 30 steps is computed",
+    "drawn_as": "a row of 30 equal blue cells, B = 30 at its right end",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Traditional (B = 12)",
+    "type": "instance",
+    "role": "local greedy caching; blue cells are computed steps, teal cells reused ones",
+    "drawn_as": "a row of cells alternating blue and teal in runs, B = 12 at its right end",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "LeMiCa (B = 10)",
+    "type": "instance",
+    "role": "the cache pattern chosen by the global path under the budget B (forward steps)",
+    "drawn_as": "a row of cells alternating blue and orange in longer runs, B = 10 at its right end, with a black arrow in from the DAG",
+    "container": "top band",
+    "is_contribution": true
+   },
+   {
+    "name": "Original / Traditional (TeaCache) / LeMiCa row labels",
+    "type": "label",
+    "role": "name the three rows of frames",
+    "drawn_as": "bold rotated labels at the left of the grid, TeaCache in small type under Traditional",
+    "container": "bottom band",
+    "is_contribution": false
+   },
+   {
+    "name": "Speed up (w/o), Speed up 2.1x, Speed up 2.64x",
+    "type": "label",
+    "role": "speed-up of each method on the house prompt",
+    "drawn_as": "serif labels at the top right of the house frames, the 2.64x one in bold red",
+    "container": "bottom band",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "x_T",
+    "to": "x_0",
+    "what": "consecutive denoising steps along the sampling path",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "node x_i",
+    "to": "node x_j",
+    "what": "candidate cache segment with error weight w_ij",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Directed Acyclic Graph (DAG)",
+    "to": "LeMiCa (B = 10)",
+    "what": "the optimal path under the budget becomes the LeMiCa cache pattern",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original / Traditional / LeMiCa cache rows",
+    "to": "Original / Traditional (TeaCache) / LeMiCa frame rows",
+    "what": "the same three names head the schedule and the frames it produced",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Traditional (TeaCache) frames",
+    "to": "LeMiCa frames",
+    "what": "TeaCache frames drift from the original in content, LeMiCa frames match it",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "colour swatches",
+    "to": "cache cells and DAG edges",
+    "what": "blue = computed step, teal = Local-Greedy reuse, orange = global reuse; orange also colours the DAG skip edges",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "x_T, x_{T-1}, x_{T-2}, x_0",
+    "kind": "identity",
+    "at": "the circles of the DAG and the ends of the timestep axis",
+    "what": "names the timesteps from noise to clean sample"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "video frames generated for three prompts (a bench in a flower garden, a tabby cat, a house on a lawn) by the original pipeline, TeaCache and LeMiCa",
+    "content": "generated-image",
+    "role": "result",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "16:9 crops in a tight 3 x 3 grid, rows named by rotated labels; the TeaCache frames visibly change the bench view, the cat's face and the house, the LeMiCa frames match the originals"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "budgets and speed-ups: B = 30, 12 and 10 forward steps; TeaCache 2.1x and LeMiCa 2.64x",
+    "form": "numbers at the ends of the cache rows and above the house frames",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "circles x_T ... x_0 joined by short blue arrows along the denoising steps, with orange skip arrows added as the DAG's candidate segments",
+    "parts": [
+     "timestep circles",
+     "blue step arrows",
+     "orange skip arrows",
+     "w_ij"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "cache-pattern-bar",
+    "drawn_as": "a row of equal cells along a timestep axis, blue where the model runs and teal or orange where the result is reused; B counts the blue cells",
+    "parts": [
+     "cells",
+     "axis",
+     "B label"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the legend top-left, then the DAG and the timestep axis with its three cache rows; after the dashed rule, reads the frame grid row by row (Original, TeaCache, LeMiCa) and ends on the red 2.64x label."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two bands stacked on white and separated by a dashed rule. Top band: a colour legend at the top left, under it a DAG of timestep circles with orange skip arrows, and at the right a timestep axis over three rows of coloured cache cells (Original, Traditional, LeMiCa) with their budgets B; a black arrow links the DAG to the LeMiCa row. Bottom band: a tight 3 x 3 grid of video frames, rows named Original, Traditional (TeaCache) and LeMiCa by rotated labels, columns bench, cat and house, with speed-up labels at the top right of the house column.",
+  "panel_count": 1,
+  "lanes": "3 rows named Original, Traditional and LeMiCa, repeated in the cache-schedule band and in the frame-grid band",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.26,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4e79a7",
+    "used_for": "No Cache cells and legend swatch"
+   },
+   {
+    "hex": "#76b7b2",
+    "used_for": "Local-Greedy Cache cells and legend swatch"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "Global Outcome-Aware Cache: DAG skip arrows, w_ij, LeMiCa cells, legend swatch"
+   },
+   {
+    "hex": "#f28e2b",
+    "used_for": "orange cache cells in the schedule rows"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "blue arrows between consecutive timesteps"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red bold 2.64x speed-up label"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "node circles, axes, dashed rule and text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black on node circles and axes; thin dividers between cache cells; a dashed black rule between the bands",
+  "font": "serif (Times New Roman) bold 6-6.5 pt for row names and legend, regular 7.5 pt for the speed-up labels, 8.5 pt for Timesteps and x labels; italic Cambria Math for x_t and w_ij",
+  "corners": "square",
+  "arrows": "short blue arrows between nodes, curved orange arrows with solid heads for skip edges, thin black arrows for the timestep axis and from the DAG to the LeMiCa row",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = no cache (the step is computed), teal = a step reused by the Local-Greedy cache, orange = a step reused by the Global Outcome-Aware cache (LeMiCa); red text marks the best speed-up",
+  "line_style_means": "blue straight arrows = consecutive denoising steps; orange curved arrows = candidate cache segments; dashed horizontal rule = separates the mechanism from the outputs",
+  "shape_means": "circle = a timestep state; strip of cells = steps along time; wide 16:9 tile = a generated frame",
+  "marker_means": "B = number of model forward steps; w_ij = error weight of a cache segment; Speed up labels give the gain per method",
+  "emphasis": "the proposed method's orange runs through the legend, the DAG edges and the LeMiCa row, and its speed-up label is bold red; the TeaCache row of frames shows the drift the method avoids",
+  "reusable_patterns": [
+   "three aligned cache-schedule rows along a timestep axis, coloured by computed or reused, with the budget at each row's end",
+   "a DAG with skip arrows to show the candidate segments of a scheduling problem, linked to the chosen row by one arrow",
+   "a tight grid of generated frames, rows = methods and columns = prompts, with speed-up labels",
+   "the same row names in the schematic band and in the output band to join mechanism and result",
+   "one accent colour for the proposed method across legend, graph edges and schedule row"
+  ],
+  "weaknesses": [
+   "the link between the DAG and the cache rows is a single arrow into the LeMiCa row, so which path gives which cells is only implied",
+   "the row names of the two bands are not joined by any line"
+  ]
+ },
+ "resources": {
+  "own": [
+   "generated video frames from the original pipeline, TeaCache and LeMiCa for three prompts",
+   "measured budgets and speed-ups"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "legend",
+   "DAG",
+   "cache-schedule rows",
+   "timestep axis",
+   "dashed rule"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "colour legend with three swatches",
+   "DAG of timestep circles with orange skip arrows",
+   "three rows of coloured cache cells along a timestep axis",
+   "3 x 3 grid of video frames",
+   "rotated row labels",
+   "red speed-up label"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "video diffusion",
+   "feature caching",
+   "cache scheduling",
+   "lexicographic minimax path",
+   "DAG",
+   "TeaCache",
+   "speed-up",
+   "error accumulation"
+  ],
+  "tags": [
+   "small-multiples",
+   "cost-badges",
+   "schedule-lanes",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Pair a one-glance mechanism band with an output grid: the top band shows each method's schedule as a row of coloured cells with its budget, the bottom grid shows what each schedule produced on the same prompts, under the same row names, so the eye goes from cause to effect.",
+  "suits": "Efficiency or approximation methods (caching, pruning, distillation, sampling schedules) whose claim is faster with the same output quality."
+ },
+ "tags": [
+  "dashed rule between bands",
+  "3 x 3 frame grid",
+  "colour legend",
+  "DAG with skip arrows",
+  "cache cells",
+  "rotated row labels",
+  "serif bold labels",
+  "red speed-up label"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Method (p.5)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "each edge represents a candidate cache segment along the original sampling trajectory",
+   "evaluating cache segment impacts through multiple prompts along a fixed sampling path, creating a static directed acyclic graph (DAG)",
+   "LeMiCa outperforms traditional methods (e.g., TeaCache) in maintaining structural consistency with faster inference"
+  ]
+ },
+ "summary": "LeMiCa is a training-free way to speed up diffusion-based video generation by choosing which denoising steps to cache from a global view instead of a local greedy threshold. Figure 1 has two bands separated by a dashed rule. The top band explains the mechanism: a legend (No Cache, Local-Greedy Cache, Global Outcome-Aware Cache), a DAG of timestep nodes x_T to x_0 whose orange skip edges carry error weights w_ij, and three rows of coloured cache cells along a timestep axis (Original B = 30, Traditional B = 12, LeMiCa B = 10) with an arrow from the DAG to the LeMiCa row. The bottom band is a 3 x 3 grid of generated frames (bench, cat, house) for Original, TeaCache and LeMiCa, with speed-ups 2.1x and 2.64x.",
+ "summary_zh": "LeMiCa 无需训练，从全局视角选择视频扩散模型中要缓存的去噪步，加速生成。图上半部分用图例、带权跳边的 DAG 和三行缓存格子说明机制，下半部分用 3×3 生成帧对比原始、TeaCache 与 LeMiCa 的画质和加速比。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The two bands are not lettered or titled, so they are recorded as bands of one drawing, not as panels (the prior pass counted three panels). In the extraction the three cache rows are one bitmap and the nine frames are separate bitmaps (10 in the digest).",
+ "venue": "NeurIPS25"
+}

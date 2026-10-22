@@ -1,0 +1,416 @@
+{
+ "paper_id": "iclr26-0035",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ViVerBench",
+  "one_liner": "A benchmark of 16 visual-verification tasks in 6 categories that tests whether multimodal LLMs can judge if a visual outcome is correct during reasoning and generation.",
+  "domain": [
+   "visual verification",
+   "multimodal reasoning",
+   "benchmark"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "six grey category panels holding 16 uniform task cards, each with prompt, answer, explanation and a thumbnail",
+  "argues": "Visual verification covers many kinds of checks, from concept existence and spatial relations to game states and formulas, and each is hard enough that even false samples need careful explanation.",
+  "subject": "Sixteen false-labelled benchmark samples, one per sub-task, grouped under six categories.",
+  "elements": [
+   {
+    "name": "Concept Existence",
+    "type": "container",
+    "role": "category of tasks that check whether a described concept is present in an image",
+    "drawn_as": "grey rounded panel with a centred bold banner, holding the cards Object, Attribute, Abstract Patterns",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Object Relationship",
+    "type": "container",
+    "role": "category checking relations between objects",
+    "drawn_as": "grey panel with banner, holding Spatial and Non-Spatial",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Image Annotation",
+    "type": "container",
+    "role": "category checking boxes, pointers and counts drawn on images",
+    "drawn_as": "grey panel with banner, holding Bounding Box, Pointing, Counting",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "World Dynamics",
+    "type": "container",
+    "role": "category checking physical plausibility of images and sequences",
+    "drawn_as": "grey panel with banner, holding Static Physics and Dynamic Physics",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "State Value Evaluation",
+    "type": "container",
+    "role": "category judging whether a state or move in a game, robot or interface moves toward the goal",
+    "drawn_as": "grey panel with banner, holding Maze, FrozenLake, Robotics, GUI",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "STEM",
+    "type": "container",
+    "role": "category checking charts and formulas against code or text",
+    "drawn_as": "grey panel with banner, holding Charts and LaTeX",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "task cards (16)",
+    "type": "instance",
+    "role": "one false sample per sub-task: Object, Attribute, Abstract Patterns, Spatial, Non-Spatial, Bounding Box, Pointing, Counting, Static Physics, Dynamic Physics, Maze, FrozenLake, Robotics, GUI, Charts, LaTeX",
+    "drawn_as": "rounded white card with 1.25 pt grey outline, grey tab title at the upper left, text at left and a thumbnail at right",
+    "container": "category panels",
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt",
+    "type": "text-block",
+    "role": "the task statement or the description the image must satisfy, shortened with ellipses",
+    "drawn_as": "bold label followed by 2-4 lines of 6 pt serif text",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "Answer: False",
+    "type": "label",
+    "role": "ground-truth verdict of the sample",
+    "drawn_as": "one line, bold label and the word False",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "Explanation",
+    "type": "text-block",
+    "role": "why the sample is false",
+    "drawn_as": "bold label followed by 2-3 lines of text",
+    "container": "task cards",
+    "is_contribution": null
+   },
+   {
+    "name": "red key phrases",
+    "type": "label",
+    "role": "the part of the prompt the image gets wrong, such as 'bearing a red flag', 'a white flower pot', 'solid black diamond', \"color='red',\"",
+    "drawn_as": "dark red text spans inside the Prompt lines",
+    "container": "task cards",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "category panels",
+    "to": "task cards",
+    "what": "each category holds 2-4 sub-task cards",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Prompt, Answer, Explanation",
+    "to": "thumbnail",
+    "what": "the text describes the image beside it",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red key phrases in Prompt",
+    "to": "Explanation",
+    "what": "the red phrase is what the Explanation says the image fails to show",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Concept Existence",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Object, Attribute and Abstract Patterns cards",
+    "verdict": null
+   },
+   {
+    "label": "Object Relationship",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Spatial and Non-Spatial cards",
+    "verdict": null
+   },
+   {
+    "label": "Image Annotation",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Bounding Box, Pointing and Counting cards",
+    "verdict": null
+   },
+   {
+    "label": "World Dynamics",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Static Physics and Dynamic Physics cards",
+    "verdict": null
+   },
+   {
+    "label": "State Value Evaluation",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Maze, FrozenLake, Robotics and GUI cards",
+    "verdict": null
+   },
+   {
+    "label": "STEM",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "Charts and LaTeX cards",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "category banners",
+    "kind": "section",
+    "at": "top of each grey panel",
+    "what": "head the six categories"
+   },
+   {
+    "marker": "sub-task tabs",
+    "kind": "identity",
+    "at": "upper left of each card",
+    "what": "name the 16 tasks"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "model-generated scenes under test: castle and ship, isometric cottage, bookshelf with a light beam, street artist, 3x3 grid of cartoon faces",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "right-aligned thumbnails, about 40-63 pt wide, sharp corners, no frames"
+   },
+   {
+    "what": "photos with a drawn marker: bounding box on a table photo, pointing dot on a street view",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "wider thumbnails at the card's right edge with the annotation as a small blue mark"
+   },
+   {
+    "what": "state and sequence images: eight frames of a box dropping, maze with path, two FrozenLake grids, two robot frames",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "sequences shown as side-by-side tiles in the right part of the card"
+   },
+   {
+    "what": "mobile settings screens",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "two narrow screenshots side by side at the card's right"
+   },
+   {
+    "what": "3D plot with coloured planes and a LaTeX formula block",
+    "content": "chart",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small plot thumbnail and a formula image on white"
+   },
+   {
+    "what": "abstract-pattern drawing and a coloured counting grid",
+    "content": "schematic-plot",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "line drawing on white and a red-bordered grid of coloured squares with dots"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "sixteen false-labelled verification samples, one per sub-task, each with a shortened prompt, Answer: False and an explanation",
+    "form": "uniform cards with Prompt, Answer and Explanation lines and a thumbnail; ellipses mark cut text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "task card with a tab title, prompt, ground-truth answer and explanation beside the sample image; no model answers or ticks",
+    "parts": [
+     "tab title",
+     "Prompt",
+     "Answer",
+     "Explanation",
+     "thumbnail"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Concept Existence banner top left and runs down the left column, then the right column from World Dynamics to STEM; inside a card the eye goes tab, Prompt with its red phrase, Explanation, then the thumbnail."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Two columns of grey rounded category panels with centred banner titles; each panel stacks two to four uniform cards with a grey tab title, three text lines on the left and one thumbnail on the right.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 0.87,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d6d6d6",
+    "used_for": "category banners (at 0.86 opacity)",
+    "opacity": 0.86
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "sub-task title tabs of the 16 cards"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light grey ground of the six category panels (at 0.75 opacity)",
+    "opacity": 0.75
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "1.25 pt outline of every card"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red key phrases inside prompts"
+   },
+   {
+    "hex": "#1d2129",
+    "used_for": "near-black body text"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "1.25 pt mid-grey outline on the 16 cards; no other strokes",
+  "font": "serif (TeX Gyre Pagella, Palatino-like) 6 pt body with bold field labels, 8.5 pt bold tab titles, 10 pt bold banners",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey = structure (banner, tab, panel); red text = the phrase that makes the sample false; all other colour comes from the thumbnails",
+  "line_style_means": "one solid grey outline = card boundary",
+  "shape_means": "wide centred banner = category; small tab at the upper left of a card = sub-task; rounded card = one sample",
+  "marker_means": "Answer: False is the ground-truth label; ellipses mark text cut from the prompt",
+  "emphasis": "Red phrases in the prompts point to what is wrong; large bold banners make the six categories the first thing read.",
+  "reusable_patterns": [
+   "grey category panels with centred banners holding titled cards",
+   "one card template repeated: tab title, Prompt, Answer, Explanation, right-aligned thumbnail",
+   "red spans in the prompt that point to the error",
+   "ellipses to shorten long prompts",
+   "only failing samples shown to dramatise difficulty"
+  ],
+  "weaknesses": [
+   "about 4,000 characters in 6 pt type are hard to read in print",
+   "thumbnails are about 40 x 40 pt, so the visual evidence of the error is hard to see"
+  ]
+ },
+ "resources": {
+  "own": [
+   "16 samples from the benchmark with their prompts, answers, explanations and images (several images are model-generated data under test)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "grey panels, banners, tabs and card outlines"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey category panels with banners",
+   "task cards with tab titles",
+   "prompt, answer and explanation text",
+   "red highlighted phrases",
+   "thumbnails of scenes, maze, FrozenLake, robot, GUI, chart and formula"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "benchmark overview",
+   "visual verification",
+   "ViVerBench",
+   "multimodal reasoning",
+   "example gallery",
+   "false samples",
+   "task taxonomy"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "highlighted-text-spans",
+   "verdict-marks",
+   "task-definition"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a benchmark's scope as grey category panels that each hold uniform cards (tab title, Prompt, Answer, Explanation, thumbnail) and colour the offending phrase red so each failure reads at a glance.",
+  "suits": "Benchmarks with many sub-tasks across several categories that need one real sample each; example galleries where every card carries the same fields."
+ },
+ "tags": [
+  "card-gallery",
+  "grey-panels",
+  "serif-text",
+  "dense-text",
+  "red-highlights",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "3 ViVerBench: Assessment of MLLMs on Visual Verification (p.3)"
+  ],
+  "evidence": [
+   "ViVerBench Overview. We show only the false data samples to better highlight data difficulty.",
+   "It comprises 16 tasks across 6 main categories",
+   "Each data sample is labeled with a true/false answer, and the two categories are evenly distributed in the benchmark."
+  ]
+ },
+ "summary": "The paper introduces a generative universal verifier and ViVerBench, a benchmark for judging whether visual outcomes produced during reasoning and generation are correct. Figure 1 is the benchmark overview. Six grey category panels in two columns (Concept Existence, Object Relationship, Image Annotation; World Dynamics, State Value Evaluation, STEM) hold 16 rounded task cards, one per sub-task such as Object, Maze, FrozenLake, GUI, Charts or LaTeX. Every card follows one template: a tab title, Prompt, Answer: False and Explanation lines with the key phrase in red, and a small thumbnail (generated scene, game state, screenshot, chart, formula). Only false samples are shown to stress difficulty. The look is flat grey, Palatino-style serif, with dense small text.",
+ "summary_zh": "ViVerBench是评测视觉验证能力的基准。图1用六个灰色类别面板（概念存在、物体关系、图像标注、世界动态、状态价值评估、STEM）收纳16张子任务卡片，每张含提示、答案False、解释（关键词标红）和缩略图，只展示错误样本以突出难度。",
+ "confidence": "high",
+ "notes": "The digest labels TeXGyrePagella as sans; it is a Palatino-like serif in the preview. Several thumbnails (castle, cottage, bookshelf, street artist, cartoon faces) look model-generated, but they are benchmark samples, so they are listed as own data. The caption is cut off in the preview.",
+ "venue": "ICLR26"
+}

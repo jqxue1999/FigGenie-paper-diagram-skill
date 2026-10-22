@@ -1,0 +1,458 @@
+{
+ "paper_id": "neurips24-0033",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DDSR",
+  "one_liner": "Sequential recommender that models interaction sequences as fuzzy sets through discrete state-space diffusion and replaces item IDs with semantic IDs from item descriptions.",
+  "domain": [
+   "sequential recommendation",
+   "discrete diffusion",
+   "fuzzy sets"
+  ],
+  "subfield": "other",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "stage-pipeline"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "three dashed panels: nested rings of items around a final choice, two tilted planes (history above, fuzzy sets below) joined by dotted arrows, and a description-to-semantic-ID table",
+  "argues": "A user's choice reflects blurred, unpredictable interests; fuzzy sets from discrete diffusion over the history plus semantic IDs from item text model this better.",
+  "subject": "Nested state-space rings, a history plane diffused into a plane of fuzzy sets, and a table from item descriptions to semantic IDs.",
+  "elements": [
+   {
+    "name": "Discrete state space",
+    "type": "container",
+    "role": "space of items; interest is focused on some items with blurred boundaries and converges when the user chooses",
+    "drawn_as": "grey pill label under three nested pale-green discs with blue dots and one orange dot at the centre",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "orange dot",
+    "type": "data",
+    "role": "the item finally chosen, at the centre of the rings (read from the drawing)",
+    "drawn_as": "orange circle at the centre of the discs",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "User Historical Interactions",
+    "type": "container",
+    "role": "observed sequence of items, each a node with grey transition arrows between them",
+    "drawn_as": "tilted peach plane with six grey item icons, blue ellipses and arrows",
+    "container": "middle panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Transitions between items",
+    "type": "label",
+    "role": "legend entry for the directed edges between consecutive items",
+    "drawn_as": "grey arrow in a rounded legend pill",
+    "container": "middle panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Item",
+    "type": "label",
+    "role": "legend entry for a node",
+    "drawn_as": "blue dot in a rounded legend pill",
+    "container": "middle panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Discrect Diffusion",
+    "type": "operation",
+    "role": "discrete diffusion that turns each history item into a fuzzy set",
+    "drawn_as": "label beside five dotted blue arrows running from the upper plane to the lower plane",
+    "container": "middle panel",
+    "is_contribution": true
+   },
+   {
+    "name": "fuzzy sets",
+    "type": "data",
+    "role": "the generated sets of items, one per history item, linked by the same transitions",
+    "drawn_as": "six pale-green ellipses on a tilted blue plane joined by grey arrows; a green zoom box with blue dots tied by a thin dark line to one ellipse",
+    "container": "middle panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Item to be recommended",
+    "type": "data",
+    "role": "the next item the model must predict, reached from the last fuzzy set",
+    "drawn_as": "dark-blue dot at the end of a grey line with a large label",
+    "container": "middle panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Descriptions",
+    "type": "data",
+    "role": "item descriptions, e.g. 'Roses regency teacup and saucer.'",
+    "drawn_as": "column of light-blue rounded text cards with an ellipsis between rows",
+    "container": "right panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Semantic IDs",
+    "type": "data",
+    "role": "tuples of three codes that replace item IDs, e.g. (12, 31, 98)",
+    "drawn_as": "column of tuples on a light-grey strip, each after a grey arrow from its description",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Seq2seq model",
+    "type": "module",
+    "role": "generates the semantic ID of an item from its description",
+    "drawn_as": "text label above a thick pale-blue down arrow to a photo and the tuple (17, 42, 51)",
+    "container": "right panel",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "item node",
+    "to": "next item node",
+    "what": "directed transition between consecutive interactions",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "history item nodes (upper plane)",
+    "to": "fuzzy sets (lower plane)",
+    "what": "Discrete Diffusion: each item spreads into a fuzzy set",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "fuzzy set",
+    "to": "next fuzzy set",
+    "what": "transitions between items are kept on the lower plane",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "last fuzzy set",
+    "to": "Item to be recommended",
+    "what": "the prediction target follows the last set",
+    "kind": "time",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "fuzzy sets (one ellipse)",
+    "to": "green zoom box",
+    "what": "a fuzzy set is a set of items",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Descriptions",
+    "to": "Semantic IDs",
+    "what": "each description gets a tuple of codes",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Seq2seq model",
+    "to": "photo and (17, 42, 51)",
+    "what": "generates the semantic ID for the item in the photo (read from the drawing)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left panel",
+    "to": "middle panel",
+    "what": "blurred interest around a final choice motivates modelling items as fuzzy sets",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Discrete state space",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "nested pale-green discs with blue item dots around an orange final choice: interest has blurred boundaries and converges",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "user history on a tilted plane, discrete diffusion to fuzzy sets on a plane below, and the item to be recommended",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "item descriptions mapped to semantic ID tuples by a seq2seq model, shown on three descriptions and one photo",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "photo of an ice-cream dessert with a cherry",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small photo at the foot of the right panel with the tuple (17, 42, 51) beside a grey arrow"
+   },
+   {
+    "what": "two tilted parallelogram planes with soft shadow (peach history plane, blue fuzzy-set plane)",
+    "content": "other",
+    "role": "background",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "pseudo-3D slabs stacked in the middle panel carrying the icons, ellipses and arrows"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "stack of books, wrench and screwdriver, apple, mug, dress, glasses",
+    "stands_for": "items in the user's interaction history",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 6
+   },
+   {
+    "depicts": "blue dots and ellipses",
+    "stands_for": "items (nodes), as keyed by the legend entry Item",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 20
+   },
+   {
+    "depicts": "orange dot",
+    "stands_for": "the finally chosen item",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "three item descriptions with their semantic IDs: Roses regency teacup and saucer (12, 31, 98); Antique olive green flower teacup (12, 47, 55); Baking mould heart white chocolate (17, 37, 69); and a dessert photo with (17, 42, 51)",
+    "form": "text cards, arrows and code tuples",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "three nested pale-green discs with blue dots scattered inside and outside and an orange dot at the centre",
+    "parts": [
+     "discs",
+     "blue dots",
+     "orange dot"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "stacked-planes-diffusion",
+    "drawn_as": "two tilted planes, observed items above and derived fuzzy sets below, joined by dotted blue arrows labelled with the operation",
+    "parts": [
+     "upper plane",
+     "lower plane",
+     "dotted arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the nested rings in the left panel, moves to the top plane of historical items, follows the dotted arrows down to the fuzzy sets and the item to be recommended, then reads the description-to-ID table on the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three dashed-frame panels left to right: a narrow one with nested discs, a wide middle one with two tilted planes, a legend in its top-right corner and a zoom box at the bottom, and a right one with a two-column table over a seq2seq arrow and a photo. The top fifth of the canvas is blank.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.13,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbe5d6",
+    "used_for": "plane of user historical interactions"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "plane of fuzzy sets"
+   },
+   {
+    "hex": "#f2f8ee",
+    "used_for": "outer disc of the discrete state space"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "middle disc"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "inner disc, fuzzy-set ellipses and the zoom box"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "description cards"
+   },
+   {
+    "hex": "#f7f7f7",
+    "used_for": "light-grey strips behind the table columns"
+   },
+   {
+    "hex": "#ececec",
+    "used_for": "legend pills and the Discrete state space label"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "item dots and ellipses, thick down arrow"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "dotted diffusion arrows and the target dot"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "item icon tiles and grey transition arrows"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange dot at the centre of the rings",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dashed black panel frames, hairline grey and white outlines, dotted blue arrows",
+  "font": "sans (Nimbus Sans, DengXian) 5-7 pt; 7 pt panel labels, 6 pt headers, 5 pt card text",
+  "corners": "rounded",
+  "arrows": "thin grey arrows with small heads between items and from descriptions to IDs; dotted blue arrows between planes; one thick pale-blue block arrow",
+  "rendering": "mixed",
+  "effects": "soft shadow under the two tilted planes and the legend pills",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue dot or ellipse = item, orange dot = final choice, green = fuzzy sets and the neighbourhood of items (tone deepens towards the centre), peach plane = observed history, blue plane = fuzzy-set space, light-blue card = item description",
+  "line_style_means": "dashed black frame = panel; dotted blue arrow = discrete diffusion; grey arrow = transition between items or description to ID; thin dark line = zoom into a fuzzy set",
+  "shape_means": "tilted parallelogram = a space; ellipse = a fuzzy set; circle = an item; rounded card = a description",
+  "marker_means": "three-number tuples are semantic IDs; the legend keys Item and Transitions between items",
+  "emphasis": "the middle panel is the largest and carries the diffusion arrows and the large label of the item to be recommended",
+  "reusable_patterns": [
+   "two tilted planes stacked, observed items above and derived sets below, joined by dotted arrows",
+   "nested pale-green discs with scattered dots to show blurred boundaries around a final choice",
+   "corner legend of two pills inside the main panel",
+   "zoom box with a thin leader showing that a set is a cluster of dots",
+   "text-to-code table: description cards with grey arrows to code tuples"
+  ],
+  "weaknesses": [
+   "the top fifth of the canvas is empty",
+   "typo 'Discrect Diffusion' in the label",
+   "discs and the orange dot are unlabelled",
+   "the link between the photo, the seq2seq model and the middle panel is only implied"
+  ]
+ },
+ "resources": {
+  "own": [
+   "item descriptions and semantic IDs"
+  ],
+  "stock": [
+   "grey item glyph icons",
+   "dessert photo"
+  ],
+  "generated": [],
+  "drawn": [
+   "rings, tilted planes, ellipses and arrows",
+   "description cards and table",
+   "legend pills"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "nested green discs with blue dots and an orange dot",
+   "two tilted planes",
+   "item glyph icons linked by grey arrows",
+   "green fuzzy-set ellipses",
+   "dotted blue diffusion arrows",
+   "description cards with semantic ID tuples",
+   "dessert photo"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "sequential recommendation",
+   "discrete diffusion",
+   "fuzzy sets",
+   "semantic IDs",
+   "user history",
+   "cold start",
+   "state space",
+   "item transitions"
+  ],
+  "tags": [
+   "embedding-space-sketch",
+   "illustration-style",
+   "zoom-callout",
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "stacked-tilted-planes",
+    "what": "two or more tilted planes stacked in perspective, each a space (observed above, derived below), joined by dotted arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a method on a toy scene: draw the observed items on one tilted plane and the derived sets on a second plane below, join them with dotted arrows labelled with the operation, keep the transitions as grey arrows on both planes, and add a corner legend.",
+  "suits": "Methods that turn a sequence or set of observed items into a derived representation (sets, clusters, latent states), where a spatial metaphor helps."
+ },
+ "tags": [
+  "three-dashed-panels",
+  "pseudo-3D-planes",
+  "pastel-flat",
+  "item-pictograms",
+  "legend-pills",
+  "dotted-blue-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-3)"
+  ],
+  "evidence": [
+   "a user’s interest at any given moment might be focused on ’some items’ with blurred boundaries",
+   "a vivid illustration of this is given on the right side of Figure 1."
+  ]
+ },
+ "summary": "DDSR is a sequential recommender that treats a user's interaction sequence as fuzzy sets produced by discrete diffusion, and uses semantic IDs built from item descriptions. Figure 1 has three dashed panels. On the left, nested pale-green discs with blue item dots around an orange centre show interest with blurred boundaries that converges on a choice. In the middle, a peach plane of historical items joined by grey transition arrows sends dotted blue arrows through Discrete Diffusion to a blue plane of green fuzzy sets and the item to be recommended, with a zoom box and a legend. On the right, item descriptions map to three-number semantic IDs via a seq2seq model.",
+ "summary_zh": "DDSR把用户交互序列建模为离散扩散得到的模糊集，并用语义ID代替物品ID。图1分三块虚线框：左为模糊边界的离散状态空间，中为历史物品平面扩散成模糊集平面并指向待推荐物品，右为描述到语义ID。",
+ "confidence": "medium",
+ "notes": "The meaning of the orange dot, of the ring tones and of the dessert photo with (17, 42, 51) is read from the drawing and the caption, not stated in the text; hence medium. The two tilted planes are bitmaps used as backgrounds, listed in pictures with role background. The top fifth of the canvas is blank.",
+ "venue": "NeurIPS24"
+}

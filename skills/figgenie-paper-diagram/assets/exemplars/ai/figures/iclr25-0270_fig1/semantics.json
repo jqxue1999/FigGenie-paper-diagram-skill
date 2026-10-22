@@ -1,0 +1,405 @@
+{
+ "paper_id": "iclr25-0270",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ThunderKittens (TK)",
+  "one_liner": "A framework for writing fast, simple AI GPU kernels from a few abstractions: register and shared tiles, tile operations and a producer-consumer program template.",
+  "domain": [
+   "GPU kernels",
+   "ML systems",
+   "memory hierarchy"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "concept-schematic"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "a memory-hierarchy pyramid beside three role columns (load and store workers, shared buffers, compute workers) that exchange tiles through numbered buffer slots, each role with a cartoon cat and a code listing",
+  "argues": "A small set of abstractions, tiles at each memory level and a producer-consumer worker template, is enough to write efficient AI kernels simply.",
+  "subject": "the GPU memory hierarchy with TK tile types, and load-store workers, shared buffers and compute workers with their code",
+  "elements": [
+   {
+    "name": "(unlabelled) robot-cat mascot",
+    "type": "icon",
+    "role": "project mascot",
+    "drawn_as": "grey robot kitten with a cape, top left corner",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Reg (64 KB, 130 TB/s)",
+    "type": "region",
+    "role": "register level: the smallest and fastest memory",
+    "drawn_as": "green triangle at the top of the pyramid with white bold text",
+    "container": "memory pyramid",
+    "is_contribution": false
+   },
+   {
+    "name": "Shared (227 KB, 33 TB/s)",
+    "type": "region",
+    "role": "shared memory level",
+    "drawn_as": "salmon trapezoid below the registers",
+    "container": "memory pyramid",
+    "is_contribution": false
+   },
+   {
+    "name": "L2 Cache (50 MB, 12 TB/s)",
+    "type": "region",
+    "role": "L2 cache level, with no TK tile type attached",
+    "drawn_as": "orange trapezoid, no banner",
+    "container": "memory pyramid",
+    "is_contribution": false
+   },
+   {
+    "name": "HBM (80 GB, 3 TB/s)",
+    "type": "region",
+    "role": "global memory level: the largest and slowest",
+    "drawn_as": "teal trapezoid at the base",
+    "container": "memory pyramid",
+    "is_contribution": false
+   },
+   {
+    "name": "Tensor core register tiles: In TK as: rt<M, N>;",
+    "type": "label",
+    "role": "the register tile type of TK, kept in the layout tensor cores need",
+    "drawn_as": "navy banner on the Reg tier with a tile mosaic image and the type in monospace",
+    "container": "memory pyramid",
+    "is_contribution": true
+   },
+   {
+    "name": "Swizzled shared tiles: In TK as: st<M, N>;",
+    "type": "label",
+    "role": "the shared tile type of TK, stored swizzled",
+    "drawn_as": "navy banner on the Shared tier with a diagonally swizzled mosaic image and the type in monospace",
+    "container": "memory pyramid",
+    "is_contribution": true
+   },
+   {
+    "name": "Global Tensors",
+    "type": "label",
+    "role": "global memory objects in HBM",
+    "drawn_as": "navy banner on the HBM tier with a vertical colour-stripe image",
+    "container": "memory pyramid",
+    "is_contribution": false
+   },
+   {
+    "name": "Load and store workers",
+    "type": "actor",
+    "role": "producer role: move data between HBM and shared memory, synchronously or asynchronously",
+    "drawn_as": "bold 11 pt title, a cartoon cat carrying a plank, and a dashed box with an underlined description and a code listing",
+    "container": "role columns",
+    "is_contribution": true
+   },
+   {
+    "name": "Shared Buffers: Inputs, Output (slots 0, 1, 2)",
+    "type": "data",
+    "role": "buffers in shared memory that decouple producers and consumers",
+    "drawn_as": "two stacks of three black-outlined rounded squares numbered 0, 1, 2, titled Inputs and Output",
+    "container": "role columns",
+    "is_contribution": true
+   },
+   {
+    "name": "Compute workers",
+    "type": "actor",
+    "role": "consumer role: run PyTorch-like operations on shared and register tiles",
+    "drawn_as": "bold 11 pt title, two cartoon cats (sunglasses and wrench, hard hat and hammer), and a dashed box with an underlined description and a code listing",
+    "container": "role columns",
+    "is_contribution": true
+   },
+   {
+    "name": "code listings in the two dashed boxes",
+    "type": "text-block",
+    "role": "TK calls for each role: load, tma::load_async, tma::store_async; rt_fl, warpgroup::mm_ABt, exp",
+    "drawn_as": "bold comment lines over regular monospace code lines",
+    "container": "role columns",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Load and store workers",
+    "to": "Inputs (slots 0 and 1)",
+    "what": "synchronous load to slot 0 and asynchronous load to slot 1 fill the input buffers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Inputs (slot 0)",
+    "to": "Compute workers",
+    "what": "compute reads the buffered tiles",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (slot 2)",
+    "to": "Load and store workers",
+    "what": "asynchronous store from buffer slot 2 back to HBM",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reg, Shared, HBM tiers",
+    "to": "navy banners with tile types",
+    "what": "each memory level names the TK tile type used there",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Load and store workers description",
+    "to": "HBM and Shared tiers",
+    "what": "text says loads and stores go from HBM to shared memory",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Compute workers description",
+    "to": "Shared and Reg tiers",
+    "what": "text says operations run on shared and register memory tiles",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "0, 1, 2",
+    "kind": "identity",
+    "at": "buffer slots under Inputs and Output",
+    "what": "slot indices that the code comments refer to (load to slot 0, load to slot 1, store from slot 2)"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "tile layout mosaics: register tile, swizzled shared tile, global tensor",
+    "content": "other",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "square mosaics of coloured cells inside the navy banners; a regular pattern for the register tile, a diagonal swizzle for the shared tile and vertical stripes for global memory"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon cat in a robot superhero costume with a cape",
+    "stands_for": "the ThunderKittens project",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon cats at work: one carrying a plank, one with sunglasses and a wrench, one with a hard hat and a hammer",
+    "stands_for": "the load-and-store worker and the two compute workers",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "real TK code for one kernel: sync and async loads, an async store, register tiles, tensor-core matrix multiply and an elementwise exp",
+    "form": "monospace listings with bold comment lines inside dashed boxes",
+    "real_values": true
+   },
+   {
+    "what": "H100-class memory sizes and bandwidths for each level: 64 KB at 130 TB/s, 227 KB at 33 TB/s, 50 MB at 12 TB/s, 80 GB at 3 TB/s",
+    "form": "text on the pyramid tiers",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "memory-hierarchy-pyramid",
+    "drawn_as": "four stacked tiers widening downward from registers to HBM, each with capacity and bandwidth, in four colours",
+    "parts": [
+     "Reg",
+     "Shared",
+     "L2 Cache",
+     "HBM"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "worker-avatars",
+    "drawn_as": "one cartoon cat per worker role, titled in large bold type above a dashed box of code",
+    "parts": [
+     "cat avatar",
+     "role title",
+     "dashed code box"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "numbered-buffer-slots",
+    "drawn_as": "two stacks of three numbered rounded squares for input and output buffers shared by the roles",
+    "parts": [
+     "slot 0",
+     "slot 1",
+     "slot 2"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Mascot and pyramid at the left from registers down to HBM, then the three role columns left to right: load and store workers, shared buffers, compute workers."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "At the left a four-tier colour pyramid with navy banners that name the tile type of each level, a mascot above it. At the right three aligned role columns under bold titles: load and store workers in a dashed code box, a narrow column of numbered input and output buffers, and compute workers in a dashed code box; arrows run between the boxes and the buffers.",
+  "panel_count": 1,
+  "lanes": "3 aligned role columns on the right (Load and store workers, Shared Buffers, Compute workers)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.63,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#001426",
+    "used_for": "navy banners that hold tile type names, mosaics and code types"
+   },
+   {
+    "hex": "#4fae4e",
+    "used_for": "Reg tier (registers)"
+   },
+   {
+    "hex": "#ed7d65",
+    "used_for": "Shared tier (shared memory)"
+   },
+   {
+    "hex": "#f29441",
+    "used_for": "L2 Cache tier"
+   },
+   {
+    "hex": "#67bbbd",
+    "used_for": "HBM tier (global memory)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black on buffer slots and arrows; 1 pt dashed black rounded boxes around the two code listings",
+  "font": "Open Sans Bold and Helvetica Neue Bold sans at 6 to 11 pt (role titles 11 pt, tier names 7 pt); Courier New monospace 6 pt for code with bold comment lines",
+  "corners": "mixed",
+  "arrows": "black straight arrows with filled heads, diagonal between the buffer slots and the dashed boxes",
+  "rendering": "mixed",
+  "effects": "none; the cats are ink-style illustrations and the mosaics are bitmaps",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per memory level (green registers, salmon shared, orange L2, teal HBM); navy banners mark tile types; the colours inside the tile mosaics stand for layout details (the quoted sentence that explains them is cut off)",
+  "line_style_means": "dashed rounded box = the code that one worker role runs; solid black arrow = tiles moving between buffers and workers",
+  "shape_means": "pyramid tier = memory level, widening from small fast registers to large slow HBM; numbered rounded square = a buffer slot; navy banner = the TK tile type at that level",
+  "marker_means": "0, 1, 2 = buffer slot indices that the code comments refer to",
+  "emphasis": "bold 11 pt role titles, saturated pyramid tiers on white and a mascot in the corner; cartoon cats give each worker role a face",
+  "reusable_patterns": [
+   "memory pyramid with capacity and bandwidth on each tier and a banner naming the tile type used at that tier",
+   "code listing in a dashed box beside each worker role",
+   "cartoon animal per worker role to make a producer-consumer template memorable",
+   "numbered buffer slots shared between producer and consumer roles",
+   "project mascot in a corner of the figure"
+  ],
+  "weaknesses": [
+   "the 6 pt monospace code is hard to read at print size",
+   "no arrow from the compute workers to the output buffer is drawn, so the output path must be taken from the text",
+   "the colours in the tile mosaics are not explained inside the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real TK code listings",
+   "hardware memory sizes and bandwidths",
+   "tile layout images from TK"
+  ],
+  "stock": [],
+  "generated": [
+   "robot-cat mascot and three worker cats, illustrated in an ink-sketch style that looks AI-generated"
+  ],
+  "drawn": [
+   "pyramid tiers and banners",
+   "dashed boxes, buffer slots and arrows",
+   "role titles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four-tier memory pyramid with capacity and bandwidth",
+   "tile mosaic images",
+   "navy banners with tile type names",
+   "three role columns",
+   "cartoon cat workers",
+   "numbered buffer slot stacks",
+   "dashed boxes with code"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "GPU kernels",
+   "tiles",
+   "memory hierarchy",
+   "tensor cores",
+   "producer-consumer",
+   "asynchronous workers",
+   "CUDA",
+   "HBM",
+   "shared memory"
+  ],
+  "tags": [
+   "mascot-character",
+   "pseudocode-box",
+   "illustration-style",
+   "matrix-cell-grid",
+   "level-ladder"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Put a hierarchy (here memory levels) beside the roles that use it: a coloured pyramid whose tiers carry capacity numbers and a banner naming the type used at that level, then one titled column per role with a cartoon avatar and a dashed code box, joined by numbered buffer slots.",
+  "suits": "Systems or library papers whose abstractions map onto a hardware hierarchy and a few cooperating worker roles, where real API code can be shown beside the drawing."
+ },
+ "tags": [
+  "memory-pyramid",
+  "cartoon-cats",
+  "dashed-code-boxes",
+  "navy-banners",
+  "mono-and-sans",
+  "dense-composite"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 ThunderKittens (p.5)"
+  ],
+  "evidence": [
+   "a general kernel template for coordinating asynchronous execution across warps in a thread block, built on the producer-consumer paradigm",
+   "workers that load from and store data to HBM, while other workers perform computation in fast memory."
+  ]
+ },
+ "summary": "ThunderKittens is a framework for writing fast, simple AI GPU kernels from a few abstractions. Figure 1 puts a four-tier memory pyramid at the left, with registers (64 KB, 130 TB/s), shared memory (227 KB, 33 TB/s), L2 cache (50 MB, 12 TB/s) and HBM (80 GB, 3 TB/s) in four colours; navy banners with tile mosaics name the TK type used at each level (rt<M, N>, st<M, N>, global tensors). At the right, three role columns show the program template: load and store workers, shared input and output buffers with numbered slots, and compute workers, each worker with a cartoon cat and a dashed box of real code, joined by arrows. A robot-cat mascot sits in the corner.",
+ "summary_zh": "ThunderKittens 用少量抽象写高效 GPU 内核。图 1 左为四层彩色存储金字塔（容量与带宽），横幅标出各层瓦片类型；右为加载存储线程、共享缓冲区和计算线程，配卡通猫和真实代码。",
+ "confidence": "high",
+ "notes": "Prior labels actor-interaction and concept-schematic kept. Only four arrows are visible between the role columns (loads into slots 0 and 1, slot 0 into compute, output slot 2 back to the load and store box); there is no arrow from compute to output. The sentence explaining the mosaic colours is cut off in the context file, so their meaning is left open. The cats are listed as generated because of their ink-illustration look, which could also be a stock illustration set.",
+ "venue": "ICLR25"
+}

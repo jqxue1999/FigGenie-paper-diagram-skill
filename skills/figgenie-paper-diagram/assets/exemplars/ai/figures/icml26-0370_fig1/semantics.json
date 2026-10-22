@@ -1,0 +1,609 @@
+{
+ "paper_id": "icml26-0370",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VaLR",
+  "one_liner": "Vision-aligned Latent Reasoning: an MLLM generates latent tokens before each reasoning step, trained to align its intermediate features with an external vision encoder.",
+  "domain": [
+   "multimodal reasoning",
+   "latent reasoning",
+   "representation alignment"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "one tall LLM drawn once with its token sequence unrolled along the bottom edge for two reasoning rounds, plus a training-only alignment branch in a wedge-shaped panel tied to one hatched layer",
+  "argues": "Feeding vision-aligned latent tokens before each reasoning step keeps visual information alive during long generation, and the alignment to an external encoder is needed only at training time.",
+  "subject": "A tall MLLM unrolled over image, question, latent and language tokens for two reasoning rounds, plus a training-only alignment branch.",
+  "elements": [
+   {
+    "name": "Large Language Model",
+    "type": "container",
+    "role": "the MLLM's language model that reasons over image, question, latent and language tokens",
+    "drawn_as": "tall rounded mint region (#e3fff9) with a flame icon beside its title, holding four stacked bars",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "Transformer Block",
+    "type": "module",
+    "role": "stacked blocks of the LLM; the second one is where intermediate features are read",
+    "drawn_as": "four full-width rounded bars labelled Transformer Block, the second drawn with diagonal hatching",
+    "container": "Large Language Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Last Hidden States of MLLM: H^1_1 ... H^1_K, H^2_1 ... H^2_K",
+    "type": "data",
+    "role": "last hidden states of the K latent positions in each reasoning round; they become the next input embeddings",
+    "drawn_as": "rows of teal-outlined rounded boxes with italic H and super/subscripts above the model, thick bright-teal arrows running down from them",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": true
+   },
+   {
+    "name": "f^1_1 ... f^1_K, f^2_1 ... f^2_K",
+    "type": "data",
+    "role": "intermediate features at the latent positions of round 1 and round 2, sent to the alignment branch",
+    "drawn_as": "teal-outlined boxes with italic f on the hatched block, round 1 inside a dashed pink box and round 2 inside a dashed blue box",
+    "container": "Large Language Model",
+    "is_contribution": true
+   },
+   {
+    "name": "LM Head",
+    "type": "module",
+    "role": "turns hidden states into the language tokens of a reasoning step",
+    "drawn_as": "two rounded mint pills above the model, each with up arrows to white token boxes",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "“In first image, the teddy bear is rotated sideways ...”",
+    "type": "sample",
+    "role": "round-1 language output of the example",
+    "drawn_as": "quoted sentence above a row of white token boxes",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "“In second image, the teddy bear’s face is oriented toward the camera ...”",
+    "type": "sample",
+    "role": "round-2 language output of the example",
+    "drawn_as": "quoted sentence above a second row of white token boxes",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "input token row",
+    "type": "data",
+    "role": "the unrolled sequence: image tokens, question tokens, latent tokens, language tokens, for two rounds",
+    "drawn_as": "row of rounded squares along the bottom edge of the model: grey for image and text tokens (image tokens in dashed groups with dots), cream (#fefde8) for latent tokens",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": true
+   },
+   {
+    "name": "Vision Encoder",
+    "type": "module",
+    "role": "encodes the two input photos into the image tokens",
+    "drawn_as": "grey-green pill (#c6ded9) with a snowflake icon, thin arrows up to the dashed image-token groups",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "“How does the viewpoint of the teddy bear differ between the two images?”",
+    "type": "sample",
+    "role": "the question that becomes the text tokens",
+    "drawn_as": "quoted sentence under the token row with a small up arrow",
+    "container": "(a) Latent Reasoning (Sec 3.1)",
+    "is_contribution": false
+   },
+   {
+    "name": "MLLM Intermediate Features, f^i_1:K",
+    "type": "data",
+    "role": "the tapped features of the latent tokens, entering the alignment branch",
+    "drawn_as": "stack of three 3 x 3 light-grey grids with the label f^i_1:K at its left",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": true
+   },
+   {
+    "name": "Upsample",
+    "type": "operation",
+    "role": "brings the features to the resolution of the vision-encoder features",
+    "drawn_as": "rounded mint pill under the grid stack",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": true
+   },
+   {
+    "name": "MLP",
+    "type": "module",
+    "role": "projects the upsampled features before alignment",
+    "drawn_as": "rounded mint pill with a flame icon at its left corner",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": true
+   },
+   {
+    "name": "Alignment Loss",
+    "type": "operation",
+    "role": "pulls the projected MLLM features towards the external vision features",
+    "drawn_as": "bold teal label on a dotted double-headed vertical arrow between two pictures",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": true
+   },
+   {
+    "name": "External Vision Encoder",
+    "type": "module",
+    "role": "pre-trained encoder that supplies the target visual representation; not used at test time",
+    "drawn_as": "rounded mint pill with a snowflake icon at the bottom of panel (b)",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": false
+   },
+   {
+    "name": "Training-time only",
+    "type": "label",
+    "role": "says that panel (b) is dropped at test time",
+    "drawn_as": "bold teal text under the bottom edge of panel (b)",
+    "container": "(b) Representation Alignment (Sec 3.2)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "two input photos",
+    "to": "Vision Encoder",
+    "what": "images to be encoded",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Vision Encoder",
+    "to": "image tokens (dashed grey groups)",
+    "what": "encoded image tokens enter the token row",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "question text",
+    "to": "text tokens (grey)",
+    "what": "question becomes text tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input token row",
+    "to": "Transformer Block stack",
+    "what": "tokens flow up through the blocks; thin vertical lines tie positions to the LM Heads",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Last Hidden States H",
+    "to": "cream latent input tokens",
+    "what": "thick teal arrows carry each round's last hidden states back down as the next input embeddings",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LM Head",
+    "to": "white language-token boxes",
+    "what": "predicts the language tokens of a reasoning step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f^2 boxes on the hatched block",
+    "to": "MLLM Intermediate Features",
+    "what": "teal line and arrow lead the tapped features into panel (b)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLLM Intermediate Features",
+    "to": "Upsample",
+    "what": "features go to the upsampling step",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Upsample",
+    "to": "MLP",
+    "what": "then the projection",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "MLP",
+    "to": "mosaic picture",
+    "what": "the projected features are shown as a coarse colour mosaic",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "two input photos",
+    "to": "External Vision Encoder",
+    "what": "the same photos are encoded by the frozen external encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "External Vision Encoder",
+    "to": "target picture",
+    "what": "target visual representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mosaic picture",
+    "to": "target picture",
+    "what": "dotted double-headed arrow labelled Alignment Loss",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "dashed pink and blue boxes of f^1 and f^2",
+    "to": "pink-bordered and blue-bordered photos",
+    "what": "matching colours tie round 1 to the first image and round 2 to the second",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "hatched Transformer Block",
+    "to": "panel (b)",
+    "what": "wedge-shaped frame lines run from the hatched block to the corners of panel (b)",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Latent Reasoning (Sec 3.1)",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "The LLM with the unrolled token row, latent tokens fed back from last hidden states, and LM Heads emitting the language of two reasoning rounds.",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Representation Alignment (Sec 3.2)",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Training-only branch: intermediate features through Upsample and an MLP, aligned with features of a frozen external vision encoder.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "bold titles with Sec numbers at the top of each panel",
+    "what": "head the two lettered parts: Latent Reasoning (Sec 3.1) and Representation Alignment (Sec 3.2)"
+   },
+   {
+    "marker": "superscripts 1, 2 and subscripts 1 to K on H and f",
+    "kind": "identity",
+    "at": "token boxes above the model and on the hatched block",
+    "what": "name the reasoning round (1 or 2) and the k-th of the K latent tokens"
+   },
+   {
+    "marker": "flame, snowflake",
+    "kind": "identity",
+    "at": "corners of the LLM, MLP, Vision Encoder and External Vision Encoder",
+    "what": "mark trainable (flame) versus frozen (snowflake) modules"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two photos of a person holding a teddy bear in colourful clothes, seen from two viewpoints",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails at the bottom left under the Vision Encoder, the first with a pink border and the second with a blue border"
+   },
+   {
+    "what": "two feature visualisations of the teddy-bear scene: a coarse colour mosaic (MLP output) and a smoother colour rendering from the external encoder",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small square pictures stacked in panel (b) and joined by a dotted double-headed arrow labelled Alignment Loss; look like PCA-style colour maps, not stated"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flame",
+    "stands_for": "trainable module (the LLM and the MLP)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "snowflake",
+    "stands_for": "frozen module (the Vision Encoder and the External Vision Encoder)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a two-image question 'How does the viewpoint of the teddy bear differ between the two images?' answered over two rounds: 'In first image, the teddy bear is rotated sideways ...' then 'In second image, the teddy bear’s face is oriented toward the camera ...'",
+    "form": "quoted sentences beside the token row and above the LM Heads, with the two photos",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "plain full-width rounded bars labelled Transformer Block, stacked four high, no internal sub-blocks, one hatched",
+    "parts": [
+     "four bars",
+     "hatched bar"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a row of rounded squares along the bottom edge, grey for image and text tokens, cream for latent tokens, white boxes above the LM Heads for outputs",
+    "parts": [
+     "grey tokens",
+     "cream latent tokens",
+     "white output tokens",
+     "dots for omitted tokens"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "vlm",
+    "drawn_as": "a frozen Vision Encoder pill feeding dashed groups of image tokens beside the question tokens into the LLM",
+    "parts": [
+     "Vision Encoder",
+     "image tokens",
+     "text tokens",
+     "LLM"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "flame icons on the LLM and the MLP, snowflake icons on the two vision encoders",
+    "parts": [
+     "flame",
+     "snowflake"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "teacher-student",
+    "drawn_as": "two parallel columns, MLLM features through Upsample and MLP versus a frozen External Vision Encoder, joined by a dotted double-headed arrow labelled Alignment Loss",
+    "parts": [
+     "MLLM branch",
+     "External Vision Encoder",
+     "Alignment Loss arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "Alignment Loss as a bold label on a dotted double-headed arrow between two feature pictures, no backward arrows",
+    "parts": [
+     "dotted arrow",
+     "label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the photos and the question at the bottom left, follows the token row up through the LLM, reads the thick teal arrows from the H states back to the cream latent tokens and the LM Heads with their quotes at the top, then follows the wedge from the hatched block into panel (b), down to Alignment Loss and the External Vision Encoder."
+ },
+ "layout": {
+  "arrangement": "inset",
+  "arrangement_note": "Panel (a), a wide tall LLM with token rows above and below, fills the left four fifths; panel (b), a narrower rounded panel, sits at the right and is tied to the hatched middle block by wedge-shaped frame lines, like a zoomed-out branch.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "panel-frames",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.35,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#22869a",
+    "used_for": "teal outlines, titles, thin arrows and connectors"
+   },
+   {
+    "hex": "#2dc2b7",
+    "used_for": "thick bright-teal arrows carrying the last hidden states back as inputs"
+   },
+   {
+    "hex": "#f3fbf9",
+    "used_for": "very light mint ground of the whole figure"
+   },
+   {
+    "hex": "#e3fff9",
+    "used_for": "mint interior of the LLM region"
+   },
+   {
+    "hex": "#dcf4ec",
+    "used_for": "mint pills and bars (LM Head, Upsample, MLP, encoders)"
+   },
+   {
+    "hex": "#c6ded9",
+    "used_for": "grey-green Vision Encoder pill"
+   },
+   {
+    "hex": "#fefde8",
+    "used_for": "cream latent tokens in the input row"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light-grey tokens and feature grids"
+   },
+   {
+    "hex": "#fbc0bd",
+    "used_for": "pink dashed box of round-1 features and the first photo border"
+   },
+   {
+    "hex": "#4e95d9",
+    "used_for": "blue dashed box of round-2 features and the second photo border"
+   },
+   {
+    "hex": "#404040",
+    "used_for": "dark-grey dashed boxes around the image-token groups"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.25-0.5 pt teal outlines on tokens, bars and pills; 0.25 pt thin connectors; thick teal arrows about 1.25 pt; dashed coloured boxes",
+  "font": "sans (Calibri, bold for titles; Cambria Math italic for H and f) 5-7.5 pt: 7.5 pt bold LLM title, 6.5 pt bold panel titles and symbols, 5.5 pt labels, 5 pt sub/superscripts",
+  "corners": "rounded",
+  "arrows": "thin teal arrows up from the encoders and LM Heads; thick bright-teal arrows from H states down to the latent input tokens; dotted vertical teal lines through the blocks; a long horizontal teal arrow to the External Vision Encoder; a dotted double-headed arrow for the loss",
+  "rendering": "flat-vector",
+  "effects": "diagonal hatching on one block, stacked-sheet look of the feature grids, soft mint tints; no shadows",
+  "model_depiction": "layer-stack",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "teal family = the model and its flows (outlines, thick feedback arrows, mint tints); cream = latent tokens, grey = ordinary input tokens, white = output language tokens; pink and blue dashed boxes and photo borders pair round 1 with the first image and round 2 with the second",
+  "line_style_means": "thick teal arrow = last hidden state fed back as the next input embedding; thin teal line = ordinary flow; dotted vertical lines = paths between token positions and the LM Heads; dotted double-headed arrow = alignment loss; dashed boxes = groups (image-token groups, per-round feature sets)",
+  "shape_means": "rounded squares = tokens; rounded pills = encoders, heads, Upsample and MLP; hatched bar = the Transformer Block where features are tapped; stack of 3 x 3 grids = intermediate feature tensor; wedge-shaped frame = panel (b) expanding from the hatched block",
+  "marker_means": "flame = trainable, snowflake = frozen; superscripts 1 and 2 on H and f index the reasoning round, subscripts 1 to K index the latent tokens; (a) and (b) with Sec numbers head the panels",
+  "emphasis": "bright thick teal feedback arrows, the hatched block, the coloured dashed boxes and the bold Training-time only label",
+  "reusable_patterns": [
+   "wedge-shaped panel frame running back to the one hatched layer it expands",
+   "hatched bar marking the single layer where features are tapped",
+   "unrolled token row along the bottom edge of a tall model, tokens coloured by type, output tokens above a head",
+   "thick feedback arrows curving from output hidden states back to the next input slots",
+   "flame and snowflake icons on modules",
+   "coloured dashed boxes matched by photo border colours to tie each round to its image",
+   "dotted double-headed arrow between predicted and target visual features labelled Alignment Loss",
+   "Training-time only label under the branch that is dropped at inference"
+  ],
+  "weaknesses": [
+   "thick teal arrows and thin dotted lines cross many bars and are hard to trace from top to bottom",
+   "the symbols H and f are used without a key; K and the round indices must be read from the text",
+   "the feature pictures in panel (b) are small and their meaning is not stated"
+  ]
+ },
+ "resources": {
+  "own": [
+   "feature visualisations of the MLLM branch and of the external encoder",
+   "the question and the two output sentences"
+  ],
+  "stock": [
+   "flame and snowflake icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "LLM stack and token rows",
+   "pills, arrows and dashed boxes",
+   "wedge-shaped panel",
+   "hatched block"
+  ],
+  "unknown": [
+   "origin of the two teddy-bear photos"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "tall LLM region with four Transformer Block bars, one hatched",
+   "unrolled token row of grey, cream and white squares",
+   "H and f token boxes in dashed coloured groups",
+   "LM Head pills with quoted outputs",
+   "thick teal feedback arrows",
+   "Vision Encoder pill with snowflake and two photos",
+   "wedge-framed alignment panel with Upsample, MLP and feature pictures",
+   "Alignment Loss arrow and External Vision Encoder"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "latent reasoning",
+   "multimodal LLM",
+   "representation alignment",
+   "vision encoder",
+   "hidden states as inputs",
+   "test-time scaling",
+   "visual information dilution",
+   "chain of thought"
+  ],
+  "tags": [
+   "module-state-coding",
+   "token-strip",
+   "zoom-callout",
+   "flow-type-arrows",
+   "colour-coded-groups",
+   "layer-probe-taps"
+  ],
+  "new_tags": [
+   {
+    "name": "hatched-tap-layer",
+    "what": "one layer of a stacked model drawn with diagonal hatching to mark where features are tapped, with a wedge-shaped panel running from it to the branch that uses them"
+   },
+   {
+    "name": "output-to-input-feedback-arrows",
+    "what": "thick arrows carry a model's last hidden states from the top back down to the next input slots of an unrolled token row"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a latent-token scheme by unrolling the token sequence along the bottom of one tall model, colour tokens by type and show the feedback as thick arrows from output hidden states back to the next input slots; attach the training-only branch as a wedge-shaped panel running back to the one hatched layer it reads.",
+  "suits": "models that feed their own hidden states back as inputs, or that add a training-only auxiliary branch tied to one intermediate layer."
+ },
+ "tags": [
+  "tall model region",
+  "unrolled token row",
+  "teal palette",
+  "hatched layer",
+  "wedge panel",
+  "flame and snowflake icons",
+  "two lettered panels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Vision-aligned Latent Reasoning (p.3)"
+  ],
+  "evidence": [
+   "Figure 1. Overview of VaLR.",
+   "During latent token generation, the last hidden states of MLLM becomes input embedding for the next token prediction",
+   "Note that we do not use the external vision encoder at test-time."
+  ]
+ },
+ "summary": "VaLR (Vision-aligned Latent Reasoning) makes a multimodal LLM generate vision-aligned latent tokens before each chain-of-thought step so that visual information is not diluted during long reasoning. Figure 1 has two lettered parts. In (a), a tall mint-tinted LLM of four Transformer Block bars is drawn once, with its token sequence unrolled along the bottom edge: image tokens from a frozen Vision Encoder, question tokens, cream latent tokens and language tokens; thick teal arrows carry each round's last hidden states H back down as the next input embeddings, and LM Heads at the top emit the quoted sentences. In (b), a wedge-shaped panel from the hatched middle block shows intermediate features f passed through Upsample and an MLP and aligned (Alignment Loss) with features from a frozen External Vision Encoder, marked Training-time only.",
+ "summary_zh": "VaLR 让多模态大模型在每步思维链前先生成与视觉对齐的潜在 token。图分 (a)(b)：(a) 底部展开 token 序列的 LLM，粗箭头把末层隐状态回送为输入；(b) 楔形面板把中间层特征对齐外部视觉编码器，仅训练时用。",
+ "confidence": "high",
+ "notes": "The text layer holds stale hidden strings from another figure (UNet Model / Distill v4, Multi-View Diffusion Model, Generated View) that do not appear in the print; the prior merged tag title-branding is therefore not supported by the printed figure. The feature pictures in panel (b) are read as PCA-style feature visualisations; the figure does not say what they are. The grey tokens after each latent block are read as language tokens of the reasoning step; the figure does not label them.",
+ "venue": "ICML26"
+}

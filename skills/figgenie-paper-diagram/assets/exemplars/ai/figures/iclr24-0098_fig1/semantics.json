@@ -1,0 +1,544 @@
+{
+ "paper_id": "iclr24-0098",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LayerNorm tuning",
+  "one_liner": "Finetune an LLM into a multimodal LLM by training only the LayerNorm weights in each attention block, using fewer parameters and less memory than LoRA.",
+  "domain": [
+   "parameter-efficient finetuning",
+   "multimodal LLM",
+   "LayerNorm tuning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "design-family",
+  "variant_note": "three identical MLLM stacks that differ only in which modules are trainable, (a) being the proposed LayerNorm tuning, with two horizontal bar charts of cost at the right",
+  "argues": "Tuning only the LayerNorms inside attention blocks needs far fewer trainable parameters and less GPU memory than QV-projection/MLP tuning or LoRA at both 7B and 13B.",
+  "subject": "Three MLLM stacks with trainable parts in blue, plus bar charts of trainable-parameter share and GPU memory.",
+  "elements": [
+   {
+    "name": "(a) LayerNorm",
+    "type": "container",
+    "role": "the proposed scheme: within the attention block only the LayerNorm parameters are trained",
+    "drawn_as": "left stack; both LayerNorm boxes blue with pale-green dotted halos; caption below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(b) QV Proj. / MLP",
+    "type": "container",
+    "role": "alternative scheme: W_Q, W_V and the MLP are trained",
+    "drawn_as": "middle stack; W_Q, W_V and MLP blue with halos, W_K and both LayerNorms grey; caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(c) LoRA",
+    "type": "container",
+    "role": "alternative scheme: LoRA adapters attached to W_Q, W_K, W_V and the MLP",
+    "drawn_as": "right stack; every block module grey or white, four dashed rectangles with blue dots; caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "ViT",
+    "type": "module",
+    "role": "vision encoder at the bottom of the chain; grey, i.e. frozen, in all three",
+    "drawn_as": "grey box with black outline",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "V-L Connector",
+    "type": "module",
+    "role": "vision-language connector; activated by default in all three (caption)",
+    "drawn_as": "blue box with pale-green dotted halo",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "Word Emb.",
+    "type": "module",
+    "role": "word embedding; activated by default in all three (caption)",
+    "drawn_as": "blue box with pale-green dotted halo",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "unlabelled rounded frame around one attention block",
+    "type": "container",
+    "role": "one attention block, the part where the three schemes differ",
+    "drawn_as": "large rounded rectangle with a heavy black outline; heavy residual lines run along its right side; no repeat count is written",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "LayerNorm (2 per block)",
+    "type": "module",
+    "role": "normalisation before the W_Q, W_K, W_V fan-out and before the MLP; the only trained modules inside the block in (a)",
+    "drawn_as": "box; blue with halo in (a), grey in (b) and (c)",
+    "container": "attention block",
+    "is_contribution": true
+   },
+   {
+    "name": "W_Q, W_K, W_V",
+    "type": "module",
+    "role": "query, key and value projection weights feeding Attention",
+    "drawn_as": "three small square boxes with serif italic labels and arrows up to Attention; W_Q and W_V blue in (b); each wrapped by a dashed rectangle with a blue dot in (c)",
+    "container": "attention block",
+    "is_contribution": false
+   },
+   {
+    "name": "Attention",
+    "type": "module",
+    "role": "attention operation of the block; grey, not trained, in all three",
+    "drawn_as": "grey box",
+    "container": "attention block",
+    "is_contribution": false
+   },
+   {
+    "name": "MLP",
+    "type": "module",
+    "role": "feed-forward part of the block; trained in (b), carries a LoRA adapter in (c)",
+    "drawn_as": "box; grey in (a), blue with halo in (b), grey with dashed rectangle and blue dot in (c)",
+    "container": "attention block",
+    "is_contribution": false
+   },
+   {
+    "name": "circled plus (2 per block)",
+    "type": "operation",
+    "role": "residual sum after Attention and after MLP",
+    "drawn_as": "circle with a plus sign on the main path, fed by a heavy skip line from the right",
+    "container": "attention block",
+    "is_contribution": false
+   },
+   {
+    "name": "LM Head",
+    "type": "module",
+    "role": "output head; activated by default in all three (caption)",
+    "drawn_as": "blue box with pale-green dotted halo at the top of each stack",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "blue dot with dashed rectangle",
+    "type": "icon",
+    "role": "marks a LoRA adapter attached to the enclosed weight (read from the figure)",
+    "drawn_as": "dashed black rectangle around W_Q, W_K, W_V or MLP with a filled blue dot at its left",
+    "container": "(c) LoRA",
+    "is_contribution": false
+   },
+   {
+    "name": "pale-green dotted halo",
+    "type": "region",
+    "role": "extra cue that a module is trainable, repeating the blue fill",
+    "drawn_as": "pale-green rounded region with a dotted outline behind a blue box",
+    "container": "all three stacks",
+    "is_contribution": false
+   },
+   {
+    "name": "legend swatches: LayerNorm-simp., LayerNorm, LoRA, QV Proj.",
+    "type": "label",
+    "role": "map the bar fills to the method names",
+    "drawn_as": "small hatched swatches with names, boxed inside the lower right of each chart; the memory chart has no QV Proj. entry",
+    "container": "bar charts",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "ViT, V-L Connector, Word Emb.",
+    "to": "attention block",
+    "what": "the chain rises through plain lines and one arrow into the first LayerNorm",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "LayerNorm",
+    "to": "W_Q, W_K, W_V",
+    "what": "the normalised input fans out to the three projections",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W_Q, W_K, W_V",
+    "to": "Attention",
+    "what": "projected queries, keys and values",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attention",
+    "to": "LM Head",
+    "what": "data pass upward through circled plus, LayerNorm, MLP and a second circled plus to the head",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "block input",
+    "to": "both circled plus nodes",
+    "what": "residual skip connections as heavy lines along the right side of the block",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "blue fill with pale-green halo",
+    "to": "trainable modules",
+    "what": "caption key: trainable components are blue, frozen ones grey; the halo repeats the cue",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "dashed rectangles with blue dots in (c)",
+    "to": "W_Q, W_K, W_V and MLP",
+    "what": "LoRA adapters attached to these weights",
+    "kind": "mapping",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "captions (a) LayerNorm, (b) QV Proj. / MLP, (c) LoRA",
+    "to": "bars and legends of the two charts",
+    "what": "the charts repeat the method names; (b) appears as QV Proj. and only in the parameters chart, LayerNorm-simp. has no stack",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Trainable Parameters (%) chart",
+    "to": "GPU Memory (GB) chart",
+    "what": "same 13B and 7B grouping and bar grammar, stacked so both costs read together",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) LayerNorm",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "only the two LayerNorms in the attention block are trainable, besides connector, embeddings and head",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) QV Proj. / MLP",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "W_Q, W_V and the MLP are trainable",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) LoRA",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "LoRA adapters (blue dots) on W_Q, W_K, W_V and the MLP",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Trainable Parameters (%)",
+    "axis": "other",
+    "shows": "horizontal bars for 13B and 7B models: QV Proj., LoRA, LayerNorm, LayerNorm-simp.",
+    "verdict": "result"
+   },
+   {
+    "label": "GPU Memory (GB)",
+    "axis": "other",
+    "shows": "horizontal bars for 13B and 7B models: LoRA, LayerNorm, LayerNorm-simp.",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "captions under the three stacks",
+    "what": "name the three tuning schemes and head the panels"
+   },
+   {
+    "marker": "Q, K, V subscripts",
+    "kind": "identity",
+    "at": "W boxes",
+    "what": "name the query, key and value projection weights"
+   },
+   {
+    "marker": "blue dot",
+    "kind": "identity",
+    "at": "left of the dashed rectangles in (c)",
+    "what": "marks a LoRA adapter on the enclosed weight"
+   },
+   {
+    "marker": "13B, 7B and the value (method) at each bar end",
+    "kind": "identity",
+    "at": "left of the bar groups and at the bar ends",
+    "what": "give the model size of each group and the measured value with the method name"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bar chart of trainable parameters (%) for 13B and 7B models: QV Proj. 18.24 and 19.02, LoRA 4.30 and 5.92, LayerNorm 2.50 and 3.78, LayerNorm-simp. 0.0031 and 0.0038",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "horizontal bars grouped by model size, each method with its own colour and hatch (red vertical, green horizontal, blue diagonal, orange diagonal), value and method written at each bar end, dashed vertical gridlines, legend inside the empty lower right"
+   },
+   {
+    "what": "bar chart of GPU memory (GB) for 13B and 7B models: LoRA 46.48 and 29.36, LayerNorm 38.30 and 24.16, LayerNorm-simp. 31.71 and 18.93",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "same grammar as the chart above, without the QV Proj. bars, legend inside the lower right"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "filled blue dot beside a dashed rectangle",
+    "stands_for": "a LoRA adapter attached to the enclosed weight",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "one large rounded rectangle with a heavy outline holding, bottom to top, LayerNorm, W_Q/W_K/W_V, Attention, a circled plus, LayerNorm, MLP and a second circled plus, with heavy residual lines on its right",
+    "parts": [
+     "LayerNorm",
+     "W_Q, W_K, W_V",
+     "Attention",
+     "MLP",
+     "circled plus nodes",
+     "residual lines"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "blue fill with a pale-green dotted halo for trainable modules, grey fill for frozen ones; the key is given in the caption only",
+    "parts": [
+     "blue box",
+     "grey box",
+     "halo"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "lora-adapter",
+    "drawn_as": "a blue dot on a dashed rectangle around each weight that carries an adapter; the low-rank A and B branches are not drawn",
+    "parts": [
+     "dashed rectangle",
+     "blue dot"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "vlm",
+    "drawn_as": "vertical chain ViT, V-L Connector and Word Emb. below the language-model block, LM Head above it",
+    "parts": [
+     "ViT",
+     "V-L Connector",
+     "Word Emb.",
+     "LM Head"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at stack (a) read bottom to top, compares which boxes are blue in (b) and (c), then moves right to the two bar charts."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three identical vertical stacks side by side (a, b, c) with the ViT at the bottom and the LM Head at the top, then two horizontal bar charts stacked on the right, each with its legend inside the empty lower right.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.08,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#59bdf4",
+    "used_for": "trainable modules (LM Head, LayerNorm, Word Emb., V-L Connector, W_Q, W_V, MLP depending on the scheme)"
+   },
+   {
+    "hex": "#d5fdd7",
+    "used_for": "pale-green halo behind trainable modules"
+   },
+   {
+    "hex": "#eaeaea",
+    "used_for": "frozen modules (ViT, Attention and the modules a scheme does not train)"
+   },
+   {
+    "hex": "#00a2ff",
+    "used_for": "blue dots marking LoRA adapters in (c)"
+   },
+   {
+    "hex": "#4284f4",
+    "used_for": "LayerNorm bars (diagonal hatch)"
+   },
+   {
+    "hex": "#34a853",
+    "used_for": "LoRA bars (horizontal hatch)"
+   },
+   {
+    "hex": "#eb4335",
+    "used_for": "QV Proj. bars (vertical hatch)"
+   },
+   {
+    "hex": "#ffa500",
+    "used_for": "LayerNorm-simp. bars (diagonal hatch)"
+   },
+   {
+    "hex": "#929292",
+    "used_for": "dotted outline of the halos"
+   },
+   {
+    "hex": "#b0b0b0",
+    "used_for": "dashed vertical gridlines in the charts"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "black outlines about 0.5 pt with a heavier block frame and residual lines; 0.25 pt hatch lines; dotted grey halo outlines; dashed black rectangles in (c); dashed grey chart gridlines",
+  "font": "sans (Helvetica Neue Medium) bold 4.5 pt for module labels; serif (Times) 6 pt for captions and axis titles; serif italic (STIX) 5 pt with 3.5 pt subscripts for W_Q, W_K, W_V; tick labels and bar values are outlined text",
+  "corners": "mixed",
+  "arrows": "thin straight black arrows with open two-stroke heads, bottom to top; heavier orthogonal residual lines ending at the circled plus",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "On the stacks, blue = trainable and grey = frozen (caption key), with a pale-green dotted halo repeating 'trainable'; on the charts colour plus hatch identifies the method: red vertical QV Proj., green horizontal LoRA, blue diagonal LayerNorm, orange diagonal LayerNorm-simp.",
+  "line_style_means": "dotted halo = trainable module; dashed black rectangle = the weight that carries a LoRA adapter; heavy rounded frame = one attention block; heavy lines = residual connections; dashed grey vertical lines = chart gridlines.",
+  "shape_means": "boxes = modules; small squares with italic W = projection weights; circled plus = residual sum; horizontal hatched bars = measured cost; blue dot = LoRA adapter.",
+  "marker_means": "Letters name the schemes; the blue dot marks an adapter; numbers at bar ends give the measured value and the method; 13B and 7B label the model size of each bar group.",
+  "emphasis": "Scheme (a) comes first and its only blue modules inside the block are the two LayerNorms; the charts then show the LayerNorm bars shorter than the LoRA bars in both metrics, with LayerNorm-simp. shortest.",
+  "reusable_patterns": [
+   "identical stacks side by side that differ only in which modules are coloured trainable",
+   "pale-green dotted halo around trainable modules as a second state cue",
+   "dashed rectangle plus blue dot marking where an adapter attaches to a weight",
+   "horizontal bar charts with colour and hatch per method and the value written at the bar end",
+   "two cost metrics (trainable parameters, GPU memory) as bar charts stacked beside the diagram",
+   "legend placed inside the empty lower right of each bar chart",
+   "bars grouped by model size (13B, 7B) with the same method order in both charts"
+  ],
+  "weaknesses": [
+   "blue means trainable on the stacks but names the LayerNorm method in the bar charts, so one hue carries two meanings",
+   "stack captions and bar legends are tied only by name, and LayerNorm-simp. has no stack of its own",
+   "module labels print at about 4.5 pt and the bar annotations are smaller",
+   "on a linear axis the 0.003% LayerNorm-simp. bars are invisible, only their text labels show them",
+   "LoRA is drawn as dots and dashed boxes, the low-rank branches are not shown"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured trainable-parameter shares and GPU memory for 7B and 13B models (bar values)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module stacks, block frame, residual lines, halos and LoRA dots",
+   "bar charts with hatch fills (look like Python-plotted vectors)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three vertical MLLM stacks",
+   "blue and grey module boxes with pale halos",
+   "attention block frame with residual lines",
+   "W_Q W_K W_V squares",
+   "blue dots on dashed boxes",
+   "two hatched horizontal bar charts"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "parameter-efficient finetuning",
+   "LayerNorm tuning",
+   "multimodal LLM",
+   "LoRA",
+   "trainable parameters",
+   "GPU memory",
+   "attention block",
+   "MLLM"
+  ],
+  "tags": [
+   "module-state-coding",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "hatch-coded-bars",
+    "what": "horizontal bars where each method has its own colour and hatch pattern, with the value and method written at the bar end"
+   },
+   {
+    "name": "trainable-halo",
+    "what": "a pale dotted halo behind modules marks them as trainable, repeating the blue fill"
+   },
+   {
+    "name": "cost-bars-beside-designs",
+    "what": "bar charts of cost (parameters, memory) placed beside the design schematics, one bar per design"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the alternatives as identical copies of one stack and change only which modules are coloured trainable, so the difference is all the eye finds; then put cost bars beside the stacks with the same method names.",
+  "suits": "Parameter-efficient or ablation-style comparisons where variants of one architecture differ in which parts are updated, with cost metrics to show the gain."
+ },
+ "tags": [
+  "design-family",
+  "identical-stacks",
+  "blue-grey-state-coding",
+  "hatched-bars",
+  "paired-charts",
+  "small-labels",
+  "residual-lines"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Trainable components are in blue, while frozen parameters are in gray.",
+   "Within the attention blocks, (a) only activates LayerNorm parameters.",
+   "Tuning LayerNorm achieves significant reductions in trainable parameters and GPU memory usages."
+  ]
+ },
+ "summary": "The paper turns a text LLM into a multimodal LLM by finetuning only the LayerNorm weights inside each attention block, treating the change as domain adaptation. Figure 1 compares three tuning schemes on identical bottom-up stacks: ViT, V-L Connector, Word Emb., one attention block (LayerNorm, W_Q, W_K, W_V, Attention, MLP, residual sums) and LM Head. Blue boxes are trainable and grey ones frozen: (a) LayerNorm trains only the two LayerNorms, (b) QV Proj. / MLP trains W_Q, W_V and the MLP, (c) LoRA adds adapters marked by blue dots. At the right, two hatched horizontal bar charts give trainable parameters (%) and GPU memory (GB) for 7B and 13B models, where the LayerNorm bars are shorter than the LoRA bars.",
+ "summary_zh": "本文只微调注意力块中的 LayerNorm，把文本 LLM 变成多模态 LLM。左图用三个相同的堆叠结构对比 LayerNorm、QV 投影/MLP、LoRA，蓝色可训练、灰色冻结；右图条形图比较可训练参数占比与 GPU 显存。",
+ "confidence": "high",
+ "notes": "The index gives width 596.7 pt and aspect 3.39 for this figure; the printed figure is about 406 x 176 pt (aspect about 2.3), the index value is inflated by clipped off-canvas content. The blue dots in (c) are read as LoRA adapters on the enclosed weights from the figure and the caption's colour key; the paper text provided does not describe them. LayerNorm-simp. appears only as orange bars, there is no stack for it. The W boxes look white rather than grey in (a) and (c), grey only for W_K in (b). Bar values, tick labels and legend text are outlined paths, not in the text layer, so they were read from the preview. [layout.aspect set to 2.08 (was 2.3): the figure box was corrected by hand, see workspace/bbox_overrides.json.]",
+ "venue": "ICLR24"
+}

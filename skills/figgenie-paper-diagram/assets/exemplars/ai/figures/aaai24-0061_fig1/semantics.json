@@ -1,0 +1,642 @@
+{
+ "paper_id": "aaai24-0061",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ProAgent",
+  "one_liner": "LLM-based cooperative agent that infers teammate intentions, plans and verifies skills, and revises its beliefs from the teammate's real behaviour.",
+  "domain": [
+   "LLM agents",
+   "human-AI cooperation",
+   "zero-shot coordination in Overcooked-AI"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "left ring of modules and environment with a teammate loop, plus a zoomed real-text trace of one Overcooked turn on the right",
+  "argues": "A proactive agent can cooperate with unfamiliar teammates by reading the state in language, predicting the teammate's intention, revising that belief from real behaviour, and verifying each skill before acting.",
+  "subject": "ProAgent module ring enlarged into one worked Overcooked turn: prompt, analysis, belief revision, validation, screenshot.",
+  "elements": [
+   {
+    "name": "state",
+    "type": "data",
+    "role": "raw environment state entering the agent",
+    "drawn_as": "cyan box at the top of the ring",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "language state",
+    "type": "data",
+    "role": "the state translated into natural language for the LLM",
+    "drawn_as": "beige box inside the dashed ProAgent box",
+    "container": "left panel",
+    "is_contribution": null
+   },
+   {
+    "name": "(unlabelled) OpenAI logo",
+    "type": "icon",
+    "role": "the LLM-based Planner that analyses the scene, infers the teammate's intention and plans a skill",
+    "drawn_as": "black knot logo, three copies: ring, framed panel, title",
+    "container": "both panels",
+    "is_contribution": true
+   },
+   {
+    "name": "belief / plan",
+    "type": "data",
+    "role": "predicted teammate intention and the skill planned for the agent",
+    "drawn_as": "two light-blue boxes stacked under the logo",
+    "container": "left panel",
+    "is_contribution": true
+   },
+   {
+    "name": "verificator",
+    "type": "module",
+    "role": "checks whether the planned skill can be performed and sends feedback to the LLM when it fails",
+    "drawn_as": "orange rounded box with a red feedback loop back to the logo; also a tab under the Plan Validation panel",
+    "container": "both panels",
+    "is_contribution": true
+   },
+   {
+    "name": "controller",
+    "type": "module",
+    "role": "breaks a valid skill into low-level actions",
+    "drawn_as": "green rounded box (left) and a tall green box (right)",
+    "container": "both panels",
+    "is_contribution": false
+   },
+   {
+    "name": "action",
+    "type": "data",
+    "role": "low-level actions executed in the environment",
+    "drawn_as": "grey-blue box at the bottom of the ring",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "memory",
+    "type": "module",
+    "role": "stores history that the Planner reads",
+    "drawn_as": "tall yellow-orange bar (left) and a wide bar along the bottom (right)",
+    "container": "both panels",
+    "is_contribution": true
+   },
+   {
+    "name": "knowledge",
+    "type": "data",
+    "role": "task knowledge fed to memory and to the prompt",
+    "drawn_as": "grey label box with a peach arrow into memory (left); first prompt block (right)",
+    "container": "both panels",
+    "is_contribution": null
+   },
+   {
+    "name": "environment",
+    "type": "actor",
+    "role": "the shared world both agents act in",
+    "drawn_as": "tall blue box on the right of the ring",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) orange robot / Bob",
+    "type": "actor",
+    "role": "the teammate agent; its decision loop is the blue ring of arrows",
+    "drawn_as": "cartoon robot at the left of the ring; again at the bottom right with the bold label Bob",
+    "container": "both panels",
+    "is_contribution": false
+   },
+   {
+    "name": "feedback",
+    "type": "label",
+    "role": "the red loop from verificator back to the LLM",
+    "drawn_as": "red rotated text along a red arrow (left); red-bordered rounded vertical box (right)",
+    "container": "both panels",
+    "is_contribution": true
+   },
+   {
+    "name": "ProAgent / teammate / loop / store key",
+    "type": "label",
+    "role": "tells the four kinds of arrow apart",
+    "drawn_as": "four sample arrows with words and a small dashed box, at the bottom left",
+    "container": "left panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Prompt: knowledge, state, belief",
+    "type": "text-block",
+    "role": "inputs to the LLM, with real strings",
+    "drawn_as": "three tinted text blocks (light grey, beige, light blue) with small tab labels, gathered by a curly brace",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Analysis: The pot is empty. Both You and Bob have empty hands.",
+    "type": "text-block",
+    "role": "the LLM's analysis of the scene",
+    "drawn_as": "red dashed box with italic text",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Plan of you / Intention of Bob / Real behavior of Bob",
+    "type": "text-block",
+    "role": "planned skill, predicted teammate intention and the teammate's observed action",
+    "drawn_as": "three blue dashed boxes with italic text, names in colour",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Belief Revision",
+    "type": "module",
+    "role": "compares the predicted intention with the real behaviour and corrects the belief",
+    "drawn_as": "beige rounded box with grey arrows from the two blue boxes",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Plan Validation: Fail? / Achieved!",
+    "type": "module",
+    "role": "outcome of checking the skill: failure goes to the reflection loop, success continues",
+    "drawn_as": "orange panel holding two salmon boxes, verificator tab below",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Reflection Loop: Error message: xxx",
+    "type": "text-block",
+    "role": "re-plan request built from the failure and sent back to the LLM",
+    "drawn_as": "grey box with red heading, red arrows into the feedback box",
+    "container": "right panel",
+    "is_contribution": true
+   },
+   {
+    "name": "I succeeded at pickup(onion)",
+    "type": "text-block",
+    "role": "success message between Achieved! and the controller (role read from the drawing)",
+    "drawn_as": "grey box joined by grey elbow connectors",
+    "container": "right panel",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "state",
+    "to": "language state",
+    "what": "raw state translated into natural language",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "language state",
+    "to": "OpenAI logo (LLM)",
+    "what": "language-based state enters the Planner",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OpenAI logo (LLM)",
+    "to": "verificator",
+    "what": "belief about the teammate, then the planned skill (red arrows down the stack)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "verificator",
+    "to": "OpenAI logo (LLM)",
+    "what": "feedback when the skill fails (red loop on the left)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "verificator",
+    "to": "controller, then action",
+    "what": "valid skill, then low-level actions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "action",
+    "to": "environment, then state",
+    "what": "actions change the world and give the next state (grey outer ring)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "state",
+    "to": "teammate robot, action, environment, state",
+    "what": "the teammate's own decision loop (blue outer ring)",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "language state, belief, plan, verificator, knowledge",
+    "to": "memory",
+    "what": "store (peach arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "memory",
+    "to": "OpenAI logo (LLM)",
+    "what": "history read back by the Planner (grey arrow; thick dark line in the right panel)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "knowledge, state, belief blocks",
+    "to": "OpenAI logo (LLM)",
+    "what": "prompt gathered by a curly brace",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "OpenAI logo (LLM)",
+    "to": "Analysis, then Plan of you and Intention of Bob",
+    "what": "analysis, then two outputs (red arrows)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Plan of you",
+    "to": "Plan Validation",
+    "what": "skill to be checked (red arrow into the verificator tab)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fail?",
+    "to": "Error message, feedback, OpenAI logo (LLM)",
+    "what": "reflection loop in red",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Achieved!",
+    "to": "I succeeded at pickup(onion), controller, game screenshot",
+    "what": "valid skill is executed in the game (grey elbow connectors)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Intention of Bob, Real behavior of Bob",
+    "to": "Belief Revision",
+    "what": "predicted and observed behaviour are compared",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Bob",
+    "to": "Real behavior of Bob, Belief Revision",
+    "what": "the teammate's actual behaviour is observed (cyan arrow); blue double arrow between Bob and the game screen",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "left dashed ProAgent box",
+    "to": "right framed panel",
+    "what": "the right panel enlarges the box",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "actor-interaction",
+    "axis": "overview",
+    "shows": "coordination task workflow: ProAgent modules between state and action, the teammate's blue loop and the environment on the ring, memory and a key of arrow colours",
+    "verdict": "ours"
+   },
+   {
+    "label": "ProAgent",
+    "kind": "worked-walkthrough",
+    "axis": "zoom",
+    "shows": "inner pipeline on one Overcooked turn with real text: prompt blocks, analysis, plan and teammate intention, belief revision, plan validation with reflection loop, controller and game screenshot",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "Overcooked-AI kitchen screenshot",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small colour game frame at the right end of the flow, fed by an arrow from the controller and tied to Bob by a blue double arrow"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "OpenAI knot logo",
+    "stands_for": "the LLM Planner",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "orange cartoon robot",
+    "stands_for": "the teammate agent (Bob)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "one Overcooked turn: knowledge 'Target: cook soup and deliver…', state 'You (Alice): hand hold nothing. Bob: hand holds nothing. Kitchen states: pot empty', belief 'Bob will choose to pickup(onion).', then analysis, plan 'pickup(onion)', intention 'pickup(dish)', real behaviour 'pickup(onion)'",
+    "form": "tinted text blocks and dashed boxes with names in red (You) and blue (Bob)",
+    "real_values": true
+   },
+   {
+    "what": "reflection and success messages: 'Error message: xxx / Please analysis again and replan the skill based on the current scene.' and 'I succeeded at pickup(onion)'",
+    "form": "grey text boxes, error heading in red, xxx as placeholder",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "the OpenAI knot logo as the language model, repeated in the ring, the framed panel and the title",
+    "parts": [
+     "black logo"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "three stacked tinted text blocks with small tab labels (knowledge, state, belief) holding real strings, funnelled by a curly brace into the LLM logo",
+    "parts": [
+     "knowledge block",
+     "state block",
+     "belief block",
+     "curly brace"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "a ring of arrows through state, the ProAgent modules, action and environment, with a second ring in another colour for the teammate",
+    "parts": [
+     "state",
+     "action",
+     "environment",
+     "grey ring",
+     "blue ring"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "a yellow bar labelled memory with peach store arrows dropping in from each module and a dark line returning to the prompt",
+    "parts": [
+     "memory bar",
+     "peach arrows",
+     "return line"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "reflection-loop",
+    "drawn_as": "Fail? branch to an error-message box, then a rounded vertical feedback box, then back into the LLM, all in red",
+    "parts": [
+     "Fail?",
+     "error message",
+     "feedback box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the cyan state box top-left, runs round the left ring to action, then follows the dashed wedge to the big frame, which reads from the prompt blocks through the LLM, analysis, validation and controller to the screenshot."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A small unframed workflow ring on the left and a large rounded frame on the right, joined by two dashed grey lines from the ring's dashed ProAgent box to the frame corners; the key of four arrows sits under the ring, a wide memory bar closes the frame at the bottom.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.12,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light grey knowledge block and label"
+   },
+   {
+    "hex": "#ede9e1",
+    "used_for": "beige language state, state prompt block and Belief Revision"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange verificator box and Plan Validation panel"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "grey error-message and success-message boxes"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "light blue belief and plan boxes and belief prompt block"
+   },
+   {
+    "hex": "#f7aa89",
+    "used_for": "salmon Fail? and Achieved! boxes and verificator tab"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "environment box"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "controller boxes"
+   },
+   {
+    "hex": "#8497b0",
+    "used_for": "action box"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "state box and the cyan arrows from Bob"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "grey arrows of the ProAgent flow, dashed ProAgent box and zoom wedge (stroke)"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red loop arrows and the dashed analysis box (stroke)"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "blue teammate ring and dashed result boxes (stroke)"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "peach store arrows (stroke)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "outline of the memory bars (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "mostly 1.25-1.5 pt coloured arrows, 0.75 pt outlines; 8 dashed shapes (zoom wedge, ProAgent box, analysis and result boxes)",
+  "font": "mixed: serif (Times New Roman) 5.5-9.5 pt for labels and prompt text, sans italic (Arial) in the analysis and result boxes, bold sans in the validation panel, bold serif 13 pt for the ProAgent title",
+  "corners": "mixed",
+  "arrows": "thin straight and elbow arrows with small filled heads in grey, red, peach, cyan; thicker curved blue and grey ring arrows; double-headed blue arrow beside Bob",
+  "rendering": "flat-vector",
+  "effects": "gradient fill on the memory bars; none otherwise",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "key: grey = ProAgent flow, blue = teammate flow, red = loop (feedback and reflection), peach = store into memory; module fills: cyan state, beige language state and belief revision, light blue belief and plan, orange verificator and validation, green controller, blue environment, yellow memory; in text red 'You', blue 'Bob'",
+  "line_style_means": "solid coloured arrows = flows per the key; dashed grey box and wedge = enlarged part; red dashed box = LLM analysis; blue dashed boxes = plan, intention and real behaviour; thick dark grey elbow line = history returning to the prompt",
+  "shape_means": "rounded box = module; tab-labelled text block = prompt section; curly brace = prompt parts merged; logo = LLM; robot = teammate; tall green box = controller; orange panel = validation",
+  "marker_means": "no numbers; Fail? and Achieved! name the two outcomes of validation; coloured words mark who is who",
+  "emphasis": "the bold ProAgent title with logo, the red reflection loop and the orange validation panel are the saturated spots, and the dashed wedge pulls the eye from the small ring to the detailed frame",
+  "reusable_patterns": [
+   "small overview ring at left, dashed zoom wedge to a big framed detail at right with the same module names and colours",
+   "key of four sample arrows that explains the colours of the flows",
+   "stacked text blocks with tab labels merged by a curly brace into the LLM logo",
+   "real example strings in dashed boxes (analysis, plan, intention, real behaviour) so the pipeline reads as a trace",
+   "red feedback loop drawn through a rounded vertical box with rotated text",
+   "the same colours for names in the text (red You, blue Bob) as for the arrows of each agent",
+   "memory bar spanning the width with peach store arrows dropping into it"
+  ],
+  "weaknesses": [
+   "5.5 pt prompt text is hard to read",
+   "red means both 'You' in the text and 'loop' in the key",
+   "elbow connectors crowd the centre right",
+   "grey, red and peach arrows of similar weight are easy to confuse"
+  ]
+ },
+ "resources": {
+  "own": [
+   "an Overcooked-AI game screenshot",
+   "real prompt, analysis, plan and belief strings from the task"
+  ],
+  "stock": [
+   "OpenAI logo, three copies",
+   "cartoon orange robot icon, two copies"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes, arrows, curly brace, dashed frames and zoom wedge",
+   "the ring of loops",
+   "the arrow key"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "ring of modules with state, action, environment",
+   "OpenAI logo as planner",
+   "dashed zoom wedge to a framed panel",
+   "prompt blocks with tab labels and curly brace",
+   "red reflection loop",
+   "Overcooked screenshot with controller arrow",
+   "orange robot Bob",
+   "memory bar with peach store arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "proactive agent",
+   "cooperative LLM agents",
+   "belief revision",
+   "Overcooked-AI",
+   "teammate intention",
+   "plan verification",
+   "reflection loop",
+   "zero-shot coordination"
+  ],
+  "tags": [
+   "zoom-callout",
+   "flow-type-arrows",
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "brand-logo-icon",
+   "mascot-character",
+   "memory-store",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "brace-into-llm",
+    "what": "a large curly brace gathers stacked prompt blocks into one arrow entering the LLM icon"
+   },
+   {
+    "name": "agent-env-ring",
+    "what": "a loop drawn as a ring of arrows through state, action and environment, with agent modules inside it and a second coloured ring for another agent"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Pair a small ring that shows who acts with a dashed wedge into a large framed panel that replays one real turn with actual prompt and output strings, keeping module names and colours identical in both and explaining arrow colours with a four-arrow key.",
+  "suits": "LLM-agent frameworks with a plan-verify-act loop, memory and a second agent, where a real example turn makes the pipeline concrete."
+ },
+ "tags": [
+  "overview-plus-zoom",
+  "real prompt text",
+  "colour-keyed arrows",
+  "logo and mascot icons",
+  "dashed wedge",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Method (p.3)"
+  ],
+  "evidence": [
+   "Overview of our proposed ProAgent framework including the coordination task workflow (left) and inner details of ProAgent pipeline (right).",
+   "The teammate agent’s decision-making loop is formed by the blue solid arrows in the outer circle",
+   "ProAgent enters into a re-plan loop, initiating a recalibration process."
+  ]
+ },
+ "summary": "ProAgent is an LLM-based cooperative agent that infers what its teammate will do, plans a skill, revises its belief from the teammate's real behaviour, verifies the skill and executes it, tested in Overcooked-AI. The figure joins two units by a dashed zoom wedge. At left, a small workflow ring shows state, language state, the LLM (OpenAI logo), belief, plan, verificator, controller and action, with a memory bar and the teammate's own blue loop around the environment. At right, a large framed panel replays one turn with real text: prompt blocks (knowledge, state, belief), the analysis, the plan and teammate intention, belief revision, plan validation with a red reflection loop, then the controller and a game screenshot. A key of four arrow colours explains the flows.",
+ "summary_zh": "ProAgent 总览图：左侧小环图画出 LLM 规划、验证、控制与记忆回路，虚线楔形放大成右侧大框，用 Overcooked 的真实文本演示提示、分析、信念修正、计划验证和反思回路，左下四色箭头图例区分流向。",
+ "confidence": "high",
+ "notes": "Kinds extend the prior (actor-interaction, worked-walkthrough) with stage-pipeline, because the right half is also the five-stage inference pipeline of the text. Panel count 2 follows the caption (left, right); the left unit has no frame or title. The text layer holds 'Planner' and 'Path' strings that are not visible in print. The role of the grey 'I succeeded at pickup(onion)' box between Achieved! and the controller is read from the connectors only.",
+ "venue": "AAAI24"
+}

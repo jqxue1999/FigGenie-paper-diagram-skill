@@ -1,0 +1,574 @@
+{
+ "paper_id": "cvpr24-0031",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "IReNe",
+  "one_liner": "Instant recoloring of a pre-trained NeRF from one user-edited image, by retraining only part of the last layer in about five seconds.",
+  "domain": [
+   "NeRF editing",
+   "recoloring",
+   "novel view synthesis"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "contribution-mosaic",
+   "model-anatomy"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "teaser: two inputs, an opened model box and an edited multi-view output in a top row, then before/after result tiles and a column of zoomed renders below and to the right",
+  "argues": "One edited image is enough to recolor a pre-trained NeRF from every view in five seconds, and the edits can be full-object, multicolour or partial with sharp boundaries.",
+  "subject": "A Lego bulldozer recolored from one edited image, shown as a pipeline, and flower and Lego edits with magnified crops.",
+  "elements": [
+   {
+    "name": "User edited image",
+    "type": "sample",
+    "role": "single image with the user's color edit",
+    "drawn_as": "small thumbnail of a red Lego bulldozer on a light-grey tile",
+    "container": "top zone",
+    "is_contribution": false
+   },
+   {
+    "name": "Pre-trained NeRF",
+    "type": "instance",
+    "role": "the scene model to be edited, shown by renders from several cameras",
+    "drawn_as": "yellow Lego bulldozer render with five view thumbnails tied to it by dotted rays",
+    "container": "top zone",
+    "is_contribution": false
+   },
+   {
+    "name": "Model optimization (IReNe)",
+    "type": "container",
+    "role": "the method: optimises the NeRF so that it reproduces the edited colors",
+    "drawn_as": "heavy black rounded frame opened to show its parts; the word IReNe has coloured letters",
+    "container": "top zone",
+    "is_contribution": true
+   },
+   {
+    "name": "input view",
+    "type": "sample",
+    "role": "image of the object fed to the networks inside the box",
+    "drawn_as": "bulldozer view with a blue frame on a light-grey rounded block",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": null
+   },
+   {
+    "name": "MLP_sigma, MLP_c",
+    "type": "module",
+    "role": "the two NeRF networks, presumably density and colour",
+    "drawn_as": "tall pink-red bars, the second with yellow dots, labelled MLP with a subscript, joined by small arrows",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": false
+   },
+   {
+    "name": "teal neuron block",
+    "type": "module",
+    "role": "layer of neurons feeding the RGB outputs; reads as the last layer that the abstract says is retrained",
+    "drawn_as": "teal rounded block with four small waveform glyphs, one arrow into each, grey lines fanning out to RGB nodes",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": true
+   },
+   {
+    "name": "R G B nodes",
+    "type": "data",
+    "role": "red, green and blue colour outputs, in two triplets",
+    "drawn_as": "six small circles lettered R, G, B; the lower triplet sits in a light-green box",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": null
+   },
+   {
+    "name": "MLP_s and mask",
+    "type": "module",
+    "role": "trainable segmentation module that limits the edit to the object",
+    "drawn_as": "pink-red bars labelled MLP_s inside a light-green box, beside a black-and-white mask of the bulldozer",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": true
+   },
+   {
+    "name": "multiplication node",
+    "type": "operation",
+    "role": "combines the colour outputs with the segmentation mask",
+    "drawn_as": "circle with a cross at the right edge of the box, three arrows entering",
+    "container": "Model optimization (IReNe)",
+    "is_contribution": null
+   },
+   {
+    "name": "Multiview edited color",
+    "type": "instance",
+    "role": "the recolored scene rendered from novel views",
+    "drawn_as": "red Lego bulldozer render with five view thumbnails tied to it by dotted rays",
+    "container": "top zone",
+    "is_contribution": false
+   },
+   {
+    "name": "Total optimization time: 5 seconds",
+    "type": "label",
+    "role": "headline cost of the method",
+    "drawn_as": "stopwatch icon and a large line of text with bold 5 seconds under the model box",
+    "container": "top zone",
+    "is_contribution": true
+   },
+   {
+    "name": "High Quality color editions",
+    "type": "container",
+    "role": "caption of two before/after pairs (orchids, lilies)",
+    "drawn_as": "caption under an original and an edited photo with a magnified crop",
+    "container": "result zone",
+    "is_contribution": null
+   },
+   {
+    "name": "Multicolor editions",
+    "type": "container",
+    "role": "caption of a before/after pair with several colours changed",
+    "drawn_as": "caption under a yellow and a red Lego photo with two crops",
+    "container": "result zone",
+    "is_contribution": null
+   },
+   {
+    "name": "Partial object editions",
+    "type": "container",
+    "role": "caption of a before/after pair where only part of the flowers changes colour",
+    "drawn_as": "caption under an original and an edited photo with a magnified crop",
+    "container": "result zone",
+    "is_contribution": null
+   },
+   {
+    "name": "zoomed renders column",
+    "type": "region",
+    "role": "close-ups of recolored Lego renders to show fine detail",
+    "drawn_as": "three red bulldozer renders each with two black-framed crops, no caption",
+    "container": "right zone",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "User edited image",
+    "to": "Model optimization (IReNe)",
+    "what": "the single edited image enters",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Pre-trained NeRF",
+    "to": "Model optimization (IReNe)",
+    "what": "the pre-trained model and its views enter",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model optimization (IReNe)",
+    "to": "Multiview edited color",
+    "what": "recolored renders from novel views come out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input view",
+    "to": "MLP_sigma, MLP_c",
+    "what": "view goes through the two networks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLP_c",
+    "to": "teal neuron block",
+    "what": "features feed the neuron layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "teal neuron block",
+    "to": "R G B nodes",
+    "what": "neurons connect to both colour triplets",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "R G B nodes",
+    "to": "multiplication node",
+    "what": "both triplets enter the product",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input view",
+    "to": "MLP_s and mask",
+    "what": "elbow arrow to the segmentation branch",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLP_s and mask",
+    "to": "multiplication node",
+    "what": "mask enters the product",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "object render",
+    "to": "view thumbnails",
+    "what": "dotted rays with end dots stand for camera positions",
+    "kind": "other",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "framed box on an edited photo",
+    "to": "magnified crop",
+    "what": "leader lines enlarge the boxed region",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "original photo",
+    "to": "edited photo",
+    "what": "same view before and after the edit, side by side",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "Top zone: edited image and pre-trained NeRF go into the opened IReNe box and come out as a multi-view recolored scene, with the 5-second cost.",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "Lower-left zone: four before/after pairs captioned High Quality, Multicolor and Partial object editions, each with a magnified crop.",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "Right zone: three recolored Lego renders with two black-framed detail crops each.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "sigma, c, s subscripts",
+    "kind": "identity",
+    "at": "under the pink bar stacks",
+    "what": "name the three networks MLP_sigma, MLP_c and MLP_s"
+   },
+   {
+    "marker": "R, G, B",
+    "kind": "identity",
+    "at": "small circles in the model box",
+    "what": "name the red, green and blue colour channels"
+   },
+   {
+    "marker": "High Quality / Multicolor / Partial object editions",
+    "kind": "section",
+    "at": "under the before/after pairs",
+    "what": "name the kind of edit each pair shows"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "user-edited image of a Lego bulldozer recoloured red",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail on a light-grey tile"
+   },
+   {
+    "what": "yellow Lego bulldozer NeRF render with five camera-view thumbnails",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "cut-out render at the centre, five thumbnails on grey tiles joined by dotted rays that end in dots"
+   },
+   {
+    "what": "view of the object inside the model box",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "thumbnail with a blue frame on a grey block at the left of the box"
+   },
+   {
+    "what": "black-and-white segmentation mask of the bulldozer",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "white object on black next to the MLP_s bars"
+   },
+   {
+    "what": "red recolored bulldozer render with five novel-view thumbnails",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "same camera-ray arrangement as the input side so the two can be compared"
+   },
+   {
+    "what": "before/after photos of orchids, lilies and a Lego bulldozer with magnified crops",
+    "content": "natural-image",
+    "role": "result",
+    "count": 13,
+    "medium": "bitmap",
+    "treatment": "equal-size original and edited tiles side by side, a white-framed box on the edited tile and a crop overlapping its corner, tied by white leader lines, caption below"
+   },
+   {
+    "what": "red Lego renders with detail crops",
+    "content": "3d-render",
+    "role": "result",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "three renders each with two black-framed crops tied by black leader lines; no captions"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "stopwatch",
+    "stands_for": "the total optimization time",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "small circles lettered R, G, B in red, green and blue",
+    "stands_for": "the colour output channels",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "circle with a cross",
+    "stands_for": "multiplication of colour outputs and mask",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "recoloring a yellow Lego bulldozer to red from one edited image and rendering it from five novel views",
+    "form": "input thumbnail and camera-ray renders on both sides of the model box",
+    "real_values": true
+   },
+   {
+    "what": "edit types on real scenes: orchids pink to purple, lilies orange to yellow, Lego yellow to red with several colours, one cluster of lilies orange to cyan",
+    "form": "before/after tile pairs with captions and zoomed crops",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "multi-view-cameras",
+    "drawn_as": "a rendered object with five view thumbnails on light-grey tiles tied to it by dotted rays that end in dots",
+    "parts": [
+     "object render",
+     "view thumbnails",
+     "dotted rays"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "mlp-bars",
+    "drawn_as": "two or three tall pink-red bars per network, some with small yellow dots for neurons, labelled MLP with a subscript and joined by thin arrows",
+    "parts": [
+     "bars",
+     "yellow dots",
+     "subscript label"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the User edited image at the top left, follows the thick arrows through the IReNe box to Multiview edited color, then drops to the before/after tiles at the lower left and ends in the zoomed renders at the right."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "Three zones split by dashed rules. The top zone runs left to right: two stacked inputs, a heavy-framed model box opened to show its networks, and the edited multi-view output, with a stopwatch line under the box. The lower-left zone holds four captioned before/after photo pairs in two columns of two, each with a magnified crop. A tall right zone stacks three red Lego renders with two black-framed crops each.",
+  "panel_count": 3,
+  "lanes": "four aligned before/after pairs, two per row, in the lower-left zone",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "other",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.02,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ececec",
+    "used_for": "light-grey tiles behind thumbnails and the grey block behind the first networks in the model box"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "thick arrows, the model-box frame, zoom frames and leader lines in the right column, the mask background"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "page ground; frames and leader lines on the flower photos"
+   },
+   {
+    "hex": "#7ed6c6",
+    "used_for": "teal neuron block in the model box",
+    "approx": true
+   },
+   {
+    "hex": "#f07878",
+    "used_for": "pink-red bars of the MLPs",
+    "approx": true
+   },
+   {
+    "hex": "#e6f5d2",
+    "used_for": "light-green box around the segmentation branch and the lower RGB triplet",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "4.25 pt black on the model box and the main arrows; 1.25 pt white or black frames and leader lines on photos; thin 0.5 pt lines inside the box; dashed zone separators drawn as segmented lines",
+  "font": "sans (Calibri), 8.5 pt labels, 10.5 pt cost line with a bold 5 seconds",
+  "corners": "mixed",
+  "arrows": "thick straight black arrows between stages, small arrows inside the box, dotted camera rays without heads, solid leader lines for zoom",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = the user's edit and the recolored outputs, yellow = the original Lego object; R, G, B circles = colour channels; inside the box grey = input view and early networks, teal = neuron layer, light green = segmentation branch; white leader lines on photos, black on the render column",
+  "line_style_means": "thick black arrows = main data flow; thin arrows inside the box = layer-to-layer flow; dotted lines ending in dots = camera rays to views; long dashes = separators between zones; solid lines from a frame to a crop = zoom",
+  "shape_means": "heavy rounded frame = the method being opened up; tall bars = MLP layers; circle with a cross = multiplication; grey tile = a rendered view; stopwatch = optimisation time",
+  "marker_means": "subscripts sigma, c, s name the three MLPs; R, G, B name colour channels; captions under the tile pairs name the edit type",
+  "emphasis": "thick arrows and the heavy frame around IReNe; 5 seconds in larger bold type with a stopwatch; large photos with crops take most of the area",
+  "reusable_patterns": [
+   "two small inputs joined by thick arrows to an opened model box and on to a multi-view output",
+   "object render with a ring of camera-view thumbnails on dotted rays for multi-view input and output",
+   "before/after photo pairs with a framed region on the edited tile magnified in a crop that overlaps the corner",
+   "right-hand column of renders with black-framed crops for fine detail",
+   "stopwatch line under the model box stating the cost headline",
+   "dashed rules separating method, result tiles and close-ups",
+   "title word coloured letter by letter to echo RGB"
+  ],
+  "weaknesses": [
+   "the opened model box packs many small parts (bars, glyphs, RGB nodes) without a key, so the roles of the teal block and of the two RGB triplets are not self-explanatory",
+   "the right column of crops has no captions and no mention in the labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "captured and NeRF-rendered views of the Lego bulldozer",
+   "before/after edits of flower and Lego scenes with magnified crops",
+   "a segmentation mask"
+  ],
+  "stock": [
+   "stopwatch icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "thick arrows",
+   "model box with MLP bars, neuron block and RGB nodes",
+   "dotted camera rays",
+   "zoom frames and leader lines",
+   "dashed zone separators"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "Lego bulldozer renders",
+   "camera-view thumbnails on dotted rays",
+   "opened model box with MLP bars and RGB nodes",
+   "multiplication node",
+   "before/after flower photo pairs with zoom crops",
+   "stopwatch caption",
+   "black-framed zoom crops"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "NeRF",
+   "recoloring",
+   "scene editing",
+   "multi-view consistency",
+   "instant optimization",
+   "novel view synthesis",
+   "segmentation module",
+   "Lego"
+  ],
+  "tags": [
+   "zoom-callout",
+   "cost-badges",
+   "claim-banner"
+  ],
+  "new_tags": [
+   {
+    "name": "before-after-tile-pairs",
+    "what": "equal-size original and edited photo tiles side by side, with a framed region on the edited tile magnified in a crop that overlaps the tile corner"
+   },
+   {
+    "name": "camera-ray-thumbnails",
+    "what": "an object render with a ring of view thumbnails tied to it by dotted rays, standing for multi-view inputs or novel-view outputs"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "A teaser can combine a short input-to-output chain with real images, one opened box for the new mechanism and a stopwatch line for the cost headline, with result tiles below as before/after pairs whose framed regions are magnified by leader lines.",
+  "suits": "Editing, rendering or generation papers that must show a quick pipeline and many visual results with fine detail in one teaser."
+ },
+ "tags": [
+  "teaser",
+  "photo-heavy",
+  "dashed zone separators",
+  "thick black arrows",
+  "before/after pairs",
+  "zoom crops",
+  "camera rays"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.1)"
+  ],
+  "evidence": [
+   "IReNe enables instant 360◦recoloring of pre-trained NeRFs using only a single image edited by the user (top row).",
+   "various types of recoloring are possible, including full-object, partial-object, and multiple-object recoloring.",
+   "We introduce an optimization scheme to avoid color bleeding at object boundaries and ensure consistency in view-dependent effects."
+  ]
+ },
+ "summary": "IReNe recolors a pre-trained NeRF in about five seconds from one image the user has edited. The teaser has three zones split by dashed rules. At the top, a user-edited image of a Lego bulldozer and a pre-trained NeRF, the yellow toy with five camera views on dotted rays, enter a heavy-framed box labelled Model optimization (IReNe) through thick arrows. The box opens to show MLP bars, a teal neuron layer, RGB nodes, a multiplication node and a segmentation branch with a mask, and its output is the red bulldozer seen from five new views, with a stopwatch line stating 5 seconds. Below, before/after pairs of orchids, lilies and Lego (full, multicolour and partial edits) carry magnified crops, and a right column of red renders shows close-ups.",
+ "summary_zh": "IReNe 只用一张用户改色的图像，约5秒内为预训练NeRF重新上色。图1分三区：上方为输入、展开的IReNe模型框和多视角改色输出，并标出5秒总耗时；左下为花卉和乐高的改色前后对比与放大图；右侧为红色乐高渲染及局部放大。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper text mentions the figure, so the roles inside the model box (teal block, the two RGB triplets, the product node, MLP_s with mask) are read from the picture and the abstract only. The SVG canvas is 511.9 x 253.0 pt while the drawn content spans about 575 x 267 pt (the index aspect is 2.15, the preview image ratio is 2.02). The zones are separated by dashed rules but carry no titles, so they are counted as three unlabelled panels. Colours of the model-box parts are approximate readings from the picture. [layout.aspect set to 2.02 (was 2.15): the figure box was corrected by hand, see workspace/bbox_overrides.json.]",
+ "venue": "CVPR24"
+}

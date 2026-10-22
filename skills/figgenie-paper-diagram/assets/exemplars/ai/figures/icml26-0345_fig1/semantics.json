@@ -1,0 +1,421 @@
+{
+ "paper_id": "icml26-0345",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DSB",
+  "one_liner": "Training-free dynamic sliding-block scheduling (plus DSB Cache) for diffusion LLMs, replacing fixed blocks to improve quality and speed.",
+  "domain": [
+   "diffusion language models",
+   "semi-autoregressive decoding",
+   "inference scheduling"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "the same token strip redrawn at steps T and T+N, each as a confidence row over a decoded-state row, plus a ground-truth row; red call-outs mark the two failures; only the problem is drawn, not DSB",
+  "argues": "A fixed block schedule delays easy, high-confidence tokens that lie just outside the active block and forces low-confidence tokens inside it to be decoded early, causing wrong answers.",
+  "subject": "Token rows of a diffusion LLM decoding a toy question with fixed blocks at steps T and T+N, versus the ground truth.",
+  "elements": [
+   {
+    "name": "Prompt: Lisa has four cats, and Eric has two. How many dogs do they have in total?",
+    "type": "sample",
+    "role": "the question the diffusion LLM answers",
+    "drawn_as": "wide rounded box with thick black outline spanning the top, bold serif sentence",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Denoise T",
+    "type": "data",
+    "role": "token confidences at the early denoising step T (Lisa has four cats | and Eric has total | . They in total | cats total and .)",
+    "drawn_as": "row of 16 word cells in four rounded groups of four, filled dark yellow (#f1c232) to cream (#fff2cc) by confidence",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Answer T",
+    "type": "data",
+    "role": "what is decoded at step T: only the first group",
+    "drawn_as": "row with Lisa has four cats in blue (#6d9eeb) cells followed by three grey slots",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "block1 / block2 / block3",
+    "type": "container",
+    "role": "the fixed-size blocks of positions that are decoded one after another",
+    "drawn_as": "light-grey (#eeeeee) rounded slots with monospace labels, one per undecoded group",
+    "container": "Answer T",
+    "is_contribution": false
+   },
+   {
+    "name": "High conf but outside the active block",
+    "type": "label",
+    "role": "names symptom 1: confident tokens that cannot be decoded because they lie outside the active block",
+    "drawn_as": "red bold text with a curved red arrow starting under the block1 slot",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Denoise T+N",
+    "type": "data",
+    "role": "token confidences at a later step T+N (first two groups already decoded)",
+    "drawn_as": "row with two blue groups, a third group of blue cells ending in a cream six, and a yellow fourth group",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Answer T+N",
+    "type": "data",
+    "role": "what is decoded at step T+N: the third group is forced out, including six",
+    "drawn_as": "three blue groups, the last token six in bold red, and one grey block3 slot",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "six",
+    "type": "instance",
+    "role": "the low-confidence token decoded prematurely and wrongly",
+    "drawn_as": "bold red word in the last cell of the third group",
+    "container": "Answer T+N",
+    "is_contribution": false
+   },
+   {
+    "name": "Low conf but decoded wrong answer!",
+    "type": "label",
+    "role": "names symptom 2: a low-confidence token inside the active block is committed and is wrong",
+    "drawn_as": "red bold two-line text with a curved red arrow from the six cell",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Groud Truth",
+    "type": "data",
+    "role": "reference text (Lisa has four cats and Eric has two. They have zero dogs in total.)",
+    "drawn_as": "row of white cells with thick black outlines in four groups, zero in the position of six",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "vertical ellipsis",
+    "type": "other",
+    "role": "elided denoising steps before, between and after the two snapshots",
+    "drawn_as": "three stacked black dots between row pairs",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "high conf / low conf key",
+    "type": "container",
+    "role": "key to the yellow confidence colours",
+    "drawn_as": "dashed red rounded box at the right holding a five-step vertical bar from dark yellow to white, labelled high conf at the top and low conf at the bottom",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Prompt",
+    "to": "token rows",
+    "what": "the question sits above all rows as their context; no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Denoise T",
+    "to": "Answer T",
+    "what": "the confidence row above decides which positions the row below has decoded; stacked, no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Answer T",
+    "to": "Denoise T+N",
+    "what": "denoising continues for N more steps, elided by vertical dots",
+    "kind": "time",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Denoise T+N",
+    "to": "Answer T+N",
+    "what": "confidence row above, decoded row below, as at step T",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "High conf but outside the active block",
+    "to": "block1 slot and the confident tokens above it",
+    "what": "red curved arrow from under the block1 slot to the red text; target tokens are the dark-yellow cells in blocks 2 and 3 of Denoise T",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "six",
+    "to": "Low conf but decoded wrong answer!",
+    "what": "red curved arrow from the six cell to the red text",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "six (Answer T+N)",
+    "to": "zero (Groud Truth)",
+    "what": "the same position holds six in the answer and zero in the truth, rows aligned",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "high conf / low conf key",
+    "to": "yellow cells in the Denoise rows",
+    "what": "yellow steps map to token confidence",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "T, T+N",
+    "kind": "order",
+    "at": "row labels Denoise / Answer",
+    "what": "an early denoising step T and a later step T+N"
+   },
+   {
+    "marker": "block1, block2, block3",
+    "kind": "identity",
+    "at": "grey slots in the Answer rows",
+    "what": "name the fixed blocks of positions"
+   },
+   {
+    "marker": "vertical ellipsis",
+    "kind": "order",
+    "at": "between and around the row pairs",
+    "what": "elided steps of the denoising chain"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "toy question 'Lisa has four cats, and Eric has two. How many dogs do they have in total?' decoded as '... They have six dogs in total.' against the truth 'zero'",
+    "form": "token rows with real words, adapted from a prior paper",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of word cells in rounded groups of four, coloured by confidence (yellow) or decoded state (blue), a grey slot standing for a whole undecoded block",
+    "parts": [
+     "word cells",
+     "groups",
+     "grey block slots"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "two denoising-step snapshots separated by vertical ellipses, no arrows, finishing in a ground-truth row",
+    "parts": [
+     "step T",
+     "step T+N",
+     "elided steps",
+     "ground truth"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the prompt bar, then reads the Denoise T and Answer T rows, the first red call-out, the Denoise T+N and Answer T+N rows with the second call-out, and ends at the ground-truth row; the key at the right explains the colours."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A prompt bar spans the top; below it five aligned token rows (Denoise T, Answer T, Denoise T+N, Answer T+N, Groud Truth) share four column groups; vertical dots mark elided steps, two red call-outs sit in the gaps and a dashed confidence key fills the right margin.",
+  "panel_count": 1,
+  "lanes": "5 aligned token rows over 4 aligned groups of four tokens",
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "right",
+  "panel_markers": "none",
+  "step_markers": "in-text",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.83,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f1c232",
+    "used_for": "highest-confidence token cells and the top step of the key"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "second-highest confidence cells"
+   },
+   {
+    "hex": "#ffe599",
+    "used_for": "medium-low confidence cells"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "lowest-confidence cream cells"
+   },
+   {
+    "hex": "#6d9eeb",
+    "used_for": "already decoded tokens in the Answer rows and decoded groups"
+   },
+   {
+    "hex": "#6c9eeb",
+    "used_for": "second, almost identical blue of other decoded cells"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "grey block slots not yet decoded"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "thin dark-grey outlines of model token cells"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "prompt bar and ground-truth outlines, text"
+   },
+   {
+    "hex": "#d71440",
+    "used_for": "red call-outs, curved arrows, the wrong token six and the dashed key box"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark grey on model token cells, 1.25 pt black on the prompt bar and the ground-truth groups, thin red for arrows and the dashed key box",
+  "font": "serif bold (Times New Roman) 7.5-11 pt, 8 pt in token cells, 9.5 pt red call-outs, 11 pt prompt; monospace bold (Courier New) for block labels; 15 pt ellipsis dots",
+  "corners": "mixed",
+  "arrows": "two curved red arrows with filled heads; no flow arrows between rows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "yellow gradient = token confidence (dark yellow high, cream low); blue = already decoded; light-grey slot = block not yet decoded; white cell with thick black outline = ground truth; red = failure call-outs",
+  "line_style_means": "dashed red rounded box = the confidence key; thick black outline = prompt and ground truth; thin dark-grey outline = model tokens",
+  "shape_means": "each cell is one token; a rounded group of four cells is one block; a grey monospace slot is a whole undecoded block",
+  "marker_means": "T and T+N are denoising steps; vertical dots are skipped steps; red bold six is the premature wrong token",
+  "emphasis": "red bold call-outs with curved arrows on exactly two spots, the confident tokens left outside the active block and the wrong six; the thick-outlined ground-truth row is the reference",
+  "reusable_patterns": [
+   "token rows redrawn at an early and a late step, each as a confidence row over a decoded-state row, with the ground-truth row at the bottom",
+   "token confidence as a yellow gradient on cells with a stepped key bar in a dashed box",
+   "grey monospace slots standing for blocks not yet decoded",
+   "two red call-outs with curved arrows naming the failure in plain words",
+   "vertical ellipses between step snapshots to show elided steps"
+  ],
+  "weaknesses": [
+   "the ground-truth label is misspelled Groud Truth",
+   "the first red arrow starts under the block1 slot and does not clearly point at the high-confidence cells it talks about",
+   "the text layer holds hidden duplicates of some labels that do not show in the print"
+  ]
+ },
+ "resources": {
+  "own": [
+   "toy prompt and decoding states, adapted from a prior paper"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token rows, cells and block slots",
+   "red call-outs and arrows",
+   "confidence key bar",
+   "prompt bar"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "prompt bar",
+   "five aligned token rows",
+   "blue decoded tokens",
+   "yellow confidence-gradient tokens",
+   "grey block slots",
+   "red call-outs with curved arrows",
+   "confidence key bar in a dashed box",
+   "ground-truth token row"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "diffusion LLM",
+   "block scheduling",
+   "semi-autoregressive decoding",
+   "token confidence",
+   "parallel decoding",
+   "premature commitment",
+   "masked diffusion",
+   "limitation of naive schedule"
+  ],
+  "tags": [
+   "token-strip",
+   "problem-only",
+   "error-callouts"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-scale-key",
+    "what": "a stepped colour bar labelled high and low inside a framed (dashed) key explains a score-coloured fill used on cells or spans"
+   },
+   {
+    "name": "step-snapshot-rows",
+    "what": "the same token strip redrawn per decoding step as stacked aligned rows, vertical ellipses between steps and the target row at the bottom"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a failure of a scheduling rule on one toy sentence: redraw the same token strip at an early and a late step, colour cells by confidence and decoded state, add the ground-truth row, and pin two red call-outs on exactly the two symptoms.",
+  "suits": "decoding, scheduling or masking methods whose flaw shows in which token is committed when; a toy sentence with two steps carries the whole argument."
+ },
+ "tags": [
+  "token rows",
+  "aligned lanes",
+  "yellow gradient",
+  "red call-outs",
+  "dashed key box",
+  "serif bold text",
+  "toy sentence"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Background & Preliminaries (p.4)"
+  ],
+  "evidence": [
+   "Figure 1. Limitation of naive block scheduling.",
+   "which can lead to premature, incorrect commitments (e.g., decoding “six” instead of the ground-truth “zero”)",
+   "Figure 1 depicts an example adapted from (Lu et al., 2025)"
+  ]
+ },
+ "summary": "DSB is a training-free block scheduling method (with a KV-cache variant, DSB Cache) for diffusion LLMs that replaces the fixed, predefined block schedule with a sliding block of dynamic size. Figure 1 does not draw the method; it shows the limitation of the naive schedule on a toy question, Lisa has four cats and Eric has two, how many dogs in total. Under a prompt bar, five aligned token rows show the denoising step T and a later step T+N, each as a confidence row (yellow gradient) above a decoded-state row (blue tokens, grey block slots), with a ground-truth row below. Two red call-outs name the symptoms: high-confidence tokens stuck outside the active block, and the low-confidence six decoded instead of zero. A dashed key bar explains the confidence colours.",
+ "summary_zh": "DSB 是面向扩散大模型的免训练动态滑动块调度。图只画朴素固定分块的缺陷：同一道玩具题在步骤 T 与 T+N 的词元行，按置信度着色并标出已解码词，两处红色标注指出块外高置信词被拖延、块内低置信词被错解成 six。",
+ "confidence": "high",
+ "notes": "Only the problem is drawn (no DSB schedule), hence the problem-only tag. The text layer carries hidden duplicates (a second Prompt at 10.5 pt, a 7.5 pt Denoise T, the word Global) that are not visible in the print. The label Groud Truth is spelled that way in the print. The target of the first red arrow is ambiguous; the caption says the confident cells lie outside the active block.",
+ "venue": "ICML26"
+}

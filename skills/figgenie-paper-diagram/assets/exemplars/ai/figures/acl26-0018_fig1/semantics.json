@@ -1,0 +1,454 @@
+{
+ "paper_id": "acl26-0018",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "UNIKIE-BENCH",
+  "one_liner": "A unified benchmark for evaluating large multimodal models on key information extraction from document images, in constrained-category and open-category tracks.",
+  "domain": [
+   "key information extraction",
+   "visual document understanding",
+   "LMM benchmark"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic",
+   "worked-walkthrough"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "a task-formulation panel plus two track panels, each a nested taxonomy of domains and scenarios with real document thumbnails and counts under the title",
+  "argues": "UNIKIE-BENCH poses key information extraction as schema-guided structured prediction and covers it with two complementary tracks that span many document domains, types, scenarios and languages.",
+  "subject": "A schema plus a document image going through an LMM into a filled JSON, and the document domains and types of the two tracks as thumbnails.",
+  "elements": [
+   {
+    "name": "Task Formulation",
+    "type": "container",
+    "role": "panel that states the KIE task: schema and document in, structured JSON out",
+    "drawn_as": "tall rounded black-framed panel with a bold italic title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Schema & Document",
+    "type": "container",
+    "role": "the model's input: an empty JSON schema and a document image",
+    "drawn_as": "rounded box with a right-aligned heading, monospace JSON on the left and an invoice image on the right",
+    "container": "Task Formulation",
+    "is_contribution": false
+   },
+   {
+    "name": "empty JSON schema",
+    "type": "text-block",
+    "role": "fields to extract (store_name, invoice_num, billing_to with name, contact, email) with empty string values",
+    "drawn_as": "monospace listing in editor colours: blue keys, dark-red strings",
+    "container": "Schema & Document",
+    "is_contribution": false
+   },
+   {
+    "name": "Large Multimodal Model",
+    "type": "module",
+    "role": "reads the document image under the schema and produces the structured result",
+    "drawn_as": "blue robot-head icon with a bold sans label, between two light-blue funnels",
+    "container": "Task Formulation",
+    "is_contribution": false
+   },
+   {
+    "name": "Output",
+    "type": "container",
+    "role": "the filled JSON: store_name, invoice_num and billing_to with name, contact and email",
+    "drawn_as": "rounded box with a right-aligned heading and the same listing with values filled in",
+    "container": "Task Formulation",
+    "is_contribution": false
+   },
+   {
+    "name": "Constrained-Category KIE Track",
+    "type": "container",
+    "role": "track with scenario-predefined schemas",
+    "drawn_as": "tall rounded panel with a bold italic two-line title and a bold underlined count line",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "4,472 documents, 3 domains, 11 scenarios",
+    "type": "label",
+    "role": "size of the constrained-category track",
+    "drawn_as": "bold underlined line under the title",
+    "container": "Constrained-Category KIE Track",
+    "is_contribution": false
+   },
+   {
+    "name": "Business Transactions",
+    "type": "container",
+    "role": "domain with four scenarios: Comm., Retail, Catering, Acco.",
+    "drawn_as": "rounded box with a dark navy heading band and four labelled thumbnails",
+    "container": "Constrained-Category KIE Track",
+    "is_contribution": false
+   },
+   {
+    "name": "Regulated Records",
+    "type": "container",
+    "role": "domain with three scenarios: Tax., Nut., Med.",
+    "drawn_as": "rounded box with a navy heading band and three labelled thumbnails",
+    "container": "Constrained-Category KIE Track",
+    "is_contribution": false
+   },
+   {
+    "name": "Public Services",
+    "type": "container",
+    "role": "domain with four scenarios: Admi., Edu., Post., Adv.",
+    "drawn_as": "rounded box with a navy heading band and four labelled thumbnails",
+    "container": "Constrained-Category KIE Track",
+    "is_contribution": false
+   },
+   {
+    "name": "Open-Category KIE Track",
+    "type": "container",
+    "role": "track that extracts any key information explicitly present in the document",
+    "drawn_as": "tall rounded panel with a bold italic two-line title and a bold underlined count line",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "1,661 documents, 4 types, 2 languages",
+    "type": "label",
+    "role": "size of the open-category track",
+    "drawn_as": "bold underlined line under the title",
+    "container": "Open-Category KIE Track",
+    "is_contribution": false
+   },
+   {
+    "name": "Receipt / Invoice / Form / Contract",
+    "type": "container",
+    "role": "the four document types of the open track",
+    "drawn_as": "four stacked rounded boxes, each with a navy heading band and a row of four thumbnails",
+    "container": "Open-Category KIE Track",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Schema & Document",
+    "to": "Large Multimodal Model",
+    "what": "schema and document image are fed in",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Large Multimodal Model",
+    "to": "Output",
+    "what": "the filled JSON is produced",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Constrained-Category KIE Track",
+    "to": "Business Transactions, Regulated Records, Public Services",
+    "what": "three domains stacked inside the track",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "each domain box",
+    "to": "its scenario thumbnails (Comm., Retail, ... Adv.)",
+    "what": "one thumbnail per scenario, 11 in all",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Open-Category KIE Track",
+    "to": "Receipt, Invoice, Form, Contract",
+    "what": "four document types, four thumbnails each",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Task Formulation",
+    "to": "the two tracks",
+    "what": "the schema-guided formulation underlies both tracks; no arrow joins the panels",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Task Formulation",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "One KIE instance: an empty JSON schema and a document image go into the large multimodal model and a filled JSON comes out.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Constrained-Category KIE Track",
+    "kind": "scope-overview",
+    "axis": "alternatives",
+    "shows": "Three domains and eleven scenarios with predefined schemas, one real document thumbnail per scenario.",
+    "verdict": "ours"
+   },
+   {
+    "label": "Open-Category KIE Track",
+    "kind": "scope-overview",
+    "axis": "alternatives",
+    "shows": "Four document types with four thumbnails each, in two languages, for extracting any explicit key information.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Task Formulation / Constrained-Category KIE Track / Open-Category KIE Track",
+    "kind": "section",
+    "at": "panel titles",
+    "what": "bold italic titles of the three panels"
+   },
+   {
+    "marker": "Business Transactions, Regulated Records, Public Services, Receipt, Invoice, Form, Contract",
+    "kind": "section",
+    "at": "navy bands",
+    "what": "white serif titles on dark navy bands head each domain or document type"
+   },
+   {
+    "marker": "Comm., Retail, Catering, Acco., Tax., Nut., Med., Admi., Edu., Post., Adv.",
+    "kind": "identity",
+    "at": "above each constrained-track thumbnail",
+    "what": "abbreviated scenario names, one per thumbnail"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "invoice of an online store, full page",
+    "content": "document",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "enlarged page with a thick dark border, placed right of the empty schema"
+   },
+   {
+    "what": "photos and scans of receipts, bills, tax invoices, nutrition labels, medical and school records, postal forms and advertisements, one per scenario",
+    "content": "document",
+    "role": "data-thumbnail",
+    "count": 11,
+    "medium": "bitmap",
+    "treatment": "thin black-framed thumbnails in a row under abbreviated scenario labels; real captures with skew, noise and mixed Chinese and English text"
+   },
+   {
+    "what": "document images of the four open-track types, four per type, partly Chinese",
+    "content": "document",
+    "role": "data-thumbnail",
+    "count": 16,
+    "medium": "bitmap",
+    "treatment": "rows of four black-framed page thumbnails inside each type box; text is unreadable at this size and acts as texture"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "robot head with an antenna and a smiling face",
+    "stands_for": "the Large Multimodal Model",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one KIE instance: schema fields store_name, invoice_num, billing_to (name, contact, email), then the filled values 'Athletics Store', 'A-2024-INV-0312', 'Alexandra Reynolds', '+1 (919) 555-8942', 'a.reynolds@email.com'",
+    "form": "two monospace JSON boxes (empty and filled) around the model, beside the invoice image",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vlm",
+    "drawn_as": "robot-head icon labelled Large Multimodal Model between two light-blue funnels, input above and output below",
+    "parts": [
+     "robot head",
+     "label",
+     "input funnel",
+     "output funnel"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "rounded box per domain or type with a navy title band and a row of document thumbnails; counts sit in the track heading",
+    "parts": [
+     "navy title band",
+     "thumbnail row",
+     "count line"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Left to right across the three panels; in the first panel top to bottom from schema and document through the model to the output; in the track panels top to bottom through the domain or type boxes."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three tall rounded panels side by side on a faintly tinted canvas. The left one runs top to bottom: schema and document box, a funnel down to a robot icon, a funnel on to the output box. The middle and right panels each stack titled boxes with a navy heading band and a row of document thumbnails, under a bold italic title and a count line.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.73,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#002060",
+    "used_for": "dark navy heading bands of the domain and type boxes, with white serif titles"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "faint canvas tint behind the white panels",
+    "opacity": 0.35
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "fill of panels and boxes"
+   },
+   {
+    "hex": "#0451a5",
+    "used_for": "JSON keys in the code boxes"
+   },
+   {
+    "hex": "#a31515",
+    "used_for": "JSON string values in the code boxes"
+   },
+   {
+    "hex": "#3b3b3b",
+    "used_for": "braces and punctuation in the code boxes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black rounded outlines on panels and boxes, thin black frames on thumbnails",
+  "font": "mixed: bold italic sans 10 pt panel titles, serif 7.5 pt box headings, bold sans 6.5 pt scenario labels and count lines, monospace (Menlo) 5.5 pt JSON listings",
+  "corners": "rounded",
+  "arrows": "no arrows: light-blue gradient funnels (bitmaps) join the input box, the model icon and the output box",
+  "rendering": "flat-vector",
+  "effects": "gradient fill on the two funnels; otherwise none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "nearly monochrome: dark navy bands head every domain or type box; blue and dark red appear only inside the code boxes (keys versus string values); the document thumbnails carry the only real colour",
+  "line_style_means": "solid black rounded frames nest panel, box and thumbnail; no dashed lines",
+  "shape_means": "funnel = the model takes an input and gives an output; rounded box = a domain or document type; navy band = the title of that box",
+  "marker_means": "abbreviated bold labels above thumbnails name scenarios; underlined count lines state the size of a track",
+  "emphasis": "bold italic panel titles and bold underlined counts; real document thumbnails make the diversity of the benchmark visible at a glance",
+  "reusable_patterns": [
+   "count line under each panel title (documents, domains, scenarios, types, languages)",
+   "task panel with an input box, a model icon and an output box joined by gradient funnels",
+   "empty and filled JSON boxes in editor colours to define a structured-output task",
+   "rows of real document thumbnails under short scenario labels",
+   "navy title bands on rounded boxes for domains and types",
+   "same box grammar reused for both tracks so they can be compared"
+  ],
+  "weaknesses": [
+   "thumbnails are far too small to read, so the documents work as texture",
+   "scenario labels are abbreviated (Comm., Acco., Admi., Adv.) and not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real document images from the benchmark",
+   "an invoice with its filled JSON",
+   "document counts of the two tracks"
+  ],
+  "stock": [
+   "robot-head icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded panels and boxes",
+   "navy title bands",
+   "light-blue funnels",
+   "JSON listings"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three rounded panels",
+   "empty and filled JSON code boxes",
+   "invoice image",
+   "robot-head model icon with two funnels",
+   "navy domain title bands",
+   "rows of document thumbnails",
+   "count lines under panel titles"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "key information extraction",
+   "visual documents",
+   "large multimodal models",
+   "benchmark",
+   "schema-guided extraction",
+   "receipts",
+   "invoices",
+   "structured JSON output"
+  ],
+  "tags": [
+   "task-definition",
+   "code-snippet-box",
+   "annotated-record-card",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "count-subtitle",
+    "what": "a bold underlined line of counts (documents, domains, scenarios, types, languages) right under each panel title"
+   },
+   {
+    "name": "thumbnail-rows-by-category",
+    "what": "rows of real sample thumbnails under short category labels inside titled domain boxes, mapping the coverage of a dataset"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open a benchmark overview with one panel that defines the task through an empty and a filled structured output around a model icon, then show each track as a nested taxonomy: titled boxes with rows of real thumbnails under short labels and a count line under the panel title.",
+  "suits": "Benchmarks and datasets whose coverage is best shown by real samples per category, plus a short task definition with structured output."
+ },
+ "tags": [
+  "three rounded panels",
+  "document thumbnails",
+  "navy title bands",
+  "monospace JSON boxes",
+  "count lines",
+  "near-monochrome"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "UNIKIE-BENCH is built upon a schema-guided KIE formulation to enable end-to-end evaluation of LMMs.",
+   "It comprises two complementary evaluation tracks: the constrained-category KIE track and the open-category KIE track."
+  ]
+ },
+ "summary": "UNIKIE-BENCH is a benchmark for key information extraction (KIE) from document images by large multimodal models. Figure 1 has three rounded panels. The left one defines the task: an empty JSON schema and an invoice image go into a robot-head icon labelled Large Multimodal Model, and a filled JSON comes out. The middle panel, the constrained-category track (4,472 documents, 3 domains, 11 scenarios), and the right panel, the open-category track (1,661 documents, 4 types, 2 languages), are drawn as stacked boxes with navy title bands and rows of real document thumbnails under short scenario or type labels. The palette is nearly monochrome navy on white, with serif titles and monospace code.",
+ "summary_zh": "UNIKIE-BENCH 评测大模型从文档图像抽取关键信息。图1分三个圆角面板：任务定义（空JSON模式加发票图经多模态模型得到填好的JSON）、受限类别赛道和开放类别赛道，后两者用深蓝标题条和真实文档缩略图展示领域与类型。",
+ "confidence": "high",
+ "notes": "Prior order contribution-mosaic, scope-overview changed to scope-overview first because the two track panels map the benchmark's coverage; worked-walkthrough added for the task panel. The code colours match a VS Code light theme. The funnels between the schema box, the model and the output are bitmaps.",
+ "venue": "ACL26"
+}

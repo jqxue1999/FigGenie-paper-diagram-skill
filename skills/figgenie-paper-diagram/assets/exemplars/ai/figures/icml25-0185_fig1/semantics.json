@@ -1,0 +1,463 @@
+{
+ "paper_id": "icml25-0185",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TOPF (Topological Point Features)",
+  "one_liner": "Computes per-point topological features of a point cloud from persistent-homology generators, projected to harmonic space and averaged over incident simplices.",
+  "domain": [
+   "topological data analysis",
+   "persistent homology",
+   "point clouds"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "state-snapshots",
+  "variant_note": "one toy point cloud redrawn under four big numerals, entering from a grey Input and leaving as a coloured Output, with an Applications inset",
+  "argues": "Loop generators from persistent homology can be turned into point-level features, one colour per topological feature, that carry global shape information to every point.",
+  "subject": "A toy point cloud, a square loop with three small corner loops, followed through four algorithm steps to per-point feature vectors.",
+  "elements": [
+   {
+    "name": "Input",
+    "type": "data",
+    "role": "point cloud X in n-dimensional space: here a square-shaped loop with three small loops at its corners",
+    "drawn_as": "grey dot cloud with a bold title inside the square",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Applications",
+    "type": "container",
+    "role": "downstream uses: Topological Node Embeddings in Biology, Machine Learning, Computer Vision, etc.",
+    "drawn_as": "grey box with a navy outline, bold title, two sample pictures and a three-line caption",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "1 Compute persistent homology",
+    "type": "operation",
+    "role": "persistent homology of an alpha/VR filtration, shown as a barcode whose bars correspond to loops in the point cloud",
+    "drawn_as": "big numeral, two-line caption under a coloured barcode",
+    "container": "step row",
+    "is_contribution": false
+   },
+   {
+    "name": "Bars correspond to loops in the point cloud",
+    "type": "label",
+    "role": "reads the barcode: one bar per loop",
+    "drawn_as": "four-line note beside the bars",
+    "container": "step row",
+    "is_contribution": null
+   },
+   {
+    "name": "2 Pick significant generators",
+    "type": "operation",
+    "role": "selects the most significant features and computes their homology generators",
+    "drawn_as": "big numeral, caption under a cloud with coloured loop outlines",
+    "container": "step row",
+    "is_contribution": null
+   },
+   {
+    "name": "3 Weighted harmonic representatives",
+    "type": "operation",
+    "role": "projects the generators to the harmonic space of a simplicial complex, optionally weighted",
+    "drawn_as": "big numeral, caption under a coloured wire mesh of the complex",
+    "container": "step row",
+    "is_contribution": true
+   },
+   {
+    "name": "4 Average over incident simplices",
+    "type": "operation",
+    "role": "for every point, averages the normalised vector entries of the simplices containing it",
+    "drawn_as": "big numeral, caption under four faded copies of the cloud",
+    "container": "step row",
+    "is_contribution": true
+   },
+   {
+    "name": "Output",
+    "type": "data",
+    "role": "the same cloud coloured by feature values; the output is a |X| x |F| matrix for downstream ML",
+    "drawn_as": "coloured dot cloud with a bold title inside the square",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Feature vectors",
+    "type": "chart",
+    "role": "feature vectors of four sample points, one per region of the cloud, rows 1 to 4",
+    "drawn_as": "four light-grey blocks of four horizontal bars each, with the caption Feature vectors",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input",
+    "to": "1 Compute persistent homology",
+    "what": "the point cloud enters the first step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "1 Compute persistent homology",
+    "to": "2 Pick significant generators",
+    "what": "significant bars give features and their generators",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "2 Pick significant generators",
+    "to": "3 Weighted harmonic representatives",
+    "what": "generators are projected to the harmonic space",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 3
+   },
+   {
+    "from": "3 Weighted harmonic representatives",
+    "to": "4 Average over incident simplices",
+    "what": "vectors are normalised and averaged per point",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 4
+   },
+   {
+    "from": "4 Average over incident simplices",
+    "to": "Output",
+    "what": "per-point averages assemble the output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Output loops",
+    "to": "Feature vectors",
+    "what": "feature vector of a point in that loop",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "barcode bars",
+    "to": "loops in the cloud",
+    "what": "bar colours equal loop colours in steps 2 to 4 and in the Output; grey bars are not carried on",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Output",
+    "to": "Applications",
+    "what": "downstream tasks use the feature matrix",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3, 4 (large numerals)",
+    "kind": "order",
+    "at": "captions of the bottom row",
+    "what": "orders the four algorithm steps"
+   },
+   {
+    "marker": "1, 2, 3, 4 (small row numbers)",
+    "kind": "identity",
+    "at": "rows of the feature-vector bars",
+    "what": "names the four selected topological features, colour-matched to the loops"
+   },
+   {
+    "marker": "Input, Output, Applications",
+    "kind": "section",
+    "at": "inside the clouds and on the inset box",
+    "what": "heads the two ends of the flow and the inset"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "toy point cloud as input",
+    "content": "point-cloud",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grey dots in a square loop with three corner loops, bold title in the square"
+   },
+   {
+    "what": "persistence barcode",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "four long coloured bars (blue, orange, green, red) staggered with short grey bars, caption to the right"
+   },
+   {
+    "what": "the cloud with generators outlined, and the weighted simplicial complex as a coloured mesh",
+    "content": "point-cloud",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same cloud and framing at steps 2 and 3; loops outlined in orange, red and green on a blue square loop; the mesh shows a blue-to-hue gradient along its edges"
+   },
+   {
+    "what": "four faded copies of the cloud, each lit in one feature colour",
+    "content": "point-cloud",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "2 x 2 grid of small clouds, everything but one loop faded to near white"
+   },
+   {
+    "what": "output cloud coloured by feature values",
+    "content": "point-cloud",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "same cloud with dots in blue, orange, red and green and blends at the junctions, bold title in the square"
+   },
+   {
+    "what": "feature-vector bars of four sample points",
+    "content": "chart",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "four blocks of four horizontal bars, a dark filled part over a pale track in the same hue, on light-grey backgrounds"
+   },
+   {
+    "what": "two point-cloud renders of application data",
+    "content": "point-cloud",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails side by side in the Applications box: a tangled blue, red and green 3D structure and a pair of blue and red spiral sheets"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "A toy point cloud, a square loop with three small corner loops, followed through all four steps",
+    "form": "the same cloud redrawn per step with one colour per loop",
+    "real_values": true
+   },
+   {
+    "what": "Feature vectors of four sample points, one in each loop region",
+    "form": "bar blocks with rows 1 to 4, filled part = value",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "persistence-barcode",
+    "drawn_as": "horizontal bars of different lengths, long coloured bars for significant features and short grey bars for the rest",
+    "parts": [
+     "long coloured bars",
+     "short grey bars"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "simplicial-complex",
+    "drawn_as": "wire mesh of triangles over the cloud, coloured by loop",
+    "parts": [
+     "mesh edges"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "feature-vector-bars",
+    "drawn_as": "one horizontal bar per feature, filled part over a pale track in the feature's colour",
+    "parts": [
+     "row number",
+     "bar",
+     "track"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the grey Input at top left, follows the hollow arrow down to step 1, reads steps 1 to 4 along the bottom, then up to the coloured Output and its feature-vector bars at top right; the Applications inset is read last."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "U-shaped flow: Input top left, a hollow arrow down to a bottom row of four numbered snapshot columns, a hollow arrow up to Output top right; an Applications inset sits between Input and Output.",
+  "panel_count": 1,
+  "lanes": "four numbered step columns along the bottom, each holding one snapshot of the toy cloud",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.1,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#2f72b1",
+    "used_for": "blue: the large square loop, feature 1, first barcode bar"
+   },
+   {
+    "hex": "#f2763c",
+    "used_for": "orange: top-left loop, feature 3"
+   },
+   {
+    "hex": "#196c44",
+    "used_for": "green: bottom-right loop, feature 2"
+   },
+   {
+    "hex": "#ae353d",
+    "used_for": "red: top-right loop, feature 4"
+   },
+   {
+    "hex": "#2f72b1",
+    "used_for": "pale tracks behind the feature bars, same for the other three hues",
+    "opacity": 0.25
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "fill of the Applications box"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "backgrounds of the feature-vector blocks"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey: raw or unselected parts, short barcode bars, curved arrows"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "navy outline of the Applications box"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt outlines on the Applications box and the block arrows; no strokes on bars",
+  "font": "sans (Bai Jamjuree), 9 pt step captions, 7-8 pt notes, bold 12.5 pt for Input, Output and Applications, 27.5 pt step numerals",
+  "corners": "square",
+  "arrows": "two large hollow grey block arrows (down from Input, up to Output) and four thin curved grey arrows with filled heads from loops to feature vectors; no arrows between steps",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per topological feature (blue square loop, green, orange and red small loops) kept in the barcode, loop outlines, mesh, step-4 thumbnails, Output cloud and feature bars; grey = raw or unselected",
+  "line_style_means": "no dashed lines; hollow block arrows carry the main flow into and out of the step row; thin curved grey arrows link a loop to its feature vector",
+  "shape_means": "horizontal bar = a topological feature (barcode) or one entry of a feature vector; ring = loop; wire mesh = simplicial complex",
+  "marker_means": "large numerals order the four steps; small row numbers name features 1 to 4",
+  "emphasis": "huge step numerals and bold Input and Output titles; colour first appears when features are selected, so colour entering the grey cloud marks the method's work",
+  "reusable_patterns": [
+   "one toy object redrawn at every step as the protagonist",
+   "one colour per feature carried from the barcode to the loops to the output vectors",
+   "big numeral with a short caption under each snapshot",
+   "hollow block arrows only at the entry and exit of the step row",
+   "faded copies of the object, one per feature, to show per-feature values",
+   "bar-row feature vectors tied by curved arrows to the region they belong to",
+   "inset box of application thumbnails"
+  ],
+  "weaknesses": [
+   "no arrows between steps 1 to 4, order is carried by the numerals only",
+   "the Applications inset is only loosely tied to the flow",
+   "the four faded clouds of step 4 are hard to read at print size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "renders of the toy cloud at each step",
+   "persistence barcode",
+   "feature-vector bars"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "block arrows, curved arrows, numerals and captions",
+   "grey Applications box"
+  ],
+  "unknown": [
+   "origin of the two Applications pictures"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "toy point cloud with a square loop and three small loops",
+   "persistence barcode",
+   "coloured loop generators",
+   "simplicial mesh",
+   "faded per-feature copies",
+   "feature-vector bar blocks",
+   "applications inset"
+  ],
+  "sample_data": "other",
+  "keywords": [
+   "persistent homology",
+   "topological data analysis",
+   "point cloud",
+   "harmonic representatives",
+   "simplicial complex",
+   "topological features",
+   "barcode",
+   "feature vectors"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "numbered-snapshot-chain",
+    "what": "the same toy object redrawn in a row of snapshots, each under a big numeral and a two-line caption, with block arrows only at entry and exit"
+   },
+   {
+    "name": "feature-bar-blocks",
+    "what": "small blocks of horizontal bars, one row per feature and the filled part as value, tied to points of an output drawing by curved arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Follow one toy object through the algorithm, redrawing it under a big numeral at each step, and give each selected feature one colour that runs from the first schematic result to the final output vectors. Close with curved arrows from output regions to their feature-vector bars.",
+  "suits": "Algorithms that transform one geometric object step by step (topological, geometric, graph methods) where a toy example makes the pipeline self-explanatory."
+ },
+ "tags": [
+  "numbered-steps",
+  "u-shaped-flow",
+  "toy-example",
+  "colour-per-feature",
+  "hollow-block-arrows",
+  "bitmap-renders"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 How to Compute Topological Point Features (p.4)"
+  ],
+  "evidence": [
+   "Input. A point cloud X in n-dimensional space.",
+   "The homology generators are projected to the harmonic space.",
+   "The output is a |X| × |F| matrix which can be used for downstream ML tasks."
+  ]
+ },
+ "summary": "TOPF computes point-level topological features for a point cloud. Figure 1 follows one toy cloud, a square-shaped loop with three small loops at its corners, through four numbered steps along the bottom: persistent homology drawn as a barcode, the significant generators outlined in colour, weighted harmonic representatives drawn as a coloured simplicial mesh, and averaging over incident simplices drawn as four faded copies, one per feature. Input sits at top left as a grey cloud and Output at top right as the same cloud coloured by feature, with bar blocks for the feature vectors of four sample points. Big hollow arrows lead in and out, an Applications inset shows two sample point clouds, and one colour per feature runs through the whole figure.",
+ "summary_zh": "TOPF 为点云计算逐点的拓扑特征。图一用一个带三个小环的方形玩具点云贯穿四个编号步骤：持续同调条形码、按颜色标出的显著生成元、加权调和代表网格、对关联单纯形取平均，最终得到按特征着色的输出点云与特征向量条形图。",
+ "confidence": "high",
+ "notes": "Prior state-snapshots variant kept. The Applications box is treated as an inset, not a panel, so panel_count is 1. Colour-to-feature mapping is read from the bar rows (1 blue, 2 green, 3 orange, 4 red) and from the step-4 thumbnails. The Output renders look computed rather than drawn, so real_values is true. The two Applications pictures are not explained in the supplied text.",
+ "venue": "ICML25"
+}

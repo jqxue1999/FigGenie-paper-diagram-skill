@@ -1,0 +1,529 @@
+{
+ "paper_id": "icml23-0002",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AdvDM",
+  "one_liner": "Adversarial examples for diffusion models that protect artworks from imitation by corrupting the feature (condition) the model extracts from an image.",
+  "domain": [
+   "adversarial examples",
+   "diffusion models",
+   "artwork copyright protection"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two titled bands (classifier, generative model), each with a green clean lane above a red adversarial lane; the lower band adds a grey zoom box on the extract step",
+  "argues": "Adversarial examples for diffusion models corrupt the extracted condition, giving an out-of-distribution condition and a broken generated image, as a wrong label does for classifiers.",
+  "subject": "A clean and an adversarial cat photo through a classifier, and through condition extraction and generation in a diffusion model.",
+  "elements": [
+   {
+    "name": "Classifier f_θ(x)",
+    "type": "module",
+    "role": "classifies the input image",
+    "drawn_as": "grey rectangle with bold serif label, one per lane",
+    "container": "Adversarial examples for classification models",
+    "is_contribution": false
+   },
+   {
+    "name": "“cat” with check / “dog” with cross",
+    "type": "label",
+    "role": "predicted class and its verdict",
+    "drawn_as": "bold quoted word with a green outlined check or a red outlined cross",
+    "container": "Adversarial examples for classification models",
+    "is_contribution": false
+   },
+   {
+    "name": "Textual Inversion on Diffusion Models",
+    "type": "container",
+    "role": "expands the extract step: how the condition c is found for an image",
+    "drawn_as": "large light-grey rounded box with a bold title, two noising strips, the objective and a small condition-space sketch",
+    "container": "Adversarial examples for generative models",
+    "is_contribution": false
+   },
+   {
+    "name": "reverse process / forward process",
+    "type": "operation",
+    "role": "diffusion chain read from t = T to t = 0 and from t = 0 to t = T",
+    "drawn_as": "two strips of five frames, italic labels, a black arrow under each strip with t = 0 and t = T at its ends",
+    "container": "Textual Inversion on Diffusion Models",
+    "is_contribution": false
+   },
+   {
+    "name": "ε_{θ,t}(c, z_t) and ε_t",
+    "type": "formula",
+    "role": "predicted noise next to the reverse strip and actual noise next to the forward strip",
+    "drawn_as": "serif maths beside the strips",
+    "container": "Textual Inversion on Diffusion Models",
+    "is_contribution": false
+   },
+   {
+    "name": "Optimize c: argmax E||ε_t − ε_{θ,t}(c, z_t)||",
+    "type": "formula",
+    "role": "objective for finding the condition c",
+    "drawn_as": "small serif text block at the left of the box",
+    "container": "Textual Inversion on Diffusion Models",
+    "is_contribution": false
+   },
+   {
+    "name": "extract",
+    "type": "operation",
+    "role": "gets the condition c from the image",
+    "drawn_as": "dashed black arrow with the word above it",
+    "container": "condition stage",
+    "is_contribution": false
+   },
+   {
+    "name": "condition c",
+    "type": "data",
+    "role": "feature extracted from the image; green star inside the grey region for the clean image, red star outside it for the adversarial example",
+    "drawn_as": "grey dome-shaped region with two notches and a coloured star, label with coloured letter c",
+    "container": "condition stage",
+    "is_contribution": true
+   },
+   {
+    "name": "“A photo of c”",
+    "type": "data",
+    "role": "prompt that carries the condition into the generative model",
+    "drawn_as": "bold quoted text with the letter c in green or red, a curved arrow of the same colour from the star",
+    "container": "generation stage",
+    "is_contribution": false
+   },
+   {
+    "name": "Generative model p_θ(x|c)",
+    "type": "module",
+    "role": "generates an image from the condition",
+    "drawn_as": "grey rectangle with bold serif label, one per lane",
+    "container": "generation stage",
+    "is_contribution": false
+   },
+   {
+    "name": "condition stage / generation stage",
+    "type": "container",
+    "role": "the two stages of the inference workflow, named under curly braces",
+    "drawn_as": "two curly braces under the lower band, the first over the image, extract and condition c, the second over the prompt, model and output",
+    "container": "Adversarial examples for generative models",
+    "is_contribution": null
+   },
+   {
+    "name": "input / infer / conditional inference",
+    "type": "label",
+    "role": "names of the arrows between image, model and output",
+    "drawn_as": "plain serif words above or below the arrows",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "clean image x",
+    "to": "Classifier f_θ(x)",
+    "what": "input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Classifier f_θ(x)",
+    "to": "classification probability",
+    "what": "infer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "classification probability",
+    "to": "“cat” / “dog” with check or cross",
+    "what": "top class becomes the label and verdict",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "clean image x and adversarial example x′ (lower band)",
+    "to": "condition c",
+    "what": "extract",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "condition c",
+    "to": "“A photo of c”",
+    "what": "the star becomes the letter c in the prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "“A photo of c”",
+    "to": "Generative model p_θ(x|c)",
+    "what": "conditional inference",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Generative model p_θ(x|c)",
+    "to": "generated image",
+    "what": "infer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "clean image x (lower band)",
+    "to": "forward process first frame",
+    "what": "ties the extract step to the box that explains it",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Textual Inversion on Diffusion Models",
+    "to": "extract step",
+    "what": "the box expands the extract step",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "filled green star",
+    "to": "hollow green star",
+    "what": "c is optimised (Optimize c)",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "t = T",
+    "to": "t = 0",
+    "what": "reverse process",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "t = 0",
+    "to": "t = T",
+    "what": "forward process",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green items (clean image, bar, check, star, c)",
+    "to": "red items (adversarial example, bar, cross, star, c)",
+    "what": "same slots in a clean lane and an adversarial lane",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Adversarial examples for classification models",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "a clean image is classified “cat” (green bar, check); the adversarial example is classified “dog” (red bar, cross)",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Adversarial examples for generative models",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "clean vs adversarial image through condition extraction (condition stage) and generation: a good cat photo vs a distorted image",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "t = 0, t = T",
+    "kind": "order",
+    "at": "ends of the two noising strips",
+    "what": "first frame is the clean image, last frame is pure noise"
+   },
+   {
+    "marker": "condition stage, generation stage",
+    "kind": "section",
+    "at": "curly braces under the lower band",
+    "what": "head the two stages of the workflow"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "clean cat photo x",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "grey-scale photo of a sleeping cat in a green frame, once per band"
+   },
+   {
+    "what": "adversarial example x′ of the same photo",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "the same photo with faint noise, in a red frame, once per band"
+   },
+   {
+    "what": "noising frames of the cat photo, clean to pure noise",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 10,
+    "medium": "bitmap",
+    "treatment": "two strips of five thumbnails, reverse (arrow to the left) above and forward (arrow to the right) below, the first forward frame in a green frame"
+   },
+   {
+    "what": "classification probability bars",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "tiny grey bar charts on a light-grey ground; a tall green bar for the clean image, a short red bar among flat grey bars for the adversarial one"
+   },
+   {
+    "what": "generated images",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "a sharp colour cat portrait for the clean lane and a dark distorted image for the adversarial lane"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "green check mark and red cross, outlined and hand-drawn in look",
+    "stands_for": "correct or wrong classification",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "green filled and hollow star, red filled star",
+    "stands_for": "the condition c as a point in condition space, inside (green) or outside (red) the grey region",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "one sleeping-cat photo, clean and adversarial, classified “cat” vs “dog” and generating a clean cat portrait vs a distorted image",
+    "form": "photo thumbnails with green and red frames, quoted labels and verdict marks",
+    "real_values": true
+   },
+   {
+    "what": "the prompt “A photo of c” with the slot c in green or red",
+    "form": "bold quoted text with a coloured slot letter",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "two strips of five frames from clean to noise, one read right to left (reverse process, t = T to t = 0), one left to right (forward process)",
+    "parts": [
+     "frames",
+     "t = 0 and t = T labels",
+     "direction arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "grey dome-shaped region with two notches and star points: green star inside, red star outside, dashed green arrow between two stars",
+    "parts": [
+     "grey region",
+     "stars",
+     "dashed arrow"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "bold quoted prompt “A photo of c” with only the slot letter coloured, no box",
+    "parts": [
+     "quoted text",
+     "coloured slot c"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Top title, then the green lane before the red lane, left to right to the label with tick or cross; the lower band repeats this with the grey zoom box above explaining extract, ending at the generated images and the two stage braces."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two titled bands stacked: the top one holds two left-to-right lanes (clean photo in a green frame, adversarial photo in a red frame) through a classifier to a probability bar chart and a verdict; the lower one has a grey rounded box on textual inversion above two lanes that extract a condition, put it in a prompt and generate, with braces naming the stages.",
+  "panel_count": 2,
+  "lanes": "2 paired lanes in each band: clean (green) above adversarial (red)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "other",
+  "width": "column",
+  "aspect": 1.0,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e7e6e6",
+    "used_for": "fill of the textual-inversion zoom box"
+   },
+   {
+    "hex": "#d0cece",
+    "used_for": "model boxes and the condition-space regions"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "background of the probability bar charts"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "non-target bars of the probability charts"
+   },
+   {
+    "hex": "#92d050",
+    "used_for": "clean case: photo frames, tall bar, check mark, stars, letter c, curved arrow"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "adversarial case: photo frames, short bar, cross, star, letter c, curved arrow"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black outlines on boxes and arrows; green and red frames around the photos; dashed black extract arrow; thin green dashed leader",
+  "font": "serif (Nimbus Roman, Cambria Math for symbols), 4-7 pt, bold 7 pt titles and model names, italics for process names",
+  "corners": "mixed",
+  "arrows": "black straight arrows with small filled heads, dashed black for extract, curved green or red arrows from star to prompt letter",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Green = clean image and the in-distribution case (frame, tall bar, check, star, letter c); red = adversarial example and the out-of-distribution case (frame, short bar, cross, star, letter c); grey = models and the condition region.",
+  "line_style_means": "Solid black arrows carry data; the dashed black arrow is the extract step; the thin green dashed line ties the clean image to the zoom box; curved coloured arrows put the condition into the prompt.",
+  "shape_means": "Grey rectangles = models; grey dome-shaped region = where conditions of real images lie; stars = condition points; rounded grey box = detail of the extract step; curly braces = stages.",
+  "marker_means": "Check and cross = correct or wrong outcome; t = 0 and t = T = ends of the noising chain; braces name the condition stage and the generation stage.",
+  "emphasis": "The red lane differs from the green lane only by input, so the effects stand out: short red bar, cross, star outside the grey region and a distorted output.",
+  "reusable_patterns": [
+   "clean case in green and attacked case in red through the same model, every slot in the lane following the lane colour",
+   "tick and cross beside the output label",
+   "mini bar chart per lane with the top class coloured",
+   "grey zoom box above a stage, tied to it by a curly brace and a dashed leader",
+   "two thumbnail strips for forward and reverse diffusion with time arrows",
+   "prompt slot letter coloured like the lane",
+   "curly braces under the lanes naming the stages"
+  ],
+  "weaknesses": [
+   "formula and strip labels in the zoom box are only 4-5 pt",
+   "the green dashed leader runs across the box and is hard to follow",
+   "the stars carry no label beyond the lane colour and the caption",
+   "there is no key for green and red"
+  ]
+ },
+ "resources": {
+  "own": [
+   "cat photo and its adversarial version",
+   "noising frames of the photo",
+   "generated images, a clean portrait and a distorted result"
+  ],
+  "stock": [
+   "outlined check mark and cross icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "grey model boxes",
+   "probability bars",
+   "grey dome-shaped condition regions with stars",
+   "arrows and braces",
+   "formula text"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "clean and adversarial cat photos in green and red frames",
+   "classifier box",
+   "mini probability bar charts",
+   "tick and cross marks",
+   "grey zoom box with noising strips",
+   "grey dome with stars for condition space",
+   "generative model box",
+   "good and distorted generated images"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "adversarial examples",
+   "diffusion models",
+   "painting imitation",
+   "textual inversion",
+   "copyright protection",
+   "condition extraction",
+   "out-of-distribution",
+   "AdvDM"
+  ],
+  "tags": [
+   "verdict-marks",
+   "zoom-callout",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "small-multiples",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "green-red-paired-lanes",
+    "what": "the same pipeline drawn twice, a green lane for the clean or good case and a red lane for the attacked or failing case, with frames, bars, marks and text slots all following the lane colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the clean and the attacked case as two lanes through the same model and colour everything that belongs to a lane (photo frame, bar, tick or cross, star, even the slot letter in the prompt) green or red, ending the red lane in a visibly broken output. Add one grey zoom box above the stage that needs explaining.",
+  "suits": "Robustness, attack or safety papers that contrast a clean and a perturbed input through one pipeline and must show the failure on a sample."
+ },
+ "tags": [
+  "two stacked bands",
+  "green vs red lanes",
+  "grey model boxes",
+  "photo thumbnails with coloured frames",
+  "serif text",
+  "braces for stages",
+  "tick and cross",
+  "powerpoint-made"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Adversarial Examples for Diffusion Models (p.4)"
+  ],
+  "evidence": [
+   "This workflow consists of two stages: (1) the condition stage that extracts the feature from input images as conditions",
+   "Our adversarial examples work by misleading the feature extracting in the condition stage and resulting in an out-of-distribution condition."
+  ]
+ },
+ "summary": "AdvDM builds adversarial examples for diffusion models so that artists can stop unauthorised painting imitation. Figure 1 compares workflows in two stacked bands. The top band shows the classic case: a clean cat photo (green frame) is classified “cat” with a tall green bar and a check, its adversarial copy (red frame) “dog” with a short red bar and a cross. The lower band shows a diffusion model in two stages: condition extraction by textual inversion, expanded in a grey box with forward and reverse noising strips and the objective, then generation from the prompt “A photo of c”. The green lane gives a good cat image, the red lane an out-of-distribution condition (red star outside the grey region) and a distorted image.",
+ "summary_zh": "AdvDM 为扩散模型构造对抗样本，防止他人模仿画作。图 1 分上下两带：上带是分类器，干净猫图被判为 cat，对抗图被判为 dog；下带是扩散模型的条件提取与生成两阶段，灰色框展开文本反演，绿线生成正常图，红线得到分布外条件和失真图。",
+ "confidence": "high",
+ "notes": "The pre-screen listed two panels; they are kept as two titled bands. The grey textual-inversion box is tied to the extract step by a curly brace and a green dashed leader, recorded as zoom_callout 'other'. The digest counts 17 placed bitmaps; 16 visible tiles are listed (one frame of the forward strip is placed twice, once for its green frame).",
+ "venue": "ICML23"
+}

@@ -1,0 +1,458 @@
+{
+ "paper_id": "icml25-0108",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SelfCite",
+  "one_liner": "A self-supervised reward for LLM citations from context ablation: removing the cited text should drop the response probability, keeping only it should hold it.",
+  "domain": [
+   "context attribution",
+   "citation generation",
+   "self-supervised reward"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough",
+   "side-by-side-contrast"
+  ],
+  "variant": "fan-out",
+  "variant_note": "one generation step feeds three parallel scoring rows (full context, cited removed, only cited) that fan in to a two-term reward, shown on one cactus example",
+  "argues": "A citation can be rewarded without human labels: its necessity is the probability drop when it is removed, its sufficiency the probability hold when it stands alone.",
+  "subject": "Computing the SelfCite reward for one question, context and response from three language-model probabilities.",
+  "elements": [
+   {
+    "name": "Context (C) + Query (Q)",
+    "type": "sample",
+    "role": "the full input: a document and the question Why do cacti have spines?",
+    "drawn_as": "grey rounded card with a text block for the context and a small block for the query",
+    "container": "left lane 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Context without cited sentences (C\\E) + Query (Q)",
+    "type": "sample",
+    "role": "the context with the cited sentences removed, for the necessity test",
+    "drawn_as": "same card with red bars covering the cited sentences",
+    "container": "left lane 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Context with only cited sentences (E) + Query (Q)",
+    "type": "sample",
+    "role": "the context reduced to the cited sentences, for the sufficiency test",
+    "drawn_as": "same card with green bars covering the other sentences",
+    "container": "left lane 3",
+    "is_contribution": true
+   },
+   {
+    "name": "LLaMA .generate()",
+    "type": "module",
+    "role": "the language model that writes the response from the full context and query",
+    "drawn_as": "light blue rounded box with the Meta logo and a monospace method name",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Generated response (R)",
+    "type": "sample",
+    "role": "the response; the statement r that carries the citation is highlighted",
+    "drawn_as": "pale card with grey text and cyan highlighted spans",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Citation E is generated for a specific statement r",
+    "type": "label",
+    "role": "says which statement the citation belongs to",
+    "drawn_as": "cyan text with a curved cyan arrow from the highlighted span",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Prob. of statement r with C + Q",
+    "type": "formula",
+    "role": "probability of the same statement given the full context: 0.97",
+    "drawn_as": "pale blue box with a label line and a formula strip with the value in blue",
+    "container": "right lane 1",
+    "is_contribution": null
+   },
+   {
+    "name": "Prob. of statement r with C\\E + Q",
+    "type": "formula",
+    "role": "probability after removing the cited sentences: 0.01",
+    "drawn_as": "pale blue box with the value in red and a red-tinted book emoji",
+    "container": "right lane 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Prob. of statement r with E + Q",
+    "type": "formula",
+    "role": "probability with only the cited sentences: 0.98",
+    "drawn_as": "pale blue box with the value in green and a green-tinted book emoji",
+    "container": "right lane 3",
+    "is_contribution": true
+   },
+   {
+    "name": "Necessity Score",
+    "type": "module",
+    "role": "probability drop = 0.97 - 0.01; a large drop means the citation is necessary",
+    "drawn_as": "light red rounded box with the arithmetic and a small up arrow with a note",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sufficiency Score",
+    "type": "module",
+    "role": "probability hold = 0.98 - 0.97; a more positive value means the citation is sufficient",
+    "drawn_as": "light green rounded box with the arithmetic and a small up arrow with a note",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "SelfCite Reward = Necessity Score + Sufficiency Score",
+    "type": "formula",
+    "role": "the final reward is the sum of the two scores",
+    "drawn_as": "bold headline equation with Necessity in red and Sufficiency in green",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Context (C) + Query (Q)",
+    "to": "LLaMA .generate()",
+    "what": "full context and query as the prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLaMA .generate()",
+    "to": "Generated response (R)",
+    "what": "the response is written",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLaMA .generate()",
+    "to": "Prob. of statement r with C + Q",
+    "what": "probability of the statement under the full context",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context without cited sentences (C\\E) + Query (Q)",
+    "to": "Generated response (R)",
+    "what": "modified context to be scored against the same response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context with only cited sentences (E) + Query (Q)",
+    "to": "Generated response (R)",
+    "what": "modified context to be scored against the same response",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Generated response (R)",
+    "to": "Prob. of statement r with C\\E + Q and with E + Q",
+    "what": ".eval(): the language model scores the same statement under each modified context",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prob. of statement r with C + Q",
+    "to": "Necessity Score",
+    "what": "compared with the 0.01 probability to give the drop (red curved arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prob. of statement r with C + Q",
+    "to": "Sufficiency Score",
+    "what": "compared with the 0.98 probability to give the hold (green curved arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Necessity Score and Sufficiency Score",
+    "to": "SelfCite Reward",
+    "what": "summed into the final reward",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "book, magnifier and light-bulb emoji",
+    "kind": "identity",
+    "at": "card titles, probability labels and formulas",
+    "what": "stand for context, query and generated statement and replace symbols inside the probability formulas"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "books emoji, tinted red or green on the modified contexts",
+    "stands_for": "the context (full, without cited sentences, only cited sentences)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "magnifier emoji",
+    "stands_for": "the query",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "light bulb emoji",
+    "stands_for": "the generated statement r",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "Meta infinity logo, blue",
+    "stands_for": "the LLaMA model, also used as the LM subscript in the probability formulas",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "a context about cacti, the query Why do cacti have spines?, and a response about defense against herbivores and water conservation",
+    "form": "text cards with sentence-level coloured bars (red for removed cited sentences, green for removed other sentences) and cyan highlights on the cited statement",
+    "real_values": true
+   },
+   {
+    "what": "probabilities 0.97, 0.01 and 0.98 and the two scores 0.97 - 0.01 and 0.98 - 0.97",
+    "form": "coloured numbers inside formula strips and score boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "light blue rounded box with the Meta logo and the monospace call .generate()",
+    "parts": [
+     "logo",
+     "method name"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "grey card with a Context block and a Query block, parts of the text covered by coloured bars",
+    "parts": [
+     "Context block",
+     "Query block",
+     "coloured bars"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left context card, follows the grey arrow to the LLaMA box and down to the generated response, then reads each lane left to right into its probability box and finally the coloured curved arrows into the two score boxes and the reward equation."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Three aligned rows, one per context variant, each running from a context-and-query card through a dotted arrow to a probability box; the LLaMA box and the generated response sit in the middle column and two coloured score boxes with curved arrows close the figure at the right.",
+  "panel_count": 1,
+  "lanes": "3 aligned rows: full context, context without cited sentences, context with only cited sentences",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.55,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f1f1f1",
+    "used_for": "grey context-and-query cards"
+   },
+   {
+    "hex": "#d5d5d5",
+    "used_for": "text blocks inside the cards"
+   },
+   {
+    "hex": "#d6ecff",
+    "used_for": "LLaMA box and probability formula strips",
+    "opacity": 0.55
+   },
+   {
+    "hex": "#f6faff",
+    "used_for": "outer boxes of the probability labels"
+   },
+   {
+    "hex": "#ff968d",
+    "used_for": "bars over the removed cited sentences and the red book chip"
+   },
+   {
+    "hex": "#a3f999",
+    "used_for": "bars over the removed other sentences and the green book chip"
+   },
+   {
+    "hex": "#fd968d",
+    "used_for": "Necessity Score box tint",
+    "opacity": 0.26
+   },
+   {
+    "hex": "#a3f999",
+    "used_for": "Sufficiency Score box tint",
+    "opacity": 0.26
+   },
+   {
+    "hex": "#b4f6fe",
+    "used_for": "cyan highlight of the cited statement and the annotation text"
+   },
+   {
+    "hex": "#929292",
+    "used_for": "grey solid and dotted arrows"
+   },
+   {
+    "hex": "#ff644e",
+    "used_for": "red curved arrow to the Necessity Score"
+   },
+   {
+    "hex": "#61d836",
+    "used_for": "green curved arrow to the Sufficiency Score"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "no outlines on cards; 0.75 pt grey arrows, solid for generation and dotted for evaluation; 1 pt coloured curved arrows",
+  "font": "sans (Optima) 5-7 pt with bold card titles and scores; monospace (Menlo) for .generate() and .eval(); serif (STIX) for the probability formulas; Apple colour emoji",
+  "corners": "rounded",
+  "arrows": "grey straight arrows with filled heads, solid for generation and dotted for evaluation; thick curved red and green arrows for the scores; a thin curved cyan arrow for the annotation",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = probability under the full context; red = necessity (cited sentences removed: red bars, 0.01, Necessity Score); green = sufficiency (only cited sentences kept: green bars, 0.98, Sufficiency Score); cyan = the statement r and its citation; grey = plain cards and arrows",
+  "line_style_means": "solid grey arrow = generate; dotted grey arrows = evaluate or feed a variant to the model; curved red and green arrows = how the probabilities become the two scores",
+  "shape_means": "grey card = context and query input; light blue rounded box = the model call; pale box with formula = a probability; tinted rounded boxes = the two scores",
+  "marker_means": "emoji stand for variables (books = context, magnifier = query, light bulb = statement); tinted book chips mark the modified contexts; underlined drop and hold name the score formulas",
+  "emphasis": "coloured numbers 0.97, 0.01 and 0.98 and the headline reward equation at the top right draw the eye; the bars on the cards show exactly what was removed",
+  "reusable_patterns": [
+   "one context card redrawn per condition with coloured bars over the removed sentences",
+   "emoji as variable symbols inside the probability formulas",
+   "coloured numeric results carried into a two-term reward equation in matching colours",
+   "curved coloured arrows from the probability boxes to the score boxes",
+   "dotted arrows labelled .eval() for scoring passes, a solid arrow for generation",
+   "cyan highlight on the response with a curved callout naming the cited statement"
+  ],
+  "weaknesses": [
+   "5 pt text on the cards",
+   "emoji used as symbols need a decoding step and the key is only implicit",
+   "red and green carry the two scores, which is hard for colour-blind readers"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the example context, query and response text",
+   "the probability values"
+  ],
+  "stock": [
+   "Apple emoji (books, magnifier, light bulb)",
+   "Meta logo"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards, coloured bars, arrows and score boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three context-and-query cards with coloured bars",
+   "LLaMA box with .generate()",
+   "generated response card with cyan highlights",
+   "probability boxes with formulas and values",
+   "two score boxes with curved arrows",
+   "emoji variables"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "SelfCite",
+   "context attribution",
+   "citation quality",
+   "necessity and sufficiency",
+   "context ablation",
+   "reward from probability",
+   "best-of-N",
+   "long-context QA"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "equation-boxes",
+   "toy-values-inline",
+   "colour-coded-groups",
+   "brand-logo-icon",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "emoji-as-variable-symbols",
+    "what": "emoji replace letters as variable symbols on cards, labels and inside formulas, tinted to match the variant they belong to"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show a reward that compares one quantity under several conditions, redraw the same input card once per condition with coloured bars over what is removed, then carry each condition's colour into its number, its score box and the final equation; emoji can stand in for variables to keep formulas short.",
+  "suits": "Reward, metric or ablation-based scoring methods that compare a model's output under modified inputs (removal, masking, perturbation) on one worked example."
+ },
+ "tags": [
+  "three-lanes",
+  "coloured-bars-on-text",
+  "emoji-symbols",
+  "curved-score-arrows",
+  "keynote-look",
+  "pale-blue-boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Method (p.2)"
+  ],
+  "evidence": [
+   "The SelfCite framework calculates rewards based on two metrics: necessity score (probability drop) and sufficiency score (probability hold).",
+   "the framework evaluates the probability of generating the same response after (1) removing the cited sentences",
+   "their sum is used as the final reward"
+  ]
+ },
+ "summary": "SelfCite aligns LLMs to cite sentences by rewarding citations through context ablation. Figure 1 computes that reward on one cactus example. A grey context-and-query card is run through a LLaMA box to generate a response whose cited statement is highlighted in cyan. The same card is then redrawn twice: once with the cited sentences covered by red bars, once with only them kept (the others covered in green). Each version gets a probability box with the formula and value for the same statement, 0.97, 0.01 and 0.98, written with emoji for context, query and statement. Curved red and green arrows turn these numbers into a necessity score (probability drop, 0.97 - 0.01) and a sufficiency score (probability hold, 0.98 - 0.97), which are summed into the SelfCite reward.",
+ "summary_zh": "SelfCite 用上下文消融给引用打分。图 1 以仙人掌问答为例：同一张上下文加问题的卡片画三遍（原文、去掉被引句、只留被引句），各配一个概率框（0.97、0.01、0.98），红绿曲线箭头算出必要性分数和充分性分数，二者相加即奖励。",
+ "confidence": "high",
+ "notes": "Prior primary kind stage-pipeline kept; worked-walkthrough added because the figure follows one concrete example with real numbers, and the context card is redrawn per condition. In the third card the green bars sit over the non-cited sentences (read from their position); the red bars in the second card sit over the cited ones. The digest lists the emoji as text glyphs, so icon counts are read from the picture.",
+ "venue": "ICML25"
+}

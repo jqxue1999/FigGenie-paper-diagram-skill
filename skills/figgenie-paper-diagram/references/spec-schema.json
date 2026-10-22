@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://forge-systems-paper-figure/figgenie-paper-diagram/references/spec-schema.json",
  "title": "Systems-paper architecture figure spec",
- "description": "The JSON intermediate between 'what the paper says' and 'the SVG the agent draws'. It describes STRUCTURE (who exists, what contains what, what flows where, what is new) plus optional grid hints -- never absolute coordinates: the agent hand-draws the SVG from this. Vocabulary is taken verbatim from references/layouts.md (templates, direction, lanes, panels), references/palettes.json (palette ids and colour roles), references/encoding.md (line style, heads, step markers, legend) and references/style-rules.md (numeric bands). Fill it with references/spec-guide.md; check it with scripts/spec_validate.py. Every object is closed (additionalProperties:false) so typos surface as errors. Referential integrity (every from/to/parent/attached_to/anchor/legend_ref resolves, no container cycles, edge endpoints resolve (nodes; a container or lane endpoint is a warning, since the linter checks the arrow against the frame), no node is used as a parent, unique ids across all arrays) is NOT expressible in JSON Schema and is enforced by the validator. The schema is a contract for the linter and for round-tripping user feedback, not a straitjacket: every object accepts `notes` and any `x-*`/`_*` field, every kind enum has `other`, and the template list has `custom`. The human-facing artifact is the natural-language brief (references/brief-template.md); the spec is derived from the confirmed brief. Mechanism figures (meta.kind = mechanism) add meta.mechanism (group, base, arrangement), panels[] / deltas[] for alternatives and frames, values[] for worked examples, node kinds state / decision / slot / cell / port, edge kinds transition / pointer / mapping / message with a `guard`, and steps[].carries; see spec-guide.md section 7 and references/mechanism/. Bitmaps (a sample, photo, screenshot, rendered result, icon) are nodes with `image` (a local PNG / JPEG next to the spec, never a URL) and usually kind `image`; the SVG draws them as <image> and embed_fonts.py inlines them at delivery (spec-guide.md section 4, 'Bitmaps').",
+ "description": "The JSON intermediate between 'what the paper says' and 'the SVG the agent draws'. It describes STRUCTURE (who exists, what contains what, what flows where, what is new) plus optional grid hints -- never absolute coordinates: the agent hand-draws the SVG from this. Vocabulary is taken verbatim from references/layouts.md (templates, direction, lanes, panels), references/palettes.json (palette ids and colour roles), references/encoding.md (line style, heads, step markers, legend) and references/style-rules.md (numeric bands). Fill it with references/spec-guide.md; check it with scripts/spec_validate.py. Every object is closed (additionalProperties:false) so typos surface as errors. Referential integrity (every from/to/parent/attached_to/anchor/legend_ref resolves, no container cycles, edge endpoints resolve (nodes; a container or lane endpoint is a warning, since the linter checks the arrow against the frame), no node is used as a parent, unique ids across all arrays) is NOT expressible in JSON Schema and is enforced by the validator. The schema is a contract for the linter and for round-tripping user feedback, not a straitjacket: every object accepts `notes` and any `x-*`/`_*` field, every kind enum has `other`, and the template list has `custom`. The human-facing artifact is the natural-language brief (references/brief-template.md); the spec is derived from the confirmed brief. Mechanism figures (meta.kind = mechanism) add meta.mechanism (group, base, arrangement), panels[] / deltas[] for alternatives and frames, values[] for worked examples, node kinds state / decision / slot / cell / port, edge kinds transition / pointer / mapping / message with a `guard`, and steps[].carries; see spec-guide.md section 7 and references/mechanism/. Bitmaps (a sample, photo, screenshot, rendered result, icon) are nodes with `image` (a local PNG / JPEG next to the spec, never a URL) and usually kind `image`; the SVG draws them as <image> and embed_fonts.py inlines them at delivery (spec-guide.md section 4, 'Bitmaps'). Three families of figure share it: systems architecture (the default), mechanism (meta.kind) and AI-venue Figure 1s (meta.family = 'ai', references/ai/).",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -168,6 +168,25 @@
       }
      }
     },
+    "family": {
+     "enum": [
+      "systems",
+      "ai"
+     ],
+     "default": "systems",
+     "description": "Which corpus the figure follows. systems = OSDI / NSDI / SOSP / ASPLOS figures (the default; everything else in this schema applies unchanged). ai = the Figure 1s of ICLR, ICML, NeurIPS, CVPR, ACL and AAAI (references/ai/): the width band comes from meta.venue, budgets and the advisory checks from references/ai/style-thresholds.json and the figure's kinds from meta.ai; meta.kind stays architecture (an overview) or mechanism (how one part works) as before."
+    },
+    "venue": {
+     "enum": [
+      "iclr",
+      "icml",
+      "neurips",
+      "cvpr",
+      "acl",
+      "aaai"
+     ],
+     "description": "AI family only: the venue whose template sets the text width (NeurIPS and ICLR 396 pt, single-column templates; ICML 486, CVPR 495, ACL 454, AAAI 504 pt, two-column templates with a 219-239 pt column). Required when meta.family = 'ai'."
+    },
     "figure_kind": {
      "enum": [
       "whole-system",
@@ -202,7 +221,7 @@
       "double"
      ],
      "default": "single",
-     "description": "81% of the corpus is single column. Double column is a strip, not a bigger square: same height, double width, aspect ~3.2 (layouts.md)."
+     "description": "81% of the systems corpus is single column. Double column is a strip, not a bigger square: same height, double width, aspect ~3.2 (layouts.md). AI family: 'double' = the venue's full text width (89% of good Figure 1s; the default), 'single' = one column of a two-column venue (ICML, CVPR, ACL, AAAI only)."
     },
     "width_pt": {
      "type": "number",
@@ -241,10 +260,11 @@
       "flanked-core",
       "block-floorplan",
       "mechanism",
+      "ai",
       "custom"
      ],
      "default": "pipeline",
-     "description": "The core frame, chosen with the table in layouts.md 'Choosing a template'. The first seven are the corpus's own taxonomy; the other thirteen are recurring sub-patterns with their own rules (I-M added 2026-09-07 from the 736-figure type-discovery pass). custom = none of the 20 fits; describe the arrangement in meta.notes (layouts.md is guidance, not a cage). 'mechanism' = the frame comes from meta.mechanism.arrangement, not from an architecture template."
+     "description": "The core frame, chosen with the table in layouts.md 'Choosing a template'. The first seven are the corpus's own taxonomy; the other thirteen are recurring sub-patterns with their own rules (I-M added 2026-09-07 from the 736-figure type-discovery pass). custom = none of the 20 fits; describe the arrangement in meta.notes (layouts.md is guidance, not a cage). 'mechanism' = the frame comes from meta.mechanism.arrangement, not from an architecture template. 'ai' = an AI-venue figure (meta.family = ai): there is no template; meta.ai.arrangement describes the arrangement (references/ai/layouts.md)."
     },
     "modifiers": {
      "type": "array",
@@ -273,10 +293,12 @@
       "left-right",
       "top-down",
       "bottom-up",
-      "mixed"
+      "mixed",
+      "radial",
+      "none"
      ],
      "default": "left-right",
-     "description": "Reading direction. Corpus: left-right 117, top-down 83, mixed 68, bottom-up 4 -- bottom-up is essentially unused; only memory hierarchies read from the device outward."
+     "description": "Reading direction. Corpus: left-right 117, top-down 83, mixed 68, bottom-up 4 -- bottom-up is essentially unused; only memory hierarchies read from the device outward. AI family (references/ai/layouts.md §3): left-right 54%, mixed 29%, top-down 11%, circular / radial 3%, none 2%; bottom-up stacks are normal in model anatomy (23% of records) and audio (36%)."
     },
     "panels": {
      "type": "integer",
@@ -309,10 +331,15 @@
       "categorical-outline",
       "green-ground",
       "charon",
+      "office-pastel",
+      "tinted-regions",
+      "role-colours",
+      "verdict-contrast",
+      "frozen-trainable",
       "custom"
      ],
      "default": "blue-orange",
-     "description": "Palette id from references/palettes.json; roles resolve there. The *-outline ids have container/lane = null (outline only, no fill); the *-ground ids and pastel-regions fill the container with a tint. 'custom' requires style_overrides.palette_roles to define at least module, stroke and text."
+     "description": "Palette id from references/palettes.json; roles resolve there. The *-outline ids have container/lane = null (outline only, no fill); the *-ground ids and pastel-regions fill the container with a tint. 'custom' requires style_overrides.palette_roles to define at least module, stroke and text. The five families marked \"family\": \"ai\" (office-pastel, tinted-regions, role-colours, verdict-contrast, frozen-trainable; references/ai/palettes.md §9) are the AI family's starting points; its figures may use any family."
     },
     "font": {
      "type": "string",
@@ -497,6 +524,148 @@
      "patternProperties": {
       "^(x-|_)": {
        "description": "extension / working field (x-* or _*): ignored by the validator, free for notes, provenance, editor state"
+      }
+     }
+    },
+    "ai": {
+     "type": "object",
+     "additionalProperties": false,
+     "default": {},
+     "description": "Only for meta.family = ai: what kind of Figure 1 this is, in the vocabulary of references/ai/ (kinds.md, domains.md, layouts.md). Descriptive: the validator reads it to pick budgets and to phrase its advice, never to reject an arrangement.",
+     "properties": {
+      "kinds": {
+       "type": "array",
+       "default": [],
+       "items": {
+        "enum": [
+         "stage-pipeline",
+         "model-anatomy",
+         "side-by-side-contrast",
+         "worked-walkthrough",
+         "concept-schematic",
+         "scope-overview",
+         "actor-interaction",
+         "contribution-mosaic",
+         "other"
+        ]
+       },
+       "description": "Every kind that applies, primary first (kinds overlap: a mosaic whose tiles hold a pipeline is contribution-mosaic + stage-pipeline). Budgets follow the primary kind (style-thresholds.json by_kind)."
+      },
+      "variant": {
+       "type": "string",
+       "default": "",
+       "description": "A variant slug of the primary kind (kinds.md: stage-chain, phase-bands, overview-plus-zoom, paired-lanes, example-gallery, single-agent-loop ...) or your own slug."
+      },
+      "subfield": {
+       "enum": [
+        "llm-nlp",
+        "multimodal",
+        "vision",
+        "generative",
+        "agents",
+        "rl-robotics",
+        "audio",
+        "science-engineering",
+        "ml-core",
+        "other"
+       ],
+       "default": "other",
+       "description": "The paper's primary sub-field (references/ai/domains.md says what each one draws differently)."
+      },
+      "subfield2": {
+       "enum": [
+        "llm-nlp",
+        "multimodal",
+        "vision",
+        "generative",
+        "agents",
+        "rl-robotics",
+        "audio",
+        "science-engineering",
+        "ml-core",
+        "other",
+        ""
+       ],
+       "default": "",
+       "description": "A secondary sub-field when the paper straddles two (two thirds do); read both sections of domains.md."
+      },
+      "arrangement": {
+       "enum": [
+        "single",
+        "pipeline-row",
+        "pipeline-column",
+        "panels-row",
+        "panels-column",
+        "panels-grid",
+        "lanes",
+        "hub",
+        "bands",
+        "cards-grid",
+        "dashboard",
+        "chat-column",
+        "inset",
+        "free",
+        "other"
+       ],
+       "default": "other",
+       "description": "How the canvas is divided, in the vocabulary of references/ai/layouts.md §1 (the AI counterpart of meta.template, which is then 'ai'). It describes the arrangement decided on; 'other' with a note is a value."
+      },
+      "grouping": {
+       "type": "array",
+       "default": [],
+       "items": {
+        "enum": [
+         "tinted-regions",
+         "framed-boxes",
+         "dashed-boxes",
+         "whitespace",
+         "panel-frames",
+         "other"
+        ]
+       },
+       "description": "How parts are set apart (layouts.md §7: tinted regions 60% of records, framed boxes 59%, dashed boxes 45%, white space 41%; usually two of them)."
+      },
+      "samples": {
+       "enum": [
+        "none",
+        "text",
+        "image",
+        "video",
+        "audio",
+        "3d",
+        "table",
+        "network-graph",
+        "chart",
+        "code",
+        "molecule",
+        "mixed",
+        "other"
+       ],
+       "default": "none",
+       "description": "The modality of the samples the figure shows (a prompt and its answer, image tiles, a waveform, a molecule). 53% of the corpus shows samples; the brief names the paper's own material for them."
+      },
+      "idioms": {
+       "type": "array",
+       "default": [],
+       "items": {
+        "type": "string"
+       },
+       "description": "The stock drawn forms the figure uses, as vocabulary ids (llm, transformer-block, lora-adapter, token-strip, diffusion-chain, agent-loop, chat-bubbles, benchmark-card, filmstrip ...; assets/exemplars/ai/vocab.json): the parts library is searched by them (assets/symbols/index.json families, subtype ai)."
+      },
+      "materials": {
+       "type": "array",
+       "default": [],
+       "items": {
+        "type": "string"
+       },
+       "description": "What the paper supplies for the figure: sample images, screenshots, real prompts and answers, numbers, the model's or the paper's logo. Named here so the plan draws from them and never invents them."
+      },
+      "notes": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "description": "free text: the arrangement in your own words when 'other', what was decided against the corpus habit and why"
       }
      }
     }
@@ -732,10 +901,13 @@
       "cell",
       "port",
       "image",
+      "text",
+      "bubble",
+      "chart",
       "other"
      ],
      "default": "module",
-     "description": "Semantic class; picks the default shape (module/compute/external/actor -> rectangle, store -> cylinder, queue -> slotted rectangle, note -> borderless text, icon -> symbol only, image -> a bitmap). Deviate from a rectangle only where the idiom is already known to readers (encoding.md A9). image = a bitmap -- a sample input or output, a photo, a screenshot, a rendered result, an icon: `image` names the file; drawn as <image>, usually with a thin frame, its label a caption. other = anything else; describe it in notes and draw what the paper shows. Mechanism kinds: state = a named state of a state machine (rounded box or ellipse); decision = a diamond with labelled branches; slot = one entry of an array / queue / log drawn as a slotted row; cell = one cell of a table or matrix; port = a small interface pin on a component edge."
+     "description": "Semantic class; picks the default shape (module/compute/external/actor -> rectangle, store -> cylinder, queue -> slotted rectangle, note -> borderless text, icon -> symbol only, image -> a bitmap). Deviate from a rectangle only where the idiom is already known to readers (encoding.md A9). image = a bitmap -- a sample input or output, a photo, a screenshot, a rendered result, an icon: `image` names the file; drawn as <image>, usually with a thin frame, its label a caption. other = anything else; describe it in notes and draw what the paper shows. Mechanism kinds: state = a named state of a state machine (rounded box or ellipse); decision = a diamond with labelled branches; slot = one entry of an array / queue / log drawn as a slotted row; cell = one cell of a table or matrix; port = a small interface pin on a component edge. AI family additions: text = a quoted text block (a prompt, a response, code lines, a record) drawn as a card with its lines -- two or three lines, never a page; bubble = a speech or thought bubble with a short message, tied to its actor; chart = a small plot drawn to scale (data-scale=\"data\") or as a picture."
     },
     "parent": {
      "$ref": "#/$defs/ref",
@@ -769,6 +941,22 @@
      "default": "",
      "description": "Name of a symbol from assets/symbols/ (copied inline as <g data-symbol=\"...\">), or a free-text description of a shape the library does not have. The agent is free to draw anything not in the library."
     },
+    "idiom": {
+     "type": "string",
+     "default": "",
+     "description": "AI family: the stock drawn form this node is (a vocabulary id: llm, transformer-block, lora-adapter, vae-codebook, diffusion-chain, token-strip, chat-bubbles ...), so the matching parts can be found (assets/symbols/index.json, subtype ai, by family) and the figure's idioms are known. Descriptive."
+    },
+    "train_state": {
+     "enum": [
+      "",
+      "trainable",
+      "frozen",
+      "shared",
+      "other"
+     ],
+     "default": "",
+     "description": "AI family: the training state the figure must show for this part. Drawn with the snowflake / fire glyphs (6% of records), a padlock, or the palette's state colours (frozen-trainable), and said in the key: the corpus splits blue and grey evenly between the two states, so the key or the glyph must say which is which (references/ai/encoding.md Part A, Part D)."
+    },
     "image": {
      "type": "object",
      "additionalProperties": false,
@@ -800,6 +988,21 @@
         "null"
        ],
        "description": "free text: provenance, licence, crop wanted, anything the enums cannot say"
+      },
+      "role": {
+       "enum": [
+        "sample-input",
+        "sample-output",
+        "data-thumbnail",
+        "result",
+        "screenshot",
+        "illustration",
+        "icon",
+        "logo",
+        "other"
+       ],
+       "default": "other",
+       "description": "What the picture is in the figure (AI family records: sample inputs and outputs 34% of figures, data thumbnails 10%, rendered results 7%): the plan sizes and frames pictures by role, and a logo or mascot is the paper's own material (never a library part)."
       }
      },
      "patternProperties": {
@@ -950,10 +1153,13 @@
       "pointer",
       "mapping",
       "message",
+      "gradient",
+      "attention",
+      "interaction",
       "other"
      ],
      "default": "data",
-     "description": "The flow class. data = the request/data path (solid). control = decisions, metadata, commands (dashed, only if containers are solid). feedback = a return edge closing a cycle. dependency = a weak 'uses' link (dotted). membership = 'belongs to', drawn as a leader, not an arrow. other = describe in notes. Mechanism kinds: transition = a state-machine edge labelled with its trigger or guard (`guard`); pointer = a reference from a slot / node to another (thin, open head); mapping = a correspondence between two representations (thin, no head or both); message = a message between lifelines on a timeline (horizontal or sloped arrow, ordered top to bottom)."
+     "description": "The flow class. data = the request/data path (solid). control = decisions, metadata, commands (dashed, only if containers are solid). feedback = a return edge closing a cycle. dependency = a weak 'uses' link (dotted). membership = 'belongs to', drawn as a leader, not an arrow. other = describe in notes. Mechanism kinds: transition = a state-machine edge labelled with its trigger or guard (`guard`); pointer = a reference from a slot / node to another (thin, open head); mapping = a correspondence between two representations (thin, no head or both); message = a message between lifelines on a timeline (horizontal or sloped arrow, ordered top to bottom). AI family additions: gradient = a loss or gradient path (usually dashed, one style per figure), attention = an attention or cross-attention link between blocks, interaction = an exchange between actors (a message, an action, feedback) in an actor figure."
     },
     "style": {
      "enum": [
@@ -1279,10 +1485,11 @@
       "label",
       "verdict",
       "delta",
-      "zoom"
+      "zoom",
+      "title"
      ],
      "default": "label",
-     "description": "callout = commentary in a small box or with a leader. bracket = a span marker over an interval (a saved duration, a repeated block). label = a bare word placed on the drawing ('Kernel Space', 'x16', 'Time'). verdict = a checkmark / cross / warning badge judging the anchor; delta = a callout naming what changed at the anchor; zoom = the link from a magnified region to its inset."
+     "description": "callout = commentary in a small box or with a leader. bracket = a span marker over an interval (a saved duration, a repeated block). label = a bare word placed on the drawing ('Kernel Space', 'x16', 'Time'). verdict = a checkmark / cross / warning badge judging the anchor; delta = a callout naming what changed at the anchor; zoom = the link from a magnified region to its inset. title = a title, claim or the paper's name set into the figure (AI family: 6% of records, scope overviews 19%; references/ai/encoding.md Part E)."
     },
     "side": {
      "enum": [
@@ -1600,10 +1807,15 @@
       "alternatives",
       "time",
       "zoom",
-      "part"
+      "part",
+      "stages",
+      "examples",
+      "narrative",
+      "overview",
+      "modalities"
      ],
      "default": "alternatives",
-     "description": "What the panels vary along: alternatives = designs / policies / cases compared (comparison); time = successive states of one instance (evolution); zoom = a magnified region of another panel; part = one lettered part of a composite figure (a structure, a table of values, a timeline, a control loop ... shown side by side because they tell one story) -- a part repeats no template, may hold its own sub-panels (their `parent` names it) and is held to its own box budget (spec-guide §8)."
+     "description": "What the panels vary along: alternatives = designs / policies / cases compared (comparison); time = successive states of one instance (evolution); zoom = a magnified region of another panel; part = one lettered part of a composite figure (a structure, a table of values, a timeline, a control loop ... shown side by side because they tell one story) -- a part repeats no template, may hold its own sub-panels (their `parent` names it) and is held to its own box budget (spec-guide §8). AI family (references/ai/layouts.md §2): stages = steps of one process in panels or bands (24% of multi-panel records), examples = cases or categories side by side (20%; a gallery of cards), narrative = unlike panels telling one story -- problem, method, result; task, model, data (34%), overview = the whole next to its parts (19%), modalities = one panel per modality (2%)."
     },
     "view": {
      "enum": [

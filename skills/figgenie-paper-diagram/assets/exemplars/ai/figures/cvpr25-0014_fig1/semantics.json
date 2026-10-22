@@ -1,0 +1,543 @@
+{
+ "paper_id": "cvpr25-0014",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Crab",
+  "one_liner": "A unified audio-visual scene understanding model trained with explicit cooperation among tasks, through a reasoning-rich instruction dataset and interaction-aware LoRA heads.",
+  "domain": [
+   "audio-visual scene understanding",
+   "unified multimodal LLM",
+   "multi-task instruction tuning"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "audio"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "scope-overview"
+  ],
+  "variant": "capability-cards",
+  "variant_note": "one model hub with four colour-tabbed task cards, each pairing a user prompt with a real audio-visual input and output; the hub holds a crab mascot and a thought cloud",
+  "argues": "One model can do temporal localization, spatial localization, spatio-temporal reasoning and pixel-level understanding of audio-visual scenes.",
+  "subject": "Crab as a central hub with four task cards, each with a prompt, a video with waveform and the output",
+  "elements": [
+   {
+    "name": "Audio-visual scene understanding task",
+    "type": "label",
+    "role": "names the family of tasks that the model unifies",
+    "drawn_as": "grey rounded title box at the top centre with a thick dark-grey arrow pointing down to the hub",
+    "container": "centre",
+    "is_contribution": false
+   },
+   {
+    "name": "AVE/AVVP/AVQA/AVS/ARIG/…",
+    "type": "label",
+    "role": "acronyms of the audio-visual tasks that are unified, each coloured like one of the four task types",
+    "drawn_as": "row of acronyms in blue, orange, green and purple under the title, ending in an ellipsis",
+    "container": "centre",
+    "is_contribution": false
+   },
+   {
+    "name": "MLLMs",
+    "type": "module",
+    "role": "the unified model that completes all four task types",
+    "drawn_as": "large rounded box with a yellow outline and glow, a red cartoon crab at the left, a green thought cloud with four coloured nodes at the top right and the bold italic word MLLMs",
+    "container": "centre",
+    "is_contribution": true
+   },
+   {
+    "name": "Temporal localization",
+    "type": "container",
+    "role": "task card: describe the events and the time range in a video",
+    "drawn_as": "pale-blue card with a blue title tab at the top left, user icon and prompt, video strip with waveform, arrow to a dashed answer box",
+    "container": "top left",
+    "is_contribution": false
+   },
+   {
+    "name": "Spatial localization",
+    "type": "container",
+    "role": "task card: recognise the sounding object and output its location",
+    "drawn_as": "pale-pink card with a pink title tab at the top right, user icon and prompt, one frame with waveform, long arrow to a frame with a green box",
+    "container": "top right",
+    "is_contribution": false
+   },
+   {
+    "name": "Spatio-temporal reasoning",
+    "type": "container",
+    "role": "task card: answer a question about the order and place of sounding instruments with an explicit reasoning process",
+    "drawn_as": "pale-orange card with an orange title tab at the top left, three-frame strip with waveforms, user icon and question, black elbow arrow to a long dashed answer box",
+    "container": "bottom left",
+    "is_contribution": true
+   },
+   {
+    "name": "Pixel-level understanding",
+    "type": "container",
+    "role": "task card: segment the sounding object in a frame",
+    "drawn_as": "pale-green card with a green title tab at the top right and two example rows split by a dashed line: frame with waveform, user icon and prompt, long arrow to a black mask tile",
+    "container": "bottom right",
+    "is_contribution": false
+   },
+   {
+    "name": "Please describe the events and time range that occurred in the video. | Please recognize the category of object that makes the sound and then output the location coordinates. | What is the left instrument of the first sounding instrument? | Please segment out the object that makes sound on the left. | Please segment out the sounding object.",
+    "type": "text-block",
+    "role": "the user instruction of each card",
+    "drawn_as": "text in the task colour beside a small outline person icon",
+    "container": "the four cards",
+    "is_contribution": false
+   },
+   {
+    "name": "A red car appears from a distance and drives down a dirt road, kicking up dust and creating a cloud of smoke. The car is visible and audible from the 4th to the 9th second.",
+    "type": "text-block",
+    "role": "answer of the temporal localization card, with the time range in words",
+    "drawn_as": "serif text in a peach dashed rounded box right of a dark arrow",
+    "container": "Temporal localization",
+    "is_contribution": false
+   },
+   {
+    "name": "In the video, three people are playing musical instruments in front of a Christmas tree. ... So the answer is cello.",
+    "type": "text-block",
+    "role": "answer with an explicit reasoning process: who plays which instrument, when the piano sounds first, then the answer",
+    "drawn_as": "five-line justified serif text in a long peach dashed box under the video strip",
+    "container": "Spatio-temporal reasoning",
+    "is_contribution": true
+   },
+   {
+    "name": "legend: Temporal localization, Spatial localization, Spatio-temporal reasoning, Pixel-level understanding",
+    "type": "label",
+    "role": "names the four task colours",
+    "drawn_as": "four coloured dots with serif words in a pale box at the bottom centre",
+    "container": "centre",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Audio-visual scene understanding task",
+    "to": "MLLMs",
+    "what": "the unified set of tasks is handed to one model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLLMs",
+    "to": "the four task cards",
+    "what": "the model completes each task type; dotted arrows in blue, purple, orange and green point from the hub to the card of the same colour",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video strip and waveform",
+    "to": "answer text",
+    "what": "temporal localization: events and time range as text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "video frame and waveform",
+    "to": "frame with green box",
+    "what": "spatial localization: location of the sounding object as a box",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "three-frame strip and waveforms",
+    "to": "reasoning answer",
+    "what": "spatio-temporal reasoning: the answer comes with an explicit reasoning text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frames and waveforms",
+    "to": "mask tiles",
+    "what": "pixel-level understanding: a segmentation mask per frame, two example rows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "user icon and prompt",
+    "to": "video input",
+    "what": "the instruction is given with the video; no arrow, only adjacency",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "task colour",
+    "to": "tab, card tint, user icon, prompt, dotted arrow, legend dot, acronym",
+    "what": "one colour per task type carried through the card and the hub arrows",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Temporal localization",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "prompt, video strip with waveform and a text answer giving the events and the time range",
+    "verdict": null
+   },
+   {
+    "label": "Spatial localization",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "prompt, one frame with waveform and an output frame with a green box on the sounding object",
+    "verdict": null
+   },
+   {
+    "label": "Spatio-temporal reasoning",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "question, three-frame strip and a long answer with explicit reasoning steps",
+    "verdict": null
+   },
+   {
+    "label": "Pixel-level understanding",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "two prompts, frames with waveforms and black mask tiles with the segmented sounding object",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Temporal localization, Spatial localization, Spatio-temporal reasoning, Pixel-level understanding",
+    "kind": "section",
+    "at": "coloured title tabs of the four cards",
+    "what": "head the four task cards"
+   },
+   {
+    "marker": "four coloured dots",
+    "kind": "identity",
+    "at": "legend at the bottom centre",
+    "what": "name the four task types by colour"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "short video strips: a red car on a dirt road, three people playing instruments under a Christmas tree",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "two strips of three butted frames with a blue audio waveform under each"
+   },
+   {
+    "what": "single video frames: a cat in a room, a TV interview, a band under the name The Beatles",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one frame per example with a blue waveform strip beneath"
+   },
+   {
+    "what": "audio waveforms of the inputs",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "blue wide strips under the frames; the reasoning card has two segments"
+   },
+   {
+    "what": "output frame of the cat with a green bounding box",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "frame at the right end of the long arrow in the spatial card"
+   },
+   {
+    "what": "segmentation masks: a teal blob of the left person, white blobs of the sounding objects",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "black tiles with the mask in teal or white at the right of the pixel-level card"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "red cartoon crab with raised claws",
+    "stands_for": "Crab, the model",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "thought cloud with four coloured nodes joined by solid and dashed lines",
+    "stands_for": "the cooperation among the four task types (nodes in the four task colours); not labelled in the figure",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "outline head-and-shoulders person",
+    "stands_for": "the user who gives the instruction",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 5
+   }
+  ],
+  "examples": [
+   {
+    "what": "five user prompts, from 'Please describe the events and time range that occurred in the video.' to 'Please segment out the sounding object.'",
+    "form": "text in the task colour beside a person icon",
+    "real_values": true
+   },
+   {
+    "what": "a text answer with a time range: 'The car is visible and audible from the 4th to the 9th second.'",
+    "form": "serif text in a dashed peach box",
+    "real_values": true
+   },
+   {
+    "what": "an answer with explicit reasoning ending 'So the answer is cello.'",
+    "form": "five-line justified text in a long dashed peach box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "a red cartoon crab beside a thought cloud and the bold italic word MLLMs in a glowing yellow box",
+    "parts": [
+     "crab mascot",
+     "thought cloud",
+     "MLLMs label"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "three butted video frames as a strip with a blue audio waveform under it, no sprocket holes",
+    "parts": [
+     "frames",
+     "waveform"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a small outline person icon followed by the instruction text in the task colour, without a box",
+    "parts": [
+     "user icon",
+     "instruction text"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "The eye lands on the glowing yellow hub with the crab, goes up to the task header, then follows the dotted colour arrows to the four cards, reading each card as prompt, input video with waveform, then output."
+ },
+ "layout": {
+  "arrangement": "hub",
+  "arrangement_note": "A central yellow-glow box with the crab and the word MLLMs, a task header with a thick down arrow above it and a colour legend below it; four tinted cards in the corners (temporal and spatial at the top, spatio-temporal reasoning and pixel-level at the bottom), each with a coloured title tab on its top edge and a colour-matched dotted arrow from the hub. Inside a card: user icon and prompt, input video with waveform, and the output at the right or below.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "radial",
+  "reading_start": "centre",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.73,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4e95db",
+    "used_for": "blue title tab of Temporal localization"
+   },
+   {
+    "hex": "#0f9ed5",
+    "used_for": "blue prompt text, dotted arrow and legend dot of Temporal localization"
+   },
+   {
+    "hex": "#e08bd6",
+    "used_for": "pink title tab of Spatial localization"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "purple prompt text and dotted arrow of Spatial localization"
+   },
+   {
+    "hex": "#f2ac84",
+    "used_for": "orange title tab of Spatio-temporal reasoning"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "orange prompt text and dotted arrow"
+   },
+   {
+    "hex": "#47b595",
+    "used_for": "green title tab of Pixel-level understanding"
+   },
+   {
+    "hex": "#11a17a",
+    "used_for": "green prompt text, dotted arrow and card border"
+   },
+   {
+    "hex": "#fbe3d6",
+    "opacity": 0.15,
+    "used_for": "pale orange tint of the reasoning card"
+   },
+   {
+    "hex": "#fee8eb",
+    "opacity": 0.28,
+    "used_for": "pale pink tint of the spatial card"
+   },
+   {
+    "hex": "#47b595",
+    "opacity": 0.05,
+    "used_for": "pale green tint of the pixel-level card"
+   },
+   {
+    "hex": "#ffff00",
+    "opacity": 0.14,
+    "used_for": "yellow glow behind the hub"
+   },
+   {
+    "hex": "#404040",
+    "used_for": "dark-grey arrows inside the cards and above the hub"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey title box and legend box"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt card borders in the task colour; dashed peach borders on the answer boxes; dotted 1.25 pt colour arrows",
+  "font": "serif (Times New Roman) 5.5 to 6 pt for prompts and answers, bold 7.5 pt for tab titles, bold italic 8 pt for MLLMs",
+  "corners": "rounded",
+  "arrows": "dotted colour-coded arrows with filled heads from the hub; thick dark-grey arrows in the temporal card and above the hub; long thin dark arrows in the spatial and pixel-level cards; one black elbow arrow in the reasoning card",
+  "rendering": "flat-vector",
+  "effects": "yellow glow behind the hub; otherwise none",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per task type: blue = temporal localization, pink and purple = spatial localization, orange = spatio-temporal reasoning, green = pixel-level understanding; carried through the tab, card tint, user icon, prompt text, dotted arrow, legend dot and the acronyms above the hub; yellow = the model hub",
+  "line_style_means": "dotted colour arrows = the model handles that task type; thick or long dark arrows = input to output inside a card; dashed peach frames = written answers; solid thin frames = cards",
+  "shape_means": "rounded card with a title tab = a task type; large rounded yellow box with a crab = the model; dashed rounded box = a text answer; black tile = a segmentation mask",
+  "marker_means": "coloured dots in the legend name the four task types; a person icon marks the user's instruction",
+  "emphasis": "The glowing yellow hub with the crab mascot is the centre of the figure, with four equal colour-coded spokes around it; the long reasoning answer is the biggest text block.",
+  "reusable_patterns": [
+   "central model hub with a mascot and four colour-coded spokes",
+   "card = title tab, user icon, prompt in the task colour, input video with waveform, arrow, output",
+   "dotted colour-matched arrows from the hub to the cards",
+   "dashed box for text answers and black tile for masks",
+   "task acronyms above the hub coloured like the cards",
+   "legend of four coloured dots at the bottom centre",
+   "thought bubble with coloured nodes for the internal cooperation"
+  ],
+  "weaknesses": [
+   "5.5 to 6 pt text in four dense cards",
+   "the thought cloud with four nodes is not labelled, so its meaning has to come from the paper",
+   "arrow styles differ from card to card without a stated meaning"
+  ]
+ },
+ "resources": {
+  "own": [
+   "video frames and audio waveforms of the examples",
+   "prompts, answers and the reasoning text",
+   "segmentation masks and a box overlay"
+  ],
+  "stock": [
+   "outline person icons"
+  ],
+  "generated": [
+   "crab mascot and thought cloud"
+  ],
+  "drawn": [
+   "cards, tabs and dotted arrows",
+   "dashed answer boxes",
+   "legend",
+   "hub box with glow"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "red crab mascot in a glowing hub",
+   "thought cloud with four coloured nodes",
+   "four colour-tabbed task cards",
+   "video strips with blue waveforms",
+   "prompt text beside a person icon",
+   "dashed answer box with reasoning text",
+   "segmentation mask tiles",
+   "dotted colour arrows",
+   "colour legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "audio-visual scene understanding",
+   "unified MLLM",
+   "temporal localization",
+   "spatial localization",
+   "spatio-temporal reasoning",
+   "pixel-level segmentation",
+   "explicit cooperation",
+   "instruction tuning"
+  ],
+  "tags": [
+   "mascot-character",
+   "title-branding",
+   "task-definition",
+   "colour-coded-groups",
+   "filmstrip"
+  ],
+  "new_tags": [
+   {
+    "name": "corner-tab-cards",
+    "what": "each card carries its title on a coloured tab sticking out of one corner of its frame, in the colour that also tints the card, its prompt text, its dotted arrow and its legend dot"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a unified model as a central hub with one colour-coded card per task: each card pairs a user prompt with a real input and output, and the same colour runs through tab, tint, prompt, dotted arrow and legend; a mascot in the hub brands the model.",
+  "suits": "Teasers of generalist or multi-task models whose claim is the breadth of tasks one model covers, with real inputs and outputs for each task."
+ },
+ "tags": [
+  "central hub with four spokes",
+  "colour-tabbed cards",
+  "mascot in a glowing box",
+  "dotted colour arrows",
+  "video strips with waveforms",
+  "dashed answer boxes",
+  "small serif text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "We present Crab, a unified audio-visual scene understanding model with explicit cooperation, which can complete various audio-visual tasks.",
+   "the model can focus on multiple interaction aspects such as temporal, spatial, and pixel-level",
+   "for spatio-temporal reasoning task, the label is no longer single words, but includes explicit reasoning process"
+  ]
+ },
+ "summary": "Crab is a unified audio-visual scene understanding model trained with explicit cooperation among tasks. Figure 1 is a hub-and-spoke teaser. At the centre, a header listing the audio-visual task acronyms (AVE, AVVP, AVQA, AVS, ARIG) points down to a glowing yellow box holding a red crab mascot, a thought cloud of four coloured nodes and the word MLLMs. Dotted colour-coded arrows lead to four tabbed cards in the corners: temporal localization, spatial localization, spatio-temporal reasoning and pixel-level understanding. Each card pairs a user prompt with a real video and waveform and the output (text, a box, a long reasoning answer or masks); one colour per task runs through tab, tint, prompt, arrow and the legend under the hub.",
+ "summary_zh": "Crab 是显式任务协作的统一视听场景理解模型。图以中央的螃蟹吉祥物和 MLLMs 为枢纽，用四种颜色的虚线箭头通向四张卡片：时间定位、空间定位、时空推理、像素级理解；每张卡片给出用户提示、视频与波形和输出，下方图例按颜色标出任务。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (contribution-mosaic, scope-overview); the variant is capability-cards because hub-and-spoke is a variant of scope-overview. The meaning of the thought cloud (four coloured nodes joined by solid and dashed lines) is not stated in the context file: the nodes carry the four task colours and the caption speaks of an interaction-aware LoRA structure, but no label ties them together. The acronym row is coloured like the four task types, but which acronym belongs to which type is not stated.",
+ "venue": "CVPR25"
+}

@@ -1,0 +1,444 @@
+{
+ "paper_id": "iclr23-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LAMP (Learning controllable Adaptive simulation for Multi-resolution Physics)",
+  "one_liner": "A graph-network surrogate that evolves a mesh and learns, with a reward on error and computation, where to refine or coarsen it.",
+  "domain": [
+   "physics simulation",
+   "adaptive meshes",
+   "reinforcement learning"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "a zoomed forward-iteration chain (policy, remesh, evolution model) above two time-unrolled mesh rows, with and without remeshing, and a reward bar",
+  "argues": "Remeshing guided by a learned policy is rewarded by the error and computation it saves compared with a rollout on the unchanged mesh.",
+  "subject": "One forward iteration of LAMP, two rollouts of the same 3D mesh with and without remeshing, and the reward built from their difference.",
+  "elements": [
+   {
+    "name": "Forward Iteration",
+    "type": "container",
+    "role": "expanded view of one forward step of the method",
+    "drawn_as": "light grey rounded inset with a bold title, joined to the first step of the Full Rollout row by dotted wedge lines",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "M^t",
+    "type": "data",
+    "role": "the current mesh as a graph, input of the iteration",
+    "drawn_as": "small node-link drawing with orange squares at nodes and edges",
+    "container": "Forward Iteration",
+    "is_contribution": null
+   },
+   {
+    "name": "f_φ^policy",
+    "type": "module",
+    "role": "policy that decides how many edges and which edges to refine or coarsen",
+    "drawn_as": "small rounded box with a function symbol, no words",
+    "container": "Forward Iteration",
+    "is_contribution": true
+   },
+   {
+    "name": "K^re, K^co and {e_k^re}{e_k^co}",
+    "type": "data",
+    "role": "the numbers of edges to refine and coarsen and the chosen edge sets (per the caption)",
+    "drawn_as": "two math lines closed by a bracket that leads to the next box",
+    "container": "Forward Iteration",
+    "is_contribution": true
+   },
+   {
+    "name": "remesh",
+    "type": "operation",
+    "role": "executes remeshing and interpolation on the chosen edges",
+    "drawn_as": "rounded box with a word label",
+    "container": "Forward Iteration",
+    "is_contribution": true
+   },
+   {
+    "name": "M̂'^t",
+    "type": "data",
+    "role": "the updated mesh after remeshing",
+    "drawn_as": "node-link drawing with new nodes, edges and squares in green",
+    "container": "Forward Iteration",
+    "is_contribution": null
+   },
+   {
+    "name": "f_θ^evo",
+    "type": "module",
+    "role": "evolution model that predicts the next state on the updated mesh",
+    "drawn_as": "small rounded box with a function symbol; the same symbol labels the arrows of the lower row",
+    "container": "Forward Iteration",
+    "is_contribution": null
+   },
+   {
+    "name": "M̂^{t+1}",
+    "type": "data",
+    "role": "predicted mesh state at the next time step",
+    "drawn_as": "node-link drawing with green additions",
+    "container": "Forward Iteration",
+    "is_contribution": null
+   },
+   {
+    "name": "Full Rollout",
+    "type": "label",
+    "role": "row of states produced with remeshing: M^t, M̂^{t+1}, M̂^{t+2}, ...",
+    "drawn_as": "bold row title at the left, arrows labelled Forward, mesh renders on top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Rollout without Remeshing",
+    "type": "label",
+    "role": "row of states produced by the evolution model alone: M^t, M̂''^{t+1}, M̂''^{t+2}, ...",
+    "drawn_as": "bold two-line row title, arrows labelled f_θ^evo",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "dashed rounded boxes",
+    "type": "region",
+    "role": "pair the state of the two rows at t+1 and at t+2",
+    "drawn_as": "grey dashed rounded rectangles around two vertically stacked renders",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Reward",
+    "type": "formula",
+    "role": "r_t = ΔError + ΔComputation, collected from each time step",
+    "drawn_as": "bold word and formula at the left end of a long bottom arrow pointing left, with vertical lines down from the dashed pairs",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "M^t",
+    "to": "f_φ^policy",
+    "what": "the mesh is the policy input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_φ^policy",
+    "to": "K^re, K^co and edge sets",
+    "what": "the policy decides how many and which edges to refine or coarsen",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "K^re, K^co and edge sets",
+    "to": "remesh",
+    "what": "the decisions drive remeshing and interpolation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "remesh",
+    "to": "M̂'^t",
+    "what": "the updated mesh",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M̂'^t",
+    "to": "f_θ^evo",
+    "what": "evolution model on the updated mesh",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_θ^evo",
+    "to": "M̂^{t+1}",
+    "what": "predicted next state",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Forward Iteration box",
+    "to": "first Forward step of the Full Rollout row",
+    "what": "the inset is the expanded view of one step",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "M^t, M̂^{t+1}, M̂^{t+2} (Full Rollout)",
+    "to": "next state",
+    "what": "Forward steps repeated over time, continuing with an ellipsis",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M^t, M̂''^{t+1}, M̂''^{t+2} (without remeshing)",
+    "to": "next state",
+    "what": "the evolution model applied repeatedly without remeshing",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "dashed pair at t+1 and at t+2",
+    "to": "Reward",
+    "what": "the difference in error and computation between the two rows at each step feeds the reward",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Forward Iteration",
+    "kind": "stage-pipeline",
+    "axis": "zoom",
+    "shows": "One step: mesh, policy, edge counts and sets, remesh, evolution model, next mesh, drawn on small node-link graphs.",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "side-by-side-contrast",
+    "axis": "overview",
+    "shows": "Two rollout rows of the same mesh at t, t+1, t+2 (with and without remeshing), paired by dashed boxes, and a reward bar underneath.",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "M^t, M̂'^t, M̂^{t+1}, M̂''^{t+1}",
+    "kind": "identity",
+    "at": "above or below each mesh",
+    "what": "names the mesh state at each time; hat for predicted, one prime for the remeshed mesh, two primes for the rollout without remeshing"
+   },
+   {
+    "marker": "…",
+    "kind": "identity",
+    "at": "right end of the rows and of the reward bar",
+    "what": "the rollout and the reward continue over later steps"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "teal triangular-mesh renders of a deforming 3D sheet at t, t+1, t+2 for the two rollouts",
+    "content": "3d-render",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "equal-size renders in two rows from one viewpoint; in the full-rollout row the mesh is denser where the sheet bends; dashed rounded boxes pair the two rows at each time"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one deforming mesh simulated for two steps with remeshing and without it",
+    "form": "rendered meshes in two aligned rows",
+    "real_values": true
+   },
+   {
+    "what": "a seven-node toy mesh before the policy, after refinement (green nodes added) and after the evolution step",
+    "form": "small node-link drawings with squares at nodes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "mesh as a small node-link graph with grey nodes and edges and a small square at nodes and edges; green marks what remeshing adds; no message-passing arrows",
+    "parts": [
+     "nodes",
+     "edges",
+     "orange squares",
+     "green additions"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "a policy box, its action (edge counts and sets), a remesh step and a reward bar; no environment loop arrow, the reward arrow ends at its label",
+    "parts": [
+     "f_φ^policy",
+     "action",
+     "remesh",
+     "Reward"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "a long thick arrow pointing left along the bottom, collecting vertical lines from each dashed pair into the Reward formula",
+    "parts": [
+     "reward formula",
+     "leftward arrow",
+     "vertical drop lines"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Forward Iteration title at top left, follows the chain of boxes to the next mesh, then drops through the dotted wedge to the Full Rollout row, then the row below, and ends at the Reward bar."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Four stacked bands: a grey Forward Iteration inset on top, the Full Rollout row, the Rollout without Remeshing row, and a Reward bar at the bottom. Dotted wedge lines tie the inset to the first step of the Full Rollout row; dashed rounded boxes pair the two rows at t+1 and t+2.",
+  "panel_count": 2,
+  "lanes": "2 aligned rollout rows (with and without remeshing) in the same time columns",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 1.96,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f4b183",
+    "used_for": "orange squares at nodes and edges of the mesh graphs"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "green: nodes, edges and squares added by remeshing (outline #70ad47)"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "grey node outlines and edges of the mesh graphs"
+   },
+   {
+    "hex": "#767171",
+    "used_for": "dark grey outlines of boxes, dashed frames and graph edges"
+   },
+   {
+    "hex": "#20b2b2",
+    "used_for": "teal of the 3D mesh renders",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.5 pt grey graph lines, 1 pt dark grey box outlines and dashed frames, heavy black arrows",
+  "font": "serif italic (Cambria Math) 8 pt for symbols; sans (Avenir Next) 8 pt, bold for row titles and the inset title; 14 pt bold ellipses",
+  "corners": "rounded",
+  "arrows": "short thin black arrows in the inset; thick black arrows between the renders; a long thick reward arrow pointing left; dotted lines for the zoom wedge",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Orange squares sit on the original nodes and edges, green marks nodes and edges added by the remesh step; teal is the simulated mesh surface in both rollouts (no colour split between the rows).",
+  "line_style_means": "dotted lines from the inset to the first Forward step = zoom; dashed rounded boxes = the pair of states compared at one time; solid arrows = forward steps; the long bottom arrow = the reward collected over the steps",
+  "shape_means": "rounded box = a function or operation (policy, remesh, evolution model); node-link drawing = a mesh state; teal render = a simulated mesh",
+  "marker_means": "hat and primes on M mark predicted, remeshed and no-remeshing states; the ellipsis says the rollout continues",
+  "emphasis": "The grey Forward Iteration inset on top with its bold title and the dotted wedge to the first step; bold row titles on the left.",
+  "reusable_patterns": [
+   "grey inset spelling out one step of the method, tied by dotted wedge lines to the first step of the rollout below",
+   "two rollout rows (with and without the method) in the same time columns and viewpoint, states paired by dashed boxes",
+   "reward bar at the bottom with vertical lines from each dashed pair and a leftward arrow",
+   "tiny node-link graphs showing the mesh before and after refinement, green for what was added",
+   "function boxes labelled with symbols instead of words (f_φ^policy, f_θ^evo)"
+  ],
+  "weaknesses": [
+   "the reward bar does not show where the reward goes (the policy)",
+   "inset labels and math symbols with hats and primes are tiny and hard to decode",
+   "the mesh renders are small"
+  ]
+ },
+ "resources": {
+  "own": [
+   "3D mesh renders from the simulator"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "mini mesh graphs",
+   "boxes and arrows",
+   "dashed pair frames",
+   "dotted wedge lines"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "mini mesh graphs with orange and green squares",
+   "policy, remesh and evolution model boxes",
+   "two rows of teal 3D mesh renders",
+   "dashed boxes pairing states",
+   "reward bar with formula",
+   "dotted wedge from the inset to the first step"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "adaptive mesh",
+   "physics simulation",
+   "remeshing policy",
+   "reinforcement learning",
+   "multi-resolution",
+   "graph neural network",
+   "surrogate model",
+   "reward"
+  ],
+  "tags": [
+   "zoom-callout",
+   "equation-boxes",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "paired-state-reward-bar",
+    "what": "dashed boxes around the method's and the baseline's states at each step, tied by vertical lines to a long reward bar below"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a learned operator and its training signal in one picture: spell out one step in a zoom inset tied by dotted wedge lines to the first step of a rollout, draw the same rollout without the operator right below in the same time columns, and pair their states with dashed boxes that drop onto a reward bar.",
+  "suits": "Sequential decision or simulation methods whose training signal is a difference against a baseline rollout (RL for adaptive meshes, schedulers, planners)."
+ },
+ "tags": [
+  "zoom-inset-on-top",
+  "two-rollout-rows",
+  "dashed-pair-boxes",
+  "math-symbol-boxes",
+  "3d-mesh-renders",
+  "bold-row-titles"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)",
+   "3 Method (p.4)"
+  ],
+  "evidence": [
+   "The high-level schematic of our LAMP is shown in Fig. 1.",
+   "compared to a multi-step rollout without remeshing, as reward to learn the policy"
+  ]
+ },
+ "summary": "LAMP (Learning controllable Adaptive simulation for Multi-resolution Physics) simulates physical systems on meshes with a graph network that evolves the state and a GNN-based policy that decides where to refine or coarsen the mesh, trained with a reward that trades error against computation. Figure 1 stacks four bands. A grey inset, Forward Iteration, chains the mesh M^t, the policy f_φ^policy, the edge counts and sets, a remesh step, the evolution model f_θ^evo and the next mesh. Below, a Full Rollout row and a Rollout without Remeshing row show the same teal 3D mesh over time. Dashed boxes pair their states, and a Reward bar r_t = ΔError + ΔComputation closes the figure.",
+ "summary_zh": "LAMP 用图网络演化模型加上决定局部加密或粗化的策略网络来做多分辨率物理模拟，奖励兼顾误差与计算量。图 1 自上而下分四层：灰色前向迭代放大框、带重网格的完整滚动、不重网格的滚动、底部奖励条，虚线框配对两行的状态。",
+ "confidence": "high",
+ "notes": "Prior labels reordered: stage-pipeline kept as primary, but the closed-loop variant is not drawn as a loop (the reward arrow ends at its label, not at the policy), so the variant is stage-chain; model-anatomy dropped because no model internals are shown. The text layer holds math glyphs the digest cannot decode, so symbols are read from the picture. The orange and green squares on the small mesh graphs are not labelled; reading them as existing versus added is mine. The three small mesh graphs seem to be one wide bitmap (351 by 54 pt in the digest); the six mesh renders are the other bitmaps.",
+ "venue": "ICLR23"
+}

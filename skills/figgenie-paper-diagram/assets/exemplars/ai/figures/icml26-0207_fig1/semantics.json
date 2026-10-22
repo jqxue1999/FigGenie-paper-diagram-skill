@@ -1,0 +1,584 @@
+{
+ "paper_id": "icml26-0207",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TerminalTraj",
+  "one_liner": "Scalable pipeline that builds Dockerized environments from repositories, generates Docker-aligned task instances and synthesizes verified terminal agent trajectories.",
+  "domain": [
+   "terminal agents",
+   "Docker environments",
+   "trajectory synthesis"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "data-construction",
+  "variant_note": "three tinted regions (sources, Docker images, instances) joined by orthogonal black arrows, with captioned icons and logos as nodes",
+  "argues": "A fully automated pipeline can turn open-source repositories into executable Docker environments and verifiable terminal tasks at large scale.",
+  "subject": "Data-source collection, Docker image curation with repo scoring, and LLM-based instance generation ending in agent trajectories.",
+  "elements": [
+   {
+    "name": "Data Sources Collection",
+    "type": "container",
+    "role": "part (i): gathers raw signals from repositories, domains and external documents",
+    "drawn_as": "teal region with teal border at the left, bold title at the top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Github, Selected Program Language, Repos",
+    "type": "data",
+    "role": "repositories from GitHub in the chosen programming languages",
+    "drawn_as": "GitHub logo, magnifier-window icon, then a dashed box with two database-and-folder icons joined by dots, black arrows",
+    "container": "Data Sources Collection",
+    "is_contribution": false
+   },
+   {
+    "name": "Specific Domains",
+    "type": "container",
+    "role": "the eight specialised domains targeted for domain-specific signals",
+    "drawn_as": "dashed box with two rows of four captioned pictograms: Security, QEMU, Multimodal, Environment Interaction, SQL, Model Train & Eval, Data Processing, Web Service",
+    "container": "Data Sources Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Search & Filter",
+    "type": "operation",
+    "role": "keywords and an LLM pick out domain-related files",
+    "drawn_as": "dashed box with a rotated title, a Keywords icon above an orange LLMs box",
+    "container": "Data Sources Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Youtube, Hugging Face, Linux Document, Collection, External Context",
+    "type": "data",
+    "role": "external sources gathered into context that feeds the LLMs",
+    "drawn_as": "dashed box with three brand icons, then a gear-and-hand icon and a stack-with-arrows icon, black arrows",
+    "container": "Data Sources Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Dockers Image Curation",
+    "type": "container",
+    "role": "part (ii): scores and filters repositories and builds Docker images",
+    "drawn_as": "blue region with blue border at the top right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Code Files",
+    "type": "data",
+    "role": "code files of each repository",
+    "drawn_as": "stack of file icons with dots, caption below",
+    "container": "Dockers Image Curation",
+    "is_contribution": false
+   },
+   {
+    "name": "Score Model",
+    "type": "module",
+    "role": "scores the quality of each repository from its code files",
+    "drawn_as": "orange rectangle with dark outline",
+    "container": "Dockers Image Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "Repo Score: 0.00, 0.35, ..., 0.97, 0.26",
+    "type": "instance",
+    "role": "scores of repositories on a scale; one example repo has 0.26",
+    "drawn_as": "repo icon stack with a column of numbers and the example score under it",
+    "container": "Dockers Image Curation",
+    "is_contribution": null
+   },
+   {
+    "name": "Filtering",
+    "type": "operation",
+    "role": "keeps repositories above a score threshold while watching language coverage",
+    "drawn_as": "rotated bold word between the scores and the bars, black bent arrow",
+    "container": "Dockers Image Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "Python, Java, JavaScript, GO, PHP, HTML, C, C++",
+    "type": "chart",
+    "role": "per-language share of accepted and discarded repositories",
+    "drawn_as": "eight horizontal bars, light-blue accept part and red discard part, tiny legend with tick Accept and cross Discard",
+    "container": "Dockers Image Curation",
+    "is_contribution": null
+   },
+   {
+    "name": "Repos, Extract, Dockerfile, Docker Images",
+    "type": "data",
+    "role": "kept repositories yield Dockerfiles that are built into Docker images",
+    "drawn_as": "repo icon, arrow labelled Extract, rotated Dockerfile icon, Docker whale icon with caption",
+    "container": "Dockers Image Curation",
+    "is_contribution": true
+   },
+   {
+    "name": "Instances Generation",
+    "type": "container",
+    "role": "part (iii): generates task instances with LLMs and rolls verified trajectories",
+    "drawn_as": "salmon region with red-orange border at the bottom right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Domain-related Code Files / Docker-related Code Files",
+    "type": "data",
+    "role": "seed files for the two instance branches",
+    "drawn_as": "two dashed boxes with captioned file icons (Markdown, Shell, Python / Markdown, Shell)",
+    "container": "Instances Generation",
+    "is_contribution": null
+   },
+   {
+    "name": "LLMs",
+    "type": "module",
+    "role": "generate instances from the seed files",
+    "drawn_as": "wide flat orange bar with bold text, one per branch, an EXAMPLE sticker pointing into each",
+    "container": "Instances Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "Domain-Specific Instances",
+    "type": "data",
+    "role": "instance bundle of Query, Valid Code, Input, Output and Docker Images",
+    "drawn_as": "rounded box with five captioned icons",
+    "container": "Instances Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "General Instances",
+    "type": "data",
+    "role": "instance bundle of Query, Valid Code and Docker Images",
+    "drawn_as": "rounded box with three captioned icons",
+    "container": "Instances Generation",
+    "is_contribution": true
+   },
+   {
+    "name": "Trajectory Rolling and Verification",
+    "type": "container",
+    "role": "an agent rolls trajectories that are checked by the verification step",
+    "drawn_as": "rounded box with Agent and Verification as orange rectangles, a sampling icon and Trajectory icon",
+    "container": "Instances Generation",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Github",
+    "to": "Repos",
+    "what": "repositories chosen by Selected Program Language",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Repos (Data Sources Collection)",
+    "to": "Code Files",
+    "what": "collected repositories enter curation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Code Files",
+    "to": "Score Model",
+    "what": "files are scored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Score Model",
+    "to": "Repo Score",
+    "what": "a quality score per repository",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Repo Score",
+    "to": "Repos",
+    "what": "after Filtering (per-language accept and discard bars) kept repos are passed on",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Repos",
+    "to": "Docker Images",
+    "what": "Extract the Dockerfile and build the image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Docker Images",
+    "to": "Instances Generation",
+    "what": "curated images go to instance generation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Score Model",
+    "to": "Search & Filter",
+    "what": "the scoring is reused to pick high-quality Markdown and Shell files in the domains",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Specific Domains",
+    "to": "Search & Filter",
+    "what": "domain keywords",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Search & Filter",
+    "to": "Domain-related Code Files",
+    "what": "selected domain files",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "External Context",
+    "to": "LLMs (domain branch)",
+    "what": "external material fed to the LLMs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Domain-related Code Files / Docker-related Code Files",
+    "to": "Domain-Specific Instances / General Instances",
+    "what": "LLMs generate the instances, helped by an EXAMPLE sticker",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Domain-Specific Instances and General Instances",
+    "to": "Agent",
+    "what": "instances become tasks for the agent",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent",
+    "to": "Verification",
+    "what": "trajectories sampled k times are verified",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Verification",
+    "to": "Trajectory",
+    "what": "verified trajectory is the output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Data Sources Collection",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "GitHub repos, eight specific domains with search and filter, external sources",
+    "verdict": null
+   },
+   {
+    "label": "Dockers Image Curation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "code files scored by a Score Model, filtered per language, Dockerfiles extracted and built into Docker images",
+    "verdict": null
+   },
+   {
+    "label": "Instances Generation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "two LLM branches make domain-specific and general instances; agent rollout and verification give trajectories",
+    "verdict": null
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "bar chart of accepted versus discarded repositories per programming language",
+    "content": "chart",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "eight horizontal bars with a light-blue accept part and a red discard part, language names at the left, tick and cross legend above"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "brand logos: GitHub, YouTube, Hugging Face, Linux Tux, Docker whale",
+    "stands_for": "data sources and the Docker image format",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "flat pictograms for the eight domains: shield, chip, media, network, SQL database, model training, funnel with window, globe",
+    "stands_for": "Security, QEMU, Multimodal, Environment Interaction, SQL, Model Train & Eval, Data Processing, Web Service",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "file and code-file icons (code, Markdown, Shell, Python, Dockerfile)",
+    "stands_for": "code files, seed files and the Dockerfile",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 9
+   },
+   {
+    "depicts": "purple database with yellow folders",
+    "stands_for": "a set of repositories",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "magnifier-window, gear-and-hand, stack-with-arrows icons",
+    "stands_for": "program-language selection, keyword search, collection and external context",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "to-do note, document with cross and tick, stack, red arrows",
+    "stands_for": "Query, Valid Code, Input and Output of an instance",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "red curl and node-path icon",
+    "stands_for": "sampling of agent rollouts and the resulting trajectory",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "cyan comic burst sticker with the word EXAMPLE",
+    "stands_for": "example material given to an LLM (read from the picture)",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a repository scored 0.26 within scores from 0.00 to 0.97, and per-language accept and discard bars",
+    "form": "numbers beside a repo icon and a mini bar chart",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "wide flat orange bar labelled LLMs between the input files and the generated instances, no logo",
+    "parts": [
+     "orange bar",
+     "EXAMPLE sticker"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the teal region (top-left), follows the arrow from GitHub across to the blue region, comes back down through Search & Filter and ends in the salmon region, ending at Verification and Trajectory at the bottom right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "a tall teal region fills the left third; the right two thirds hold the blue curation region on top and the taller salmon generation region below; orthogonal black arrows leave the teal region to the right, come back from the blue region to the teal and salmon regions, and the salmon region runs left to right with two parallel branches over one verification box",
+  "panel_count": 3,
+  "lanes": "2 parallel branches in the Instances Generation region (domain-related files to Domain-Specific Instances; Docker-related files to General Instances) merging into one rollout and verification box",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.7,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#bfe5e1",
+    "used_for": "ground of the Data Sources Collection region (teal)"
+   },
+   {
+    "hex": "#bfddee",
+    "used_for": "ground of the Dockers Image Curation region (blue)"
+   },
+   {
+    "hex": "#f2cbc3",
+    "used_for": "ground of the Instances Generation region (salmon)"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "orange boxes: Score Model, LLMs, Agent, Verification"
+   },
+   {
+    "hex": "#caeefb",
+    "used_for": "EXAMPLE stickers"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "discard part of the language bars and cross marks"
+   },
+   {
+    "hex": "#009785",
+    "used_for": "border of the teal region (stroke)"
+   },
+   {
+    "hex": "#449bcd",
+    "used_for": "border of the blue region (stroke)"
+   },
+   {
+    "hex": "#d6593e",
+    "used_for": "border of the salmon region (stroke)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, dashed boxes and text"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black outlines on boxes and dashed groups, 1 pt coloured region borders and arrows",
+  "font": "bold sans (Kermit, Aptos), 3-8 pt: 7 pt region titles, 8 pt on LLMs, Agent and Verification, 4-5 pt icon captions",
+  "corners": "mixed",
+  "arrows": "black orthogonal arrows with small filled heads and several right-angle bends; short straight arrows inside groups",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "teal = data sources, blue = Docker image curation, salmon = instance generation (tinted region with a deeper border of the same hue); orange boxes = models or agent steps that act; red = discarded repositories; cyan sticker = example material",
+  "line_style_means": "dashed black boxes gather items of one kind (repos, domains, file lists, external sources); solid rounded boxes hold generated instance parts and the rollout step",
+  "shape_means": "orange rectangle = a model or agent step; dashed box = a set of inputs; rounded box = a produced bundle; captioned icon = a data item or tool",
+  "marker_means": "tick and cross in the bar legend = accepted and discarded; 'sampling k times' labels the agent arrow; EXAMPLE burst = example fed into an LLM",
+  "emphasis": "three coloured regions separate the three parts; orange bars stand out as the active models; Verification is drawn large at the end",
+  "reusable_patterns": [
+   "three tinted regions with matching deeper borders for the parts of a data pipeline, joined by orthogonal black arrows",
+   "dashed boxes that gather same-kind inputs with captioned icons inside",
+   "orange bars for the LLM steps so models stand out among icons",
+   "mini accept and discard bar chart inside the filtering step",
+   "comic EXAMPLE sticker pointing into an LLM box to show seed examples",
+   "two parallel branches merging into one rollout and verification box",
+   "real brand logos as data-source nodes"
+  ],
+  "weaknesses": [
+   "about 40 icons with 3-5 pt captions make it dense at print size",
+   "title typo 'Dockers Image Curation'",
+   "long bent arrows cross between regions (Score Model to Search & Filter, External Context to LLMs)",
+   "the icons for the eight domains are generic pictograms that say little about the content"
+  ]
+ },
+ "resources": {
+  "own": [
+   "repo score numbers and the per-language accept and discard bars"
+  ],
+  "stock": [
+   "brand logos of GitHub, YouTube, Hugging Face, Linux and Docker",
+   "flat pictograms for domains, files, folders and tools",
+   "comic EXAMPLE stickers"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted regions with borders",
+   "orange boxes",
+   "dashed boxes",
+   "arrows",
+   "bar chart"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "tinted pipeline regions",
+   "GitHub and Docker logos",
+   "eight domain pictograms",
+   "Score Model box",
+   "accept and discard bars per language",
+   "orange LLMs bars",
+   "EXAMPLE stickers",
+   "Agent and Verification boxes"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "terminal agents",
+   "Docker environments",
+   "trajectory synthesis",
+   "data curation",
+   "repository scoring",
+   "verification",
+   "instance generation",
+   "open-source repositories"
+  ],
+  "tags": [
+   "pictogram-chain",
+   "brand-logo-icon",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "comic-example-sticker",
+    "what": "a cartoon burst labelled EXAMPLE pointing into an LLM box to mark seed or few-shot examples"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Split a data pipeline into three tinted regions with matching deeper borders, fill them with captioned icons and real logos as nodes, and mark the model steps with one distinct orange bar so they stay findable among many icons.",
+  "suits": "Data-synthesis and curation pipelines with many heterogeneous sources and tools, where the reader should see the sources, the filtering and the generated instances as three parts."
+ },
+ "tags": [
+  "three tinted regions",
+  "icon-rich pipeline",
+  "orange model bars",
+  "dashed input groups",
+  "orthogonal arrows",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "2 TerminalTraj Pipeline (p.2-3)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "our pipeline consists of 3 parts: (i) Data Sources Collection, aggregating diverse raw signals; (ii) Docker Image Curation",
+   "the top-right part shows Docker image curation, and the bottom-right part presents instance generation",
+   "Repositories scoring below τ = 0.2 are discarded regarding practical trade-off"
+  ]
+ },
+ "summary": "TerminalTraj turns open-source repositories into executable, verifiable terminal tasks and agent trajectories. Figure 1 is a data-construction pipeline drawn as three tinted regions joined by black arrows and filled with small captioned icons and brand logos. The teal region on the left collects sources: GitHub repositories in chosen languages, eight specific domains found by keywords and an LLM, and external documents. The blue region at the top right scores repositories with a Score Model, filters them (a per-language accept and discard bar chart) and extracts Dockerfiles to build Docker images. The salmon region at the bottom right feeds domain-related and Docker-related code files to LLMs, marked with EXAMPLE stickers, to make domain-specific and general instances, then an agent rolls trajectories that are verified.",
+ "summary_zh": "TerminalTraj 把开源仓库变成可执行、可验证的终端任务与智能体轨迹。图 1 为数据构造流水线：左侧青绿区收集数据源，右上蓝色区给仓库打分、过滤并建 Docker 镜像，右下橙红区用 LLM 生成实例，再由智能体采样轨迹并验证。",
+ "confidence": "high",
+ "notes": "Prior label kept (stage-pipeline, data-construction). The role of the External Context arrow into the domain LLMs and of the EXAMPLE stickers is read from the picture; the paper text supplied does not describe them. Icon counts are approximate (41 placed bitmaps in the digest). The bars' light-blue colour is not listed in the digest and is left out of the palette.",
+ "venue": "ICML26"
+}

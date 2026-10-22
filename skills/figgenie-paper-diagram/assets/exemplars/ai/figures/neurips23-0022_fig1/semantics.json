@@ -1,0 +1,484 @@
+{
+ "paper_id": "neurips23-0022",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CtCAE",
+  "one_liner": "Contrastive-trained complex-valued autoencoder that discovers objects without supervision by synchronising phases, handling more than three colour objects.",
+  "domain": [
+   "object-centric learning",
+   "complex-valued networks",
+   "contrastive learning"
+  ],
+  "subfield": "vision",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "a vertical encoder-decoder with magnitude and phase maps feeds a grid of address-over-feature cells from which one anchor, one positive and five negatives are sampled and tied to the anchor by plus and minus arrows",
+  "argues": "Positive (green) and negative (red) feature pairs are sampled around one anchor address (a magnitude patch) and contrasted through their phase features.",
+  "subject": "A complex-valued autoencoder's magnitude and phase outputs, and the sampling of positive and negative address-feature pairs for one anchor.",
+  "elements": [
+   {
+    "name": "Encoder",
+    "type": "module",
+    "role": "maps the input image to complex-valued activations",
+    "drawn_as": "black-outlined trapezoid, wide at the bottom and narrow at the top, label inside",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Encoder Magnitudes / Encoder Phases",
+    "type": "icon",
+    "role": "the two parts of the encoder output, magnitude and phase",
+    "drawn_as": "two tiny 2 x 2 glyphs between the trapezoids: a colour-square grid (red, green, blue, pink) and a grid of small arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Decoder",
+    "type": "module",
+    "role": "maps the encoder output to magnitude and phase output maps",
+    "drawn_as": "black-outlined trapezoid, narrow at the bottom and wide at the top, label inside",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Addresses (Magnitudes → Addresses)",
+    "type": "label",
+    "role": "the coloured squares of the grid are addresses taken from magnitude values",
+    "drawn_as": "row label at the left of the top grid row with a small arrow note in 4 pt text",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Features (Phases → Features)",
+    "type": "label",
+    "role": "the white boxes with arrows are features taken from phase values",
+    "drawn_as": "row label under it with a small arrow note",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "address-feature grid",
+    "type": "container",
+    "role": "candidate cells from which pairs are sampled",
+    "drawn_as": "3 rows of 5 columns, each column a coloured address square over a white feature box holding a black arrow; row 1 in greens, rows 2 and 3 in reds, shades varying along each row",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Anchor Address",
+    "type": "instance",
+    "role": "the address of the anchor, a patch of magnitude values",
+    "drawn_as": "blue-violet (#5855ff) square with a big black X at the left of the middle row, the X also marked on the decoder magnitudes map",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Anchor Feature",
+    "type": "instance",
+    "role": "the phase feature at the anchor address",
+    "drawn_as": "lighter blue-violet box with a black arrow under the anchor address",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Anchor Features",
+    "type": "instance",
+    "role": "the anchor feature as it enters the contrastive comparison",
+    "drawn_as": "white box with a black arrow at the top right, reached by a blue curved arrow from the anchor feature",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sample Positive Pair Features",
+    "type": "instance",
+    "role": "feature of the sampled positive",
+    "drawn_as": "white box with a black arrow at the right, joined to the anchor features by a green double-headed curved arrow with a plus",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sample Negative Pairs Features",
+    "type": "instance",
+    "role": "features of the five sampled negatives",
+    "drawn_as": "row of five white boxes with black arrows at the bottom right, each hit by a red curved arrow from the anchor features",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "green-outlined column",
+    "type": "region",
+    "role": "the grid column sampled as the positive",
+    "drawn_as": "one column of the top row with a thick bright-green outline",
+    "container": "address-feature grid",
+    "is_contribution": true
+   },
+   {
+    "name": "red-outlined columns",
+    "type": "region",
+    "role": "the five grid columns sampled as negatives",
+    "drawn_as": "two columns in the middle row and three in the bottom row with thick red outlines",
+    "container": "address-feature grid",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input image",
+    "to": "Encoder",
+    "what": "image enters the encoder; stacked, no arrow, read bottom to top",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Encoder",
+    "to": "Decoder",
+    "what": "encoder output (magnitudes and phases) goes to the decoder; stacked, no arrow",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Decoder Magnitudes",
+    "to": "Addresses row",
+    "what": "magnitude patches become the addresses; the X marks the anchor patch",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Decoder Phases",
+    "to": "Features row",
+    "what": "phase values become the features",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Anchor Feature",
+    "to": "Anchor Features",
+    "what": "the anchor feature is carried to the right-hand column of samples",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "green-outlined column",
+    "to": "Sample Positive Pair Features",
+    "what": "grey curved arrow copies the sampled positive feature",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red-outlined columns",
+    "to": "Sample Negative Pairs Features",
+    "what": "grey curved arrows copy the five sampled negative features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Anchor Features",
+    "to": "Sample Positive Pair Features",
+    "what": "green double-headed curved arrow with a plus marks a positive pair",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Anchor Features",
+    "to": "Sample Negative Pairs Features",
+    "what": "red curved arrows with minus signs mark negative pairs",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "X",
+    "kind": "identity",
+    "at": "anchor address square and one patch of the decoder magnitudes map",
+    "what": "marks the anchor patch"
+   },
+   {
+    "marker": "+",
+    "kind": "identity",
+    "at": "green double-headed arrow",
+    "what": "marks the positive pair"
+   },
+   {
+    "marker": "− (three drawn)",
+    "kind": "identity",
+    "at": "red curved arrows to the negatives",
+    "what": "mark the negative pairs"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "decoder magnitude map of the scene with a patch grid: cells tinted red or green over grey, the anchor patch purple with an X",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square tile with black grid lines over a faint rendering of the scene, rotated label Decoder Magnitudes at its left"
+   },
+   {
+    "what": "decoder phase map of the scene with a patch grid: cyan background with small black arrows in cells, a magenta blob",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square tile with black grid lines, rotated label Decoder Phases at its left"
+   },
+   {
+    "what": "input scene: a red cube, a blue cylinder, a gold sphere and a green metallic sphere on a grey floor",
+    "content": "3d-render",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "plain square picture at the bottom left under the Encoder"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "tiny 2 x 2 colour-square grid (red, green, blue, pink) and a 2 x 2 grid of small arrows",
+    "stands_for": "encoder magnitudes and encoder phases",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a multi-object scene with its decoder magnitude and phase maps and one anchor patch marked X",
+    "form": "input picture plus two patch-grid overlays",
+    "real_values": true
+   },
+   {
+    "what": "one anchor, one positive and five negative features drawn as boxes each holding a single arrow",
+    "form": "arrow-in-box glyphs under coloured address squares, joined by curved arrows",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "two stacked trapezoids, the encoder wide at the bottom narrowing upward, the decoder narrow at the bottom widening upward, with magnitude and phase key glyphs between them",
+    "parts": [
+     "Encoder trapezoid",
+     "Decoder trapezoid",
+     "key glyphs"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "an anchor feature box joined to one positive by a green double-headed arrow with a plus and to five negatives by red curved arrows with minus signs",
+    "parts": [
+     "anchor",
+     "positive",
+     "negatives",
+     "plus and minus arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "complex-valued-activation",
+    "drawn_as": "a coloured square for the magnitude (address) stacked on a white box holding an arrow for the phase (feature)",
+    "parts": [
+     "coloured square",
+     "arrow-in-box"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the decoder maps at the top left (or the input scene at the bottom left), follows the encoder-decoder column, then moves to the grid at the right: the anchor at its left edge, the blue arrow to Anchor Features at the top right, and the green plus and red minus arrows to the sampled boxes."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A narrow vertical column at the left stacks the output maps, the Decoder, the key glyphs, the Encoder and the input scene; a large 3 x 5 grid fills the middle with the anchor at its left edge, and the anchor, positive and negative feature boxes sit in columns at the right, joined by curved arrows.",
+  "panel_count": 1,
+  "lanes": "3 aligned rows of 5 address-over-feature columns",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.55,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#5855ff",
+    "used_for": "anchor address square with the X and the blue curved arrow (also at 0.76 opacity for the anchor feature)"
+   },
+   {
+    "hex": "#5aff55",
+    "used_for": "positive: bright-green address cell, thick outline of the sampled column, plus arrow"
+   },
+   {
+    "hex": "#46af50",
+    "used_for": "darkest green address cell"
+   },
+   {
+    "hex": "#b2f0b2",
+    "used_for": "pale green address cell"
+   },
+   {
+    "hex": "#d1f4d0",
+    "used_for": "palest green address cell"
+   },
+   {
+    "hex": "#ff0017",
+    "used_for": "negative: thick red outlines, red curved arrows, minus signs, brightest red address cell"
+   },
+   {
+    "hex": "#bf2024",
+    "used_for": "dark red address cell"
+   },
+   {
+    "hex": "#e8baba",
+    "used_for": "pale pink address cell"
+   },
+   {
+    "hex": "#a4a4a4",
+    "used_for": "grey curved copy arrows and neutral cells of the magnitude map"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "outlines of cells and boxes, arrows inside feature boxes, text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black outlines on cells and boxes, about 1 pt thick green and red outlines on the sampled columns, thin grey and coloured curved arrows",
+  "font": "sans (DejaVu Sans) 4-6.5 pt, regular weight, rotated labels at the decoder maps, one 18 pt X",
+  "corners": "square",
+  "arrows": "thin curved arrows: red with minus signs from the anchor features to the negatives, green double-headed with a plus to the positive, grey copy arrows from sampled columns to the right-hand boxes, one blue curved arrow from the anchor; small black straight arrows inside the feature boxes",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "purple-blue = anchor (address with X and feature); green = positive pair (outline, address shades, arrow with plus); red = negative pairs (outlines, address shades, arrows with minus); grey = copy arrows and unsampled patches; shades along each row of address squares vary but are not explained",
+  "line_style_means": "grey curved arrows = copy of a sampled feature to its labelled box; coloured curved arrows = pairing with the anchor; thick coloured outline = a sampled column",
+  "shape_means": "trapezoids = encoder and decoder; a coloured square over a white box with an arrow = one address (magnitude) and its feature (phase)",
+  "marker_means": "the big X marks the anchor address; the plus on the green arrow marks the positive pair; minus signs on the red arrows mark negative pairs",
+  "emphasis": "thick green and red outlines pick out the sampled columns; saturated colours against black outlines; the anchor is the only blue-violet block",
+  "reusable_patterns": [
+   "anchor, positive and negatives drawn as boxes joined by a green plus arrow and red minus arrows",
+   "grid cells outlined in the colour of their role to show which are sampled",
+   "complex activation drawn as a coloured square (magnitude) over a white box holding an arrow (phase)",
+   "patch-grid overlays on the model's output maps with the anchor patch marked X",
+   "grey curved arrows copying sampled items from the grid to labelled boxes"
+  ],
+  "weaknesses": [
+   "no legend inside the figure: the colour roles are explained only in the caption",
+   "grey and coloured curved arrows cross heavily at the right",
+   "the meaning of the shades along each grid row is not stated",
+   "the encoder-to-decoder flow has no arrows"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a rendered multi-object scene",
+   "decoder magnitude and phase maps from the model"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "trapezoids",
+   "address-over-feature grid and arrow-in-box features",
+   "curved arrows and outlines",
+   "key glyphs"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "encoder and decoder trapezoids",
+   "multi-object input scene",
+   "decoder magnitude and phase maps with patch grid",
+   "grid of address-over-feature cells",
+   "purple anchor address with X",
+   "arrow-in-box features",
+   "red and green outlines on sampled columns",
+   "curved plus and minus arrows to sampled-feature boxes"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "complex-valued autoencoder",
+   "object discovery",
+   "contrastive learning",
+   "phase synchrony",
+   "magnitude and phase",
+   "positive negative sampling",
+   "unsupervised",
+   "multi-object scenes"
+  ],
+  "tags": [
+   "positive-negative-pairs",
+   "colour-coded-groups",
+   "matrix-cell-grid"
+  ],
+  "new_tags": [
+   {
+    "name": "arrow-in-box-features",
+    "what": "a feature drawn as a white box holding one arrow whose direction is the value (phase), stacked under a coloured square for the magnitude"
+   },
+   {
+    "name": "role-coloured-outlines",
+    "what": "cells of a grid picked out by thick outlines in the colour of their role (green positive, red negative) and tied to the anchor by coloured curved arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Explain a pair-sampling scheme for a contrastive loss on a real grid of items: show the model's output maps with a patch grid and the anchor cell marked X, lay the candidate cells out as a coloured grid, outline the sampled ones in the role colour, and link them to labelled boxes with a green plus arrow and red minus arrows.",
+  "suits": "contrastive or metric-learning methods where choosing which pairs count as positive or negative is the novelty."
+ },
+ "tags": [
+  "arrow-in-box glyphs",
+  "green red purple roles",
+  "trapezoid encoder decoder",
+  "patch-grid overlays",
+  "curved arrows",
+  "sans text",
+  "sparse labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Contrastive Training of CAEs (p.3)"
+  ],
+  "evidence": [
+   "Sampling process of positive (green) and negative (red) pairs for one anchor (purple) in the CtCAE model.",
+   "Anchor address (the purple box marked with an X) corresponds to the patch of magnitude values",
+   "we contrast the encoder output in an identical manner"
+  ]
+ },
+ "summary": "The paper introduces CtCAE, a complex-valued autoencoder for unsupervised object discovery in which binding information lives in the phase of the activations, trained with a new contrastive loss. Figure 1 shows how that loss samples pairs for one anchor. At the left, a vertical encoder and decoder (two trapezoids) take a multi-object scene and give magnitude and phase maps, shown as patch-grid overlays with the anchor patch marked X. At the right, a 3 x 5 grid stacks coloured address squares (magnitudes) over white boxes with arrows (phase features); the purple anchor sits at the left, one green-outlined column is the positive, five red-outlined columns are negatives, and grey curved arrows copy them to labelled boxes tied to the anchor by a green plus arrow and red minus arrows.",
+ "summary_zh": "CtCAE 用复数值自编码器做无监督物体发现，绑定信息存在相位里，并以新的对比损失训练。图左为编码器、解码器和幅值/相位图（X 标锚点），图右为地址-特征格网：一个紫色锚点、一个绿框正样本、五个红框负样本，经加减号弧线相连。",
+ "confidence": "medium",
+ "notes": "The roles (purple anchor, green positive, red negative) come from the caption; the criterion for choosing the columns and the meaning of the shades along each grid row are not in the evidence (they are described in Section 3). The bottom-to-top direction of the encoder-decoder column is inferred from stacking, there are no arrows. The prior attribute panels=2 was not followed: the left column and the right grid are unframed regions of one drawing.",
+ "venue": "NeurIPS23"
+}

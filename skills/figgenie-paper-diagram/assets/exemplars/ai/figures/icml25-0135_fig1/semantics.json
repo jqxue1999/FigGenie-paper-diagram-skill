@@ -1,0 +1,815 @@
+{
+ "paper_id": "icml25-0135",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Vector-HaSH+ (multi-region brain model, M5)",
+  "one_liner": "Grid cells, hippocampus and non-grid sensory cortex form a memory circuit feeding an RNN policy, trained by RL on a T-maze evidence task to compare grid-cell codes.",
+  "domain": [
+   "computational neuroscience",
+   "reinforcement learning",
+   "hippocampal memory"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "concept-schematic",
+   "side-by-side-contrast",
+   "actor-interaction"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "four lettered panels: prior circuit (A), proposed circuit with numbered links (B), joint vs disjoint grid-code example (C), T-maze RL loop (D)",
+  "argues": "Grid cells that jointly encode position and evidence, inside a hippocampal memory circuit feeding an RNN policy, are the model component under test in a T-maze RL task.",
+  "subject": "A brain-circuit model (grid cells, hippocampus, non-grid sensory EC, RNN policy) and the T-maze task it is trained on.",
+  "elements": [
+   {
+    "name": "grid cells (MEC)",
+    "type": "module",
+    "role": "grid-cell modules whose state is updated by the velocity input V",
+    "drawn_as": "peach band split by orange dividers into three modules, each with a black wire-frame torus and a loop arrow above",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "V",
+    "type": "data",
+    "role": "velocity input that drives the grid-cell state",
+    "drawn_as": "blue-grey square with the letter V and a black arrow into the grid band",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "hipppocampus (prox CA1/ distal CA3)",
+    "type": "module",
+    "role": "hippocampal layer holding a sparse code, linked both ways to the grid layer and to the non-grid layer",
+    "drawn_as": "pink band with scattered black squares",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "non-grid (EC)",
+    "type": "module",
+    "role": "non-grid sensory layer that receives the sensory input pattern",
+    "drawn_as": "green band over two black-and-white cell strips, bed and box clip-art at its left",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "scaffold / heteroassociation / Vector-HaSH",
+    "type": "label",
+    "role": "vertical brackets naming the grid-hippocampus loop, the hippocampus-sensory link and the whole circuit",
+    "drawn_as": "three rotated labels with thin vertical rules on the right of A",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "fixed random / fixed non-random / plastic (Hebb-like)",
+    "type": "label",
+    "role": "key to the three connection types by arrow style",
+    "drawn_as": "three sample arrows (hatched, black, grey) with captions",
+    "container": "A",
+    "is_contribution": false
+   },
+   {
+    "name": "pos / evi",
+    "type": "data",
+    "role": "position and evidence velocity inputs to the grid cells",
+    "drawn_as": "lavender and light-blue rounded boxes stacked at the left of B",
+    "container": "B",
+    "is_contribution": true
+   },
+   {
+    "name": "MLP",
+    "type": "module",
+    "role": "extracts evidence velocity from the sensory input",
+    "drawn_as": "pale yellow rounded box at the bottom left of B",
+    "container": "B",
+    "is_contribution": true
+   },
+   {
+    "name": "grid cells",
+    "type": "module",
+    "role": "grid modules updated by pos and evi, with recurrent loops",
+    "drawn_as": "peach band with orange dividers and three curved loop arrows on top",
+    "container": "B",
+    "is_contribution": null
+   },
+   {
+    "name": "hippocampus",
+    "type": "module",
+    "role": "hippocampal layer between grid cells and non-grid sensory EC; its vector goes to the RNN",
+    "drawn_as": "pink rounded bar",
+    "container": "B",
+    "is_contribution": null
+   },
+   {
+    "name": "Non-grid sensory (EC)",
+    "type": "module",
+    "role": "non-grid sensory layer that receives the sensory input",
+    "drawn_as": "green rounded bar",
+    "container": "B",
+    "is_contribution": null
+   },
+   {
+    "name": "Vector-HaSH",
+    "type": "container",
+    "role": "groups the three memory layers as the core inherited from prior work",
+    "drawn_as": "grey dashed rounded frame with an italic grey title",
+    "container": "B",
+    "is_contribution": false
+   },
+   {
+    "name": "RNN",
+    "type": "module",
+    "role": "action-selection policy that reads the hippocampal vector",
+    "drawn_as": "teal rounded box right of the dashed frame",
+    "container": "B",
+    "is_contribution": true
+   },
+   {
+    "name": "sensory",
+    "type": "data",
+    "role": "sensory input from the environment",
+    "drawn_as": "light grey rounded box at the right edge",
+    "container": "B",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint grid representation:",
+    "type": "container",
+    "role": "top row: three grid modules that each encode position and evidence (M3 and M5)",
+    "drawn_as": "bold row title above three lattice tiles",
+    "container": "C",
+    "is_contribution": true
+   },
+   {
+    "name": "Disjoint grid representation:",
+    "type": "container",
+    "role": "bottom row: modules 1 and 2 encode position, module 3 encodes evidence (M4)",
+    "drawn_as": "bold row title above three lattice tiles",
+    "container": "C",
+    "is_contribution": false
+   },
+   {
+    "name": "Module 1 (λ1 × λ1) / Module 2 / Module 3",
+    "type": "module",
+    "role": "periodic 2D state space of one grid module, one highlighted hexagon marks the current state",
+    "drawn_as": "dark hexagon lattice in a green, blue or red parallelogram; six tiles in all",
+    "container": "C",
+    "is_contribution": null
+   },
+   {
+    "name": "Position Axis (+1, +1, +1) / Evidence Axis (+1, -1, +1)",
+    "type": "label",
+    "role": "toy values of the two task variables along the two lattice axes",
+    "drawn_as": "black axis arrows along the tile edges with text",
+    "container": "C",
+    "is_contribution": null
+   },
+   {
+    "name": "red activation path",
+    "type": "other",
+    "role": "path of the active state: wiggling when both variables share a module, straight when one variable owns the module",
+    "drawn_as": "red arrow over the lattice",
+    "container": "C",
+    "is_contribution": null
+   },
+   {
+    "name": "axis positive direction / periodicity indicator",
+    "type": "label",
+    "role": "key to the solid black arrow and the dashed grey curved arrow",
+    "drawn_as": "two sample arrows with bold captions",
+    "container": "C",
+    "is_contribution": false
+   },
+   {
+    "name": "T-maze (Decision region, Delay, Cue region, Start region)",
+    "type": "instance",
+    "role": "virtual corridor with towers on both sides; the agent must turn to the side with more towers",
+    "drawn_as": "grey T with thick black outline, region names at left, small squares as towers, cheese at the end",
+    "container": "D",
+    "is_contribution": false
+   },
+   {
+    "name": "field of view",
+    "type": "region",
+    "role": "part of the corridor the agent sees ahead",
+    "drawn_as": "green frame over the start of the corridor",
+    "container": "D",
+    "is_contribution": null
+   },
+   {
+    "name": "Vector-HaSH+",
+    "type": "module",
+    "role": "the memory circuit as one box with a path-integration loop",
+    "drawn_as": "salmon rounded box with bold text",
+    "container": "D",
+    "is_contribution": true
+   },
+   {
+    "name": "RNN / Action (↑,←,→)",
+    "type": "module",
+    "role": "policy that turns the hippocampal code h into an action",
+    "drawn_as": "teal rounded box with an arrow up to the action label",
+    "container": "D",
+    "is_contribution": null
+   },
+   {
+    "name": "Position velocity / Evidence velocity (#right - #left) / MLP",
+    "type": "data",
+    "role": "the two velocity inputs and the MLP that produces evidence velocity from the view",
+    "drawn_as": "lavender and light-blue boxes, gold path labelled MLP",
+    "container": "D",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "sensory",
+    "to": "Non-grid sensory (EC)",
+    "what": "sensory input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "sensory",
+    "to": "MLP",
+    "what": "sensory input routed along the bottom of B",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "MLP",
+    "to": "evi",
+    "what": "evidence velocity extracted from the sensory input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "pos / evi",
+    "to": "grid cells",
+    "what": "velocity inputs that update the grid state",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "grid cells",
+    "to": "grid cells",
+    "what": "recurrent update of each module",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "grid cells",
+    "to": "hippocampus",
+    "what": "grid code projected down (hatched arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "hippocampus",
+    "to": "grid cells",
+    "what": "hippocampal readout back to the grid layer (black arrow)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "hippocampus",
+    "to": "Non-grid sensory (EC)",
+    "what": "two-way grey arrows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 5
+   },
+   {
+    "from": "hippocampus",
+    "to": "RNN",
+    "what": "hippocampal vector as policy input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 6
+   },
+   {
+    "from": "V",
+    "to": "grid cells (MEC)",
+    "what": "velocity drives the grid state",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "grid cells (MEC)",
+    "to": "hipppocampus (prox CA1/ distal CA3)",
+    "what": "hatched arrow down (fixed random), black arrow up (fixed non-random)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hipppocampus (prox CA1/ distal CA3)",
+    "to": "non-grid (EC)",
+    "what": "two-way grey arrows (plastic, Hebb-like), bracketed as heteroassociation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each torus and the hippocampal band",
+    "to": "rate-map thumbnails",
+    "what": "firing-rate map of that module or layer",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Position Axis / Evidence Axis",
+    "to": "lattice tiles",
+    "what": "which lattice direction each task variable moves along",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Joint grid representation:",
+    "to": "Disjoint grid representation:",
+    "what": "same example encoded two ways",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "field of view",
+    "to": "Vector-HaSH+",
+    "what": "visual sensory information (green)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "T-maze start region",
+    "to": "Position velocity",
+    "what": "position velocity (dark purple), then up into Vector-HaSH+",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "T-maze view",
+    "to": "Evidence velocity (#right - #left)",
+    "what": "gold path through the MLP, then navy arrow into Vector-HaSH+",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Vector-HaSH+",
+    "to": "RNN",
+    "what": "hippocampal code h",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RNN",
+    "to": "Action (↑,←,→)",
+    "what": "chosen action",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Action (↑,←,→)",
+    "to": "T-maze",
+    "what": "action moves the agent, which changes the sensory input and the grid states",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pos, evi, MLP, RNN in B",
+    "to": "same-coloured boxes in D",
+    "what": "same colour for the same variable or module in both panels",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Vector-HaSH: velocity-driven grid modules, hippocampal layer and non-grid sensory layer with arrow styles keyed by connection type and rate maps beside each layer",
+    "verdict": "prior"
+   },
+   {
+    "label": "B Proposed multi-regional model M5",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Vector-HaSH+ wiring: pos, evi, MLP and sensory inputs, the three memory layers in a dashed frame and an RNN, links numbered (1) to (6)",
+    "verdict": "ours"
+   },
+   {
+    "label": "C",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "Joint (top) and disjoint (bottom) grid codes for an agent moving 3 positions with evidence +1, -1, +1, drawn on three grid-module lattices each",
+    "verdict": "alternatives"
+   },
+   {
+    "label": "D Reinforcement learning scheme with proposed model M5",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "T-maze with field of view, Vector-HaSH+, RNN, action and the loop that moves the agent",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A, B, C, D",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "large bold letters head the four panels"
+   },
+   {
+    "marker": "(1) to (6)",
+    "kind": "order",
+    "at": "links of panel B",
+    "what": "order of computation: sensory input, MLP evidence velocity, pos/evi into grid cells, grid recurrence, grid-hippocampus-sensory exchange, hippocampal vector to RNN"
+   },
+   {
+    "marker": "Module 1, 2, 3 with subscripts and λ1, λ2, λ3",
+    "kind": "identity",
+    "at": "captions under the lattice tiles in C",
+    "what": "names the three grid modules and their periods"
+   },
+   {
+    "marker": "green, blue and red frames",
+    "kind": "identity",
+    "at": "lattice tiles in C",
+    "what": "frame colour names Module 1, 2 or 3 and is kept in both rows"
+   },
+   {
+    "marker": "Ng, Nh, Ns",
+    "kind": "identity",
+    "at": "left of the three layers in A",
+    "what": "subscripted symbols naming the grid, hippocampal and sensory layers"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "simulated grid-cell firing-rate maps",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small blue heat-map squares with a periodic dot lattice, one above each torus, tied to it by hollow-headed arrows"
+   },
+   {
+    "what": "simulated place-cell firing-rate maps",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two dark-blue squares with one bright spot at different places, stacked left of the hippocampal band with hollow-headed arrows"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "black wire-frame torus with an orange patch",
+    "stands_for": "one grid module as a toroidal attractor",
+    "style": "3d",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "dark hexagon lattice in a coloured parallelogram with one peach hexagon",
+    "stands_for": "periodic 2D state space of one grid module, peach hexagon = current state",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "brown bed and cardboard box",
+    "stands_for": "objects in the surroundings that produce the non-grid sensory input",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "cheese wedge",
+    "stands_for": "the reward at the end of the maze",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small white mouse",
+    "stands_for": "the agent at the start of the corridor",
+    "style": "cartoon",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "An agent moves 3 positions forward and meets evidence +1, -1, +1; the active grid state is traced as a red path on each lattice",
+    "form": "toy trajectory drawn on module tiles, values written on the axis labels",
+    "real_values": true
+   },
+   {
+    "what": "A T-maze trial with towers on both sides, cue region, delay, decision region with cheese and a field-of-view window",
+    "form": "top-down maze picture with named regions",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "agent in the T-maze, Vector-HaSH+ and RNN in a row; the action returns to the agent through a long grey dashed outer loop",
+    "parts": [
+     "T-maze",
+     "field of view",
+     "Vector-HaSH+",
+     "RNN",
+     "Action",
+     "grey dashed return loop"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "grid-cell-module",
+    "drawn_as": "wire-frame torus per module in A; hexagon lattice in a parallelogram with dashed curved periodicity arrows in C",
+    "parts": [
+     "torus",
+     "hexagon lattice",
+     "orange divider",
+     "periodicity arrows"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "connection types keyed by arrow style: hatched = fixed random, black = fixed non-random, grey = plastic (Hebb-like); no snowflake or padlock",
+    "parts": [
+     "hatched arrow",
+     "black arrow",
+     "grey arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "two thin strips of alternating dark and white cells under the green band standing for the sensory input pattern",
+    "parts": [
+     "cell strip",
+     "second strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "t-maze-task",
+    "drawn_as": "top-down T-shaped corridor with towers as small squares on both sides, regions named at the left and a reward at the end",
+    "parts": [
+     "corridor",
+     "towers",
+     "region labels",
+     "cheese"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at A top left, moves right to B for the proposed wiring and its numbered links, drops to C for the grid-code contrast, then D for the full RL loop."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four lettered panels in a 2 x 2 grid without outer frames: A prior circuit top left, B proposed wiring top right, C joint and disjoint grid-code rows bottom left, D T-maze and RL loop bottom right.",
+  "panel_count": 4,
+  "lanes": "C: two stacked rows (joint, disjoint) of three aligned grid-module tiles",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "tinted-regions",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.72,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b2b5c2",
+    "used_for": "grey-lilac: dashed Vector-HaSH frame and outer RL loop, T-maze floor"
+   },
+   {
+    "hex": "#abc8dc",
+    "used_for": "blue-grey: velocity block V and light-blue input boxes"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "light blue: evi and Evidence velocity boxes"
+   },
+   {
+    "hex": "#d9d2ea",
+    "used_for": "lavender: pos and Position velocity boxes"
+   },
+   {
+    "hex": "#e6b8af",
+    "used_for": "salmon: Vector-HaSH+ box in D"
+   },
+   {
+    "hex": "#a3c4ca",
+    "used_for": "teal: RNN boxes"
+   },
+   {
+    "hex": "#ef5f2d",
+    "used_for": "orange: grid-cell labels and module dividers"
+   },
+   {
+    "hex": "#090f10",
+    "used_for": "near-black: hexagon cells, maze walls, thick arrows"
+   },
+   {
+    "hex": "#3e267c",
+    "used_for": "dark purple: position-velocity path and start-region frame"
+   },
+   {
+    "hex": "#2ca02c",
+    "used_for": "green: field-of-view frame and arrow"
+   },
+   {
+    "hex": "#254b8d",
+    "used_for": "navy: evidence-velocity path"
+   },
+   {
+    "hex": "#c69e27",
+    "used_for": "gold: MLP path"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "magenta: h arrow and label"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow: MLP box in B",
+    "approx": true
+   },
+   {
+    "hex": "#f9e0c8",
+    "used_for": "peach: grid-cell bands",
+    "approx": true
+   },
+   {
+    "hex": "#f0d5ea",
+    "used_for": "pink: hippocampus bands",
+    "approx": true
+   },
+   {
+    "hex": "#cde59c",
+    "used_for": "light green: non-grid sensory bands",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt on boxes, coloured connectors and the T-maze walls; the dashed frame and loops are light grey",
+  "font": "sans (IBM Plex Sans, Roboto, Montserrat), mostly 4.5-8 pt, bold 16.5 pt panel letters, bold 8 pt panel titles",
+  "corners": "mixed",
+  "arrows": "dashed black arrows with small filled heads for the numbered signals in B, thick solid block arrows for recurrent links, thin hollow-headed arrows to the rate maps in A, coloured solid elbow connectors in D, dashed grey curved arrows for periodicity in C",
+  "rendering": "mixed",
+  "effects": "none; the torus glyphs and clip-art icons carry their own shading as bitmaps",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "one colour per region or variable: peach = grid cells, pink = hippocampus, green = non-grid sensory, teal = RNN, lavender = position, light blue = evidence, yellow = MLP; in C green, blue and red frames name Modules 1 to 3",
+  "line_style_means": "A: hatched arrow = fixed random, black = fixed non-random, grey = plastic (Hebb-like); B: dashed black = numbered signals, thick solid = recurrent links; C: solid black = axis positive direction, dashed grey curve = periodicity; D: coloured solid = signal paths, grey dashed = action-to-position loop",
+  "shape_means": "torus = grid module with periodic state space; hexagon lattice in a parallelogram = state space of one module; band = layer of cells; dashed rounded frame = inherited Vector-HaSH core; T shape = the maze",
+  "marker_means": "bold letters head panels; parenthesised numbers give the order of computation in B; the red arrow on a lattice is the path of the active state",
+  "emphasis": "the proposed model gets bold panel titles (M5), B and D reuse one colour per variable, and the joint-versus-disjoint contrast in C carries bold row titles",
+  "reusable_patterns": [
+   "numbered links on a circuit diagram giving the computation order",
+   "same colour for the same variable in the circuit panel and in the task panel",
+   "arrow-style key for fixed versus plastic connections",
+   "toy trajectory drawn on small state-space tiles, two coding schemes in stacked rows",
+   "long dashed outer loop that closes the agent-environment cycle",
+   "small heat-map thumbnails tied to each module by hollow-headed arrows"
+  ],
+  "weaknesses": [
+   "labels in panel A are only 3.5-4.5 pt",
+   "numbers (1) and (5) each label two different links in B",
+   "label typo hipppocampus in A"
+  ]
+ },
+ "resources": {
+  "own": [
+   "simulated grid-cell and place-cell rate maps",
+   "the T-maze task layout",
+   "the worked grid-code trajectories on the lattices"
+  ],
+  "stock": [
+   "bed and cardboard-box clip-art",
+   "cheese clip-art",
+   "mouse icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "circuit boxes, bands and arrows in A and B",
+   "hexagon-lattice modules and axis arrows in C",
+   "field-of-view frame, boxes and RL loop in D"
+  ],
+  "unknown": [
+   "torus glyphs in A, possibly reused from the earlier Vector-HaSH figure"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "torus grid-cell modules",
+   "hippocampus band",
+   "non-grid sensory band",
+   "dashed frame around the memory circuit",
+   "numbered links",
+   "hexagon-lattice module tiles with red path",
+   "T-maze with towers and cheese",
+   "RNN policy box"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "hippocampus",
+   "grid cells",
+   "Vector-HaSH",
+   "evidence accumulation",
+   "T-maze",
+   "reinforcement learning",
+   "entorhinal cortex",
+   "path integration",
+   "RNN policy",
+   "multi-region model"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "colour-coded-groups",
+   "toy-values-inline",
+   "small-multiples",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "numbered-computation-order",
+    "what": "parenthesised numbers on the links of a circuit diagram give the order in which signals are computed in one step"
+   },
+   {
+    "name": "state-space-lattice-tiles",
+    "what": "a module's state space drawn as a lattice of cells with a highlighted current cell and an arrow path, one tile per module, rows per coding scheme"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Keep one colour per variable or region in both the circuit panel and the task-environment panel, and number the circuit's links to give the computation order. Show a toy trajectory on small state-space tiles to contrast two coding schemes.",
+  "suits": "Neuroscience-inspired or modular architectures where a circuit, a coding scheme and a task environment must be tied together in one overview."
+ },
+ "tags": [
+  "lettered-panels",
+  "circuit-diagram",
+  "numbered-links",
+  "colour-keyed-variables",
+  "small-bitmaps-in-vector",
+  "neuroscience"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Methods (p.3-4)",
+   "4 Alternative Multi-Region Interaction (p.6)"
+  ],
+  "evidence": [
+   "The numbers in parentheses are the order of computation.",
+   "A disjoint grid representation (bottom) encodes task variables in separate modules",
+   "Schematic of the RL setup in which an agent navigates a virtual T-maze with towers appearing on both sides"
+  ]
+ },
+ "summary": "The paper builds a multi-region brain model, Vector-HaSH+, in which grid cells, hippocampus and non-grid sensory entorhinal cortex form a memory circuit that feeds an RNN policy trained by reinforcement learning on a virtual T-maze evidence task. Figure 1 is a four-panel composite. A redraws the earlier Vector-HaSH circuit with torus-shaped grid modules, a hippocampal band, a sensory band and an arrow key for fixed versus plastic links. B rewires it with pos, evi, MLP and RNN boxes and links numbered (1) to (6). C contrasts joint and disjoint grid codes on a toy trajectory over hexagon-lattice tiles. D shows the T-maze, the field of view and the closed agent loop in colours matching B.",
+ "summary_zh": "论文提出多脑区模型 Vector-HaSH+：网格细胞、海马与感觉皮层组成记忆回路，驱动 RNN 策略在 T 迷宫中累积证据。图一四面板：A 原回路，B 带编号连线的新回路，C 联合与分离网格编码对比，D 强化学习闭环。",
+ "confidence": "high",
+ "notes": "Prior labels corrected: side-by-side-contrast (C, joint vs disjoint) and actor-interaction (D, agent loop) added; sample data is simulated rate maps and a maze picture, not none. Much of A, C and D is placed as bitmaps with live text on top. The meaning of the black up arrow beside the start region in D and of the N symbols in A is not stated in the supplied text.",
+ "venue": "ICML25"
+}

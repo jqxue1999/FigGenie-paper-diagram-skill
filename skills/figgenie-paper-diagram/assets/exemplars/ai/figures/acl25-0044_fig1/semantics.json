@@ -1,0 +1,488 @@
+{
+ "paper_id": "acl25-0044",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ERM (Exemplar-Guided Reflection with Memory)",
+  "one_liner": "Feedback-based prompt optimization with an exemplar-guided reflection prompt and two memories, feedback and exemplars, retrieved by priority score.",
+  "domain": [
+   "automatic prompt engineering",
+   "prompt optimization",
+   "memory for LLMs"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "three lettered panels filled with real prompts, outputs and scored memory entries from one maths word problem; operations shrink to Retrieval and Update arrow labels",
+  "argues": "Keeping scored memories of feedback and of exemplars, instead of discarding them, lets prompt optimization reuse past information and pick better exemplars.",
+  "subject": "An LLM turns failure cases into exemplars and feedback, which go into two scored memories that are retrieved to refine the prompt and to answer a new question.",
+  "elements": [
+   {
+    "name": "(a) Exemplar-Guided Reflection",
+    "type": "container",
+    "role": "the reflection step: a meta-prompt makes the LLM write an exemplar and a feedback",
+    "drawn_as": "left panel with a green frame and title bar",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "meta-prompt box",
+    "type": "text-block",
+    "role": "instructive meta-prompt: find 4 varied failure examples with step-by-step solutions and give 3 reasons for the failure",
+    "drawn_as": "navy-outlined box with purple-highlighted text, user icon at its left",
+    "container": "(a) Exemplar-Guided Reflection",
+    "is_contribution": true
+   },
+   {
+    "name": "exemplar and feedback output",
+    "type": "text-block",
+    "role": "LLM output: a worked exemplar (question and solution) and a feedback sentence on the prompt",
+    "drawn_as": "navy-outlined box, blue-highlighted exemplar over an orange-highlighted feedback, robot icon at its right",
+    "container": "(a) Exemplar-Guided Reflection",
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Feedback Memory",
+    "type": "container",
+    "role": "stores all feedbacks with priority scores and retrieves the best ones to refine the prompt",
+    "drawn_as": "top-right panel with an orange frame, title bar and peach tint",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Feedback Memory Storage",
+    "type": "module",
+    "role": "memory of feedback entries each with a score (0.7, 0.8)",
+    "drawn_as": "titled peach box holding two framed cards with orange-highlighted text and a Score line",
+    "container": "(b) Feedback Memory",
+    "is_contribution": true
+   },
+   {
+    "name": "Retrieval / Update (b)",
+    "type": "operation",
+    "role": "retrieval takes stored feedback into the prompt; update writes the score back",
+    "drawn_as": "orange arrow pointing right labelled Retrieval and orange arrow pointing left labelled Update",
+    "container": "(b) Feedback Memory",
+    "is_contribution": null
+   },
+   {
+    "name": "feedback prompt box",
+    "type": "text-block",
+    "role": "retrieved feedback plus the instruction to refine the prompt so the model predicts correctly",
+    "drawn_as": "navy-outlined box, orange and purple highlighted lines, user icon at its left",
+    "container": "(b) Feedback Memory",
+    "is_contribution": null
+   },
+   {
+    "name": "refined prompt output",
+    "type": "text-block",
+    "role": "the new prompt written by the LLM (be careful, double-check the answer)",
+    "drawn_as": "navy-outlined box with pink-highlighted text, robot icon at its right",
+    "container": "(b) Feedback Memory",
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Exemplar Factory",
+    "type": "container",
+    "role": "stores exemplars with priority scores and retrieves the best ones at inference",
+    "drawn_as": "bottom-right panel with a blue frame, title bar and light-blue tint",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Exemplar Memory Storage",
+    "type": "module",
+    "role": "memory of exemplars (question, solution) each with a score (0.9, 0.8)",
+    "drawn_as": "titled light-blue box holding two framed cards with blue-highlighted text and a Score line",
+    "container": "(c) Exemplar Factory",
+    "is_contribution": true
+   },
+   {
+    "name": "Retrieval / Update (c)",
+    "type": "operation",
+    "role": "retrieval takes stored exemplars into the inference prompt; update writes the score back",
+    "drawn_as": "blue arrow pointing right labelled Retrieval and blue arrow pointing left labelled Update",
+    "container": "(c) Exemplar Factory",
+    "is_contribution": null
+   },
+   {
+    "name": "inference prompt box",
+    "type": "text-block",
+    "role": "optimized prompt, retrieved exemplars and a new question about a trip to Paris",
+    "drawn_as": "navy-outlined box: pink line, blue exemplar lines, plain question, user icon at its left",
+    "container": "(c) Exemplar Factory",
+    "is_contribution": null
+   },
+   {
+    "name": "answer box",
+    "type": "text-block",
+    "role": "the model's answer to the new question",
+    "drawn_as": "short navy-outlined box reading '... The answer is 1,500.', robot icon at its right",
+    "container": "(c) Exemplar Factory",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "meta-prompt box",
+    "to": "exemplar and feedback output",
+    "what": "the LLM answers the meta-prompt with an exemplar and a feedback",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "exemplar and feedback output",
+    "to": "Feedback Memory Storage",
+    "what": "the feedback span is stored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "exemplar and feedback output",
+    "to": "Exemplar Memory Storage",
+    "what": "the exemplar span is stored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feedback Memory Storage",
+    "to": "feedback prompt box",
+    "what": "Retrieval of the feedback with the highest score",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "refined prompt output",
+    "to": "Feedback Memory Storage",
+    "what": "Update of the stored feedback's score",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Exemplar Memory Storage",
+    "to": "inference prompt box",
+    "what": "Retrieval of exemplars with the highest scores",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "answer box",
+    "to": "Exemplar Memory Storage",
+    "what": "Update of the stored exemplar's score",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "feedback prompt box",
+    "to": "refined prompt output",
+    "what": "the LLM writes a refined prompt from the feedback",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "inference prompt box",
+    "to": "answer box",
+    "what": "the LLM answers the new question",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "highlight colours",
+    "to": "text spans in all panels",
+    "what": "the same colour marks the same kind of text in every panel and in the memories",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Exemplar-Guided Reflection",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "a meta-prompt yields an exemplar and a feedback from a failure case",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Feedback Memory",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "scored feedback storage, retrieved to refine the prompt and updated afterwards",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Exemplar Factory",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "scored exemplar storage, retrieved at inference and updated afterwards",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "panel title bars",
+    "what": "letter plus name heads each panel and is cited in the text as Figure 1(a) to (c)"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "robot head with antenna",
+    "stands_for": "the LLM that writes the output next to it",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "person outline with a magnifying glass",
+    "stands_for": "the user or prompt writer behind the prompt box",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "a maths word problem about granola bags with its step-by-step solution (exemplar) and a feedback sentence on the prompt",
+    "form": "text boxes with blue and orange highlighted spans in panel (a)",
+    "real_values": true
+   },
+   {
+    "what": "stored feedback and exemplar entries with priority scores 0.7, 0.8, 0.9 and 0.8",
+    "form": "two small framed cards per storage box, text plus a Score line",
+    "real_values": true
+   },
+   {
+    "what": "a new question about a trip to Paris with the answer 1,500",
+    "form": "plain question in the inference prompt and a short answer box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "navy-outlined text box whose lines are highlighted by role: purple instruction, orange feedback, blue exemplar, pink generated prompt, plain test question",
+    "parts": [
+     "highlighted spans",
+     "box outline",
+     "user icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "titled storage box of scored cards, with a Retrieval arrow out to the prompt and an Update arrow back",
+    "parts": [
+     "storage box",
+     "scored cards",
+     "Retrieval arrow",
+     "Update arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head beside each output box",
+    "parts": [
+     "robot head",
+     "output box"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the meta-prompt in the top of panel (a), then the output below it, then the orange arrow to (b) and the blue arrow to (c), read left to right inside each: storage, arrows, prompt, output."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One tall panel (a) at the left and two stacked panels (b) above (c) at the right, each with a coloured frame and title bar. Inside (b) and (c) the memory storage is at the left, labelled Retrieval and Update arrows in the middle, and the prompt and output boxes at the right. Two elbow arrows run from the output in (a) to the two storages.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.55,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#324274",
+    "used_for": "outlines of prompt and output boxes"
+   },
+   {
+    "hex": "#acd78e",
+    "used_for": "frame and title bar of panel (a)"
+   },
+   {
+    "hex": "#f5b482",
+    "used_for": "frame, title bar and arrows of the feedback path (b)"
+   },
+   {
+    "hex": "#91ace0",
+    "used_for": "frame, title bar and arrows of the exemplar path (c)"
+   },
+   {
+    "hex": "#fce6d5",
+    "opacity": 0.5,
+    "used_for": "peach tint inside panel (b)"
+   },
+   {
+    "hex": "#dae3f5",
+    "opacity": 0.6,
+    "used_for": "light-blue tint inside panel (c)"
+   },
+   {
+    "hex": "#b6c7ea",
+    "used_for": "highlight of exemplar text"
+   },
+   {
+    "hex": "#f8cdac",
+    "opacity": 0.8,
+    "used_for": "highlight of feedback text"
+   },
+   {
+    "hex": "#f5b7bf",
+    "opacity": 0.8,
+    "used_for": "highlight of the generated or refined prompt"
+   },
+   {
+    "hex": "#7030a0",
+    "opacity": 0.3,
+    "used_for": "highlight of the meta-prompt or instruction text"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "no stroked paths: box outlines and panel frames are thin filled shapes; navy outlines on text boxes, a coloured frame per panel",
+  "font": "serif (Times New Roman) 4-8 pt: 6 pt for prompts and outputs, 4 pt for memory entries, 8 pt for panel titles in a sans face, bold 5.5-6 pt for Retrieval, Update and storage titles",
+  "corners": "square",
+  "arrows": "thin orange and blue arrows with small solid heads, elbow-routed from panel (a), straight in the memory rows; orange for feedback and blue for exemplars",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "panel colour and arrow colour: green = reflection, orange = feedback path, blue = exemplar path; text highlights: purple = meta-prompt or instruction, orange = feedback, blue = exemplar, pink = generated prompt",
+  "line_style_means": "orange arrow = feedback travelling to and from its memory, blue arrow = exemplar travelling to and from its memory; right-pointing arrow = Retrieval, left-pointing = Update",
+  "shape_means": "robot head = LLM, person with magnifier = user or prompt writer, titled box of cards = memory, navy-outlined box = a prompt or an output",
+  "marker_means": "Score: x is the priority score of a stored entry; (a) to (c) letters name panels",
+  "emphasis": "frame colour and arrow colour are matched so the two memories are told apart at a glance; the highlight colours repeat in every panel",
+  "reusable_patterns": [
+   "real prompt text with spans highlighted by role, the same colours in every panel",
+   "storage box of scored cards with a Retrieval arrow out and an Update arrow back",
+   "an orange and a blue arrow splitting one LLM output into two stores",
+   "robot head beside each output box and person icon beside each prompt box",
+   "panel title bars in the colour of the panel's own frame",
+   "long text cut with '...' inside real example boxes"
+  ],
+  "weaknesses": [
+   "memory entries are set in 4 pt text",
+   "no key for the highlight colours, their meaning has to be inferred from the text",
+   "the evaluation of the refined prompt that drives the score update is not drawn"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real maths word-problem exemplar with solution, feedback, refined prompt and answer"
+  ],
+  "stock": [
+   "robot-head icon",
+   "person-with-magnifier icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "panel frames and title bars",
+   "storage cards",
+   "arrows",
+   "text highlights"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "meta-prompt box",
+   "exemplar and feedback output box",
+   "feedback memory storage with scored cards",
+   "exemplar memory storage with scored cards",
+   "robot LLM icons",
+   "user icons",
+   "Retrieval and Update arrows"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "prompt optimization",
+   "reflection",
+   "feedback memory",
+   "exemplar retrieval",
+   "priority score",
+   "meta-prompt",
+   "automatic prompt engineering"
+  ],
+  "tags": [
+   "memory-store",
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "model-pictogram",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a text-driven method with its real text: colour each span of the prompt by role (instruction, feedback, exemplar, generated prompt) and keep the colours identical in every panel and in the memory the span is stored to, so the data flow can be followed by colour alone.",
+  "suits": "Prompt-, memory- or reflection-based LLM methods where text artefacts flow between an LLM and stores."
+ },
+ "tags": [
+  "lettered-panels",
+  "real-text-boxes",
+  "colour-matched-arrows",
+  "robot-and-user-icons",
+  "serif-text",
+  "wps-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "As shown in Figure 1(a), we manually design an instructive meta-prompt.",
+   "We then propose Feedback Memory to store all feedbacks and assign a priority score to each of them",
+   "we store all exemplars in Exemplar Factory and assign a prior score to each piece."
+  ]
+ },
+ "summary": "ERM (Exemplar-Guided Reflection with Memory) makes feedback-based automatic prompt optimization more efficient and accurate. Figure 1 shows its three parts as lettered panels filled with real text from one maths word problem. In (a) a meta-prompt makes the LLM write an exemplar (blue) and a feedback (orange); the feedback goes by an orange arrow to (b) Feedback Memory, the exemplar by a blue arrow to (c) Exemplar Factory. Each memory is a storage box of scored cards tied to an LLM prompt by Retrieval and Update arrows: (b) retrieves feedback to write a refined prompt, (c) retrieves exemplars to answer a new question. Spans are highlighted by role; robot and user icons mark the LLM and the prompt writer.",
+ "summary_zh": "ERM 用带记忆的示例引导反思来优化提示词。图用三个带字母的面板和真实的数学应用题文本：（a）元提示让模型产出示例（蓝）与反馈（橙），分别经橙、蓝箭头存入（b）反馈记忆和（c）示例工厂，再用检索与更新箭头取用并更新带分数的条目。",
+ "confidence": "high",
+ "notes": "The caption in the context file is cut off after 'which guides'. The three panels map one-to-one onto the paper's three contributions (meta-prompt, Feedback Memory, Exemplar Factory), but arrows run from (a) to (b) and (c), so the figure is recorded as a pipeline with a worked example rather than as a contribution mosaic.",
+ "venue": "ACL25"
+}

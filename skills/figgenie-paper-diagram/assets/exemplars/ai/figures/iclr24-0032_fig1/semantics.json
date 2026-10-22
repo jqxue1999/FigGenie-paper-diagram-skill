@@ -1,0 +1,445 @@
+{
+ "paper_id": "iclr24-0032",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SpeechFlow",
+  "one_liner": "A generative speech model pre-trained with flow matching and masked audio on 60k hours of untranscribed speech, then fine-tuned with task-specific conditions.",
+  "domain": [
+   "speech generation",
+   "flow matching",
+   "generative pre-training"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "pre-training and fine-tuning drawn as two columns that reuse the same network box, split by a black rule and tied by a dashed arrow, with a flow-path sketch at the far left",
+  "argues": "Pre-train a flow-matching network on masked-audio infilling, then fine-tune the same network with a task-specific condition in place of the mask.",
+  "subject": "Spectrograms entering a flow-matching network with random weights, then the same network with pre-trained weights taking a task condition, each with its loss.",
+  "elements": [
+   {
+    "name": "x_1",
+    "type": "sample",
+    "role": "target data: a speech spectrogram at the end of the flow path",
+    "drawn_as": "large viridis-coloured spectrogram at the top left with an italic label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_0",
+    "type": "sample",
+    "role": "noise spectrogram at the start of the flow path",
+    "drawn_as": "large noise-textured spectrogram at the bottom left with an italic label",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "t",
+    "type": "operation",
+    "role": "flow time: a point on the path from x_0 to x_1",
+    "drawn_as": "small circle on a thick light-green arrow that runs from x_0 up to x_1",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "ψ_t(x_0)",
+    "type": "sample",
+    "role": "intermediate noisy spectrogram at flow time t, an input of the network (shown in both stages)",
+    "drawn_as": "small spectrogram under the network column with a symbol label beside it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_mask",
+    "type": "sample",
+    "role": "masked audio used as the condition during pre-training",
+    "drawn_as": "small spectrogram with solid dark blocks over some time spans, stacked above ψ_t(x_0)",
+    "container": "pre-training column",
+    "is_contribution": true
+   },
+   {
+    "name": "Random θ",
+    "type": "module",
+    "role": "the flow-matching network before pre-training, with randomly initialised weights",
+    "drawn_as": "light blue rectangle with a dark navy outline",
+    "container": "pre-training column",
+    "is_contribution": null
+   },
+   {
+    "name": "v_t(ψ_t(x_0), x_mask; θ)",
+    "type": "formula",
+    "role": "network output in the pre-training stage",
+    "drawn_as": "formula above the box with a light grey arrow",
+    "container": "pre-training column",
+    "is_contribution": false
+   },
+   {
+    "name": "Flow-matching (Eq.4)",
+    "type": "label",
+    "role": "the loss of the pre-training stage",
+    "drawn_as": "two-line text with a light grey arrow from the output formula",
+    "container": "pre-training column",
+    "is_contribution": false
+   },
+   {
+    "name": "Pre-trained θ",
+    "type": "module",
+    "role": "the same network with pre-trained weights, fine-tuned for a task",
+    "drawn_as": "light blue rectangle with a dark navy outline",
+    "container": "fine-tuning column",
+    "is_contribution": true
+   },
+   {
+    "name": "Task-specific condition",
+    "type": "data",
+    "role": "the condition y that replaces the mask in fine-tuning (noisy recording, overlapped speech or phone sequence per the caption)",
+    "drawn_as": "plain peach rectangle with two lines of text and a side label y",
+    "container": "fine-tuning column",
+    "is_contribution": null
+   },
+   {
+    "name": "v_t(ψ_t(x_0), y; θ)",
+    "type": "formula",
+    "role": "network output in the fine-tuning stage",
+    "drawn_as": "formula above the box with a light grey arrow",
+    "container": "fine-tuning column",
+    "is_contribution": false
+   },
+   {
+    "name": "Flow-matching (Eq.5)",
+    "type": "label",
+    "role": "the loss of the fine-tuning stage",
+    "drawn_as": "two-line text with a light grey arrow from the output formula",
+    "container": "fine-tuning column",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "x_0",
+    "to": "x_1",
+    "what": "path from noise to data parametrised by t",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "t",
+    "to": "ψ_t(x_0)",
+    "what": "the sample at flow time t",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "x_mask and ψ_t(x_0)",
+    "to": "Random θ",
+    "what": "inputs of the pre-training stage",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Random θ",
+    "to": "v_t(ψ_t(x_0), x_mask; θ)",
+    "what": "network output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "v_t(ψ_t(x_0), x_mask; θ)",
+    "to": "Flow-matching (Eq.4)",
+    "what": "output goes into the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Random θ",
+    "to": "Pre-trained θ",
+    "what": "after pre-training the same network continues as the pre-trained model for fine-tuning",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Task-specific condition and ψ_t(x_0)",
+    "to": "Pre-trained θ",
+    "what": "inputs of the fine-tuning stage",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Pre-trained θ",
+    "to": "v_t(ψ_t(x_0), y; θ)",
+    "what": "network output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "v_t(ψ_t(x_0), y; θ)",
+    "to": "Flow-matching (Eq.5)",
+    "what": "output goes into the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "pre-training with masked audio: a flow-path sketch from x_0 to x_1 and the Random θ network fed ψ_t(x_0) and x_mask, trained with Flow-matching (Eq.4)",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "fine-tuning with a task-specific condition y instead of the mask: Pre-trained θ trained with Flow-matching (Eq.5)",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "t",
+    "kind": "identity",
+    "at": "circle on the green arrow",
+    "what": "names the flow time"
+   },
+   {
+    "marker": "(Eq.4), (Eq.5)",
+    "kind": "identity",
+    "at": "under the loss labels",
+    "what": "point to the loss equations of the two stages"
+   },
+   {
+    "marker": "x_0, x_1, x_mask, ψ_t(x_0), y",
+    "kind": "identity",
+    "at": "beside each spectrogram or condition box",
+    "what": "name the data items"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "mel spectrogram of a speech sample x_1 (harmonic stripes) and a noise spectrogram x_0",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two large viridis-coloured rectangles at the far left, one above the other, joined by a thick green arrow"
+   },
+   {
+    "what": "masked copy of the speech spectrogram, with three solid dark purple blocks hiding time spans",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small rectangle stacked above the noisy sample under the network box"
+   },
+   {
+    "what": "intermediate noisy spectrogram ψ_t(x_0) at flow time t",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small rectangle under each network column, the same bitmap in both stages"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one speech utterance as spectrograms: clean target, noise, masked copy and an intermediate noisy version",
+    "form": "four viridis-coloured spectrogram bitmaps",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a single thick light-green arrow from a noise spectrogram at the bottom to a speech spectrogram at the top, with a circle node t on it tied by a dashed curve to the intermediate sample",
+    "parts": [
+     "x_0",
+     "x_1",
+     "arrow",
+     "t node",
+     "dashed link"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "pretrain-then-finetune",
+    "drawn_as": "the same network box drawn twice, labelled Random θ and Pre-trained θ, with a dashed arrow crossing a vertical rule and a different input under each box",
+    "parts": [
+     "Random θ box",
+     "Pre-trained θ box",
+     "dashed arrow",
+     "rule"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Start with the x_0 to x_1 path at the far left, go up the Random θ column to Eq.4, cross the rule by the dashed arrow and read the Pre-trained θ column upward."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two unlabelled columns divided by a black vertical rule: at left a flow-path sketch (x_0 to x_1) beside a Random θ network column, at right a Pre-trained θ column; each column reads bottom-up from stacked inputs through a network box and an output formula to a loss label, and a dashed arrow crosses the rule from one box to the other.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.57,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "fill of the Random θ and Pre-trained θ network boxes"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outline of the network boxes"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "fill of the Task-specific condition box"
+   },
+   {
+    "hex": "#a9d18e",
+    "used_for": "thick arrow from x_0 to x_1 (the flow path)"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "light grey arrows and short connector lines through the network, output and loss"
+   },
+   {
+    "hex": "#8497b0",
+    "used_for": "dashed arrow from Random θ to Pre-trained θ"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "dashed curve from the t node to ψ_t(x_0) and the outline of the t node"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt dark navy on the network boxes, 0.5 pt grey dashed curve, 1 pt black vertical rule; the arrows are filled shapes without outline",
+  "font": "serif (Times New Roman for words, Cambria Math for symbols), 7.5 pt labels and formulas, 5.5 to 6.5 pt small labels, 11 pt for the x symbols",
+  "corners": "square",
+  "arrows": "short thick light-grey arrows with small triangular heads, one thick light-green arrow, one dashed blue-grey arrow, one headless dashed grey curve",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "light blue = the network (same colour before and after pre-training); peach = the task-specific condition; green = the flow path from noise to data; grey = data flow; viridis colours inside the bitmaps = spectrogram energy",
+  "line_style_means": "light grey solid arrows = data flow through the network to the loss; dashed grey curve = link from flow time t to its sample; dashed blue-grey arrow = the network carried from pre-training to fine-tuning; black rule = divides the two stages",
+  "shape_means": "navy-outlined rectangle = the network θ; plain peach rectangle = a condition; viridis rectangle = a spectrogram",
+  "marker_means": "t = flow time; (Eq.4) and (Eq.5) refer to the loss equations; Random versus Pre-trained before θ names the weights' state",
+  "emphasis": "The only coloured dashed arrow in the figure crosses the rule from Random θ to Pre-trained θ, and the input stacked under the box (x_mask versus a task condition) is the one thing that changes between the stages.",
+  "reusable_patterns": [
+   "same network box drawn once per training stage with the weights label changing, tied by a dashed arrow across a dividing rule",
+   "inputs stacked under the box and the loss named above it with an equation reference",
+   "real spectrogram bitmaps as visible data, with a masked copy using solid dark blocks",
+   "flow path drawn as one thick arrow between noise and data with a time node linked by a dashed curve to the intermediate sample",
+   "swap of one input between stages (masked audio versus task condition) to show what differs"
+  ],
+  "weaknesses": [
+   "the two stages are not titled in the drawing; Left and Right exist only in the caption",
+   "what the task-specific condition looks like for each task is left to the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "mel spectrograms of one utterance: clean target, noise, masked copy and an intermediate noisy copy"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "network boxes and the condition box",
+   "arrows, dashed curve and dividing rule",
+   "formulas and labels"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "viridis mel spectrograms",
+   "green flow-path arrow with time node",
+   "Random θ box",
+   "Pre-trained θ box",
+   "masked spectrogram",
+   "task-specific condition box",
+   "flow-matching loss labels",
+   "dashed weight-transfer arrow"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "SpeechFlow",
+   "flow matching",
+   "speech generation",
+   "generative pre-training",
+   "masked audio",
+   "fine-tuning",
+   "spectrogram infilling",
+   "speech enhancement",
+   "speech separation"
+  ],
+  "tags": [
+   "module-state-coding",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a pretrain-then-finetune recipe by drawing the same network box once per stage with only its weights label (Random θ, Pre-trained θ) and the bottom input changed, split by a vertical rule and tied by one dashed arrow; the swapped input and the named loss above each box show the difference without extra text.",
+  "suits": "Pre-train then fine-tune recipes where the network stays the same and only the input condition and the loss change between stages."
+ },
+ "tags": [
+  "two stages split by a vertical rule",
+  "viridis spectrogram bitmaps",
+  "light blue network boxes",
+  "serif labels and formulas",
+  "light grey arrows",
+  "sparse"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.4 (caption only)",
+   "Abstract"
+  ],
+  "evidence": [
+   "(Left) Pre-training with masked audio. (Right) Fine-tuning with task-specific condition such as noisy recording, overlapped speech, or phone sequence.",
+   "we pre-trained a generative model, named SpeechFlow, on 60k hours of untranscribed speech with Flow Matching and masked conditions"
+  ]
+ },
+ "summary": "SpeechFlow is a generative speech model pre-trained with flow matching and masked audio conditions on 60k hours of untranscribed speech, then fine-tuned with task-specific conditions such as a noisy recording, overlapped speech or a phone sequence. Figure 1 sets the two stages side by side, split by a black vertical rule. At the far left a green arrow carries a noise spectrogram x_0 to a speech spectrogram x_1 with a time node t. Beside it a light blue Random θ box takes ψ_t(x_0) and a masked spectrogram x_mask and outputs the vector field for the flow-matching loss (Eq.4). A dashed arrow leads to a Pre-trained θ box that takes a peach task-specific condition y instead (Eq.5).",
+ "summary_zh": "SpeechFlow 先用流匹配和掩码音频在六万小时无标注语音上预训练，再用噪声录音、重叠语音或音素序列等任务条件微调。图中黑色竖线分开两个阶段：左边随机初始化的网络输入掩码频谱，右边预训练网络输入任务条件，各附流匹配损失公式。",
+ "confidence": "medium",
+ "notes": "No paragraph mentions the figure; the roles of ψ_t(x_0), the green path and the dashed arrow rest on the figure, the caption and standard flow-matching notation. The two columns carry no titles in the figure, so panel labels are null. The canvas is wider than the drawing: about a quarter of it at the right is empty. The flow-path sketch at the far left is also a small concept-schematic.",
+ "venue": "ICLR24"
+}

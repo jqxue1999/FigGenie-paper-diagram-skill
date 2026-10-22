@@ -1,0 +1,463 @@
+{
+ "paper_id": "acl26-0034",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "A survey of hallucination in Video LLMs with a taxonomy of two types, dynamic distortion and content fabrication, each with two subtypes.",
+  "domain": [
+   "video LLM hallucination",
+   "survey",
+   "taxonomy"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "side-by-side-contrast"
+  ],
+  "variant": "taxonomy-map",
+  "variant_note": "an image-level hallucination example at left behind a dashed divider, and at right a two-colour taxonomy of video hallucinations whose four cards each show one failure on a frame strip",
+  "argues": "Video LLMs show hallucination types beyond static image errors: dynamic distortion and content fabrication, each with two subtypes illustrated by a wrong caption on a clip.",
+  "subject": "image-level hallucination versus a 2 by 2 taxonomy of video hallucinations, each type with frames and the model's wrong sentence",
+  "elements": [
+   {
+    "name": "Image VLM Hallucination",
+    "type": "container",
+    "role": "baseline: static errors of an image model on one photo",
+    "drawn_as": "grey rounded panel with the title below, holding a cat photo, a thick arrow and a caption box",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "A cat is sleeping on a RED RUG, facing RIGHT.",
+    "type": "text-block",
+    "role": "model caption with an attribute, an object and a relation error marked in red",
+    "drawn_as": "black rounded box with red capital words and three red arrows",
+    "container": "Image VLM Hallucination",
+    "is_contribution": false
+   },
+   {
+    "name": "Attr. Hal, Obj. Hal, Rel. Hal",
+    "type": "label",
+    "role": "tags naming the three static error types (read as attribute, object and relation hallucination)",
+    "drawn_as": "bold red labels with red arrows pointing at RED, RUG and RIGHT",
+    "container": "Image VLM Hallucination",
+    "is_contribution": false
+   },
+   {
+    "name": "Video LLM Hallucination",
+    "type": "container",
+    "role": "the taxonomy of video-specific hallucinations",
+    "drawn_as": "large grey rounded panel with the title below, holding a blue and an orange region",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Dynamic Distortion",
+    "type": "container",
+    "role": "category (1): hallucinations that distort how the video moves or who is who",
+    "drawn_as": "pale blue rounded region with a blue-grey title, holding two cards",
+    "container": "Video LLM Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Spatialtemporal Dynamic Hallucination",
+    "type": "container",
+    "role": "subtype: spatiotemporal misrepresentation, e.g. reporting 'The person is STANDING UP' when the person sits down",
+    "drawn_as": "blue card with a clock-and-scrambled-arrows icon, three frames T1 to T3, a down arrow and a caption box",
+    "container": "Dynamic Distortion",
+    "is_contribution": true
+   },
+   {
+    "name": "Referential Inconsistency",
+    "type": "container",
+    "role": "subtype: the referent changes, e.g. 'The man CHANGES INTO BLUE CLOTHES' when a woman appears",
+    "drawn_as": "blue card with an icon of two avatars and a broken chain, three frames, a down arrow and a caption box",
+    "container": "Dynamic Distortion",
+    "is_contribution": true
+   },
+   {
+    "name": "Content Fabrication",
+    "type": "container",
+    "role": "category (2): hallucinated content that the video does not show",
+    "drawn_as": "pale orange rounded region with an orange title, holding two cards",
+    "container": "Video LLM Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Context-Driven Fabrication",
+    "type": "container",
+    "role": "subtype: hallucination driven by statistical priors, e.g. a party scene leads to 'LOUDLY SINGING HAPPY BIRTHDAY'",
+    "drawn_as": "orange card with a brain icon dotted to a birthday cake, three frames, a down arrow and a caption box",
+    "container": "Content Fabrication",
+    "is_contribution": true
+   },
+   {
+    "name": "Audio-Visual Conflict",
+    "type": "container",
+    "role": "subtype: audio overrides visual evidence, e.g. 'DOG IS HOWLING LOUDLY' while only a cat is seen",
+    "drawn_as": "orange card with a megaphone and faded eye icon, three frames over a black waveform, a down arrow and a caption box",
+    "container": "Content Fabrication",
+    "is_contribution": true
+   },
+   {
+    "name": "hallucinated captions",
+    "type": "text-block",
+    "role": "the model's wrong sentence under each card, with the hallucinated words in red capitals",
+    "drawn_as": "black rounded boxes with bold text and red capital spans",
+    "container": "the four cards",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "cat photo",
+    "to": "caption box",
+    "what": "the model describes the photo",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attr. Hal, Obj. Hal, Rel. Hal",
+    "to": "RED, RUG, RIGHT",
+    "what": "each tag points at the wrong word",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frames T1 to T3",
+    "to": "caption box",
+    "what": "the model's description of the clip, which contradicts it",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Dynamic Distortion",
+    "to": "its two cards",
+    "what": "category contains its subtypes",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Content Fabrication",
+    "to": "its two cards",
+    "what": "category contains its subtypes",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Image VLM Hallucination",
+    "to": "Video LLM Hallucination",
+    "what": "static image errors versus video-specific types beyond them",
+    "kind": "comparison",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "brain icon",
+    "to": "birthday cake icon",
+    "what": "a prior from the context (party) brings the cake and song to mind",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "family colour (blue, orange)",
+    "to": "region, card outline and title",
+    "what": "the family of each card is kept by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Image VLM Hallucination",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "a cat photo with a caption whose colour, object and relation are wrong, each error tagged by a red arrow",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Video LLM Hallucination",
+    "kind": "scope-overview",
+    "axis": "alternatives",
+    "shows": "Dynamic Distortion (blue) and Content Fabrication (orange), two cards each, every card with an icon, a three-frame strip and a wrong caption",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "T1, T2, T3",
+    "kind": "order",
+    "at": "corners of the frames",
+    "what": "order the sampled frames in time"
+   },
+   {
+    "marker": "Attr. Hal, Obj. Hal, Rel. Hal",
+    "kind": "identity",
+    "at": "red arrows at the cat caption",
+    "what": "name the three static error types"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo of a sleeping orange cat on a blanket",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "rounded photo at the top of the left panel above a thick black arrow"
+   },
+   {
+    "what": "three-frame clips: a person standing up from an armchair, a man and then a woman cooking, a living room decorated for a party, a cat playing with a person",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "four strips of three black-bordered frames with T1 to T3 labels in the corners, above a down arrow"
+   },
+   {
+    "what": "audio waveform under the cat clip",
+    "content": "audio-waveform",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "black waveform strip as wide as the frame strip, standing for a competing audio track"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "analogue clock with scrambled forking arrows",
+    "stands_for": "spatiotemporal dynamic distortion",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "a man avatar and a woman avatar with a broken chain between them",
+    "stands_for": "referential inconsistency",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "brain with nodes linked by dotted lines to a birthday cake",
+    "stands_for": "statistical priors that fabricate content",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "megaphone with sound marks and a faded red eye",
+    "stands_for": "audio overriding visual evidence",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a cat photo captioned 'A cat is sleeping on a RED RUG, facing RIGHT.' with errors tagged Attr. Hal, Obj. Hal, Rel. Hal",
+    "form": "photo, thick arrow, caption box with red words and red arrows",
+    "real_values": false
+   },
+   {
+    "what": "frames of a person sitting down captioned 'The person is STANDING UP.'",
+    "form": "three frames, down arrow, caption box",
+    "real_values": false
+   },
+   {
+    "what": "frames of a man then a woman cooking captioned 'The man CHANGES INTO BLUE CLOTHES AND CONTINUES COOKING.'",
+    "form": "three frames, down arrow, caption box",
+    "real_values": false
+   },
+   {
+    "what": "frames of a birthday party being set up captioned 'People are LOUDLY SINGING HAPPY BIRTHDAY'",
+    "form": "three frames, down arrow, caption box",
+    "real_values": false
+   },
+   {
+    "what": "frames of a cat playing over a waveform captioned 'The cat is playing, and DOG IS HOWLING LOUDLY'",
+    "form": "three frames, waveform, down arrow, caption box",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "three black-bordered frames in a row with T1, T2, T3 corner labels and no sprocket holes",
+    "parts": [
+     "T1",
+     "T2",
+     "T3"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "audio-waveform",
+    "drawn_as": "black waveform strip under the frames to stand for an audio track",
+    "parts": [
+     "waveform"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the left image example (photo, arrow, caption, red tags), crosses the dashed divider to the blue Dynamic Distortion cards, then the orange Content Fabrication cards, each card read top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A narrow grey panel for the image-level baseline at left, a dashed vertical divider, and a wide grey panel for video hallucinations at right; the wide panel holds a blue and an orange region side by side with two stacked cards each, every card ordered title, icon and frames, arrow, caption box.",
+  "panel_count": 2,
+  "lanes": "2 by 2 grid of cards: two blue (Dynamic Distortion) and two orange (Content Fabrication)",
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.73,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#eeeeea",
+    "used_for": "grey backgrounds of the two big panels"
+   },
+   {
+    "hex": "#d8e5f5",
+    "used_for": "Dynamic Distortion region and its cards (outline #445d75)"
+   },
+   {
+    "hex": "#fee3cb",
+    "used_for": "Content Fabrication region and its cards (outline #ce854e)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "hallucinated words, error arrows and the Attr., Obj., Rel. Hal tags"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt: black rounded outlines on caption boxes, slate-blue and orange outlines on the cards, black frames on photos, one dashed vertical divider",
+  "font": "sans (Calibri Bold), 6-8.5 pt almost all bold, 8.5 pt panel and category titles, 2.5-3.5 pt italic frame labels",
+  "corners": "rounded",
+  "arrows": "one thick black arrow from the photo to its caption, short black arrows from frames to captions, thin red arrows from tags to the wrong words",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = Dynamic Distortion family and orange = Content Fabrication family (region, card outline, title); red = hallucinated words and their error tags; grey = the two containers",
+  "line_style_means": "dashed vertical line = separates the known image-level problem from the video taxonomy; black arrow = from the evidence to the model's wrong output",
+  "shape_means": "rounded caption box = model output; icon at left = metaphor for the category; three framed frames = a sampled clip",
+  "marker_means": "T1 to T3 = time order; red capitals = hallucinated words; red arrow with Attr., Obj. or Rel. Hal = error type of a static hallucination",
+  "emphasis": "Red capital words in the captions and the large bold family titles draw the eye; the hallucinated words are the only red on the page.",
+  "reusable_patterns": [
+   "category card: title, concept icon, three-frame strip with T labels, down arrow, caption box with wrong words in red capitals",
+   "image-level baseline panel at left behind a dashed divider, then the new taxonomy at right",
+   "two families as coloured regions each holding two cards",
+   "audio waveform under the frames to show a competing audio track",
+   "red arrows with short tags pinned to wrong words in a caption"
+  ],
+  "weaknesses": [
+   "the T1 to T3 frame labels are about 3 pt",
+   "the correct description is never shown next to the wrong one, so the error must be read from the frames",
+   "icons are only loosely tied to the categories"
+  ]
+ },
+ "resources": {
+  "own": [
+   "illustrative wrong captions for each type"
+  ],
+  "stock": [
+   "flat-colour concept icons (clock, avatars with broken chain, brain and cake, megaphone and eye)"
+  ],
+  "generated": [],
+  "drawn": [
+   "grey panels and coloured regions",
+   "cards and caption boxes",
+   "red callout arrows",
+   "dashed divider"
+  ],
+  "unknown": [
+   "origin of the cat photo and the twelve frames; they look clean and possibly AI-generated or stock"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "cat photo with a caption box and red error tags",
+   "two colour-coded regions of cards",
+   "three-frame strips labelled T1 T2 T3",
+   "caption boxes with red hallucinated words",
+   "concept icons (clock, broken chain, brain and cake, megaphone and eye)",
+   "audio waveform under frames"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video LLM",
+   "hallucination",
+   "survey",
+   "taxonomy",
+   "dynamic distortion",
+   "content fabrication",
+   "temporal",
+   "audio-visual conflict"
+  ],
+  "tags": [
+   "error-callouts",
+   "highlighted-text-spans",
+   "problem-only",
+   "filmstrip",
+   "colour-coded-groups",
+   "visual-metaphor"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Teach a failure taxonomy with one card per type: a concept icon, a three-frame strip with time labels, an arrow and the model's wrong sentence with the hallucinated words in red capitals; put the familiar image-level case at the left behind a dashed divider so the new video types read as an extension.",
+  "suits": "survey or position papers that introduce a taxonomy of failure types and need one concrete, readable example for each type."
+ },
+ "tags": [
+  "taxonomy cards",
+  "red capital error spans",
+  "two-hue coding",
+  "dashed divider",
+  "frame strips",
+  "concept icons"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract",
+   "Figure 1 caption (no paragraph mentions the figure)"
+  ],
+  "evidence": [
+   "Video models exhibit unique hallucination types beyond static errors in images.",
+   "which includes hallucinations influenced by statistical priors and cases where auditory input overrides visual evidence",
+   "a systematic taxonomy that categorizes them into two core types: dynamic distortion and content fabrication"
+  ]
+ },
+ "summary": "This survey organises hallucinations in video LLMs into two core types, dynamic distortion and content fabrication, each with two subtypes. Figure 1 is the taxonomy with one example per subtype. At left, an image-level case sets the baseline: a cat photo and the caption 'A cat is sleeping on a red rug, facing right' with attribute, object and relation errors tagged by red arrows. At right, two coloured regions hold two cards each: blue for Spatialtemporal Dynamic Hallucination and Referential Inconsistency, orange for Context-Driven Fabrication and Audio-Visual Conflict. A card pairs a concept icon with a three-frame strip (T1 to T3) and the model's wrong sentence with the hallucinated words in red capitals.",
+ "summary_zh": "这篇综述把视频大模型的幻觉分为动态失真和内容编造两类、各含两个子类。图一左侧用图像幻觉作基线，右侧蓝、橙两个区域各放两张卡片，每张含概念图标、T1 到 T3 三帧画面和把幻觉词标红的错误描述。",
+ "confidence": "high",
+ "notes": "No paragraph mentions the figure, so roles come from the caption, the abstract and the drawing. Prior kinds kept (scope-overview as taxonomy-map, side-by-side-contrast for image versus video). Whether the captions and clips are real model outputs is not stated; they are judged illustrative (real_values false). The tags Attr. Hal, Obj. Hal and Rel. Hal are read as attribute, object and relation hallucination; the figure does not spell them out. The card title reads Spatialtemporal Dynamic Hallucination while the caption says spatiotemporal misrepresentation.",
+ "venue": "ACL26"
+}

@@ -1,0 +1,566 @@
+{
+ "paper_id": "iclr23-0007",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CAV-MAE (Contrastive Audio-Visual Masked Auto-Encoder)",
+  "one_liner": "A self-supervised audio-visual model that combines a contrastive loss and masked reconstruction on one shared joint encoder.",
+  "domain": [
+   "audio-visual representation learning",
+   "self-supervised learning",
+   "masked autoencoders"
+  ],
+  "subfield": "audio",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "tokenization panel, two component designs in a grey panel, and the combined model with both loss paths",
+  "argues": "Contrastive audio-visual learning and masked audio-visual reconstruction can be combined in one model, CAV-MAE, that keeps the strengths of both.",
+  "subject": "Audio and image tokenization, two baseline designs, and the proposed model that combines their two losses.",
+  "elements": [
+   {
+    "name": "A) Audio and Image Tokenization",
+    "type": "container",
+    "role": "input stage shared by all models",
+    "drawn_as": "white panel with a dark frame, bold italic title at the bottom",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "patch grids with 64, 8 and 14",
+    "type": "data",
+    "role": "the spectrogram is cut into a 64 by 8 grid of patches and the image into 14 by 14",
+    "drawn_as": "small tile grids with ellipses and curly braces carrying the counts",
+    "container": "A) Audio and Image Tokenization",
+    "is_contribution": false
+   },
+   {
+    "name": "A1 A2 ... A512 / V1 V2 ... V196",
+    "type": "data",
+    "role": "audio and visual token sequences made from the patches",
+    "drawn_as": "rows of small image tiles with letter labels above",
+    "container": "A) Audio and Image Tokenization",
+    "is_contribution": false
+   },
+   {
+    "name": "Audio Encoder / Visual Encoder",
+    "type": "module",
+    "role": "modality-specific encoders",
+    "drawn_as": "rounded boxes, light green for audio, light orange for visual",
+    "container": "B) top and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Pooling",
+    "type": "operation",
+    "role": "pools each modality's embeddings into one vector for the contrastive loss",
+    "drawn_as": "small italic word beside the arrows into C_A and C_V",
+    "container": "B) top and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "C_A / C_V",
+    "type": "data",
+    "role": "pooled audio and visual representations",
+    "drawn_as": "small rounded cells, green and orange",
+    "container": "B) top and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Contrastive Loss",
+    "type": "operation",
+    "role": "ties the audio and visual representations of the same clip",
+    "drawn_as": "dashed vertical double-headed arrow between C_A and C_V with a rotated bold italic label",
+    "container": "B) top and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Mask / Mask and Concatenate",
+    "type": "operation",
+    "role": "hides part of the tokens and joins the two modalities into one sequence",
+    "drawn_as": "rotated word beside the token column",
+    "container": "B) bottom and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Encoder",
+    "type": "module",
+    "role": "one encoder shared by audio and visual tokens",
+    "drawn_as": "tall pale-pink rounded rectangle with vertical text; small LN boxes marked a and v inside it in C",
+    "container": "B) bottom and C)",
+    "is_contribution": true
+   },
+   {
+    "name": "E_A1 ... E_A4 / E_V1 ... E_V4",
+    "type": "data",
+    "role": "token embeddings, stacked per modality",
+    "drawn_as": "vertical stacks of small cells with subscripts, green for audio and orange for visual",
+    "container": "B) and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "[M]",
+    "type": "data",
+    "role": "masked-token placeholders inserted at the hidden positions before decoding",
+    "drawn_as": "grey cells interleaved with embedding cells",
+    "container": "B) bottom and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Decoder",
+    "type": "module",
+    "role": "rebuilds all audio and visual tokens from the padded sequence",
+    "drawn_as": "tall pale-pink rounded rectangle with vertical text",
+    "container": "B) bottom and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Reconstruction Loss",
+    "type": "operation",
+    "role": "compares the rebuilt tokens with the input tokens",
+    "drawn_as": "bold italic label on an arc from the input token column over the top to the output token column",
+    "container": "B) bottom and C)",
+    "is_contribution": null
+   },
+   {
+    "name": "Combination",
+    "type": "operation",
+    "role": "says that C) combines the two designs of B)",
+    "drawn_as": "large grey block arrow pointing from the grey B panel to C), rotated bold label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "B) grey panel",
+    "type": "container",
+    "role": "holds the two component designs: Audio-Visual Contrastive Learning above and Vanilla Audio-Visual Masked Auto-Encoder below",
+    "drawn_as": "slate-grey panel with two white framed sub-panels",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "C) Contrastive Audio-Visual Masked Auto-Encoder",
+    "type": "container",
+    "role": "the proposed model with both loss paths",
+    "drawn_as": "large white panel with a dark frame, bold italic title at the bottom",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "spectrogram (128 by 1024)",
+    "to": "patch grid and tokens A1 to A512",
+    "what": "audio is cut into 16 by 16 patches that become tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "image (224 by 224)",
+    "to": "patch grid and tokens V1 to V196",
+    "what": "the image is cut into patches that become visual tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "tokens A1-A4 and V1-V4 (B top)",
+    "to": "Audio Encoder and Visual Encoder",
+    "what": "each modality has its own encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "embedding stacks (B top)",
+    "to": "C_A and C_V",
+    "what": "pooled into one vector per modality",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "C_A",
+    "to": "C_V",
+    "what": "Contrastive Loss between the two pooled representations",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "tokens (B bottom)",
+    "to": "Joint Encoder",
+    "what": "Mask and Concatenate: part of the tokens is hidden and the rest joined into one sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Joint Encoder",
+    "to": "Joint Decoder",
+    "what": "outputs padded with [M] at the hidden positions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input tokens",
+    "to": "reconstructed tokens",
+    "what": "Reconstruction Loss between output and input",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "B) grey panel",
+    "to": "C)",
+    "what": "Combination: the proposed model contains both designs",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "masked tokens A1, A3, V2, V3 (C)",
+    "to": "Audio Encoder and Visual Encoder",
+    "what": "modality-specific encoders on the unmasked tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio, Concatenate and Visual stacks",
+    "to": "Joint Encoder",
+    "what": "three input streams to one shared encoder; green and orange arrows mark the two single-modality streams",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Joint Encoder (single-modality outputs)",
+    "to": "C_A and C_V",
+    "what": "pooled for the contrastive loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Joint Encoder (concatenated outputs)",
+    "to": "Joint Decoder",
+    "what": "padded with [M], then rebuilt for the reconstruction loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "grey panel",
+    "to": "its two sub-panels",
+    "what": "the two component designs are grouped",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A) Audio and Image Tokenization",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "A 128 by 1024 spectrogram and a 224 by 224 photo are cut into 16 by 16 patches, giving A1 to A512 and V1 to V196 as input to all models.",
+    "verdict": "setting"
+   },
+   {
+    "label": "B) Audio-Visual Contrastive Learning",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "Conventional contrastive model: separate audio and visual encoders, pooling, and a contrastive loss between C_A and C_V.",
+    "verdict": "baseline"
+   },
+   {
+    "label": "B) Vanilla Audio-Visual Masked Auto-Encoder",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "Mask and concatenate tokens, joint encoder, [M]-padded sequence, joint decoder and reconstruction loss; new in this paper.",
+    "verdict": "component"
+   },
+   {
+    "label": "C) Contrastive Audio-Visual Masked Auto-Encoder",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "The proposed model: masked tokens through modality encoders and a shared joint encoder, with both a contrastive and a reconstruction loss.",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A), B), C)",
+    "kind": "section",
+    "at": "titles of the three lettered panels",
+    "what": "name the tokenization, the component designs and the proposed model"
+   },
+   {
+    "marker": "A1..A512, V1..V196, E_A1, C_A",
+    "kind": "identity",
+    "at": "tokens, embeddings and pooled vectors",
+    "what": "letter gives the modality (A audio, V visual), number the token index; E is an embedding, C a pooled vector"
+   },
+   {
+    "marker": "64, 8, 14, 128, 1024, 224",
+    "kind": "identity",
+    "at": "beside the spectrogram, image and patch grids",
+    "what": "sizes in pixels or patches"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "an audio spectrogram (128 by 1024) and its patch tiles",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "wide colour-mapped strip with size labels; a few of its 16 by 16 tiles repeated in the patch grid and the token row"
+   },
+   {
+    "what": "a photo of a black and white cat (224 by 224) and its patch tiles",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square photo with size labels; the patch grid shows some tiles of the cat among blank grey tiles"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one clip cut into 512 audio patches (64 by 8 grid) and 196 image patches (14 by 14 grid), with the real sizes written beside the samples",
+    "form": "samples, brace-labelled patch grids and token rows",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "spectrogram and photo each cut into a grid of 16 by 16 patches with brace labels, then listed as tokens A1 ... A512 and V1 ... V196",
+    "parts": [
+     "sample",
+     "patch grid",
+     "brace counts",
+     "token row"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "tokens as small rounded cells named A1 to A4 and V1 to V4, green and orange by modality, masked ones greyed, [M] placeholders in grey",
+    "parts": [
+     "audio cells",
+     "visual cells",
+     "[M] cells"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "Joint Encoder and Joint Decoder as tall pale-pink rounded rectangles with vertical text between token stacks",
+    "parts": [
+     "Joint Encoder",
+     "Joint Decoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "the two pooled vectors C_A and C_V tied by a dashed double-headed arrow labelled Contrastive Loss; no negatives or similarity matrix",
+    "parts": [
+     "C_A",
+     "C_V",
+     "dashed arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "losses drawn as labelled arrows between the compared items (an arc over the top for reconstruction, a dashed arrow for contrast), with no loss node",
+    "parts": [
+     "Reconstruction Loss arc",
+     "Contrastive Loss arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at A) top left, then the grey B) panel at the right (contrastive above, masked auto-encoder below), then the Combination arrow down-left to C), read left to right with both losses at the top and the middle."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "An irregular two-column grid: A) tokenization at the top left, a tall grey B) panel at the right stacking two framed component designs, and C) at the bottom left. A big grey Combination arrow points from B) to C).",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.72,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#bbded6",
+    "used_for": "audio tokens A1 to A4 and audio cells"
+   },
+   {
+    "hex": "#fc9432",
+    "used_for": "visual tokens V1 to V4 and visual embedding cells"
+   },
+   {
+    "hex": "#e3fae3",
+    "used_for": "Audio Encoder box and audio embedding stacks"
+   },
+   {
+    "hex": "#ffdda6",
+    "used_for": "Visual Encoder box and visual embedding stacks"
+   },
+   {
+    "hex": "#fae3d9",
+    "used_for": "Joint Encoder and Joint Decoder boxes"
+   },
+   {
+    "hex": "#ced4db",
+    "used_for": "grey panel behind B) and the greyed masked tokens"
+   },
+   {
+    "hex": "#3a414a",
+    "used_for": "dark slate outlines, arrows and text"
+   },
+   {
+    "hex": "#008a0e",
+    "used_for": "green arrows of the audio stream in C)"
+   },
+   {
+    "hex": "#cc4e00",
+    "used_for": "orange arrows of the visual stream in C)"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.5 pt dark slate outlines on boxes and token cells, 0.5 to 0.75 pt arrows and panel frames",
+  "font": "sans (Nimbus Sans) 3 to 7.5 pt; bold italic for panel titles and loss names; italic for Pooling; subscripts on E and C",
+  "corners": "rounded",
+  "arrows": "thin dark slate arrows with small filled heads, straight and elbowed; green and orange for the two streams in C); dashed double-headed arrow for the contrastive loss; one large grey block arrow",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Green = audio (tokens, Audio Encoder, embeddings, arrows), orange = visual; grey cells = masked-out tokens and [M] placeholders; pale pink = the shared joint encoder and decoder; grey panel = the two component designs that are combined.",
+  "line_style_means": "dashed double-headed arrow = contrastive loss between C_A and C_V; solid arc over the top = reconstruction loss between input and output tokens; solid arrows = data flow",
+  "shape_means": "rounded cell = one token or embedding (a stack is a sequence); box with horizontal text = modality encoder; tall rounded rectangle with vertical text = joint encoder or decoder; big block arrow = combination",
+  "marker_means": "A or V names the modality of a token, E an embedding, C a pooled vector, [M] a masked token; A), B), C) name the panels",
+  "emphasis": "C) is the largest panel with the densest wiring, reached by the big Combination arrow; colour per modality lets the eye follow audio and visual streams through the shared blocks.",
+  "reusable_patterns": [
+   "grey component panel stacking the two prior designs, with a big labelled block arrow into the combined model",
+   "tokens as small rounded cells coloured by modality, masked ones greyed, [M] placeholders",
+   "dashed double-headed arrow between two pooled vectors labelled Contrastive Loss",
+   "reconstruction loss as an arc across the top from input tokens to output tokens",
+   "tokenization strip with a spectrogram and a photo cut into labelled patch grids",
+   "rotated labels (Mask, Concatenate, Audio, Visual) beside token stacks"
+  ],
+  "weaknesses": [
+   "type is only 3 to 5.5 pt",
+   "C) is crowded: many cell stacks and arrows around the joint encoder are hard to parse",
+   "rotated labels and the two sub-panels in B) are cramped"
+  ]
+ },
+ "resources": {
+  "own": [
+   "an audio spectrogram"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token cells and stacks",
+   "module boxes",
+   "arrows, braces and the grey panel"
+  ],
+  "unknown": [
+   "origin of the cat photo"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "spectrogram and cat photo with patch grids",
+   "green and orange token cells",
+   "audio encoder, visual encoder, joint encoder and joint decoder boxes",
+   "dashed contrastive loss arrow between C_A and C_V",
+   "reconstruction loss arc",
+   "grey panel with a big Combination arrow"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "audio-visual",
+   "masked autoencoder",
+   "contrastive learning",
+   "self-supervised",
+   "joint encoder",
+   "tokenization",
+   "cross-modal",
+   "reconstruction loss"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "combination-block-arrow",
+    "what": "a large labelled block arrow carrying a grey panel of component designs into the combined proposed model"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "To show a method that fuses two known objectives, draw both components in one grey panel in the same visual grammar as the final model and join them to it with a big labelled arrow. Use one colour per modality across tokens, encoders, embeddings and arrows so each stream can be followed through shared blocks.",
+  "suits": "Papers that combine two learning objectives or architectures (contrastive plus reconstruction, two modalities, shared plus separate encoders) and must show what is shared and what is added."
+ },
+ "tags": [
+  "grey-component-panel",
+  "colour-per-modality",
+  "rotated-labels",
+  "dense-token-stacks",
+  "lettered-panels",
+  "block-arrow-combination"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)",
+   "Method (p.3)",
+   "Method (p.4)"
+  ],
+  "evidence": [
+   "we design the Contrastive Audio-Visual Masked Autoencoder (CAV-MAE) (shown in Figure 1.C)",
+   "CAV-MAE integrates two major self-supervised frameworks: contrastive audio-visual learning and cross-modal masked data modeling"
+  ]
+ },
+ "summary": "CAV-MAE combines contrastive learning and masked data modelling to learn a joint and coordinated audio-visual representation. Figure 1 has three lettered parts and one grey component panel. A) tokenizes a 128 by 1024 spectrogram and a 224 by 224 image into 16 by 16 patches (A1 to A512, V1 to V196). B) stacks the two prior designs in a grey panel: a conventional contrastive audio-visual model with separate encoders and a dashed Contrastive Loss arrow, and a vanilla audio-visual masked auto-encoder with masking, a joint encoder, a joint decoder and a Reconstruction Loss arc. A big Combination arrow leads to C), the full model, with both losses. Green marks audio and orange visual.",
+ "summary_zh": "CAV-MAE 结合对比学习与掩码重建。图 1 分三部分：A 把频谱图和图像切成 16×16 补丁；B 在灰色面板里画出传统对比模型和朴素音视频 MAE；粗箭头 Combination 指向含两种损失的完整模型 C。绿色为音频，橙色为视觉。",
+ "confidence": "high",
+ "notes": "Prior labels kept (model-anatomy, side-by-side-contrast, objective-graph). The wiring inside the joint encoder in C) is read from the drawing only: three stacks labelled Audio, Concatenate and Visual feed it, and small LN boxes marked a and v sit inside it (LN is not expanded in the figure). The digest lists 26 placed bitmaps but only 3 distinct images; the visible picture content is the spectrogram and the cat photo with their patches.",
+ "venue": "ICLR23"
+}

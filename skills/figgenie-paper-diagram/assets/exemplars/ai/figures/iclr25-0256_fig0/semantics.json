@@ -1,0 +1,421 @@
+{
+ "paper_id": "iclr25-0256",
+ "fig": "0",
+ "kind": "ai",
+ "system": {
+  "name": "KAN (Kolmogorov-Arnold Network)",
+  "one_liner": "Neural networks with learnable univariate activation functions on edges and summation on nodes, proposed as an alternative to MLPs.",
+  "domain": [
+   "neural network architecture",
+   "approximation theory",
+   "interpretable models"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "a ruled comparison table: MLP in the left column, KAN in the right, six aligned rows from the governing theorem through shallow and deep formulas to network drawings (a) to (d)",
+  "argues": "MLPs and KANs rest on different theorems: MLPs have fixed activations on nodes and learnable weights on edges, KANs have learnable activation functions on edges and plain sums on nodes.",
+  "subject": "a table comparing MLP and KAN by theorem, shallow and deep formulas and four network drawings",
+  "elements": [
+   {
+    "name": "Model, Theorem, Formula (Shallow), Model (Shallow), Formula (Deep), Model (Deep)",
+    "type": "label",
+    "role": "row headers of the table",
+    "drawn_as": "small upright serif labels in a left column of ruled cells",
+    "container": "table",
+    "is_contribution": null
+   },
+   {
+    "name": "Multi-Layer Perceptron (MLP)",
+    "type": "label",
+    "role": "head of the baseline column",
+    "drawn_as": "large bold serif header",
+    "container": "table",
+    "is_contribution": false
+   },
+   {
+    "name": "Kolmogorov-Arnold Network (KAN)",
+    "type": "label",
+    "role": "head of the proposed column",
+    "drawn_as": "large bold serif header, same size as the MLP header",
+    "container": "table",
+    "is_contribution": true
+   },
+   {
+    "name": "Universal Approximation Theorem, Kolmogorov-Arnold Representation Theorem",
+    "type": "text-block",
+    "role": "the theorem that inspires each network",
+    "drawn_as": "bold serif names, one per column, in the second row",
+    "container": "table",
+    "is_contribution": null
+   },
+   {
+    "name": "f(x) ≈ sum a_i sigma(w_i . x + b_i); f(x) = sum_q Phi_q(sum_p phi_q,p(x_p))",
+    "type": "formula",
+    "role": "shallow form of each model: a sum of activated linear maps versus a sum of univariate functions of sums of univariate functions",
+    "drawn_as": "large typeset equations centred in their cells",
+    "container": "table",
+    "is_contribution": null
+   },
+   {
+    "name": "(a) shallow MLP",
+    "type": "instance",
+    "role": "two inputs, five hidden nodes with activation boxes, one output; edges are the weights",
+    "drawn_as": "bitmap node-link drawing with red and blue edges, black nodes and five small activation-curve boxes on the hidden nodes",
+    "container": "table",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) shallow KAN",
+    "type": "instance",
+    "role": "same skeleton with an activation-curve box on every edge and plain dots as nodes",
+    "drawn_as": "bitmap node-link drawing with thin grey edges, a curve box on each of the fifteen edges and black summation dots",
+    "container": "table",
+    "is_contribution": true
+   },
+   {
+    "name": "MLP(x) = (W3 o sigma2 o W2 o sigma1 o W1)(x); KAN(x) = (Phi3 o Phi2 o Phi1)(x)",
+    "type": "formula",
+    "role": "deep form: linear maps and non-linearities alternate in the MLP, one function layer per step in the KAN",
+    "drawn_as": "centred equations with bold W and Phi",
+    "container": "table",
+    "is_contribution": null
+   },
+   {
+    "name": "(c) three-layer MLP",
+    "type": "instance",
+    "role": "deep MLP with layers W1, sigma1, W2, sigma2, W3",
+    "drawn_as": "bitmap drawing between dashed horizontal layer lines, two rows of activation boxes, with MLP(x) at the top and x at the bottom",
+    "container": "table",
+    "is_contribution": false
+   },
+   {
+    "name": "(d) three-layer KAN",
+    "type": "instance",
+    "role": "deep KAN with layers Phi1, Phi2, Phi3",
+    "drawn_as": "bitmap drawing between dashed layer lines with an activation box on every edge, KAN(x) at the top and x at the bottom",
+    "container": "table",
+    "is_contribution": true
+   },
+   {
+    "name": "fixed activation functions on nodes; learnable weights on edges; learnable activation functions on edges; sum operation on nodes",
+    "type": "label",
+    "role": "names the contrast on the shallow drawings",
+    "drawn_as": "italic key words in plain call-out text with short curved black arrows to the parts",
+    "container": "table",
+    "is_contribution": true
+   },
+   {
+    "name": "W3, sigma2, W2, sigma1, W1 and Phi3, Phi2, Phi1",
+    "type": "label",
+    "role": "layer operators of the deep drawings",
+    "drawn_as": "bold symbols in a column beside each drawing, bracketed to boxed property labels",
+    "container": "table",
+    "is_contribution": null
+   },
+   {
+    "name": "nonlinear, fixed; linear, learnable; nonlinear, learnable",
+    "type": "label",
+    "role": "properties of the bracketed operators: sigma is non-linear and fixed, W linear and learnable, Phi non-linear and learnable",
+    "drawn_as": "italic text in small square boxes reached by arrows from brackets",
+    "container": "table",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "MLP column",
+    "to": "KAN column",
+    "what": "each row holds the counterpart of the same item",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Theorem row",
+    "to": "Formula (Shallow) row",
+    "what": "the theorem is written as a formula",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Formula (Shallow)",
+    "to": "(a), (b)",
+    "what": "the formula is drawn as a network",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Formula (Deep)",
+    "to": "(c), (d)",
+    "what": "the composition is drawn as a three-layer network",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "call-out words",
+    "to": "parts of (a) and (b)",
+    "what": "name what sits on nodes and what sits on edges",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "layer labels W and sigma, and Phi",
+    "to": "boxed property labels",
+    "what": "brackets and arrows group operators by property",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a), (b)",
+    "to": "(c), (d)",
+    "what": "the same two networks made deeper",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "shallow MLP with fixed activations on nodes and learnable weights on edges",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "shallow KAN with learnable activation functions on edges and summation on nodes",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "three-layer MLP with W and sigma layers",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(d)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "three-layer KAN with Phi layers",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "identity",
+    "at": "top left of each network cell, bold",
+    "what": "name the four network drawings"
+   },
+   {
+    "marker": "subscripts 1, 2, 3",
+    "kind": "identity",
+    "at": "W, sigma and Phi in the deep drawings",
+    "what": "index the layers from the input upward"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "tiny framed plot of an activation curve: the same sigmoid-like shape on every MLP node, different bumps and waves on KAN edges (about fifty in total)",
+    "stands_for": "fixed versus learnable activation functions",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 50
+   }
+  ],
+  "examples": [
+   {
+    "what": "toy networks: a shallow one with two inputs and five hidden units (width 2n+1 for n = 2) and a three-layer one",
+    "form": "node-link drawings",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "mlp-head",
+    "drawn_as": "fully connected node-link drawing with red and blue edges as weights and activation boxes on the hidden nodes",
+    "parts": [
+     "node",
+     "edge",
+     "activation box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "kan-network",
+    "drawn_as": "same node-link skeleton as the MLP but with an activation-curve box on every edge and plain dots as nodes",
+    "parts": [
+     "summation dot",
+     "edge with curve box"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "fixed and learnable written as italic words in call-outs and boxed property labels instead of icons",
+    "parts": [
+     "italic word",
+     "boxed label",
+     "bracket"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Column headers, then down the rows: theorem, shallow formula, drawings (a) and (b), deep formula, drawings (c) and (d), MLP before KAN."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A ruled table of a narrow row-header column and two wide columns, MLP left and KAN right, over six rows: headers, theorem, shallow formula, shallow drawings (a) and (b), deep formula, deep drawings (c) and (d). Each MLP cell sits level with its KAN counterpart.",
+  "panel_count": 4,
+  "lanes": "2 aligned columns (MLP, KAN) across 6 table rows",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.7,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#000000",
+    "used_for": "table rules, text, dashed layer lines, nodes and call-out arrows"
+   },
+   {
+    "hex": "#e53030",
+    "approx": true,
+    "used_for": "red edges in the MLP drawings (read off the bitmaps; meaning not stated)"
+   },
+   {
+    "hex": "#2a2af0",
+    "approx": true,
+    "used_for": "blue edges in the MLP drawings (read off the bitmaps; meaning not stated)"
+   }
+  ],
+  "ground": "white",
+  "fill": "none",
+  "stroke": "0.25 to 0.5 pt black table rules; dashed horizontal layer lines in (c) and (d); thin black outlines on the property boxes",
+  "font": "serif (Times New Roman, STIX math) at 4.5 to 9.5 pt; bold for column headers, theorem names and panel letters; italic for call-outs and property labels; bold upright W and Phi",
+  "corners": "square",
+  "arrows": "short curved black arrows from call-outs to the drawing; straight arrows from brackets to boxed labels",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "the vector layer is black on white; in the MLP drawings red and blue separate two groups of edges (not explained in the figure)",
+  "line_style_means": "dashed horizontal lines = layer boundaries from input x to the output; solid rules = table cells",
+  "shape_means": "black dot = node (a summation node in the KAN); small boxed curve = an activation function; square boxes = property labels",
+  "marker_means": "letters (a) to (d) name the drawings; subscripts index layers",
+  "emphasis": "two large bold column headers of equal size, and the italic words fixed, learnable, nodes and edges in the call-outs",
+  "reusable_patterns": [
+   "aligned two-column table with row headers so each MLP property sits level with its KAN counterpart",
+   "same node-link skeleton for both networks so only the position of the activation boxes (nodes versus edges) differs",
+   "italic call-outs with short curved arrows naming the contrast on the drawing",
+   "brackets from layer symbols to boxed property labels (linear learnable, nonlinear fixed)",
+   "formula row directly above the drawing it specifies, shallow then deep"
+  ],
+  "weaknesses": [
+   "the red and blue edge colours in the MLP drawings have no explanation in the figure",
+   "the activation curves in the KAN drawings are about 3 pt, too small to tell apart"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "table rules, headers and typeset formulas",
+   "call-outs, brackets and boxed labels"
+  ],
+  "unknown": [
+   "the four network drawings are bitmaps, probably exported from plotting code"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "ruled two-column comparison table",
+   "theorem and formula cells",
+   "MLP and KAN node-link drawings",
+   "activation-function glyph boxes on nodes or edges",
+   "bracketed layer labels with boxed properties",
+   "curved-arrow call-outs"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "Kolmogorov-Arnold network",
+   "MLP",
+   "learnable activation functions",
+   "universal approximation theorem",
+   "Kolmogorov-Arnold representation theorem",
+   "spline",
+   "network architecture",
+   "edges versus nodes"
+  ],
+  "tags": [
+   "comparison-table",
+   "equation-boxes"
+  ],
+  "new_tags": [
+   {
+    "name": "drawing-callouts",
+    "what": "italic annotation phrases tied to parts of a network drawing by short curved black arrows, or boxed property labels reached by brackets, naming the contrast on the drawing itself"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Compare two architectures in a ruled table with row headers for theorem, formula and drawing, and draw both networks on the same skeleton so the one difference (activation glyphs on edges instead of nodes) stands out, with italic call-outs naming it.",
+  "suits": "Architecture proposals that replace one component of a familiar model and can be stated as a theorem, an equation and a node-link picture."
+ },
+ "tags": [
+  "ruled-table",
+  "serif-math",
+  "node-link-drawings",
+  "italic-callouts",
+  "monochrome",
+  "single-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 Kolmogorov-Arnold Networks (p.4-6)"
+  ],
+  "evidence": [
+   "KANs place learnable activation functions on edges (“weights”), as illustrated in Figure 0.1.",
+   "In Figure 0.1 (c) and (d), we visualize a three-layer MLP and a three-layer KAN, to clarify their differences."
+  ]
+ },
+ "summary": "The paper proposes Kolmogorov-Arnold Networks as an alternative to MLPs. Figure 0.1 is a ruled comparison table with an MLP column on the left and a KAN column on the right. Rows give the governing theorem (Universal Approximation versus Kolmogorov-Arnold Representation), the shallow and deep formulas, and four network drawings (a) to (d). The MLP drawings have fixed activation boxes on nodes and learnable weights on edges; the KAN drawings keep the same skeleton but put a learnable activation curve on every edge and plain summation dots on nodes. Italic call-outs with curved arrows and bracketed boxed labels (nonlinear fixed, linear learnable, nonlinear learnable) spell out the contrast. The figure is monochrome serif apart from red and blue edges inside the MLP bitmaps.",
+ "summary_zh": "论文提出 KAN 替代 MLP。图 0.1 是左 MLP、右 KAN 的对比表：逐行给出定理、浅层与深层公式和网络图 (a)–(d)。MLP 的激活固定在节点上，KAN 把可学习激活放在边上，节点只求和。",
+ "confidence": "high",
+ "notes": "The context says the figure is numbered 0.1 and has no separate legend; the red and blue edge colours inside the MLP bitmaps are not explained by the figure or the quoted paragraphs, and their palette values are approximate readings. The four network drawings are bitmaps but are drawings of the model, so they are listed as elements and not as pictures; the activation-curve count (about fifty) is an estimate.",
+ "venue": "ICLR25"
+}

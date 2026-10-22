@@ -1,0 +1,392 @@
+{
+ "paper_id": "icml26-0157",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "BitTokens",
+  "one_liner": "A single-token number encoding that represents any number via its IEEE 754 binary floating-point form, so small LMs can do arithmetic accurately with few tokens.",
+  "domain": [
+   "numeracy",
+   "number tokenization",
+   "arithmetic"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "a qualitative performance-versus-tokens plane on which three model types answer the same prompt in thought bubbles",
+  "argues": "Reasoning LLMs get arithmetic right only with long token-hungry chains and basic LLMs are cheap but wrong; BitTokens are both accurate and cheap.",
+  "subject": "One multiplication prompt answered by three model types placed on a performance-versus-tokens plane, with a long reasoning transcript.",
+  "elements": [
+   {
+    "name": "Prompt: What is 4314.97 × 4080000?",
+    "type": "instance",
+    "role": "the arithmetic question given to every model",
+    "drawn_as": "bold 'Prompt:' label and a rounded white box with black outline at the top centre",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Arithmetic performance",
+    "type": "label",
+    "role": "vertical axis, better is up",
+    "drawn_as": "thick arrow pointing up, gradient from black at the origin to green, rotated axis title",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Required tokens",
+    "type": "label",
+    "role": "horizontal axis, more tokens to the right",
+    "drawn_as": "thick arrow pointing right, gradient from black at the origin to red, axis title below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "LLMs with BitTokens",
+    "type": "module",
+    "role": "language model using the proposed single-token number encoding, accurate and cheap",
+    "drawn_as": "black node-and-edge network glyph with a small white box '00101010' across it, name below, at the top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "The answer is 17,605,077,600.",
+    "type": "sample",
+    "role": "correct short answer of the BitTokens model",
+    "drawn_as": "yellow-tinted rounded speech box with orange outline, two small circles as thought tail, green check mark",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "LLMs with Reasoning",
+    "type": "module",
+    "role": "language model that reasons step by step, accurate but token-hungry",
+    "drawn_as": "network glyph with a brain outline in the middle, name below, at the top right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Computing a product step-by-step / Final product confirmation / Verifying calculations",
+    "type": "text-block",
+    "role": "reasoning chain that reaches 17,605,077,600 and re-checks it",
+    "drawn_as": "tall light-blue rounded box with blue outline holding dense 3.5 pt text in three paragraphs with bold lead-ins, a thought tail from the reasoning model, green check mark at its corner",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Basic LLMs",
+    "type": "module",
+    "role": "plain language model, cheap but inaccurate",
+    "drawn_as": "network glyph without emblem, name below, at the bottom",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "The answer is 17,603,067,600,000.",
+    "type": "sample",
+    "role": "wrong short answer of the basic model",
+    "drawn_as": "pink-tinted rounded speech box with dark-red outline, two small circles as thought tail, red cross",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Prompt: What is 4314.97 × 4080000?",
+    "to": "the three model glyphs",
+    "what": "the same prompt is answered by every model type",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "model glyph",
+    "to": "answer bubble",
+    "what": "the model's reply, drawn as a thought bubble with two trailing circles",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "LLMs with Reasoning",
+    "to": "reasoning transcript box",
+    "what": "the long chain of thought behind its answer",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Arithmetic performance and Required tokens axes",
+    "to": "position of each model glyph",
+    "what": "position places BitTokens top-left (accurate, few tokens), Reasoning top-right (accurate, many tokens), Basic LLMs bottom (inaccurate, few tokens)",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "bold lead-ins in the transcript",
+    "kind": "section",
+    "at": "reasoning transcript box",
+    "what": "head the three parts of the reasoning chain: Computing a product step-by-step, Final product confirmation, Verifying calculations"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "black node-and-edge network glyph",
+    "stands_for": "a language model (BitTokens, Reasoning, Basic)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "brain outline inside the network glyph",
+    "stands_for": "reasoning ability of the model",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "white box with the bit string 00101010",
+    "stands_for": "the binary single-token number encoding of BitTokens",
+    "style": "other",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "thought bubble (rounded box with two trailing circles)",
+    "stands_for": "the answer a model gives",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "the prompt 'What is 4314.97 × 4080000?' with the correct answer 17,605,077,600 and the wrong answer 17,603,067,600,000",
+    "form": "prompt box and thought bubbles with check mark and cross",
+    "real_values": true
+   },
+   {
+    "what": "a reasoning-model transcript that splits 4,080,000 into 408 × 10,000, multiplies in parts and verifies by a second route",
+    "form": "long light-blue text box with bold lead-ins",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "black node-and-edge network glyph, with an emblem for the model type (binary string box for BitTokens, brain for Reasoning, none for Basic)",
+    "parts": [
+     "network glyph",
+     "emblem",
+     "name label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "thought bubbles with two trailing circles, one per model, tinted by outcome",
+    "parts": [
+     "bubble body",
+     "tail circles"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "one prompt box on top and each model's answer with a green check or red cross",
+    "parts": [
+     "prompt",
+     "model answers",
+     "check mark",
+     "cross mark"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the prompt pill at the top, drops to the three model glyphs and their bubbles, reads the check mark and cross, then skims the long transcript box on the right and the two axes."
+ },
+ "layout": {
+  "arrangement": "single",
+  "arrangement_note": "one drawing: prompt pill on top, an L-shaped pair of gradient axis arrows with three model glyphs placed in the plane (BitTokens top-left, Reasoning top-right, Basic bottom), and a tall transcript box filling the right third",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.55,
+  "text_density": "dense",
+  "visual_density": "sparse",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#deeff9",
+    "opacity": 0.5,
+    "used_for": "reasoning transcript box and the reasoning thought bubble"
+   },
+   {
+    "hex": "#fbf0d9",
+    "opacity": 0.66,
+    "used_for": "BitTokens answer bubble"
+   },
+   {
+    "hex": "#f9f2f3",
+    "opacity": 0.66,
+    "used_for": "Basic LLMs answer bubble"
+   },
+   {
+    "hex": "#009900",
+    "used_for": "top end of the performance axis and the check marks"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "right end of the tokens axis and the cross mark"
+   },
+   {
+    "hex": "#6c8ebf",
+    "used_for": "blue outline of the transcript box and reasoning bubble"
+   },
+   {
+    "hex": "#e69f00",
+    "used_for": "orange outline of the BitTokens bubble"
+   },
+   {
+    "hex": "#9e0d19",
+    "used_for": "dark-red outline of the Basic LLMs bubble"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "thin 0.25 pt outlines on bubbles and the transcript box, heavier black outline on the prompt box, thick gradient axis arrows",
+  "font": "sans (Liberation Sans, DejaVu Sans); 3.5 pt transcript with bold lead-ins, 4.5 pt bold model names, 6-6.5 pt prompt and axis titles, 8.5 pt check and cross marks",
+  "corners": "rounded",
+  "arrows": "two thick axis arrows with filled heads and a black-to-colour gradient; thought bubbles trail as two small circles",
+  "rendering": "flat-vector",
+  "effects": "gradient fills on the axis arrows, translucent tints on the bubbles; no shadows",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = good (high performance, correct answer), red = bad (many tokens, wrong answer), black = origin of both axes; bubble tint names the model: yellow = BitTokens, blue = Reasoning, pink = Basic LLMs",
+  "line_style_means": "no dashed or dotted lines; two small circles trail from each model glyph to its answer",
+  "shape_means": "network glyph = a language model; box with 00101010 = BitTokens encoding; brain = reasoning; rounded bubble = the model's answer",
+  "marker_means": "green check = correct product 17,605,077,600; red cross = wrong product 17,603,067,600,000",
+  "emphasis": "BitTokens sits alone in the top-left corner with a one-line bubble while the reasoning model needs a transcript box several times larger",
+  "reusable_patterns": [
+   "qualitative performance-versus-cost plane with gradient-coloured axis arrows (green better, red costly)",
+   "the same prompt answered by three model types, answers in thought bubbles with check or cross",
+   "a long real transcript box beside one model so that its token cost is seen as sheer size",
+   "model glyph with a small emblem (binary string, brain) that tells the model type",
+   "bubble tint by outcome or model type"
+  ],
+  "weaknesses": [
+   "the transcript is 3.5 pt text and works only as a texture at print size",
+   "axes carry no numbers, positions are qualitative",
+   "the check mark for the reasoning model sits at the corner of the transcript box, away from its bubble"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real multiplication prompt with three models' answers",
+   "a real reasoning-model transcript excerpt"
+  ],
+  "stock": [
+   "node-and-edge network glyph",
+   "brain icon",
+   "check and cross marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "prompt box",
+   "gradient axis arrows",
+   "thought bubbles",
+   "binary string label",
+   "transcript box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "prompt pill",
+   "gradient axis arrows",
+   "network-glyph model icons",
+   "thought bubbles with answers",
+   "brain emblem",
+   "binary string box",
+   "long reasoning transcript box",
+   "check and cross marks"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "numeracy",
+   "number tokenization",
+   "BitTokens",
+   "arithmetic",
+   "single-token encoding",
+   "reasoning tokens",
+   "IEEE 754",
+   "efficiency"
+  ],
+  "tags": [
+   "schematic-plot",
+   "verdict-marks",
+   "model-pictogram",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-axis-arrows",
+    "what": "axis arrows filled with a black-to-colour gradient (green better, red costly) that frame a qualitative plane"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Place model types on a qualitative performance-versus-cost plane and let each answer the same prompt in a thought bubble with a tick or cross; show the expensive method's cost by drawing its real transcript at full length beside it.",
+  "suits": "Motivation figures that must show a method is both accurate and cheap against a slow-but-right baseline and a fast-but-wrong baseline."
+ },
+ "tags": [
+  "qualitative plane",
+  "gradient axes",
+  "thought bubbles",
+  "network-glyph models",
+  "dense transcript box",
+  "single-column"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.1)",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "LLMs perform poorly on arithmetic tasks, requiring excessive reasoning tokens to achieve good performance.",
+   "reasoning chains can be very inefficient, sometimes requiring tens of thousands of tokens to solve a single calculation",
+   "Our BitTokens tokenization strategy allows language models to solve arithmetic tasks both effectively and efficiently."
+  ]
+ },
+ "summary": "BitTokens encode any number as one token built from its IEEE 754 binary floating-point representation, so small language models can learn arithmetic algorithms without long reasoning chains or number splitting. Figure 1 is a motivation sketch. A prompt pill at the top asks 'What is 4314.97 × 4080000?'. Below it, a qualitative plane with gradient axes (arithmetic performance up in green, required tokens to the right in red) holds three model types drawn as network glyphs: LLMs with BitTokens at the top left, answering correctly in one short bubble; LLMs with Reasoning at the top right, also correct but followed by a long light-blue transcript of step-by-step checking; and Basic LLMs at the bottom, cheap but giving a wrong number marked with a red cross.",
+ "summary_zh": "BitTokens 用 IEEE 754 浮点位表示把任意数字编码成单个 token。图 1 为定性示意：顶部给出乘法题，下方的“性能—所需 token”平面上，BitTokens 一句话答对，推理模型答对但附长篇推理，基础模型廉价却答错。",
+ "confidence": "high",
+ "notes": "Prior labels kept (concept-schematic, side-by-side-contrast). The plane has no tick values, so schematic-plot applies. The correct product is 17,605,077,600; the basic-LLM answer is off by a factor of about 1000. The three network glyphs and the brain are small bitmaps, the axis arrows are gradient bitmaps.",
+ "venue": "ICML26"
+}

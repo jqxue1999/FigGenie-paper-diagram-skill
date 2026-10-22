@@ -1,0 +1,521 @@
+{
+ "paper_id": "icml26-0149",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DreamDojo",
+  "one_liner": "A foundation robot world model pretrained on 44k hours of egocentric human video with latent actions, post-trained on robots and distilled to real time.",
+  "domain": [
+   "robot world model",
+   "egocentric human video",
+   "latent actions"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "contribution-mosaic",
+   "scope-overview"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "four numbered framed panels in a jigsaw: pretraining, robot post-training, distillation, applications; no arrows between panels",
+  "argues": "Pretraining on large human video with latent actions, then post-training and distillation on robots, yields a real-time world model usable for teleoperation, policy evaluation and planning.",
+  "subject": "Human-video pretraining, robot post-training, autoregressive distillation and four application tiles, shown with real frames and robot photos.",
+  "elements": [
+   {
+    "name": "Human Video Pretraining",
+    "type": "container",
+    "role": "stage 1: the world model learns from human egocentric video",
+    "drawn_as": "L-shaped light-grey frame with grey tab '1' and a grey title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "In-lab / EgoDex / DreamDojo-HV",
+    "type": "data",
+    "role": "the three egocentric human-video datasets of the pretraining mixture",
+    "drawn_as": "three tightly packed 3x3 thumbnail mosaics stacked at the left, each with a black name tab",
+    "container": "Human Video Pretraining",
+    "is_contribution": null
+   },
+   {
+    "name": "DreamDojo",
+    "type": "module",
+    "role": "the world model that takes frames in and puts frames out",
+    "drawn_as": "saturated green rounded box with large white bold name, inside a thin light-green halo",
+    "container": "Human Video Pretraining",
+    "is_contribution": true
+   },
+   {
+    "name": "input and predicted frame tiles",
+    "type": "sample",
+    "role": "one clean frame plus three noisy frames go into the model, three frames come out",
+    "drawn_as": "small rounded frame tiles, noise-textured for the noisy ones, above and below the model box with short green arrows",
+    "container": "Human Video Pretraining",
+    "is_contribution": null
+   },
+   {
+    "name": "Robot Post-Training",
+    "type": "container",
+    "role": "stage 2: the model is adapted to target robots",
+    "drawn_as": "light-grey rounded frame with grey tab '2'",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "GR-1 / G1 / AgiBot / YAM",
+    "type": "actor",
+    "role": "the four robot embodiments used for post-training",
+    "drawn_as": "four robot photo cutouts in a row with light-grey captions",
+    "container": "Robot Post-Training",
+    "is_contribution": null
+   },
+   {
+    "name": "Autoregressive Distillation",
+    "type": "container",
+    "role": "stage 3: the model is distilled into a faster student",
+    "drawn_as": "wide light-grey rounded frame with grey tab '3'",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "noise-level frame strips and graded green strip",
+    "type": "sample",
+    "role": "rows of frames from faint or noisy to clear above and below a strip of four green blocks that darken",
+    "drawn_as": "four small frame tiles per row, faded or noise-textured, over a strip of 4 green blocks with rising saturation",
+    "container": "Autoregressive Distillation",
+    "is_contribution": null
+   },
+   {
+    "name": "DreamDojo Student",
+    "type": "module",
+    "role": "the distilled student that produces frames chunk by chunk",
+    "drawn_as": "long saturated green box with white text, spanning three frame columns, green arrows in and out",
+    "container": "Autoregressive Distillation",
+    "is_contribution": true
+   },
+   {
+    "name": "Applications",
+    "type": "container",
+    "role": "stage 4: what the trained model is used for",
+    "drawn_as": "tall light-grey rounded frame with grey tab '4'",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Unseen Environments",
+    "type": "sample",
+    "role": "generalisation to unseen objects and scenes",
+    "drawn_as": "large photo tile with black name tab",
+    "container": "Applications",
+    "is_contribution": null
+   },
+   {
+    "name": "Live Teleop",
+    "type": "sample",
+    "role": "live teleoperation use",
+    "drawn_as": "photo tile of a person with a controller before a screen, black name tab",
+    "container": "Applications",
+    "is_contribution": null
+   },
+   {
+    "name": "Policy Eval",
+    "type": "sample",
+    "role": "policy evaluation use",
+    "drawn_as": "photo tile of a robot with fruit and a grey bag, black name tab",
+    "container": "Applications",
+    "is_contribution": null
+   },
+   {
+    "name": "Model-based Planning",
+    "type": "sample",
+    "role": "online planning use",
+    "drawn_as": "2x2 grid of rollout frames, the first with a green border, black name tab",
+    "container": "Applications",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "In-lab / EgoDex / DreamDojo-HV",
+    "to": "DreamDojo",
+    "what": "human video data feed the pretrained world model",
+    "kind": "data",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "input frame tiles",
+    "to": "DreamDojo",
+    "what": "one clean frame and three noisy frames go in",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DreamDojo",
+    "to": "predicted frame tiles",
+    "what": "three frames come out",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "noise-level frame strips",
+    "to": "DreamDojo Student",
+    "what": "frame chunks in, student outputs frames",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frame columns of DreamDojo Student",
+    "to": "later frame columns",
+    "what": "thin diagonal green lines tie earlier frames to later ones (not labelled)",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Human Video Pretraining",
+    "to": "Applications",
+    "what": "stage order 1, 2, 3, 4 given by digits in the panel tabs only, no arrows between panels",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1 Human Video Pretraining",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "three human-video datasets funnelled into the DreamDojo box with frames in and out",
+    "verdict": null
+   },
+   {
+    "label": "2 Robot Post-Training",
+    "kind": "scope-overview",
+    "axis": "stages",
+    "shows": "four target robot embodiments as photo cutouts",
+    "verdict": null
+   },
+   {
+    "label": "3 Autoregressive Distillation",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "DreamDojo Student on strips of frames at different noise levels",
+    "verdict": null
+   },
+   {
+    "label": "4 Applications",
+    "kind": "contribution-mosaic",
+    "axis": "stages",
+    "shows": "four photo tiles: Unseen Environments, Live Teleop, Policy Eval, Model-based Planning",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2, 3, 4",
+    "kind": "order",
+    "at": "grey tabs at the top-left corner of each panel",
+    "what": "order of the four stages"
+   },
+   {
+    "marker": "black name tabs",
+    "kind": "identity",
+    "at": "lower-left corner of dataset mosaics and application tiles",
+    "what": "names the dataset (In-lab, EgoDex, DreamDojo-HV) or the application"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "egocentric human-video thumbnails of In-lab, EgoDex and DreamDojo-HV",
+    "content": "video-frames",
+    "role": "data-thumbnail",
+    "count": 27,
+    "medium": "bitmap",
+    "treatment": "three 3x3 mosaics with no gaps, a black name tab at the lower left of each"
+   },
+   {
+    "what": "frame tiles fed to the world model (one clean, three noisy)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small rounded tiles above the model box, noise texture on the noisy ones, green arrows down"
+   },
+   {
+    "what": "frame tiles predicted by the world model",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small rounded tiles below the model box, green arrows down from it"
+   },
+   {
+    "what": "frame tiles of the distillation panel at several noise levels",
+    "content": "video-frames",
+    "role": "other",
+    "count": 17,
+    "medium": "bitmap",
+    "treatment": "rows of four faded, noisy or clear tiles at the left, then three columns of stacked noisy and clean frames above and clear frames below the student box"
+   },
+   {
+    "what": "application photos and rollouts: unseen workshop, teleoperation, policy evaluation, planning grid",
+    "content": "natural-image",
+    "role": "result",
+    "count": 7,
+    "medium": "bitmap",
+    "treatment": "rounded photo tiles with black name tabs; planning tile is a 2x2 grid whose first frame has a green border"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "photo cutouts of the robots GR-1, G1, AgiBot and YAM",
+    "stands_for": "the four target robot embodiments of post-training",
+    "style": "photo-cutout",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "one egocentric scene passed through DreamDojo: a clean frame plus noisy frames in, predicted frames out",
+    "form": "frame tiles above and below the model box joined by green arrows",
+    "real_values": true
+   },
+   {
+    "what": "a robot-arm scene with fruit handled by DreamDojo Student, chunk by chunk",
+    "form": "frame tiles in three columns with green arrows and thin diagonal lines",
+    "real_values": true
+   },
+   {
+    "what": "application snapshots: tools and a shoe in an unseen workshop, a teleoperator with a controller, a robot with fruit and a bag, planning rollouts",
+    "form": "photo tiles with black name tabs",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dataset-card",
+    "drawn_as": "three 3x3 mosaics of video thumbnails, each with a black name tab, stacked at the left and funnelled into the model",
+    "parts": [
+     "In-lab mosaic",
+     "EgoDex mosaic",
+     "DreamDojo-HV mosaic",
+     "name tabs"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "rows of four small frame tiles, without a sprocket border, for input and output video chunks",
+    "parts": [
+     "frame tiles"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "frames that go from faded or noisy to clear in a row, next to a strip of green blocks that darken",
+    "parts": [
+     "noisy frames",
+     "clear frames",
+     "graded green strip"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at panel 1 (top-left), follows the dataset wedge into the green DreamDojo box, goes right to panel 2, down to panel 3 and finally to the photo tiles of panel 4, guided by the digits."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "four rounded grey panels fitted like a jigsaw: panel 1 is L-shaped and wraps around the top of panel 3, panel 2 sits top-centre, panel 3 is wide at the bottom-centre, panel 4 is tall at the right; digit tabs give the order and no arrows join the panels; each panel also has a title",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.25,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#76b900",
+    "used_for": "DreamDojo and DreamDojo Student boxes, arrows, diagonal lines"
+   },
+   {
+    "hex": "#76b900",
+    "opacity": 0.2,
+    "used_for": "wedge from the dataset mosaics to the DreamDojo box"
+   },
+   {
+    "hex": "#76b900",
+    "opacity": 0.1,
+    "used_for": "first block of the graded green strip (distillation panel)"
+   },
+   {
+    "hex": "#76b900",
+    "opacity": 0.4,
+    "used_for": "second block of the graded green strip"
+   },
+   {
+    "hex": "#76b900",
+    "opacity": 0.6,
+    "used_for": "third block of the graded green strip"
+   },
+   {
+    "hex": "#76b900",
+    "opacity": 0.8,
+    "used_for": "fourth block of the graded green strip"
+   },
+   {
+    "hex": "#cecece",
+    "used_for": "panel frames and number tabs"
+   },
+   {
+    "hex": "#4f4f4f",
+    "used_for": "panel titles"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "name tabs on photo tiles"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "no stroked shapes; frames, tabs and arrows are filled paths",
+  "font": "sans, 7.5 pt labels, 9 pt panel titles, 12 pt model name in white on green",
+  "corners": "rounded",
+  "arrows": "short thin green arrows with small open heads into and out of the model boxes; thin green diagonal lines and grey corner brackets in the distillation panel",
+  "rendering": "flat-vector",
+  "effects": "translucent green wedge and halo, faded and noise-textured frames; no shadows",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = the DreamDojo model family (model box, student box, arrows, graded strip); grey = panel frames and tabs; black tabs = names of datasets and applications; photos carry their own colours",
+  "line_style_means": "thin green arrows = frames in and out of a model; thin diagonal green lines in panel 3 = links between frame chunks (not labelled)",
+  "shape_means": "rounded grey frame = one stage; saturated green box = a model; black tab = name of a photo tile or dataset",
+  "marker_means": "digits 1-4 in grey tabs give the order of the stages",
+  "emphasis": "green is the only saturated colour, so the two model boxes stand out against the photographic thumbnails; panel 1 is the largest and carries the dataset funnel",
+  "reusable_patterns": [
+   "numbered grey corner tabs give the reading order of a jigsaw of framed panels without arrows",
+   "translucent green wedge funnels a dataset mosaic into the model box",
+   "black name tabs pinned to the lower-left corner of photo tiles",
+   "noise-textured frame tiles for noisy inputs next to clean frames for outputs",
+   "robot embodiments as photo cutouts with light-grey captions",
+   "one accent hue over grey frames and full-colour photos"
+  ],
+  "weaknesses": [
+   "no arrows join the four panels, order rests on the digits",
+   "the wiring of panel 3 (graded strip, diagonal lines, grey brackets) is unlabelled and needs the paper",
+   "labels are small (7.5 pt) against a wide figure with many photos",
+   "the teacher side of the distillation is not drawn or named"
+  ]
+ },
+ "resources": {
+  "own": [
+   "egocentric video thumbnails of the three datasets",
+   "model predictions and rollout frames",
+   "teleoperation photo and application frames"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "panel frames and number tabs",
+   "green model boxes and arrows",
+   "translucent wedge",
+   "graded green strip",
+   "black name tabs"
+  ],
+  "unknown": [
+   "origin of the robot cutouts (vendor images or the authors' photos)",
+   "whether the application tiles are real footage or model rollouts"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "egocentric video thumbnail mosaics",
+   "DreamDojo model box",
+   "noisy frame strips",
+   "robot photo cutouts",
+   "DreamDojo Student box",
+   "application photo tiles",
+   "numbered panel tabs"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "robot world model",
+   "egocentric human video",
+   "latent actions",
+   "post-training",
+   "autoregressive distillation",
+   "live teleoperation",
+   "policy evaluation",
+   "model-based planning"
+  ],
+  "tags": [
+   "filmstrip"
+  ],
+  "new_tags": [
+   {
+    "name": "noise-level-strip",
+    "what": "a row of frames of one scene at rising noise levels (faded, then noisy, then clear) standing for a denoising schedule"
+   },
+   {
+    "name": "numbered-panel-tabs",
+    "what": "grey corner tabs with a digit give the reading order of a jigsaw of framed panels"
+   },
+   {
+    "name": "photo-name-tabs",
+    "what": "black rounded tabs with white text pinned to the corner of photo tiles or mosaics to name the dataset or application"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "One accent hue on the model boxes and arrows over grey frames and full-colour photo tiles keeps a dense, photographic overview readable; numbered corner tabs order a jigsaw of panels with no inter-panel arrows.",
+  "suits": "Large-scale data-plus-model papers (robotics, video, world models) whose overview must show many real frames, several embodiments and several applications."
+ },
+ "tags": [
+  "photo-heavy",
+  "four numbered panels",
+  "single accent hue green",
+  "jigsaw layout",
+  "black name tabs",
+  "grey frames",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract",
+   "1 Introduction (Figure 1 caption)"
+  ],
+  "evidence": [
+   "DreamDojo acquires comprehensive physical knowledge from large-scale human datasets by utilizing latent actions as unified labels.",
+   "After post-training and distillation on the target robots, our model can predict the future world in real time",
+   "It also enables live teleoperation and online model-based planning."
+  ]
+ },
+ "summary": "DreamDojo is a generalist robot world model: pretrained on 44k hours of egocentric human video with latent actions as unified action labels, post-trained on target robots and distilled into a real-time student that supports live teleoperation, policy evaluation and planning. Figure 1 is a four-panel overview laid out like a jigsaw with grey numbered tabs 1 to 4. Panel 1 shows three 3x3 mosaics of human-video thumbnails (In-lab, EgoDex, DreamDojo-HV) funnelled by a translucent green wedge into the green DreamDojo box, with noisy and clean frame tiles going in and out. Panel 2 shows four robot photo cutouts (GR-1, G1, AgiBot, YAM). Panel 3 shows the DreamDojo Student on strips of frames, and panel 4 shows four photo tiles of applications. Green is the only saturated colour.",
+ "summary_zh": "DreamDojo 是经人类视频预训练、机器人后训练和蒸馏得到的实时通用机器人世界模型。图 1 用四个带编号的灰框面板依次展示人类视频预训练、机器人后训练、自回归蒸馏，以及遥操作、策略评估、规划等应用，实拍帧为主，绿色标出模型。",
+ "confidence": "medium",
+ "notes": "No paragraph of the paper mentions the figure, so only the caption, abstract and the picture support the record. The meaning of the graded green strip, the diagonal lines, the grey corner brackets and the green border on the first planning tile in the 2x2 grid is not explained anywhere and is kept as description. Prior labels kept (stage-pipeline, contribution-mosaic); scope-overview added for the dataset mosaics and the robot row. Frame and tile counts are read from the digest and the picture and are approximate.",
+ "venue": "ICML26"
+}

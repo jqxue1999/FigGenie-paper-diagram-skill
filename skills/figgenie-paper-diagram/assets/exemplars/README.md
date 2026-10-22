@@ -1,5 +1,9 @@
 # Exemplar figures (v2 layout, 2026-09-07)
 
+This tree holds the systems-venue exemplars (architecture templates and mechanism groups). The AI family's
+exemplars — 3,210 Figure 1s of ICLR, ICML, NeurIPS, CVPR, ACL and AAAI in three tiers, searched with
+`scripts/find_ai_exemplars.py` and chosen by the user — live in [`ai/`](ai/README.md).
+
 Reference figures from published OSDI / NSDI / SOSP / ASPLOS papers, chosen from the human-rated
 `good` architecture diagrams of the corpus, reviewed by hand (drops + stars) and annotated by review
 agents after looking at every figure. Reproduced for style reference only: they are there to strengthen a

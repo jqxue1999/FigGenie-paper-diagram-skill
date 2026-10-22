@@ -1,0 +1,452 @@
+{
+ "paper_id": "icml26-0093",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FlashTrace",
+  "one_liner": "Efficient multi-token attribution for reasoning LLMs: whole spans are attributed in one pass and importance is traced recursively back through the reasoning chain to the input.",
+  "domain": [
+   "token attribution",
+   "LLM interpretability",
+   "chain-of-thought reasoning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "contribution-mosaic"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two lanes split by a dashed vertical line draw the same isometric token sequence with different arrows, above a row of three small measured charts",
+  "argues": "Token-by-token attribution is slow and lets reasoning tokens soak up importance; span-wise recursive attribution reaches the input in K hops and stays fast up to 10K tokens.",
+  "subject": "Isometric token cubes (input, reasoning, output) with attribution arrows for the naive and the span-wise scheme, plus three small result charts.",
+  "elements": [
+   {
+    "name": "Naive Token-by-Token Attribution",
+    "type": "container",
+    "role": "title of the baseline lane",
+    "drawn_as": "bold centred title above the left half",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Input (I)",
+    "type": "data",
+    "role": "original input tokens that the importance should finally reach",
+    "drawn_as": "3 white isometric cubes with dark outline at the lower left, label rotated along the diagonal",
+    "container": "both lanes",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning Tokens (T)",
+    "type": "data",
+    "role": "intermediate reasoning tokens that absorb importance",
+    "drawn_as": "run of 5 light-blue isometric cubes on the diagonal, dots before and after",
+    "container": "both lanes",
+    "is_contribution": false
+   },
+   {
+    "name": "Output (O)",
+    "type": "data",
+    "role": "target output tokens to be attributed",
+    "drawn_as": "run of dark blue-violet isometric cubes at the upper right",
+    "container": "both lanes",
+    "is_contribution": false
+   },
+   {
+    "name": "per-token attribution arrows",
+    "type": "operation",
+    "role": "each output token is attributed separately to earlier tokens",
+    "drawn_as": "fan of thin bright-cyan curved arrows from the output cubes to the reasoning cubes and one long arrow to the input",
+    "container": "Naive Token-by-Token Attribution",
+    "is_contribution": false
+   },
+   {
+    "name": "Complexity Θ(|O|×|I+T|) Slow & Inefficient",
+    "type": "formula",
+    "role": "cost of the naive scheme",
+    "drawn_as": "bold label with the complexity formula at the top left, clock icon below",
+    "container": "Naive Token-by-Token Attribution",
+    "is_contribution": false
+   },
+   {
+    "name": "Reasoning Tokens Absorb Importance",
+    "type": "other",
+    "role": "importance mass piles up on the reasoning tokens",
+    "drawn_as": "mini histogram: small grey bars then tall blue-violet gradient bars over a gradient strip, caption beneath",
+    "container": "Naive Token-by-Token Attribution",
+    "is_contribution": false
+   },
+   {
+    "name": "FlashTrace: Recursive & Span-wise",
+    "type": "container",
+    "role": "title of the proposed lane",
+    "drawn_as": "bold centred title above the right half",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "K-hop Span-wise Attribution Θ(K|I+T|)",
+    "type": "formula",
+    "role": "names the scheme and gives its cost",
+    "drawn_as": "bold two-line label with the complexity formula below it, left of the output span",
+    "container": "FlashTrace: Recursive & Span-wise",
+    "is_contribution": true
+   },
+   {
+    "name": "span-wise hop arrows",
+    "type": "operation",
+    "role": "attribute a whole span in one pass: output span to reasoning span, then reasoning span to input",
+    "drawn_as": "two thick bent blue-violet gradient arrows, each with a yellow lightning bolt",
+    "container": "FlashTrace: Recursive & Span-wise",
+    "is_contribution": true
+   },
+   {
+    "name": "span brackets",
+    "type": "other",
+    "role": "group neighbouring tokens into spans",
+    "drawn_as": "black arcs above the reasoning run and the output run",
+    "container": "FlashTrace: Recursive & Span-wise",
+    "is_contribution": true
+   },
+   {
+    "name": "Importance Trace Through Reasoning",
+    "type": "label",
+    "role": "gives the direction of the trace, output back to input",
+    "drawn_as": "large grey-violet gradient arrow pointing down-left with a two-line caption",
+    "container": "FlashTrace: Recursive & Span-wise",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Output (O)",
+    "to": "Reasoning Tokens (T)",
+    "what": "attribution of each output token onto individual reasoning tokens",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (O)",
+    "to": "Input (I)",
+    "what": "one long per-token arrow that reaches the input directly",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (O) span",
+    "to": "Reasoning Tokens (T) span",
+    "what": "first span-wise hop",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reasoning Tokens (T) span",
+    "to": "Input (I)",
+    "what": "second span-wise hop that carries importance back to the source input",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Naive Token-by-Token Attribution",
+    "to": "FlashTrace: Recursive & Span-wise",
+    "what": "same token sequence, different attribution scheme",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Naive Token-by-Token Attribution",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "fan of per-token arrows, cost Θ(|O|×|I+T|), clock, importance piling up on reasoning tokens",
+    "verdict": "baseline"
+   },
+   {
+    "label": "FlashTrace: Recursive & Span-wise",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "two thick span-wise hops through the reasoning tokens to the input, cost Θ(K|I+T|), lightning bolts",
+    "verdict": "ours"
+   },
+   {
+    "label": "Attr. Weight (%)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "caption (a): stacked bars Direct vs COT, cyan segment 19% and 7%, grey remainder cut at the 0.4 axis top",
+    "verdict": "fails"
+   },
+   {
+    "label": "Recovery Rate (%)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "caption (b): recovery of ground-truth input tokens, Direct 26% vs COT 9%",
+    "verdict": "fails"
+   },
+   {
+    "label": "Time (s)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "caption (c): runtime of Baseline vs FlashTrace for lengths from 100 to 10,000 tokens",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "stacked bar chart of attribution weight, Direct vs COT",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "two stacked bars, cyan lower segment with bold % label, light-grey upper segment, dashed gridlines at 0.2 and 0.4"
+   },
+   {
+    "what": "bar chart of recovery rate, Direct vs COT",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "two bars (cyan, dark blue) with bold % labels inside, dashed gridline at 0.2"
+   },
+   {
+    "what": "line chart of runtime against length for Baseline and FlashTrace",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "dark-blue diamond line climbing to about 280 s against a flat green dot line, direct labels instead of a legend, rotated tick labels"
+   },
+   {
+    "what": "mini histogram of importance mass over tokens",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "about 8 small grey bars followed by taller blue-violet gradient bars (placed as tiny bitmaps) above a gradient strip"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "isometric cube",
+    "stands_for": "one token (white = input, light blue = reasoning, dark blue-violet = output)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 24
+   },
+   {
+    "depicts": "stopwatch with a circular arrow",
+    "stands_for": "long run time of the naive scheme",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "yellow lightning bolt",
+    "stands_for": "fast single-pass span-wise attribution",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "tokens as small isometric cubes in runs along a rising diagonal, coloured by role, with dots between runs; black arcs mark spans in the right lane",
+    "parts": [
+     "input cubes",
+     "reasoning cubes",
+     "output cubes",
+     "span arcs"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the two bold titles, follows the cyan fan (left) and the fat blue arrows (right) from output back to input, then drops to the three charts left to right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "top half: two titled lanes split by a dashed vertical line, each an isometric token diagonal from input (lower left) to output (upper right); bottom half: three small charts in a row separated by whitespace",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.48,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#43c6e0",
+    "used_for": "Direct bars and the input share segment in the charts"
+   },
+   {
+    "hex": "#cdd2dc",
+    "used_for": "grey remainder of the stacked bars (share left to other tokens)"
+   },
+   {
+    "hex": "#94b3e6",
+    "used_for": "reasoning-token cubes"
+   },
+   {
+    "hex": "#6573da",
+    "used_for": "output cubes and the fat span-wise arrows"
+   },
+   {
+    "hex": "#0040a4",
+    "used_for": "COT bar and the Baseline line"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "input cube faces and small grey histogram bars"
+   },
+   {
+    "hex": "#00bcfe",
+    "used_for": "thin per-token attribution arrows (stroke)"
+   },
+   {
+    "hex": "#4a648c",
+    "used_for": "outlines of reasoning cubes (stroke)"
+   },
+   {
+    "hex": "#373366",
+    "used_for": "outlines of output cubes (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5-0.75 pt dark outlines on cubes, 1 pt axes, dashed 0.5 pt grey gridlines, 0.75-1 pt cyan attribution arrows",
+  "font": "sans (Libertinus Sans), 4.5-7 pt; bold 5 pt lane titles and 7 pt axis titles, 6 pt values and ticks",
+  "corners": "mixed",
+  "arrows": "thin curved cyan arrows with small filled heads in the baseline lane; thick bent gradient block arrows in the FlashTrace lane; dashed vertical divider",
+  "rendering": "isometric",
+  "effects": "gradient fills on the fat arrows, histogram bars and strip; no shadows",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "white cubes = input I, light blue = reasoning tokens T, dark blue-violet = output O; bright cyan thin arrows = per-token attribution; violet-blue gradient fat arrows = span-wise trace; in charts cyan = Direct (and input share), dark blue = COT and Baseline, green = FlashTrace, grey = rest of the attribution share",
+  "line_style_means": "dashed vertical line splits the two schemes; dashed diagonal is the ground line of the token runs; light dashed lines are chart gridlines",
+  "shape_means": "isometric cube = one token; black arc over a run = a span; thin curved arrow = one token's attribution; fat bent arrow = one span-wise hop",
+  "marker_means": "clock = long run time, yellow lightning bolt = fast single pass; bold percentages on bars are measured values",
+  "emphasis": "the proposed lane replaces the fan of thin arrows by two fat gradient arrows with lightning bolts, and FlashTrace gets its own green line in the runtime chart",
+  "reusable_patterns": [
+   "same token sequence drawn in both lanes so that only the arrows differ",
+   "fan of thin arrows against one fat gradient arrow",
+   "cost formula plus clock or lightning bolt per lane",
+   "mini histogram beside the tokens showing where importance mass ends up",
+   "row of three small measured charts under the schematic as evidence",
+   "dashed vertical divider between baseline and proposed lane"
+  ],
+  "weaknesses": [
+   "stacked bars are cut at the top of the axis and the figure carries no colour key for cyan versus grey",
+   "chart text is about 6 pt at single-column width",
+   "rotated tick labels overlap at the low end of the runtime axis"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured attribution weight, recovery rate and runtime numbers drawn as charts"
+  ],
+  "stock": [
+   "stopwatch icon",
+   "lightning-bolt icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "isometric token cubes",
+   "cyan curved attribution arrows",
+   "fat gradient span-wise arrows",
+   "span arcs",
+   "mini importance histogram",
+   "dashed divider and diagonal"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "isometric token cubes",
+   "cyan curved attribution arrows",
+   "fat gradient trace arrow",
+   "clock icon",
+   "lightning bolts",
+   "mini importance histogram",
+   "stacked bar chart",
+   "runtime line chart"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "token attribution",
+   "multi-token attribution",
+   "reasoning LLMs",
+   "chain-of-thought",
+   "interpretability",
+   "span-wise",
+   "recursive attribution",
+   "efficiency",
+   "recovery rate"
+  ],
+  "tags": [
+   "illustration-style",
+   "token-strip",
+   "cost-badges",
+   "distribution-glyph"
+  ],
+  "new_tags": [
+   {
+    "name": "thick-gradient-arrow",
+    "what": "one fat arrow with a gradient fill carries a quantity (importance) across the drawing, set against many thin arrows in the baseline lane"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw baseline and method in the same token-strip grammar so that only the arrows differ: a fan of thin per-item arrows with a clock and its cost formula versus a few fat span arrows with lightning bolts and the lower cost. Back the claim with a row of three small measured charts underneath.",
+  "suits": "Efficiency or faithfulness papers whose baseline cost or failure can be shown as a pattern of arrows over a token sequence, with measured evidence beneath."
+ },
+ "tags": [
+  "isometric-cubes",
+  "two-lane contrast",
+  "chart row under schematic",
+  "cyan and violet gradients",
+  "single-column",
+  "bold sans titles"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract (p.1)",
+   "3 Multi-Token Attribution (p.3-4)"
+  ],
+  "evidence": [
+   "Motivation for FLASHTRACE. Top: Naive token-bytoken attribution requires expensive per-token computation, while FLASHTRACE performs efficient span-wise recursive attribution.",
+   "Naive multi-hop attribution scales poorly with reasoning length, while FLASHTRACE remains efficient even for 10K tokens.",
+   "Finding 1: Reasoning tokens absorb the majority of attribution mass."
+  ]
+ },
+ "summary": "FlashTrace explains the output span of a reasoning LLM by tracing importance back through the chain of thought to the input, attributing a whole span in one pass instead of one token at a time. Figure 1 is a motivation figure. The top half draws the same token sequence twice in isometric view (white input cubes, light-blue reasoning cubes, dark output cubes), split by a dashed vertical line: on the left a fan of thin cyan arrows from every output token with a clock and a Θ(|O|×|I+T|) cost; on the right two fat gradient arrows hop span by span, with lightning bolts and Θ(K|I+T|). Below, three small charts show that reasoning absorbs attribution weight (19% to 7% left for the input), that recovery of ground-truth inputs drops from 26% to 9%, and that baseline time climbs to about 280 s while FlashTrace stays flat.",
+ "summary_zh": "FlashTrace 按 span 一次性归因并沿推理链递归回到输入。图 1 上半部用同一条等距立方体 token 序列对比逐 token 归因与 span 级递归归因，下半部三张小图展示推理吸走归因权重、输入召回率下降和基线耗时暴涨。",
+ "confidence": "high",
+ "notes": "The first chart has no colour key: cyan = share left for the input and grey = share absorbed by reasoning tokens are read from the caption (about 80% to over 90% on reasoning tokens). The (a)/(b)/(c) letters occur only in the caption, not in the figure. Prior labels kept (side-by-side-contrast first) but the bottom row is a finding-cards style row, hence contribution-mosaic as third kind; the cube count of 24 is approximate.",
+ "venue": "ICML26"
+}

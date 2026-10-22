@@ -1,0 +1,428 @@
+{
+ "paper_id": "iclr26-0129",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TRACE",
+  "one_liner": "Finds the denoising step where instances separate in a diffusion model's self-attention, extracts edges from it, and distils them into a one-step edge decoder.",
+  "domain": [
+   "instance edge detection",
+   "diffusion attention",
+   "unsupervised instance segmentation"
+  ],
+  "subfield": "vision",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "(a) the phenomenon on a two-cats example at four timesteps, self- versus cross-attention; (b) the method on a dog photo with its three named stages",
+  "argues": "Instance structure shows up in self-attention at particular diffusion steps, not in cross-attention, and TRACE picks that step, extracts edges and distils them into cleaner boundaries.",
+  "subject": "Attention-map tiles of one image across diffusion timesteps in the reverse and forward process, and TRACE's three steps that turn them into instance edges.",
+  "elements": [
+   {
+    "name": "Reverse Process / Prompt: \"Two Cats\"",
+    "type": "operation",
+    "role": "denoising from noise to an image under a text prompt",
+    "drawn_as": "long red arrow from the Noise tile to the Image tile with bold text under it",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Temporal Difference",
+    "type": "operation",
+    "role": "compares attention at neighbouring timesteps to see where structure changes",
+    "drawn_as": "red bold label between two curved double-headed red arrows above the first self-attention tiles",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Self-Attention / Cross-Attention",
+    "type": "label",
+    "role": "names the two rows of attention maps",
+    "drawn_as": "rotated serif labels at the left of the tile rows",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "yellow-framed tile at tau = 699 with white dashed box",
+    "type": "region",
+    "role": "the timestep where self-attention separates the two cats",
+    "drawn_as": "yellow frame around one self-attention tile and a dashed white square over the two cats",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Forward Process / Prompt: \"\" (Null-Text)",
+    "type": "operation",
+    "role": "noising a real image with an empty prompt",
+    "drawn_as": "long green arrow from the Image tile to the Noise tile with bold green text under it",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Instance Emergence Point",
+    "type": "operation",
+    "role": "selects the timestep where instance structure is most pronounced",
+    "drawn_as": "green rounded tag with a check mark above the tau = 399 tile, tied to it by a green frame and a line",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Attention Boundary Divergence",
+    "type": "operation",
+    "role": "turns self-attention differences into initial edge maps",
+    "drawn_as": "green rounded box with a check mark and a green arrow pointing left to the first edge map",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "One-step Edge Distillation",
+    "type": "operation",
+    "role": "distils the initial edges into a one-step predictor",
+    "drawn_as": "green rounded box with a check mark and a green arrow pointing right to the second edge map",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "tau chips",
+    "type": "label",
+    "role": "timestep of each tile (999, 699, 499, 99 in (a); 99, 199, 399, 799 in (b))",
+    "drawn_as": "small light-grey chips at the bottom-right corner of every tile",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "(a) Observation: Instance Cues in Diffusion Models / (b) TRACE: Extracting Instance Boundaries",
+    "type": "label",
+    "role": "panel titles",
+    "drawn_as": "bold serif titles under each half",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Noise",
+    "to": "Image",
+    "what": "reverse process under the prompt 'Two Cats'",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Image",
+    "to": "Noise",
+    "what": "forward process with a null prompt",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "attention tile at tau = 999",
+    "to": "attention tile at tau = 699 and 499",
+    "what": "temporal difference between neighbouring timesteps",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "self-attention tile at tau = 399",
+    "to": "Attention Boundary Divergence",
+    "what": "the selected tile is the input",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Attention Boundary Divergence",
+    "to": "initial edge map",
+    "what": "edges from self-attention differences",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "initial edge map",
+    "to": "refined edge map",
+    "what": "one-step edge distillation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "self-attention row",
+    "to": "cross-attention row",
+    "what": "same four timesteps stacked so each column compares the two kinds of map",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Observation: Instance Cues in Diffusion Models",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "reverse process from noise to two cats; self- and cross-attention maps at four timesteps; self-attention at tau = 699 splits the cats",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) TRACE: Extracting Instance Boundaries",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "forward process on a dog photo; self-attention tiles; instance emergence point; boundary divergence edges; one-step distilled edges",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "bold titles under each half",
+    "what": "letters head the two halves"
+   },
+   {
+    "marker": "tau = 999 ... 99",
+    "kind": "identity",
+    "at": "bottom-right corner of every tile",
+    "what": "diffusion timestep of the tile"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "random colour-noise images at tau = 999",
+    "content": "generated-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square tile with a thin black frame and a timestep chip, at the start of the reverse process and the end of the forward process"
+   },
+   {
+    "what": "two cats on a black background, the image produced under the prompt 'Two Cats'",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square tile with a thin black frame, tau = 0"
+   },
+   {
+    "what": "photo of two white dogs indoors",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square tile with a thin black frame, tau = 0"
+   },
+   {
+    "what": "self-attention maps shown as false-colour tiles per timestep",
+    "content": "dense-map",
+    "role": "result",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "43 pt square tiles in a row of four per half, timestep chip in each corner, instance-emergent tile framed in yellow (a) or green (b) with a white dashed box"
+   },
+   {
+    "what": "cross-attention heat maps of the cats (blue to red)",
+    "content": "dense-map",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "row of four square tiles under the self-attention row"
+   },
+   {
+    "what": "two edge maps: initial edges with red crosses, refined edges with green circles",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "white tiles with grey edge strokes at the left and right ends of the lower row of (b)"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "prompt 'Two Cats' for the reverse process versus the empty null-text prompt for the forward process",
+    "form": "bold text under each process arrow",
+    "real_values": true
+   },
+   {
+    "what": "timestep values tau = 999, 699, 499, 99 in (a) and 99, 199, 399, 799 in (b)",
+    "form": "chips in the corner of each tile",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a noise tile and an image tile joined by one long arrow named Reverse Process (or Forward Process), with a row of per-timestep tiles underneath instead of a drawn chain",
+    "parts": [
+     "noise tile",
+     "image tile",
+     "process arrow",
+     "timestep tiles"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "false-colour self-attention tiles and blue-to-red cross-attention heat maps, one per timestep",
+    "parts": [
+     "self-attention row",
+     "cross-attention row"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Top-left Noise tile along the red arrow to the cats, down to the attention rows read left to right in time, then across to (b): the dog photo along the green arrow, the framed tile, the green stage boxes and the two edge maps."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two halves side by side with bold titles underneath. Each has a long process arrow on top between an image tile and a noise tile, and square tiles below: (a) two rows by four timesteps, (b) one row of four timesteps over a row with edge maps at both ends and two green stage boxes between them.",
+  "panel_count": 2,
+  "lanes": "4 timestep columns shared by the self- and cross-attention rows in (a); 4 timestep columns in (b)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.52,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d83435",
+    "used_for": "reverse-process arrow, Temporal Difference label and arrows, red crosses on the initial edge map"
+   },
+   {
+    "hex": "#006600",
+    "used_for": "forward-process arrow and text, green stage boxes, frame of the tau = 399 tile, green circles on the refined edge map"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "frame around the instance-emergent self-attention tile in (a)"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "timestep chips in the tile corners"
+   },
+   {
+    "hex": "#333333",
+    "used_for": "text and thin tile outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "thin dark outlines on tiles, 1.25 pt arrows and frames in red, green and yellow",
+  "font": "serif (Times New Roman) 5-8.5 pt, bold for prompts, stage names and panel titles",
+  "corners": "mixed",
+  "arrows": "two long straight arrows with filled heads (red for reverse, green for forward), short curved double-headed red arrows, green straight arrows pointing at the edge maps",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = the reverse (generation) process and the temporal-difference observation, green = the forward (noising) process and TRACE's own steps; yellow or green frame = the timestep where instances emerge; attention-map colours are false colours with no key",
+  "line_style_means": "white dashed square inside a tile = the region where the two instances separate; coloured frame = the selected timestep",
+  "shape_means": "square tiles = one image or map per timestep; rounded green boxes with ticks = TRACE stages",
+  "marker_means": "tau chip = diffusion timestep; check marks on the green boxes mark TRACE's named steps; red crosses on the initial edge map and green circles on the refined one read as flaws versus repaired boundaries (not stated in the caption)",
+  "emphasis": "yellow and green frames with white dashed boxes on the key tile, bold green stage boxes with ticks, bold prompt text",
+  "reusable_patterns": [
+   "rows of attention-map tiles per timestep with a timestep chip in each tile",
+   "coloured frame plus a dashed white box marking the step where the phenomenon appears",
+   "long process arrow between a noise tile and an image tile, coloured by direction (red reverse, green forward)",
+   "curved double-headed 'Temporal Difference' arrows over neighbouring tiles",
+   "green ticked stage boxes tied to the framed tile by a line and to edge-map tiles by arrows",
+   "red crosses and green circles drawn on a before and after edge map"
+  ],
+  "weaknesses": [
+   "no key for the false colours of the self-attention maps",
+   "red crosses and green circles are not explained in the figure",
+   "5 pt bold text for Temporal Difference is small"
+  ]
+ },
+ "resources": {
+  "own": [
+   "noise, generated cats, a photo and the attention and edge maps at several timesteps from the paper's own runs"
+  ],
+  "stock": [],
+  "generated": [
+   "the two-cats image produced by the diffusion model"
+  ],
+  "drawn": [
+   "process arrows, green stage boxes, frames, dashed boxes, crosses and circles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "noise tile",
+   "two-cats image",
+   "rows of self-attention tiles per timestep",
+   "cross-attention heat map tiles",
+   "reverse and forward process arrows",
+   "green ticked stage boxes",
+   "edge map tiles with red crosses and green circles"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "diffusion models",
+   "instance edge detection",
+   "self-attention",
+   "cross-attention",
+   "instance emergence",
+   "one-step distillation",
+   "unsupervised segmentation",
+   "timestep"
+  ],
+  "tags": [
+   "small-multiples",
+   "saliency-heatmap",
+   "flow-type-arrows",
+   "error-callouts"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a phenomenon as a grid of per-timestep tiles (rows = map type, columns = timestep), mark the first timestep where it appears with a coloured frame and a dashed box, then reuse the same tile grammar for the method so the green stage names attach to the exact tile and edge maps they act on.",
+  "suits": "Iterative or diffusion-based methods where an observation at certain steps motivates a step-selection and extraction pipeline, with intermediate maps as the content."
+ },
+ "tags": [
+  "attention-map tile grids",
+  "timestep chips",
+  "red and green process arrows",
+  "framed key tile",
+  "green ticked stage boxes",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "cross-attention remains semantic even with the prompt, whereas self-attention at specific steps reveals instance-level structure",
+   "TRACE selects the instance-emergent step using a temporal divergence criterion",
+   "these edges are distilled into a one-step predictor that integrates the diffusion backbone with an edge decoder"
+  ]
+ },
+ "summary": "TRACE decodes instance boundaries from a pretrained text-to-image diffusion model by finding the denoising step at which instances separate in self-attention. Figure 1 has two lettered halves. (a) Observation: a red 'Reverse Process' arrow turns a noise tile into a two-cats image, and two rows of attention maps at four timesteps show cross-attention staying semantic while self-attention at tau = 699 splits the cats, marked by a yellow frame, a dashed white box and red 'Temporal Difference' arrows. (b) TRACE: a green 'Forward Process' arrow takes a dog photo to noise; the self-attention tile at tau = 399 is tagged 'Instance Emergence Point', passed through Attention Boundary Divergence to an initial edge map with red crosses, then One-step Edge Distillation to a refined map with green circles.",
+ "summary_zh": "TRACE 从文生图扩散模型的自注意力中解码实例边界。(a) 观察：红色反向过程里交叉注意力偏语义，自注意力在 τ=699 分开两只猫；(b) 绿色正向过程找到实例涌现点，经注意力边界散度得初始边缘，再一步蒸馏出更连贯的边缘。",
+ "confidence": "high",
+ "notes": "Prior kinds kept and stage-pipeline added for the three named stages in (b); subfield order changed to vision first because the task is instance segmentation and edges. The meaning of the red crosses and green circles is read from the drawing only. Tiles are 18 placed bitmaps (the noise image is reused), all 43 x 43 pt.",
+ "venue": "ICLR26"
+}

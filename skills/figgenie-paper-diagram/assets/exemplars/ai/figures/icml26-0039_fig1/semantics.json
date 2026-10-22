@@ -1,0 +1,697 @@
+{
+ "paper_id": "icml26-0039",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GoodDiffusion",
+  "one_liner": "Proactive copyright protection for diffusion bridge models: inputs with a valid sample-specific signature generate normally, unauthorized inputs only yield a warning image.",
+  "domain": [
+   "copyright protection",
+   "diffusion bridge models",
+   "backdoor-style proactive defense"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast"
+  ],
+  "variant": "geometric-intuition",
+  "variant_note": "left: a problem-then-fix pair of mini-schematics; right: a tilted landscape of image distributions with one thick generation trajectory per method",
+  "argues": "Sample-specific signatures from a learnable network make unauthorized use end in a warning image, whereas static signatures can be recovered and watermarks do not stop generation.",
+  "subject": "Static versus sample-specific signatures, and generation trajectories of four methods over a landscape of image distributions.",
+  "elements": [
+   {
+    "name": "Static Signature (White-box vulnerable)",
+    "type": "container",
+    "role": "panel showing that a fixed signature can be recovered and bypassed",
+    "drawn_as": "rounded frame with a grey header, a three-step strip and the footer Optimize Surrogate N*",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Static k",
+    "type": "data",
+    "role": "a fixed signature pattern",
+    "drawn_as": "sparse white grid with one dark 2 x 2 block",
+    "container": "Static Signature panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Optimization loop around “N*”",
+    "type": "operation",
+    "role": "the attacker recovers a surrogate N* by gradient-based optimization",
+    "drawn_as": "hooded attacker icon inside a circular arrow",
+    "container": "Static Signature panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Bypass",
+    "type": "sample",
+    "role": "output obtained with the recovered surrogate, protection bypassed",
+    "drawn_as": "photo of an arch scene at the end of the strip",
+    "container": "Static Signature panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Sample-Specific Signatures (White-box Robust)",
+    "type": "container",
+    "role": "panel showing signatures that differ per input and resist recovery",
+    "drawn_as": "rounded frame with a green header, a flow strip and the footer No Universal Surrogate",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "input photos",
+    "type": "sample",
+    "role": "three different inputs x1, x2, x3 (arch scene, dog, tractor in snow)",
+    "drawn_as": "three small framed photos stacked at the left",
+    "container": "Sample-Specific Signatures panel",
+    "is_contribution": false
+   },
+   {
+    "name": "LSN g_φ(x)",
+    "type": "module",
+    "role": "Learnable Signature Network that assigns a signature to each input",
+    "drawn_as": "pale-teal rounded box with a small network glyph",
+    "container": "Sample-Specific Signatures panel",
+    "is_contribution": true
+   },
+   {
+    "name": "k(x1), k(x2), k(x3)",
+    "type": "data",
+    "role": "sample-specific signatures, different for each input",
+    "drawn_as": "three grey checker mosaics with different patterns",
+    "container": "Sample-Specific Signatures panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Signatures vary across samples",
+    "type": "label",
+    "role": "reason the attacker is blocked: the attacker arrow into the LSN is crossed out",
+    "drawn_as": "green shield with a check, a hooded attacker with a red cross",
+    "container": "Sample-Specific Signatures panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Static k can be recovered / Dynamic k(x) can defend against recovery",
+    "type": "label",
+    "role": "captions of two large curved block arrows from the landscape to the two left panels",
+    "drawn_as": "red text on a red arrow and blue text on a blue-gradient arrow",
+    "container": "between left and right",
+    "is_contribution": null
+   },
+   {
+    "name": "Original Inputs p(x1)",
+    "type": "region",
+    "role": "the original input distribution at generation time t = 1",
+    "drawn_as": "grey peak with a stack of three photos",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "Authorized Inputs p_auth(x̃1) with Signatures k(x1)",
+    "type": "region",
+    "role": "inputs after signature injection, a plus sign between the photo stack and a signature mosaic",
+    "drawn_as": "light-blue hill with a photo stack, a plus sign and a checker mosaic",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "Target Images p_auth(x0)",
+    "type": "region",
+    "role": "the high-quality target distribution at t = 0",
+    "drawn_as": "beige hill with a photo stack at the right",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "Watermarked Images",
+    "type": "region",
+    "role": "output of post-hoc watermarking, close to the target images",
+    "drawn_as": "lavender translucent hill with a photo stack and a watermark drop",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "Standard I2I Diffusion",
+    "type": "operation",
+    "role": "trajectory of an unprotected image-to-image diffusion model from original inputs to target images",
+    "drawn_as": "faded grey thick curved arrow",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "Watermarking (Post-hoc)",
+    "type": "operation",
+    "role": "trajectory of a watermarked model ending at watermarked images",
+    "drawn_as": "faded pink thick curved arrow",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "GoodDiffusion (Ours) (authorized)",
+    "type": "operation",
+    "role": "authorized trajectory from authorized inputs to target images",
+    "drawn_as": "thick blue arrow with a blue padlock icon",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "GoodDiffusion (Ours) (unauthorized)",
+    "type": "operation",
+    "role": "unauthorized trajectory that ends at the warning image",
+    "drawn_as": "thick red arrow with a key icon crossed in red",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "Warning δ(x − x̄0)",
+    "type": "sample",
+    "role": "the warning image that unauthorized users get",
+    "drawn_as": "red spike with ripple rings and a small black warning poster",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "GoodDiffusion (Ours) Early Proactive Control: Signature Injection p(x1) → p_auth(x̃1)",
+    "type": "text-block",
+    "role": "callout stating what the signature injection does",
+    "drawn_as": "blue-outlined rounded box joined to the authorized hill by a blue curve",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "Watermarks do not directly prevent unauthorized generation",
+    "type": "text-block",
+    "role": "claim about the baseline",
+    "drawn_as": "lavender box with a purple outline and a red cross circle, joined to the watermark hill by a purple curve",
+    "container": "landscape",
+    "is_contribution": false
+   },
+   {
+    "name": "GoodDiffusion (Ours) prevents unauthorized generation by a warning image (Proactive Defense)",
+    "type": "text-block",
+    "role": "claim about the proposed method",
+    "drawn_as": "pink box with a red outline and a green check circle, joined to the warning spike by a red curve",
+    "container": "landscape",
+    "is_contribution": true
+   },
+   {
+    "name": "Generation Time: t = 1 → t = 0",
+    "type": "label",
+    "role": "time axis of the generation trajectories",
+    "drawn_as": "bold label above a blue-to-orange gradient arrow along the lower edge of the slab",
+    "container": "landscape",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Static k",
+    "to": "Optimization loop around “N*”",
+    "what": "the attacker works from the fixed signature",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Optimization loop around “N*”",
+    "to": "Bypass",
+    "what": "the recovered surrogate bypasses the protection",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input photos",
+    "to": "LSN g_φ(x)",
+    "what": "each input goes into the signature network",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LSN g_φ(x)",
+    "to": "k(x1), k(x2), k(x3)",
+    "what": "one different signature per input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "hooded attacker",
+    "to": "LSN g_φ(x)",
+    "what": "attacker arrow crossed out in red: no universal surrogate",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "landscape",
+    "to": "Static Signature panel",
+    "what": "Static k can be recovered",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "landscape",
+    "to": "Sample-Specific Signatures panel",
+    "what": "Dynamic k(x) can defend against recovery",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original Inputs p(x1)",
+    "to": "Target Images p_auth(x0)",
+    "what": "Standard I2I Diffusion",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original Inputs p(x1)",
+    "to": "Watermarked Images",
+    "what": "Watermarking (Post-hoc)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original Inputs p(x1) plus Signatures k(x1)",
+    "to": "Authorized Inputs p_auth(x̃1)",
+    "what": "signature injection, shown by a plus sign",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Authorized Inputs p_auth(x̃1)",
+    "to": "Target Images p_auth(x0)",
+    "what": "authorized trajectory (blue)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Original Inputs p(x1)",
+    "to": "Warning δ(x − x̄0)",
+    "what": "unauthorized trajectory (red)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "callout boxes",
+    "to": "the landscape parts they describe",
+    "what": "thin blue, purple and red curves tie each callout to its hill or spike",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Generation Time arrow",
+    "to": "trajectories",
+    "what": "all trajectories run from t = 1 on the left to t = 0 on the right",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "blue elements",
+    "to": "red elements",
+    "what": "blue marks the authorized and robust side, red the unauthorized and vulnerable side",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Static Signature (White-box vulnerable)",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "a static signature is recovered by an optimization loop around a surrogate N* and bypassed",
+    "verdict": "fails"
+   },
+   {
+    "label": "Sample-Specific Signatures (White-box Robust)",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "the Learnable Signature Network gives each input a different signature, so no universal surrogate exists",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "overview",
+    "shows": "landscape of image distributions with trajectories of standard diffusion, watermarking, authorized and unauthorized GoodDiffusion",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "x1, x2, x3 (subscripts)",
+    "kind": "identity",
+    "at": "signatures k(x1), k(x2), k(x3) and the input distributions",
+    "what": "name different input samples and their signatures"
+   },
+   {
+    "marker": "t = 1 → t = 0",
+    "kind": "order",
+    "at": "arrow along the lower edge of the landscape",
+    "what": "generation time runs from the input side to the image side"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photo stacks standing for image distributions",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "three overlapping photos offset diagonally on each hill: Original Inputs, Authorized Inputs, Watermarked Images and Target Images"
+   },
+   {
+    "what": "inputs of the signature network and the bypass result: arch scene, dog, tractor in snow",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small framed photos; three at the left of the LSN and one at the end of the static strip"
+   },
+   {
+    "what": "signature patterns",
+    "content": "other",
+    "role": "illustration",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "grey checker mosaics; the static one is a sparse grid with one dark block, the sample-specific ones differ per input"
+   },
+   {
+    "what": "warning image",
+    "content": "document",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small black poster with white warning text beside the red spike"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "hooded attacker silhouette",
+    "stands_for": "the malicious model thief",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "blue padlock",
+    "stands_for": "the authorized path",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red key crossed by a red x",
+    "stands_for": "the unauthorized path",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "green shield with a check",
+    "stands_for": "signatures vary across samples, so protection holds",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red cross circle and green check circle",
+    "stands_for": "wrong claim versus right claim on the two callouts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "small node-and-edge network",
+    "stands_for": "the Learnable Signature Network",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red spike with concentric ripples",
+    "stands_for": "where unauthorized generation ends, the warning image",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "Three different inputs, an arch scene, a dog and a tractor in snow, each given a different signature k(x1), k(x2), k(x3)",
+    "form": "photos at the left of the LSN and checker mosaics at its right",
+    "real_values": true
+   },
+   {
+    "what": "The warning image shown to an unauthorized user",
+    "form": "small black warning poster beside the red spike",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "generation trajectories as thick curved arrows over a tilted landscape from the input distribution at t = 1 to the target at t = 0, one arrow per method, with a time arrow below",
+    "parts": [
+     "input hill",
+     "thick arrows",
+     "target hill",
+     "time arrow"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "stacks of three offset photos standing for an image distribution, one stack per hill",
+    "parts": [
+     "photo stack"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "distribution-landscape",
+    "drawn_as": "tilted slab with a blue-to-orange gradient and contour lines whose hills are image distributions",
+    "parts": [
+     "slab",
+     "hills",
+     "contour lines"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Static Signature panel at top left, goes down to the Sample-Specific panel, then across the big curved arrows to Original Inputs at the top of the landscape and along the grey, pink, blue and red trajectories to the callouts and the time arrow."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A left column of two stacked framed panels (problem above, fix below) separated by a vertical rule from one large tilted landscape at the right; two big curved block arrows cross the rule; callout boxes sit on the landscape.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.96,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey header of the static panel and light grey fills"
+   },
+   {
+    "hex": "#b2dfcc",
+    "used_for": "green header of the sample-specific panel"
+   },
+   {
+    "hex": "#deefe6",
+    "used_for": "pale green body of the sample-specific panel"
+   },
+   {
+    "hex": "#d8ebea",
+    "used_for": "LSN box"
+   },
+   {
+    "hex": "#ffcdcd",
+    "used_for": "pink callout for the proposed method"
+   },
+   {
+    "hex": "#dcd1e4",
+    "used_for": "lavender callout about watermarks"
+   },
+   {
+    "hex": "#5699c9",
+    "used_for": "blue outline of the signature-injection callout and the authorized side"
+   },
+   {
+    "hex": "#f06d62",
+    "used_for": "red outline and the unauthorized side"
+   },
+   {
+    "hex": "#9c80aa",
+    "used_for": "purple outline of the watermark callout"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "0.5 pt grey contour lines and frames"
+   },
+   {
+    "hex": "#6b9cd4",
+    "used_for": "blue end of the landscape and time-arrow gradient"
+   },
+   {
+    "hex": "#f19482",
+    "used_for": "salmon-red end of the gradient and red trajectory"
+   },
+   {
+    "hex": "#a31e1c",
+    "used_for": "dark red accent"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt grey contour lines and frames, 1-1.25 pt coloured outlines on callouts and panels",
+  "font": "serif (Palatino Linotype) mostly bold 7 pt, Cambria Math for symbols, 4.5-5 pt subscripts",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small heads in the left panels, thick curved gradient arrows over the landscape (grey, pink, blue, red), two large curved block arrows, a gradient arrow for time",
+  "rendering": "mixed",
+  "effects": "3D tilted slab with an extruded edge, gradient fills, soft shadows under hills and block arrows",
+  "model_depiction": "network-glyph",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "blue = authorized and robust side (arrow, padlock, callout outline, the words Sample-Specific and Dynamic k(x) can defend), red = unauthorized and vulnerable side (arrow, key, Static k can be recovered), grey = standard diffusion, pink = post-hoc watermarking, lavender = the watermark claim; the landscape tint runs blue to orange-red in the direction of the generation-time arrow",
+  "line_style_means": "thick curved arrows = generation trajectories, one per method; thin black arrows = data flow in the left panels; contour lines = landscape surface; thin coloured curves tie each callout to what it describes",
+  "shape_means": "hill = an image distribution; photo stack = samples of it; red spike with ripples = the warning image; grey checker mosaic = a signature; teal box with a network glyph = LSN",
+  "marker_means": "red cross and green check circles on callouts = wrong versus right claim; red cross over the attacker arrow = blocked; padlock = authorized, crossed key = unauthorized",
+  "emphasis": "the thick saturated blue and red arrows with bold GoodDiffusion (Ours) labels and outlined callouts stand out against the faded grey and pink baseline arrows",
+  "reusable_patterns": [
+   "tilted landscape with hills as distributions and one thick arrow per method, baselines faded and the proposed method saturated",
+   "photo stacks on hills for image distributions",
+   "verdict circles (red cross, green check) on callout boxes",
+   "left column of two mini-schematics (problem then fix) tied to the main picture by big curved block arrows with colour-coded captions",
+   "time arrow with a gradient along the slab edge",
+   "outlined callouts joined to their target by thin coloured curves"
+  ],
+  "weaknesses": [
+   "faded baseline labels on the gradient (Standard I2I Diffusion, Watermarking, Watermarked Images) have low contrast",
+   "many callouts and curves compete on the landscape",
+   "the static panel shows the recovery only as a loop icon"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos of an arch scene, a dog and a tractor",
+   "warning poster image"
+  ],
+  "stock": [
+   "hooded attacker silhouette",
+   "padlock, key, shield and cross and check icons"
+  ],
+  "generated": [
+   "tilted landscape slab with contour lines and hills (raster illustration made for the figure)"
+  ],
+  "drawn": [
+   "panel frames, boxes, arrows, callouts, signature mosaics"
+  ],
+  "unknown": [
+   "whether the signature mosaics are real signatures or mock-ups"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "tilted landscape with hills",
+   "photo stacks",
+   "thick trajectory arrows",
+   "signature mosaics",
+   "LSN box with network glyph",
+   "hooded attacker icon",
+   "warning spike and poster",
+   "verdict callouts"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "diffusion bridge model",
+   "copyright protection",
+   "proactive defense",
+   "sample-specific signature",
+   "watermarking",
+   "backdoor",
+   "surrogate attack",
+   "warning image"
+  ],
+  "tags": [
+   "verdict-marks",
+   "colour-coded-groups",
+   "claim-banner",
+   "embedding-space-sketch",
+   "stacked-cards",
+   "illustration-style",
+   "visual-metaphor"
+  ],
+  "new_tags": [
+   {
+    "name": "trajectory-landscape",
+    "what": "a tilted landscape whose hills are data distributions and whose thick coloured arrows are the generation trajectories of different methods, baselines faded and the proposed method saturated"
+   },
+   {
+    "name": "left-problem-fix-column",
+    "what": "two stacked mini-schematics (vulnerable design, robust design) at the left, tied to the main picture by big curved block arrows with colour-coded one-line captions"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw competing methods as thick coloured trajectories over one landscape of distributions, baselines faded and the proposed method saturated and labelled, and back the claim with callouts carrying a red cross or a green check; put a problem-then-fix pair of mini-schematics beside it, joined by colour-coded block arrows.",
+  "suits": "Generative-model papers where behaviour is best explained as paths between distributions, especially protection or control methods that need an authorized versus unauthorized contrast."
+ },
+ "tags": [
+  "tilted-landscape",
+  "gradient-slab",
+  "outlined-callouts",
+  "verdict-circles",
+  "photo-stacks",
+  "serif-bold-labels",
+  "big-curved-block-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "4 GoodDiffusion (p.5)"
+  ],
+  "evidence": [
+   "The trained DBM integrates two distinct diffusion bridges into a single network",
+   "The authorized trajectory (blue) follows pauth(˜x1) →pauth(x0 | ˜x1).",
+   "GoodDiffusion provides early proactive control: the unauthorized user can only generate the warning image"
+  ]
+ },
+ "summary": "GoodDiffusion protects diffusion bridge models proactively: inputs with a valid sample-specific signature generate normally, while unauthorized inputs can only produce a warning image. Figure 1 has two stacked left panels and one large landscape. The panels contrast a static signature, which an attacker's optimization loop around a surrogate N* recovers and bypasses, with signatures from a Learnable Signature Network that vary across inputs and leave no universal surrogate. At right a tilted gradient slab holds hills of image distributions with photo stacks; thick arrows trace grey standard diffusion, pink watermarking, a blue authorized path to the target images and a red unauthorized path to a warning spike, with verdict callouts.",
+ "summary_zh": "GoodDiffusion 主动保护扩散桥模型：带有效样本特异签名的输入正常生成，未授权输入只得警告图。图一左侧对比可被恢复的静态签名与逐样本签名，右侧分布地形图上用灰、粉、蓝、红箭头比较四条生成轨迹。",
+ "confidence": "high",
+ "notes": "Prior concept-schematic and side-by-side-contrast kept. Panels are counted as 3: two framed left panels plus the untitled landscape. The landscape tint is read as following generation time because the time arrow uses the same blue to orange-red gradient. The signature mosaics look illustrative rather than measured.",
+ "venue": "ICML26"
+}

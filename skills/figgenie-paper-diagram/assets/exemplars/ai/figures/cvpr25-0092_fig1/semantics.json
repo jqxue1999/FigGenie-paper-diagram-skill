@@ -1,0 +1,513 @@
+{
+ "paper_id": "cvpr25-0092",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "N3DNet (trained with RA-DQN)",
+  "one_liner": "An all-optical nonlinear diffractive network for image denoising at the speed of light, whose layer phases are tuned by a regularization-assisted deep Q-network.",
+  "domain": [
+   "all-optical image denoising",
+   "diffractive deep neural networks",
+   "reinforcement learning for phase optimization"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "rl-robotics"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "model-anatomy"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "an optical network as the environment and an RL agent that reads its phases and loss and returns phase updates",
+  "argues": "The diffractive denoiser is trained as an environment by a deep-Q agent: phases are the state, the loss gives the reward, phase changes are the actions.",
+  "subject": "A 3D-rendered stack of diffractive and nonlinear layers with noisy inputs and denoised outputs, and the RL agent with Q table and deep network that trains it.",
+  "elements": [
+   {
+    "name": "Environment (N3DNet)",
+    "type": "container",
+    "role": "the optical network and its measurements, seen by the agent as the environment",
+    "drawn_as": "large frame with a red header band and white body",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "M diffractive layers",
+    "type": "module",
+    "role": "phase-modulating layers of width W and height H through which the light passes",
+    "drawn_as": "translucent teal slabs with a noisy texture, braces marking W and H, black pointer arrows from the label",
+    "container": "Environment (N3DNet)",
+    "is_contribution": true
+   },
+   {
+    "name": "Nonlinear activation layers",
+    "type": "module",
+    "role": "nonlinear activation placed after each diffractive layer",
+    "drawn_as": "translucent yellow slabs between the teal ones, black pointer arrows from the label",
+    "container": "Environment (N3DNet)",
+    "is_contribution": true
+   },
+   {
+    "name": "Grid phase",
+    "type": "region",
+    "role": "the grid of phase values of the layers, handed to the agent as the state",
+    "drawn_as": "orange-outlined box: a small dotted patch opened by dotted lines into a large grid of green dots",
+    "container": "Environment (N3DNet)",
+    "is_contribution": null
+   },
+   {
+    "name": "Outputs / Targets / Loss",
+    "type": "region",
+    "role": "network outputs are compared with clean targets to give a loss",
+    "drawn_as": "orange-outlined box with a green grid and a blue grid, a dotted bracket down to Loss",
+    "container": "Environment (N3DNet)",
+    "is_contribution": null
+   },
+   {
+    "name": "RA-DQN agent",
+    "type": "container",
+    "role": "reinforcement-learning agent that tunes the layer phases",
+    "drawn_as": "narrow frame with a purple header band",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "States",
+    "type": "data",
+    "role": "the list of all phases, one per pixel of every layer",
+    "drawn_as": "bold purple title over the symbols phi 1 to phi H x W x M",
+    "container": "RA-DQN agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Q Table",
+    "type": "module",
+    "role": "table pairing each state with its action",
+    "drawn_as": "red-outlined two-column table, pale-yellow header cells States and Actions, a wavy break in the middle",
+    "container": "RA-DQN agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Deep neural network",
+    "type": "module",
+    "role": "the deep Q-network that maps states to actions",
+    "drawn_as": "purple fully connected node-link glyph with ellipses, bold purple label",
+    "container": "RA-DQN agent",
+    "is_contribution": true
+   },
+   {
+    "name": "Rewards (Reward function)",
+    "type": "data",
+    "role": "learning signal derived from the loss",
+    "drawn_as": "bold green text with a green arrow up to the network",
+    "container": "RA-DQN agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Actions",
+    "type": "data",
+    "role": "the phase updates delta phi 1 to delta phi H x W x M",
+    "drawn_as": "bold purple title over the symbols, green arrow down from the network",
+    "container": "RA-DQN agent",
+    "is_contribution": null
+   },
+   {
+    "name": "light cones",
+    "type": "other",
+    "role": "light from each input passes through the layers to the outputs",
+    "drawn_as": "translucent red, green and blue cones from the input slides to the first layer and from the last layer to the output slides",
+    "container": "Environment (N3DNet)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input 1 ... Input Z",
+    "to": "M diffractive layers",
+    "what": "noisy mode images enter as beams",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "M diffractive layers",
+    "to": "Output 1 ... Output Z",
+    "what": "denoised images leave the stack",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Output 1 ... Output Z",
+    "to": "Grid phase",
+    "what": "state of the network",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output 1 ... Output Z",
+    "to": "Outputs / Targets / Loss",
+    "what": "outputs are compared with targets",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Grid phase",
+    "to": "States",
+    "what": "phases as states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "States",
+    "to": "Deep neural network",
+    "what": "state input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Outputs / Targets / Loss",
+    "to": "Rewards (Reward function)",
+    "what": "reward",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Rewards (Reward function)",
+    "to": "Deep neural network",
+    "what": "reward drives the update",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Deep neural network",
+    "to": "Actions",
+    "what": "chosen phase changes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Actions",
+    "to": "M diffractive layers",
+    "what": "phases of the layers are changed",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q Table",
+    "to": "Deep neural network",
+    "what": "states and actions listed beside the network",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "labels Nonlinear activation layers and M diffractive layers",
+    "to": "yellow and teal slabs",
+    "what": "names the two layer types",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Environment (N3DNet)",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "the optical network with its inputs, outputs, phase grid and loss",
+    "verdict": "ours"
+   },
+   {
+    "label": "RA-DQN agent",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "the learning agent with states, Q table, deep network, rewards and actions",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Input 1, Input 2, Input Z / Output 1, Output 2, Output Z",
+    "kind": "identity",
+    "at": "beside the noisy and denoised slides",
+    "what": "names the Z images going through the stack, with a vertical ellipsis for the ones not drawn"
+   },
+   {
+    "marker": "W, H, M",
+    "kind": "identity",
+    "at": "braces on the first slab and the label M diffractive layers",
+    "what": "width, height and count of layers; H x W x M counts all phases"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "noisy mode images fed into the network",
+    "content": "other",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "dark-red slides with orange spots, skewed in perspective at the left end of the light cones"
+   },
+   {
+    "what": "denoised mode images from the network",
+    "content": "other",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same slide style at the right end of the light cones, labelled Output 1, 2, Z"
+   },
+   {
+    "what": "3D render of the layer stack with light cones",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large perspective render of teal and yellow translucent slabs with beams, labels and pointer arrows drawn over it"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "dot grid with a zoom patch",
+    "stands_for": "grid of phase values of a layer",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "green cell grid and blue cell grid",
+    "stands_for": "output images and target images as pixel arrays",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "fully connected network of purple circles",
+    "stands_for": "the deep Q-network",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "mode image denoising: noisy mode images in, denoised mode images out",
+    "form": "image slides at both ends of the 3D stack",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "two heavy frames, environment and agent, joined by three green arrows for state, reward and action; the action arrow runs round the bottom back to the layers",
+    "parts": [
+     "environment frame",
+     "agent frame",
+     "state arrow",
+     "reward arrow",
+     "action arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffractive-layer-stack",
+    "drawn_as": "rendered translucent slabs in perspective, teal for phase layers and yellow for nonlinear layers, with light cones from the inputs",
+    "parts": [
+     "teal slab",
+     "yellow slab",
+     "light cone"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "q-table",
+    "drawn_as": "two-column States / Actions table with symbol rows and a wavy break",
+    "parts": [
+     "header cells",
+     "rows",
+     "wavy break"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "fully connected node-link glyph with ellipses for hidden width and depth",
+    "parts": [
+     "input nodes",
+     "hidden nodes",
+     "output nodes"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the noisy inputs at the far left, follows the light through the stack to the outputs, then the green arrows into the agent and round the bottom back to the layers."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two heavy-bordered frames side by side, a wide red one holding the 3D render and two small measurement boxes, a narrow purple one holding the agent; three green arrows cross between them and one runs round the bottom.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "framed-boxes",
+   "panel-frames",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.71,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#da1a2f",
+    "used_for": "Environment frame and header band"
+   },
+   {
+    "hex": "#360f9e",
+    "used_for": "RA-DQN agent frame, header, network glyph and agent labels"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "outlines of Grid phase and Outputs / Targets boxes, labels Noise input images and Denoise images"
+   },
+   {
+    "hex": "#0d845c",
+    "used_for": "state, reward and action arrows and the Rewards text"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "header cells of the Q table"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red outline of the Q table"
+   },
+   {
+    "hex": "#7ba65e",
+    "used_for": "green cell grid of the outputs"
+   },
+   {
+    "hex": "#5879b4",
+    "used_for": "blue cell grid of the targets"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "1 pt coloured frames, 0.5 pt orange boxes and grid lines, thin black pointer arrows",
+  "font": "serif (Times) 8-10.5 pt; italic headers and symbols; bold purple and green for agent terms",
+  "corners": "mixed",
+  "arrows": "thick dark-green arrows with filled triangular heads for state, reward and action; thin black pointer arrows from labels to layers",
+  "rendering": "mixed",
+  "effects": "translucent 3D slabs with light cones in the rendered part",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red frame = environment (the optical network), purple frame = RL agent, green arrows = state, reward and action exchanged between them, orange = data labels and measurement boxes, red / green / blue cones = different input beams",
+  "line_style_means": "dotted = zoom lines from a small patch to the phase grid and the bracket from outputs and targets to the loss",
+  "shape_means": "teal slab = diffractive layer, yellow slab = nonlinear activation layer, table = Q table, circles and lines = deep network, cell grid = image",
+  "marker_means": "W, H, M are width, height and layer count; phi and delta phi are phase and phase change; vertical ellipses stand for more inputs and outputs",
+  "emphasis": "the 3D render fills most of the left frame and the two heavy frames carry the story; no highlighting of one block",
+  "reusable_patterns": [
+   "two heavy-bordered regions for environment and agent joined by three colour-matched arrows for state, reward and action",
+   "action arrow routed round the bottom edge to close the loop",
+   "3D rendered layer stack with pointer arrows from text labels to each layer type",
+   "small patch opened into a large dot grid by dotted lines",
+   "cell-grid glyphs for outputs and targets with a dotted bracket to the loss"
+  ],
+  "weaknesses": [
+   "the tails of the two arrows into the Grid phase and Outputs boxes are ambiguous",
+   "the loop closes through a long arrow around the bottom"
+  ]
+ },
+ "resources": {
+  "own": [
+   "noisy and denoised mode images from the paper's data",
+   "the paper's phase, reward and action notation"
+  ],
+  "stock": [],
+  "generated": [
+   "3D render of the layer stack and light cones made for the figure"
+  ],
+  "drawn": [
+   "frames and header bands",
+   "arrows and braces",
+   "Q table",
+   "network glyph",
+   "cell grids and dot grid"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "3D rendered diffractive layer stack",
+   "noisy input and denoised output mode images",
+   "Grid phase box with zoom",
+   "outputs and targets grids with loss",
+   "Q table",
+   "deep neural network glyph",
+   "green state, reward and action arrows"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "all-optical network",
+   "diffractive deep neural network",
+   "image denoising",
+   "reinforcement learning",
+   "DQN",
+   "phase optimization",
+   "optical computing",
+   "nonlinear activation"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "matrix-cell-grid",
+   "zoom-callout",
+   "illustration-style",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Frame a learned optimiser and the system it tunes as agent and environment: one heavy-bordered region for the system, one for the learner, three colour-matched arrows for state, reward and action, and the action arrow routed round the bottom to close the loop.",
+  "suits": "Methods where reinforcement learning or search tunes parameters of a physical or simulated system, such as optics, control or design automation."
+ },
+ "tags": [
+  "two heavy frames",
+  "3D render",
+  "green loop arrows",
+  "serif labels",
+  "mixed render and vector"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Caption: schematic of N3DNet on a mode image denoising example, trained with the RA-DQN algorithm.",
+   "Introduction: a nonlinear PEL activation follows each phase modulation layer of the network."
+  ]
+ },
+ "summary": "The paper builds an all-optical diffractive network, N3DNet, that denoises images at the speed of light, with a pre-denoising module and a nonlinear activation after each diffractive layer, trained by a new reinforcement-learning algorithm, RA-DQN. Figure 1 frames training as environment and agent. A red frame shows the optical network as a 3D render: noisy mode images enter through coloured light cones, cross M translucent diffractive layers with yellow nonlinear layers between, and leave as denoised outputs, followed by a phase-grid box and an outputs-versus-targets box with a loss. A purple frame holds the agent: states, a Q table, a deep network, rewards and actions. Green arrows carry state, reward and action, and the action arrow returns round the bottom to the layers.",
+ "summary_zh": "提出全光非线性衍射去噪网络N3DNet，并用强化学习算法RA-DQN训练。图中左侧红框为光学网络的3D渲染图（带噪输入、M层衍射层与非线性激活层、去噪输出、相位网格与损失），右侧紫框为智能体，绿色箭头传递状态、奖励与动作。",
+ "confidence": "high",
+ "notes": "The arrow tails into Grid phase and Outputs / Targets start from the output column, so it is not certain whether the state is read from the outputs or from the layers; the record keeps the drawn tails. The pre-screen call of actor-interaction plus model-anatomy is kept. The bottom caption text is partly cropped into the preview and was ignored.",
+ "venue": "CVPR25"
+}

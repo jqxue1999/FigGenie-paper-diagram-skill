@@ -1,0 +1,495 @@
+{
+ "paper_id": "neurips25-0128",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Orient Anything V2",
+  "one_liner": "Foundation model for 3D object orientation, rotational symmetry and relative rotation from one or two images, trained on synthesized 3D assets.",
+  "domain": [
+   "3D object orientation estimation",
+   "rotational symmetry",
+   "relative rotation and 6DoF pose"
+  ],
+  "subfield": "vision",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "deliverables-triptych",
+  "variant_note": "three titled columns for the data engine, the model and the new capabilities, the last one a photo grid with drawn 3D axes",
+  "argues": "The orientation foundation model is upgraded on both data (synthetic assets with fine labels) and model (joint encoder), gaining symmetry handling and relative rotation.",
+  "subject": "Data-engine chain, joint-encoder diagram with one or two input images, and a grid of photos overlaid with 3D axes.",
+  "elements": [
+   {
+    "name": "Class Names",
+    "type": "data",
+    "role": "starting input of the data engine: object categories",
+    "drawn_as": "white square box with black 1 pt outline",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": null
+   },
+   {
+    "name": "Full Coverage / Perfect Balance",
+    "type": "label",
+    "role": "properties claimed for the class-name stage",
+    "drawn_as": "italic serif lines with square bullets beside the box",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Generative model",
+    "type": "operation",
+    "role": "synthesizes 3D assets from the class names (abstract: assets synthesized by generative models)",
+    "drawn_as": "pale blue rounded box with light blue outline",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "3D Assets",
+    "type": "data",
+    "role": "synthesized 3D objects",
+    "drawn_as": "white square box with black outline",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Diverse Pose / Realistic Texture",
+    "type": "label",
+    "role": "properties claimed for the 3D assets",
+    "drawn_as": "italic square-bullet lines beside the box",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Pseudo ensemble",
+    "type": "operation",
+    "role": "turns assets into front-face labels; the abstract describes a model-in-the-loop annotation system, the figure only names this step",
+    "drawn_as": "pale blue rounded box",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Fine Labels",
+    "type": "data",
+    "role": "final orientation labels of the data engine",
+    "drawn_as": "white square box with black outline at the top of the column",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Strong Robustness / Rotational Symmetry",
+    "type": "label",
+    "role": "properties claimed for the labels",
+    "drawn_as": "italic square-bullet lines beside the box",
+    "container": "Data: Scalable Data Engine",
+    "is_contribution": true
+   },
+   {
+    "name": "Encoder (2 copies)",
+    "type": "module",
+    "role": "encode the first and the optional second image; an arrow labelled share links them, i.e. shared weights",
+    "drawn_as": "light blue rounded boxes inside the model frame",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": null
+   },
+   {
+    "name": "share",
+    "type": "operation",
+    "role": "weight sharing between the two encoders",
+    "drawn_as": "small arrow with 5 pt label between the two Encoder boxes",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Encoder",
+    "type": "module",
+    "role": "fuses both encoder streams and feeds the two outputs (abstract: multi-frame architecture)",
+    "drawn_as": "yellow rounded box spanning the top of the model frame",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": true
+   },
+   {
+    "name": "Absolute Orientation",
+    "type": "data",
+    "role": "output from a single image",
+    "drawn_as": "plain label above a solid arrow",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": null
+   },
+   {
+    "name": "Relative Rotation",
+    "type": "data",
+    "role": "output from an image pair",
+    "drawn_as": "plain label above a dashed arrow",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": true
+   },
+   {
+    "name": "model frame",
+    "type": "container",
+    "role": "groups the encoders and joint encoder as one model",
+    "drawn_as": "grey-blue rounded rectangle",
+    "container": "Model: Orient Anything V2",
+    "is_contribution": null
+   },
+   {
+    "name": "cyan arrow between paired photos",
+    "type": "operation",
+    "role": "from the first view to the second view whose relative rotation is shown",
+    "drawn_as": "cyan block arrow baked into the picture row",
+    "container": "New Features: Symmetry & Rotation",
+    "is_contribution": null
+   },
+   {
+    "name": "Data: Scalable Data Engine / Model: Orient Anything V2 / New Features: Symmetry & Rotation",
+    "type": "label",
+    "role": "bold column titles placed under each part",
+    "drawn_as": "8 pt bold lead-in plus regular name",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Class Names",
+    "to": "Generative model",
+    "what": "categories to be turned into objects",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Generative model",
+    "to": "3D Assets",
+    "what": "synthesized objects",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D Assets",
+    "to": "Pseudo ensemble",
+    "what": "assets to be labelled",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Pseudo ensemble",
+    "to": "Fine Labels",
+    "what": "labels produced",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "first robot image",
+    "to": "Encoder (left)",
+    "what": "single input view",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Encoder (left)",
+    "to": "Encoder (right)",
+    "what": "shared weights",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder (2 copies)",
+    "to": "Joint Encoder",
+    "what": "features of each view",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Joint Encoder",
+    "to": "Absolute Orientation",
+    "what": "orientation of the object in one image, solid path",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "second robot image (dashed frame)",
+    "to": "Encoder (right)",
+    "what": "optional second view, dashed path",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Joint Encoder",
+    "to": "Relative Rotation",
+    "what": "rotation between the two views, dashed path",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Data column",
+    "to": "Model column",
+    "what": "not drawn; the caption says the model is upgraded from both Data and Model perspectives",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Model column",
+    "to": "photo grid",
+    "what": "tiles show the capabilities gained: symmetry axes and relative rotation",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Data: Scalable Data Engine",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "bottom-up chain Class Names, Generative model, 3D Assets, Pseudo ensemble, Fine Labels with property bullets beside each artifact",
+    "verdict": "ours"
+   },
+   {
+    "label": "Model: Orient Anything V2",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Joint Encoder over two weight-sharing Encoders; a solid path from one image to Absolute Orientation and a dashed path from a second image to Relative Rotation",
+    "verdict": "ours"
+   },
+   {
+    "label": "New Features: Symmetry & Rotation",
+    "kind": "scope-overview",
+    "axis": "narrative",
+    "shows": "grid of object photos with drawn 3D axes, including symmetric objects and two image pairs with relative rotation",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "two views of a toy robot, one grey-white and one pink",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "grey square tiles under the two encoders; the second tile has a dashed border to mark the optional second frame"
+   },
+   {
+    "what": "eight single-object photos (bottle, backpack, train carriage, toy box, bowl, sports car, skateboard, pyramid) with red, green and blue 3D axes",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "square tiles with grey 1 pt frames in a grid; axes are baked into the bitmaps; a bottle and a bowl show a single axis, other objects show several"
+   },
+   {
+    "what": "two image pairs (fighter jet, skateboard) showing a rotation between two views",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "pairs placed edge to edge, a cyan block arrow from the first to the second tile, dashed red and green arcs on the second tile for the rotation"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "photos of everyday objects with their predicted orientation axes, and two before/after pairs with relative rotation drawn",
+    "form": "photo tiles with baked-in axis arrows; pairs with a cyan arrow and dashed arcs",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "siamese-shared-encoders",
+    "drawn_as": "two Encoder boxes joined by an arrow labelled share, both feeding one Joint Encoder",
+    "parts": [
+     "Encoder",
+     "share arrow",
+     "Encoder",
+     "Joint Encoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "pose-axes-triad",
+    "drawn_as": "red, green and blue arrows from the object centre drawn over the photo",
+    "parts": [
+     "blue axis",
+     "green axis",
+     "red axis"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the bottom-left Class Names box and climbs the Data column, then the Model column from the input images up to the two outputs, then the photo grid at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three titled parts side by side: a vertical data-engine chain, a framed encoder diagram, and a four-by-three grid of photo tiles; the first two flow bottom-up and each part is titled underneath.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "other",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.94,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffe699",
+    "used_for": "Joint Encoder, the only warm fill"
+   },
+   {
+    "hex": "#cce6ff",
+    "used_for": "the two Encoder boxes"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "Generative model and Pseudo ensemble boxes"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "outline of the two operation boxes"
+   },
+   {
+    "hex": "#dee3e9",
+    "used_for": "grey-blue rounded frame around the model"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "1 pt frames of the photo tiles"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt black outlines on the three data boxes, 1 pt grey frames on photo tiles, pale blue outlines on operation boxes, dashed outline on the second input image",
+  "font": "Times-style serif at 7 pt for labels, italic 7 pt for property bullets, bold 8 pt column titles, 5 pt for share",
+  "corners": "mixed",
+  "arrows": "thin black lines with small filled heads on only some links of the data engine; dashed line for the relative-rotation path; cyan block arrows baked into the photo pairs",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "white black-outlined box = data artifact, pale blue rounded box = operation or encoder, yellow = the joint encoder, grey-blue = the model container; red, green and blue arrows in the photos are 3D axes (their individual meaning is not given)",
+  "line_style_means": "solid = single-image path to absolute orientation, dashed = second-image path to relative rotation (read from the figure and the abstract)",
+  "shape_means": "square box = data, rounded box = operation or module, rounded frame = the model",
+  "marker_means": "square bullets list the properties each artifact gains; cyan arrow = from first view to second view",
+  "emphasis": "bold column titles, the yellow Joint Encoder as the single warm block, and the largest area given to real photos in the third column",
+  "reusable_patterns": [
+   "data-engine chain that alternates artifact boxes and operation pills, with italic property bullets beside each artifact",
+   "solid versus dashed path plus a dashed-frame input to show an optional second frame",
+   "photo grid whose tiles carry baked-in 3D axes to show the output on real objects",
+   "cyan block arrow between two views with dashed arcs for the relative rotation",
+   "column titles of the form 'Topic: Name' under each part"
+  ],
+  "weaknesses": [
+   "bottom-up flow in the first two columns is unusual and not marked",
+   "arrow heads appear on only alternate links of the data chain",
+   "axis colours in the photos are not explained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "object photos with predicted 3D axes",
+   "image pairs with relative-rotation arrows"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "data-engine chain",
+   "encoder diagram with model frame",
+   "column titles"
+  ],
+  "unknown": [
+   "whether the two robot input images are photos or rendered assets"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "data-engine chain of boxes",
+   "property bullets",
+   "joint encoder over two shared encoders",
+   "robot input images with dashed second frame",
+   "photo grid with 3D axes",
+   "image pairs with cyan arrow"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "orientation estimation",
+   "rotational symmetry",
+   "relative rotation",
+   "synthetic 3D assets",
+   "foundation model",
+   "data engine",
+   "6DoF pose",
+   "zero-shot"
+  ],
+  "tags": [
+   "flow-type-arrows",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "baked-in-3d-axes",
+    "what": "red, green and blue 3D axis arrows drawn over photos of objects to show orientation or rotation"
+   },
+   {
+    "name": "property-bullets-beside-stage",
+    "what": "italic square-bullet lists beside each artifact box of a pipeline stating what that stage guarantees"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Split the overview into three titled columns - how the data is made, how the model is built, what it can now do - and make the last column a grid of real results, so the claims of the first two are cashed out visually. Short italic property bullets beside each pipeline artifact state what the stage guarantees.",
+  "suits": "Foundation-model or data-centric papers that contribute a data engine, a model change and new capabilities whose results can be shown on photos."
+ },
+ "tags": [
+  "three titled columns",
+  "bottom-up flow",
+  "photo grid with overlays",
+  "serif labels",
+  "pale blue operation boxes",
+  "dashed optional branch"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.1 (caption and abstract only; no body paragraph mentions it)"
+  ],
+  "evidence": [
+   "Overview of Orient Anything V2. We upgrade the foundation orientation estimation model from both Data and Model perspectives.",
+   "gaining the New Features to handle rotational symmetry and relative rotation.",
+   "A multi-frame architecture that directly predicts relative object rotations."
+  ]
+ },
+ "summary": "Orient Anything V2 is a foundation model that estimates the 3D orientation of an object, its rotational symmetry and the relative rotation between two views. Figure 1 is a three-part overview titled Data, Model and New Features. On the left a bottom-up data engine runs from Class Names through a generative model to 3D Assets, then through a pseudo ensemble to Fine Labels, with italic property bullets beside each artifact. In the middle a Joint Encoder sits above two weight-sharing Encoders: a solid path from one robot image gives Absolute Orientation and a dashed path from a second image gives Relative Rotation. On the right a grid of object photos carries drawn 3D axes, with two paired rows showing relative rotation.",
+ "summary_zh": "Orient Anything V2 估计物体朝向、旋转对称和相对旋转。图 1 分三列：左为自下而上的数据引擎（类别名到精细标签），中为联合编码器（实线出绝对朝向、虚线出相对旋转），右为叠加三维坐标轴的照片网格。",
+ "confidence": "medium",
+ "notes": "No body paragraph mentions the figure, so the roles of Pseudo ensemble (annotation) and of the dashed path (second frame, relative rotation) are read from the caption, abstract and drawing. A #4472c4 fill in the digest belongs to four rectangles hidden under the pair pictures and is not visible. The caption asks the reader to zoom in.",
+ "venue": "NeurIPS25"
+}

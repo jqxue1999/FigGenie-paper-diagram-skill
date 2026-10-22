@@ -1,0 +1,445 @@
+{
+ "paper_id": "icml26-0016",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CVE-Factory",
+  "one_liner": "A multi-agent framework that turns sparse CVE metadata into fully executable agentic tasks with instructions, a Docker environment and verification tests.",
+  "domain": [
+   "code security",
+   "vulnerability reproduction",
+   "agentic task synthesis"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "actor-interaction"
+  ],
+  "variant": "data-construction",
+  "variant_note": "a raw CVE record passes through the CVE-Factory badge into a full task package: task file, tests, containers and a code agent working in a terminal",
+  "argues": "Raw CVE metadata is sparse; CVE-Factory turns it into a complete agentic task with instructions, an interactive environment and verification tests.",
+  "subject": "A raw CVE JSON record above, and below the executable task generated from it: docker-compose, task.yaml, run-tests.sh, a code agent and a terminal.",
+  "elements": [
+   {
+    "name": "CVE-2025-10686.json",
+    "type": "sample",
+    "role": "raw CVE metadata record with truncated fields (datePublished, cve_descriptions, cwe_description, references, cvssV3_1, affected_versions)",
+    "drawn_as": "grey rounded card with a header bar and six lines of JSON",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CVE-Factory",
+    "type": "module",
+    "role": "the framework that converts the record into a task",
+    "drawn_as": "text label with a small shield-and-gear icon, next to a grey down arrow",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "docker-compose.yaml",
+    "type": "container",
+    "role": "the executable environment that holds the containers",
+    "drawn_as": "large light-blue rounded region with a file-name title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Container : wordpress",
+    "type": "container",
+    "role": "the container where the vulnerable WordPress app, the task, the tests and the agent live",
+    "drawn_as": "darker blue band with a database icon, tall area below it",
+    "container": "docker-compose.yaml",
+    "is_contribution": null
+   },
+   {
+    "name": "task.yaml",
+    "type": "text-block",
+    "role": "natural-language task instruction, excerpt: When I use browser dev tools…the plugin try loading files from outside…",
+    "drawn_as": "lavender card with a title rule and four lines of text",
+    "container": "Container : wordpress",
+    "is_contribution": true
+   },
+   {
+    "name": "run-tests.sh",
+    "type": "module",
+    "role": "verification test script run when the agent is done",
+    "drawn_as": "small lavender box under task.yaml",
+    "container": "Container : wordpress",
+    "is_contribution": true
+   },
+   {
+    "name": "Code Agent",
+    "type": "actor",
+    "role": "agent that reads the task and works in the terminal with the actions think, write, view code and web search",
+    "drawn_as": "cream card with a grey robot icon and an underlined action list with tiny icons",
+    "container": "Container : wordpress",
+    "is_contribution": false
+   },
+   {
+    "name": "Terminal",
+    "type": "region",
+    "role": "the shell the agent acts in; shows cat and vim commands on class-meta-shortcode.php",
+    "drawn_as": "black rounded window with coloured prompts and light code text",
+    "container": "Container : wordpress",
+    "is_contribution": null
+   },
+   {
+    "name": "read",
+    "type": "operation",
+    "role": "the agent reads task.yaml",
+    "drawn_as": "label with a document icon above a dark-navy block arrow pointing right",
+    "container": "Container : wordpress",
+    "is_contribution": null
+   },
+   {
+    "name": "done",
+    "type": "operation",
+    "role": "when the agent is done the tests in run-tests.sh are run",
+    "drawn_as": "label with a flag icon above a dark-navy block arrow pointing left",
+    "container": "Container : wordpress",
+    "is_contribution": null
+   },
+   {
+    "name": "Container : db",
+    "type": "container",
+    "role": "the database container the app talks to",
+    "drawn_as": "darker blue band with a database icon at the bottom",
+    "container": "docker-compose.yaml",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "CVE-2025-10686.json",
+    "to": "CVE-Factory",
+    "what": "the raw record is the input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CVE-Factory",
+    "to": "docker-compose.yaml",
+    "what": "produces the executable task package below it, linked by position",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "task.yaml",
+    "to": "Code Agent",
+    "what": "read",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Code Agent",
+    "to": "run-tests.sh",
+    "what": "done",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Code Agent",
+    "to": "Terminal",
+    "what": "the agent's commands and outputs appear in the terminal beside it",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Container : wordpress",
+    "to": "Container : db",
+    "what": "grey down arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Container : db",
+    "to": "Container : wordpress",
+    "what": "grey up arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "docker-compose.yaml",
+    "to": "both containers",
+    "what": "the region holds the wordpress and db containers",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "CVE metadata record as a JSON card",
+    "content": "document",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "grey card with a header bar, six JSON lines with values cut by ellipses"
+   },
+   {
+    "what": "terminal window with a short shell session",
+    "content": "screenshot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "black rounded window with a light title bar, coloured prompts, grey and white code lines, placed beside the agent card"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "shield with a gear",
+    "stands_for": "the CVE-Factory framework",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "database cylinder outline",
+    "stands_for": "a Docker container (wordpress, db)",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "grey robot head with antennae",
+    "stands_for": "the code agent",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "light bulb, pen, eye, browser with magnifier",
+    "stands_for": "the agent's actions think, write, view code, web search",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "document and flag",
+    "stands_for": "the read and done steps",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "CVE-2025-10686, a WordPress local file inclusion: its raw JSON, the generated task text and a terminal session reading class-meta-shortcode.php",
+    "form": "JSON card, text card and terminal window",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "tool-use",
+    "drawn_as": "underlined action names (think, write, view code, web search) each with a tiny icon, stacked under a robot icon next to a terminal",
+    "parts": [
+     "robot",
+     "action list",
+     "terminal"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a task.yaml card with a natural-language excerpt above a run-tests.sh box, standing for instruction and verification",
+    "parts": [
+     "task.yaml",
+     "run-tests.sh"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "grey robot head with antennae for the code agent",
+    "parts": [
+     "robot"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the JSON card at top, follows the grey arrow through CVE-Factory into the docker-compose region, reads task.yaml, then read to the agent and terminal, done to run-tests.sh, and the db container last."
+ },
+ "layout": {
+  "arrangement": "pipeline-column",
+  "arrangement_note": "A vertical flow: the raw CVE card at the top, a grey arrow through the CVE-Factory badge into a tall light-blue docker-compose region; inside it the wordpress band holds task.yaml and run-tests.sh at left and a Code Agent card beside a black terminal at right, and a db band sits below.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.22,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d6e3f8",
+    "used_for": "light-blue docker-compose region"
+   },
+   {
+    "hex": "#8faadc",
+    "used_for": "darker blue container bands",
+    "opacity": 0.47
+   },
+   {
+    "hex": "#ededed",
+    "used_for": "grey card of the raw CVE JSON"
+   },
+   {
+    "hex": "#f4e4d3",
+    "used_for": "cream Code Agent card"
+   },
+   {
+    "hex": "#232325",
+    "used_for": "black terminal window"
+   },
+   {
+    "hex": "#e0d1e4",
+    "used_for": "lavender task.yaml card and run-tests.sh box",
+    "opacity": 0.42
+   },
+   {
+    "hex": "#e5e9eb",
+    "used_for": "light title bar of the terminal"
+   },
+   {
+    "hex": "#767171",
+    "used_for": "grey flow arrows"
+   },
+   {
+    "hex": "#203864",
+    "used_for": "dark-navy read and done arrows"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1 pt dark rules under the card header and the container band, thin outlines on cards, no outlines on the regions",
+  "font": "serif (Times New Roman) 7.5 pt for labels and JSON, monospace (Consolas) 6 pt in the terminal, underlined italic serif for the action names",
+  "corners": "rounded",
+  "arrows": "short thick block arrows: grey vertical ones for the main flow and between containers, dark-navy horizontal ones for read and done",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "light blue = the executable environment, darker blue bands = containers, lavender = task files, cream = the agent card, black = the terminal, grey = raw metadata and flow arrows",
+  "line_style_means": "grey block arrows = flow into the package and between containers; navy block arrows = the agent's read and done steps",
+  "shape_means": "card = file; band with a cylinder icon = container; black window = terminal; robot = agent",
+  "marker_means": "the words read and done on the navy arrows give the order task, agent, tests",
+  "emphasis": "the large rich bottom region against the small top card shows how sparse the raw metadata is",
+  "reusable_patterns": [
+   "raw input card on top and the rich generated package below, joined by one arrow through the tool's name badge",
+   "files as small cards inside a container band with a terminal mock beside the agent",
+   "action list with tiny icons under a robot icon",
+   "grey down and up arrows between two stacked containers",
+   "real record excerpts cut by ellipses as sample data"
+  ],
+  "weaknesses": [
+   "the arrow from the JSON card ends beside the CVE-Factory label, so the link to the output is implied by position",
+   "terminal and action text are only 6 pt"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real CVE record and a real task excerpt",
+   "a terminal session"
+  ],
+  "stock": [
+   "robot, database, action and document icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards, container bands, regions and block arrows"
+  ],
+  "unknown": [
+   "whether the shield-and-gear badge is stock or custom"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "JSON record card",
+   "CVE-Factory badge",
+   "docker-compose region",
+   "container bands with database icons",
+   "task.yaml and run-tests.sh cards",
+   "code agent robot with action list",
+   "terminal window"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "CVE",
+   "code security",
+   "agentic tasks",
+   "environment synthesis",
+   "docker",
+   "vulnerability",
+   "WordPress",
+   "terminal agent"
+  ],
+  "tags": [
+   "code-snippet-box",
+   "annotated-record-card",
+   "gui-screen",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "before-after-conversion-arrow",
+    "what": "a raw record card on top, a grey down arrow through the tool's name badge, and the full generated artefact below, to show how much the tool adds"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show what a generator adds by putting the thin raw input record (a small grey card with real fields) above and the full generated package below, joined by one arrow through the tool's name; draw the package as nested regions (compose, containers, files, agent, terminal).",
+  "suits": "Data or environment synthesis pipelines whose output is a structured package (task, environment, tests) and whose input is a thin record."
+ },
+ "tags": [
+  "vertical-flow",
+  "nested-regions",
+  "json-card",
+  "terminal-mock",
+  "light-blue-tint",
+  "serif-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "these sources provide only sparse descriptions and references, as shown in Figure 1",
+   "A complete task package must therefore provide a task description, an environment that faithfully reproduces vulnerabilities",
+   "(Bottom) An agentic task including natural-language instructions, an interactive environment, and verification tests."
+  ]
+ },
+ "summary": "CVE-Factory is a multi-agent framework that turns sparse CVE metadata into fully executable agentic tasks for code-security agents. Figure 1 contrasts the input and the output. At the top a grey card shows the raw JSON of CVE-2025-10686 with a few truncated fields; a grey arrow passes through the CVE-Factory badge into a light-blue docker-compose region. There a wordpress container band holds the task.yaml instruction card, the run-tests.sh verifier and a Code Agent (a robot with think, write, view code and web search actions) beside a black terminal showing shell commands, with arrows labelled read and done; a db container sits below. Colours separate files, containers, agent and terminal.",
+ "summary_zh": "CVE-Factory 把稀疏的 CVE 元数据变成可执行的智能体任务。图一上方是原始 JSON 卡片，经 CVE-Factory 得到下方的 docker-compose 环境：任务说明、测试脚本、代码智能体与终端，以及数据库容器。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (stage-pipeline with the data-construction variant, actor-interaction). The caption's Top and Bottom are not lettered in the figure, so panels is empty and the two units are treated as the input object and the output package. The terminal window is a bitmap with live text on top; the text layer is per word.",
+ "venue": "ICML26"
+}

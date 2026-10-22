@@ -1,0 +1,533 @@
+{
+ "paper_id": "icml26-0156",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Measures how many LoRA parameters a reasoning strategy needs to reach a fixed training accuracy and shows this intrinsic dimension tracks generalization.",
+  "domain": [
+   "chain-of-thought reasoning",
+   "intrinsic dimensionality",
+   "LoRA fine-tuning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "concept-schematic"
+  ],
+  "variant": "problem-method-finding",
+  "variant_note": "four tinted panels tell question, finetune-and-evaluate pipeline, intrinsic-dimension measurement and finding, each closed by a sketched sentence banner",
+  "argues": "Reasoning strategies that need fewer trainable parameters to reach a common training accuracy (lower intrinsic dimension) generalize better, in and out of distribution.",
+  "subject": "One word problem in three reasoning formats, a finetune-and-evaluate row, a LoRA sweep curve and an accuracy-versus-dimension scatter.",
+  "elements": [
+   {
+    "name": "Different Reasoning Strategies",
+    "type": "container",
+    "role": "title of the left panel that sets up the question",
+    "drawn_as": "bold centred title in a tall grey rounded panel",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Q: Natalia sold ... how many were sold in total?",
+    "type": "instance",
+    "role": "one GSM8K-style word problem answered in three formats",
+    "drawn_as": "italic question text at the top of the left panel",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "Ans: 72 (No CoT)",
+    "type": "sample",
+    "role": "bare answer with no reasoning",
+    "drawn_as": "lavender box with dark outline",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "She sold 48 clips.... .... total of 48+24=72n... Ans: 72 (Short CoT)",
+    "type": "sample",
+    "role": "short chain-of-thought answer",
+    "drawn_as": "cyan box with italic reasoning lines and the answer",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "def solve(): ans = .... return ans (Exec PoT)",
+    "type": "sample",
+    "role": "executable program-of-thought answer",
+    "drawn_as": "orange box with a short code stub",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "vertical dots",
+    "type": "other",
+    "role": "more strategies exist",
+    "drawn_as": "three stacked dots below the cards",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "Which reasoning strategy upon training yields the best generalization?",
+    "type": "text-block",
+    "role": "the research question",
+    "drawn_as": "dark-red bold text in a hand-sketched box with wobbly outline and pink hatch",
+    "container": "Different Reasoning Strategies",
+    "is_contribution": false
+   },
+   {
+    "name": "Training Data",
+    "type": "container",
+    "role": "the three training sets, one per strategy",
+    "drawn_as": "dashed black box with a rotated label holding three offset stacks of cards: No CoT (lavender), Short CoT (cyan), Exec PoT (orange)",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Model Finetuning",
+    "type": "module",
+    "role": "model finetuned on each strategy's data, D parameters",
+    "drawn_as": "bitmap cube-with-sparkle icon with the label pi_theta^D and 'D = # Parms.' underneath",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Acc (No CoT) = 7.18%, Acc (Short CoT) = 32.63%, Acc (Exec PoT) = 46.15%",
+    "type": "data",
+    "role": "accuracy of each finetuned strategy",
+    "drawn_as": "three lines of text right of the model",
+    "container": "top band",
+    "is_contribution": null
+   },
+   {
+    "name": "GSM8K Test / GSM-IC / GSM-Symbolic / GSM-Hard",
+    "type": "data",
+    "role": "in-domain and out-of-domain evaluation sets",
+    "drawn_as": "four rounded colour chips in a 2x2 grid under the title 'In-Domain and OOD Evaluation'",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Measuring Generalization Performance",
+    "type": "label",
+    "role": "names what the top band does",
+    "drawn_as": "orange bold text in a hand-sketched hatched banner",
+    "container": "top band",
+    "is_contribution": false
+   },
+   {
+    "name": "Train over a set of d <= D parameters using LoRA",
+    "type": "operation",
+    "role": "sweep of LoRA parameter counts d for the same data",
+    "drawn_as": "small cube icon pi_theta^d with a text block beside it, elbow arrow to the plot",
+    "container": "green panel",
+    "is_contribution": true
+   },
+   {
+    "name": "tau = 63%",
+    "type": "label",
+    "role": "common accuracy threshold",
+    "drawn_as": "dashed grey horizontal line across the curve",
+    "container": "green panel",
+    "is_contribution": true
+   },
+   {
+    "name": "d_int (Exec PoT) = 1.5M",
+    "type": "label",
+    "role": "minimum parameters at which Exec PoT crosses tau",
+    "drawn_as": "red boxed callout with a red arrow to a red dot where curve and threshold meet, red dotted drop line to the axis",
+    "container": "green panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Intrinsic dimension d_int: Min # params required to fit the data with accuracy tau",
+    "type": "text-block",
+    "role": "definition of the measure",
+    "drawn_as": "dark-green bold text in a hand-sketched hatched banner at the bottom of the green panel",
+    "container": "green panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Exec PoT (Best) / Short CoT / No CoT (Worst)",
+    "type": "label",
+    "role": "names three highlighted points of the scatter",
+    "drawn_as": "boxed callouts in red, blue and purple with arrows to coloured dots",
+    "container": "blue panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Finding: Lower Intrinsic Dimension of strategies inversely correlates with better generalization!",
+    "type": "text-block",
+    "role": "headline finding of the paper",
+    "drawn_as": "bold blue text in a hand-sketched hatched banner at the bottom of the blue panel",
+    "container": "blue panel",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Training Data",
+    "to": "Model Finetuning",
+    "what": "each strategy's data finetunes a model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Model Finetuning",
+    "to": "Acc (No CoT) = 7.18%, Acc (Short CoT) = 32.63%, Acc (Exec PoT) = 46.15%",
+    "what": "accuracy measured on the evaluation sets",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Training Data",
+    "to": "Train over a set of d <= D parameters using LoRA",
+    "what": "same training data is reused for the LoRA sweep",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Train over a set of d <= D parameters using LoRA",
+    "to": "training-accuracy curve",
+    "what": "each d gives one training accuracy point",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "d_int (Exec PoT) = 1.5M",
+    "to": "crossing point of curve and tau",
+    "what": "reads the minimum parameter count off the curve",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "answer cards and card stacks",
+    "to": "highlighted scatter points",
+    "what": "each strategy keeps its hue: lavender to purple, cyan to blue, orange to red",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "d_int of each strategy",
+    "to": "x axis of the accuracy scatter",
+    "what": "intrinsic dimension read from each strategy's curve becomes its x position (not drawn as a link)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Different Reasoning Strategies",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "one question answered by three strategies and the research question",
+    "verdict": "setting"
+   },
+   {
+    "label": "Training Data, Model Finetuning, In-Domain and OOD Evaluation",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "three training sets finetune a model whose accuracies are read on four benchmark chips",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "LoRA parameter sweep: training accuracy against trainable parameters with threshold tau and d_int for Exec PoT; title is the green banner",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "scatter of overall accuracy against intrinsic dimension with three highlighted strategies and a dotted trend; title is the blue banner",
+    "verdict": "finding"
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "training accuracy against trainable LoRA parameters for one strategy",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "blue sigmoid curve with light-blue dots on a log x axis, dashed grey tau line, red dotted drop line, red dot and red callout"
+   },
+   {
+    "what": "overall accuracy against intrinsic dimension over many reasoning strategies",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grey dots with three coloured highlighted points, dotted grey trend line, boxed callouts with arrows, log x axis"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cube outline with a four-point sparkle",
+    "stands_for": "the finetuned language model (D parameters on top, d <= D in the green panel)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a GSM8K-style word problem (Natalia sold clips) answered as a bare number, a short chain of thought and a program",
+    "form": "question text above three coloured answer cards",
+    "real_values": true
+   },
+   {
+    "what": "accuracy of the three finetuned strategies and the minimum parameter count for Exec PoT",
+    "form": "plain text lines and a red callout on the curve",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cube outline with a sparkle labelled pi_theta^D or pi_theta^d",
+    "parts": [
+     "cube icon",
+     "parameter label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "three offset stacks of cards named by strategy inside a dashed box, no counts",
+    "parts": [
+     "No CoT stack",
+     "Short CoT stack",
+     "Exec PoT stack",
+     "dashed box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "one question with three coloured answer cards, without ticks or crosses",
+    "parts": [
+     "question",
+     "No CoT answer",
+     "Short CoT answer",
+     "Exec PoT answer"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the title of the grey panel and runs down to the red research question, jumps to the yellow band (data, model, accuracies), drops to the green sweep curve and ends at the blue scatter and its finding banner."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "a tall grey panel at the left; to its right a wide yellow band on top (training data to model to accuracies and benchmark chips) and two panels below it, green (LoRA sweep curve) and blue (scatter), each closed by a hand-sketched sentence banner",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "panel-frames",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.3,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fffaea",
+    "used_for": "ground of the top band (training data, finetuning, evaluation)"
+   },
+   {
+    "hex": "#e3f7e2",
+    "opacity": 0.7,
+    "used_for": "ground of the green LoRA-sweep panel"
+   },
+   {
+    "hex": "#e9f9ff",
+    "opacity": 0.7,
+    "used_for": "ground of the blue finding panel"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "ground of the grey left panel"
+   },
+   {
+    "hex": "#d0cee2",
+    "used_for": "No CoT answer card and card stack"
+   },
+   {
+    "hex": "#b0e3e6",
+    "used_for": "Short CoT answer card and card stack"
+   },
+   {
+    "hex": "#fad7ac",
+    "used_for": "Exec PoT answer card and card stack"
+   },
+   {
+    "hex": "#cce5ff",
+    "used_for": "GSM8K Test chip"
+   },
+   {
+    "hex": "#ffff88",
+    "used_for": "GSM-IC chip"
+   },
+   {
+    "hex": "#cdeb8b",
+    "used_for": "GSM-Symbolic chip"
+   },
+   {
+    "hex": "#ffcccc",
+    "used_for": "GSM-Hard chip"
+   },
+   {
+    "hex": "#0d652d",
+    "used_for": "dark green outline and text of the green panel banner"
+   },
+   {
+    "hex": "#a50e0e",
+    "used_for": "dark red text and outline of the research-question banner and the Exec PoT callout"
+   },
+   {
+    "hex": "#e37400",
+    "used_for": "orange text and outline of the 'Measuring Generalization Performance' banner"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.5 pt outlines on panels, cards and chips; 0.25 pt hatch lines (about 380) inside the four sketched banners",
+  "font": "sans, 7 pt (5.5 pt for the stack labels), bold banners, italics for the question and reasoning lines, serif-like italics for symbols",
+  "corners": "mixed",
+  "arrows": "plain black arrows with filled heads, straight and one elbow; thick red and coloured arrows from callouts to plot points",
+  "rendering": "mixed",
+  "effects": "hand-sketched wobbly outlines with hatch fill on the four sentence banners; no shadows",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "lavender = No CoT, cyan = Short CoT, orange = Exec PoT (purple, blue and red dots and callouts in the scatter match them); panel tints: grey = question, yellow = experiment, green = intrinsic-dimension measurement, blue = finding; chip colours only tell the four benchmarks apart",
+  "line_style_means": "dashed black box groups the three training sets; dashed grey line = threshold tau; red dotted line = d_int; dotted grey line in the scatter = trend",
+  "shape_means": "offset card stack = one training set; cube with sparkle = the model; rounded chip = an evaluation set; wobbly hatched banner = the panel's one-sentence message",
+  "marker_means": "(Best) and (Worst) tags on scatter callouts; red dot = where the curve crosses tau",
+  "emphasis": "each panel ends in a hand-sketched hatched banner in its accent colour stating its message; the Exec PoT point and callouts are red",
+  "reusable_patterns": [
+   "hand-sketched hatched banner at the bottom of each panel stating its takeaway",
+   "the same three strategy hues in answer cards, training stacks and scatter highlights",
+   "offset card stacks for training sets inside a dashed box",
+   "dashed threshold line plus dotted drop line to read a minimum off a curve, with a red callout",
+   "scatter with many grey background points and a few coloured, boxed callouts",
+   "panels tinted by role: grey question, yellow setup, green measure, blue finding",
+   "vertical dots under the cards to say more strategies exist"
+  ],
+  "weaknesses": [
+   "strategy colours shift between panels (orange cards, red dot; lavender cards, purple dot; cyan cards, blue dot)",
+   "the link from the green panel's d_int to the scatter's x axis is not drawn",
+   "7 pt text and many labels in a full-width figure",
+   "plots are bitmaps, so their small text cannot be edited"
+  ]
+ },
+ "resources": {
+  "own": [
+   "GSM8K-style example question and three answer formats",
+   "measured training-accuracy curve",
+   "scatter of accuracy against intrinsic dimension",
+   "accuracy numbers"
+  ],
+  "stock": [
+   "cube-with-sparkle model icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, answer cards, card stacks and chips",
+   "hand-sketched hatched banners",
+   "arrows and callouts"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "answer cards in three colours",
+   "offset card stacks in a dashed box",
+   "cube-with-sparkle model icon",
+   "accuracy-versus-parameters curve with threshold line",
+   "scatter with coloured callouts",
+   "benchmark chips",
+   "hatched sentence banners"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "intrinsic dimension",
+   "chain-of-thought",
+   "program-of-thought",
+   "generalization",
+   "LoRA",
+   "GSM8K",
+   "out-of-distribution",
+   "reasoning strategies"
+  ],
+  "tags": [
+   "stacked-cards",
+   "claim-banner",
+   "colour-coded-groups",
+   "plot-callouts",
+   "option-catalog",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "sketch-hatch-banners",
+    "what": "sentence banners drawn hand-sketched, with wobbly outline and hatch fill in the panel's accent colour, one per panel"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Close each tinted panel with a hand-sketched hatched banner in its accent colour that states the panel's message in one sentence, and keep one hue per compared strategy from the raw samples through the training sets to the result plot.",
+  "suits": "Analysis papers that walk from a question through an experimental setup and a new measure to one headline finding, with a measured plot per step."
+ },
+ "tags": [
+  "tinted-panels",
+  "sketch-style-banners",
+  "card stacks",
+  "bitmap plots with callouts",
+  "three-strategy colour code",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Intrinsic Dimensionality of Reasoning (p.3)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "sweep varying LoRA parameter counts d and identify the minimum dint at which training accuracy crosses a common threshold",
+   "We find a strong inverse correlation between intrinsic dimensionality and generalization performance (Section 4).",
+   "we use a common threshold τ across all strategies to ensure fair comparison"
+  ]
+ },
+ "summary": "The paper proposes intrinsic dimensionality, the smallest number of LoRA parameters needed to reach a fixed training accuracy, as a quantitative measure of how effective a reasoning strategy is. Figure 1 is an overview in four tinted panels. A grey panel shows one GSM8K-style question answered in three formats (No CoT, Short CoT, Exec PoT) and asks which strategy generalizes best. A yellow band shows the three training sets as offset card stacks feeding a finetuned model whose accuracies (7.18%, 32.63%, 46.15%) are read on in-domain and OOD benchmark chips. A green panel plots training accuracy against LoRA parameters with a threshold tau = 63% and d_int of about 1.5M for Exec PoT. A blue panel scatters accuracy against d_int and states the finding. Every panel ends in a hand-sketched hatched banner.",
+ "summary_zh": "论文用内在维度（达到固定训练准确率所需的最少 LoRA 参数量）衡量推理链的有效性。图 1 用四个着色面板依次展示同一道题的三种推理策略、微调与评测流程、含阈值 τ 的参数扫描曲线和准确率—内在维度散点，各面板底部有手绘风格的结论横幅。",
+ "confidence": "high",
+ "notes": "The pre-screen said pictures=0; the two plots are bitmaps and are listed as pictures. The three strategy hues drift between panels (orange cards, red scatter point). The Exec PoT accuracy is printed as 46.15% in the figure. Whether the grey dots in the scatter are further strategies or model sizes is not stated in the figure or the supplied text.",
+ "venue": "ICML26"
+}

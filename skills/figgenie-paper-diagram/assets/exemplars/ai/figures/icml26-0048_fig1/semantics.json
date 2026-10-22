@@ -1,0 +1,551 @@
+{
+ "paper_id": "icml26-0048",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "HALO (heterogeneous-agent Lyapunov policy optimization)",
+  "one_liner": "MARL framework for human-robot collaboration that projects decentralized policy gradients onto a Lyapunov-stable direction so the rationality gap contracts monotonically.",
+  "domain": [
+   "human-robot collaboration",
+   "multi-agent reinforcement learning",
+   "Lyapunov stability"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "actor-interaction",
+   "concept-schematic"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "an upper layer of environment, agents and real-world deployment hands signals down to a grey band of boxed equations, whose result returns as the final parameter update",
+  "argues": "Decentralized agents trained on conflicting gradients can be stabilised by a short analytic chain (rationality gap, stability normal vector, closed-form projection) that rectifies their update and carries over to real-world collaboration.",
+  "subject": "Centralized-training, decentralized-execution agents in a collaboration scene, and the equation chain of Lyapunov policy optimization.",
+  "elements": [
+   {
+    "name": "Centralized training",
+    "type": "label",
+    "role": "names the long black line that leaves the interaction space and reaches the agents with s and r = R(s, a)",
+    "drawn_as": "label set into a thick black line over the top of the figure",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Infinite interaction space",
+    "type": "container",
+    "role": "the environment in which the agents act; shows Collaboration versus Interference on a beam-carrying scene",
+    "drawn_as": "white rounded box with shadow, bold green title, scene render inside",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Collaboration / Interference",
+    "type": "label",
+    "role": "names the two outcomes of joint beam carrying shown by the scene",
+    "drawn_as": "serif labels above and below the beam, with green curved arrows and magenta vertical arrows",
+    "container": "Infinite interaction space",
+    "is_contribution": null
+   },
+   {
+    "name": "Agent i",
+    "type": "actor",
+    "role": "one decentralized learner: state s_i gives observation o_i, policy outputs action a_i",
+    "drawn_as": "peach band holding a state box s_i and a policy box π_θi(a_i|o_i)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Agent j",
+    "type": "actor",
+    "role": "second learner, same structure; '… …' between the bands stands for more agents",
+    "drawn_as": "peach band with s_j and π_θj(a_j|o_j) boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Decentralized execution",
+    "type": "label",
+    "role": "each agent sends only its own action a_i, a_j to the environment",
+    "drawn_as": "serif label between the interaction space and the agent bands",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Lyapunov policy optimization (grey band)",
+    "type": "container",
+    "role": "holds the proposed update rule as a chain of equation boxes",
+    "drawn_as": "full-width grey band with bold title at top left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Differentiable gradient fields",
+    "type": "container",
+    "role": "holds the two gradient fields u_ind(θ) (Independent rationality) and u_team(θ) (Team rationality)",
+    "drawn_as": "light-blue box with blue title and two white rounded boxes with captions",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": true
+   },
+   {
+    "name": "Lyapunov rationality gap",
+    "type": "formula",
+    "role": "V(θ) = ½‖u_ind(θ) − u_team(θ)‖², the gap between independent and team gradients",
+    "drawn_as": "white square box with name above the formula",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": true
+   },
+   {
+    "name": "Stability normal vector",
+    "type": "formula",
+    "role": "h = (H_ind − H_team)ᵀ(u_ind − u_team), obtained from the gap by a Hessian-vector product",
+    "drawn_as": "white square box with name above the formula",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": true
+   },
+   {
+    "name": "Lyapunov-constrained optimization",
+    "type": "formula",
+    "role": "argmin over d of ½‖d − u_ind(θ)‖², with a bowl graphic at the box's right end",
+    "drawn_as": "white square box with name above the formula",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": true
+   },
+   {
+    "name": "Analytic closed-form projection",
+    "type": "formula",
+    "role": "closed-form multiplier λ* and projected direction d* = u_ind − λ*h, reached through the KKT condition",
+    "drawn_as": "white square box with name above the formulas",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": true
+   },
+   {
+    "name": "Hessian-vector product / KKT condition",
+    "type": "operation",
+    "role": "name the two derivation steps on the arrows between equation boxes",
+    "drawn_as": "plain serif labels beside an upward and a downward arrow",
+    "container": "Lyapunov policy optimization (grey band)",
+    "is_contribution": null
+   },
+   {
+    "name": "Final parameter update",
+    "type": "label",
+    "role": "the projected update goes back to the agents' policies",
+    "drawn_as": "brown label beside a double-line upward arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Policy",
+    "type": "label",
+    "role": "the learned policy is carried to the real-world collaboration",
+    "drawn_as": "label above a double-line arrow pointing to the photo",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Infinite interaction space",
+    "to": "Agent i",
+    "what": "state s and reward r = R(s, a) sent along the Centralized training line",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "s_i, s_j",
+    "to": "π_θi(a_i|o_i), π_θj(a_j|o_j)",
+    "what": "observations o_i, o_j",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "π_θi(a_i|o_i), π_θj(a_j|o_j)",
+    "to": "Infinite interaction space",
+    "what": "actions a_i, a_j (Decentralized execution)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent i",
+    "to": "Agent j",
+    "what": "small down arrow with '… …' between the two bands, standing for further agents",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent i, Agent j",
+    "to": "real-world photo",
+    "what": "Policy",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Agent i, Agent j",
+    "to": "Lyapunov policy optimization (grey band)",
+    "what": "Lyapunov policy optimization (brown label on the down arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lyapunov policy optimization (grey band)",
+    "to": "Agent i, Agent j",
+    "what": "Final parameter update",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Differentiable gradient fields",
+    "to": "Stability normal vector",
+    "what": "gradient fields u_ind, u_team",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Differentiable gradient fields",
+    "to": "Lyapunov rationality gap",
+    "what": "gradient fields u_ind, u_team",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lyapunov rationality gap",
+    "to": "Stability normal vector",
+    "what": "Hessian-vector product",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stability normal vector",
+    "to": "Lyapunov-constrained optimization",
+    "what": "h as the stability constraint",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lyapunov-constrained optimization",
+    "to": "Analytic closed-form projection",
+    "what": "KKT condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Final parameter update",
+    "to": "Lyapunov policy optimization (label)",
+    "what": "the same brown colour marks the two hand-off labels between agents and the grey band",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Lyapunov policy optimization (grey band)",
+    "to": "its equation boxes",
+    "what": "the band contains the gradient-field box and the four equation boxes",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "s, r = R(s, a)",
+    "kind": "identity",
+    "at": "arrowheads at the end of the Centralized training line",
+    "what": "names the state and reward signals"
+   },
+   {
+    "marker": "o_i, o_j",
+    "kind": "identity",
+    "at": "arrows from the state boxes to the policy boxes",
+    "what": "names the observations"
+   },
+   {
+    "marker": "a_i, a_j",
+    "kind": "identity",
+    "at": "arrows from the policy boxes to the interaction space",
+    "what": "names the actions"
+   },
+   {
+    "marker": "Lyapunov policy optimization",
+    "kind": "section",
+    "at": "top left of the grey band",
+    "what": "heads the band that holds the equation chain"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "rendered scene of two humanoid figures carrying a wooden beam over a grey floor plane, annotated with green and magenta arrows",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "set inside a white rounded box titled Infinite interaction space, with Collaboration above and Interference below"
+   },
+   {
+    "what": "photo of a humanoid robot and a human carrying a beam under a motion-capture truss, with thought bubbles holding a network glyph and a brain",
+    "content": "natural-image",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "cut out on white at the top right, labelled MoCap and Real-world collaboration, reached by the Policy arrow"
+   },
+   {
+    "what": "3D bowl (paraboloid) shaded orange to purple with a spiral path to the minimum on a thin blue ground plane",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small graphic at the right end of the Lyapunov-constrained optimization box"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "orange and blue node-and-edge network glyphs above the beam scene",
+    "stands_for": "the two agents' policies",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "thought bubbles with a node-and-edge network glyph over the robot and a brain over the human",
+    "stands_for": "the robot's learned policy and the human partner's behaviour",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "beam-carrying task: two partners lift a long beam together, as a rendered scene with Collaboration versus Interference and as a real photo of a humanoid robot with a human",
+    "form": "scene render and photo with thought bubbles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "agent bands send actions a_i, a_j into an environment box; state s and reward r = R(s, a) come back along a long labelled line over the top",
+    "parts": [
+     "agent bands",
+     "interaction-space box",
+     "Centralized training line",
+     "a_i, a_j arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "multi-agent",
+    "drawn_as": "two stacked peach agent bands Agent i and Agent j with '… …' for more agents",
+    "parts": [
+     "Agent i",
+     "Agent j",
+     "ellipsis"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "ctde",
+    "drawn_as": "Centralized training as a long labelled line from the environment, Decentralized execution as separate action arrows per agent",
+    "parts": [
+     "Centralized training line",
+     "Decentralized execution label",
+     "per-agent action arrows"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "loss-landscape-bowl",
+    "drawn_as": "small 3D paraboloid with a spiral path converging to its minimum on a ground plane, inside the optimization box",
+    "parts": [
+     "bowl",
+     "spiral path",
+     "ground plane"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the top-left interaction space, passes the two agent bands, drops into the grey equation band, reads it left to right, and returns by the 'Final parameter update' arrow."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "An upper layer holds the interaction-space box at the left, the two peach agent bands in the middle and the real-world photo at the right; a full-width grey band below holds the equation chain; vertical arrows hand over between the two layers.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.44,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cccccc",
+    "used_for": "full-width grey band holding the Lyapunov policy optimization chain"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "equation boxes, rounded state, policy and gradient boxes, interaction-space box"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "the two peach agent bands (Agent i, Agent j)"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "Differentiable gradient fields box"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "blue title text of Differentiable gradient fields"
+   },
+   {
+    "hex": "#385723",
+    "used_for": "bold dark-green title Infinite interaction space"
+   },
+   {
+    "hex": "#843c0c",
+    "used_for": "brown labels Final parameter update and Lyapunov policy optimization"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "green curved arrows around the beam (bitmap)",
+    "approx": true
+   },
+   {
+    "hex": "#b030b0",
+    "used_for": "magenta vertical arrows between the two figures (bitmap)",
+    "approx": true
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.75 pt black on boxes and arrows; no outline on the grey band and the peach bars",
+  "font": "serif (Times New Roman), 9 pt throughout; bold for the band title and Infinite interaction space; bold upright vectors in formulas; blue, green and brown titles",
+  "corners": "mixed",
+  "arrows": "black, straight and orthogonal with small filled heads; double-line open arrows for Final parameter update and Policy; a thick line carries the centralized-training signals",
+  "rendering": "mixed",
+  "effects": "soft grey drop shadow under the rounded boxes (state, policy, gradient-field and interaction-space boxes)",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach = the agents; light blue = the gradient fields; grey = the Lyapunov policy optimization band; brown labels = the two hand-off arrows between agents and band; green title = the environment; blue title = gradient fields",
+  "line_style_means": "single black arrows = signals and data; double-line open arrows = policy deployment and parameter update; thick line over the top = centralized-training signals",
+  "shape_means": "rounded white box = a state, a policy, a gradient field or the environment; square white box = one equation step; peach bar = one agent; grey band = the proposed algorithm",
+  "marker_means": "bare symbols (s, o_i, a_i, r, V(θ), h, d*) name the signals and quantities; no numbering",
+  "emphasis": "the contribution gets the large grey band of white equation boxes; the setting above it uses lighter peach regions and a photo",
+  "reusable_patterns": [
+   "setting on top, proposed algorithm as a full-width grey band underneath, joined by two coloured vertical hand-off arrows",
+   "equation boxes with a bold name above the formula and the derivation step named on the arrow between boxes",
+   "real photo of the deployment as the final output tile, with thought bubbles showing each partner's policy",
+   "small 3D bowl graphic inside an equation box for geometric intuition",
+   "centralized training drawn as a long labelled line that bypasses the agents"
+  ],
+  "weaknesses": [
+   "dense 9 pt serif text and many small symbols at double-column width",
+   "the Final parameter update arrow leaves the top edge of the band instead of the projection box that produces d*",
+   "several vertical hand-off arrows cross the agent region, so the loop is hard to trace"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photo of the real-world humanoid-robot and human experiment under a MoCap truss",
+   "the method's equations"
+  ],
+  "stock": [
+   "node-and-edge network glyphs and brain icon in thought bubbles"
+  ],
+  "generated": [],
+  "drawn": [
+   "agent bands and boxes",
+   "grey band and equation boxes",
+   "arrows and labels",
+   "bowl graphic"
+  ],
+  "unknown": [
+   "origin of the rendered beam-carrying scene (simulator render or illustration)"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "interaction-space box with beam scene",
+   "two peach agent bands with policy boxes",
+   "real-world photo with MoCap truss",
+   "grey band of equation boxes",
+   "bowl graphic",
+   "double-line hand-off arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "human-robot collaboration",
+   "multi-agent RL",
+   "Lyapunov policy optimization",
+   "rationality gap",
+   "CTDE",
+   "gradient conflict",
+   "closed-form projection"
+  ],
+  "tags": [
+   "equation-boxes",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "method-band-below-setting",
+    "what": "the setting (environment, agents, deployment photo) sits on top and the proposed algorithm is a full-width tinted band underneath, joined by labelled vertical hand-off arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put the setting on top and the new algorithm in a full-width grey band underneath, joined by two coloured vertical arrows (signals down, update back up). Inside the band, equation boxes with a bold name above each formula and the step named on the arrows read as a derivation.",
+  "suits": "Optimisation or learning-rule contributions that sit inside an RL or training loop and are best told by a short chain of equations plus one deployment photo."
+ },
+ "tags": [
+  "two-layer-composite",
+  "grey-equation-band",
+  "serif-text",
+  "drop-shadow-boxes",
+  "photo-tile",
+  "double-line-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "4 Methodology: The HALO Framework (p.3)"
+  ],
+  "evidence": [
+   "The HALO framework architecture combining the transition from standard decentralized learning to Lyapunov policy optimization for real-world HRC.",
+   "We design a stability-aware control law that rectifies decentralized gradients to satisfy a convergence certificate, as illustrated in Fig. 1."
+  ]
+ },
+ "summary": "HALO (heterogeneous-agent Lyapunov policy optimization) stabilises decentralized multi-agent RL for human-robot collaboration by projecting each agent's gradient so that the rationality gap between independent and team objectives contracts. Figure 1 is a two-layer system diagram. The upper layer shows centralized training and decentralized execution: an 'Infinite interaction space' box with a collaboration versus interference scene, two peach agent bands with state and policy boxes exchanging actions and states, and a real-world photo of a robot and a human carrying a beam under a motion-capture truss. A full-width grey band beneath chains boxed equations: gradient fields, rationality gap, stability normal vector, a constrained optimisation with a small bowl graphic, and the closed-form projection, whose result returns as the final parameter update.",
+ "summary_zh": "HALO 的框架图：上层是集中训练、分散执行的人机协作场景（交互空间、两个智能体、真机照片），下层灰色带用公式框串起梯度场、理性差距、稳定法向量、约束优化到闭式投影，再回传参数更新。",
+ "confidence": "high",
+ "notes": "Pre-screen panels=4 was not kept: the regions are connected by arrows in one drawing. The meaning of the green curved and magenta vertical arrows on the scene, of the small arrow with dots between the agent bands, and exactly where the Final parameter update arrow starts are not explained in the caption or text; they are recorded as drawn. The rounded boxes with formulas inside appear to be bitmaps with baked-in shadows.",
+ "venue": "ICML26"
+}

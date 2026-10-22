@@ -1,0 +1,402 @@
+{
+ "paper_id": "iclr24-0056",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MAGNET",
+  "one_liner": "Masked audio generation with a single non-autoregressive transformer that fills RVQ audio tokens over a few parallel decoding iterations, with external rescoring.",
+  "domain": [
+   "text-to-music generation",
+   "masked generative modeling",
+   "audio tokens"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough",
+   "model-anatomy"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "the decoding loop (Restricted Transformer, Rescoring, Span Masking) unrolled over iterations 1, 2, 3 ... s, with a token grid that fills in",
+  "argues": "Inference is a short loop: predict candidate tokens for masked spans, rescore them with an external model, re-mask the least confident spans, repeat until all tokens are fixed.",
+  "subject": "Four decoding iterations of a masked token grid through a restricted transformer, rescoring and span masking, ending in an audio decoder and a waveform.",
+  "elements": [
+   {
+    "name": "Masked RVQ Tokens",
+    "type": "data",
+    "role": "input token grid of an iteration: 4 codebook rows by 6 time steps, fully masked at iteration 1",
+    "drawn_as": "4 x 6 grid of square cells; empty at first, later with numbered green cells",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Restricted Transformer",
+    "type": "module",
+    "role": "the single non-autoregressive transformer that predicts tokens for the masked spans",
+    "drawn_as": "tall lilac square box with bold monospace text, repeated in every column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "T5",
+    "type": "module",
+    "role": "text encoder that turns the prompt into embeddings",
+    "drawn_as": "light grey trapezoid narrowing to the right, at the lower left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Text Embeddings",
+    "type": "data",
+    "role": "text conditioning passed to the transformer by cross attention",
+    "drawn_as": "small 3D slab of three cells",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Cross Attention",
+    "type": "label",
+    "role": "names the arrow that carries the text embeddings into the first transformer",
+    "drawn_as": "italic monospace label over a bent arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Candidate RVQ Tokens",
+    "type": "data",
+    "role": "tokens predicted in this pass; the bottom row is pink at iteration 1, pink rows turn green in later iterations",
+    "drawn_as": "4 x 6 grid with numbered pink and green cells",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Rescoring",
+    "type": "operation",
+    "role": "rescores and ranks the predicted tokens with an external pretrained model",
+    "drawn_as": "short lilac box at the top of each column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Span Masking",
+    "type": "operation",
+    "role": "selects the token spans to re-mask for the next iteration",
+    "drawn_as": "lilac box between two columns, fed by a long orthogonal line from Rescoring",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "EnCodec",
+    "type": "module",
+    "role": "decodes the final tokens to audio",
+    "drawn_as": "light grey trapezoid widening upward at the top right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Decoding Iteration 1, 2, 3, ..., s",
+    "type": "label",
+    "role": "numbers the unrolled iterations; s is the last",
+    "drawn_as": "bold italic monospace caption under each column, an ellipsis for the omitted ones",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "T5",
+    "to": "Text Embeddings",
+    "what": "prompt becomes embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Embeddings",
+    "to": "Restricted Transformer",
+    "what": "text conditioning by cross attention",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Masked RVQ Tokens",
+    "to": "Restricted Transformer",
+    "what": "tokens with masked spans",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Restricted Transformer",
+    "to": "Candidate RVQ Tokens",
+    "what": "predicted tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Candidate RVQ Tokens",
+    "to": "Rescoring",
+    "what": "candidates are rescored",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Rescoring",
+    "to": "Span Masking",
+    "what": "scored candidates decide which spans to re-mask",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Span Masking",
+    "to": "Masked RVQ Tokens (next iteration)",
+    "what": "masked grid for the next decoding iteration",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Restricted Transformer (iteration s)",
+    "to": "EnCodec",
+    "what": "all tokens fixed, decoded to audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "EnCodec",
+    "to": "waveform",
+    "what": "generated audio",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Decoding Iteration 1, 2, 3, ..., s",
+    "kind": "order",
+    "at": "caption under each column",
+    "what": "number the unrolled decoding iterations"
+   },
+   {
+    "marker": "pink and green cell colours",
+    "kind": "identity",
+    "at": "token cells in the candidate and masked grids",
+    "what": "separate newly predicted candidate tokens from tokens kept from earlier passes; no key is given"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "black audio waveform of the generated clip",
+    "content": "audio-waveform",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small black waveform above the EnCodec trapezoid at the top right"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a text prompt: Classic reggae track with an electronic guitar solo",
+    "form": "quoted bold monospace text under the T5 trapezoid",
+    "real_values": true
+   },
+   {
+    "what": "RVQ token ids (for example 13, 993, 129, 323, 422, 83) in 4 x 6 grids, filling in over the iterations",
+    "form": "numbers written in pink and green grid cells",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "stacked rows of small square cells, one row per codebook level and one column per time step, holding token ids; empty = masked, pink = candidate, green = kept",
+    "parts": [
+     "4 x 6 grid",
+     "numbered cells",
+     "empty masked cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a tall lilac square box labelled Restricted Transformer, repeated in every column",
+    "parts": [
+     "box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "T5 text encoder and EnCodec decoder as light grey trapezoids at the two ends, narrowing towards the embeddings and widening towards the waveform",
+    "parts": [
+     "T5 trapezoid",
+     "EnCodec trapezoid"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Start at the T5 prompt and masked grid at the lower left, read each column bottom-up, follow the orthogonal line and Span Masking box into the next column, and end at EnCodec and the waveform at the top right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Decoding iterations 1, 2, 3 and s drawn as four identical columns left to right; in each column token grids and boxes stack bottom-up (masked tokens, Restricted Transformer, candidate tokens, Rescoring); an orthogonal line from each Rescoring box runs right and down into a Span Masking box that feeds the next column; T5 with the prompt sits at the lower left, EnCodec and the waveform at the top right.",
+  "panel_count": 1,
+  "lanes": "four aligned decoding-iteration columns (1, 2, 3, s) with an ellipsis for the omitted iterations",
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.4,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e1d5e7",
+    "used_for": "Restricted Transformer, Rescoring and Span Masking boxes"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "green token cells (tokens kept from earlier passes)"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "pink token cells (candidate tokens of the current pass)"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "empty masked token cells, T5 and EnCodec trapezoids"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "grey outline on one element (a trapezoid or the embedding slab)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on every box and token cell, thin black arrows",
+  "font": "monospace (Courier New), 5 pt bold box names, 3.5 pt italic captions, 3 pt token ids in cells (Arial)",
+  "corners": "square",
+  "arrows": "thin black arrows with small filled heads; orthogonal long line from Rescoring to Span Masking; a bent arrow for cross attention",
+  "rendering": "flat-vector",
+  "effects": "none; the text embeddings are a small 3D slab",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "lilac = the three procedure blocks; green cells = tokens kept from earlier passes; pink cells = candidate tokens of the current pass; empty light grey cells = masked tokens; light grey trapezoids = pretrained text encoder and audio decoder",
+  "line_style_means": "thin black arrows = data flow; the long orthogonal line from Rescoring to Span Masking hands the scored candidates over to the masking step and into the next column",
+  "shape_means": "square box = procedure block; grid of cells = tokens (rows are codebook levels, columns are time steps); trapezoid = encoder or decoder; 3D slab = text embeddings; black waveform = audio",
+  "marker_means": "Decoding Iteration k numbers a column; the numbers in cells are token ids; s marks the last iteration",
+  "emphasis": "The identical lilac stack in every column and the cells turning from empty to pink to green show the sequence being filled in; the last column alone ends in a decoder and a waveform.",
+  "reusable_patterns": [
+   "identical aligned columns for iterations 1, 2, 3 ... s with an ellipsis",
+   "token grid redrawn in every column with cell colour showing the state of each token",
+   "orthogonal return line from the top box to a box that feeds the next column",
+   "numbers written in the cells to show token ids",
+   "pretrained encoder and decoder as grey trapezoids at the two ends",
+   "last column closed by the decoder and the output waveform bitmap"
+  ],
+  "weaknesses": [
+   "no key for the pink and green cell colours; their meaning has to be read from the changes across columns",
+   "the 3 pt token ids are tiny at column width"
+  ]
+ },
+ "resources": {
+  "own": [
+   "audio waveform bitmap",
+   "the example prompt"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token grids with ids",
+   "lilac boxes, trapezoids and the text-embedding slab",
+   "arrows and the return lines"
+  ],
+  "unknown": [
+   "whether the token ids come from a real run or were typed in"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "numbered pink and green token grids",
+   "tall lilac Restricted Transformer boxes",
+   "Rescoring boxes",
+   "Span Masking boxes",
+   "T5 trapezoid and text-embedding slab",
+   "EnCodec trapezoid",
+   "audio waveform",
+   "Decoding Iteration captions"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "MAGNET",
+   "masked generative modeling",
+   "non-autoregressive",
+   "audio tokens",
+   "RVQ",
+   "iterative decoding",
+   "rescoring",
+   "span masking",
+   "text-to-music"
+  ],
+  "tags": [
+   "token-strip",
+   "toy-values-inline"
+  ],
+  "new_tags": [
+   {
+    "name": "iteration-columns",
+    "what": "an iterative procedure drawn as identical aligned columns for iterations 1, 2, 3 ... s with an ellipsis, and a return line handing each column's output to the next column's input"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Unroll an iterative decoding loop as identical aligned columns (iteration 1, 2, 3, ..., s) and let the cell colours of a toy token grid change from column to column so the grid visibly fills in; hand each column's output to the next with an orthogonal line and close the last column with the decoder and the output signal.",
+  "suits": "Iterative or masked decoding, refinement and sampling loops whose state is a grid of discrete tokens."
+ },
+ "tags": [
+  "four aligned columns",
+  "lilac boxes",
+  "monospace labels",
+  "numbered token cells",
+  "orthogonal return lines",
+  "thin outlines"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.4",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "During each iteration, we mask a subset of token spans (starting from a fully masked sequence).",
+   "at each iteration step, we fix the most probable token spans, i.e., the spans that got the top confidence score"
+  ]
+ },
+ "summary": "MAGNET is a masked generative model that produces audio tokens with a single non-autoregressive transformer over a few parallel decoding iterations, with an external pretrained model rescoring the predictions. Figure 1 draws inference as four aligned columns for iterations 1, 2, 3 and s. In each column a 4 x 6 grid of RVQ token ids, fully masked at first, goes up through a lilac Restricted Transformer to a grid of candidate tokens and a Rescoring box; an orthogonal line passes to a Span Masking box that feeds the next column. A T5 encoder and a quoted prompt condition the first transformer by cross attention, pink cells turn green over the iterations, and the last column ends in an EnCodec decoder and a waveform.",
+ "summary_zh": "MAGNET 用单个非自回归 Transformer 并行迭代生成音频 token，并用外部模型重打分。图把推理画成解码迭代 1 到 s 的列：网格经受限 Transformer、重打分、片段掩码传下一列，末列经 EnCodec 出波形。",
+ "confidence": "high",
+ "notes": "The prior put model-anatomy first; the boxes are black boxes named by what they do and the figure draws a loop, so I put stage-pipeline first. The prior counted 4 panels; the iteration columns are not framed, so I record them as lanes. The pink and green cell meaning is read from how cells change between columns and from the paper's 'fix the most probable token spans'; it is not keyed in the figure. Whether the token ids are from a real run is not stated.",
+ "venue": "ICLR24"
+}

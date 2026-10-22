@@ -1,0 +1,384 @@
+{
+ "paper_id": "icml26-0227",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Local redundancy",
+  "one_liner": "An information-theoretic plasticity measure: worst-case redundancy of a local model family, lower-bounded by the expected squared gradient norm on a synthetic memorization task.",
+  "domain": [
+   "plasticity",
+   "continual learning",
+   "information theory"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "concept-schematic"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "three lettered panels in a row, each carrying one claim: geometric intuition, lower-bound sketch with its inequality, result bar chart",
+  "argues": "Plasticity can be measured as the information radius of the local model family; a gradient-norm bound makes it computable and predicts downstream performance better than common heuristics.",
+  "subject": "High and low plasticity as information circles, a blob sketch of the lower bound with its inequality, and a bar chart of metrics.",
+  "elements": [
+   {
+    "name": "(a) Plasticity as Information Radius",
+    "type": "container",
+    "role": "panel title: plasticity is the radius of the set of reachable distributions",
+    "drawn_as": "bold serif two-line title above two circles",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "High Plasticity",
+    "type": "region",
+    "role": "a plastic network reaches many distributions: large radius",
+    "drawn_as": "large pale-blue circle with a blue rim, centre dot P_theta0, a blue arrow to the rim labelled R_n** (large), blue dots inside and on the rim, bold blue caption below",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Low Plasticity",
+    "type": "region",
+    "role": "a rigid network reaches few distributions: small radius",
+    "drawn_as": "small pale-red circle with a red rim, centre dot P_theta0, a short red arrow labelled R_n** (small), a few red dots, bold red caption below",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "(b) Memorization Gradient Lower Bound",
+    "type": "container",
+    "role": "panel title: the memorization gradient lower-bounds local redundancy",
+    "drawn_as": "bold serif two-line title above a blob sketch",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "P_theta0 and local model family",
+    "type": "region",
+    "role": "the model at its current parameters and the distributions reachable in an infinitesimal neighbourhood",
+    "drawn_as": "irregular light-grey blob with a thick dark outline and a black centre dot",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "P_(theta0 + eps grad L)",
+    "type": "data",
+    "role": "the model after one small gradient step",
+    "drawn_as": "black dot on the blob outline reached by a black arrow from the centre",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "Memorization dataset",
+    "type": "data",
+    "role": "synthetic targets that the gradient step moves towards",
+    "drawn_as": "blue dot with blue label outside the blob, reached by a dotted light-blue line from the step",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "R_n**(theta0, eps)",
+    "type": "label",
+    "role": "local redundancy: the full radius of the local family",
+    "drawn_as": "longer brown dashed arrow from the centre to the far blob outline, brown dot at its end",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "R_n**(theta0, eps) >= eps * E_y[|| grad_theta L ||^2]",
+    "type": "formula",
+    "role": "the lower bound of Theorem 3.4 in words of the sketch: gradient norm bounds the radius",
+    "drawn_as": "serif formula in a pale-yellow rounded box with a gold border under the blob",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Correlation with Future Task Performance",
+    "type": "container",
+    "role": "panel title: local redundancy against four existing plasticity measures",
+    "drawn_as": "bold serif two-line title above the bar chart",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "P_theta0 (centre dot)",
+    "to": "circle rim",
+    "what": "radius of the information ball, R_n** (large) or (small)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P_theta0",
+    "to": "P_(theta0 + eps grad L)",
+    "what": "one small gradient step",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "P_(theta0 + eps grad L)",
+    "to": "Memorization dataset",
+    "what": "direction in which the step moves, towards fitting the memorization data",
+    "kind": "other",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "P_theta0",
+    "to": "far outline of the blob",
+    "what": "local redundancy radius R_n**(theta0, eps)",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "short black gradient-step arrow",
+    "to": "longer brown dashed radius arrow",
+    "what": "the squared gradient norm gives only a part of the radius, a lower bound",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(a) information radius",
+    "to": "(b) lower bound and (c) bars",
+    "what": "the radius of (a) is bounded by the computable quantity of (b), and (c) tests how well the measure predicts later performance; links are carried by the caption only",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Plasticity as Information Radius",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "a large blue circle for high plasticity beside a small red circle for low plasticity, each with a radius arrow",
+    "verdict": null
+   },
+   {
+    "label": "(b) Memorization Gradient Lower Bound",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "blob sketch of the local family with a gradient step, the full radius and the inequality",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Correlation with Future Task Performance",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "bar chart of correlation improvement for five measures; local redundancy is the tallest, in blue",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "panel titles",
+    "what": "letters head the three panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "bar chart of correlation improvement (%) for Local Redundancy (Ours), Dist. from Init, Weight Norm, Dead Neurons, Train Grad Norm",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "five bars with black error bars and bold values above (8.9, 7.3, 4.6, 3.4, 1.6), our bar blue and the baselines grey, y axis 0 to 10 and two-line category labels"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "circles and a blob in a plane standing for the set of reachable distributions, with a centre point, scattered points and arrows",
+    "parts": [
+     "circle or blob",
+     "centre point P_theta0",
+     "dots",
+     "radius arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Left to right along the letters: the two circles in (a), the blob with its dashed radius and the formula in (b), then the bars in (c), ending on the tallest blue bar."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "three lettered panels in one row without frames: two circles at the left, a blob sketch with a formula box in the middle, a bar chart at the right",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.45,
+  "text_density": "moderate",
+  "visual_density": "sparse",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#2e86ab",
+    "used_for": "blue: high plasticity circle and arrow, memorization dataset, the Local Redundancy (Ours) bar"
+   },
+   {
+    "hex": "#c5e1ec",
+    "opacity": 0.5,
+    "used_for": "fill of the large high-plasticity circle"
+   },
+   {
+    "hex": "#d64045",
+    "used_for": "red: low plasticity circle, arrow and dots"
+   },
+   {
+    "hex": "#f5c6c6",
+    "opacity": 0.5,
+    "used_for": "fill of the small low-plasticity circle"
+   },
+   {
+    "hex": "#aaaaaa",
+    "used_for": "grey baseline bars"
+   },
+   {
+    "hex": "#f0f0f0",
+    "opacity": 0.8,
+    "used_for": "fill of the local model family blob"
+   },
+   {
+    "hex": "#444444",
+    "used_for": "outlines of the blob and the bars"
+   },
+   {
+    "hex": "#8b5a2b",
+    "used_for": "brown dashed arrow of the local redundancy radius"
+   },
+   {
+    "hex": "#222222",
+    "used_for": "black gradient-step arrow and dots, axis text"
+   },
+   {
+    "hex": "#fffde7",
+    "opacity": 0.9,
+    "used_for": "fill of the formula box"
+   },
+   {
+    "hex": "#c9a227",
+    "used_for": "gold border of the formula box"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-1.5 pt: thick blob outline, 1.25 pt arrows, 0.75 pt bar outlines and axes, black error bars; dashed brown arrow and dotted light-blue line",
+  "font": "serif (DejaVu Serif, Computer Modern for maths): bold 7 pt panel titles, 6.5 pt coloured state labels, 5.5 pt values and math, 3-5 pt subscripts and notes",
+  "corners": "mixed",
+  "arrows": "short thick straight arrows with filled heads from a centre dot: blue and red solid in (a), black solid and brown dashed in (b); dotted light-blue leader",
+  "rendering": "flat-vector",
+  "effects": "translucent fills; no shadows",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = high plasticity and the proposed measure (circle in (a), our bar in (c)); red = low plasticity; grey = existing heuristics and the local model family blob; brown = the local redundancy radius; gold-bordered pale box = the inequality",
+  "line_style_means": "solid arrow = a gradient step or a radius; brown dashed arrow = local redundancy R_n**(theta0, eps); dotted light-blue line = direction to the memorization dataset; black whiskers on bars = error bars (not explained in the figure)",
+  "shape_means": "circle = set of distributions a network can reach, its radius is the redundancy; blob = local model family around theta0; dot = one distribution; bar = one plasticity measure",
+  "marker_means": "(large) and (small) qualify the radii; letters head the panels; bold numbers above the bars give the correlation improvement in percent",
+  "emphasis": "ours is the only coloured bar and the tallest; high plasticity in blue and low plasticity in red sit side by side, the large circle dominating panel (a)",
+  "reusable_patterns": [
+   "two circles of different radius side by side, large blue and small red, to show capacity or plasticity",
+   "blob with a centre point, a short solid arrow and a longer dashed arrow to compare a gradient step with the full radius",
+   "formula in a pale-yellow rounded box under the sketch as the panel's take-away",
+   "one highlighted bar for the proposed measure among grey baselines with bold values above",
+   "serif typography with real math symbols in every panel"
+  ],
+  "weaknesses": [
+   "error bars in (c) are not explained in the figure",
+   "3-4 pt subscripts in the math labels",
+   "the link between the radius of (a) and the bound of (b) is carried by the caption only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured correlation improvements of five measures with error bars"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "circles and blob sketches",
+   "arrows",
+   "formula box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "large blue and small red circles",
+   "grey blob with centre point",
+   "solid and dashed radius arrows",
+   "formula box",
+   "bar chart with error bars",
+   "memorization dataset dot"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "plasticity",
+   "local redundancy",
+   "information radius",
+   "memorization",
+   "continual learning",
+   "gradient norm",
+   "universal compression",
+   "transfer learning"
+  ],
+  "tags": [
+   "embedding-space-sketch",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Express an abstract quantity as a radius: draw a large and a small circle with the same centre marker for high versus low capacity, then sketch the bound as a short step arrow inside a longer dashed radius with the inequality in a box below.",
+  "suits": "Theory-driven papers that introduce a new measure with an intuition, a bound and one empirical comparison, each fitting a small panel."
+ },
+ "tags": [
+  "three lettered panels",
+  "serif matplotlib style",
+  "geometric circles and blob",
+  "highlighted ours bar",
+  "pale formula box",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Local Redundancy as Plasticity (p.4)"
+  ],
+  "evidence": [
+   "a plastic network can reach many distributions (large radius); a rigid network cannot (small radius)",
+   "The expected squared gradient norm on synthetic memorization data lower-bounds local redundancy (Theorem 3.4)",
+   "Local redundancy: a principled, computable measure of plasticity."
+  ]
+ },
+ "summary": "The paper introduces local redundancy, an information-theoretic measure of a network's plasticity derived from universal compression theory, and shows that the expected squared gradient norm on a synthetic memorization task lower-bounds it. Figure 1 is a three-panel hero figure in serif matplotlib style. Panel (a) draws plasticity as information radius: a large blue circle (high plasticity) beside a small red circle (low plasticity), each with a centre point and a radius arrow. Panel (b) sketches the local model family as a grey blob with a short gradient step and a longer brown dashed radius, with the inequality in a pale-yellow box. Panel (c) is a bar chart in which local redundancy (blue) predicts future task performance better than four grey baseline metrics.",
+ "summary_zh": "论文提出可塑性度量“局部冗余”，并证明其下界是合成记忆任务上的期望梯度范数平方。图 1 为三联图：(a) 大蓝圈与小红圈表示高低可塑性；(b) 灰色斑块、梯度步与虚线半径配合不等式展示下界；(c) 柱状图显示它比四个基线更能预测后续表现。",
+ "confidence": "high",
+ "notes": "Prior labels kept in order (contribution-mosaic, concept-schematic). The three panels also read as a narrative (principled, computable, predictive) but no process arrows run between them. The formula is read from the digest text; error bars in (c) have no stated meaning.",
+ "venue": "ICML26"
+}

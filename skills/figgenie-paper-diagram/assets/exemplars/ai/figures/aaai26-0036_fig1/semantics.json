@@ -1,0 +1,521 @@
+{
+ "paper_id": "aaai26-0036",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "IQGS",
+  "one_liner": "Instance query-based Gaussian segmentation for 2DGS scenes; this figure reviews clustering- and classification-based methods and their failures.",
+  "domain": [
+   "Gaussian splatting segmentation",
+   "3D scene understanding",
+   "instance segmentation"
+  ],
+  "subfield": "vision",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "two prior paradigms drawn in mirrored lanes (b) and (c) after a feature-render panel (a), then two failure panels (d) and (e) with mIoU drops; the proposed method is not drawn",
+  "argues": "Existing Gaussian segmentation (clustering- or classification-based) fails when moved from 3DGS to 2DGS or to another scene, with mIoU falling from 60.99% to 35.62% and from 61.76% to 0.82%.",
+  "subject": "Gaussian points rendered to a feature map, two mirrored supervision paradigms, and two transfer-failure comparisons",
+  "elements": [
+   {
+    "name": "Gaussian Points G = {p_i, s_i, q_i, α_i, C_i, I_i}",
+    "type": "formula",
+    "role": "attributes of a Gaussian point; the added learnable instance attribute I_i is the red one",
+    "drawn_as": "bold title with an italic formula under it, I_i in red",
+    "container": "(a) Feature Render",
+    "is_contribution": false
+   },
+   {
+    "name": "Instance 1 (A, B, C) and Instance 2 (D, E, F)",
+    "type": "instance",
+    "role": "Gaussian points that belong to two instances",
+    "drawn_as": "six white ovals with a soft glow, lettered A to F, grouped under the labels Instance 1 and Instance 2",
+    "container": "(a) Feature Render",
+    "is_contribution": false
+   },
+   {
+    "name": "F_render",
+    "type": "operation",
+    "role": "renders the points of view k into pixels of a feature map",
+    "drawn_as": "script F with subscript on dashed vertical lines from each oval down to a lettered circle; rotated label View k at the left",
+    "container": "(a) Feature Render",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Map (a)",
+    "type": "region",
+    "role": "rendered feature map of the view with the six points as lettered circles",
+    "drawn_as": "skewed quadrilateral with a shadow, circled letters A to F",
+    "container": "(a) Feature Render",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature Map with Contrastive Loss",
+    "type": "module",
+    "role": "clustering-based supervision: features of one mask are pulled together, features of different masks pushed apart",
+    "drawn_as": "black-outlined box with two dashed blue ellipses (A B C and D E F), red arrows among the letters, a red double arrow between the ellipses, red text Contrastive Loss",
+    "container": "(b) Clustering-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "SAM Mask (b)",
+    "type": "data",
+    "role": "SAM masks of View 1 ... View n, each numbered by instance",
+    "drawn_as": "dashed box with two small white frames holding blue oval and rounded-square masks numbered 1, 2 and 3, 4",
+    "container": "(b) Clustering-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Mask (b)",
+    "type": "data",
+    "role": "the masks of view k that supervise the feature clusters",
+    "drawn_as": "a blue oval and a blue rounded square with dashed black arrows to the two ellipses",
+    "container": "(b) Clustering-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Classifier",
+    "type": "module",
+    "role": "predicts the instance ID of each pixel",
+    "drawn_as": "purple node-and-edge glyph with the word under it, black arrows in and out",
+    "container": "(c) Classification-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Pred ID Map with CrossEntropy Loss",
+    "type": "module",
+    "role": "classification-based supervision: predicted ID maps compared with mask IDs by cross-entropy",
+    "drawn_as": "black-outlined box with two dashed blue ellipses and red text CrossEntropy Loss",
+    "container": "(c) Classification-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "SAM Mask + DEVA",
+    "type": "data",
+    "role": "SAM masks whose IDs are made consistent across views by the external model DEVA",
+    "drawn_as": "dashed box with View 1 ... View n; the masks are numbered 1, 2 in both views",
+    "container": "(c) Classification-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "Mask #1 / Mask #2 with ID 1 / ID 2",
+    "type": "data",
+    "role": "the global ID given to each mask, pointing at its ellipse",
+    "drawn_as": "blue oval and rounded square with solid red arrows labelled ID 1 and ID 2",
+    "container": "(c) Classification-based Methods",
+    "is_contribution": false
+   },
+   {
+    "name": "3DGS 60.99% / 2DGS 35.62%",
+    "type": "label",
+    "role": "mIoU of the same method on the same scene reconstructed by 3DGS and by 2DGS",
+    "drawn_as": "two coloured segmentation renders with a thick black border, name on a pale top strip, number in white at the bottom",
+    "container": "(d) 3D/2DGS Transfer Effect",
+    "is_contribution": false
+   },
+   {
+    "name": "Target Scene 61.76% / Source Scene 0.82%",
+    "type": "label",
+    "role": "mIoU of the original model and after the classifier is replaced by one from another scene",
+    "drawn_as": "two coloured segmentation renders, the right one speckled with black",
+    "container": "(e) Scene Transfer Effect",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "(a) feature map",
+    "to": "Feature Map in (b)",
+    "what": "rendered features enter the clustering lane",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a) feature map",
+    "to": "Classifier",
+    "what": "rendered features enter the classification lane",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SAM Mask (View k)",
+    "to": "Mask (b)",
+    "what": "the masks of one view",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mask (b)",
+    "to": "dashed ellipses",
+    "what": "masks decide which points are clustered together",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "points inside and between ellipses",
+    "to": "Contrastive Loss",
+    "what": "red arrows pull points of one mask together and push the two clusters apart",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SAM Mask + DEVA (View k)",
+    "to": "Mask #1 / Mask #2",
+    "what": "masks with globally consistent IDs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mask #1, Mask #2",
+    "to": "ellipses in Pred ID Map",
+    "what": "ID 1 and ID 2 supervise the predicted IDs",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(b) and (c) methods",
+    "to": "(d) and (e) renders",
+    "what": "failure of such methods when moved from 3DGS to 2DGS and between scenes (the caption names Gaussian Grouping)",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Feature Render",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "Gaussian points with an instance attribute rendered to a feature map in view k",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Clustering-based Methods",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "mask-supervised feature clusters trained with a contrastive loss",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) Classification-based Methods",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "classifier, DEVA-matched mask IDs and cross-entropy loss",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(d) 3D/2DGS Transfer Effect",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "segmentation render of 3DGS (60.99%) beside 2DGS (35.62%)",
+    "verdict": "fails"
+   },
+   {
+    "label": "(e) Scene Transfer Effect",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "segmentation render of the target scene (61.76%) beside the source scene (0.82%)",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A to F",
+    "kind": "identity",
+    "at": "Gaussian ovals and feature-map circles",
+    "what": "names the six points across (a), (b) and (c)"
+   },
+   {
+    "marker": "1, 2, 3, 4 inside masks",
+    "kind": "identity",
+    "at": "SAM Mask boxes",
+    "what": "instance numbers per view: (b) shows 1, 2 in View 1 and 3, 4 in View n, (c) shows 1, 2 in both views"
+   },
+   {
+    "marker": "ID 1, ID 2, Mask #1, Mask #2",
+    "kind": "identity",
+    "at": "right side of (c)",
+    "what": "names the global IDs given by DEVA"
+   },
+   {
+    "marker": "View 1 ... View n, View k",
+    "kind": "identity",
+    "at": "mask boxes and rotated label in (a)",
+    "what": "names the camera views"
+   },
+   {
+    "marker": "(a) to (e)",
+    "kind": "section",
+    "at": "bold titles under the panels",
+    "what": "names the five panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "instance-segmentation renders of one scene by 3DGS and by 2DGS",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "square thumbnails with a thick black border, name on a pale strip at the top, mIoU in white bold at the bottom; the 2DGS one is fragmented"
+   },
+   {
+    "what": "instance-segmentation renders of the target scene and the source scene",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "same format; the source scene render is speckled with black and has 0.82%"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "white ovals with soft glow lettered A to F",
+    "stands_for": "Gaussian points",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "blue oval and blue rounded square",
+    "stands_for": "two instance masks, in the SAM boxes and as the big mask shapes",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 12
+   },
+   {
+    "depicts": "purple node-and-edge network glyph",
+    "stands_for": "the classifier",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "mIoU drops of the SOTA method: 60.99% to 35.62% from 3DGS to 2DGS and 61.76% to 0.82% between scenes",
+    "form": "numbers printed on the render thumbnails",
+    "real_values": true
+   },
+   {
+    "what": "instance numbers per view: 1, 2 | 3, 4 in the clustering lane and 1, 2 | 1, 2 in the classification lane",
+    "form": "numbers inside blue mask shapes in the SAM mask boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "red arrows pulling letters inside one dashed ellipse together and a red double arrow pushing the two ellipses apart, next to the words Contrastive Loss",
+    "parts": [
+     "intra-cluster arrows",
+     "inter-cluster double arrow",
+     "loss label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "dashed blue ellipses with lettered points inside a black-outlined Feature Map box",
+    "parts": [
+     "ellipses",
+     "lettered points"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "small purple node-and-edge glyph labelled Classifier",
+    "parts": [
+     "input nodes",
+     "hidden nodes",
+     "output nodes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "point-cloud",
+    "drawn_as": "six glowing white ovals labelled A to F standing for Gaussian points of two instances, dropped by dashed lines to a feature map",
+    "parts": [
+     "ovals",
+     "dashed projection lines"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at (a) at the left (Gaussian points down to the feature map), moves right to the mirrored lanes (b) then (c), and ends on the render pairs (d) and (e) at the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Five dashed panels in three columns: (a) tall at the left, (b) over (c) in the wide middle column as mirrored lanes, (d) over (e) at the right as pairs of renders. Every panel has a bold title underneath.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.84,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#376ebb",
+    "used_for": "blue mask shapes and the dashed instance ellipses"
+   },
+   {
+    "hex": "#f20f27",
+    "used_for": "red loss labels, pull and push arrows, ID arrows and the instance attribute I_i"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple classifier glyph"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey dashed panel frames"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark outlines and dashed black arrows"
+   },
+   {
+    "hex": "#f1ecf5",
+    "used_for": "pale lavender glow around the Gaussian ovals",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black outlines and dashed lines, dashed grey panel frames, thick black borders on the render thumbnails",
+  "font": "serif bold (Times New Roman Bold), 5.5-9 pt: 8 pt panel titles, 7 pt labels, italic math for the formula",
+  "corners": "mixed",
+  "arrows": "thin solid and dashed black arrows with small heads, solid red arrows for IDs and for pulls, a red double-headed arrow for the push",
+  "rendering": "flat-vector",
+  "effects": "soft glow on the Gaussian ovals and a shadow under the feature map",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Red = learning signal: the instance attribute I_i, the loss names, the pull and push arrows and the ID arrows; blue = masks and the dashed instance clusters; purple = the classifier; the colours in the renders are random instance colours of the segmentation.",
+  "line_style_means": "Dashed grey = panel frames; dashed black vertical = projection of each Gaussian to its pixel; dashed black arrow = a mask supervising a cluster (b); solid red arrow = ID assignment (c); dashed blue ellipse = the features of one instance.",
+  "shape_means": "White glowing oval = Gaussian point; blue oval and rounded square = two instance masks; lettered circle = a feature at a pixel; purple glyph = classifier; skewed quadrilateral = a rendered feature map.",
+  "marker_means": "Letters A-F name points; numbers in masks and ID 1 / ID 2 name instances, different per view in (b) and shared in (c); percentages on the renders are mIoU.",
+  "emphasis": "Red loss labels and arrows draw the eye in (b) and (c); white bold percentages on the renders show the drop.",
+  "reusable_patterns": [
+   "two paradigms in mirrored lanes with the same boxes, so only the loss label and the supervision arrows differ",
+   "numbers inside mask shapes to show ID consistency across views (1, 2 | 3, 4 against 1, 2 | 1, 2)",
+   "dashed ellipses with lettered points and red arrows for pull and push inside a feature map",
+   "a pair of renders with the metric printed in white on each image to show a drop",
+   "dashed vertical projection lines from 3D points to the pixels of a view with a rotated View label"
+  ],
+  "weaknesses": [
+   "the caption cites a panel (f) that does not exist; the figure has panels (a) to (e)",
+   "the labels Target Scene and Source Scene seem reversed against the caption's source-to-target direction",
+   "the proposed method is not drawn, so the figure motivates but does not explain",
+   "all text is 7 pt bold, which leaves little hierarchy between titles and labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "segmentation renders of a prior method on 3DGS, 2DGS, a target scene and a source scene"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "Gaussian ovals with glow",
+   "mask shapes",
+   "feature-map boxes and ellipses",
+   "classifier glyph",
+   "red and black arrows",
+   "dashed panel frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "lettered Gaussian ovals grouped as two instances",
+   "feature map box with dashed instance ellipses",
+   "red pull and push arrows with loss labels",
+   "SAM mask boxes with numbered masks per view",
+   "purple classifier glyph",
+   "pairs of segmentation renders with mIoU"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "Gaussian splatting",
+   "instance segmentation",
+   "2DGS",
+   "SAM masks",
+   "contrastive learning",
+   "classification-based",
+   "transferability",
+   "mIoU"
+  ],
+  "tags": [
+   "problem-only",
+   "embedding-space-sketch",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "metric-on-render",
+    "what": "the metric value is printed in white bold on the lower edge of each output render, with the method or condition name on a strip at its top"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw competing paradigms as mirrored lanes with identical boxes so that only the loss label and the supervision arrows differ, then follow them with output renders that carry the metric on the image to prove the failure.",
+  "suits": "Motivation figures that review prior paradigms and show their failure on examples without drawing the proposed method."
+ },
+ "tags": [
+  "mirrored-lanes",
+  "dashed-panel-frames",
+  "bold-serif",
+  "red-loss-labels",
+  "render-pairs",
+  "five-panel-grid"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.1)",
+   "front (p.2)",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "clustering-based methods use GT masks to cluster features on the rendered feature map",
+   "classification-based methods introduce a classifier to explicitly predict each pixel’s instance ID",
+   "severe accuracy degradation (60.99% →35.62% on mIoU) when transferring from 3DGS to 2DGS"
+  ]
+ },
+ "summary": "IQGS is a segmentation framework for 2DGS-reconstructed scenes; Figure 1 reviews existing methods and why they fail. Five dashed panels: (a) Gaussian points of two instances, lettered A to F, rendered to a feature map, with a formula whose instance attribute is red; (b) clustering-based methods, where mask-supervised dashed clusters are pulled and pushed by a contrastive loss; (c) classification-based methods in the same layout, with a classifier, ID arrows from DEVA-matched masks and a cross-entropy loss; (d) and (e) pairs of segmentation renders with mIoU printed on them, 60.99% falling to 35.62% from 3DGS to 2DGS and 61.76% to 0.82% across scenes. The proposed method is not drawn.",
+ "summary_zh": "IQGS 是面向 2DGS 场景的分割框架。图 1 回顾现有方法：(a) 高斯点渲染成特征图，(b)(c) 并排对比聚类式与分类式，(d)(e) 用渲染图和 mIoU 展示换到 2DGS 或新场景时精度骤降；未画本文方法。",
+ "confidence": "high",
+ "notes": "The figure shows existing methods and failure cases only (the prior merged tag problem-only fits); the paper's own method is not drawn. The caption refers to panels (d) and (f) but the figure has (a) to (e), so (f) is read as (e). The caption says the drop is from source to target scenes, while the figure labels the 61.76% render Target Scene and the 0.82% render Source Scene. The paper text names Gaussian Grouping as the method behind the numbers; the figure itself does not.",
+ "venue": "AAAI26"
+}

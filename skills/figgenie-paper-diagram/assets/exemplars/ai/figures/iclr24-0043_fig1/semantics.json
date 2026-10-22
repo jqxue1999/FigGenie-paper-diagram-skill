@@ -1,0 +1,449 @@
+{
+ "paper_id": "iclr24-0043",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "InstructScene",
+  "one_liner": "Instruction-driven 3D indoor scene synthesis in two stages: a semantic graph prior designs a scene graph, then a layout decoder places the objects.",
+  "domain": [
+   "3D indoor scene synthesis",
+   "text-driven generation",
+   "scene graphs"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "three titled stages joined by two verb-labelled thick arrows, one real instruction followed through, with a codebook zoom underneath",
+  "argues": "A semantic graph designed from the instruction, with object features and spatial relations, turns text into a coherent 3D scene when objects are then embodied from the graph.",
+  "subject": "One bedroom instruction turned into a coloured object graph with relation-labelled edges and then into a decoded 3D scene; one node opened into codebook features.",
+  "elements": [
+   {
+    "name": "User Instructions",
+    "type": "text-block",
+    "role": "natural-language instruction naming four objects and their spatial relations",
+    "drawn_as": "wavy rounded frame beside a person icon; object phrases underlined in colours, left and above in bold italic",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Design",
+    "type": "operation",
+    "role": "stage 1: designs a holistic semantic graph from the user instruction",
+    "drawn_as": "thick black arrow with a line-art robot head above it and the verb below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Semantic Graph Prior",
+    "type": "module",
+    "role": "graph in which each node is an object with semantic features and each edge a spatial relation",
+    "drawn_as": "five coloured circles joined by curved edges, relation words in small rounded white boxes on the edges",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "front / above / left of / right of",
+    "type": "label",
+    "role": "spatial relation carried by an edge",
+    "drawn_as": "small white rounded boxes with thin black outlines sitting on the edges",
+    "container": "Semantic Graph Prior",
+    "is_contribution": false
+   },
+   {
+    "name": "gold node",
+    "type": "data",
+    "role": "one object node, opened to show its semantic feature",
+    "drawn_as": "gold circle with a dark gold outline, source of a dashed gold wedge",
+    "container": "Semantic Graph Prior",
+    "is_contribution": null
+   },
+   {
+    "name": "Object Feature Codebook",
+    "type": "data",
+    "role": "discrete set of object feature entries the node features are taken from",
+    "drawn_as": "black-framed box with a 3 x 7 grid of colour swatches and an ellipsis",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "zoom of one node",
+    "type": "container",
+    "role": "shows the node's feature as a stack of four swatches beside the object image",
+    "drawn_as": "dashed gold rounded box with four swatches, a black divider and a wardrobe image",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Embody",
+    "type": "operation",
+    "role": "stage 2: places objects in a scene by decoding 7-DoF attributes from the graph prior",
+    "drawn_as": "thick black arrow with a line-art robot arm above it and the verb below",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Decoded 3D Scene",
+    "type": "sample",
+    "role": "the synthesised bedroom",
+    "drawn_as": "perspective render of a bed, wardrobe, nightstand and ceiling lamp inside thin white 3D boxes",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "User Instructions",
+    "to": "Semantic Graph Prior",
+    "what": "the instruction is turned into a semantic graph",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Semantic Graph Prior",
+    "to": "Decoded 3D Scene",
+    "what": "object placements are decoded from the graph",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "underlined object phrases",
+    "to": "graph nodes",
+    "what": "each phrase has a node of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "bold italic left and above",
+    "to": "edge labels left of and above",
+    "what": "the relation words of the text reappear on the edges",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "gold node",
+    "to": "zoom of one node",
+    "what": "the node is opened into its feature swatches and object image",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Object Feature Codebook",
+    "to": "zoom of one node",
+    "what": "the swatches of a node come from the codebook",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "person icon",
+    "to": "User Instructions",
+    "what": "the user who speaks the instruction",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Design",
+    "kind": "order",
+    "at": "first thick arrow",
+    "what": "first step: build the semantic graph"
+   },
+   {
+    "marker": "Embody",
+    "kind": "order",
+    "at": "second thick arrow",
+    "what": "second step: decode the scene layout"
+   },
+   {
+    "marker": "User Instructions, Semantic Graph Prior, Decoded 3D Scene, Object Feature Codebook",
+    "kind": "section",
+    "at": "titles above each part",
+    "what": "head the stages and the codebook strip"
+   },
+   {
+    "marker": "underline in object colour",
+    "kind": "identity",
+    "at": "object phrases of the instruction",
+    "what": "ties each phrase to the node of the same colour"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "rendered 3D bedroom: black double bed, wooden wardrobe, grey nightstand and a ceiling lamp over the bed",
+    "content": "3d-render",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "perspective render on a pale floor, each object enclosed in a thin white 3D bounding box, tilted frame cut at the right"
+   },
+   {
+    "what": "wardrobe model image shown as the object belonging to the zoomed node",
+    "content": "3d-render",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "product-style render on a pale grey ground inside the dashed zoom box, right of a black divider"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "person outline",
+    "stands_for": "the user who gives the instruction",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot head with antenna",
+    "stands_for": "the Design stage that builds the graph",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot arm",
+    "stands_for": "the Embody stage that places objects",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a bedroom instruction: a grey nightstand left of a wooden wardrobe with doors, a white ceiling lamp with a wooden circle above a black double bed",
+    "form": "text in a wavy bubble with coloured underlined phrases",
+    "real_values": true
+   },
+   {
+    "what": "the semantic graph and the decoded scene for that instruction",
+    "form": "five coloured nodes with relation-labelled edges, and a 3D render",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a wavy rounded frame holding the instruction, with object phrases underlined in colours and relation words in bold italic",
+    "parts": [
+     "instruction text",
+     "coloured underlines",
+     "bold italic relation words"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "scene-graph",
+    "drawn_as": "coloured circle nodes joined by curved edges, each edge carrying a relation word in a small rounded white box",
+    "parts": [
+     "object nodes",
+     "edges",
+     "relation labels"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "a framed grid of colour swatches with an ellipsis, a block arrow to a zoom showing four swatches for one node",
+    "parts": [
+     "swatch grid",
+     "ellipsis",
+     "block arrow",
+     "zoom of four swatches"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Start at the person and the instruction at the left, follow the Design arrow to the graph, the Embody arrow to the 3D scene, then glance at the codebook strip and its zoom below."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A top row of three titled stages (instruction bubble with a person icon, semantic graph, 3D render) joined by two thick arrows with a robot-head and a robot-arm icon above them and a verb below; a lower strip holds the Object Feature Codebook swatch grid, a big grey curved arrow and a dashed gold zoom box tied by a wedge to one graph node.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.71,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#8c6d68",
+    "used_for": "grey nightstand: its phrase in the instruction and the two rosy-brown graph nodes"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "wooden wardrobe: its phrase, its graph node, and the dashed zoom wedge and box"
+   },
+   {
+    "hex": "#7f6000",
+    "used_for": "dark gold outline of the wardrobe node and a swatch in the zoom stack"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "white ceiling lamp: pale yellow graph node"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "amber outline of the lamp node and a codebook swatch"
+   },
+   {
+    "hex": "#404040",
+    "used_for": "black double bed: its phrase and the dark centre node"
+   },
+   {
+    "hex": "#843c0c",
+    "used_for": "brown swatch in the codebook and the zoom stack"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "large grey block arrow from the codebook to the zoom box"
+   },
+   {
+    "hex": "#203864",
+    "used_for": "navy swatch in the codebook grid"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "green swatch in the codebook grid"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black on relation labels and graph edges, 0.75 pt on frames; dashed gold wedge and zoom box; thick filled black arrows for the two stages",
+  "font": "serif (Times New Roman), 6.5 pt instruction text, 7.5 pt titles, 5 pt relation labels, bold italic for spatial words",
+  "corners": "mixed",
+  "arrows": "two thick black filled arrows labelled by a verb under each; thin curved graph edges with small heads; one wide grey curved block arrow",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "node colour = object identity, repeated on its phrase in the instruction (grey nightstand rosy brown, wooden wardrobe gold, white ceiling lamp pale yellow, black double bed dark grey); gold also draws the zoom wedge and box; codebook swatches stand for feature entries",
+  "line_style_means": "dashed gold wedge and box = zoom into one node; thin curved arrows = spatial relations between objects; thick black arrows = stage transitions; grey block arrow = lookup in the codebook",
+  "shape_means": "circle = object node; small rounded white box on an edge = relation word; wavy rounded frame = the user's instruction; framed grid = codebook",
+  "marker_means": "coloured underline = an object phrase; bold italic = a spatial relation word; the verb under a thick arrow names the stage",
+  "emphasis": "The instruction's colour-coded phrases are tied to the graph nodes, and the single gold node is blown up by a dashed wedge, so the reader sees where each phrase ends up and what a node's feature is made of.",
+  "reusable_patterns": [
+   "colour-coded underlined phrases in the instruction matched to graph node colours",
+   "verb-labelled thick arrows with a small line-art icon above for each stage",
+   "dashed wedge from one graph node into a framed inset of its features",
+   "codebook drawn as a framed swatch grid with an ellipsis and a block arrow to the inset",
+   "relation words in small rounded boxes sitting on curved graph edges",
+   "result render with the objects enclosed in thin 3D bounding boxes"
+  ],
+  "weaknesses": [
+   "the codebook swatch colours carry no key, so their meaning rests on the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real instruction text",
+   "the rendered 3D bedroom",
+   "the wardrobe model image"
+  ],
+  "stock": [
+   "line-art person icon",
+   "line-art robot head icon",
+   "line-art robot arm icon",
+   "Office-style colour swatches"
+  ],
+  "generated": [],
+  "drawn": [
+   "graph nodes, curved edges and relation labels",
+   "wavy instruction frame, arrows, wedge and frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "wavy instruction bubble with colour-coded underlined phrases",
+   "person icon",
+   "robot head and robot arm icons above thick arrows",
+   "semantic graph with coloured nodes and relation-labelled edges",
+   "dashed gold wedge and zoom box",
+   "codebook swatch grid",
+   "grey block arrow",
+   "bedroom 3D render with bounding boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "3D indoor scene synthesis",
+   "instruction-driven generation",
+   "semantic graph prior",
+   "layout decoder",
+   "feature codebook",
+   "scene graph",
+   "text-to-3D scene",
+   "7-DoF layout"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "zoom-callout",
+   "knowledge-graph",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "swatch-codebook",
+    "what": "a discrete codebook or vocabulary drawn as a framed grid of coloured swatches with an ellipsis, then zoomed to the few entries one item uses"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Thread one real instruction through every stage and keep one colour per object from the underlined phrase to the graph node, then open a single node with a dashed wedge into the features it is built from; a verb and a small icon on each thick arrow name the stages without extra boxes.",
+  "suits": "Text-to-structure-to-output generators (scenes, layouts, molecules) where an instruction becomes an intermediate structure and then a rendered result."
+ },
+ "tags": [
+  "verb-labelled thick arrows",
+  "line-art icons",
+  "coloured underlines",
+  "dashed gold zoom wedge",
+  "serif labels",
+  "3D render result"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "INSTRUCTSCENE first designs a holistic semantic graph based on user instruction.",
+   "each node is an object endowed with semantic features and each edge represents a spatial relationship between objects"
+  ]
+ },
+ "summary": "InstructScene is a generative framework for instruction-driven 3D indoor scene synthesis, made of a semantic graph prior and a layout decoder. Figure 1 follows one bedroom instruction through the method. A person icon and a wavy bubble hold the instruction, where the phrases for the nightstand, wardrobe, ceiling lamp and bed are underlined in colours and the words left and above are bold italic. A thick arrow labelled Design, with a robot-head icon, leads to a graph whose coloured nodes match those phrases and whose curved edges carry relation words. A second arrow labelled Embody, with a robot-arm icon, leads to a decoded 3D bedroom render. Below, an Object Feature Codebook swatch grid is linked by a grey arrow to a dashed gold zoom of the wardrobe node.",
+ "summary_zh": "InstructScene 由语义图先验和布局解码器组成，按文字指令合成 3D 室内场景。图以一句卧室指令为例：彩色下划线短语对应同色图节点，边标空间关系；Design 生成语义图，Embody 得到 3D 场景，下方虚线放大特征码本。",
+ "confidence": "high",
+ "notes": "The prior said panels=3; the three titled stages are not framed or separated, so I count one drawing with a pipeline of titled stages. The graph has two rosy-brown nodes while the instruction names one nightstand; the figure does not explain the second. The knowledge-graph tag is used for the drawn form (coloured nodes with relation-named edges), although this is a spatial scene graph.",
+ "venue": "ICLR24"
+}

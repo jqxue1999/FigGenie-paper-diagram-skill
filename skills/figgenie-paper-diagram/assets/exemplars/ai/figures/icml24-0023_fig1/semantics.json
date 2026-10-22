@@ -1,0 +1,412 @@
+{
+ "paper_id": "icml24-0023",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Counterfactual simulatability",
+  "one_liner": "An evaluation of whether a model's natural-language explanations let humans predict its answers on counterfactual inputs, measured by precision and generality.",
+  "domain": [
+   "natural language explanations",
+   "LLM evaluation",
+   "human mental models"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "scenario-narrative",
+  "variant_note": "one chat scenario that forks into the answer the user expects and the answer the AI really gives",
+  "argues": "A factually correct explanation can still mislead: the answer a user infers from it for a related question (Yes) differs from what the model actually answers (No).",
+  "subject": "A BLT-in-Casablanca chat in which GPT-4's explanation leads a user to expect a different answer from the one GPT-4 gives to a related question.",
+  "elements": [
+   {
+    "name": "AI answers a user's question with an explanation",
+    "type": "label",
+    "role": "heading that names the first part of the scenario",
+    "drawn_as": "plain text at the top, the word 'AI' in orange and 'user's' in blue",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Is it hard to get a BLT in Casablanca?",
+    "type": "sample",
+    "role": "the human user's original question",
+    "drawn_as": "light-blue rounded bubble on the left, next to a blue user icon",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Answer: Yes",
+    "type": "sample",
+    "role": "GPT-4's answer to the question",
+    "drawn_as": "small orange rounded bubble, right-aligned, next to a robot icon; 'Answer:' in bold",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Explanation: Casablanca is a large city in Morocco. ...",
+    "type": "text-block",
+    "role": "GPT-4's natural-language explanation: pork is not commonly consumed in a Muslim-majority country and a BLT contains bacon, so a BLT may be hard to find",
+    "drawn_as": "large orange rounded card, five lines of text, bold 'Explanation:' lead-in, robot icon at its right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "The user forms an expectation of how AI would answer related questions",
+    "type": "label",
+    "role": "names the left branch as the user's inferred behaviour of the AI",
+    "drawn_as": "grey text, 'expectation' in bold-italic blue",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "How AI actually answers related questions",
+    "type": "label",
+    "role": "names the right branch as the model's real behaviour",
+    "drawn_as": "grey text, 'actually' in bold-italic orange",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "pink thought bubble holding the expected exchange",
+    "type": "container",
+    "role": "what the user imagines: the AI would say Yes to the related pork-belly question",
+    "drawn_as": "large translucent pink ellipse with two small trailing circles pointing to a user icon at the bottom left",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Is it hard to find pork belly in Casablanca? (expected branch)",
+    "type": "sample",
+    "role": "the related (counterfactual) question as the user imagines it being asked",
+    "drawn_as": "blue bubble over the pink ellipse, so it looks purple-grey; user icon on its left",
+    "container": "pink thought bubble holding the expected exchange",
+    "is_contribution": false
+   },
+   {
+    "name": "Answer: Yes (expected branch)",
+    "type": "sample",
+    "role": "the answer the user predicts from the explanation",
+    "drawn_as": "orange bubble with a robot icon on its right",
+    "container": "pink thought bubble holding the expected exchange",
+    "is_contribution": false
+   },
+   {
+    "name": "Is it hard to find pork belly in Casablanca? (actual branch)",
+    "type": "sample",
+    "role": "the same related question really asked to the AI",
+    "drawn_as": "light-blue bubble with a user icon on its left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Answer: No (actual branch)",
+    "type": "sample",
+    "role": "what the AI really answers to the related question",
+    "drawn_as": "orange bubble with a robot icon on its right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "inconsistent!",
+    "type": "label",
+    "role": "verdict on the mismatch between the expected Yes and the actual No",
+    "drawn_as": "bold red word sitting on a curved red double-headed arrow between the two answers",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "The user is misled by the explanation and forms a wrong mental model of the AI.",
+    "type": "label",
+    "role": "takeaway sentence stating the consequence",
+    "drawn_as": "two lines of black text at the bottom, 'misled' bold-italic red and 'wrong mental model' red",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "blue user avatar (x4)",
+    "type": "actor",
+    "role": "the human user asking and imagining",
+    "drawn_as": "flat bust icon, blue",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "yellow robot head (x4)",
+    "type": "actor",
+    "role": "GPT-4, the AI that answers",
+    "drawn_as": "flat round-faced robot with antenna, orange-yellow",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Is it hard to get a BLT in Casablanca?",
+    "to": "Answer: Yes",
+    "what": "user asks, GPT-4 answers",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Answer: Yes",
+    "to": "Explanation: Casablanca is a large city in Morocco. ...",
+    "what": "the answer is justified by a stacked explanation card",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Explanation: Casablanca is a large city in Morocco. ...",
+    "to": "pink thought bubble holding the expected exchange",
+    "what": "the user reads the explanation and infers how the AI would answer a related question",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Explanation: Casablanca is a large city in Morocco. ...",
+    "to": "Answer: No (actual branch)",
+    "what": "the AI is really asked the related question and answers it",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Answer: Yes (expected branch)",
+    "to": "Answer: No (actual branch)",
+    "what": "expected and actual answers disagree",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pink thought bubble holding the expected exchange",
+    "to": "blue user avatar (x4)",
+    "what": "the bubble is the thought of the user icon at the bottom left",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "words 'AI', 'actually' in orange and 'user's', 'expectation' in blue",
+    "to": "orange AI bubbles and blue user bubbles",
+    "what": "word colour repeats the colour of the actor's bubbles",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "blue person bust (head and shoulders)",
+    "stands_for": "the human user, in the chat, in the thought bubble and as the thinker",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "round robot head with antenna and a smiling face",
+    "stands_for": "GPT-4, the AI that answers",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "a real GPT-4 exchange: the BLT-in-Casablanca question, its Yes answer and its pork-based explanation, then the related pork-belly question with the expected Yes and the actual No",
+    "form": "chat bubbles with full text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "rounded speech bubbles with a person or robot icon beside each turn; user turns blue and left, AI turns orange and right",
+    "parts": [
+     "user bubble",
+     "AI bubble",
+     "avatar icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "a small cartoon robot head beside every AI turn",
+    "parts": [
+     "robot head icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "thought-bubble",
+    "drawn_as": "a large translucent ellipse with two shrinking circles trailing to the thinking user, enclosing an imagined chat turn",
+    "parts": [
+     "ellipse",
+     "two trailing circles",
+     "user icon"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the heading and the blue question bubble at the top, goes down through the orange answer and explanation card, follows the two black arrows to the left (expected) and right (actual) exchanges, then along the red 'inconsistent!' arrow to the closing sentence."
+ },
+ "layout": {
+  "arrangement": "chat-column",
+  "arrangement_note": "A top-down chat transcript (user question on the left, AI answer and a wide explanation card on the right and centre) forks through two thin black arrows into two lower columns: the user's expected exchange inside a pink thought bubble on the left and the AI's actual exchange on the right. A red curved double-headed arrow links the two answers; a takeaway sentence and a user icon sit at the bottom.",
+  "panel_count": 1,
+  "lanes": "two aligned lower columns: the expected exchange (left, inside the thought bubble) and the actual exchange (right)",
+  "direction": "top-down",
+  "reading_start": "top",
+  "grouping": [
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.02,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff8b25",
+    "used_for": "AI turns: answer bubbles and the explanation card, the words 'AI' and 'actually'",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#3e74d1",
+    "used_for": "user turns: question bubbles, the words 'user's' and 'expectation'",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#ff2600",
+    "used_for": "the problem: thought-bubble tint, the 'inconsistent!' arrow and word, 'misled' and 'wrong mental model'",
+    "opacity": 0.1
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no outlines on bubbles; 0.5 pt black thin arrows, one 0.75 pt red curved arrow",
+  "font": "sans (Arial Narrow family), 6.5-7.5 pt; bold lead-ins ('Answer:', 'Explanation:'), bold-italic coloured key words",
+  "corners": "rounded",
+  "arrows": "thin straight black arrows with small heads for the fork; one curved red arrow with heads at both ends for the contradiction",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = the AI (its bubbles, explanation, the words 'AI' and 'actually'); blue = the human user (questions, 'user's', 'expectation'); red = the failure (inconsistent arrow, 'misled', 'wrong mental model', pink thought bubble)",
+  "line_style_means": "thin black arrows = from the explanation to the two follow-up exchanges; red curved double-headed arrow = the two answers contradict each other",
+  "shape_means": "rounded rectangle = one chat turn; large pink ellipse with trailing circles = what the user imagines; person icon = user; robot icon = AI",
+  "marker_means": "no numbers or letters; the bold red word 'inconsistent!' is the verdict on the pair of answers",
+  "emphasis": "red is kept for the failure only: the double-headed arrow with its word, and the red words in the closing sentence; coloured bold-italic key words in the grey side labels",
+  "reusable_patterns": [
+   "role colours repeated in the heading words so the text itself is the colour key",
+   "one source forks into 'expected' and 'actual' lanes tied by a red double-headed arrow carrying a verdict word",
+   "thought-bubble ellipse around an imagined chat turn",
+   "bold-italic coloured key words inside grey side labels",
+   "closing sentence under the contrast with the consequence words in red"
+  ],
+  "weaknesses": [
+   "6.5 pt text in the bubbles is small for a single-column figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real GPT-4 question, answer and explanation",
+   "the related pork-belly question with expected and actual answers"
+  ],
+  "stock": [
+   "flat user avatar bitmap",
+   "flat robot-head bitmap"
+  ],
+  "generated": [],
+  "drawn": [
+   "chat bubbles and explanation card",
+   "thought-bubble ellipse and circles",
+   "black fork arrows and the red double-headed arrow"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "user avatar icons",
+   "robot AI icons",
+   "question and answer bubbles",
+   "explanation card",
+   "pink thought bubble with expected exchange",
+   "red double-headed 'inconsistent!' arrow",
+   "fork arrows"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "natural language explanations",
+   "counterfactual simulatability",
+   "mental model",
+   "inconsistency",
+   "LLM explanations",
+   "GPT-4",
+   "expectation vs actual",
+   "faithfulness"
+  ],
+  "tags": [
+   "problem-only",
+   "claim-banner",
+   "verdict-marks",
+   "colour-coded-groups",
+   "highlighted-text-spans",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "thought-bubble-expectation",
+    "what": "an imagined or expected exchange drawn inside a translucent thought-bubble ellipse that trails to the person who imagines it, set beside the real exchange"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Stage the failure as a chat that forks into an 'expected' lane (in a thought bubble) and an 'actual' lane, tie the two answers with a red double-headed arrow carrying one verdict word, and reuse the actor colours in the heading words.",
+  "suits": "Motivating examples where a user's belief about a model differs from its behaviour: explanations, trust, calibration, consistency, sycophancy."
+ },
+ "tags": [
+  "chat-transcript",
+  "role-colour-coding",
+  "thought-bubble",
+  "flat-vector",
+  "icon-avatars",
+  "single-column",
+  "motivating-example"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract page, Figure 1 (p.1)"
+  ],
+  "evidence": [
+   "what GPT-4 actually answers (right) is different from what the user would expect (left) based on the explanation",
+   "the explanation misleads humans to form a wrong mental model of GPT-4 even though it is factually correct"
+  ]
+ },
+ "summary": "The paper asks whether LLMs explain themselves: can a human use a model's natural-language explanation to predict its answers on related counterfactual inputs? It proposes counterfactual simulatability, scored by precision and generality, and finds low precision. Figure 1 is a single motivating chat. A user asks whether a BLT is hard to get in Casablanca, GPT-4 answers Yes with a pork-and-religion explanation, and two arrows fork into what the user would expect for a related pork-belly question (Yes, inside a pink thought bubble) and what GPT-4 really answers (No), linked by a red double-headed arrow labelled 'inconsistent!'. Blue marks the user, orange the AI, red the problem, and a closing sentence states the wrong mental model.",
+ "summary_zh": "论文提出“反事实可模拟性”，检验模型的自然语言解释能否帮人预测其在相关输入上的回答。图1用聊天示例：GPT-4答BLT问题并给出解释，用户据此预期猪腩肉问题答Yes，实际答No，红色箭头标出“inconsistent!”。",
+ "confidence": "high",
+ "notes": "No paragraph of the paper mentioning the figure was available; everything rests on the caption, the abstract and the figure. Prior label 'worked-walkthrough, side-by-side-contrast' kept, with 'concept-schematic' added because the figure shows the idea of a mismatched mental model rather than the system. The bitmap robot and user icons are each one image placed four times.",
+ "venue": "ICML24"
+}

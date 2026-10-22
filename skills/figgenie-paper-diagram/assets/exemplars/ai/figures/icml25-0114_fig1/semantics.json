@@ -1,0 +1,447 @@
+{
+ "paper_id": "icml25-0114",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "STAR (RaRSQ)",
+  "one_liner": "Rotation-augmented residual skill quantization that avoids codebook collapse of VQ-VAE's straight-through gradient when learning discrete robot skills.",
+  "domain": [
+   "robot skill abstraction",
+   "vector quantization",
+   "robotic manipulation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "naive VQ and RaRSQ as two rows of the same toy embedding space, three columns for before update, gradient flow and after update, under a one-line pipeline strip",
+  "argues": "Naive VQ gives all embeddings of one code the same gradient and lets codes collapse; RaRSQ gives them different directions and keeps the geometry, so more codes (skills) stay in use.",
+  "subject": "A skill-quantization pipeline strip and a grid of toy embedding spaces showing gradients and codebook updates for naive VQ and RaRSQ.",
+  "elements": [
+   {
+    "name": "Encoder",
+    "type": "module",
+    "role": "maps the observation image to continuous features",
+    "drawn_as": "lavender trapezoid narrowing to the right with the name written vertically",
+    "container": "top strip",
+    "is_contribution": false
+   },
+   {
+    "name": "feature cube",
+    "type": "data",
+    "role": "encoder output before quantization",
+    "drawn_as": "grey isometric block cut into a grid of cells",
+    "container": "top strip",
+    "is_contribution": null
+   },
+   {
+    "name": "Quantization",
+    "type": "operation",
+    "role": "replaces each feature cell by a codebook vector",
+    "drawn_as": "grey bracket line from the feature cube over the codebook to the quantized cube, with an arrowhead",
+    "container": "top strip",
+    "is_contribution": true
+   },
+   {
+    "name": "Codebook",
+    "type": "data",
+    "role": "the learned vectors (skills) used for quantization",
+    "drawn_as": "dashed rounded box with isometric bars in orange, green, light blue, an ellipsis and pale cyan",
+    "container": "top strip",
+    "is_contribution": null
+   },
+   {
+    "name": "quantized cube",
+    "type": "data",
+    "role": "features after quantization, each cell in the colour of its codebook vector",
+    "drawn_as": "isometric block whose cells are orange, green and blue",
+    "container": "top strip",
+    "is_contribution": null
+   },
+   {
+    "name": "Decoder",
+    "type": "module",
+    "role": "maps the quantized features back to the image",
+    "drawn_as": "lavender trapezoid widening to the right with the name written vertically",
+    "container": "top strip",
+    "is_contribution": false
+   },
+   {
+    "name": "Before Update / Gradient Flow / After Update",
+    "type": "label",
+    "role": "column headings naming the three stages of one update",
+    "drawn_as": "bold serif headings above the grid",
+    "container": "bottom grid",
+    "is_contribution": null
+   },
+   {
+    "name": "Naive VQ / RaRSQ",
+    "type": "label",
+    "role": "row headings naming the two methods",
+    "drawn_as": "bold serif row labels at the left of the grid",
+    "container": "bottom grid",
+    "is_contribution": null
+   },
+   {
+    "name": "embedding-space discs",
+    "type": "instance",
+    "role": "one toy space with about eight encoder embeddings (hollow circles), three codebook vectors (filled circles) and curved partition boundaries, redrawn in six cells",
+    "drawn_as": "dashed circle with two arrowed axes, teal hollow circles, orange, green and light blue filled circles, thin blue curves",
+    "container": "bottom grid",
+    "is_contribution": true
+   },
+   {
+    "name": "gradient arrows",
+    "type": "other",
+    "role": "per-embedding gradient direction in the middle column: identical within a partition for naive VQ, differing in direction for RaRSQ",
+    "drawn_as": "tiny dark navy arrows on the hollow circles",
+    "container": "bottom grid",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input image",
+    "to": "Encoder",
+    "what": "observation image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Encoder",
+    "to": "feature cube",
+    "what": "continuous features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "feature cube",
+    "to": "quantized cube",
+    "what": "Quantization against the codebook",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Codebook",
+    "to": "quantized cube",
+    "what": "cells take the colours of the codebook vectors they are assigned",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "quantized cube",
+    "to": "Decoder",
+    "what": "quantized features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Decoder",
+    "to": "output image",
+    "what": "reconstructed image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Before Update",
+    "to": "Gradient Flow",
+    "what": "next stage of the update",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Gradient Flow",
+    "to": "After Update",
+    "what": "next stage of the update",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Naive VQ row",
+    "to": "RaRSQ row",
+    "what": "same toy points and codes, different gradients and different outcome",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "top strip (Quantization, Codebook)",
+    "to": "embedding-space discs",
+    "what": "the discs visualise what the quantization step does to embeddings and codebook during training",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "pipeline strip: image, encoder, feature cube, quantization with codebook, quantized cube, decoder, image",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "2 by 3 grid of embedding-space discs: naive VQ above RaRSQ, before update, gradient flow and after update",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Before Update, Gradient Flow, After Update",
+    "kind": "section",
+    "at": "column headings of the grid",
+    "what": "name the three stages of one update"
+   },
+   {
+    "marker": "Naive VQ, RaRSQ",
+    "kind": "section",
+    "at": "row labels of the grid",
+    "what": "name the two methods compared"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "a robot arm in a tabletop kitchen scene with two red arrows on the arm",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small photos at both ends of the strip, the same picture used as input and as output, red arrows drawn on top as vectors"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one toy embedding space with about eight encoder embeddings and three codebook vectors, redrawn six times",
+    "form": "dashed discs with axes, hollow and filled points, blue partition curves and small gradient arrows",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "two lavender trapezoids, the encoder narrowing and the decoder widening towards the latent, with the name written vertically",
+    "parts": [
+     "Encoder trapezoid",
+     "Decoder trapezoid"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "encoder, grey feature block, dashed codebook box of coloured bars, coloured quantized block, decoder",
+    "parts": [
+     "feature cube",
+     "codebook bars",
+     "quantized cube"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "dashed circle with two arrowed axes holding hollow embedding circles, filled codebook points, blue partition curves and small gradient arrows",
+    "parts": [
+     "axes",
+     "hollow circles",
+     "filled circles",
+     "partition curves",
+     "gradient arrows"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the photo at the left end of the strip and follows the grey arrows to the output photo, then drops to the grid and reads the Naive VQ row left to right before the RaRSQ row."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "A one-line pipeline strip on top, separated by a dashed rule from a grid of six toy embedding-space discs below (rows Naive VQ and RaRSQ, columns Before Update, Gradient Flow, After Update).",
+  "panel_count": 2,
+  "lanes": "2 aligned rows by 3 aligned columns of embedding-space discs",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.48,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "encoder and decoder trapezoids"
+   },
+   {
+    "hex": "#aeaeae",
+    "used_for": "grey faces of the feature cube"
+   },
+   {
+    "hex": "#e0e0e0",
+    "used_for": "light grey faces of the feature cube"
+   },
+   {
+    "hex": "#f5b482",
+    "used_for": "orange codebook vector, its cells and the orange point"
+   },
+   {
+    "hex": "#c59169",
+    "used_for": "darker side faces of the orange bars"
+   },
+   {
+    "hex": "#a9c7b5",
+    "used_for": "green codebook vector, its cells and the green point"
+   },
+   {
+    "hex": "#9dd5f5",
+    "used_for": "light blue codebook vector, its cells and the blue point",
+    "approx": true
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "axes and thin outlines (stroke)"
+   },
+   {
+    "hex": "#a6cac7",
+    "used_for": "hollow circles of the encoder embeddings (stroke)"
+   },
+   {
+    "hex": "#061747",
+    "used_for": "gradient arrows on the embeddings (stroke)"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "curved partition boundaries (stroke)"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red arrows over the robot photos (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt thin lines: dark slate axes, dashed black circles and codebook box, blue boundaries, grey strip arrows",
+  "font": "serif (Times New Roman) bold, 4-6 pt: component names 6 pt, headings and labels 4-4.5 pt",
+  "corners": "mixed",
+  "arrows": "thin grey straight arrows in the strip; axes with arrowheads at both ends; tiny dark navy arrowheads for gradients",
+  "rendering": "mixed",
+  "effects": "pseudo-3D isometric extrusion on the feature cube, quantized cube and codebook bars; none elsewhere",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "codebook vector colours (orange, green, light blue) carry over to the cells of the quantized cube and the filled points in the discs; hollow teal circles = encoder embeddings; grey = unquantized features; lavender = encoder and decoder",
+  "line_style_means": "dashed circle = bounded embedding space; solid blue curves = partition boundaries between codebook vectors; tiny dark arrows = gradients on embeddings; grey arrows in the strip = data flow",
+  "shape_means": "trapezoid = encoder or decoder; isometric grid block = feature tensor; dashed rounded box with coloured bars = codebook; hollow circle = encoder embedding; filled circle = codebook vector",
+  "marker_means": "column headings name the update stages, row labels name the methods",
+  "emphasis": "the gradient arrows of the middle column differ by row (parallel inside a partition for naive VQ, different directions for RaRSQ), and in the last column RaRSQ spreads some embeddings into the light blue partition while naive VQ leaves it empty",
+  "reusable_patterns": [
+   "pipeline strip on top and a grid of the same toy space below, rows = methods and columns = before / during / after an update",
+   "the same toy points redrawn in every cell so that only the change shows",
+   "codebook colours reused on quantized cells and on points",
+   "dashed circle with two arrowed axes as the boundary of an embedding space",
+   "tiny arrows on the points for per-point gradient direction",
+   "the same photo reused as input and as output"
+  ],
+  "weaknesses": [
+   "text of 4-6 pt in a single-column figure",
+   "hollow versus filled circles and the blue curves are explained only in the text",
+   "the link between the strip and the discs is implied by placement only"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a frame of a robot manipulation scene"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "trapezoids, isometric blocks and codebook bars",
+   "embedding-space discs, boundaries and arrows"
+  ],
+  "unknown": [
+   "whether the photo comes from a real robot setup or a simulator"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "robot arm photos with red arrows",
+   "encoder and decoder trapezoids",
+   "grey feature cube and coloured quantized cube",
+   "dashed codebook box with coloured bars",
+   "2 by 3 grid of embedding-space discs",
+   "partition curves and gradient arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "vector quantization",
+   "rotation-augmented gradient",
+   "codebook collapse",
+   "skill abstraction",
+   "robot manipulation",
+   "straight-through estimator",
+   "VQ-VAE",
+   "residual quantization"
+  ],
+  "tags": [
+   "embedding-space-sketch",
+   "small-multiples",
+   "matrix-cell-grid",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Pair a one-line pipeline strip with a rows-by-columns grid of one toy space (rows = methods, columns = before / during / after an update), reusing the codebook colours, so the reader sees where quantization sits and how only the gradient arrows change the outcome.",
+  "suits": "Papers that change a training mechanism (gradient estimator, quantizer, loss) whose effect can be shown as movements of points in a toy space."
+ },
+ "tags": [
+  "pipeline-strip-over-grid",
+  "toy-embedding-discs",
+  "isometric-cubes",
+  "serif-labels",
+  "dashed-circles",
+  "powerpoint-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Comparison between naive VQ and our RaRSQ approach in the skill learning process.",
+   "STE assigns identical gradients to all encoder embeddings (hollow circles) that are quantized to the same codebook vector",
+   "RaRSQ prevents embeddings from collapsing to the same codebook vector, leading to more diverse skill representations"
+  ]
+ },
+ "summary": "STAR learns discrete robot skills with a rotation-augmented residual quantizer (RaRSQ) that avoids the codebook collapse caused by VQ-VAE's straight-through gradient. Figure 1 compares naive VQ with RaRSQ. A one-line strip on top shows a robot-arm image passing an encoder trapezoid, a grey feature cube, quantization against a dashed codebook of coloured bars, a coloured quantized cube and a decoder back to the image. Below, a 2 by 3 grid of the same toy embedding space has rows for naive VQ and RaRSQ and columns for before update, gradient flow and after update: hollow dots are encoder embeddings, coloured dots codebook vectors, blue curves partition boundaries, small arrows gradients. Naive VQ moves all dots of a partition the same way; RaRSQ spreads them across more codes.",
+ "summary_zh": "STAR 用旋转增广的残差量化（RaRSQ）避免码本坍塌。图 1 对比朴素 VQ 与 RaRSQ：上方是编码、量化、解码的一行流程，下方 2×3 嵌入空间小图展示更新前、梯度流、更新后，朴素 VQ 梯度一致，RaRSQ 的点被推开或拉近。",
+ "confidence": "high",
+ "notes": "Prior kinds kept in the same order. Top and bottom are counted as two unlabelled panels because the caption names Top and Bottom and a dashed rule separates them; the six discs are cells of a grid and are not counted as panels. The preview crop shows a stray magenta page fragment above the strip and the digest's drawn extent starts at x -64.9; neither is part of the figure. Light blue palette entry is approximate (read off the picture).",
+ "venue": "ICML25"
+}

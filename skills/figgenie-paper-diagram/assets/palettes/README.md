@@ -53,6 +53,19 @@ One paper's palette, measured from its figures; use it with `meta.style` set to 
 | --- | --- | --- | --- | --- |
 | [`charon.svg`](charon.svg) | Charon: ink outlines, identity pastels, grey headers | `#cddfff` / text `#178d6a` | Charon, MLSys 2026 | `mlsys26-charon_fig3`, `mlsys26-charon_fig5` |
 
+### AI-venue families (added 2026-10-10)
+
+Five starting points for figures with `meta.family: ai` (`../../references/ai/palettes.md` §9), built from the fills and
+region tints of the AI corpus's 336 deep records; `n` is the number of records with that habit, not a cluster size.
+
+| card | palette | module / accent | records | first exemplars |
+| --- | --- | --- | --- | --- |
+| [`office-pastel.svg`](office-pastel.svg) | Office tints, one mid accent | `#deebf7` / `#ed7d31` | 131 (39%) | `acl23-0028_fig1`, `acl25-0127_fig1` |
+| [`tinted-regions.svg`](tinted-regions.svg) | Pale region fields, white or pale boxes | `#ffffff` on `#fbe3d6` / `#4472c4` | 104 (31%) | `aaai26-0001_fig1`, `acl23-0008_fig1` |
+| [`role-colours.svg`](role-colours.svg) | One mid colour per actor, part or token type | `#9dc3e6` +4 / `#c00000` | 97 (29%) | `acl25-0048_fig1`, `iclr23-0028_fig1` |
+| [`verdict-contrast.svg`](verdict-contrast.svg) | Grey prior, blue ours, red and green verdicts | `#d9d9d9` / `#4472c4` | 64 (19%) | `acl23-0022_fig1`, `iclr25-0080_fig1` |
+| [`frozen-trainable.svg`](frozen-trainable.svg) | Blue trained, grey frozen, peach for the new block | `#deebf7` / `#ed7d31` | 51 (15%) | `aaai25-0124_fig1`, `acl25-0025_fig1` |
+
 Written by `scripts/distill/make_swatches.py`; the hue families come from
 `scripts/distill/palette_cluster.py` over 272 architecture figures and the ground families from
 `scripts/distill/palette_grounds.py` over the 726 good figures with semantic records. Label colours inside

@@ -1,0 +1,558 @@
+{
+ "paper_id": "iclr25-0080",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DRAFT",
+  "one_liner": "A framework that lets an LLM refine tool documentation by trial and error with the tool, through experience gathering, learning from experience and documentation rewriting.",
+  "domain": [
+   "tool learning",
+   "tool documentation",
+   "LLM agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "three narrative panels: (a) defects in current documentation on real excerpts, (b) trial-and-error rounds that reveal hidden functionalities, (c) win, tie and lose bars for the improved documentation",
+  "argues": "Tool documentation written for humans is incomplete, redundant or inaccurate for LLMs; repeated trials with the tool repair it, and LLMs prefer the rewritten version.",
+  "subject": "Three documentation defects with their errors, three rounds of an agent exploring a tool, and a stacked bar chart of preference for improved documentation.",
+  "elements": [
+   {
+    "name": "Incomplete Documentation / Redundant Documentation / Inaccurate Documentation",
+    "type": "label",
+    "role": "names the three kinds of documentation defect",
+    "drawn_as": "three framed boxes with bold serif titles; borders in blue, purple and lilac, spaced down the left of panel (a)",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "tool documentation page stack",
+    "type": "data",
+    "role": "the raw documentation of a tool; red dashed boxes mark the defective passages",
+    "drawn_as": "offset stack of lilac pages filled with tiny JSON-like text; four red dashed boxes",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "documentation excerpts",
+    "type": "sample",
+    "role": "four quoted passages: an empty description of GetSearchImage, a parameter imageId with the description 'Image identifier.', a long QR-code-generator description, and a SQUAKE description that does not match what the tool returns",
+    "drawn_as": "dashed-border boxes (blue, blue, violet, lilac) with JSON-style text",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "robot questions",
+    "type": "sample",
+    "role": "what the confused agent asks about each excerpt: 'What is this tool used for ?', 'Why did it go wrong?', 'What is the key information ?', 'Why does the result not match the description?'",
+    "drawn_as": "grey robot head with a sad red face beside a pale cloud bubble with the question",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Error: The resource could not be found. / Actual return results: I'm a teapot.",
+    "type": "sample",
+    "role": "the failures that follow: an invalid parameter and a result that contradicts the description",
+    "drawn_as": "red text lines with a small wrench icon in lilac strips under two of the excerpts",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "agent cycle",
+    "type": "operation",
+    "role": "one round of exploration: the agent looks at an eye card, calls the tool (blue hand with wrench), gets an idea (lightbulb) and tries again; drawn three times",
+    "drawn_as": "three purple robot heads around a 2x2 grid, joined by grey curved arrows, with an eye card, a blue wrench hand and a blue lightbulb",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Trial",
+    "type": "operation",
+    "role": "the trial-and-error step between rounds",
+    "drawn_as": "blue circular double arrow with the word Trial, beneath the first two cycles; a grey block arrow between cycles",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "2x2 eye grid",
+    "type": "icon",
+    "role": "the tool's functionalities: crossed-out grey eyes are untested, open white eyes are discovered (per the caption)",
+    "drawn_as": "2x2 tiles: all crossed out in round 1, one open in round 2, all open in round 3",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "green smiley",
+    "type": "icon",
+    "role": "end state: the agent has mastered the tool",
+    "drawn_as": "green smiley face at the lower right of panel (b)",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "dataset logos",
+    "type": "icon",
+    "role": "logos above panel (c): a Hugging Face emoji, RESTful API and RapidAPI; not labelled in the figure",
+    "drawn_as": "three small brand logos in a row",
+    "container": "(c)",
+    "is_contribution": false
+   },
+   {
+    "name": "Documentation 2 is easier to understand! Here are the reasons: ...",
+    "type": "sample",
+    "role": "an LLM judge's explanation of why the improved documentation is preferred, with four numbered reasons: Detail and Clarity, Error Handling, Parameters Explanation, Example Provided",
+    "drawn_as": "sketchy-framed lilac speech box with bold reason titles and ellipses",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "RestBench-TMDB, RestBench-Spotify, ToolBench",
+    "type": "chart",
+    "role": "win, tie and lose shares of the improved documentation against the raw one: 92.5%, 5.5%, 2%; 77.5%, 17.5%, 5%; 87.9%, 11.4%, 0.7%",
+    "drawn_as": "three stacked horizontal bars with gold Win, pink Tie and green Lose segments, the dataset name in bold inside the gold part, leader lines for the thin segments, a legend above",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "tool documentation page stack",
+    "to": "documentation excerpts",
+    "what": "each defective passage in a red dashed box is shown enlarged as an excerpt",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "documentation excerpts",
+    "to": "robot questions",
+    "what": "the agent's confusion about that excerpt",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "documentation excerpts",
+    "to": "Error: The resource could not be found. / Actual return results: I'm a teapot.",
+    "what": "the failure caused by the defect",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Incomplete / Redundant / Inaccurate Documentation labels",
+    "to": "documentation excerpts",
+    "what": "border colour pairs each defect type with its excerpts",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "round 1 cycle",
+    "to": "round 2 cycle",
+    "what": "after a trial one functionality is discovered",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "round 2 cycle",
+    "to": "round 3 cycle",
+    "what": "after another trial all functionalities are discovered",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "agent robots",
+    "to": "agent robots",
+    "what": "exploration cycle: eye card, tool call, lightbulb, back to the robots",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Documentation 2 is easier to understand! ...",
+    "to": "stacked bars",
+    "what": "the judge's reasons accompany the win rates; no arrow joins them",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "issues in current tool documentation: incomplete, redundant and inaccurate, each with an excerpt and its consequence",
+    "verdict": "fails"
+   },
+   {
+    "label": "(b)",
+    "kind": "worked-walkthrough",
+    "axis": "narrative",
+    "shows": "three rounds of trial-and-error exploration that turn untested (grey) functionalities into discovered (white) ones",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "win, tie and lose shares of improved against raw documentation on three tool-learning datasets, with a judge's explanation",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "bold 7 pt letters at the bottom of each panel",
+    "what": "names the three panels"
+   },
+   {
+    "marker": "1. 2. 3. 4.",
+    "kind": "identity",
+    "at": "inside the judge's speech box",
+    "what": "numbers the four reasons given for preferring Documentation 2"
+   },
+   {
+    "marker": "crossed-out eye, open eye",
+    "kind": "other",
+    "at": "tiles of the 2x2 grid in (b)",
+    "what": "untested versus discovered functionality"
+   },
+   {
+    "marker": "sad red face, green smiley",
+    "kind": "other",
+    "at": "beside each robot in (a) and at the end of (b)",
+    "what": "the agent's state: confused versus successful"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "stack of tool documentation pages with highlighted passages",
+    "content": "document",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "offset stack of lilac pages with unreadable tiny JSON text and four red dashed boxes"
+   },
+   {
+    "what": "stacked horizontal win, tie and lose bars for three datasets",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "gold, pink and green segments with percentages, a legend and leader lines for the thin segments"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "cartoon robot head with antenna: grey with a sad red face in (a), purple in (b)",
+    "stands_for": "the LLM agent",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 13
+   },
+   {
+    "depicts": "red sad face and green smiley",
+    "stands_for": "confused versus successful agent",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "blue hand holding a wrench; small wrench in the error strips",
+    "stands_for": "calling a tool",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "eye on a card; crossed-out and open eyes in a 2x2 grid; blue lightbulb",
+    "stands_for": "observation, untested and discovered functionality, and insight",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 12
+   },
+   {
+    "depicts": "blue circular double arrow with the word Trial",
+    "stands_for": "one trial-and-error iteration",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "Hugging Face emoji, RESTful API and RapidAPI logos",
+    "stands_for": "brands above the dataset bars, unlabelled",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "four real-looking tool documentation excerpts with the questions an LLM asks and the errors that result",
+    "form": "dashed JSON-style boxes, cloud-bubble questions, red error lines",
+    "real_values": true
+   },
+   {
+    "what": "an LLM judge's explanation that the improved documentation is easier to understand, with four numbered reasons",
+    "form": "sketchy-framed speech box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot heads with antennae that change mood: sad red face in (a), happy green smiley at the end of (b)",
+    "parts": [
+     "robot head",
+     "face expression"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "three robot heads around a 2x2 grid joined by grey curved arrows, with an eye card, a wrench hand and a lightbulb as the observe, act and think icons",
+    "parts": [
+     "robots",
+     "eye card",
+     "wrench hand",
+     "lightbulb",
+     "curved arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a blue hand with a wrench for the tool call in (b) and small wrench icons beside the error lines in (a)",
+    "parts": [
+     "wrench hand",
+     "wrench icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "pale cloud bubbles carrying the agent's questions, and a sketchy-framed box quoting the judge",
+    "parts": [
+     "cloud bubble",
+     "speech box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the page stack and the Incomplete Documentation label at the top left of (a), follows the arrows to the excerpts and down the four rows, then goes to (b) top right across the three rounds, and ends in (c) at the bottom right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three panels in an L-shaped grid: (a) on the left spanning the full height, with a page stack at the far left and four rows of excerpt, robot question or error line at its right; (b) top right on a cyan ground with three cycles of robots and icons separated by block arrows; (c) bottom right on a lilac ground with logos, the judge's speech box and stacked win/tie/lose bars. Letters sit at the bottom of each panel; there are no panel titles.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.47,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#a9e9e4",
+    "used_for": "pale teal ground of panel (a)",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#99e2df",
+    "used_for": "cyan ground of panel (b)",
+    "opacity": 0.26
+   },
+   {
+    "hex": "#ebe3f3",
+    "used_for": "lilac ground of panel (c)",
+    "opacity": 0.69
+   },
+   {
+    "hex": "#e7f1fd",
+    "used_for": "pale blue fill of label and excerpt boxes"
+   },
+   {
+    "hex": "#e0e3ff",
+    "used_for": "pale periwinkle fill of excerpt boxes"
+   },
+   {
+    "hex": "#e7dfef",
+    "used_for": "pale lilac fill of excerpt boxes and the speech box"
+   },
+   {
+    "hex": "#95a9ff",
+    "used_for": "blue border: Incomplete Documentation and its excerpts"
+   },
+   {
+    "hex": "#8e50b6",
+    "used_for": "purple border: Redundant Documentation"
+   },
+   {
+    "hex": "#9388bf",
+    "used_for": "lilac border: Inaccurate Documentation, and the robots in (b)"
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "grey arrows, grey robots and crossed-out eyes"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red: defect boxes, error text, sad faces"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue: Trial arrows, wrench hand and lightbulb"
+   },
+   {
+    "hex": "#fdbe0a",
+    "used_for": "gold: Win segments"
+   },
+   {
+    "hex": "#f3d1f4",
+    "used_for": "pink-lilac: Tie segments"
+   },
+   {
+    "hex": "#add49b",
+    "used_for": "green: Lose segments"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "no stroked shapes in the digest: borders are drawn as filled outlines; dashed coloured borders on excerpt boxes, red dashed boxes on the page thumbnails",
+  "font": "sans (Arial) 5-6 pt for excerpts and questions; bold serif (Times) 6 pt for category labels and dataset names, bold 7 pt serif for panel letters",
+  "corners": "mixed",
+  "arrows": "thin grey straight arrows with small heads from page boxes to excerpts; thick grey curved arrows and block arrows between rounds in (b); blue circular Trial arrows",
+  "rendering": "flat-vector",
+  "effects": "cloud-shaped bubbles with soft edges; no shadows",
+  "model_depiction": "robot",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "red = defect or error (dashed boxes, error text, sad faces); blue, purple and lilac borders = Incomplete, Redundant and Inaccurate documentation; grey = untested (crossed-out eye) and arrows; white eye = discovered; gold, pink and green bar segments = Win, Tie, Lose of the improved documentation",
+  "line_style_means": "dashed borders mark quoted documentation and defective passages; solid grey arrows link a defect to its excerpt; curved arrows in (b) = the exploration cycle; blue circular arrow = Trial",
+  "shape_means": "cloud bubble = the agent's question; dashed rectangle = quoted documentation text; 2x2 grid of eye tiles = a tool's functionalities; stacked horizontal bar = win, tie, lose shares",
+  "marker_means": "(a), (b), (c) letter the panels; sad red face = confused or failing agent; green smiley = mastery; crossed eye = untested, open eye = discovered",
+  "emphasis": "red dashed boxes and red error lines pin the defects; the 2x2 grid turns from all crossed-out to all open across three rounds and ends in a smiley; the long gold Win segments in (c)",
+  "reusable_patterns": [
+   "stack of page thumbnails with red dashed boxes tied by arrows to enlarged excerpts, each followed by the agent's question cloud and the resulting error line",
+   "the same agent cycle drawn three times while a 2x2 grid of eye icons flips from crossed-out to open",
+   "robot with a sad red face in the problem panel and a green smiley at the end of the process panel",
+   "stacked horizontal win, tie and lose bars with thin segments labelled by leader lines",
+   "speech box in a sketchy frame quoting an LLM judge's numbered reasons",
+   "category labels whose border colour reappears on the quoted excerpts"
+  ],
+  "weaknesses": [
+   "the tiny text on the page stack is only a texture and cannot be read",
+   "the three logos in (c) are not labelled",
+   "tie and lose segments of the bars are thin and need leader lines",
+   "three different visual grammars (annotated documents, icon cycle, bar chart) share one figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "documentation excerpts and error messages from real tools (GetSearchImage, SQUAKE)",
+   "win, tie and lose results of the paper's experiments",
+   "an LLM judge's explanation text"
+  ],
+  "stock": [
+   "cartoon robot heads, emoji-style faces, wrench hand, lightbulb, eye icons",
+   "brand logos: Hugging Face emoji, RESTful API, RapidAPI"
+  ],
+  "generated": [],
+  "drawn": [
+   "panel grounds and dashed boxes",
+   "grey and blue arrows",
+   "stacked bars and legend",
+   "page stack with red boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "page stack with red dashed boxes",
+   "dashed JSON excerpt boxes",
+   "sad robot with question cloud",
+   "red error line with wrench",
+   "robot cycles around a 2x2 eye grid",
+   "Trial circular arrows",
+   "stacked win, tie and lose bars",
+   "judge's speech box"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "tool learning",
+   "API documentation",
+   "self-driven interaction",
+   "documentation rewriting",
+   "trial and error",
+   "RestBench",
+   "ToolBench",
+   "LLM judge"
+  ],
+  "tags": [
+   "model-pictogram",
+   "error-callouts",
+   "verdict-marks",
+   "zoom-callout",
+   "small-multiples",
+   "brand-logo-icon",
+   "colour-coded-groups",
+   "pictogram-chain"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Tell a problem, a process and a result in one figure: red dashed boxes on a page stack tied by arrows to enlarged excerpts and their errors, the same icon cycle repeated per round while a grid of eyes flips from crossed-out to open, and one stacked bar chart as the verdict.",
+  "suits": "papers on agent tooling or documentation quality where defects can be shown on real excerpts and improvement over rounds can be shown with icons."
+ },
+ "tags": [
+  "three tinted panels",
+  "robot pictograms",
+  "dashed excerpt boxes",
+  "red error lines",
+  "icon cycles",
+  "stacked bars",
+  "L-shaped grid"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "incomplete documentation also fails to mention certain constraints on the parameters",
+   "transitioning from untested functionalities (gray) to discovered capabilities (white) via a trial-and-error process",
+   "DRAFT is able to produce tool documentation that is more favored by LLMs"
+  ]
+ },
+ "summary": "DRAFT is a framework that lets an LLM refine tool documentation through trial and error with the tool, to repair documentation written for humans. Figure 1 has three tinted panels. (a) A stack of documentation pages with red dashed boxes on defective passages leads by grey arrows to enlarged excerpts, labelled incomplete, redundant and inaccurate, each with a sad robot's question and the error it causes, such as a resource not found or an 'I'm a teapot' return. (b) Three rounds of the same robot-and-icon cycle, with Trial arrows between them, flip a 2x2 grid of eyes from crossed-out to open and end in a smiley. (c) Stacked bars show win, tie and lose shares of the improved against the raw documentation on RestBench-TMDB, RestBench-Spotify and ToolBench.",
+ "summary_zh": "DRAFT 让大模型通过试错交互改写工具文档。图1分三块：(a)红色虚线框标出不完整、冗余、不准确的文档摘录及报错；(b)机器人三轮试错，眼睛格由划掉变睁开；(c)堆叠条形图显示改进文档的胜平负比例。",
+ "confidence": "high",
+ "notes": "Prior kinds (side-by-side-contrast problem-then-fix, stage-pipeline) revised: stage-pipeline is replaced by worked-walkthrough (iteration rounds) and concept-schematic because panel (b) repeats one unlabelled cycle with a changing state instead of handing artifacts between named stages. Which excerpt belongs to which defect is read from border colours; the first two excerpts both carry the blue border (incomplete). The roles of the three logos in (c) are not labelled. Tie and lose percentages for TMDB (5.5%, 2%) and the ToolBench lose value (0.7%) are read from labels with leader lines. The robot count and icon counts are approximate.",
+ "venue": "ICLR25"
+}

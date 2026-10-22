@@ -1,0 +1,370 @@
+{
+ "paper_id": "neurips25-0254",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ST-TTC",
+  "one_liner": "Test-time computing paradigm for spatio-temporal forecasting: a lightweight spectral-domain calibrator corrects predictions in real time, updated by a flash mechanism with a streaming memory queue.",
+  "domain": [
+   "spatio-temporal forecasting",
+   "test-time computing",
+   "calibration"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "design-family",
+  "variant_note": "three sibling formula chains (a) to (c) in one grammar, the proposed one given the wide bottom row",
+  "argues": "Unlike test-time training and online continual learning, which optimise the whole model or internal parameters, test-time computing optimises only a small calibrator g after the forecaster.",
+  "subject": "Three formula chains (input, model, output, loss) with the parameters optimised at test time marked in red.",
+  "elements": [
+   {
+    "name": "x̃^t",
+    "type": "data",
+    "role": "input of the pretext task in (a); the tilde marks a modified copy of x^t (not explained in the figure)",
+    "drawn_as": "italic symbol before an arrow",
+    "container": "(a) Test-Time Training",
+    "is_contribution": false
+   },
+   {
+    "name": "x̂^t = f(x̃^t; θ)",
+    "type": "formula",
+    "role": "forward pass of the model in (a)",
+    "drawn_as": "grey rectangle with 0.75 pt black outline",
+    "container": "(a) Test-Time Training",
+    "is_contribution": false
+   },
+   {
+    "name": "f_θ (red)",
+    "type": "label",
+    "role": "model parameters optimised at test time in (a)",
+    "drawn_as": "red symbol above the box with a small black down arrow",
+    "container": "(a) Test-Time Training",
+    "is_contribution": false
+   },
+   {
+    "name": "Loss(x̂^t, x^t)",
+    "type": "formula",
+    "role": "self-supervised loss between the model output and the original input x^t, which is fed in from above",
+    "drawn_as": "grey rectangle with x^t and a down arrow over it",
+    "container": "(a) Test-Time Training",
+    "is_contribution": false
+   },
+   {
+    "name": "x^t",
+    "type": "data",
+    "role": "input of the forecaster in (b)",
+    "drawn_as": "italic symbol before an arrow",
+    "container": "(b) Online Continual Learning",
+    "is_contribution": false
+   },
+   {
+    "name": "ŷ^t = f(x^t; θ(δ))",
+    "type": "formula",
+    "role": "forward pass in (b) with the internal parameters θ(δ)",
+    "drawn_as": "grey rectangle with the (δ) part in red",
+    "container": "(b) Online Continual Learning",
+    "is_contribution": false
+   },
+   {
+    "name": "f_θ(δ) (red δ)",
+    "type": "label",
+    "role": "internal parameters δ optimised at test time in (b), which requires changes to the network's internals (caption)",
+    "drawn_as": "symbol with red (δ) above the box with a down arrow",
+    "container": "(b) Online Continual Learning",
+    "is_contribution": false
+   },
+   {
+    "name": "Loss(ŷ^t, y^t)",
+    "type": "formula",
+    "role": "supervised loss against the target y^t, fed in from above",
+    "drawn_as": "grey rectangle with y^t and a down arrow over it",
+    "container": "(b) Online Continual Learning",
+    "is_contribution": false
+   },
+   {
+    "name": "ŷ^t = f(x^t; θ)",
+    "type": "formula",
+    "role": "the forecaster, left unchanged at test time (its f_θ label is black)",
+    "drawn_as": "grey rectangle with black f_θ above it",
+    "container": "(c) Test-Time Computing",
+    "is_contribution": false
+   },
+   {
+    "name": "ŷ^t_cal = g(ŷ^t; θ)",
+    "type": "formula",
+    "role": "the lightweight calibrator that corrects the prediction; the only part marked red",
+    "drawn_as": "extra grey rectangle after the forecaster with red g_θ above it",
+    "container": "(c) Test-Time Computing",
+    "is_contribution": true
+   },
+   {
+    "name": "Loss(ŷ^t_cal, y^t)",
+    "type": "formula",
+    "role": "loss on the calibrated prediction against y^t",
+    "drawn_as": "grey rectangle with y^t and a down arrow over it",
+    "container": "(c) Test-Time Computing",
+    "is_contribution": true
+   },
+   {
+    "name": "Red represents the parameters that need to be optimized during the test.",
+    "type": "text-block",
+    "role": "key for the red symbols",
+    "drawn_as": "three-line serif sentence at the right of panel (c) with the word Red in red",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "x̃^t",
+    "to": "x̂^t = f(x̃^t; θ)",
+    "what": "input into the model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x̂^t = f(x̃^t; θ)",
+    "to": "Loss(x̂^t, x^t)",
+    "what": "output x̂^t goes into the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x^t",
+    "to": "x̂^t = f(x̃^t; θ)",
+    "what": "input of the forecaster in (b)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ŷ^t = f(x^t; θ(δ))",
+    "to": "Loss(ŷ^t, y^t)",
+    "what": "prediction ŷ^t goes into the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ŷ^t = f(x^t; θ)",
+    "to": "ŷ^t_cal = g(ŷ^t; θ)",
+    "what": "forecast passed to the calibrator",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ŷ^t_cal = g(ŷ^t; θ)",
+    "to": "Loss(ŷ^t_cal, y^t)",
+    "what": "calibrated prediction goes into the loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_θ, f_θ(δ), g_θ labels",
+    "to": "their boxes",
+    "what": "the parameter set used by each box",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x^t and y^t labels",
+    "to": "loss boxes",
+    "what": "target fed into each loss",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red symbols",
+    "to": "key sentence",
+    "what": "red marks the parameters optimised during the test",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(a) and (b)",
+    "to": "(c)",
+    "what": "same chain template; (c) adds one calibrator box and changes the red symbol to g_θ",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Test-Time Training",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "x̃ into f with parameters θ, output x̂ compared with x in a loss; f_θ in red",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) Online Continual Learning",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "x into f with internal parameters θ(δ), prediction ŷ compared with y; the (δ) part in red",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) Test-Time Computing",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "x into a black f, then a red calibrator g producing ŷ_cal, compared with y",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "panel captions",
+    "what": "letter the three paradigms"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [],
+  "reading_order": "Starts at (a) at the top left and reads its chain left to right, then (b) across the dotted vertical line, then the wide (c) chain along the bottom, ending on the red key sentence."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "(a) and (b) side by side in the top row, split by a dotted vertical line; (c) spans the bottom row under a dotted horizontal rule with the red-key sentence at its right; each panel is one left-to-right chain of grey equation boxes with symbols and short down arrows above the boxes.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.98,
+  "text_density": "sparse",
+  "visual_density": "sparse",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "fill of the equation boxes"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red symbols for parameters optimised at test time and the word Red in the key",
+    "approx": true
+   },
+   {
+    "hex": "#000000",
+    "used_for": "box outlines, arrows, dotted dividers and all other text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt black outlines on the equation boxes; dotted black dividers",
+  "font": "serif (Times New Roman, Cambria Math) italic math at 9.5 pt with 7 pt sub- and superscripts, regular 9.5 pt captions",
+  "corners": "square",
+  "arrows": "thin black arrows between boxes; small bold black down arrows from the symbol above each box into it",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "red = parameters optimised during the test (f_θ in (a), δ in (b), g_θ in (c)); black = everything else, including the unchanged forecaster in (c); grey box fill = an equation or loss module",
+  "line_style_means": "dotted lines divide the panels; solid black arrows carry data",
+  "shape_means": "grey rectangle = an equation or loss; a plain symbol with a down arrow = the parameter set or target that feeds the box",
+  "marker_means": "(a) to (c) letter the paradigms; tilde and hat accents mark a modified input and a prediction; subscript cal marks the calibrated prediction; superscript t is the time step",
+  "emphasis": "the red symbols isolate what is trained at test time; (c) has one extra box and the only black forecaster, showing the proposed method changes just a small module",
+  "reusable_patterns": [
+   "the same chain of equation boxes repeated per paradigm so that only the red symbols and one extra box differ",
+   "red font as the single highlight, with a one-sentence key",
+   "short down arrows from the parameter symbol above each box to show which parameters the box uses",
+   "dotted rules between sibling designs with the proposed one given the wide bottom row"
+  ],
+  "weaknesses": [
+   "all symbols, so the paradigms are unreadable without the caption",
+   "tilde, hat and subscript conventions are not explained in the figure",
+   "red versus black is the only encoding of what is optimised"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "equation boxes, arrows and dotted dividers"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three chains of grey equation boxes",
+   "red parameter labels",
+   "calibrator box g",
+   "loss boxes with target symbols",
+   "dotted dividers",
+   "red key sentence"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "test-time computing",
+   "test-time training",
+   "online continual learning",
+   "spatio-temporal forecasting",
+   "calibration",
+   "plug-and-play calibrator",
+   "paradigm comparison"
+  ],
+  "tags": [
+   "equation-boxes",
+   "module-state-coding"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Contrast learning paradigms by writing each as the same chain of equation boxes and colouring only the symbols optimised at test time in red; the proposed method is the chain that adds one small box.",
+  "suits": "Method-comparison figures for paradigms that differ in what is trained or adapted (training, test-time, online), each writable as input, model, output and loss."
+ },
+ "tags": [
+  "equation chains",
+  "red highlight",
+  "dotted dividers",
+  "serif math",
+  "grey boxes",
+  "no icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.3)"
+  ],
+  "evidence": [
+   "Conceptual visualization comparison of different spatio-temporal learning paradigms under test environment.",
+   "Our (c) Test-Time Computing method only requires a lightweight calibrator gθ, which is a seamless and lightweight plug-and-play module.",
+   "Red represents the parameters that need to be optimized during the test."
+  ]
+ },
+ "summary": "ST-TTC is a test-time computing paradigm for spatio-temporal forecasting that adds a lightweight spectral-domain calibrator after the forecaster and updates it with a flash mechanism. Figure 1 compares three learning paradigms under test conditions as three chains of grey equation boxes in the same grammar: (a) Test-Time Training, where the model f_θ is trained through a pretext loss on x; (b) Online Continual Learning, where internal parameters θ(δ) are optimised against the target y; and (c) Test-Time Computing, where the forecaster stays unchanged and only the calibrator g_θ, marked in red, sits before the loss. A key sentence explains the red, and dotted rules separate the panels.",
+ "summary_zh": "ST-TTC 是时空预测的测试时计算范式。图 1 用三条同样语法的公式框链并列比较：(a) 测试时训练、(b) 在线持续学习、(c) 测试时计算；红色符号标出测试时要优化的参数，(c) 只优化校准器 g。",
+ "confidence": "high",
+ "notes": "The pre-screen listed side-by-side-contrast only; concept-schematic is added because the figure is a formal chain of boxed equations. The role of the tilde on x in (a) as a modified input is read from the caption's pretext-task wording. The figure has no pictures, icons or examples.",
+ "venue": "NeurIPS25"
+}

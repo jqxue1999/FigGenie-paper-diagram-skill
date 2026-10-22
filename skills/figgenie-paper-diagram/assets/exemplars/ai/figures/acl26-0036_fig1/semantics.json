@@ -1,0 +1,418 @@
+{
+ "paper_id": "acl26-0036",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MM-Eval",
+  "one_liner": "A unified evaluation framework for multimodal summaries covering text quality, image-text relevance and image-set diversity, motivated by blind spots of current MSMO metrics.",
+  "domain": [
+   "multimodal summarization",
+   "evaluation metrics",
+   "MLLM-as-a-judge"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic",
+   "concept-schematic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "a 2 by 2 grid of colour-banded toy-example cards, one per failure of existing metrics, each with a claim header, small score pills, an italic explanation and a takeaway banner",
+  "argues": "Current MSMO metrics are blind to factual errors, to semantically valid image choices, to visual redundancy and to text-image misalignment, because each looks at one modality alone.",
+  "subject": "four toy examples where ROUGE and Image Precision score well or badly for the wrong reason",
+  "elements": [
+   {
+    "name": "Reference Summary",
+    "type": "sample",
+    "role": "gold text for the ROUGE example: 'The protest occurred in Paris on May 3 with 5,000 participants.'",
+    "drawn_as": "pale green box with a green outline and the date in green",
+    "container": "(a) ROUGE",
+    "is_contribution": false
+   },
+   {
+    "name": "Generated Summary (a)",
+    "type": "sample",
+    "role": "same sentence with the wrong date May 5, still scoring high on ROUGE",
+    "drawn_as": "pale pink box with a red outline and the date in red",
+    "container": "(a) ROUGE",
+    "is_contribution": false
+   },
+   {
+    "name": "Human Selection",
+    "type": "sample",
+    "role": "reference image choice of two protest photos",
+    "drawn_as": "two rounded thumbnails side by side above the label",
+    "container": "(b) Image Precision",
+    "is_contribution": false
+   },
+   {
+    "name": "Model Selection",
+    "type": "sample",
+    "role": "the model's choice: one photo identical to the human one and one different photo of the same scene",
+    "drawn_as": "two rounded thumbnails side by side above the label",
+    "container": "(b) Image Precision",
+    "is_contribution": false
+   },
+   {
+    "name": "three near-duplicate photos",
+    "type": "sample",
+    "role": "a selection of three near-identical images of the same rally",
+    "drawn_as": "three equal rounded thumbnails in a row with a pill under each",
+    "container": "(c) Visual Redundancy",
+    "is_contribution": false
+   },
+   {
+    "name": "Generated Summary (d) and Selected Image",
+    "type": "sample",
+    "role": "text about flooding paired with a photo of a rally",
+    "drawn_as": "pale blue text box 'Flooding impacts city, displacing thousands...' and a photo with a red cross and MISALIGNED between them",
+    "container": "(d) Cross-Modal Gap",
+    "is_contribution": false
+   },
+   {
+    "name": "metric pills",
+    "type": "label",
+    "role": "what the existing metric reports or lacks: ROUGE: High, IP = 0.50, IP: High, ROUGE, IP, Align ?, No Penalty",
+    "drawn_as": "small filled rounded pills with arrows or marks: teal when the metric looks fine, red or orange for the hidden problem",
+    "container": "all cards",
+    "is_contribution": null
+   },
+   {
+    "name": "verdict pills",
+    "type": "label",
+    "role": "the true verdict: Factual Error, Semantically Valid, Diversity: Low, MISALIGNED",
+    "drawn_as": "red or green pills and a red bold label beside the samples",
+    "container": "all cards",
+    "is_contribution": null
+   },
+   {
+    "name": "explanation lines",
+    "type": "text-block",
+    "role": "one or two italic sentences saying why the metric is wrong on this example",
+    "drawn_as": "grey italic centred text under each example",
+    "container": "all cards",
+    "is_contribution": null
+   },
+   {
+    "name": "Takeaway banners",
+    "type": "label",
+    "role": "one-sentence lesson of each card, e.g. ROUGE rewards surface similarity, not factual correctness",
+    "drawn_as": "bold white text on a bottom band in the card's lighter hue",
+    "container": "all cards",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Reference Summary",
+    "to": "Generated Summary (a)",
+    "what": "same sentence except the date",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Human Selection",
+    "to": "Model Selection",
+    "what": "choices that overlap by one photo and differ by one that shows the same scene",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "samples in each card",
+    "to": "metric and verdict pills",
+    "what": "what the metric says versus what is true",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Generated Summary (d)",
+    "to": "Selected Image",
+    "what": "text and image disagree: flooding versus a rally",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "card header colour",
+    "to": "takeaway banner",
+    "what": "the card's hue returns on its banner",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) ROUGE: Lexical Overlap ≠ Factual Accuracy",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "a summary with a wrong date still scores high on ROUGE; takeaway: ROUGE rewards surface similarity",
+    "verdict": "fails"
+   },
+   {
+    "label": "(b) Image Precision: Exact Match ≠ Semantic Validity",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "a semantically valid but non-identical image selection gets IP = 0.50; takeaway: IP penalizes valid non-identical selections",
+    "verdict": "fails"
+   },
+   {
+    "label": "(c) Visual Redundancy: No Diversity Penalty",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "three near-duplicate images get a high IP and no diversity penalty; takeaway: no metric discourages redundancy",
+    "verdict": "fails"
+   },
+   {
+    "label": "(d) Cross-Modal Gap: No Alignment Metric",
+    "kind": "concept-schematic",
+    "axis": "examples",
+    "shows": "a flooding text and a rally photo score high on ROUGE and IP while alignment is unmeasured",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "card headers",
+    "what": "letter the four cards and head each with its claim"
+   },
+   {
+    "marker": "arrows, ticks, crosses and warning signs in pills",
+    "kind": "other",
+    "at": "metric and verdict pills",
+    "what": "up or down arrow for a high or low reading, tick or cross for valid or not, warning sign for an unpenalised or erroneous case, question mark for a missing metric"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "protest photos in Paris with flags and signs: a crowd with a PROTEST sign, a woman with a megaphone, a wide street crowd, a crowd with NO MORE and ACT NOW signs",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "rounded-corner thumbnails; the same four bitmaps are reused: two per selection row in (b), three side by side in (c), one in (d)"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "reference 'The protest occurred in Paris on May 3 with 5,000 participants.' versus generated 'on May 5', with ROUGE: High and Factual Error",
+    "form": "two tinted text boxes with the differing date coloured green or red, and two pills",
+    "real_values": false
+   },
+   {
+    "what": "human-selected versus model-selected protest photos with IP = 0.50 and Semantically Valid",
+    "form": "two labelled rows of two photos and two pills",
+    "real_values": false
+   },
+   {
+    "what": "three near-duplicate protest photos with IP: High, Diversity: Low and No Penalty",
+    "form": "three photos with a pill under each",
+    "real_values": false
+   },
+   {
+    "what": "summary 'Flooding impacts city, displacing thousands...' paired with a rally photo, with ROUGE, IP and Align ?",
+    "form": "text box, photo, MISALIGNED label and three pills",
+    "real_values": false
+   }
+  ],
+  "idioms": [],
+  "reading_order": "Starts at card (a) top left, reads each card from header to example to pills to italic note to takeaway banner, then moves to (b), (c) and (d) in grid order."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A 2 by 2 grid of equal cards with no gutter; each card has a coloured header bar that states its claim, a white body with the toy example and pills, an italic explanation and a coloured takeaway band at the bottom; every card has its own hue.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.52,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4a7c8a",
+    "used_for": "card (a) header and the teal metric pills"
+   },
+   {
+    "hex": "#5fa5b9",
+    "used_for": "card (a) takeaway banner"
+   },
+   {
+    "hex": "#6a5b8a",
+    "used_for": "card (b) header"
+   },
+   {
+    "hex": "#8b77b4",
+    "used_for": "card (b) takeaway banner"
+   },
+   {
+    "hex": "#8a6d3b",
+    "used_for": "card (c) header"
+   },
+   {
+    "hex": "#c19850",
+    "used_for": "card (c) takeaway banner"
+   },
+   {
+    "hex": "#5c6b3c",
+    "used_for": "card (d) header"
+   },
+   {
+    "hex": "#7a8e50",
+    "used_for": "card (d) takeaway banner"
+   },
+   {
+    "hex": "#e8f5e9",
+    "used_for": "reference summary box (outline #a5d6a7)"
+   },
+   {
+    "hex": "#ffebee",
+    "used_for": "generated summary box with the error (outline #ef9a9a)"
+   },
+   {
+    "hex": "#e3f2fd",
+    "used_for": "generated summary box in card (d) (outline #90caf9)"
+   },
+   {
+    "hex": "#c62828",
+    "used_for": "red pills and words: Factual Error, IP = 0.50, Diversity: Low, MISALIGNED, the date May 5"
+   },
+   {
+    "hex": "#e65100",
+    "used_for": "orange pills: No Penalty and Align ?"
+   },
+   {
+    "hex": "#2e7d32",
+    "used_for": "green pill Semantically Valid and the date May 3"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-1 pt tinted outlines on the text boxes; cards are defined by their coloured header and banner rather than an outline",
+  "font": "sans (Arial), 5.5-6 pt, bold for headers, pills and takeaways, italic for explanations",
+  "corners": "rounded",
+  "arrows": "none; direction is carried by arrow glyphs inside the pills",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each card has its own hue on header and takeaway banner (teal a, purple b, brown c, olive d); green = correct or valid (reference, May 3, Semantically Valid); red = error or hidden problem (generated summary, May 5, Factual Error, IP = 0.50, Diversity: Low, MISALIGNED); teal = what the existing metric reports as fine; orange = what no metric covers (No Penalty, Align ?)",
+  "line_style_means": "no line coding; boxes carry tinted outlines in the colour of their verdict",
+  "shape_means": "pill = a metric reading or verdict; tinted rounded box = a text sample; rounded thumbnail = an image choice; header bar = claim; bottom band = takeaway",
+  "marker_means": "up or down arrow = high or low metric value; tick or cross = valid or not; warning sign = unpenalised or erroneous; question mark = no metric exists",
+  "emphasis": "Red words and red pills mark the problem, orange pills mark the gap in current metrics, and the takeaway banner states the lesson in the card hue.",
+  "reusable_patterns": [
+   "2 by 2 cards, each with a claim header, a toy example, metric pills, an italic explanation and a takeaway banner in the card hue",
+   "reference and generated sample boxes in green and red tints with the differing word coloured to match",
+   "metric pills with arrows: teal for looks fine, red for the hidden problem, orange for the missing metric",
+   "the same few photos reused to build different selections across cards",
+   "header that states the claim with an inequality sign (A ≠ B)"
+  ],
+  "weaknesses": [
+   "a stray 'vs.' label overprints the italic note in card (b)",
+   "the caption is one short sentence while the figure carries four claims",
+   "5.5 pt text is small at column width",
+   "in card (c) the pills sit under single photos although they judge the whole set"
+  ]
+ },
+ "resources": {
+  "own": [
+   "toy summaries, selections and scores written for the figure"
+  ],
+  "stock": [],
+  "generated": [
+   "the four protest photos look AI-generated"
+  ],
+  "drawn": [
+   "cards, header bars, pills and takeaway banners",
+   "tinted text boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "2 by 2 grid of colour-banded cards",
+   "reference and generated summary boxes with coloured dates",
+   "protest photo selections",
+   "metric score pills with arrows",
+   "takeaway banners",
+   "MISALIGNED label with a red cross"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal summarization",
+   "evaluation metrics",
+   "ROUGE",
+   "image precision",
+   "diversity",
+   "cross-modal alignment",
+   "toy examples",
+   "silo effect"
+  ],
+  "tags": [
+   "claim-banner",
+   "problem-only",
+   "verdict-marks",
+   "highlighted-text-spans",
+   "error-callouts",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "metric-badge-pills",
+    "what": "score readings drawn as small pills with arrows or marks (ROUGE: High, Diversity: Low, Align ?), teal when the metric looks fine, red or orange for the hidden problem"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "State each limitation of existing metrics as a claim header with an inequality, show it on a toy example with coloured pills for what the metric says versus what is true, and close every card with a one-line takeaway banner in the card's hue.",
+  "suits": "evaluation or metric papers that motivate a new measure by showing, in a grid of toy examples, where current metrics are blind."
+ },
+ "tags": [
+  "2x2 cards",
+  "coloured header bars",
+  "takeaway banners",
+  "metric pills",
+  "toy examples",
+  "claim headers"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "Figure 1 illustrates these limitations with toy examples.",
+   "Outputs are decomposed and assessed via unimodal metrics, each blind to cross-modal coherence.",
+   "a limitation we refer to as the “Silo Effect”"
+  ]
+ },
+ "summary": "MM-Eval is a unified framework for evaluating multimodal summaries by text quality, image-text relevance and image diversity. Figure 1 motivates it with four toy examples of what current MSMO metrics miss. It is a 2 by 2 grid of cards, each with a coloured header that states the claim, a toy example, small score pills and a coloured takeaway banner. (a) ROUGE stays high although a summary changes the date from May 3 to May 5. (b) Image Precision gives 0.50 although the model chose a semantically valid photo. (c) Three near-duplicate photos receive no diversity penalty. (d) High ROUGE and IP hide a flooding text paired with a rally photo.",
+ "summary_zh": "MM-Eval 用来综合评估多模态摘要的文本质量、图文相关与图像多样性。图一用 2×2 的玩具示例卡片说明现有指标的盲区：ROUGE 看不出日期错误，图像精度惩罚语义有效的选择，没有多样性惩罚，也没有图文对齐指标；每张卡片末尾有要点横幅。",
+ "confidence": "high",
+ "notes": "The prior labels listed contribution-mosaic first; because the cards show failures of other people's metrics rather than the paper's own offerings, scope-overview (example-gallery) is primary here and contribution-mosaic (finding-cards) is kept second. A stray 'vs.' label overlaps the italic note in card (b). The photos look AI-generated; their origin is not stated. The figure has no arrows, so relations are all adjacency and colour.",
+ "venue": "ACL26"
+}

@@ -1,0 +1,382 @@
+{
+ "paper_id": "icml25-0194",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "An auditor queries a platform on an audit set; the platform may answer with a manipulated model, so the auditor compares against a prior.",
+  "domain": [
+   "ML auditing",
+   "fairness audits",
+   "audit manipulation"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "three parties joined by paired arrows, cut into before, during and after time bands, with circled step callouts",
+  "argues": "A platform can answer the auditor with a manipulated model h_m instead of the model h_p it gives its users, so the auditor must compare h_m(S) to prior knowledge.",
+  "subject": "Platform, users and auditor exchanging queries and answers before, during and after an audit, with three numbered steps.",
+  "elements": [
+   {
+    "name": "Platform (top) with h_p",
+    "type": "actor",
+    "role": "platform that exposes its model h_p to the users",
+    "drawn_as": "square black-outlined box with the word Platform, h_p in green italic and a server icon",
+    "container": "Before the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "Users with 𝒟",
+    "type": "actor",
+    "role": "users who send queries x; the symbol 𝒟 beside the people icon presumably names their distribution",
+    "drawn_as": "square box with the word Users, 𝒟 and a people icon",
+    "container": "Before the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "x ∈ 𝒳",
+    "type": "data",
+    "role": "a user query sent to the platform",
+    "drawn_as": "heavy arrow pointing left with a math label above",
+    "container": "Before the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "h_p(x)",
+    "type": "data",
+    "role": "the platform's answer to the user",
+    "drawn_as": "heavy arrow pointing right with a green label below",
+    "container": "Before the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "Platform (middle) with h_m",
+    "type": "actor",
+    "role": "the platform as the auditor sees it, answering with the manipulated model h_m",
+    "drawn_as": "square box with the word Platform, h_m in maroon italic and a server icon",
+    "container": "During the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "Auditor with ℋ_a",
+    "type": "actor",
+    "role": "regulator who holds a prior ℋ_a and tests the answers",
+    "drawn_as": "square box with the word Auditor, a scales icon and a white tab holding ℋ_a",
+    "container": "During the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "S",
+    "type": "data",
+    "role": "the audit set the auditor sends to the platform",
+    "drawn_as": "heavy arrow pointing left with a label above",
+    "container": "During the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "h_m(S)",
+    "type": "data",
+    "role": "the manipulated answers the platform sends back to the auditor",
+    "drawn_as": "heavy arrow pointing right with a maroon label below",
+    "container": "During the audit",
+    "is_contribution": false
+   },
+   {
+    "name": "1 audit set S generation",
+    "type": "operation",
+    "role": "step 1: the auditor builds the audit set S",
+    "drawn_as": "cloud thought bubble with two trailing circles pointing at the Auditor",
+    "container": "During the audit",
+    "is_contribution": null
+   },
+   {
+    "name": "2 h_p(S) → h_m(S) manipulation",
+    "type": "operation",
+    "role": "step 2: the platform replaces its answers on S by manipulated ones",
+    "drawn_as": "rectangular callout at the left edge, tied to a thin curved arrow from h_p to h_m",
+    "container": "During the audit",
+    "is_contribution": null
+   },
+   {
+    "name": "3 ℋ_a ↔ h_m(S) comparison",
+    "type": "operation",
+    "role": "step 3: the auditor compares the answers with its prior",
+    "drawn_as": "rectangular callout overlapping the Auditor box and the lower divider",
+    "container": "After the audit",
+    "is_contribution": null
+   },
+   {
+    "name": "Before the audit / During the audit / After the audit",
+    "type": "label",
+    "role": "names the three time bands",
+    "drawn_as": "grey small-caps titles with dotted dividers",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Users with 𝒟",
+    "to": "Platform (top) with h_p",
+    "what": "query x ∈ 𝒳",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Platform (top) with h_p",
+    "to": "Users with 𝒟",
+    "what": "answer h_p(x)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Auditor with ℋ_a",
+    "to": "Platform (middle) with h_m",
+    "what": "audit set S",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Platform (top) with h_p",
+    "to": "Platform (middle) with h_m",
+    "what": "the platform swaps h_p(S) for h_m(S)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Platform (middle) with h_m",
+    "to": "Auditor with ℋ_a",
+    "what": "manipulated answers h_m(S)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "h_m(S)",
+    "to": "ℋ_a",
+    "what": "the auditor compares the answers with its prior",
+    "kind": "comparison",
+    "drawn": "containment",
+    "step": 3
+   },
+   {
+    "from": "1 audit set S generation",
+    "to": "Auditor with ℋ_a",
+    "what": "the auditor builds S",
+    "kind": "control",
+    "drawn": "other",
+    "step": 1
+   },
+   {
+    "from": "h_p, h_p(x)",
+    "to": "h_m, h_m(S)",
+    "what": "green marks the real model and its answers, maroon the manipulated ones",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1, 2, 3 (circled)",
+    "kind": "order",
+    "at": "the thought bubble and the two rectangular callouts",
+    "what": "the three steps of the audit: audit set generation, manipulation, comparison"
+   },
+   {
+    "marker": "Before / During / After the audit",
+    "kind": "section",
+    "at": "left of the dotted dividers",
+    "what": "heads the three time bands"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "two stacked server slabs",
+    "stands_for": "the platform and its model",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "two outlined people",
+    "stands_for": "the platform's users",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "balance scales",
+    "stands_for": "the auditor or regulator",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [],
+  "reading_order": "Starts at the top Platform and Users, crosses the first dotted line, then reads the auditor's bubble (1), the swap (2) and the comparison (3) in order down to After the audit."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked time bands (before, during, after the audit) separated by dotted grey lines; the Platform box sits at the left and Users or Auditor at the right in the top two bands, with a pair of arrows between each; three callouts hang on the steps.",
+  "panel_count": 1,
+  "lanes": "three time bands (before, during, after the audit) with the platform column at left and the users or auditor column at right",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.29,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#006341",
+    "used_for": "green: the platform's real model h_p and its answer h_p(x)"
+   },
+   {
+    "hex": "#861f41",
+    "used_for": "maroon: the manipulated model h_m and its answer h_m(S)"
+   },
+   {
+    "hex": "#004070",
+    "used_for": "dark blue: circled step numbers"
+   },
+   {
+    "hex": "#606060",
+    "used_for": "grey: dotted dividers and the time-band titles"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "actor box outlines, arrows, icons and text"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "fill of boxes and callouts"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "heavy 1.5-2.5 pt black outlines on actor boxes and arrows, 0.5-1 pt on callouts, 2.5 pt dotted grey dividers",
+  "font": "serif (TeX Gyre Schola, Nimbus Roman), 10 pt box titles, 12 pt math symbols, grey small caps for the period titles, 8.5 pt step digits",
+  "corners": "mixed",
+  "arrows": "heavy black arrows with open chevron heads in opposed pairs; one thin curved arrow with a filled head; a thought-bubble tail of two small circles",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "green = the platform's real model h_p and its answers; maroon = the manipulated model h_m and its answers; dark blue = step numbers; grey = time bands",
+  "line_style_means": "dotted grey lines divide time; heavy opposed arrows are exchanges between parties; the thin curved arrow is the platform swapping h_p for h_m",
+  "shape_means": "square boxes = actors; cloud with trailing circles = something the auditor does privately (building S); rectangular callouts = steps 2 and 3",
+  "marker_means": "circled numbers 1 to 3 = the three steps of the audit",
+  "emphasis": "heavy outlines for the actors and the green versus maroon labels draw the eye to the swap from h_p to h_m",
+  "reusable_patterns": [
+   "time bands named in small caps with dotted dividers across an actor diagram",
+   "the same actor drawn twice in different bands, linked by a curved arrow, to show its state changing",
+   "thought-bubble callout for something an actor does privately",
+   "rectangular callouts carrying a circled step number and the operation as a formula",
+   "one colour per model version carried through box label, arrow caption and formula"
+  ],
+  "weaknesses": [
+   "callout 3 overlaps the Auditor box and the lower divider, crowding the corner",
+   "the symbol 𝒟 beside the users is not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "server, people and scales line icons (vector glyphs)"
+  ],
+  "generated": [],
+  "drawn": [
+   "actor boxes, arrows, callouts and dotted dividers"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "platform box with server icon",
+   "users box with people icon",
+   "auditor box with scales icon",
+   "paired arrows with data labels",
+   "thought-bubble callout",
+   "numbered callouts",
+   "dotted time dividers"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "ML auditing",
+   "audit manipulation",
+   "audit set",
+   "fairness",
+   "prior knowledge",
+   "platform",
+   "regulator"
+  ],
+  "tags": [
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "time-band-dividers",
+    "what": "dotted horizontal dividers with small-caps period names (before, during, after) cutting an actor diagram into phases"
+   },
+   {
+    "name": "circled-step-callouts",
+    "what": "cloud or rectangular callouts carrying a circled step number and the operation written as a formula, attached to the actor or link that performs it"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Cut an actor diagram into named time bands with dotted dividers, redraw the same actor in each band with its model state colour-coded, and hang numbered callouts on the actor or link that performs each step.",
+  "suits": "Protocols with a few parties and a time order where one party changes behaviour between phases, such as audits, attacks, or privacy and security protocols."
+ },
+ "tags": [
+  "time-bands",
+  "line-art-icons",
+  "circled-step-callouts",
+  "serif-labels",
+  "single-column",
+  "heavy-outlines"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Enhancing Black-box Auditing with a Prior (p.3)"
+  ],
+  "evidence": [
+   "The platform exposes a model hp to the users.",
+   "the platform manipulates its answers on the audit set S",
+   "hm refers to the model exposed to the auditor (bottom part of Figure 1)"
+  ]
+ },
+ "summary": "The paper studies how a regulator can audit an ML platform without being fooled when the platform manipulates its answers. Figure 1 draws the three-step audit as an actor diagram cut into three time bands by dotted lines: before, during and after the audit. At top the Platform serves model h_p to Users; below, the Platform shows h_m to the Auditor. Heavy paired arrows carry queries and answers (x, h_p(x), S, h_m(S)), a thought bubble marks audit set generation, a curved arrow marks the swap from h_p to h_m, and a callout marks the comparison with the auditor's prior ℋ_a. Green and maroon separate the real from the manipulated model; server, people and scales icons name the three parties.",
+ "summary_zh": "论文研究监管者如何审计可能篡改答案的机器学习平台。图一用虚线把三步审计分成审计前、中、后三段：平台对用户给出 h_p，对审计者给出被篡改的 h_m；圆圈编号标出生成审计集、篡改、与先验比较，绿与深红区分真假模型。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (actor-interaction, stage-pipeline) with variant multi-party-exchange; the three bands are time lanes, not panels. The meaning of the script D beside the users is not stated in the quoted text. The text layer carries only the box titles and the step digits; formulas and callout wording are not live text and were read from the preview.",
+ "venue": "ICML25"
+}

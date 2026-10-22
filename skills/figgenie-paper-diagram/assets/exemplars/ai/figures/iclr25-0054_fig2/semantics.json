@@ -1,0 +1,481 @@
+{
+ "paper_id": "iclr25-0054",
+ "fig": "2",
+ "kind": "ai",
+ "system": {
+  "name": "DEPT",
+  "one_liner": "A communication-efficient pre-training framework that decouples token embeddings from the transformer body so models train on several data sources without a shared vocabulary.",
+  "domain": [
+   "language model pre-training",
+   "multilingual data",
+   "federated and distributed training"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline",
+   "actor-interaction",
+   "model-anatomy"
+  ],
+  "variant": "design-family",
+  "variant_note": "a 2x2 grid of one identical left-to-right training pipeline for the STANDARD baseline and the TRIM, GLOB and SPEC variants, with numbered steps and a legend inside the first panel",
+  "argues": "DEPT's three variants (TRIM, GLOB, SPEC) keep the same pipeline as standard pre-training but decouple embeddings from the transformer body to different degrees.",
+  "subject": "Corpora, tokenizers, tokenized datasets, workers and a server holding an embedding layer (EL) and a transformer body (TB), drawn four times with small differences.",
+  "elements": [
+   {
+    "name": "Text Corpus",
+    "type": "data",
+    "role": "the text sources, here four languages in two groups (blue pair and green pair)",
+    "drawn_as": "national flags beside hexagon badges with a document glyph, joined by a vertical bracket; blue badges for the first two, green for the last two, with a dotted ellipsis between",
+    "container": "each panel",
+    "is_contribution": false
+   },
+   {
+    "name": "Tokenizer",
+    "type": "module",
+    "role": "builds the vocabulary and tokenizer: global for STANDARD, GLOB and TRIM, global or personalised for SPEC",
+    "drawn_as": "grey trapezoid narrowing to the right with sample glyph rows 'a b c', 'è ü ç', '象 日'; in SPEC two small trapezoids, one per source",
+    "container": "each panel",
+    "is_contribution": true
+   },
+   {
+    "name": "Tokenized dataset",
+    "type": "data",
+    "role": "the pre-tokenized corpora",
+    "drawn_as": "blue and green cylinders with a dotted line between; stacked into one merged blue-over-green cylinder in STANDARD",
+    "container": "each panel",
+    "is_contribution": null
+   },
+   {
+    "name": "WORKERS",
+    "type": "container",
+    "role": "the parties that train the model on their own pre-tokenized data (step 3)",
+    "drawn_as": "dotted rounded frame with two white rounded boxes, each holding an EL tile and a TB box, a loop arrow on each",
+    "container": "TRIM, GLOB and SPEC panels",
+    "is_contribution": null
+   },
+   {
+    "name": "SERVER",
+    "type": "container",
+    "role": "trains the single model in STANDARD; in the other variants it aggregates the workers' results (step 5)",
+    "drawn_as": "rounded white frame with the label SERVER at the lower right",
+    "container": "each panel",
+    "is_contribution": null
+   },
+   {
+    "name": "EL (Embedding Layer)",
+    "type": "module",
+    "role": "token embedding matrix; the part DEPT decouples",
+    "drawn_as": "square tile of vertical stripes: red in STANDARD, GLOB and TRIM (crossed by blue and green X marks in TRIM), blue or green stripes in SPEC",
+    "container": "workers and server",
+    "is_contribution": true
+   },
+   {
+    "name": "TB (Transformer Body)",
+    "type": "module",
+    "role": "the transformer layers shared across sources",
+    "drawn_as": "red rounded square with bold TB",
+    "container": "workers and server",
+    "is_contribution": null
+   },
+   {
+    "name": "EL + EL = EL, TB + TB = TB",
+    "type": "formula",
+    "role": "aggregation of the workers' embeddings and bodies on the server (step 5); SPEC aggregates only TB",
+    "drawn_as": "small icons joined by plus and equals signs, bold, in the server frame; in TRIM partly faded EL tiles with arrows merging into one larger EL",
+    "container": "SERVER",
+    "is_contribution": true
+   },
+   {
+    "name": "partial results icons",
+    "type": "icon",
+    "role": "small TB and EL icons travelling between workers and server (steps 4 and 6)",
+    "drawn_as": "tiny TB and EL tiles between two numbered circles, next to curved arrows",
+    "container": "TRIM, GLOB and SPEC panels",
+    "is_contribution": null
+   },
+   {
+    "name": "STANDARD / TRIM / GLOB / SPEC",
+    "type": "label",
+    "role": "names the four pipelines",
+    "drawn_as": "small boxed tags at the centre cross of the grid: white with black text, red, blue and green",
+    "container": "each panel",
+    "is_contribution": null
+   },
+   {
+    "name": "LEGEND",
+    "type": "container",
+    "role": "defines the icons: Text Corpus, Tokenizer, Tokenized dataset, Embedding Layer, Transformer Body",
+    "drawn_as": "boxed key with 2.5 pt monospace labels inside the STANDARD panel",
+    "container": "STANDARD",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Text Corpus",
+    "to": "Tokenizer",
+    "what": "corpora processed into a vocabulary and tokenizer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Tokenizer",
+    "to": "Tokenized dataset",
+    "what": "corpora tokenized into pre-tokenized datasets",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Tokenized dataset",
+    "to": "WORKERS",
+    "what": "each worker gets its own dataset (SERVER in STANDARD)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "WORKERS",
+    "to": "WORKERS",
+    "what": "local training of EL and TB, drawn as a loop arrow on each worker (on the server in STANDARD)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "WORKERS",
+    "to": "SERVER",
+    "what": "partial training results collected",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "SERVER",
+    "to": "SERVER",
+    "what": "results aggregated: TB + TB = TB, and EL + EL = EL except in SPEC",
+    "kind": "other",
+    "drawn": "other",
+    "step": 5
+   },
+   {
+    "from": "SERVER",
+    "to": "WORKERS",
+    "what": "the new model is sent back; steps 3 to 6 repeat to convergence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 6
+   },
+   {
+    "from": "LEGEND",
+    "to": "icons in all four panels",
+    "what": "icon shapes explained once",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "STANDARD",
+    "to": "TRIM, GLOB, SPEC",
+    "what": "the same pipeline with changes in tokenizers, datasets and embeddings",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "STANDARD",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "one merged dataset trained on a single server with steps 1 to 3 only",
+    "verdict": "baseline"
+   },
+   {
+    "label": "TRIM",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "separate datasets and workers; embeddings crossed by blue and green X marks and merged into one EL on the server, bodies summed",
+    "verdict": "ours"
+   },
+   {
+    "label": "GLOB",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "separate datasets and workers; the server sums both embeddings and bodies",
+    "verdict": "ours"
+   },
+   {
+    "label": "SPEC",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "per-source tokenizers and blue or green embeddings that stay local; only the bodies are summed on the server",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1 to 6",
+    "kind": "order",
+    "at": "dark circles on the arrows of each pipeline",
+    "what": "orders the pipeline steps: vocabulary and tokenizer, tokenization, local training, collection, aggregation, redistribution"
+   },
+   {
+    "marker": "STANDARD, TRIM, GLOB, SPEC",
+    "kind": "section",
+    "at": "tag boxes at the centre cross",
+    "what": "names the four panels"
+   },
+   {
+    "marker": "+ and =",
+    "kind": "other",
+    "at": "between EL and TB icons on the server",
+    "what": "aggregation written as an equation"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "national flags (Romania, Italy, China, USA)",
+    "stands_for": "the languages of the text corpora",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 16
+   },
+   {
+    "depicts": "hexagon badge with a document glyph, blue or green",
+    "stands_for": "a text corpus of a data source",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 17
+   },
+   {
+    "depicts": "grey trapezoid with glyph rows",
+    "stands_for": "tokenizer",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   },
+   {
+    "depicts": "blue and green cylinders",
+    "stands_for": "tokenized datasets",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 7
+   },
+   {
+    "depicts": "striped tile EL and rounded square TB",
+    "stands_for": "embedding layer and transformer body",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 30
+   }
+  ],
+  "examples": [
+   {
+    "what": "sample characters of three scripts written on the tokenizer",
+    "form": "tiny glyph rows 'a b c', 'è ü ç', '象 日' on the trapezoid",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "federated-round",
+    "drawn_as": "dotted WORKERS frame and rounded SERVER frame joined by numbered arrows for collecting partial results, aggregating and sending the new model back",
+    "parts": [
+     "WORKERS",
+     "SERVER",
+     "steps 4 to 6"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tokenizer-trapezoid",
+    "drawn_as": "grey trapezoid narrowing to the right with sample characters of several scripts",
+    "parts": [
+     "trapezoid",
+     "glyph rows"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "dataset-cylinder",
+    "drawn_as": "blue and green cylinders for the tokenized datasets, merged into one stacked cylinder in the baseline",
+    "parts": [
+     "blue cylinder",
+     "green cylinder"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the flags at the left of STANDARD, follows the pipeline to the right through steps 1 to 3, then the same path in TRIM, GLOB and SPEC with the extra steps 4 to 6; the eye compares the four panels."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A 2x2 grid of identical left-to-right pipelines separated by thin cross-shaped rules: STANDARD top left (legend box at its right end), TRIM top right, GLOB bottom left, SPEC bottom right. Small variant tag boxes sit at the centre cross, not above each panel. Each pipeline runs from flag and document icons through a tokenizer and datasets to workers and a server frame; the figure is very wide and low.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.46,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff6666",
+    "used_for": "EL stripes and TB boxes (model parts shared across sources)"
+   },
+   {
+    "hex": "#3686dd",
+    "used_for": "blue data source: hexagon badges, cylinders, GLOB tag, source-specific stripes"
+   },
+   {
+    "hex": "#00cc00",
+    "used_for": "green data source: hexagon badges, cylinders, SPEC tag, source-specific stripes"
+   },
+   {
+    "hex": "#b3b3b3",
+    "used_for": "tokenizer trapezoids and neutral legend swatches"
+   },
+   {
+    "hex": "#d80027",
+    "used_for": "red of the flags and the TRIM tag"
+   },
+   {
+    "hex": "#ffda44",
+    "used_for": "yellow of the flags"
+   },
+   {
+    "hex": "#0066cc",
+    "used_for": "outline of the blue badges"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on most shapes, white 0.25 pt lines for the EL stripes, 0.5-0.75 pt frames",
+  "font": "bold monospace (Courier New) 2-5.5 pt: 2-2.5 pt for LEGEND, SERVER, WORKERS and tag labels, 4.5 pt for EL, TB and glyph rows, 3.5 pt step numbers",
+  "corners": "mixed",
+  "arrows": "thin black elbow arrows, dashed arrows from datasets to training, curved loop arrows for local training, small arrowheads",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "blue and green = the two data-source groups (corpus badges, datasets, source-specific embedding stripes); red = model parts shared across sources (TB and the global EL); grey = tokenizer and neutral legend items; variant tags use their own colours",
+  "line_style_means": "dashed arrows = tokenized data flowing to training; solid thin arrows = pipeline flow; loop arrow = repeated local training; dotted frame = the workers; dotted vertical line = more sources",
+  "shape_means": "hexagon with document = text corpus; grey trapezoid = tokenizer; cylinder = tokenized dataset; striped tile = embedding layer; rounded square = transformer body; rounded frame = server; dotted frame = workers",
+  "marker_means": "dark circled numbers 1 to 6 order the pipeline; plus and equals signs state the aggregation; X marks over EL in TRIM show trimmed embedding entries (read from the abstract, not labelled)",
+  "emphasis": "the identical template makes the differences stand out: merged versus separate cylinders, one versus two tokenizers, crossed-out or coloured EL, EL aggregation present or absent",
+  "reusable_patterns": [
+   "2x2 grid of one pipeline with small tag boxes naming each variant",
+   "legend box placed inside one panel to define icons for all panels",
+   "dark circled step numbers on arrows, with fewer steps in the baseline panel",
+   "plus and equals signs between small module icons to state aggregation as an equation",
+   "flags and document badges for languages or data sources, with colour carried through datasets and embeddings",
+   "blue and green keeping data-source identity from badge to cylinder to embedding stripe"
+  ],
+  "weaknesses": [
+   "2-4.5 pt text and 2.5 pt legend labels are hard to read at print size",
+   "variant tags sit at the centre cross, so a panel's name is found by position",
+   "the X marks over EL in TRIM and the striped tile are only partly covered by the legend"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "national flag icons",
+   "hexagon document badges"
+  ],
+  "generated": [],
+  "drawn": [
+   "tokenizer trapezoids, cylinders, EL and TB tiles",
+   "worker and server frames",
+   "arrows, step circles and aggregation equations",
+   "legend box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "flag and document hexagon icons",
+   "grey tokenizer trapezoid",
+   "blue and green dataset cylinders",
+   "workers and server frames",
+   "striped EL tiles and TB boxes",
+   "numbered step circles",
+   "plus and equals aggregation icons"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "decoupled embeddings",
+   "multilingual pre-training",
+   "federated pre-training",
+   "tokenizer",
+   "data heterogeneity",
+   "embedding layer",
+   "transformer body",
+   "communication efficiency"
+  ],
+  "tags": [
+   "small-multiples",
+   "pictogram-chain",
+   "colour-coded-groups",
+   "notation-key",
+   "module-state-coding"
+  ],
+  "new_tags": [
+   {
+    "name": "flag-language-icons",
+    "what": "national flags beside document icons standing for the languages or sources of the corpora"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw design variants as a 2x2 grid of one identical pipeline, number the steps once and change only the parts that differ (merged versus separate datasets, crossed-out or coloured embeddings, an aggregation equation present or absent), with the legend inside one panel.",
+  "suits": "families of training-pipeline variants (federated, distributed, multilingual) where a few components change from variant to variant."
+ },
+ "tags": [
+  "2x2 pipeline grid",
+  "tiny monospace labels",
+  "flag icons",
+  "dark numbered circles",
+  "plus-equals equations",
+  "very wide and dense"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "(3) WORKERS train the model on their pre-tokenized data; (4) partial training results are collected; (5) results are aggregated",
+   "we propose partially or fully decoupling the embedding space from transformer bodies",
+   "Steps 3–6 repeat to convergence."
+  ]
+ },
+ "summary": "DEPT is a communication-efficient pre-training framework that decouples token embeddings from the transformer body so that models can train on several data sources without a shared vocabulary. Figure 2 draws the standard pipeline and the three DEPT variants (TRIM, GLOB, SPEC) as a 2x2 grid of the same left-to-right schematic: flag-and-document icons for text corpora go through a tokenizer to blue and green tokenized datasets, then to workers and a server holding an embedding layer (EL) and a transformer body (TB). Dark numbered circles 1 to 6 order the steps, and plus and equals signs show how bodies and embeddings are aggregated; the variants differ in tokenizers, in crossed-out or colour-specific embeddings and in whether the server aggregates EL at all. A legend sits in the first panel.",
+ "summary_zh": "DEPT 把词嵌入与 Transformer 主体解耦，使多数据源预训练无需共享词表。图2用2×2网格对比标准流程与 TRIM、GLOB、SPEC 三个变体，圆圈数字 1–6 标出步骤，加号和等号表示聚合。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (design-family first) and stage-pipeline added because the caption describes numbered pipeline steps. The X marks over the EL tiles in TRIM are not explained in the legend; their reading as trimmed vocabulary entries follows the abstract (embedding parameters reduced to what the source vocabulary needs). Counts of icons are approximate (flags and badges from the digest, tiles by eye). The schema has no marker kind for plus and equals signs, recorded as other.",
+ "venue": "ICLR25"
+}

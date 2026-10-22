@@ -1,0 +1,502 @@
+{
+ "paper_id": "cvpr26-0033",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ELIT",
+  "one_liner": "Drop-in diffusion-transformer mechanism: a variable-length latent interface with Read/Write cross-attention lets the number of latents set the compute budget.",
+  "domain": [
+   "diffusion transformers",
+   "compute-adaptive generation",
+   "text-to-image"
+  ],
+  "subfield": "generative",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "bento-highlights",
+  "variant_note": "three tiles in one row read as an equation: a minimal DiT + ELIT sketch, a quality-FLOPs scatter, and a sample grid at shrinking budgets beside the baseline",
+  "argues": "A variable-length latent interface lets one DiT-style model trade quality for FLOPs smoothly: ELIT curves beat the baselines and samples degrade gracefully as the budget shrinks.",
+  "subject": "Sketch of DiT blocks with Latent Interface, Read and Write; FDD-vs-GFLOPs scatter for three backbones; text-to-image samples at shrinking budgets next to the full-budget baseline.",
+  "elements": [
+   {
+    "name": "DiT",
+    "type": "label",
+    "role": "names the vanilla baseline on the left of the equation header",
+    "drawn_as": "bold blue serif header",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "ELIT",
+    "type": "label",
+    "role": "names the added mechanism; a plus sign joins it to DiT",
+    "drawn_as": "bold red serif header",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "DiT Blocks",
+    "type": "module",
+    "role": "the unchanged DiT transformer blocks, drawn as three groups (top, middle, bottom) with Read and Write sitting in the gaps between them",
+    "drawn_as": "rounded light-blue boxes with a thin offset second outline, each holding stacked white rounded bars; the middle box is taller",
+    "container": "DiT + ELIT sketch",
+    "is_contribution": false
+   },
+   {
+    "name": "Latent Interface",
+    "type": "module",
+    "role": "learnable variable-length sequence of latent tokens that the blocks can operate on",
+    "drawn_as": "white label box with a black outline above a short rounded strip of five cells, red fading to near white, split by dotted dividers",
+    "container": "DiT + ELIT sketch",
+    "is_contribution": true
+   },
+   {
+    "name": "Read",
+    "type": "operation",
+    "role": "cross-attention layer that pulls information from the spatial tokens into the latent interface",
+    "drawn_as": "pink rounded box with thick black outline between the top and middle DiT groups",
+    "container": "DiT + ELIT sketch",
+    "is_contribution": true
+   },
+   {
+    "name": "Write",
+    "type": "operation",
+    "role": "cross-attention layer that broadcasts the updated latents back to the spatial tokens",
+    "drawn_as": "pink rounded box with thick black outline between the middle and bottom DiT groups",
+    "container": "DiT + ELIT sketch",
+    "is_contribution": true
+   },
+   {
+    "name": "Flexible Compute Allocation",
+    "type": "label",
+    "role": "title over the scatter plot; the right-hand side of the equation 'DiT + ELIT ='",
+    "drawn_as": "centred black serif title",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Legend (DiT, ELIT-DiT, U-ViT, ELIT-U-ViT, HDiT, ELIT-HDiT)",
+    "type": "label",
+    "role": "key to six marker types: blue baseline and red ELIT version per backbone, star / down-triangle / square per backbone",
+    "drawn_as": "boxed key in the upper left of the plot, small sans text",
+    "container": "scatter plot",
+    "is_contribution": false
+   },
+   {
+    "name": "ELIT-Qwen-Image",
+    "type": "container",
+    "role": "title of the 3 x 6 grid of ELIT samples (three prompts by six budgets)",
+    "drawn_as": "bold red serif title above a red-framed grid of 18 square tiles",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Qwen-Image",
+    "type": "container",
+    "role": "title of the baseline column rendered at full compute",
+    "drawn_as": "bold blue serif title above a blue-framed column of 3 tiles",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "35% FLOPs / 320 Tokens",
+    "type": "label",
+    "role": "budget of the leftmost ELIT column",
+    "drawn_as": "bold green percentage over a black token count",
+    "container": "ELIT-Qwen-Image",
+    "is_contribution": null
+   },
+   {
+    "name": "69% FLOPs / 4096 Tokens",
+    "type": "label",
+    "role": "budget of the rightmost ELIT column",
+    "drawn_as": "bold green percentage over a black token count",
+    "container": "ELIT-Qwen-Image",
+    "is_contribution": null
+   },
+   {
+    "name": "100% / 4096",
+    "type": "label",
+    "role": "budget of the Qwen-Image baseline column",
+    "drawn_as": "black text under the blue-framed column",
+    "container": "Qwen-Image",
+    "is_contribution": null
+   },
+   {
+    "name": "FLOPs / Tokens arrow",
+    "type": "other",
+    "role": "shows that FLOPs and tokens shrink towards the left end of the sample grid",
+    "drawn_as": "one long thin black arrow pointing left, 'FLOPs' above and 'Tokens' below its middle",
+    "container": "ELIT-Qwen-Image",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "DiT",
+    "to": "ELIT",
+    "what": "ELIT is added to a vanilla DiT (plus sign)",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "DiT + ELIT",
+    "to": "Flexible Compute Allocation",
+    "what": "the sum yields flexible compute, shown by the plot and the samples (equals sign)",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Latent Interface",
+    "to": "Read",
+    "what": "latent strip stacked directly above Read; no connector is drawn",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "DiT Blocks (top group)",
+    "to": "Read",
+    "what": "Read sits in the gap below the top group, no arrows between boxes",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Write",
+    "to": "DiT Blocks (bottom group)",
+    "what": "Write sits in the gap above the bottom group",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "ELIT markers (red)",
+    "to": "baseline markers (blue)",
+    "what": "each red curve is read against the blue point of the same shape",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "ELIT budget points of one backbone",
+    "to": "next budget point",
+    "what": "four operating points per backbone joined into a trade-off curve",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "69% / 4096 Tokens",
+    "to": "35% / 320 Tokens",
+    "what": "budget shrinks leftwards across the six ELIT columns",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ELIT-Qwen-Image",
+    "to": "Qwen-Image",
+    "what": "same three prompts per row, ELIT at six budgets against the 100% baseline",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "red / blue colours in headers",
+    "to": "plot markers and image frames and titles",
+    "what": "red = ELIT, blue = baseline, carried across all three tiles",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "DiT + ELIT",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "minimal sketch of three DiT block groups with the Latent Interface strip and the Read and Write layers",
+    "verdict": "ours"
+   },
+   {
+    "label": "Flexible Compute Allocation",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "FDD against GFLOPs: single blue baseline points for DiT, U-ViT, HDiT and red four-point curves for their ELIT versions",
+    "verdict": "ours"
+   },
+   {
+    "label": "ELIT-Qwen-Image / Qwen-Image",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "three prompts at six ELIT budgets (35% to 69% FLOPs) in a red frame, next to the 100% FLOPs baseline column in a blue frame",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "35% / 320, 69% / 4096, 100% / 4096",
+    "kind": "identity",
+    "at": "ends of the sample grid and the baseline column",
+    "what": "name the compute budget (FLOPs share and token count) of that column; no step numbers are used"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "ELIT-Qwen-Image samples: a woman with a golden headband, a police officer walking in a snowy street, a woman in a leather jacket on a neon-lit street",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 18,
+    "medium": "bitmap",
+    "treatment": "square tiles butted edge to edge into a 3 x 6 grid inside a red frame, no gaps, one prompt per row and one budget per column"
+   },
+   {
+    "what": "the same three prompts rendered by the original Qwen-Image at full compute",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one column of three tiles in a blue frame, set apart from the ELIT grid by a gap"
+   },
+   {
+    "what": "FDD versus GFLOPs scatter with a boxed legend",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "small plot with faint grid; red markers joined by red polylines for ELIT, single blue markers for baselines, marker shape per backbone; 4 pt tick text"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "three text-to-image prompts, each shown at six ELIT budgets and by the baseline",
+    "form": "rows of image tiles with budgets labelled only at the two ends (35% / 320 tokens, 69% / 4096 tokens) and 100% / 4096 for the baseline",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "rounded light-blue box holding a stack of white rounded bars and the words DiT Blocks; three boxes of different heights stand for three groups of blocks",
+    "parts": [
+     "outer box with offset outline",
+     "stacked white bars",
+     "DiT Blocks label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short rounded strip of five cells whose red tint fades from saturated on the left to almost white on the right, split by dotted vertical dividers",
+    "parts": [
+     "gradient cells",
+     "dotted dividers",
+     "Latent Interface label box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "cross-attention layers reduced to two small pink boxes labelled Read and Write",
+    "parts": [
+     "Read",
+     "Write"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "quality-compute-tradeoff-curve",
+    "drawn_as": "scatter of FDD against GFLOPs: a red polyline with one marker per budget for each ELIT model and a single blue marker per baseline",
+    "parts": [
+     "red polylines",
+     "blue baseline points",
+     "legend"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the 'DiT + ELIT =' header top left, runs over the sketch to the plot, then to the red-framed sample grid, ends on the blue Qwen-Image column and the budget arrow below."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three units from left to right: a narrow column sketch headed 'DiT + ELIT =', a square-ish scatter plot headed 'Flexible Compute Allocation', and a wide 3 x 6 photo grid with a detached baseline column; one budget arrow runs under the grid.",
+  "panel_count": 3,
+  "lanes": "sample grid of 3 prompt rows by 6 budget columns, plus one baseline column",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.02,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#1f77b4",
+    "used_for": "baseline identity: DiT, U-ViT, HDiT markers, 'DiT' header, Qwen-Image title and frame"
+   },
+   {
+    "hex": "#d62728",
+    "used_for": "ELIT identity: ELIT markers and curves, 'ELIT' header, ELIT-Qwen-Image title and frame"
+   },
+   {
+    "hex": "#a4d3f7",
+    "used_for": "fill of the DiT Blocks boxes"
+   },
+   {
+    "hex": "#d2fcff",
+    "used_for": "pale outer plate behind each DiT Blocks box"
+   },
+   {
+    "hex": "#febdbd",
+    "used_for": "fill of the Read and Write boxes"
+   },
+   {
+    "hex": "#ddd4ff",
+    "used_for": "lilac plate behind Read and Write"
+   },
+   {
+    "hex": "#feffff",
+    "used_for": "near-white bars inside the DiT Blocks boxes"
+   },
+   {
+    "hex": "#03a717",
+    "used_for": "bold green FLOPs percentages (35%, 69%)"
+   },
+   {
+    "hex": "#ffffff",
+    "opacity": 0.8,
+    "used_for": "background of the plot legend"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt black outlines on the sketch boxes with a small offset second outline; 0.25 pt grey axes and grid; about 0.75 pt coloured polylines; about 1 pt coloured frames round the image groups",
+  "font": "serif (Times-like) about 7 pt for headers and labels, bold coloured headers; small sans about 4 pt for plot ticks, legend and axis names",
+  "corners": "mixed",
+  "arrows": "a single thin straight black arrow with a small filled head under the sample grid; no arrows in the sketch",
+  "rendering": "flat-vector",
+  "effects": "none beyond the small offset outline that gives the sketch boxes a slightly raised edge",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = vanilla DiT-family baselines (header, markers, Qwen-Image frame and title); red = ELIT (header, markers and curves, frame and title of the ELIT grid); in the sketch light blue = existing DiT blocks, pink = new Read/Write layers, red gradient = latent tokens; green = FLOPs share",
+  "line_style_means": "solid red polylines join the operating points of one ELIT model; dotted dividers split the latent strip into tokens; the black arrow gives the direction of shrinking budget",
+  "shape_means": "marker shape names the backbone (star DiT, down-triangle U-ViT, square HDiT); the same shape in red and blue pairs ELIT with its baseline",
+  "marker_means": "bold green percentage = share of baseline FLOPs; the number below = latent token count",
+  "emphasis": "red versus blue is kept in every tile; the ELIT grid is wrapped in a red frame while the baseline column gets a blue one; new layers are pink while unchanged blocks are blue.",
+  "reusable_patterns": [
+   "equation header 'A + B =' that makes the sketch and the results read as one sum",
+   "one colour pair (blue baseline, red ours) carried from the header through plot markers to image frames and titles",
+   "sample grid whose columns step through the budget, with the baseline column detached at the end",
+   "bold green percentage plus token count under the end columns as the headline saving",
+   "single arrow under a strip of samples that names what shrinks along it",
+   "trade-off scatter with red polylines for ours and lone blue points for baselines"
+  ],
+  "weaknesses": [
+   "plot tick labels and legend are about 4 pt, tiny at double-column print width",
+   "the sketch has no arrows, so how Read, the latent strip and Write connect to the DiT groups must be taken from the text",
+   "only the two end columns of the sample grid carry budget labels",
+   "the scatter (DiT, U-ViT, HDiT) and the samples (Qwen-Image) show different models and no label links them"
+  ]
+ },
+ "resources": {
+  "own": [
+   "21 generated image tiles from ELIT-Qwen-Image and Qwen-Image",
+   "measured FDD and GFLOPs points for six models"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "DiT Blocks, Read, Write and Latent Interface boxes",
+   "equation header",
+   "scatter plot with legend",
+   "red and blue frames and the budget arrow"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "DiT Blocks boxes",
+   "Latent Interface token strip",
+   "Read and Write boxes",
+   "FDD vs GFLOPs scatter with legend",
+   "3 x 6 grid of generated photos",
+   "detached baseline image column",
+   "budget arrow with FLOPs and token counts"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "diffusion transformer",
+   "elastic compute",
+   "latent interface",
+   "cross-attention",
+   "FLOPs budget",
+   "text-to-image",
+   "Qwen-Image",
+   "quality-compute trade-off"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "small-multiples",
+   "cost-badges",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "equation-header",
+    "what": "a header row 'A + B =' above a sketch so that the tiles read as method plus add-on equals result"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Keep one colour pair (blue baseline, red ours) from a tiny architecture sketch through the result plot to the frames and titles of the sample grid, and head the strip with 'A + B =' so three unlike tiles read as one claim. Show a budget as one arrow with FLOPs share and token count under samples that step through it.",
+  "suits": "Teasers for plug-in mechanisms (efficiency, adapters, schedulers) where a minimal sketch, a trade-off plot and a strip of samples together make the case."
+ },
+ "tags": [
+  "equation-header",
+  "teaser-triptych",
+  "photo-grid",
+  "blue-vs-red-coding",
+  "scatter-with-legend",
+  "serif-labels",
+  "double-column-wide"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 Experiments (p.8)"
+  ],
+  "evidence": [
+   "At inference, the number of latent tokens is a user-controlled knob that yields a smooth quality–FLOPs trade-off",
+   "Read pulls information from input tokens, which we will refer to as spatial, into the latent interface",
+   "Write broadcasts updated latents back to the spatial tokens."
+  ]
+ },
+ "summary": "ELIT (Elastic Latent Interface Transformer) is a drop-in addition to diffusion transformers that inserts a variable-length set of latent tokens plus two cross-attention layers, Read and Write, so the compute per step is set by the number of latents instead of the image size. Figure 1 is a teaser in three tiles under an equation header 'DiT + ELIT = Flexible Compute Allocation': a minimal sketch of three groups of DiT Blocks with the Latent Interface strip, Read and Write; an FDD-versus-GFLOPs scatter in which red ELIT curves for DiT, U-ViT and HDiT sit below single blue baseline points; and a 3 x 6 grid of text-to-image samples at shrinking budgets (35% to 69% of the FLOPs, 320 to 4096 tokens) beside the full-budget Qwen-Image column. Blue means baseline and red means ELIT throughout.",
+ "summary_zh": "ELIT 给 DiT 加上可变长度的潜变量接口和 Read/Write 交叉注意力，靠潜变量数控制算力。图 1 由三块组成：结构草图、FDD-GFLOPs 散点图、不同预算下的文生图样例，蓝色为基线，红色为 ELIT。",
+ "confidence": "high",
+ "notes": "Prior labels kept (contribution-mosaic first). The digest calls the font sans, but the preview shows serif labels at 7 pt and sans plot text at 4 pt. The sketch has no arrows; the heads counted in the digest are the triangle markers of the plot plus the budget arrow. The 69% label sits under the 4096-token column, which is not explained in the figure.",
+ "venue": "CVPR26"
+}

@@ -1,0 +1,458 @@
+{
+ "paper_id": "icml24-0072",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Stochastic Control Guidance (SCG)",
+  "one_liner": "A training-free, plug-and-play guidance method that makes pretrained diffusion models follow non-differentiable rules by sampling candidates at each step and keeping the most rule-compliant.",
+  "domain": [
+   "symbolic music generation",
+   "guided diffusion",
+   "non-differentiable rules"
+  ],
+  "subfield": "generative",
+  "subfield2": "audio"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "branch-and-select",
+  "variant_note": "an overview chain plus a wedge zoom into one sampling step that branches into three candidates, scores each with the rules and keeps the best",
+  "argues": "Rules that cannot be differentiated can still guide a pretrained diffusion model: at every step sample several next states, score their clean-sample estimates with the rules, and keep the best.",
+  "subject": "A pretrained diffusion chain guided by rule programs, and a zoom into one sampling step that branches into three candidates, scores them with the rules and keeps the best.",
+  "elements": [
+   {
+    "name": "Rule Programs",
+    "type": "text-block",
+    "role": "symbolic rules written as code, here a chord-extraction function, that define the target",
+    "drawn_as": "rounded white box with a bold title and a monospace listing: def find_chords(notes): ... return [I, IV, V, ...]",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Pretrained Diffusion Model",
+    "type": "container",
+    "role": "the unchanged pretrained model that denoises from x_T to x_0 and receives rule guidance at every step",
+    "drawn_as": "rounded white box with a bold title holding a chain of state strips and arrows",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "x_T, x_{T-1}, ..., x_0",
+    "type": "data",
+    "role": "the states of the sampling chain from noise to a clean sample",
+    "drawn_as": "row of light-blue four-cell strips joined by arrows, an ellipsis in the middle",
+    "container": "Pretrained Diffusion Model",
+    "is_contribution": false
+   },
+   {
+    "name": "Stochastic Control Guidance (SCG)",
+    "type": "container",
+    "role": "the guidance performed at one sampling step, shown enlarged",
+    "drawn_as": "large rounded box under the top row with a bold title, reached by a translucent light-blue wedge",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "x_t",
+    "type": "data",
+    "role": "the current noisy state at step t",
+    "drawn_as": "bold x with subscript t beside a light-blue four-cell strip, at the left of the zoom box",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": false
+   },
+   {
+    "name": "x^1_{t-1}, x^2_{t-1}, x^3_{t-1}",
+    "type": "data",
+    "role": "several realizations of the next step, sampled from x_t",
+    "drawn_as": "three strips in rows, fanned out from x_t by arrows; rows 1 and 3 light blue, row 2 orange",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": true
+   },
+   {
+    "name": "x-hat^1_0, x-hat^2_0, x-hat^3_0",
+    "type": "data",
+    "role": "the clean sample estimated from each candidate",
+    "drawn_as": "bold x with hat, subscript 0 and superscript index, each followed by a score thumbnail",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": true
+   },
+   {
+    "name": "Rules",
+    "type": "module",
+    "role": "evaluates the rule function on each clean-sample estimate (forward evaluation only)",
+    "drawn_as": "tall rounded white box with bold label, three arrows in and three out",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": false
+   },
+   {
+    "name": "loss bars with l(y, rule(x-hat^i_0))",
+    "type": "chart",
+    "role": "loss of each candidate against the target y; the shortest bar belongs to the best candidate",
+    "drawn_as": "three horizontal bars on a vertical axis line, two solid blue, the short middle one light orange; formula label above",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": true
+   },
+   {
+    "name": "smiley face",
+    "type": "icon",
+    "role": "marks the candidate with the lowest loss as the chosen one",
+    "drawn_as": "outline smiley beside the short orange bar, followed by an arrow",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": null
+   },
+   {
+    "name": "x^2_{t-1} (selected)",
+    "type": "data",
+    "role": "the chosen next state that continues the sampling chain",
+    "drawn_as": "bold x with superscript 2 and subscript t-1 beside an orange four-cell strip at the right of the zoom box",
+    "container": "Stochastic Control Guidance (SCG)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Rule Programs",
+    "to": "Pretrained Diffusion Model",
+    "what": "rule guidance enters at every sampling step",
+    "kind": "control",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "x_T",
+    "to": "x_{T-1}",
+    "what": "denoising step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_{T-1}",
+    "to": "x_0",
+    "what": "denoising steps (ellipsis)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_0",
+    "to": "generated score thumbnail",
+    "what": "the clean sample is a piece of symbolic music",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "junction of Rule Programs and the chain",
+    "to": "Stochastic Control Guidance (SCG)",
+    "what": "zoom into the guided sampling step",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "x_t",
+    "to": "x^1_{t-1}, x^2_{t-1}, x^3_{t-1}",
+    "what": "sample several realizations of the next step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x^i_{t-1}",
+    "to": "x-hat^i_0",
+    "what": "estimate the corresponding clean sample",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x-hat^i_0",
+    "to": "Rules",
+    "what": "each clean-sample estimate is checked by the rules",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Rules",
+    "to": "loss bars with l(y, rule(x-hat^i_0))",
+    "what": "one loss value per candidate",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "loss bars with l(y, rule(x-hat^i_0))",
+    "to": "x^2_{t-1} (selected)",
+    "what": "the candidate with the lowest loss is kept as the next state",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Rule Programs",
+    "to": "Rules",
+    "what": "the same rule functions, named alike, evaluated forward",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "orange strip x^2_{t-1}, orange bar",
+    "to": "orange x^2_{t-1} (selected)",
+    "what": "the winning candidate keeps its orange colour from candidate to bar to next state",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "Rule Programs beside the Pretrained Diffusion Model chain x_T to x_0, with a rule line feeding every sampling step",
+    "verdict": "setting"
+   },
+   {
+    "label": "Stochastic Control Guidance (SCG)",
+    "kind": "stage-pipeline",
+    "axis": "zoom",
+    "shows": "one guided step: x_t branches into three candidates, each decoded to a score, checked by Rules, compared as loss bars; the best becomes x_{t-1}",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2, 3 (superscripts)",
+    "kind": "identity",
+    "at": "x^i_{t-1} and x-hat^i_0 and the three rows",
+    "what": "index the three candidate realizations and their clean-sample estimates"
+   },
+   {
+    "marker": "T, T-1, 0 (subscripts)",
+    "kind": "order",
+    "at": "x_T, x_{T-1}, x_0",
+    "what": "order the denoising steps from noise to clean sample"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "rendered sheet-music thumbnails of generated symbolic music (two-staff piano scores)",
+    "content": "other",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small thumbnails with no frame: one at the end of the diffusion chain and one after each candidate in the zoom; judged to be raster images from the preview"
+   },
+   {
+    "what": "three horizontal loss bars",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "bars of different length on a vertical axis line, no numbers; the shortest in orange marks the best candidate"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "outline smiley face",
+    "stands_for": "the best, most rule-compliant candidate",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a rule program: def find_chords(notes): ... return [I, IV, V, ...] and rendered score samples",
+    "form": "monospace code listing in a rounded box and sheet-music thumbnails",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "states x_T, x_{T-1}, ..., x_0 as four-cell strips joined by right-pointing arrows with an ellipsis, ending in a rendered sample",
+    "parts": [
+     "x_T",
+     "x_{T-1}",
+     "ellipsis",
+     "x_0",
+     "output score"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "each latent state is a short strip of four cells; light blue for ordinary states and candidates, light orange for the selected one",
+    "parts": [
+     "four-cell strip"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top row (rules and the diffusion chain), follows the wedge down into the SCG box, reads left to right from x_t through the three candidate rows into Rules and the loss bars, and ends at the orange selected state."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A top row of two rounded boxes (Rule Programs left, Pretrained Diffusion Model right) and, below, one large rounded box titled Stochastic Control Guidance (SCG). A translucent light-blue wedge widens from the junction under the top boxes to the title of the large box. Inside it a left-to-right pipeline has three parallel candidate rows that converge on a single Rules box and a loss bar glyph, ending in the selected candidate.",
+  "panel_count": 2,
+  "lanes": "3 parallel candidate rows inside the zoom box",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "column",
+  "aspect": 2.26,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#5b9bd5",
+    "used_for": "zoom wedge, translucent",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "state and candidate strips (light fill)",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "solid bars of the rejected candidates"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "the selected candidate: its short loss bar and orange strip fill"
+   },
+   {
+    "hex": "#f4b183",
+    "used_for": "orange tint on the cells of the selected strips",
+    "opacity": 0.5
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on rounded boxes, strip cells and arrows",
+  "font": "Courier monospace 5.5 pt for the rule code; bold sans (Calibri) 7 pt for box titles; bold math italic x with sub- and superscripts, 5.5-10 pt",
+  "corners": "mixed",
+  "arrows": "thin black straight arrows with small filled heads; a plain black rule line with up arrows into the chain",
+  "rendering": "flat-vector",
+  "effects": "translucent zoom wedge",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "light blue = ordinary states, candidates and rejected loss bars; light orange = the selected (lowest-loss) candidate, its bar and the next state; translucent blue wedge = the zoomed region",
+  "line_style_means": "the black line from Rule Programs with up arrows into the chain = rules acting at every sampling step; black arrows = data flow; wedge edges = zoom relation",
+  "shape_means": "four-cell strip = a latent state; rounded square Rules = rule evaluation; horizontal bars = loss per candidate; smiley = the winner",
+  "marker_means": "superscripts 1-3 index the candidates; subscripts T to 0 order the denoising steps; smiley marks the selected candidate",
+  "emphasis": "the colour switch to orange for the second candidate carries the selection from strip to bar to next state; the translucent wedge pulls the eye into the SCG box",
+  "reusable_patterns": [
+   "translucent wedge from an overview chain into a large rounded zoom box with a bold title",
+   "one state fanned into three parallel candidate rows that pass through the same checker",
+   "bar glyph comparing candidates with the winner in a different colour plus a smiley, carried on to the next state",
+   "rendered output thumbnails at the end of the chain and of every candidate row",
+   "code listing in a rounded box as the source of the rules"
+  ],
+  "weaknesses": [
+   "the link between the Rule Programs box and the Rules box is by name only",
+   "the wedge does not say which step t is shown"
+  ]
+ },
+ "resources": {
+  "own": [
+   "rendered sheet-music thumbnails of generated music",
+   "a rule code snippet (find_chords)"
+  ],
+  "stock": [
+   "smiley face bitmap"
+  ],
+  "generated": [],
+  "drawn": [
+   "boxes, state strips, arrows and loss bars",
+   "zoom wedge"
+  ],
+  "unknown": [
+   "whether the diffusion chain strips are vector or part of a pasted image"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "Rule Programs code box",
+   "Pretrained Diffusion Model chain of state strips",
+   "sheet-music thumbnails",
+   "translucent zoom wedge",
+   "three candidate strips",
+   "Rules box",
+   "loss bars with smiley",
+   "selected orange strip"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "symbolic music generation",
+   "diffusion model",
+   "rule guidance",
+   "non-differentiable rules",
+   "stochastic control",
+   "plug-and-play",
+   "sampling-time guidance",
+   "candidate selection",
+   "piano roll"
+  ],
+  "tags": [
+   "zoom-callout",
+   "code-snippet-box",
+   "token-strip",
+   "verdict-marks"
+  ],
+  "new_tags": [
+   {
+    "name": "candidate-fan-select",
+    "what": "one state fans out by arrows into several candidate rows, each scored by the same checker and compared in a small bar glyph, the winner marked by colour and a smiley and carried on"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Zoom from a short overview chain into one step with a translucent wedge; in the zoom fan one state into parallel candidate rows through the same checker, show the comparison as a bar glyph, and mark the winner with a colour switch and a smiley that carries on to the next state.",
+  "suits": "Sampling-time or inference-time algorithms (best-of-N, guidance, search, rejection) that repeat a branch, score and select step inside a longer generative chain."
+ },
+ "tags": [
+  "zoom-wedge",
+  "two-bands",
+  "candidate-rows",
+  "sheet-music-thumbnails",
+  "pastel-blue-orange",
+  "thin-black-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 Non-Differentiable Rule Guidance (p.5)"
+  ],
+  "evidence": [
+   "we generate multiple realizations at each sampling step, and select the one that best follows the target (Figure 1)",
+   "we sample several realizations of the next step, and select the one yielding the most rule-compliant clean sample"
+  ]
+ },
+ "summary": "The paper proposes Stochastic Control Guidance (SCG), a training-free, plug-and-play way to guide pretrained diffusion models for symbolic music with non-differentiable rules such as chord progressions, needing only forward evaluation of the rule function. Figure 1 gives the overview in two bands. At the top, a rounded box of rule code (find_chords) sits beside a Pretrained Diffusion Model drawn as a chain of blue four-cell state strips from x_T to x_0, ending in a sheet-music rendering, with a line from the rules feeding every step. A translucent wedge zooms into SCG: x_t branches into three candidates x_{t-1}, each turned into a clean-sample score, checked by a Rules box and compared as three loss bars; the shortest (orange, with a smiley) becomes the next state.",
+ "summary_zh": "论文提出随机控制引导（SCG），无需训练即可让预训练扩散模型遵循不可微的音乐规则。图1上方是规则程序与扩散链，下方放大到SCG：x_t分出三个候选，经Rules评分，损失最短者（橙色笑脸）成为下一状态。",
+ "confidence": "high",
+ "notes": "Prior kinds kept in a different order: the zoom opens a procedure (branch, score, select), not a learned model, so stage-pipeline is primary and model-anatomy stays as secondary for the unrolled diffusion chain and the overview-plus-zoom layout. The digest lists 4 different bitmaps (3 JPEG, 1 PNG); which of them are the score thumbnails and which one the smiley was judged from the preview, not from the SVG.",
+ "venue": "ICML24"
+}

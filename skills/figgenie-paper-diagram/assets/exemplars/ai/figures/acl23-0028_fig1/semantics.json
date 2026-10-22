@@ -1,0 +1,540 @@
+{
+ "paper_id": "acl23-0028",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "HardPT",
+  "one_liner": "Few-shot prompt-tuning framework that sorts samples into easy, hard and misleading with an RL agent and trains on hard samples with an adaptive contrastive loss.",
+  "domain": [
+   "few-shot prompt-tuning",
+   "hard sample identification",
+   "contrastive learning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "two lettered stages stacked: (a) review sentences stratified into EASY, HARD, MISLEADING; (b) prompt-based training on EASY and HARD with positive and negative sample rows",
+  "argues": "Samples differ in value: sorting them into easy, hard and misleading lets prompt-tuning train on hard samples, with positive and negative samples added, while leaving misleading ones out.",
+  "subject": "Review sentences stratified into easy, hard, misleading; then templated inputs through encoder and MLM head to a contrastive loss.",
+  "elements": [
+   {
+    "name": "Instances in Dataset",
+    "type": "data",
+    "role": "raw training sentences (three movie-review snippets and an ellipsis)",
+    "drawn_as": "rounded dark-blue frame with bullets, title set into the bottom border",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Label",
+    "type": "data",
+    "role": "given label of each sentence, each with a small 'Correct label' note (Positive, Negative, Neutral)",
+    "drawn_as": "narrow rounded frame, bold black words",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Prediction",
+    "type": "data",
+    "role": "model prediction per sentence, coloured green for correct, yellow for challenging, red for incorrect (caption)",
+    "drawn_as": "narrow rounded frame, coloured bullets and words",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "block chevrons (2)",
+    "type": "operation",
+    "role": "unlabelled steps between columns; the second one stands for the agent's classification into strata (caption)",
+    "drawn_as": "pale blue double chevrons, one after Label and one after Prediction",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Instances after Stratification",
+    "type": "container",
+    "role": "the sentences regrouped by difficulty",
+    "drawn_as": "rounded frame holding three dashed cards",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "EASY",
+    "type": "sample",
+    "role": "'This is one of the best films.' kept as an easy sample",
+    "drawn_as": "dashed card, green title, bullet text and ellipsis",
+    "container": "Instances after Stratification",
+    "is_contribution": true
+   },
+   {
+    "name": "HARD",
+    "type": "sample",
+    "role": "'Just to distract the kids, as it claims.' kept as a hard sample",
+    "drawn_as": "dashed card, gold title",
+    "container": "Instances after Stratification",
+    "is_contribution": true
+   },
+   {
+    "name": "MISLEADING",
+    "type": "sample",
+    "role": "'The subject matter of this film is unusual.' flagged as a misleading sample",
+    "drawn_as": "dashed card, red title",
+    "container": "Instances after Stratification",
+    "is_contribution": true
+   },
+   {
+    "name": "EASY input (b)",
+    "type": "sample",
+    "role": "easy sentence wrapped in the cloze template '[CLS] ... It is [Mask]. [SEP]'",
+    "drawn_as": "pale green dashed card inside a frame titled EASY; bracket 'Input & Template' underneath",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "HARD input (b)",
+    "type": "sample",
+    "role": "hard sentence wrapped in the same template; positive and negative samples are joined behind it",
+    "drawn_as": "pale yellow dashed card inside a wide frame titled HARD; bracket 'Input & Template'",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "The Positive Samples (P_1 ... P_i)",
+    "type": "sample",
+    "role": "positive samples such as 'It is just passable.' appended to the hard sample for the contrast batch (caption)",
+    "drawn_as": "orange-outlined peach boxes, orange bracket and label",
+    "container": "HARD frame (b)",
+    "is_contribution": true
+   },
+   {
+    "name": "The Negative Samples (N_1 ... N_j)",
+    "type": "sample",
+    "role": "negative samples such as 'It's disappointing.' appended to the hard sample for the contrast batch (caption)",
+    "drawn_as": "purple-outlined blue-grey boxes, blue bracket and label",
+    "container": "HARD frame (b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Pre-trained Encoder",
+    "type": "module",
+    "role": "the PLM that encodes the templated inputs",
+    "drawn_as": "cylinder, white, black outline",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "MLM Head",
+    "type": "module",
+    "role": "masked-language-model head after the encoder",
+    "drawn_as": "cylinder, white, black outline",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Adaptive Contrastive Loss",
+    "type": "module",
+    "role": "training loss that receives the easy and hard flows",
+    "drawn_as": "dash-dot box titled Training Loss",
+    "container": "(b)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Instances in Dataset",
+    "to": "Label",
+    "what": "each sentence has a given label (rows line up)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Label",
+    "to": "Prediction",
+    "what": "a prediction is placed next to each label",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Prediction",
+    "to": "Instances after Stratification",
+    "what": "samples are classified into easy, hard and misleading by an agent (caption)",
+    "kind": "data",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "green, yellow, red predictions",
+    "to": "EASY, HARD, MISLEADING titles",
+    "what": "same colour marks the stratum",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "EASY, HARD cards in (a)",
+    "to": "EASY input (b), HARD input (b)",
+    "what": "easy and hard samples reappear as training inputs; MISLEADING has no counterpart in (b)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "EASY input (b)",
+    "to": "Pre-trained Encoder",
+    "what": "templated easy input (green dashed flow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "HARD input (b)",
+    "to": "Pre-trained Encoder",
+    "what": "templated hard input with positive and negative samples (yellow dashed flow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "The Positive Samples, The Negative Samples",
+    "to": "HARD input (b)",
+    "what": "concatenated behind the hard sample to form the complete input",
+    "kind": "data",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Pre-trained Encoder",
+    "to": "MLM Head",
+    "what": "two parallel dashed arrows, green and yellow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLM Head",
+    "to": "Adaptive Contrastive Loss",
+    "what": "two parallel dashed arrows, green and yellow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "sentences with labels and predictions are stratified into EASY, HARD and MISLEADING cards",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b)",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "EASY and HARD inputs with a cloze template run through encoder and MLM head into the adaptive contrastive loss; the hard input gets positive and negative rows",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "centred under each panel",
+    "what": "name the two steps referred to in the caption"
+   },
+   {
+    "marker": "EASY, HARD, MISLEADING",
+    "kind": "identity",
+    "at": "titles of the cards and frames",
+    "what": "name the three strata; coloured green, gold, red"
+   },
+   {
+    "marker": "P_1 ... P_i, N_1 ... N_j",
+    "kind": "identity",
+    "at": "positive and negative boxes",
+    "what": "index the positive and negative samples"
+   },
+   {
+    "marker": "Correct label: Positive / Negative / Neutral",
+    "kind": "identity",
+    "at": "small green notes under each label",
+    "what": "give the true class of each sentence; the third differs from its given label"
+   },
+   {
+    "marker": "Input & Template, The Positive Samples, The Negative Samples, Training Loss",
+    "kind": "section",
+    "at": "brackets under the boxes and a title on the loss frame",
+    "what": "name the parts they span"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "three review sentences ('This is one of the best films.', 'Just to distract the kids, as it claims', 'The subject matter of this film is unusual.') with labels, predictions and strata",
+    "form": "bulleted text in rounded frames, then dashed cards",
+    "real_values": true
+   },
+   {
+    "what": "templated inputs '[CLS] ... It is [Mask]. [SEP]' with positive 'P1: It is just passable.' and negative 'N1: It's disappointing.' samples",
+    "form": "text strings in coloured boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "dashed card holding '[CLS] sentence. It is [Mask]. [SEP]' with the template in italic underline and the [Mask] slot in a blue highlighted box",
+    "parts": [
+     "[CLS]",
+     "sentence",
+     "template 'It is'",
+     "[Mask] slot",
+     "[SEP]"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "a row of orange positive boxes and a row of blue-grey negative boxes beside the hard input, bracketed and named; no pull or push arrows",
+    "parts": [
+     "positive boxes",
+     "negative boxes",
+     "brackets"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "two cylinders labelled Pre-trained Encoder and MLM Head in a chain",
+    "parts": [
+     "Pre-trained Encoder",
+     "MLM Head"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "rounded frame titled Instances in Dataset with three bullet sentences and an ellipsis, followed by Label and Prediction frames of the same height so rows line up",
+    "parts": [
+     "sentence rows",
+     "ellipsis",
+     "title on border"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Top-left dataset frame, across Label and Prediction to the stratified cards in (a); then (b) from the EASY frame through encoder and MLM head to the loss, with the HARD frame along the bottom."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two lettered panels stacked. (a) on top is a row of four rounded frames (sentences, labels, predictions, stratified cards) joined by two block chevrons. (b) below is the training diagram: an EASY input frame, a cylinder encoder, a cylinder MLM head and a dash-dot loss box in one row, with a wide HARD frame (hard input plus positive and negative rows) along the bottom; the letters sit centred under each panel.",
+  "panel_count": 2,
+  "lanes": "4 aligned columns in (a) whose three rows follow the same three sentences",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.05,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#70ad47",
+    "used_for": "EASY: title, green predictions, dashed green flow arrows"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "dark green text: 'Correct label' notes and the EASY frame title in (b)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "HARD: yellow predictions and dashed yellow flow arrows"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "dark gold HARD titles"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "MISLEADING title and the red Negative prediction"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "EASY input card fill in (b)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "HARD input card fill in (b)"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "positive sample boxes fill"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "positive sample outlines, bracket and label"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "negative sample boxes fill"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "negative sample outlines"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "negative samples bracket and label"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "block chevrons fill (outline #9dc3e6)"
+   },
+   {
+    "hex": "#bdd7ee",
+    "opacity": 0.51,
+    "used_for": "highlight on the [Mask] slot (outline #5b9bd5)"
+   },
+   {
+    "hex": "#2f528f",
+    "used_for": "outlines of the rounded data frames"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "frame titles on borders, brackets and 'Input & Template'"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.75 pt: dark-blue rounded frames, dashed borders on cards, dash-dot border on the loss box, coloured dashed arrows",
+  "font": "Helvetica-style sans 3-9.5 pt (6 pt body, 5.5 pt bold titles, 3 pt bold notes); bold serif italics (Times) for the frame titles and for 'Template', P and N in (b)",
+  "corners": "rounded",
+  "arrows": "large pale-blue double chevrons in (a); thin dashed green and yellow arrows with small filled heads on orthogonal routes in (b)",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "other",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Green = EASY (correct prediction), gold or yellow = HARD (challenging), red = MISLEADING (incorrect); orange = positive samples, purple-outlined blue-grey = negative samples; pale blue = block chevrons; dark-blue and slate = frames and brackets.",
+  "line_style_means": "Dashed green and yellow arrows = the EASY and HARD flows, drawn as two parallel arrows through the shared encoder, head and loss; dashed card borders = single samples; dash-dot box = the training loss; solid rounded frames = data groups.",
+  "shape_means": "Cylinder = pre-trained encoder and MLM head; rounded frame with a title set into its border = a data group; double chevrons = step between columns; blue highlighted rectangle = the [Mask] slot; brackets under text = the span they name.",
+  "marker_means": "(a) and (b) name the two steps; EASY, HARD, MISLEADING name the strata and set the colour; P_1..P_i and N_1..N_j index positive and negative samples.",
+  "emphasis": "Colour carries the story: the strata colours of (a) return as the two dashed flows of (b), and only the hard sample gets the extra orange and blue rows before the contrastive loss.",
+  "reusable_patterns": [
+   "frames whose title sits in a break of the border (fieldset style) for data columns",
+   "one colour per data class kept on frame titles, dashed arrows and prediction text",
+   "two parallel coloured dashed arrows running through shared modules",
+   "the same example sentence traced from dataset column to stratum card to templated input",
+   "brackets under text spans naming the part (Input & Template, Positive Samples)",
+   "coloured prediction words flagging correct, challenging and incorrect",
+   "unlabelled block chevrons for a processing step between columns"
+  ],
+  "weaknesses": [
+   "the agent named in the caption is not drawn; the chevrons are unlabelled",
+   "3 pt 'Correct label' notes are very small",
+   "MISLEADING has no counterpart in (b), so its fate is left to the text",
+   "the meaning of green, yellow and red predictions is given only in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real review sentences with labels, predictions and strata",
+   "the cloze template and positive and negative sample sentences"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "frames, cards, cylinders, chevrons and dashed arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "rounded data frames with titles in the border",
+   "dashed stratum cards (EASY, HARD, MISLEADING)",
+   "double chevrons",
+   "cylinders for encoder and MLM head",
+   "positive and negative sample boxes",
+   "coloured dashed arrows",
+   "dash-dot loss box",
+   "template string with a [Mask] slot"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "prompt-tuning",
+   "few-shot learning",
+   "hard samples",
+   "reinforcement learning",
+   "contrastive loss",
+   "masked language model",
+   "sentiment classification"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "flow-type-arrows",
+   "positive-negative-pairs",
+   "highlighted-text-spans",
+   "verdict-marks",
+   "prompt-template-card"
+  ],
+  "new_tags": [
+   {
+    "name": "title-on-frame-border",
+    "what": "rounded frames whose title is set into a break of the border line, used for data columns and groups"
+   },
+   {
+    "name": "span-brackets",
+    "what": "bracket lines under a text span or a group of boxes with a name in the middle"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Trace the same example sentences from a raw data column through labels and predictions into coloured stratum cards, then carry the stratum colours into the dashed arrows of the training diagram, so one colour code ties data triage to model training.",
+  "suits": "Methods with a data-selection or curriculum step followed by a training step, especially NLP few-shot or noisy-label work with text examples."
+ },
+ "tags": [
+  "two stacked lettered panels",
+  "fieldset-style frames",
+  "colour-coded dashed arrows",
+  "cylinder model blocks",
+  "sentence examples",
+  "Office palette"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.4-5)"
+  ],
+  "evidence": [
+   "The model architecture of HardPT can be divided into two steps.",
+   "Samples are classified into easy, hard, and misleading categories by an agent.",
+   "The positive sample and negative sample are concatenated behind the hard sample"
+  ]
+ },
+ "summary": "HardPT is a few-shot prompt-tuning framework that identifies hard samples with a reinforcement-learning agent and learns from them with an adaptive contrastive loss. Figure 1 draws the two steps as stacked panels. In (a), three movie-review sentences are shown with their labels and the model's predictions, coloured green, yellow or red, and two block chevrons lead to dashed cards that sort them into EASY, HARD and MISLEADING. In (b), the EASY and HARD sentences get a cloze template with a [Mask] slot and run through a pre-trained encoder and an MLM head, both drawn as cylinders, in two colour-coded dashed flows that end in the adaptive contrastive loss; the hard sample is joined by rows of orange positive and blue negative samples.",
+ "summary_zh": "HardPT 图 1 分两步：(a) 把带标签和预测的句子分成 EASY、HARD、MISLEADING 三类；(b) EASY 与 HARD 句子套模板，经编码器和 MLM 头得到自适应对比损失，HARD 另接正负样本。",
+ "confidence": "high",
+ "notes": "Prior labels kept (stage-pipeline, worked-walkthrough) and model-anatomy added for panel (b). The RL agent named in the caption is not drawn: the two block chevrons in (a) are the only mark of the processing steps. In the Label column the third label (Positive) differs from its 'Correct label: Neutral' note, so labels are read as the dataset's possibly noisy labels. MISLEADING has no counterpart in (b), as drawn. The colour of the Prediction text follows the caption (green correct, yellow challenging, red incorrect).",
+ "venue": "ACL23"
+}

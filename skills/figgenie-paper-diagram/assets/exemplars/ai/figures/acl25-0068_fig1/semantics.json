@@ -1,0 +1,552 @@
+{
+ "paper_id": "acl25-0068",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TMCHT task and ARCJ (Adversarial Replication Contagious Jailbreak)",
+  "one_liner": "A multi-agent attack task where one attacker agent tries to mislead a town of agents with independent memories, and the finding that toxicity disappears along the chain.",
+  "domain": [
+   "multi-agent safety",
+   "jailbreak attacks on agent memory",
+   "LLM agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough",
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "multi-agent-organization",
+  "variant_note": "three lettered panels act out one restaurant question: a poisoned memory, an attacker among agents on graph, line and star topologies, and a chat chain where a similarity score decays",
+  "argues": "Memory attacks that work on one agent do not spread through a network of agents, because the toxic suffix fades with every hop.",
+  "subject": "A restaurant question answered from normal and poisoned memory, an attacker agent talking to a town of agents, and a message chain with falling similarity.",
+  "elements": [
+   {
+    "name": "(a) Attack Memory",
+    "type": "container",
+    "role": "background: a poisoned memory item is retrieved instead of the normal one and the model answers wrongly",
+    "drawn_as": "left cream panel with an orange title banner, a question bar and two dashed columns",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "question bar",
+    "type": "data",
+    "role": "the user question 'Which restaurant has the best food?'",
+    "drawn_as": "light-blue rounded bar under the title, repeated in (a) and (c)",
+    "container": "(a), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Normal Memory",
+    "type": "module",
+    "role": "memory that retrieves the genuine item [Steakhouse] with semantic similarity 0.7",
+    "drawn_as": "blue book icon in a dashed column, retrieve with a magnifier above, green item text, pink score box",
+    "container": "(a) Attack Memory",
+    "is_contribution": false
+   },
+   {
+    "name": "Attacked Memory!",
+    "type": "module",
+    "role": "memory with an injected item [Urbanhouse+Suffix] that scores 0.9 and is retrieved instead",
+    "drawn_as": "same column with a lightning bolt on the book, red item text with a purple Suffix, red score box",
+    "container": "(a) Attack Memory",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM and reply",
+    "type": "module",
+    "role": "the LLM generates the answer from the retrieved item: Steakhouse or Urbanhouse",
+    "drawn_as": "brain icon labelled LLM, hollow arrow labelled generate, avatar with a bubble 'I think ... is the best!'",
+    "container": "(a) Attack Memory",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Attack Multi-Agent (Our Task)",
+    "type": "container",
+    "role": "the paper's task: an attacker wants all townspeople to believe Urbanhouse is the best",
+    "drawn_as": "middle cream panel with an orange banner holding the attacker bubble, a goal box with a network graph and a topology strip",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Attacker",
+    "type": "actor",
+    "role": "the agent that wants everyone to think Urbanhouse is best and can only talk to A and B",
+    "drawn_as": "pixel-art chef avatar with a large speech bubble",
+    "container": "(b) Attack Multi-Agent (Our Task)",
+    "is_contribution": true
+   },
+   {
+    "name": "Goal of Attacking Multi-Agent",
+    "type": "region",
+    "role": "after T rounds of talk all agents think Urbanhouse is the best",
+    "drawn_as": "dashed rounded box with the agent graph A to G, a circular arrow labelled After T rounds talk and red text",
+    "container": "(b) Attack Multi-Agent (Our Task)",
+    "is_contribution": true
+   },
+   {
+    "name": "agent graph A to G",
+    "type": "instance",
+    "role": "town of agents that talk in pairs along the links",
+    "drawn_as": "round avatars with dashed rings, letters beside them, thin black double-headed arrows between neighbours",
+    "container": "Goal of Attacking Multi-Agent",
+    "is_contribution": null
+   },
+   {
+    "name": "Graph / Line / Star",
+    "type": "icon",
+    "role": "the three interaction topologies used",
+    "drawn_as": "three mini node-link glyphs with their names in a dashed strip",
+    "container": "(b) Attack Multi-Agent (Our Task)",
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Toxicity Disappearing (Our Finding)",
+    "type": "container",
+    "role": "the finding: the suffix and with it the retrievability of the toxic message fade along the chain",
+    "drawn_as": "right cream panel with an orange banner, a question bar, four bubbles joined by talk arrows and a score column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "chat chain Attacker, A, C, D",
+    "type": "instance",
+    "role": "message passed on hop by hop: Urbanhouse is the best! +Suffix, then Urbanhouse is the best!, then Steakhouse is the best!, then I do not care food",
+    "drawn_as": "avatars with state rings and blue speech bubbles stacked top to bottom, hollow arrows labelled talk",
+    "container": "(c) Toxicity Disappearing (Our Finding)",
+    "is_contribution": true
+   },
+   {
+    "name": "semantic similarity column",
+    "type": "chart",
+    "role": "similarity of the passed message to the query: 0.9, 0.8, 0.7, 0.5, dropping at every hop",
+    "drawn_as": "dashed box with vertical red boxes fading from dark red to pale pink joined by dashed arrows labelled drop, rotated label Toxicity Disappearing",
+    "container": "(c) Toxicity Disappearing (Our Finding)",
+    "is_contribution": true
+   },
+   {
+    "name": "Agent = ( LLM + Memory + Retriever )",
+    "type": "label",
+    "role": "legend strip defining an agent and the three avatar states Attacker, Clean, Attacked",
+    "drawn_as": "full-width dotted strip below the panels with icons, plus signs and three ringed avatars",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "question bar",
+    "to": "Normal Memory",
+    "what": "retrieve",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "question bar",
+    "to": "Attacked Memory!",
+    "what": "retrieve",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Normal Memory",
+    "to": "LLM and reply",
+    "what": "item [Steakhouse], semantic similarity 0.7",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attacked Memory!",
+    "to": "LLM and reply",
+    "what": "item [Urbanhouse+Suffix], semantic similarity 0.9",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attacker",
+    "to": "agent graph A to G",
+    "what": "talks only to A and B, who pass the message on",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "agent graph A to G",
+    "to": "agent graph A to G",
+    "what": "neighbouring agents talk in pairs for T rounds",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Attacker",
+    "to": "chat chain Attacker, A, C, D",
+    "what": "message with suffix starts the chain",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "chat chain Attacker, A, C, D",
+    "to": "semantic similarity column",
+    "what": "similarity falls 0.9, 0.8, 0.7, 0.5 along the hops",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Graph / Line / Star",
+    "to": "agent graph A to G",
+    "what": "the town's links follow one of three topologies",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Attack Memory",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "normal memory retrieves Steakhouse, an attacked memory retrieves Urbanhouse and the answer flips",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Attack Multi-Agent (Our Task)",
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "an attacker among agents A to G on graph, line or star topologies wants to mislead all of them",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Toxicity Disappearing (Our Finding)",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "the suffix disappears along a chat chain and the similarity score falls from 0.9 to 0.5",
+    "verdict": "finding"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "orange title banners",
+    "what": "letter plus title heads each panel; (Our Task) and (Our Finding) tag the paper's own parts"
+   },
+   {
+    "marker": "A to G",
+    "kind": "identity",
+    "at": "beside the avatars in (b) and (c)",
+    "what": "name the clean agents so the chain in (c) can be read against the graph in (b)"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "pixel-art chef",
+    "stands_for": "the attacker agent",
+    "style": "pixel-art",
+    "medium": "bitmap",
+    "count": 6
+   },
+   {
+    "depicts": "cartoon boy in a suit, in a green or pink dashed ring",
+    "stands_for": "a clean agent (green ring) or an attacked agent (pink ring)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 15
+   },
+   {
+    "depicts": "grey brain with circuit lines",
+    "stands_for": "the LLM",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "blue book, with a yellow lightning bolt when attacked",
+    "stands_for": "agent memory (normal or poisoned)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "magnifying glass",
+    "stands_for": "the retriever",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "circular arrow",
+    "stands_for": "repeated rounds of talk",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "mini node-link glyphs: graph, line, star",
+    "stands_for": "the three interaction topologies",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "the question 'Which restaurant has the best food?' answered 'I think Steakhouse is the best!' from normal memory and 'I think Urbanhouse is the best!' from poisoned memory",
+    "form": "question bar, retrieved item text and avatar bubbles with coloured words",
+    "real_values": true
+   },
+   {
+    "what": "the attacker's order 'I want everyone think that Urbanhouse is the best restaurant! I can only talk with A and B.'",
+    "form": "large speech bubble beside the chef",
+    "real_values": true
+   },
+   {
+    "what": "a four-hop chain of replies with similarity scores 0.9, 0.8, 0.7, 0.5",
+    "form": "stacked speech bubbles with a column of fading red score boxes",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "light-blue speech bubbles with a tail to a cartoon avatar, one per speaker, key words coloured",
+    "parts": [
+     "bubble",
+     "avatar",
+     "coloured words"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "multi-agent",
+    "drawn_as": "round avatars with letters wired by thin double-headed arrows in a graph; mini glyphs for graph, line and star topologies",
+    "parts": [
+     "avatars",
+     "links",
+     "topology strip"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "retrieval-store",
+    "drawn_as": "a magnifier labelled retrieve pointing from the question into a book icon, which returns an item with a similarity score",
+    "parts": [
+     "magnifier",
+     "book",
+     "retrieved item",
+     "score box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "grey brain-with-circuit icon beside the word LLM, a hollow arrow labelled generate below it",
+    "parts": [
+     "brain icon",
+     "label",
+     "arrow"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the title of (a) at top left, the question, then the two memory columns down to the replies; then (b) from the attacker bubble to the graph; then (c) down the chat chain and the score column; the legend strip last."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three cream panels side by side, each with an orange title banner, plus a full-width legend strip below that defines the agent and the avatar states. Panel (a) is split into two dashed columns (normal and attacked), (b) into the attacker bubble, a goal box with the graph and a topology strip, (c) into a message chain and a score column.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "letters+titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.68,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff8e5",
+    "used_for": "cream ground of the panels and the legend strip"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "fill of the dashed inner boxes"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "orange-yellow title banners"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "question bars and speech bubbles"
+   },
+   {
+    "hex": "#edaea7",
+    "used_for": "pink ring of attacked agents"
+   },
+   {
+    "hex": "#e4867c",
+    "used_for": "coral ring of the attacker"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "green ring of clean agents"
+   },
+   {
+    "hex": "#ef2d44",
+    "used_for": "red score boxes for high similarity"
+   },
+   {
+    "hex": "#f796a1",
+    "used_for": "pink score boxes for lower similarity"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "hollow grey block arrows"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy dashed rings and outlines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5-1 pt black and navy outlines, 26 dashed or dotted shapes: panel frames, inner boxes, avatar rings, drop arrows",
+  "font": "serif (Times New Roman) 8.5 pt body with coloured red, green and purple words; bold 11.5 pt panel titles; 10.5 pt legend",
+  "corners": "rounded",
+  "arrows": "large hollow grey block arrows for retrieve, generate and talk; thin black double-headed arrows between agents; dashed black arrows for drop",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "avatar ring colour = state (coral for the attacker, green for a clean agent, pink for an attacked agent) with a key in the legend strip; word colour: green = genuine item, red = poisoned item, purple = adversarial suffix; score boxes fade from dark red to pale pink as similarity falls; orange banners for titles, light blue for questions and bubbles",
+  "line_style_means": "hollow grey block arrow = process step (retrieve, generate, talk); thin double-headed black arrow = two agents talk; dashed black arrow = similarity drops; dashed rounded box = a group of items; dashed ring = agent avatar outline",
+  "shape_means": "blue book = memory, magnifier = retriever, brain = LLM, chef = attacker, boy in a suit = ordinary agent, bubble = utterance, circular arrow = repeated rounds",
+  "marker_means": "A to G name agents; the numbers in red boxes are semantic similarity scores; (Our Task) and (Our Finding) tag the paper's own panels",
+  "emphasis": "orange title banners, the red poisoned words, and the red score boxes that fade down the chain",
+  "reusable_patterns": [
+   "the same question bar repeated at the top of two panels so the outcomes can be compared",
+   "normal and attacked columns in one grammar with only the changed words in red",
+   "legend strip below the panels defining the agent as an equation of icons and giving the ring colours",
+   "chain of speech bubbles joined by talk arrows beside a column of fading score boxes",
+   "mini glyphs for the three topologies in a strip",
+   "avatar ring colour used as a state marker",
+   "tags (Our Task) and (Our Finding) inside the panel titles"
+  ],
+  "weaknesses": [
+   "the attacker's only two neighbours A and B are easy to miss in the graph of (b)",
+   "the similarity scores come without a note on how they are measured and look illustrative",
+   "the legend strip sits below the panels, away from the icons it explains",
+   "the paper's remedy is not drawn, only the problem"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the restaurant question with its answers and bubbles"
+  ],
+  "stock": [
+   "book, magnifier, brain, circular-arrow and lightning-bolt icons"
+  ],
+  "generated": [
+   "pixel-art chef and cartoon boy characters"
+  ],
+  "drawn": [
+   "panels and banners",
+   "dashed boxes",
+   "agent graph links",
+   "score boxes",
+   "block arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "pixel-art chef attacker with speech bubble",
+   "cartoon agents in coloured rings",
+   "memory book with lightning bolt",
+   "magnifier retrieve icon and brain LLM icon",
+   "agent network graph A to G",
+   "chain of speech bubbles with fading score boxes",
+   "legend strip with the agent equation"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "jailbreak",
+   "multi-agent",
+   "memory attack",
+   "LLM safety",
+   "contagion",
+   "toxicity disappearing",
+   "retrieval suffix",
+   "topology"
+  ],
+  "tags": [
+   "mascot-character",
+   "pictogram-chain",
+   "highlighted-text-spans",
+   "problem-only",
+   "module-state-coding",
+   "illustration-style"
+  ],
+  "new_tags": [
+   {
+    "name": "score-chip-column",
+    "what": "a vertical column of colour-graded score boxes joined by dashed drop arrows beside a chain of messages, showing a value decaying hop by hop"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Tell an attack or failure story as three lettered panels around the same question: the mechanism as a normal-versus-attacked pair, the proposed task with a topology, and the finding as a chat chain with a fading score column; define the cast once in a legend strip with an icon equation and ring colours.",
+  "suits": "Safety, attack or failure-analysis papers about LLM agents where a scenario with a cast of characters and one decaying quantity must be shown."
+ },
+ "tags": [
+  "three-panel-story",
+  "orange-title-banners",
+  "cartoon-and-pixel-art",
+  "speech-bubbles",
+  "cream-ground",
+  "legend-strip"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Toxic samples injected into the memory are more easily retrieved than normal content, leading to misleading responses.",
+   "The toxicity of a suffix diminishes after multiple transmissions, making it more difficult to retrieve.",
+   "Given an attacker and other clean agents in a small town."
+  ]
+ },
+ "summary": "The paper proposes the TMCHT task, in which one attacker agent tries to mislead a whole town of agents with independent memories, and finds that the toxicity of a poisoned message disappears as it is passed on. Figure 1 tells this as three lettered panels around one restaurant question: (a) a normal memory retrieves Steakhouse while a poisoned memory with a suffix retrieves Urbanhouse; (b) a pixel-art attacker with a speech bubble among agents A to G, with graph, line and star topologies; (c) a chain of talking agents where the message flips back and a similarity score falls from 0.9 to 0.5. Cartoon avatars with colour-coded rings carry the cast, and a legend strip defines an agent as LLM plus memory plus retriever.",
+ "summary_zh": "论文提出 TMCHT 任务：攻击者智能体试图误导整个小镇，并发现毒性在传递中消失。图用三个面板围绕同一餐厅问题：(a) 正常与被投毒记忆，(b) 攻击者与拓扑中的智能体，(c) 对话链上相似度从 0.9 降到 0.5，底部图例定义智能体。",
+ "confidence": "high",
+ "notes": "Kinds follow the prior pass (actor-interaction, worked-walkthrough) with side-by-side-contrast added for the normal-versus-attacked pair in (a) and concept-schematic for the decay in (c). The remedy ARCJ is not drawn in this figure. The scores 0.9 to 0.5 in (c) look illustrative. The origin of the character art (pixel-art chef, cartoon boy) cannot be told; it is listed as generated.",
+ "venue": "ACL25"
+}

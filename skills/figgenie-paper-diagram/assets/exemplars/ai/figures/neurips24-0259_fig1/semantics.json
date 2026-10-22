@@ -1,0 +1,562 @@
+{
+ "paper_id": "neurips24-0259",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Brain-JEPA",
+  "one_liner": "A brain dynamics foundation model that predicts latent representations of masked fMRI blocks from one observation block, with gradient positioning and spatiotemporal masking.",
+  "domain": [
+   "brain dynamics",
+   "fMRI foundation model",
+   "self-supervised learning"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "left column of input data and masks, middle column of two encoders joined by an EMA arrow, right frame of three aligned predictor rows; four circled steps match the caption",
+  "argues": "Brain-JEPA predicts latent representations of three kinds of target blocks from one observation block, using brain-gradient positions and spatiotemporal masks, with an EMA target encoder.",
+  "subject": "fMRI ROI time series cut into patches, masked into observation and target blocks, encoded, positioned and predicted in latent space",
+  "elements": [
+   {
+    "name": "Input Data",
+    "type": "data",
+    "role": "fMRI time series of the brain parcels (ROI#1 ... ROI#N) over the timestep axis, cut into patches",
+    "drawn_as": "grey wiggly curves in a grid of dashed cells, ROI labels at the left, arrows from a head icon, one cell filled blue and labelled One Patch",
+    "container": "left column",
+    "is_contribution": false
+   },
+   {
+    "name": "Patchify + Shuffle ROIs",
+    "type": "operation",
+    "role": "step 1: split the series into patches after shuffling ROIs",
+    "drawn_as": "bold caption beside a black circled 1 and a scissors icon",
+    "container": "left column",
+    "is_contribution": null
+   },
+   {
+    "name": "Spatiotemporal Masking",
+    "type": "operation",
+    "role": "step 2: splits everything but the observation block into Cross-ROIs (alpha), Cross-Time (beta) and Double-Cross (gamma) regions and samples targets from each",
+    "drawn_as": "titled lattice of cells hatched in blue, green or red by region, a few solid red, blue or green target blocks, an orange-framed Observation block in the middle",
+    "container": "left column",
+    "is_contribution": true
+   },
+   {
+    "name": "Targets / Cross-ROIs / Cross-Time / Double-Cross",
+    "type": "container",
+    "role": "key to the mask: solid = targets, hatch = regions",
+    "drawn_as": "grey strip under the lattice with a slashed-eye icon and four swatches with letters alpha, beta, gamma",
+    "container": "left column",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation",
+    "type": "data",
+    "role": "the single visible block given to the encoder",
+    "drawn_as": "white card with an orange frame, an orange eye icon and a grey label; one inside the lattice and one copy before the encoder",
+    "container": "middle column",
+    "is_contribution": null
+   },
+   {
+    "name": "Targets",
+    "type": "data",
+    "role": "the blocks to be predicted, one colour per region",
+    "drawn_as": "three bars of cells: red of three, blue of two, green of two, under a grey label",
+    "container": "middle column",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation Encoder f_theta",
+    "type": "module",
+    "role": "ViT observation encoder (per the caption) that gives the observation representation",
+    "drawn_as": "grey rounded rectangle with two offset copies behind it, italic f with theta",
+    "container": "middle column",
+    "is_contribution": false
+   },
+   {
+    "name": "Target Encoder f_theta-bar",
+    "type": "module",
+    "role": "encoder that gives the target representations; its parameters follow the observation encoder by EMA",
+    "drawn_as": "same stacked grey rounded rectangle, theta with a bar",
+    "container": "middle column",
+    "is_contribution": false
+   },
+   {
+    "name": "EMA",
+    "type": "operation",
+    "role": "incremental update of the target encoder from the observation encoder",
+    "drawn_as": "brown double-chevron arrow pointing down, brown label",
+    "container": "middle column",
+    "is_contribution": null
+   },
+   {
+    "name": "s_x",
+    "type": "data",
+    "role": "patch-level representation of the observation block",
+    "drawn_as": "column of orange dots in a pale orange capsule, repeated once per predictor row",
+    "container": "right frame",
+    "is_contribution": null
+   },
+   {
+    "name": "Brain Gradient Positioning",
+    "type": "module",
+    "role": "positional embedding of ROIs from brain functional gradients",
+    "drawn_as": "line-art brain with coloured curved arrows (green, orange, blue, purple) to ROI#1, ROI#2, ROI#3 ... ROI#N, repeated per row",
+    "container": "right frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Temporal Positioning",
+    "type": "module",
+    "role": "sine and cosine positional embedding of timesteps",
+    "drawn_as": "small axes with two overlaid grey wave curves under a Timestep axis, coloured dots mark the target positions",
+    "container": "right frame",
+    "is_contribution": null
+   },
+   {
+    "name": "g_phi (predictor)",
+    "type": "module",
+    "role": "step 3: narrower ViT that predicts target representations from s_x conditioned on the positional embedding",
+    "drawn_as": "tall grey rounded rectangle, three copies, one per target type",
+    "container": "right frame",
+    "is_contribution": false
+   },
+   {
+    "name": "predicted representation (s-hat_y^r)",
+    "type": "data",
+    "role": "prediction for a target block of region r",
+    "drawn_as": "small column of red, blue or green dots in an orange-bordered pale capsule at the right of each row",
+    "container": "right frame",
+    "is_contribution": null
+   },
+   {
+    "name": "target representation (s_y^r)",
+    "type": "data",
+    "role": "representation of a target block from the target encoder",
+    "drawn_as": "short pill of red, blue or green dots on a tinted ground, three pills stacked under the right frame",
+    "container": "bottom middle",
+    "is_contribution": null
+   },
+   {
+    "name": "L2 (MSE)",
+    "type": "operation",
+    "role": "step 4: loss that aligns predicted and target representations",
+    "drawn_as": "label with a black circled 4; dashed grey arrows return from each prediction to its target pill",
+    "container": "right frame",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input Data",
+    "to": "Patchify + Shuffle ROIs",
+    "what": "step 1: time series are cut into patches (dashed cells)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Patchify + Shuffle ROIs",
+    "to": "Spatiotemporal Masking",
+    "what": "the patch grid becomes the lattice that is masked",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "Spatiotemporal Masking",
+    "to": "Observation and Targets",
+    "what": "step 2: one observation block and target blocks per region type are taken from the lattice",
+    "kind": "data",
+    "drawn": "containment",
+    "step": 2
+   },
+   {
+    "from": "Observation",
+    "to": "Observation Encoder f_theta",
+    "what": "the observation block is encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Observation Encoder f_theta",
+    "to": "s_x",
+    "what": "observation representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Targets",
+    "to": "Target Encoder f_theta-bar",
+    "what": "target blocks are encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Target Encoder f_theta-bar",
+    "to": "target representations",
+    "what": "target representations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Observation Encoder f_theta",
+    "to": "Target Encoder f_theta-bar",
+    "what": "EMA of the observation encoder's parameters",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "s_x, Brain Gradient Positioning, Temporal Positioning",
+    "to": "g_phi (predictor)",
+    "what": "summed by plus nodes; the predictor is conditioned on the positional embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "g_phi (predictor)",
+    "to": "predicted representation",
+    "what": "prediction of a target block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "predicted representation",
+    "to": "target representation",
+    "what": "L2 (MSE) alignment",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "red, blue and green of mask regions",
+    "to": "targets, predictor rows, representations and loss lines of the same region",
+    "what": "one colour per region type is kept through the figure",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1",
+    "kind": "order",
+    "at": "Patchify + Shuffle ROIs",
+    "what": "input is cut into patches"
+   },
+   {
+    "marker": "2",
+    "kind": "order",
+    "at": "large brace beside the lattice and encoders",
+    "what": "spatiotemporal masking, observation and targets"
+   },
+   {
+    "marker": "3",
+    "kind": "order",
+    "at": "middle predictor row",
+    "what": "the predictor works from s_x and the positional embedding"
+   },
+   {
+    "marker": "4",
+    "kind": "order",
+    "at": "L2 (MSE)",
+    "what": "predicted representations are aligned with the target ones"
+   },
+   {
+    "marker": "alpha, beta, gamma",
+    "kind": "identity",
+    "at": "key under the lattice",
+    "what": "names the Cross-ROIs, Cross-Time and Double-Cross regions"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "fMRI ROI time series",
+    "content": "chart",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "rows of grey noisy curves, one per ROI, inside dashed cells with a blue cell for one patch and a Timestep axis"
+   },
+   {
+    "what": "sine and cosine temporal-position curves",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "two overlaid grey waves on small axes under each predictor row; coloured dots at the top mark the target timesteps"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "grey head silhouette with a line-art brain",
+    "stands_for": "the subject whose brain signals are recorded",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "line-art brain with coloured regions and curved arrows",
+    "stands_for": "brain gradient positioning of the ROIs",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "orange eye",
+    "stands_for": "the observation block that the model sees",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "slashed eye",
+    "stands_for": "regions hidden from the observation (read from the key)",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "scissors",
+    "stands_for": "cutting into patches",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "vit-patchify",
+    "drawn_as": "series per ROI cut by dashed cell borders, one cell filled blue as One Patch",
+    "parts": [
+     "dashed grid",
+     "One Patch"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "teacher-student",
+    "drawn_as": "two grey stacked encoders one above the other, joined by a brown double-chevron EMA arrow",
+    "parts": [
+     "Observation Encoder",
+     "Target Encoder",
+     "EMA arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short columns or bars of dots and cells in region colours standing for patch representations",
+    "parts": [
+     "orange column",
+     "red, blue, green pills"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "dashed grey arrows from each predicted pill back to its target pill, labelled L2 (MSE)",
+    "parts": [
+     "dashed arrows",
+     "L2 (MSE) label"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the head and time series at top left, follows circled 1 down to the masking lattice, crosses the brace to the encoders in the middle, then reads the three predictor rows at the right and the dashed loss arrows back."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three columns left to right: input data above the masking lattice; the observation and target encoders joined by an EMA arrow; a large pale frame with three aligned predictor rows. Dashed loss arrows run from the right frame back to the target representations at the bottom.",
+  "panel_count": 1,
+  "lanes": "3 aligned predictor rows in the right frame, one per target region type (red, blue, green)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.77,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff8c00",
+    "used_for": "orange: observation frame, eye icon and s_x tokens"
+   },
+   {
+    "hex": "#ffe4bc",
+    "used_for": "pale orange capsules behind token columns"
+   },
+   {
+    "hex": "#c94828",
+    "opacity": 0.8,
+    "used_for": "red: Double-Cross region, its targets and tokens"
+   },
+   {
+    "hex": "#6582a6",
+    "opacity": 0.8,
+    "used_for": "blue: Cross-ROIs region, its targets and tokens"
+   },
+   {
+    "hex": "#bacb44",
+    "opacity": 0.8,
+    "used_for": "green: Cross-Time region, its targets and tokens"
+   },
+   {
+    "hex": "#cccccc",
+    "opacity": 0.7,
+    "used_for": "grey layers of encoders and predictors"
+   },
+   {
+    "hex": "#808080",
+    "opacity": 0.7,
+    "used_for": "darker grey of encoder layers"
+   },
+   {
+    "hex": "#00a549",
+    "used_for": "green curved arrow of ROI#1 at the brain icon"
+   },
+   {
+    "hex": "#ffac00",
+    "used_for": "orange curved arrow of ROI#2 at the brain icon"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "dashed grey loss arrows and the right frame outline"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 pt black outlines and dashed black cells, 0.25 pt grey rules, dashed 0.75 pt grey loss arrows",
+  "font": "serif (Times New Roman) 3-6 pt bold labels, italic math symbols for s, f and g, a chalkboard-style sans for the Observation tags",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads, curved arrows from the head to the ROI labels, brown double-chevron EMA arrow, dashed grey loss arrows, short coloured curved arrows at the brain icons",
+  "rendering": "flat-vector",
+  "effects": "offset copies behind each encoder suggest a stack; hatch fills in the lattice",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red, blue and green = the three region types of target blocks (Double-Cross, Cross-ROIs, Cross-Time), kept on lattice cells, target bars, target and predicted representations and the loss lines; orange = the observation block and its representation",
+  "line_style_means": "dashed black cell borders = patch grid; dashed grey arrow = L2 loss between prediction and target; brown double chevron = EMA parameter update; solid black = forward flow",
+  "shape_means": "stacked grey rounded rectangle = encoder; tall grey rounded rectangle = predictor; dots in a pale capsule = representation tokens; orange-framed card with an eye = the visible observation",
+  "marker_means": "black circled 1 to 4 = steps listed in the caption; hatch direction and colour = region type; slashed eye = hidden regions (as read from the key)",
+  "emphasis": "the orange observation frame and the large pale frame around the predictor rows; coloured targets against the grey network",
+  "reusable_patterns": [
+   "masking lattice: hatch the regions by type, fill solid the sampled targets, frame the visible block in a contrasting colour",
+   "three aligned predictor rows, one per target type, each carrying its colour from the mask to the loss",
+   "brain icon with coloured arrows to ROI labels as the glyph of a positional embedding",
+   "EMA drawn as a brown double-chevron arrow between online and target encoders",
+   "dashed grey loss arrows returning from the predictions to the target representations",
+   "circled step numbers placed at the operation they name, matching the caption"
+  ],
+  "weaknesses": [
+   "ROI labels are 3 pt",
+   "the dashed loss arrows run a long way around the right edge",
+   "the bar over theta that marks the target encoder is easy to miss"
+  ]
+ },
+ "resources": {
+  "own": [
+   "fMRI ROI time-series curves"
+  ],
+  "stock": [
+   "head, brain, eye and scissors icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "masking lattice and legend",
+   "encoders, predictors and token columns",
+   "sine and cosine curves",
+   "arrows and step numbers"
+  ],
+  "unknown": [
+   "whether the brain line art is stock or hand-drawn"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "ROI time-series grid with a highlighted patch",
+   "hatched masking lattice with an orange observation block",
+   "colour-coded target bars",
+   "stacked grey encoders joined by an EMA arrow",
+   "brain icon with coloured arrows to ROI labels",
+   "token dot columns",
+   "dashed loss arrows"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "JEPA",
+   "fMRI",
+   "brain foundation model",
+   "gradient positioning",
+   "spatiotemporal masking",
+   "EMA target encoder",
+   "ViT",
+   "self-supervised"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "colour-coded-groups",
+   "token-strip",
+   "flow-type-arrows",
+   "notation-key"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw a structured mask as a lattice: hatch the regions by type, fill the sampled targets solid, frame the visible block in a contrasting colour, then carry each region's colour through the encoders' outputs and the loss lines.",
+  "suits": "masked-prediction or JEPA-style self-supervised methods with structured masks over a grid (images, video, fMRI, time series)."
+ },
+ "tags": [
+  "circled step numbers",
+  "hatched mask lattice",
+  "stacked grey encoders",
+  "three colour-coded rows",
+  "serif labels",
+  "dashed loss arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method, overview (p.4)",
+   "3.2 Spatiotemporal Masking and Observation (p.5)",
+   "Training (p.6)"
+  ],
+  "evidence": [
+   "Instead of reconstructing masked patches of fMRI time series, Brain-JEPA operates in the latent space",
+   "Brain-JEPA employs a single observation block to predict the representations of target blocks.",
+   "Brain-JEPA aims to predict representations of multiple target blocks based on the representation of a single observation block."
+  ]
+ },
+ "summary": "Brain-JEPA is a brain dynamics foundation model that predicts latent representations instead of reconstructing fMRI patches. The figure is a left-to-right architecture drawing with four circled steps. At left, ROI time series are cut into patches (step 1) and a hatched lattice shows Spatiotemporal Masking into Cross-ROIs, Cross-Time and Double-Cross regions with one orange observation block and coloured targets (step 2). In the middle an observation encoder and an EMA-updated target encoder process the blocks; at right three predictor rows add brain-gradient and temporal position embeddings (step 3) and dashed arrows align predictions with targets by L2 loss (step 4).",
+ "summary_zh": "Brain-JEPA 在潜空间预测 fMRI 块的表征。图自左向右带四个圆圈步骤：时序分块，斜线格子展示时空掩码，中间观察编码器与 EMA 更新的目标编码器，右侧三行预测器加位置编码，虚线箭头对齐预测与目标。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The caption names the regions Cross-ROI (alpha), Cross-Time (beta), Double-Cross (gamma), matching the key in the figure; the body text swaps alpha and beta. The meaning of the slashed eye in the key is read as hidden regions and is not stated in the text. Which colour belongs to which predictor row is read from the dot counts (red three, blue two, green two).",
+ "venue": "NeurIPS24"
+}

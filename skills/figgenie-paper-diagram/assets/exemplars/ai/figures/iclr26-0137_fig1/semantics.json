@@ -1,0 +1,413 @@
+{
+ "paper_id": "iclr26-0137",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Visual Planning",
+  "one_liner": "A paradigm where a large vision model plans by predicting a sequence of images, trained with reinforcement learning (VPRL), instead of reasoning in text.",
+  "domain": [
+   "visual planning",
+   "multimodal reasoning",
+   "visual navigation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "worked-walkthrough"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "three stacked lanes with one Input-to-output grammar: direct prompting, verbal chain-of-thought, visual thoughts; only box colour and the content under each box change",
+  "argues": "Traditional paradigms produce verbose and inaccurate textual plans, whereas Visual Planning predicts the next visual state directly as a pure image trajectory.",
+  "subject": "Three reasoning paradigms drawn as input-to-output chains for a map-navigation example: direct prompting, multimodal chain-of-thought and visual planning.",
+  "elements": [
+   {
+    "name": "Text / Image key",
+    "type": "label",
+    "role": "colour key: blue outline for text, purple outline for image",
+    "drawn_as": "two small rounded squares with coloured labels at the top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Direct Prompting",
+    "type": "container",
+    "role": "lane: the model answers the input straight away",
+    "drawn_as": "centred lane title over one long arrow from Input to Verbal Output",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Multimodal Chain-of-Thought",
+    "type": "container",
+    "role": "lane: the model writes verbal thoughts before the verbal output",
+    "drawn_as": "centred lane title over a chain of blue Verbal Thought boxes",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Visual Planning",
+    "type": "container",
+    "role": "lane: the model produces a chain of visual thoughts, with no language in between",
+    "drawn_as": "centred lane title over a chain of purple Visual Thought boxes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Input",
+    "type": "data",
+    "role": "task input; image plus text in the first two lanes, image only in the Visual Planning lane",
+    "drawn_as": "rounded box, purple-to-blue gradient outline in lanes 1 and 2, purple outline in lane 3",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Verbal Thought",
+    "type": "data",
+    "role": "an intermediate step written in text",
+    "drawn_as": "blue rounded box with blue text, two in a row, an italic plan sentence under each",
+    "container": "Multimodal Chain-of-Thought",
+    "is_contribution": false
+   },
+   {
+    "name": "Verbal Output",
+    "type": "data",
+    "role": "the final textual answer",
+    "drawn_as": "blue rounded box at the right end of lanes 1 and 2",
+    "container": "Direct Prompting and Multimodal Chain-of-Thought",
+    "is_contribution": false
+   },
+   {
+    "name": "Visual Thought",
+    "type": "data",
+    "role": "an intermediate step that is the next visual state, an image",
+    "drawn_as": "purple rounded box with purple text, three in a row, a map thumbnail under each",
+    "container": "Visual Planning",
+    "is_contribution": true
+   },
+   {
+    "name": "...",
+    "type": "label",
+    "role": "omitted steps of the chain",
+    "drawn_as": "dotted ellipsis between the last two boxes of lanes 2 and 3",
+    "container": "lanes 2 and 3",
+    "is_contribution": false
+   },
+   {
+    "name": "plan sentences",
+    "type": "text-block",
+    "role": "the text of the verbal thoughts and output: 'Go straight to the crossing.', 'Then turn slightly left at the crossing.', 'To conclude: you should first go straight to ......'",
+    "drawn_as": "grey italic captions under the blue boxes",
+    "container": "Multimodal Chain-of-Thought",
+    "is_contribution": null
+   },
+   {
+    "name": "robot with thought cloud",
+    "type": "icon",
+    "role": "the model thinking in a sequence of pictures",
+    "drawn_as": "lavender robot head with a trail of circles to a cloud holding two tiny picture icons, an arrow and an ellipsis",
+    "container": "Visual Planning",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input",
+    "to": "Verbal Output",
+    "what": "direct answer, one long arrow with no steps in between",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input",
+    "to": "Verbal Thought",
+    "what": "input is turned into a first verbal thought",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Verbal Thought",
+    "to": "Verbal Thought, ..., Verbal Output",
+    "what": "thoughts follow each other until the verbal output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input",
+    "to": "Visual Thought",
+    "what": "input image is turned into the first visual thought",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Thought",
+    "to": "Visual Thought, ..., Visual Thought",
+    "what": "each thought predicts the next visual state (caption)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text / Image key",
+    "to": "box outlines and text",
+    "what": "blue = text, purple = image",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Verbal Thought boxes",
+    "to": "plan sentences",
+    "what": "the content of each verbal step is written under its box",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Visual Thought boxes",
+    "to": "map thumbnails",
+    "what": "the content of each visual step is pictured under its box",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "flat map with a red location pin and a blue navigation-arrow marker (the navigation input)",
+    "content": "map",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "44 pt thumbnail under the Input box of the middle lane; illustrative city-map style, not one of the paper's grid tasks"
+   },
+   {
+    "what": "the same map redrawn three times with the navigation marker moved and turned step by step toward the pin",
+    "content": "map",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same size and place under each Visual Thought box so that only the marker changes"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "lavender robot head with an antenna",
+    "stands_for": "the model that plans",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "thought cloud holding two tiny picture icons joined by an arrow and an ellipsis",
+    "stands_for": "thinking in a sequence of images",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a navigation plan in words: 'Go straight to the crossing.', 'Then turn slightly left at the crossing.', 'To conclude: you should first go straight to ......'",
+    "form": "italic captions under the verbal boxes",
+    "real_values": true
+   },
+   {
+    "what": "the same navigation as map states with a moving marker",
+    "form": "four map thumbnails",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chain-of-thought",
+    "drawn_as": "a row of rounded boxes Input, Thought, Thought, ellipsis, Output joined by thin arrows; the thoughts are text boxes in lane 2 and image boxes in lane 3",
+    "parts": [
+     "Input box",
+     "thought boxes",
+     "ellipsis",
+     "output box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "thought-bubble",
+    "drawn_as": "robot head with a trail of small circles to a cloud holding two tiny pictures and an ellipsis",
+    "parts": [
+     "robot",
+     "circle trail",
+     "cloud",
+     "picture icons"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Top-left key, then lane 1 left to right, lane 2 left to right with the captions underneath, and lane 3 left to right with the maps and the robot underneath."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Three horizontal lanes stacked top to bottom, each with a centred title and the same Input-to-output chain on shared columns; a small two-swatch key sits above the first lane; contents of the steps hang under the boxes.",
+  "panel_count": 1,
+  "lanes": "3 stacked lanes (Direct Prompting, Multimodal Chain-of-Thought, Visual Planning) with aligned input, thought and output columns",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.96,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4e95d9",
+    "used_for": "outline and text of text-modality boxes (Verbal Thought, Verbal Output) and the Text key"
+   },
+   {
+    "hex": "#78206e",
+    "used_for": "outline and text of image-modality boxes (Visual Thought, Input of lane 3) and the Image key"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "arrows, lane titles and the Input text"
+   },
+   {
+    "hex": "#f26b6b",
+    "used_for": "red pin in the map thumbnails",
+    "approx": true
+   },
+   {
+    "hex": "#0b5cb5",
+    "used_for": "navigation marker in the map thumbnails",
+    "approx": true
+   },
+   {
+    "hex": "#fbe0b0",
+    "used_for": "land of the map thumbnails",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "none",
+  "stroke": "1 pt rounded outlines in blue or purple (a purple-to-blue gradient on two Input boxes), 0.5 pt black arrows",
+  "font": "sans (Aptos) 6-9.5 pt; lane titles 9.5 pt, box labels 8.5 pt in the colour of the outline, 7.5 pt grey italics for the plan sentences",
+  "corners": "rounded",
+  "arrows": "thin straight black arrows with small filled heads, a dotted ellipsis before the last box",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue outline and text = text modality, purple outline and text = image modality, purple-to-blue gradient outline = input that mixes image and text",
+  "line_style_means": "one long arrow = direct answer with no steps; short arrows with an ellipsis = a chain of steps",
+  "shape_means": "rounded boxes = steps; italic captions under a box = the content of a verbal step; map thumbnails under a box = the content of a visual step",
+  "marker_means": "the ellipsis marks omitted steps; the position and heading of the navigation marker change from map to map",
+  "emphasis": "the bottom lane is purple throughout with a picture under every box and the robot with an image cloud, while the other lanes are blue with text captions",
+  "reusable_patterns": [
+   "three stacked lanes with identical Input-steps-Output grammar so that only colour and content differ",
+   "outline colour coded by modality with a two-swatch key in the corner",
+   "gradient outline for a mixed-modality input",
+   "content of each step shown under its box: italic text for verbal steps, a map thumbnail for visual steps",
+   "the same map redrawn at the same place after each step with only the marker moved",
+   "robot head with a thought cloud of tiny pictures to say 'thinks in images'",
+   "ellipsis before the last box to show an open-ended chain"
+  ],
+  "weaknesses": [
+   "the input map is drawn only under the middle lane, so the bottom lane's Input has no picture of its own",
+   "the purple-to-blue gradient outline is subtle",
+   "the tiny pictures in the thought cloud are about 9 pt wide"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the navigation plan sentences",
+   "the sequence of map states with a moving marker"
+  ],
+  "stock": [
+   "flat map illustration with pin and navigation arrow (probably clip art)",
+   "robot head icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded boxes, arrows, key and ellipses",
+   "gradient-outlined Input boxes (placed as small bitmaps)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three stacked lanes",
+   "Input, Verbal Thought, Visual Thought and Output boxes",
+   "text and image colour key",
+   "map thumbnails with pin and navigation marker",
+   "robot head with thought cloud",
+   "italic plan sentences"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "visual planning",
+   "multimodal chain-of-thought",
+   "direct prompting",
+   "image-only reasoning",
+   "navigation",
+   "visual thoughts",
+   "large vision model"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "small-multiples",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "gradient-outline-mixed-modality",
+    "what": "a box outline that fades from one modality colour to another marks an input that mixes both modalities"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Compare paradigms by drawing each as the same Input-steps-Output chain on its own lane and letting colour carry the single difference (blue text boxes versus purple image boxes), with a two-swatch key in the corner and the content of each step written or pictured under its box.",
+  "suits": "Paradigm comparisons where the contrast is the medium of the intermediate steps (text versus image versus code), such as chain-of-thought variants and modality-specific reasoning."
+ },
+ "tags": [
+  "stacked lanes",
+  "outline-only rounded boxes",
+  "modality colour key",
+  "thin arrows with ellipsis",
+  "map thumbnails",
+  "robot icon"
+ ],
+ "provenance": {
+  "sections": [
+   "front (p.2)"
+  ],
+  "evidence": [
+   "The traditional approaches (top and middle rows) generate verbose and inaccurate textual plan",
+   "the Visual Planning paradigm (bottom row) predicts the next visual state directly, forming a pure image trajectory without language mediation",
+   "planning is executed via sequences of images that encode step-by-step inference in the visual domain"
+  ]
+ },
+ "summary": "Visual Planning proposes planning with sequences of images instead of text. Figure 1 compares three reasoning paradigms as three stacked lanes with the same grammar: rounded boxes joined by arrows from an input to an output, outlined in blue for text and purple for image according to a key in the corner. Direct Prompting maps an image-and-text input straight to a verbal output; Multimodal Chain-of-Thought inserts verbal thought boxes with italic plan sentences under them; Visual Planning replaces them with purple Visual Thought boxes, each with a map thumbnail in which a navigation marker moves toward a pin, plus a robot with a thought cloud of tiny pictures at the input.",
+ "summary_zh": "视觉规划主张用图像序列而非文字做规划。图把三种推理范式画成同一输入到输出的三条横向泳道：直接提示、多模态思维链（蓝框文字思考）和视觉规划（紫框图像思考，地图上的导航标记逐步移动），角落图例以蓝色表示文本、紫色表示图像。",
+ "confidence": "high",
+ "notes": "Prior kinds kept; the variant is changed from design-family to paired-lanes because the three lanes redraw one chain. The lanes are titled but unframed and share one key, so the figure is counted as one drawing with lanes (panel_count 1). No body paragraph mentions the figure; roles come from the caption and the figure. The gradient-outlined Input boxes are inferred to be the two 52 x 18 pt placed bitmaps.",
+ "venue": "ICLR26"
+}

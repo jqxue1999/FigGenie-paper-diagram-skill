@@ -1,0 +1,455 @@
+{
+ "paper_id": "iclr23-0028",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "MAESTRO (Multi-Agent Environment Design Strategist for Open-Ended Learning)",
+  "one_liner": "A regret-based curriculum for two-player zero-sum games that samples environment and co-player pairs from per-co-player buffers to train a student.",
+  "domain": [
+   "multi-agent reinforcement learning",
+   "unsupervised environment design",
+   "curriculum learning"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "stage-pipeline"
+  ],
+  "variant": "multi-party-exchange",
+  "variant_note": "a generator, a student, a co-player population and per-co-player buffers exchanging environments and regret through verb-labelled arrows, which together form a generate, evaluate, store, train cycle",
+  "argues": "Co-players and environments should be curated jointly: regret measured per pair fills each co-player's buffer, and high-regret pairs train the student.",
+  "subject": "The training loop of MAESTRO: environment generator, student agent, co-player population and their environment buffers.",
+  "elements": [
+   {
+    "name": "Environment Generator",
+    "type": "actor",
+    "role": "produces new environments",
+    "drawn_as": "red gear icon on a pale pink tile with a bold two-line label beneath",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Generate new environment",
+    "type": "operation",
+    "role": "the generator hands a new environment to the pair box",
+    "drawn_as": "solid arrow with a plain label",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "sampled environment and co-player pair",
+    "type": "instance",
+    "role": "a new environment together with a co-player drawn from the population, used to evaluate the student",
+    "drawn_as": "grey rounded box with a maze thumbnail and an amber robot",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Evaluate",
+    "type": "operation",
+    "role": "the student is evaluated against the sampled co-player on the new environment",
+    "drawn_as": "solid arrow from the grey box to the student, plain label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Student Agent",
+    "type": "actor",
+    "role": "the agent being trained",
+    "drawn_as": "largest robot, coral red, bold title above",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Train",
+    "type": "operation",
+    "role": "the student trains on the prioritised pair",
+    "drawn_as": "solid arrow from the light blue box to the student, plain label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "prioritised environment and co-player pair",
+    "type": "instance",
+    "role": "a high-regret pair selected for training",
+    "drawn_as": "light blue rounded box with a blue-framed maze and a blue robot",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Sample agent for evaluation",
+    "type": "operation",
+    "role": "a co-player is drawn from the population for evaluation",
+    "drawn_as": "dashed arrow up from the population to the grey box, the word agent in orange",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Update agent’s buffer using regret",
+    "type": "operation",
+    "role": "the student's regret against that co-player is added to the co-player's buffer",
+    "drawn_as": "long solid arrow down from the Evaluate arrow into the buffer tile of the sampled co-player, with a small amber-framed maze beside the label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Periodically store student agent’s copies",
+    "type": "operation",
+    "role": "copies of the student are kept in the population",
+    "drawn_as": "dashed arrow down from the student to a co-player robot, a small padlock beside the label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Prioritise high regret agent-environment pairs",
+    "type": "operation",
+    "role": "selects pairs with high regret from the population and buffers for training",
+    "drawn_as": "solid arrow up from the framed region to the light blue box, the words agent and environment in blue",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Co-Player Population",
+    "type": "container",
+    "role": "the set of co-players of various skill levels, four shown with an ellipsis",
+    "drawn_as": "dashed rounded rectangle holding robots in blue, teal, amber and red",
+    "container": "framed bottom region",
+    "is_contribution": true
+   },
+   {
+    "name": "Environment Buffers",
+    "type": "container",
+    "role": "each co-player's own buffer of high-regret environments",
+    "drawn_as": "four coloured tiles under the robots, each with a stack of three maze thumbnails",
+    "container": "framed bottom region",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Environment Generator",
+    "to": "sampled environment and co-player pair",
+    "what": "Generate new environment",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Co-Player Population",
+    "to": "sampled environment and co-player pair",
+    "what": "Sample agent for evaluation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "sampled environment and co-player pair",
+    "to": "Student Agent",
+    "what": "Evaluate: the student plays the co-player in that environment",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Evaluate arrow",
+    "to": "buffer tile of the sampled co-player",
+    "what": "Update agent’s buffer using regret",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Student Agent",
+    "to": "Co-Player Population",
+    "what": "Periodically store student agent’s copies",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Co-Player Population and Environment Buffers",
+    "to": "prioritised environment and co-player pair",
+    "what": "Prioritise high regret agent-environment pairs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "prioritised environment and co-player pair",
+    "to": "Student Agent",
+    "what": "Train",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each co-player robot",
+    "to": "the buffer tile of the same colour",
+    "what": "each co-player owns one buffer",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "orange and blue words in the arrow labels",
+    "to": "orange pair box and blue pair box",
+    "what": "the coloured keyword points at the colour of the object it names",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "verbs on the arrows (Generate, Evaluate, Train, Sample, Update, Periodically store, Prioritise)",
+    "kind": "order",
+    "at": "beside each arrow",
+    "what": "name the step each arrow carries; there are no numbers"
+   },
+   {
+    "marker": "padlock",
+    "kind": "identity",
+    "at": "next to the store-copies label",
+    "what": "small lock beside the step that stores student copies; its meaning is not stated"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "grid-maze environments: black floor, grey blocks, small red and blue triangles",
+    "content": "map",
+    "role": "data-thumbnail",
+    "count": 15,
+    "medium": "bitmap",
+    "treatment": "three offset thumbnails stacked on each of four coloured buffer tiles (12), one in each of the two pair boxes, one small amber-framed thumbnail beside the update label"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "red gear with a dark teal centre",
+    "stands_for": "the Environment Generator",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon robot with antenna, round head and body with side handles, in coral, amber, blue, teal and red",
+    "stands_for": "the student and the co-players (one colour each)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "small padlock",
+    "stands_for": "marks the store-copies arrow (meaning not stated)",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "an environment and co-player pair: a maze thumbnail beside a robot in a rounded box, once for evaluation and once for training",
+    "form": "thumbnail plus robot icon in a rounded box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "a population of four coloured robots in a dashed frame next to a larger student robot, linked to it by labelled arrows",
+    "parts": [
+     "student robot",
+     "four co-player robots",
+     "dashed frame"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "per-agent buffers as coloured tiles with a stack of three thumbnails, written to by an update arrow and read by a prioritise arrow",
+    "parts": [
+     "coloured tile",
+     "stack of mazes",
+     "update arrow",
+     "prioritise arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "rl-loop",
+    "drawn_as": "an environment-design loop of generator, student, evaluate and train arrows with regret written to buffers; no action, state or reward labels",
+    "parts": [
+     "Environment Generator",
+     "Student Agent",
+     "Evaluate",
+     "Train"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the gear generator at top left, follows Generate and Evaluate to the student, then down to the co-player population and buffers and back up through Prioritise and Train."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A top row runs Environment Generator, grey pair box, Evaluate, Student Agent, Train, light blue pair box. Below it a large framed region holds the dashed Co-Player Population over the Environment Buffers in four aligned columns, one colour each. Vertical dashed and solid arrows join the top row to the region.",
+  "panel_count": 1,
+  "lanes": "4 aligned columns in the framed region, each a co-player robot above its buffer tile in one colour",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.83,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f4cccc",
+    "used_for": "pale pink tile behind the Environment Generator gear"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey rounded box of the sampled environment and co-player pair"
+   },
+   {
+    "hex": "#cfe2f3",
+    "used_for": "light blue rounded box of the prioritised pair"
+   },
+   {
+    "hex": "#88a8ea",
+    "used_for": "blue co-player's buffer tile and its maze frame"
+   },
+   {
+    "hex": "#1e8d8e",
+    "used_for": "teal co-player's buffer tile"
+   },
+   {
+    "hex": "#edae33",
+    "used_for": "amber co-player's buffer tile and the amber outline of the update thumbnail"
+   },
+   {
+    "hex": "#c9514c",
+    "used_for": "red co-player's buffer tile"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black arrows and outlines; 1.25 pt dashed population frame and dashed arrows",
+  "font": "sans (Arial) 5.5 to 6 pt; bold for actor and row names and for the coloured keywords in labels",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small filled heads; dashed for sampling from and storing into the population, solid for the other flows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "padlock"
+ },
+ "encoding": {
+  "color_means": "Each co-player has one colour (blue, teal, amber, red) shared by its robot and its buffer tile. In arrow labels the orange word agent and the blue words agent-environment point at the orange and blue pair boxes. Student is coral; pink tile = generator; grey = sampled pair; light blue = prioritised pair.",
+  "line_style_means": "dashed arrows = drawing from and storing into the co-player population (my reading); solid arrows = the other flows; dashed rounded frame = the population",
+  "shape_means": "robot = an agent; gear = the generator; coloured tile with a stack of three mazes = one co-player's buffer; rounded grey or light blue box = an environment and co-player pair",
+  "marker_means": "verbs on arrows name the steps; the padlock marks the store-copies step",
+  "emphasis": "The largest robot and bold title mark the Student Agent at the top centre; the framed bottom region groups the stateful parts; coloured words tie labels to boxes.",
+  "reusable_patterns": [
+   "one colour per population member carried by its robot icon and by the tile of its own buffer",
+   "stack of three offset thumbnails on a coloured tile for a buffer of samples",
+   "verb labels on dashed and solid arrows instead of step numbers",
+   "coloured keywords inside arrow labels tied to the colour of the object they name",
+   "dashed rounded frame around a population of agent icons",
+   "gear icon on a pink tile for a generator"
+  ],
+  "weaknesses": [
+   "labels are only 5.5 pt and wrap in narrow columns",
+   "the long vertical Update arrow crosses the other arrows",
+   "the two pair boxes at the top are unlabelled",
+   "the coral student robot is close in colour to the red co-player"
+  ]
+ },
+ "resources": {
+  "own": [
+   "maze environment thumbnails from the paper's domain"
+  ],
+  "stock": [
+   "flat cartoon robot icons",
+   "gear icon",
+   "padlock icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded boxes and coloured tiles",
+   "arrows",
+   "dashed frames"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "gear environment generator",
+   "coral student robot",
+   "dashed population of four coloured robots",
+   "coloured buffer tiles with stacked maze thumbnails",
+   "grey and light blue pair boxes",
+   "verb-labelled dashed and solid arrows"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "multi-agent RL",
+   "unsupervised environment design",
+   "regret",
+   "co-player population",
+   "curriculum",
+   "environment buffer",
+   "student agent",
+   "open-ended learning"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "stacked-cards",
+   "model-pictogram",
+   "memory-store",
+   "highlighted-text-spans"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Give each member of a population one colour and carry it onto its own memory: a robot icon above a tile of the same colour holding a stack of sample thumbnails. Run verb-labelled arrows between population, generator and learner, and colour the keywords in the labels to tie them to the boxes they name.",
+  "suits": "Population-based or curriculum methods (self-play, co-evolution, environment design) where each agent owns a buffer and a generate, evaluate, store, train cycle has to be read at a glance."
+ },
+ "tags": [
+  "robot-icons",
+  "verb-labelled-arrows",
+  "colour-tiles",
+  "dashed-population-frame",
+  "flat-cartoon",
+  "no-step-numbers"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)",
+   "Method (p.5)"
+  ],
+  "evidence": [
+   "MAESTRO maintains a population of co-players, each having an individual buffer of high-regret environments.",
+   "MAESTRO continually provides high-regret environment/co-player pairs for training the student."
+  ]
+ },
+ "summary": "MAESTRO is a multi-agent environment-design method for two-player zero-sum games: it keeps a population of co-players, each with its own buffer of high-regret environments, and trains a student on high-regret environment and co-player pairs. Figure 1 draws this as a cast of icons joined by verb-labelled arrows. A gear Environment Generator feeds a grey pair box, the Student Agent robot is evaluated against it, and the regret is written into that co-player's buffer. A dashed Co-Player Population of four coloured robots sits above four tiles of the same colours, each holding a stack of maze thumbnails; high-regret pairs go to a light blue box and train the student, and student copies are stored in the population.",
+ "summary_zh": "MAESTRO 面向双人零和博弈做多智能体环境设计：维护一群协同玩家，每个有自己的高遗憾环境缓冲区，并用高遗憾的环境-玩家对训练学生。图 1 用齿轮、机器人、迷宫缩略图和带动词的箭头表示，同色机器人对应同色缓冲区。",
+ "confidence": "high",
+ "notes": "Prior labels kept (actor-interaction as multi-party-exchange, stage-pipeline read as a closed loop). The bottom framed region is treated as part of one drawing because it carries row labels, not a title, so panels is empty. The padlock's meaning on the store arrow is not stated in the figure. The reading of dashed versus solid arrows is mine. The coral student robot and the red co-player could be confused.",
+ "venue": "ICLR23"
+}

@@ -1,0 +1,522 @@
+{
+ "paper_id": "iclr25-0061",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DPA-OMF",
+  "one_liner": "Aligns a pre-trained multi-agent traffic simulation model by ranking its own rollouts against expert demos with occupancy measure matching, then applying direct preference alignment.",
+  "domain": [
+   "multi-agent motion generation",
+   "preference alignment",
+   "autonomous driving simulation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "closed-loop",
+  "variant_note": "a loop of sample rollouts, rank them against an expert demo, align the model; three coloured section headings, the model with distribution curves at the left and a mini grid of scenes and heat maps at the right",
+  "argues": "Expert demonstrations can rank the model's own rollouts through occupancy measure matching, giving implicit preference pairs at scale to align a motion generation model directly.",
+  "subject": "Motion token prediction model, rollout database, a ranking grid of expert demo, sampled rollouts and heat maps, and the preference objective that closes the loop.",
+  "elements": [
+   {
+    "name": "Model Pre-training",
+    "type": "container",
+    "role": "heads the part with the pre-trained scene encoder and motion token prediction model",
+    "drawn_as": "grey bold heading at the top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "scene context icons",
+    "type": "icon",
+    "role": "the multi-modal scene context c: agents, traffic lights and road map (unlabelled; c is named in the caption)",
+    "drawn_as": "green rounded box with a car, a traffic light and a road line",
+    "container": "Model Pre-training",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-modal Scene Encoder",
+    "type": "module",
+    "role": "encodes the scene for the motion model",
+    "drawn_as": "bold label on a thick black arrow into the model",
+    "container": "Model Pre-training",
+    "is_contribution": false
+   },
+   {
+    "name": "Motion Token Prediction Model",
+    "type": "module",
+    "role": "the auto-regressive model that predicts the next motion token of the agents; the reference model before alignment",
+    "drawn_as": "wide light-blue rounded bar with a bold label",
+    "container": "Model Pre-training",
+    "is_contribution": false
+   },
+   {
+    "name": "P(a0; c), P(a1; a^0, c), ..., P(aT; a^<T, c)",
+    "type": "data",
+    "role": "the model's token distribution at each prediction step: grey dotted = reference model, orange = after alignment",
+    "drawn_as": "pairs of curves above the model, formula caption under each, an ellipsis between",
+    "container": "Model Pre-training",
+    "is_contribution": true
+   },
+   {
+    "name": "start, a^0, ..., a^(T-1)",
+    "type": "data",
+    "role": "the action tokens sampled at each step and fed back to the model",
+    "drawn_as": "grey rounded chips under the model with thin grey curved arrows looping from the model to the chips",
+    "container": "Model Pre-training",
+    "is_contribution": false
+   },
+   {
+    "name": "Sample rollouts",
+    "type": "operation",
+    "role": "the model generates rollouts that are stored in the database",
+    "drawn_as": "thick grey curved arrow with a grey label from the model to the database",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "rollout database",
+    "type": "data",
+    "role": "stores the sampled rollouts (unlabelled)",
+    "drawn_as": "black stacked-cylinder icon at the centre of the loop",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Direct Preference Alignment",
+    "type": "operation",
+    "role": "uses the ranked pairs to align the model; objective max over phi of P(preferred > unpreferred | c)",
+    "drawn_as": "orange heading, a thick orange curved arrow from the database back to the model, and the formula with a green-framed and a red-framed scene tile",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "type": "container",
+    "role": "ranks sampled rollouts by how well their occupancy matches the expert demo in the same scene",
+    "drawn_as": "bright blue two-line heading over a 2x3 mini grid",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Expert demo",
+    "type": "sample",
+    "role": "expert demonstration in the same scene, the reference for the ranking",
+    "drawn_as": "top-down scene tile with a light-green frame; a driver icon with thought bubbles below it",
+    "container": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "is_contribution": false
+   },
+   {
+    "name": "Sampled rollouts",
+    "type": "sample",
+    "role": "two rollouts of the model in the same scene, one preferred (green frame) and one unpreferred (red frame)",
+    "drawn_as": "two scene tiles with trajectories, framed green and red, labelled underneath",
+    "container": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "is_contribution": null
+   },
+   {
+    "name": "occupancy heat maps",
+    "type": "data",
+    "role": "occupancy-measure features of the two rollouts used to measure alignment with the expert demo",
+    "drawn_as": "two dark violet maps with bright diagonal streaks above the rollout tiles",
+    "container": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "is_contribution": true
+   },
+   {
+    "name": "check and cross",
+    "type": "icon",
+    "role": "preferred versus unpreferred rollout",
+    "drawn_as": "green check box and red cross box above the two heat maps",
+    "container": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "scene context icons",
+    "to": "Motion Token Prediction Model",
+    "what": "scene context c through the multi-modal scene encoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Motion Token Prediction Model",
+    "to": "start, a^0, ..., a^(T-1)",
+    "what": "sampled action tokens, fed back for the next step",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Motion Token Prediction Model",
+    "to": "rollout database",
+    "what": "Sample rollouts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "rollout database",
+    "to": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "what": "rollouts are ranked; no arrow joins the two, only position",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Expert demo",
+    "to": "occupancy heat maps",
+    "what": "distance to the expert demo in the same scene, shown by the shared grid",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "occupancy heat maps",
+    "to": "check and cross",
+    "what": "ranking outcome: closer rollout preferred",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "green and red framed tiles (ranking)",
+    "to": "green and red framed tiles (formula)",
+    "what": "the ranked pair is the operand of the alignment objective",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "rollout database",
+    "to": "Motion Token Prediction Model",
+    "what": "Direct Preference Alignment updates the model with the ranked pairs",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "grey dotted curves",
+    "to": "orange curves",
+    "what": "reference distribution versus distribution after alignment, drawn as overlays",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Model Pre-training",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "scene encoder, motion token prediction model, token distributions and sampled tokens",
+    "verdict": "setting"
+   },
+   {
+    "label": "Direct Preference Alignment",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "the loop between model and rollout database and the preference objective",
+    "verdict": "ours"
+   },
+   {
+    "label": "Preference Ranking via Occupancy Measure Matching Feedback",
+    "kind": "side-by-side-contrast",
+    "axis": "stages",
+    "shows": "expert demo and two sampled rollouts with heat maps and check or cross",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Model Pre-training, Direct Preference Alignment, Preference Ranking via Occupancy Measure Matching Feedback",
+    "kind": "section",
+    "at": "three coloured headings (grey, orange, blue)",
+    "what": "heads the three parts and colours the arrows and curves of each"
+   },
+   {
+    "marker": "start, a^0, a^(T-1), P(a_t; ...)",
+    "kind": "identity",
+    "at": "token chips and curve captions",
+    "what": "names the action tokens and the predicted distributions"
+   },
+   {
+    "marker": "green check, red cross, >",
+    "kind": "other",
+    "at": "above the heat maps and inside the formula",
+    "what": "preferred versus unpreferred rollout and the preference order"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "occupancy-measure heat maps of the two rollouts",
+    "content": "dense-map",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "dark violet maps with bright diagonal streaks, side by side above the rollout tiles in the mini grid"
+   },
+   {
+    "what": "top-down traffic scenes with multi-agent trajectories: the expert demo and two sampled rollouts",
+    "content": "map",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "lane map in light grey with coloured trajectories; expert demo framed light green, rollouts framed green and red"
+   },
+   {
+    "what": "small copies of the preferred and unpreferred scene tiles",
+    "content": "map",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "tiny framed tiles used as the two operands of the objective formula"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "car, traffic light and road line in a green rounded box",
+    "stands_for": "the multi-modal scene context",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "stacked black cylinder",
+    "stands_for": "the rollout database",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "driver with a steering wheel and two thought bubbles",
+    "stands_for": "the expert who produced the demo",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "auto-regressive motion model as a wide light-blue rounded bar with predicted distributions above and token chips below",
+    "parts": [
+     "rounded bar",
+     "distribution curves",
+     "token chips"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "grey rounded chips start, a^0, ..., a^(T-1) under the model with curved arrows looping back from the model",
+    "parts": [
+     "start",
+     "a^0",
+     "ellipsis",
+     "a^(T-1)"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "preferred rollout in a green frame against unpreferred rollout in a red frame, joined by a preference sign in the objective",
+    "parts": [
+     "green tile",
+     "red tile",
+     ">"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the scene icons at the left, follows the black arrow into the model, then the grey sample arrow to the database and the orange return arrow under the objective; the ranking grid at the right is read after the database."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three coloured headings over three regions in a row: grey Model Pre-training at the left (scene icon box, model bar with curves and token chips), orange Direct Preference Alignment in the middle (database and two circular arrows with the objective formula above), blue Preference Ranking at the right (a 2x3 mini grid of heat maps, scene tiles and an expert demo). The regions are not framed and the loop arrows cross between them.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.42,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey: Model Pre-training heading, reference-model dotted curves, sample-rollouts arrow and label, token arrows"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey token chips"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "light-blue motion token prediction model bar",
+    "opacity": 0.28
+   },
+   {
+    "hex": "#d2fbed",
+    "used_for": "pale green fill of the scene context box"
+   },
+   {
+    "hex": "#06e89d",
+    "used_for": "teal-green outline of the scene context box"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "orange: Direct Preference Alignment heading, aligned distribution curves, alignment arrow"
+   },
+   {
+    "hex": "#0177ff",
+    "used_for": "bright blue: Preference Ranking heading"
+   },
+   {
+    "hex": "#00823b",
+    "used_for": "green: check mark and frame of the preferred rollout"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "dark red: cross mark and frame of the unpreferred rollout"
+   },
+   {
+    "hex": "#62ff60",
+    "used_for": "light-green frame of the expert demo tile"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "database icon, text and the black arrow"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-1.25 pt: 1.25 pt green and red frames on tiles, 1 pt orange curves, thin dotted grey reference curves",
+  "font": "serif (Palatino) 4-12 pt, bold coloured 6.5 pt headings, 6 pt labels; Cambria Math for formulas",
+  "corners": "mixed",
+  "arrows": "thick curved grey and orange arrows with large heads for the loop, thin grey curved arrows for token feedback, one thick straight black arrow",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey = pre-trained reference model and its sampling; orange = alignment and the aligned distributions; bright blue = ranking by occupancy matching; green = preferred rollout (check), red = unpreferred rollout (cross); light-green frame = expert demo",
+  "line_style_means": "grey dotted curves = reference model's token distributions; solid orange curves = probabilities after alignment; curved grey arrows = sampling and token feedback; thick orange arrow = preference alignment of the model",
+  "shape_means": "wide rounded bar = model; grey rounded chips = action tokens; cylinder = rollout database; framed square tiles = traffic scenes or maps",
+  "marker_means": "check and cross = preferred and unpreferred; the > sign = preference order; start, a^0 to a^(T-1) = tokens",
+  "emphasis": "three coloured headings key the regions; the formula with two colour-framed tiles ties the objective to the ranked pair; orange curves over grey dotted ones show what alignment does to each token distribution",
+  "reusable_patterns": [
+   "orange solid curve over a grey dotted curve above each prediction step to show a distribution before and after alignment",
+   "coloured section headings whose colour is reused on the arrows and curves of that part",
+   "objective written as a formula whose operands are the same green- and red-framed pictures used in the ranking part",
+   "check mark and cross above ranked samples with matching green and red frames",
+   "two circular arrows between model and database for the sample-then-align loop",
+   "expert demo tile with a person-and-thought-bubble icon"
+  ],
+  "weaknesses": [
+   "the link between heat maps, rollouts and expert demo rests on grid position only",
+   "no arrow ties the database to the ranking region",
+   "4-6 pt formulas and captions are small"
+  ]
+ },
+ "resources": {
+  "own": [
+   "top-down scene renderings with trajectories (expert demo and sampled rollouts)",
+   "occupancy-measure heat maps"
+  ],
+  "stock": [
+   "PowerPoint-style icons: car, traffic light, road, database, driver with steering wheel"
+  ],
+  "generated": [],
+  "drawn": [
+   "model bar, token chips and distribution curves",
+   "curved arrows, frames, check and cross",
+   "objective formula"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "motion token prediction model bar",
+   "orange and grey distribution curves",
+   "token chips",
+   "database cylinder",
+   "orange and grey circular arrows",
+   "traffic scene tiles with green and red frames",
+   "occupancy heat maps",
+   "driver icon with thought bubble",
+   "check and cross marks"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "preference alignment",
+   "multi-agent motion generation",
+   "autonomous driving",
+   "occupancy measure matching",
+   "post-training",
+   "traffic simulation",
+   "expert demonstrations",
+   "preference ranking"
+  ],
+  "tags": [
+   "distribution-glyph",
+   "positive-negative-pairs",
+   "verdict-marks",
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "picture-operands-in-formula",
+    "what": "an objective written as a formula whose operands are small pictures of the samples (preferred and unpreferred scene) instead of symbols"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Colour each section heading and reuse that colour on its arrows and curves, and write the objective as a formula whose operands are the very green- and red-framed pictures of the ranking part, so the loss reads straight off the figure.",
+  "suits": "alignment or post-training methods in embodied or generative settings where samples are scenes or images and the preference pair is the key object."
+ },
+ "tags": [
+  "three coloured headings",
+  "circular arrows",
+  "framed scene tiles",
+  "serif labels",
+  "orange over grey curves",
+  "check and cross"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "It defines an implicit preference distance function that measures the alignment between a generated sample and an expert demonstration",
+   "enabling largescale automatic preference data generation to align the motion generation model",
+   "the orange lines represent the probabilities after the alignment process"
+  ]
+ },
+ "summary": "This paper aligns a pre-trained multi-agent traffic simulation model with human preferences without human rankings: expert demonstrations rank the model's own rollouts through occupancy measure matching, and the ranked pairs drive a direct preference alignment (DPA-OMF). Figure 1 draws a loop in three coloured sections. At the left a scene encoder feeds a motion token prediction model, with distributions drawn as orange curves over grey dotted reference curves and token chips below. A grey arrow samples rollouts into a database and an orange arrow returns them for alignment, under the objective max P(green > red | c). At the right, an expert demo and two sampled rollouts with heat maps, check and cross marks show the ranking.",
+ "summary_zh": "论文无需人工排序，用专家示范通过占用度量匹配给预训练交通仿真模型自己的采样排序，再做直接偏好对齐（DPA-OMF）。图1分三块着色区域画出采样入库、热图加对勾叉号排序、橙色箭头回灌对齐的循环。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The three coloured headings are counted as titled panels although they are not framed and the loop arrows cross between them. The meaning of the two heat maps (occupancy features of the rollouts compared with the expert demo) follows the caption; the figure itself only places them above the rollouts. The database and scene icons are unlabelled. Medium of the small icons is a best reading of the digest (10 bitmaps, 146 vector paths). The schema has no marker kind for check, cross and the preference sign, recorded as other.",
+ "venue": "ICLR25"
+}

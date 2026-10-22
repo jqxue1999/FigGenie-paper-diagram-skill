@@ -1,0 +1,500 @@
+{
+ "paper_id": "aaai25-0072",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GenAuction",
+  "one_liner": "Generative ad auction in which a Transformer-based Generator proposes candidate page views, an Evaluator picks the best, and a VCG module sets payments.",
+  "domain": [
+   "online advertising auctions",
+   "generative allocation of page views",
+   "mechanism design"
+  ],
+  "subfield": "other",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "wide left-to-right block diagram of a generator (two repeated PV-Generator modules), an evaluator and a payment module, with input, output and payment rows under the frame",
+  "argues": "Selecting whole page views with a generator and an evaluator, instead of ranking ads one by one, allocates ads end to end and prices them with VCG.",
+  "subject": "Repeated PV-Generator modules, an Evaluator with a CTR model and a VCG Payment module, with input, output and payment rows below.",
+  "elements": [
+   {
+    "name": "GenAuction",
+    "type": "container",
+    "role": "the whole mechanism",
+    "drawn_as": "black-framed wide box with the bold title centred at the top",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Generator",
+    "type": "container",
+    "role": "creates a set of candidate PVs",
+    "drawn_as": "grey tinted region with a bold title, holding two PV-Generator modules",
+    "container": "GenAuction",
+    "is_contribution": true
+   },
+   {
+    "name": "PV-Generator-1 / PV-Generator-2",
+    "type": "module",
+    "role": "one generation step: a Selector then a Concator, repeated with '…' for more steps",
+    "drawn_as": "two pale-yellow regions with bold titles, identical inside",
+    "container": "Generator",
+    "is_contribution": true
+   },
+   {
+    "name": "Input",
+    "type": "data",
+    "role": "features of ads and user information entering the selector",
+    "drawn_as": "white box with a red dashed border at the bottom of the selector, red dashed arrow into Embedding",
+    "container": "PV-Generator",
+    "is_contribution": false
+   },
+   {
+    "name": "Selector: Embedding, Transformer, Masking",
+    "type": "module",
+    "role": "maps ad and user features to embeddings, applies a Transformer and masks to choose ads",
+    "drawn_as": "pale green region with a vertical stack of a red-orange gradient Embedding box, an orange gradient Transformer box and a green Masking pill joined by thin arrows",
+    "container": "PV-Generator",
+    "is_contribution": true
+   },
+   {
+    "name": "Output (Ad)",
+    "type": "data",
+    "role": "selected ads",
+    "drawn_as": "narrow green dashed column of light-green tiles with '…', green dashed arrows",
+    "container": "PV-Generator",
+    "is_contribution": false
+   },
+   {
+    "name": "Concator: Concat, Beam Search",
+    "type": "module",
+    "role": "assembles the selected ads into a candidate PV with beam search",
+    "drawn_as": "pale purple region with a cyan Concat box at the bottom, a dashed black grid of tiles above it and a purple Beam Search pill at the top",
+    "container": "PV-Generator",
+    "is_contribution": true
+   },
+   {
+    "name": "Output (PV)",
+    "type": "data",
+    "role": "candidate PVs of one generator",
+    "drawn_as": "narrow purple dashed column of purple tiles with '…'",
+    "container": "PV-Generator",
+    "is_contribution": false
+   },
+   {
+    "name": "PV Embedding (between the generators)",
+    "type": "module",
+    "role": "turns the first PV into an embedding for the next generator",
+    "drawn_as": "pink-to-beige gradient rounded box between the two PV-Generator regions",
+    "container": "Generator",
+    "is_contribution": null
+   },
+   {
+    "name": "Output (PVX)",
+    "type": "data",
+    "role": "all candidate PVs handed to the Evaluator",
+    "drawn_as": "purple dashed column of tiles in several purple shades with '…'",
+    "container": "GenAuction",
+    "is_contribution": false
+   },
+   {
+    "name": "Evaluator",
+    "type": "container",
+    "role": "assesses the candidate PVs to select a winning PV",
+    "drawn_as": "pale blue region with a bold title holding a vertical stack read bottom to top",
+    "container": "GenAuction",
+    "is_contribution": true
+   },
+   {
+    "name": "PV Embedding / Contextual Aware CTR Model / PV Embedding / Transformer",
+    "type": "module",
+    "role": "embeds each PV, scores it with a contextual-aware CTR model, embeds again and applies a Transformer",
+    "drawn_as": "stack of pink, green-to-blue, pink and orange gradient boxes joined by tiny upward arrowheads",
+    "container": "Evaluator",
+    "is_contribution": true
+   },
+   {
+    "name": "MLP & soft-max & argmax",
+    "type": "module",
+    "role": "picks the winning PV",
+    "drawn_as": "green gradient pill at the top of the Evaluator stack",
+    "container": "Evaluator",
+    "is_contribution": true
+   },
+   {
+    "name": "Output (PV)",
+    "type": "data",
+    "role": "the winning PV",
+    "drawn_as": "blue dashed column of blue tiles with '…'",
+    "container": "GenAuction",
+    "is_contribution": false
+   },
+   {
+    "name": "VCG Payment",
+    "type": "module",
+    "role": "computes the payments",
+    "drawn_as": "pale yellow box with bold text at the top right",
+    "container": "GenAuction",
+    "is_contribution": false
+   },
+   {
+    "name": "Output (P)",
+    "type": "data",
+    "role": "payments",
+    "drawn_as": "yellow dashed column of pale tiles with '…'",
+    "container": "GenAuction",
+    "is_contribution": false
+   },
+   {
+    "name": "Input / Output / Payment rows",
+    "type": "data",
+    "role": "system inputs (User, Bidder 1 … Bidder N), outputs per bidder and payments per bidder",
+    "drawn_as": "three dashed rows under the frame: red (Input), blue (Output), yellow (Payment, pale tiles)",
+    "container": "below the frame",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Input row",
+    "to": "Input boxes of the generators",
+    "what": "user and bidder features enter the generators (red dashed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input",
+    "to": "Embedding, Transformer, Masking, Output (Ad)",
+    "what": "selector chain, then selected ads (red dashed arrow into Embedding, thin black arrows, green dashed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (Ad)",
+    "to": "Concat, tile grid, Beam Search, Output (PV)",
+    "what": "ads are concatenated and searched into candidate PVs (green dashed arrow, thin black arrows, purple dashed box)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PV) of PV-Generator-1",
+    "to": "PV Embedding, then PV-Generator-2",
+    "what": "the first PV is embedded and handed to the next generator (purple dashed arrow, pale arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PV) of PV-Generator-1",
+    "to": "Concator of PV-Generator-2",
+    "what": "long purple dashed arrow along the bottom of the Generator region",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PV) of the generators",
+    "to": "Output (PVX)",
+    "what": "candidate PVs gathered, with '…' for further generators",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PVX)",
+    "to": "Evaluator",
+    "what": "candidates enter the bottom PV Embedding (purple dashed arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "PV Embedding",
+    "to": "MLP & soft-max & argmax",
+    "what": "upward chain through the CTR model, a second PV Embedding and the Transformer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "MLP & soft-max & argmax",
+    "to": "Output (PV)",
+    "what": "winning PV (purple dashed arrow into the blue column)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PV)",
+    "to": "VCG Payment",
+    "what": "the chosen PV is the input of the payment rule (blue arrow)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "VCG Payment",
+    "to": "Output (P)",
+    "what": "payments (orange arrow down)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (PV) and Output (P)",
+    "to": "Output row and Payment row",
+    "what": "blue and yellow dashed arrows run down to the bidder rows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "-1, -2",
+    "kind": "identity",
+    "at": "PV-Generator-1, PV-Generator-2",
+    "what": "number the repeated generators"
+   },
+   {
+    "marker": "(Ad), (PV), (PVX), (P)",
+    "kind": "identity",
+    "at": "Output boxes",
+    "what": "name the kind of output: selected ads, a PV, candidate PVs, payments"
+   },
+   {
+    "marker": "Bidder 1 … Bidder N",
+    "kind": "identity",
+    "at": "Input, Output and Payment rows",
+    "what": "index the bidders"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a single orange gradient box labelled Transformer, not opened, inside the selector and inside the evaluator",
+    "parts": [
+     "labelled box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "one green pill labelled MLP & soft-max & argmax at the top of the evaluator",
+    "parts": [
+     "MLP",
+     "soft-max",
+     "argmax"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tile-column-set",
+    "drawn_as": "a set of items as a narrow dashed column of coloured tiles with an ellipsis, outline colour set by the kind of item",
+    "parts": [
+     "dashed column",
+     "tiles",
+     "ellipsis"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the Input row at the bottom-left and the Input box of PV-Generator-1, runs through Selector and Concator, then PV-Generator-2, to Output (PVX); the Evaluator stack is read bottom to top, then Output (PV), VCG Payment and Output (P); coloured arrows lead down to the rows beneath."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "A black-framed wide box titled GenAuction holds, left to right, a grey Generator region (two pale-yellow PV-Generator modules with a PV Embedding between them), Output (PVX), a pale-blue Evaluator stack, Output (PV) and a yellow VCG Payment with Output (P); three coloured dashed rows (Input, Output, Payment) sit under the frame.",
+  "panel_count": 1,
+  "lanes": "three aligned dashed rows below the frame (Input, Output, Payment), each in the colour of its data",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 4,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.01,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dbdbdb",
+    "opacity": 0.2,
+    "used_for": "grey tint of the Generator region"
+   },
+   {
+    "hex": "#ffe699",
+    "opacity": 0.2,
+    "used_for": "pale yellow tint of the PV-Generator modules"
+   },
+   {
+    "hex": "#c5e0b4",
+    "opacity": 0.2,
+    "used_for": "pale green tint of the Selector and the ad outputs"
+   },
+   {
+    "hex": "#7030a0",
+    "opacity": 0.2,
+    "used_for": "pale purple tint of the Concator and the PV outputs; also the purple dashed outlines (stroke)"
+   },
+   {
+    "hex": "#b4c7e7",
+    "opacity": 0.2,
+    "used_for": "pale blue tint of the Evaluator and its output"
+   },
+   {
+    "hex": "#ffff00",
+    "opacity": 0.2,
+    "used_for": "light yellow tint of VCG Payment"
+   },
+   {
+    "hex": "#bbdaaa",
+    "used_for": "green tiles of the ad outputs"
+   },
+   {
+    "hex": "#d2b8d8",
+    "used_for": "purple tiles of the PV outputs"
+   },
+   {
+    "hex": "#f9c9be",
+    "used_for": "pink tiles of the payment outputs"
+   },
+   {
+    "hex": "#00b050",
+    "used_for": "green dashed outlines and arrows for ads (stroke)"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue dashed outlines for the chosen PV and the Output row (stroke)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow-orange dashed outlines for payments (stroke)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red dashed outlines for inputs (stroke)"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "0.25 pt hairlines on the 73 coloured dashed outlines and arrows, 0.5 pt on the black frame and 15 grey shapes; 63 dashed shapes",
+  "font": "sans (Microsoft YaHei) 7 pt, bold for module titles and output names, 8.5 pt bold title GenAuction",
+  "corners": "mixed",
+  "arrows": "thin black arrows with tiny heads inside modules; dashed coloured arrows (green, purple, red, blue, yellow) between modules matching the data boxes; one long purple dashed arrow under the generators",
+  "rendering": "flat-vector",
+  "effects": "gradient fills on the module boxes and pills, stored as bitmaps in the file",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "dashed outline colour = kind of data: red = inputs, green = selected ads, purple = page-view candidates, blue = chosen PV and bidder outputs, yellow = payments; tints: pale green Selector, pale purple Concator, pale blue Evaluator, pale yellow payment; module gradients mark layer types (red-orange Embedding, orange Transformer, green MLP, cyan Concat)",
+  "line_style_means": "dashed coloured arrows = flow of that kind of data between modules; thin black arrows = flow inside a module; the long purple dashed arrow under the generators = a skip from the first PV output to the second Concator",
+  "shape_means": "rounded gradient box or pill = layer or module; narrow dashed column of tiles = a set of items; white box with a red dashed border = input; black frame = whole system",
+  "marker_means": "(Ad), (PV), (PVX), (P) name output types; -1 and -2 number repeated generators; Bidder 1 … N index the bidders",
+  "emphasis": "the colour of dashed outlines carries each kind of data through the frame down to the rows beneath, and the bold title and the three bottom rows frame the whole mechanism",
+  "reusable_patterns": [
+   "a repeated module drawn twice with '…' to say it repeats (PV-Generator-1, PV-Generator-2)",
+   "dashed columns of tiles in one outline colour per kind of data, matching the arrows",
+   "rows for system inputs, outputs and payments outside the main frame, tied to it by coloured arrows",
+   "gradient pills for layers (embedding, transformer, masking) stacked with tiny black arrows",
+   "a tinted region per component with a bold title (Generator, Evaluator)",
+   "the system title set inside the top of the frame"
+  ],
+  "weaknesses": [
+   "tiny arrowheads inside the modules are hard to see",
+   "the long purple dashed arrow under the generators is easy to miss",
+   "the route from Output (PV) through PV Embedding into the second generator is ambiguous",
+   "7 pt text throughout"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, gradient pills, tiles and arrows (probably PowerPoint, Microsoft YaHei text)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two repeated PV-Generator modules",
+   "gradient pill layers Embedding, Transformer, Masking",
+   "dashed columns of coloured tiles",
+   "Evaluator stack with a CTR model",
+   "VCG Payment box",
+   "input, output and payment rows below the frame"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "generative auction",
+   "online advertising",
+   "Generator-Evaluator",
+   "transformer",
+   "CTR model",
+   "VCG payment",
+   "page view allocation",
+   "beam search"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "dashed-colour-data-columns",
+    "what": "sets of items (ads, candidate page views, payments) drawn as narrow dashed columns of coloured tiles with an ellipsis, one outline colour per kind of data"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each kind of data one dashed-outline colour and keep it on the tile columns, the arrows and the rows beneath the frame, so a long left-to-right mechanism can be followed by colour alone; show a repeated module twice with an ellipsis instead of drawing it N times.",
+  "suits": "auction, ranking or generator-evaluator pipelines with several kinds of intermediate sets and system-level inputs, outputs and payments."
+ },
+ "tags": [
+  "titled frame",
+  "repeated modules",
+  "dashed coloured columns",
+  "gradient pills",
+  "bottom rows",
+  "sans labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Methodology (p.3-4)"
+  ],
+  "evidence": [
+   "GenAuction consists of three primary components: the Generator, which is to create a set of candidate PVs",
+   "the Evaluator, which assesses the candidate PVs to select a winning PV",
+   "we use embedding layers to extract the embeddings from raw sparse features"
+  ]
+ },
+ "summary": "GenAuction is a generative ad auction that selects winning page views (PVs) instead of single ads. The figure is a wide left-to-right block diagram inside a titled frame. The Generator holds two repeated PV-Generator modules; each has a Selector (Embedding, Transformer, Masking) that outputs candidate ads and a Concator (Concat, Beam Search) that assembles candidate PVs, and a PV Embedding passes the first PV on to the second generator. The candidate PVs, Output (PVX), go to the Evaluator, a stack of PV Embedding, a contextual-aware CTR model, PV Embedding, Transformer and an MLP with soft-max and argmax, which yields the chosen PV. A VCG Payment module turns it into payments. Dashed outlines in red, green, purple, blue and yellow follow each kind of data to the Input, Output and Payment rows beneath.",
+ "summary_zh": "GenAuction 总体结构图：大框内自左向右为含两个重复 PV 生成器的 Generator、带 CTR 模型的 Evaluator 和 VCG 支付模块，下方是输入、输出和支付三行；红绿紫蓝黄虚线框按数据种类着色。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (model-anatomy, stage-pipeline). The digest counts 16 bitmaps because the gradient-filled module boxes and pills are stored as images; they are not data samples, so pictures is empty. The route of the PV Embedding between the generators and the purple dashed arrow along the bottom are read from the drawing.",
+ "venue": "AAAI25"
+}

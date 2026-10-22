@@ -1,0 +1,432 @@
+{
+  "meta": {
+    "_purpose": "Spec-writing example only (AI family): it shows which fields exist and how they are filled for a real Figure 1. It is not a style reference, so do not carry its fonts, palette, panel count or node count into another figure. For style, look at the figure it was written from (assets/exemplars/ai/figures/acl23-0028_fig1/) and at the exemplars the user picks for your own figure.",
+    "id": "hardpt-fig1",
+    "title": "HardPT: stratified samples and prompt-based training",
+    "system": {
+      "name": "HardPT",
+      "one_liner": "hard-sample-aware prompt tuning: sort training sentences into easy, hard and misleading, train on the hard ones with positive and negative samples, leave the misleading ones out"
+    },
+    "family": "ai",
+    "venue": "acl",
+    "kind": "architecture",
+    "figure_kind": "whole-system",
+    "column": "double",
+    "width_pt": 454,
+    "max_height_pt": 212,
+    "template": "ai",
+    "direction": "left-right",
+    "panels": 2,
+    "palette": "office-pastel",
+    "font": "arial",
+    "step_markers": "none",
+    "language": "en",
+    "version": 1,
+    "ai": {
+      "kinds": [
+        "stage-pipeline",
+        "model-anatomy",
+        "worked-walkthrough"
+      ],
+      "variant": "stage-chain",
+      "subfield": "llm-nlp",
+      "subfield2": "",
+      "arrangement": "panels-column",
+      "grouping": [
+        "framed-boxes",
+        "dashed-boxes",
+        "whitespace"
+      ],
+      "samples": "text",
+      "idioms": [
+        "prompt-box",
+        "contrastive-pair",
+        "database-cylinder"
+      ],
+      "materials": [
+        "the three review sentences with their labels and the model's predictions (Table 1 of the paper)",
+        "the cloze template '[CLS] <sentence> It is [Mask]. [SEP]'",
+        "one positive and one negative sample sentence for the hard case"
+      ],
+      "notes": "two lettered panels stacked: (a) the data triage read left to right through four framed columns joined by block chevrons; (b) the training diagram, the EASY frame in the top row with encoder, MLM head and loss, the wide HARD frame along the bottom with its positive and negative sample rows"
+    },
+    "caption_draft": "Figure 1. (a) Training sentences with their labels and the model's predictions are stratified into EASY (green), HARD (gold) and MISLEADING (red) samples. (b) Easy and hard samples are wrapped in a cloze template and run through the frozen encoder and MLM head into the adaptive contrastive loss; the hard sample is joined by positive (P) and negative (N) samples, while misleading samples are left out.",
+    "open_questions": [
+      "Does the misleading stratum appear in (b) at all (greyed out), or only in (a)?",
+      "Are the positive and negative samples drawn for the easy input too, or only for the hard one?"
+    ],
+    "_source": "assets/exemplars/ai/figures/acl23-0028_fig1",
+    "_notes": "Captured: the one colour code that ties the two panels (green / gold / red for the three strata, carried from the predictions in (a) into the card titles and the dashed flow arrows of (b)), the real example sentences as text nodes with their lines, the cloze template as a prompt-box idiom, the positive and negative sample rows as the contrastive-pair idiom with a count, the encoder and MLM head drawn as cylinders (the paper's choice, kept through `symbol`), and the two dashed flows that share the encoder, head and loss. Not captured as geometry: the exact widths of the four columns of (a), the bracket labels 'Input & Template' under the cards, the ellipses between the sample boxes. The record notes that the colour meaning is given only in the caption; the spec declares a legend so the figure can be read alone."
+  },
+  "panels": [
+    {
+      "id": "a",
+      "label": "Stratification",
+      "panel_label": "(a)",
+      "axis": "stages",
+      "order": 0,
+      "verdict": "ours",
+      "note": "four framed columns read left to right: the sentences, their labels, the predictions, the stratified cards"
+    },
+    {
+      "id": "b",
+      "label": "Prompt-based training",
+      "panel_label": "(b)",
+      "axis": "stages",
+      "order": 1,
+      "verdict": "ours",
+      "note": "the EASY input, the encoder, the MLM head and the loss in one row; the HARD input with its sample rows along the bottom"
+    }
+  ],
+  "containers": [
+    {
+      "id": "strata",
+      "label": "Instances after Stratification",
+      "kind": "solid",
+      "role": "novel",
+      "panel": "a",
+      "title_position": "bottom-center",
+      "order": 3,
+      "note": "a rounded frame with its title set into the bottom border, like the three frames before it"
+    },
+    {
+      "id": "easy-frame",
+      "label": "EASY",
+      "kind": "solid",
+      "role": "novel",
+      "panel": "b",
+      "order": 0,
+      "note": "frame titled EASY in green, holding the templated easy input"
+    },
+    {
+      "id": "hard-frame",
+      "label": "HARD",
+      "kind": "solid",
+      "role": "novel",
+      "panel": "b",
+      "order": 4,
+      "note": "wide frame titled HARD in gold, holding the templated hard input and the positive and negative rows"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "instances",
+      "label": "Instances in Dataset",
+      "kind": "text",
+      "role": "existing",
+      "panel": "a",
+      "order": 0,
+      "text_lines": [
+        "This is one of the best films.",
+        "Just to distract the kids, as it claims.",
+        "The subject matter of this film is unusual.",
+        "..."
+      ],
+      "note": "bulleted sentences in a rounded frame whose title sits in the bottom border; the three sentences are followed through the whole figure"
+    },
+    {
+      "id": "labels",
+      "label": "Label",
+      "kind": "text",
+      "role": "existing",
+      "panel": "a",
+      "order": 1,
+      "text_lines": [
+        "Positive (correct label: Positive)",
+        "Negative (correct label: Negative)",
+        "Positive (correct label: Neutral)",
+        "..."
+      ],
+      "note": "the given label per sentence in bold, each with a small 'Correct label' note"
+    },
+    {
+      "id": "prediction",
+      "label": "Prediction",
+      "kind": "text",
+      "role": "existing",
+      "panel": "a",
+      "order": 2,
+      "legend_ref": "leg-easy",
+      "text_lines": [
+        "Positive",
+        "Positive",
+        "Negative",
+        "..."
+      ],
+      "note": "the model's prediction per sentence, coloured by stratum: green correct, gold challenging, red incorrect"
+    },
+    {
+      "id": "easy",
+      "label": "EASY",
+      "kind": "text",
+      "role": "novel",
+      "parent": "strata",
+      "panel": "a",
+      "order": 0,
+      "legend_ref": "leg-easy",
+      "text_lines": [
+        "EASY",
+        "This is one of the best films.",
+        "..."
+      ],
+      "idiom": "stacked-cards",
+      "note": "a dashed card with a green title and the easy sentence"
+    },
+    {
+      "id": "hard",
+      "label": "HARD",
+      "kind": "text",
+      "role": "novel",
+      "parent": "strata",
+      "panel": "a",
+      "order": 1,
+      "legend_ref": "leg-hard",
+      "text_lines": [
+        "HARD",
+        "Just to distract the kids, as it claims.",
+        "..."
+      ]
+    },
+    {
+      "id": "misleading",
+      "label": "MISLEADING",
+      "kind": "text",
+      "role": "optional",
+      "parent": "strata",
+      "panel": "a",
+      "order": 2,
+      "legend_ref": "leg-misleading",
+      "text_lines": [
+        "MISLEADING",
+        "The subject matter of this film is unusual.",
+        "..."
+      ],
+      "note": "the stratum that is left out of training; it has no counterpart in (b)"
+    },
+    {
+      "id": "easy-input",
+      "label": "[CLS] This is one of the best films. It is [Mask]. [SEP]",
+      "kind": "text",
+      "role": "existing",
+      "parent": "easy-frame",
+      "panel": "b",
+      "order": 0,
+      "idiom": "prompt-box",
+      "legend_ref": "leg-easy",
+      "text_lines": [
+        "[CLS] This is one of the best films. It is [Mask]. [SEP]",
+        "Input & Template"
+      ],
+      "note": "pale green dashed card; the template words in italic underline, the [Mask] slot a small blue highlighted box, a bracket under the card naming the two spans"
+    },
+    {
+      "id": "hard-input",
+      "label": "[CLS] Just to distract the kids, as it claims. It is [Mask]. [SEP]",
+      "kind": "text",
+      "role": "existing",
+      "parent": "hard-frame",
+      "panel": "b",
+      "order": 0,
+      "idiom": "prompt-box",
+      "legend_ref": "leg-hard",
+      "text_lines": [
+        "[CLS] Just to distract the kids, as it claims. It is [Mask]. [SEP]",
+        "Input & Template"
+      ],
+      "note": "pale yellow dashed card drawn like the easy one"
+    },
+    {
+      "id": "positives",
+      "label": "P1: It is just passable. [SEP]",
+      "kind": "text",
+      "role": "existing",
+      "parent": "hard-frame",
+      "panel": "b",
+      "order": 1,
+      "multiplicity": "P1 ... Pi",
+      "idiom": "contrastive-pair",
+      "text_lines": [
+        "P1: It is just passable. [SEP]",
+        "...",
+        "Pi"
+      ],
+      "note": "orange-outlined peach boxes in a row with an ellipsis, bracketed 'The Positive Samples'"
+    },
+    {
+      "id": "negatives",
+      "label": "N1: It's disappointing. [SEP]",
+      "kind": "text",
+      "role": "existing",
+      "parent": "hard-frame",
+      "panel": "b",
+      "order": 2,
+      "multiplicity": "N1 ... Nj",
+      "idiom": "contrastive-pair",
+      "text_lines": [
+        "N1: It's disappointing. [SEP]",
+        "...",
+        "Nj"
+      ],
+      "note": "purple-outlined blue-grey boxes in a row, bracketed 'The Negative Samples'"
+    },
+    {
+      "id": "encoder",
+      "label": "Pre-trained Encoder",
+      "kind": "module",
+      "role": "existing",
+      "panel": "b",
+      "order": 1,
+      "train_state": "frozen",
+      "symbol": "cylinder",
+      "note": "the paper draws the encoder and the head as white cylinders with black outlines; symbol keeps that choice"
+    },
+    {
+      "id": "mlm-head",
+      "label": "MLM Head",
+      "kind": "module",
+      "role": "existing",
+      "panel": "b",
+      "order": 2,
+      "symbol": "cylinder"
+    },
+    {
+      "id": "loss",
+      "label": "Adaptive Contrastive Loss",
+      "sublabel": "Training Loss",
+      "kind": "module",
+      "role": "novel",
+      "emphasis": "bold-border",
+      "panel": "b",
+      "order": 3,
+      "note": "a dash-dot box titled Training Loss; the contribution of (b)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-labels",
+      "from": "instances",
+      "to": "labels",
+      "kind": "mapping",
+      "style": "solid",
+      "note": "a pale blue block chevron between the columns (parts-styles §10, block-arrows); rows line up across the frames"
+    },
+    {
+      "id": "e-pred",
+      "from": "labels",
+      "to": "prediction",
+      "kind": "data",
+      "style": "solid",
+      "note": "the prediction placed next to each label; no arrow drawn, the chevron carries the step"
+    },
+    {
+      "id": "e-strata",
+      "from": "prediction",
+      "to": "easy",
+      "kind": "data",
+      "style": "solid",
+      "label": "stratify",
+      "note": "the second block chevron into the stratified frame (its first card stands for the frame): samples are sorted into easy, hard and misleading by their predictions"
+    },
+    {
+      "id": "e-easy",
+      "from": "easy-input",
+      "to": "encoder",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "flow-easy",
+      "note": "green dashed arrow: the easy flow"
+    },
+    {
+      "id": "e-hard",
+      "from": "hard-input",
+      "to": "encoder",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "flow-hard",
+      "note": "yellow dashed arrow from the bottom frame up into the encoder"
+    },
+    {
+      "id": "e-enc-head",
+      "from": "encoder",
+      "to": "mlm-head",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "flow-easy",
+      "note": "two parallel dashed arrows, green above yellow, through the shared modules"
+    },
+    {
+      "id": "e-head-loss",
+      "from": "mlm-head",
+      "to": "loss",
+      "kind": "data",
+      "style": "dashed",
+      "legend_ref": "flow-hard",
+      "note": "the same two parallel dashed arrows into the loss"
+    },
+    {
+      "id": "e-pos",
+      "from": "positives",
+      "to": "hard-input",
+      "kind": "membership",
+      "style": "solid",
+      "note": "the positive samples are concatenated behind the hard input; drawn by adjacency in the same frame, no arrow"
+    },
+    {
+      "id": "e-neg",
+      "from": "negatives",
+      "to": "hard-input",
+      "kind": "membership",
+      "style": "solid",
+      "note": "the negative samples likewise"
+    }
+  ],
+  "legend": {
+    "mode": "explicit",
+    "placement": "below",
+    "items": [
+      {
+        "id": "leg-easy",
+        "label": "EASY: correct prediction, kept",
+        "swatch": {
+          "kind": "fill",
+          "role": "#70ad47"
+        }
+      },
+      {
+        "id": "leg-hard",
+        "label": "HARD: challenging, kept with positive and negative samples",
+        "swatch": {
+          "kind": "fill",
+          "role": "#ffc000"
+        }
+      },
+      {
+        "id": "leg-misleading",
+        "label": "MISLEADING: incorrect, left out",
+        "swatch": {
+          "kind": "fill",
+          "role": "#c00000"
+        }
+      },
+      {
+        "id": "flow-easy",
+        "label": "easy flow",
+        "swatch": {
+          "kind": "line",
+          "role": "#70ad47",
+          "line_style": "dashed"
+        }
+      },
+      {
+        "id": "flow-hard",
+        "label": "hard flow",
+        "swatch": {
+          "kind": "line",
+          "role": "#ffc000",
+          "line_style": "dashed"
+        }
+      }
+    ]
+  },
+  "notes": "The paper's figure gives the colour meanings only in the caption (a recorded weakness of this figure); the legend above lets the drawn figure stand alone. Read (a) left to right, then (b) from the EASY frame through the encoder and head to the loss, with the HARD frame along the bottom feeding the same path."
+}

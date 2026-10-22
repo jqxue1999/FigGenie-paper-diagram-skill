@@ -1,0 +1,615 @@
+{
+ "paper_id": "neurips25-0162",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SafeVLA (Integrated Safety Approach, ISA)",
+  "one_liner": "Integrated Safety Approach: model safety tasks, elicit unsafe behaviours in a simulator, constrain VLA policies with CMDP-based safe RL, and assure safety with targeted tests.",
+  "domain": [
+   "VLA safety alignment",
+   "constrained reinforcement learning",
+   "robot manipulation and navigation in simulation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "lettered-stage-panels",
+  "variant_note": "four lettered rounded panels laid out as a bent chain (A down to B, B up to C, C right to D) with dotted hand-offs and Update loops, plus code snippets at the right",
+  "argues": "VLA safety needs an integrated approach: model safety-critical task aspects, elicit unsafe behaviours, constrain learning with a CMDP, and assure the resulting policy with targeted evaluations.",
+  "subject": "Four lettered panels (modeling, eliciting, constraining, assuring) linked by dotted hand-offs, plus code snippets of safety predicates.",
+  "elements": [
+   {
+    "name": "(A) Modeling Safety",
+    "type": "container",
+    "role": "panel that formalises the safety task",
+    "drawn_as": "grey rounded panel with bold lettered title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Safety-Fetch / Safety-PickUp / Safety-ObjNav",
+    "type": "instance",
+    "role": "the safety task environments modelled in the paper",
+    "drawn_as": "three light green rounded boxes joined by dashed green double-headed arrows to a junction",
+    "container": "(A) Modeling Safety",
+    "is_contribution": true
+   },
+   {
+    "name": "Modeling Task  t_i = (e_i, x_i, q_i, G, Φ, Ψ)",
+    "type": "formula",
+    "role": "a safety task as a tuple of categories, positions, orientations, objects and two sets of safety predicates",
+    "drawn_as": "lavender box holding a formula",
+    "container": "(A) Modeling Safety",
+    "is_contribution": true
+   },
+   {
+    "name": "(B) Eliciting Risks",
+    "type": "container",
+    "role": "panel that rolls the policy out in a simulator to elicit unsafe behaviour",
+    "drawn_as": "wide grey rounded panel with bold lettered title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "for categories e_i / for positions x_i / for orientations q_i / for objects G",
+    "type": "data",
+    "role": "components of the task tuple that parameterise the simulated scene",
+    "drawn_as": "four lavender boxes down the left side, each tied to a vertical spine by a purple dashed double-headed arrow",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": null
+   },
+   {
+    "name": "AI2THOR Simulator",
+    "type": "module",
+    "role": "environment in which the policy is rolled out",
+    "drawn_as": "tall blue rounded box",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": false
+   },
+   {
+    "name": "h_t = (o_{t+1-H}, a_{t+1-H}, ..., o_t)",
+    "type": "data",
+    "role": "window of recent observations and actions given to the policy",
+    "drawn_as": "pink box with a formula, light blue arrow down to the policy",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": null
+   },
+   {
+    "name": "Policy π_θi",
+    "type": "module",
+    "role": "the current VLA policy acting in the simulator, with the instruction l",
+    "drawn_as": "teal node-and-edge network glyph with orange edges",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": false
+   },
+   {
+    "name": "Instruction l / a_t",
+    "type": "data",
+    "role": "language instruction into the policy and the action out of it back to the simulator",
+    "drawn_as": "two small pink boxes beside the policy, light blue arrows",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": false
+   },
+   {
+    "name": "Trajectories  D = {τ^(n)}_{n=1}^N",
+    "type": "data",
+    "role": "rollouts collected from the simulator",
+    "drawn_as": "pink box with a formula",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": null
+   },
+   {
+    "name": "Safety Critical Components",
+    "type": "data",
+    "role": "store of safety predicates: φ_corner(s,a), ψ_blind spot(τ), ψ_fragile collection(τ), ψ_critical point(τ), φ_dangerous equipment(s,a)",
+    "drawn_as": "pale blue cylinder listing predicate symbols",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": true
+   },
+   {
+    "name": "for state-action safety predicates Φ / for trajectory-level safety predicates Ψ",
+    "type": "data",
+    "role": "slots for the two kinds of predicates that fill the safety critical components",
+    "drawn_as": "two lavender boxes at the bottom with a purple dashed line up to the cylinder",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": null
+   },
+   {
+    "name": "def phi_corner(s, a) / def phi_dangerous_equipment(s, a)",
+    "type": "text-block",
+    "role": "predicates implemented as Python-style code returning SAFE or UNSAFE",
+    "drawn_as": "two blue rounded boxes of 3 pt monospace code tied to the cylinder by dashed leaders, an ellipsis between them",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Update",
+    "type": "operation",
+    "role": "feedback from the safety components back to the task components for the next round; content not explained",
+    "drawn_as": "dashed black arrows along the bottom of panel B with the word Update",
+    "container": "(B) Eliciting Risks",
+    "is_contribution": null
+   },
+   {
+    "name": "(C) Constraining Policies",
+    "type": "container",
+    "role": "panel that turns trajectories into costs and rewards and defines the constrained problem",
+    "drawn_as": "grey rounded panel with bold lettered title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Cost Function / Reward Function",
+    "type": "formula",
+    "role": "compute per-trajectory costs {c_i(τ^(n))} and rewards {r(τ^(n), l)}",
+    "drawn_as": "pale yellow boxes with set-builder formulas",
+    "container": "(C) Constraining Policies",
+    "is_contribution": null
+   },
+   {
+    "name": "Costs / Rewards",
+    "type": "data",
+    "role": "the computed cost and reward sets passed to the CMDP",
+    "drawn_as": "pink boxes with formulas, black arrows to the cylinder",
+    "container": "(C) Constraining Policies",
+    "is_contribution": null
+   },
+   {
+    "name": "CMDP",
+    "type": "module",
+    "role": "constrained problem: max over θ of J_r(θ) subject to J_{C_i}(θ) ≤ 0 for every cost i",
+    "drawn_as": "tan cylinder holding the objective",
+    "container": "(C) Constraining Policies",
+    "is_contribution": true
+   },
+   {
+    "name": "(D) Safety Assurance",
+    "type": "container",
+    "role": "panel of targeted safety evaluations on the way to the next policy",
+    "drawn_as": "grey rounded panel with thick black outline",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Test-time Safety / Long-tail Safety / Extreme Failure Safety",
+    "type": "operation",
+    "role": "three assurance checks",
+    "drawn_as": "three light teal rounded boxes stacked",
+    "container": "(D) Safety Assurance",
+    "is_contribution": true
+   },
+   {
+    "name": "Policy π_θ_{i+1}",
+    "type": "module",
+    "role": "the next, safer policy",
+    "drawn_as": "teal network glyph at the far right behind a large teal arrow",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Safety-Fetch / Safety-PickUp / Safety-ObjNav",
+    "to": "task junction",
+    "what": "the three safety tasks are modelled together",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "task junction",
+    "to": "AI2THOR Simulator",
+    "what": "task environment handed to the simulator",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Modeling Task",
+    "to": "task component boxes",
+    "what": "tuple components, carried down a dotted spine into panel B",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "task component boxes",
+    "to": "AI2THOR Simulator",
+    "what": "scene configuration",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "AI2THOR Simulator",
+    "to": "h_t",
+    "what": "observation history",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h_t and Instruction l",
+    "to": "Policy π_θi",
+    "what": "inputs of the policy",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Policy π_θi",
+    "to": "AI2THOR Simulator",
+    "what": "action a_t executed in the simulator",
+    "kind": "interaction",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "AI2THOR Simulator",
+    "to": "Trajectories",
+    "what": "rollouts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trajectories",
+    "to": "Safety Critical Components",
+    "what": "rollouts checked against the predicates",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Trajectories",
+    "to": "Cost Function and Reward Function",
+    "what": "rollouts handed up to panel C",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cost Function / Reward Function",
+    "to": "CMDP",
+    "what": "costs and rewards define the constrained problem",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "CMDP",
+    "to": "Policy π_θ_{i+1}",
+    "what": "optimised policy, passed through the safety assurance panel by a large teal funnel arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "predicate slots Φ and Ψ",
+    "to": "Safety Critical Components",
+    "what": "predicates that fill the cylinder",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Safety Critical Components",
+    "to": "code snippets",
+    "what": "components shown as code",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Safety Critical Components",
+    "to": "task component boxes",
+    "what": "Update loop back to the spine",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(A) Modeling Safety",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "three safety task boxes and the Modeling Task tuple t_i",
+    "verdict": "ours"
+   },
+   {
+    "label": "(B) Eliciting Risks",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "task components configure an AI2THOR simulator in which the policy acts; trajectories are collected and checked against safety critical components, with code and Update loops",
+    "verdict": "ours"
+   },
+   {
+    "label": "(C) Constraining Policies",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "cost and reward functions produce costs and rewards that define a CMDP objective",
+    "verdict": "ours"
+   },
+   {
+    "label": "(D) Safety Assurance",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "test-time, long-tail and extreme failure safety checks leading to the next policy",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(A), (B), (C), (D)",
+    "kind": "section",
+    "at": "panel titles",
+    "what": "head the four aspects of the pipeline, in the order they are applied"
+   },
+   {
+    "marker": "e_i, x_i, q_i, G, Φ, Ψ",
+    "kind": "identity",
+    "at": "task tuple and the lavender boxes",
+    "what": "name the components of the safety task and tie each box to its symbol"
+   },
+   {
+    "marker": "i, i+1",
+    "kind": "identity",
+    "at": "policy glyphs",
+    "what": "mark the current and the next policy iteration"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "network of teal circles with orange edges",
+    "stands_for": "the VLA policy, current (θ_i) and next (θ_i+1)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "flat-topped cylinders",
+    "stands_for": "a store of safety predicates and the CMDP problem",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "two safety predicates written as code: a corner check on the agent position and a dangerous-equipment contact check, each returning SAFE or UNSAFE",
+    "form": "monospace code boxes tied to the cylinder by dashed leaders",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "rl-loop",
+    "drawn_as": "simulator, history window h_t, instruction l, policy and action a_t joined by light blue arrows; reward is computed elsewhere in panel C",
+    "parts": [
+     "AI2THOR Simulator",
+     "h_t",
+     "Instruction l",
+     "Policy",
+     "a_t"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "constrained-optimisation-block",
+    "drawn_as": "tan cylinder holding the objective max J_r(θ) subject to J_{C_i}(θ) ≤ 0",
+    "parts": [
+     "cylinder",
+     "objective",
+     "constraint line"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "predicate-store-cylinder",
+    "drawn_as": "cylinder listing named predicate symbols with code boxes tied to it by dashed leaders",
+    "parts": [
+     "cylinder",
+     "predicate list",
+     "code boxes",
+     "leaders"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at (A) at the top left, follows the dotted arrows down into (B), then the trajectory arrows up into (C), the teal funnel into (D) and the resulting policy at the far right; the code boxes at the right explain the safety critical components."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three panels on the top row (A, C, D) and the wide panel B under them; dotted black arrows carry the task from A into B and trajectories from B up into C, a teal funnel arrow carries C into D, and two code boxes at the right are tied to a cylinder in B by dashed leaders.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "letters",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.15,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5f5f5",
+    "used_for": "grey rounded panels A to D"
+   },
+   {
+    "hex": "#acd78e",
+    "opacity": 0.4,
+    "used_for": "safety task boxes in panel A"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "task tuple, task component and predicate slot boxes"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "dashed purple arrows tying components and predicates"
+   },
+   {
+    "hex": "#fadbdf",
+    "used_for": "pink data boxes: trajectories, history, instruction, action, costs, rewards"
+   },
+   {
+    "hex": "#fff2ca",
+    "used_for": "Cost Function and Reward Function boxes"
+   },
+   {
+    "hex": "#ebd8a6",
+    "opacity": 0.4,
+    "used_for": "CMDP cylinder"
+   },
+   {
+    "hex": "#91ace0",
+    "opacity": 0.4,
+    "used_for": "AI2THOR Simulator box"
+   },
+   {
+    "hex": "#dae3f5",
+    "opacity": 0.4,
+    "used_for": "Safety Critical Components cylinder"
+   },
+   {
+    "hex": "#eaeef5",
+    "used_for": "code snippet boxes"
+   },
+   {
+    "hex": "#7ddfd6",
+    "opacity": 0.4,
+    "used_for": "safety assurance boxes in panel D"
+   },
+   {
+    "hex": "#249087",
+    "used_for": "teal funnel arrow and policy glyph nodes"
+   },
+   {
+    "hex": "#eba63a",
+    "used_for": "orange edges of the policy glyph"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on panels and boxes, thicker black outline on panel D, 1.5 pt teal on the funnel and glyphs, 0.75 pt dashed purple and green arrows, thick dotted black hand-off arrows",
+  "font": "serif (Times-style, Cambria Math) at 6 pt for labels and formulas with 4.5 pt sub- and superscripts, bold 6 pt panel titles, 3 pt monospace (Consolas) in the code boxes",
+  "corners": "rounded",
+  "arrows": "thin black arrows inside panels; thick dotted black arrows with filled heads between panels; light blue arrows for the simulator and policy exchange; dashed purple double-headed arrows; dashed black Update arrows; large teal funnel arrow",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "network-glyph",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = safety tasks, lavender = task components and predicate slots, pink = data produced in rollouts (trajectories, history, instruction, actions, costs, rewards), pale yellow = cost and reward functions, blue = simulator, tan = CMDP, teal = safety assurance and the resulting policy",
+  "line_style_means": "solid black = data flow inside a panel; thick dotted black = hand-off between panels; light blue = simulator and policy exchange; dashed purple = components or predicates being attached; dashed black = Update feedback and zoom leaders; dashed green double arrow = relation among the safety tasks",
+  "shape_means": "cylinder = store of predicates or the constrained problem; rounded rectangle = module or data item; network glyph = policy; large teal funnel = hand-over from optimisation to assurance",
+  "marker_means": "letters A to D head the four aspects in the order they apply; subscripts i and i+1 on the policy mark successive iterations",
+  "emphasis": "thick outline on panel D, teal colour and the large teal arrow ending in the next policy",
+  "reusable_patterns": [
+   "lettered rounded grey panels with the title inside the top-left corner",
+   "thick dotted arrows for hand-offs between panels versus thin black arrows inside a panel",
+   "cylinder as a store of named components with code boxes tied to it by dashed leaders",
+   "formulas set inside the boxes (tuple, trajectory set, costs, CMDP objective)",
+   "network glyph with subscript i and i+1 for successive policies",
+   "teal funnel arrow from the optimisation block to the final policy"
+  ],
+  "weaknesses": [
+   "3 pt code text and 4.5 pt sub- and superscripts are unreadable at print size",
+   "six arrow styles with no legend",
+   "the Update arrows and the purple dashed arrows are not explained in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "Python-style safety predicate code",
+   "the paper's formulas and task names"
+  ],
+  "stock": [
+   "node-and-edge neural network glyph for the policy"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, boxes, cylinders and arrows",
+   "formula boxes",
+   "teal funnel arrow"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four lettered rounded panels",
+   "task boxes Safety-Fetch, Safety-PickUp, Safety-ObjNav",
+   "AI2THOR simulator box with policy loop",
+   "trajectories box",
+   "cylinder of safety critical components with code boxes",
+   "CMDP cylinder with objective",
+   "teal funnel arrow to the policy glyph"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "VLA safety",
+   "constrained MDP",
+   "safe reinforcement learning",
+   "risk elicitation",
+   "AI2THOR",
+   "safety predicates",
+   "long-tail risks",
+   "integrated safety approach"
+  ],
+  "tags": [
+   "equation-boxes",
+   "code-snippet-box",
+   "zoom-callout",
+   "flow-type-arrows",
+   "model-pictogram",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw a multi-aspect pipeline as lettered grey panels, using thick dotted arrows for hand-offs between panels and thin solid arrows inside them; show a store of components as a cylinder and tie real code boxes to it with dashed leaders.",
+  "suits": "Safety, alignment or RL pipelines that combine task modelling, data elicitation, a constrained objective and an evaluation stage, where formulas and code carry part of the story."
+ },
+ "tags": [
+  "lettered grey panels",
+  "dotted hand-off arrows",
+  "formula boxes",
+  "code boxes with leaders",
+  "teal funnel arrow",
+  "serif labels"
+ ],
+ "provenance": {
+  "sections": [
+   "ISA overview (p.4)"
+  ],
+  "evidence": [
+   "We argue that VLA safety requires an integrated safety approach (ISA), rather than a single method.",
+   "(i) modeling safety-critical aspects of tasks and environments; (ii) eliciting latent and diverse unsafe behaviors from existing policies;",
+   "(iii) constraining the VLA’s learning process to integrate these safety considerations; and (iv) assuring the resulting model’s safety"
+  ]
+ },
+ "summary": "SafeVLA proposes an Integrated Safety Approach (ISA) for aligning vision-language-action models with safety constraints. Figure 1 draws the pipeline as four lettered rounded grey panels: (A) Modeling Safety, with three safety task boxes and a task tuple; (B) Eliciting Risks, where task components configure an AI2THOR simulator in which the policy acts, trajectories are collected, and a cylinder of safety predicates is tied by dashed leaders to two Python-style code snippets; (C) Constraining Policies, where cost and reward functions feed a CMDP cylinder with a max-subject-to-constraints objective; and (D) Safety Assurance, three tests leading to the next policy, shown as a network glyph. Dotted, dashed, light blue and teal arrows separate kinds of flow, and formulas fill many boxes.",
+ "summary_zh": "SafeVLA 提出集成安全方法（ISA）。图 1 用 A 到 D 四个灰色圆角面板画流程：建模安全任务；在 AI2THOR 中引出风险并收集轨迹；用代价与奖励构成 CMDP 约束策略；三类测试保证安全；右侧附两段谓词代码。",
+ "confidence": "medium",
+ "notes": "The roles of the Update arrows, of the purple dashed double-headed arrows and of the exact hand-over from the CMDP through the teal funnel into panel D are read from the drawing and the four aspects named in the paper, not explained in the caption. The prior kind (stage-pipeline) is kept as the only kind; the formulas and the simulator loop are parts of the stages. The digest finds no placed photos: the only bitmaps are the policy glyphs and the funnel.",
+ "venue": "NeurIPS25"
+}

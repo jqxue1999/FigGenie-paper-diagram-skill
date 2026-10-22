@@ -1,0 +1,639 @@
+{
+ "paper_id": "acl23-0074",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FluentSpeech",
+  "one_liner": "Stutter-oriented automatic speech editing: a context-aware diffusion denoiser with a stutter predictor edits stuttered speech from the transcript.",
+  "domain": [
+   "speech editing",
+   "stutter removal",
+   "diffusion models"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "(a) thin overview with the denoiser as one green box, (b) the diffusion chain unrolled over spectrogram thumbnails, (c) the denoiser opened up next to its conditioning frame",
+  "argues": "A context-aware diffusion denoiser, conditioned on text, speaker, pitch, duration and stutter information, regenerates a masked span of the mel-spectrogram, and a stutter predictor locates the span automatically.",
+  "subject": "FluentSpeech overview, the reverse diffusion chain over spectrograms, and the wiring of the context-aware spectrogram denoiser and its conditioning.",
+  "elements": [
+   {
+    "name": "Phoneme",
+    "type": "data",
+    "role": "phoneme sequence of the transcription",
+    "drawn_as": "plain text at the bottom with an upward arrow",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Phoneme Embedding",
+    "type": "module",
+    "role": "embeds the phonemes",
+    "drawn_as": "peach rounded box with thick black outline",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Transformer Encoder",
+    "type": "module",
+    "role": "linguistic encoder that turns phonemes into the text hidden sequence e_p",
+    "drawn_as": "peach rounded box with thick black outline",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "x_t, t, e_p, e_x, ..., e_pitch",
+    "type": "data",
+    "role": "inputs of the denoiser: noisy spectrogram, diffusion step, phoneme, acoustic and pitch embeddings",
+    "drawn_as": "serif italic symbols under upward arrows into the green box",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Context-Aware Spectrogram Denoiser",
+    "type": "module",
+    "role": "diffusion denoiser that regenerates the masked mel-spectrogram under the context c",
+    "drawn_as": "pale green rounded box with thick outline; arrows in from a Mask spectrogram and out to an edited one",
+    "container": "(a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Reverse Diffusion",
+    "type": "container",
+    "role": "denoising chain from x_T to x_0 with f_theta(x_t | t, c)",
+    "drawn_as": "pale green frame with bold title, formula, three stacked spectrograms and upward arrows",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "x_0, x_t, x_T",
+    "type": "label",
+    "role": "indices of the chain: clean result at the top, noisy start at the bottom",
+    "drawn_as": "italic labels at the right of the stack with vertical dots between",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Spectrogram Denoiser theta",
+    "type": "container",
+    "role": "the denoising network opened up",
+    "drawn_as": "peach frame with bold title",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Conv 1 x 1 + Relu (input)",
+    "type": "module",
+    "role": "input projection of x_t",
+    "drawn_as": "two small light-yellow boxes at the bottom",
+    "container": "Spectrogram Denoiser theta",
+    "is_contribution": false
+   },
+   {
+    "name": "FC + Swish with positional encoding of t",
+    "type": "module",
+    "role": "turns the diffusion step t into an embedding that is added to the stream",
+    "drawn_as": "light-yellow box above a circled plus with a circled sinusoid glyph, line into the residual stream",
+    "container": "Spectrogram Denoiser theta",
+    "is_contribution": false
+   },
+   {
+    "name": "Residual Block (N x)",
+    "type": "module",
+    "role": "repeated block: Conv 3 x 3, gated unit (tanh and sigma with an element-wise product), two Conv 1 x 1 giving residual out and skip out",
+    "drawn_as": "blue-grey rounded box holding small light-yellow boxes, circled operators and skip lines",
+    "container": "Spectrogram Denoiser theta",
+    "is_contribution": false
+   },
+   {
+    "name": "Conv 1 x 1 + Relu (output) and Predicted x_0",
+    "type": "module",
+    "role": "sums the skip outputs and predicts x_0",
+    "drawn_as": "two light-yellow boxes at the top with an arrow up to the text Predicted x_0",
+    "container": "Spectrogram Denoiser theta",
+    "is_contribution": false
+   },
+   {
+    "name": "Context Conditioning c",
+    "type": "container",
+    "role": "the condition c assembled from the embeddings below and fed into the residual blocks",
+    "drawn_as": "pale grey frame with bold title",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Speaker Embedding",
+    "type": "data",
+    "role": "speaker identity vector",
+    "drawn_as": "row of narrow tall outlined cells",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Mel Embedding",
+    "type": "data",
+    "role": "embedding of the masked acoustic features, added to the condition",
+    "drawn_as": "row of narrow tall cells, hatched where masked",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "Stutter Embedding",
+    "type": "data",
+    "role": "frame-wise stutter label (0 normal, 1 stutter) turned into an embedding",
+    "drawn_as": "five blue cells with the digits 0 1 1 0 0",
+    "container": "Context Conditioning c",
+    "is_contribution": true
+   },
+   {
+    "name": "Stutter Predictor",
+    "type": "module",
+    "role": "text-guided predictor that locates stutter regions from the text and mel embeddings; used only on spontaneous speech (caption)",
+    "drawn_as": "light-blue rounded box with dashed black outline and dashed lines",
+    "container": "Context Conditioning c",
+    "is_contribution": true
+   },
+   {
+    "name": "Mel Embedding",
+    "type": "data",
+    "role": "mel-spectrogram embedding fed to the stutter predictor",
+    "drawn_as": "row of narrow tall outlined cells",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Pitch Predictor, Masked Pitch",
+    "type": "module",
+    "role": "predicts the pitch of the edited frames from the text embedding and the masked pitch",
+    "drawn_as": "peach box above orange cells, two cells hatched",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Duration Predictor, LR, Masked Duration",
+    "type": "module",
+    "role": "predicts durations; the length regulator expands the phoneme embedding to frame level",
+    "drawn_as": "peach box, a circle labelled LR, yellow cells with one hatched",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "Phoneme Embedding (c)",
+    "type": "data",
+    "role": "phoneme embedding entering the duration path",
+    "drawn_as": "three cells, red, blue and green",
+    "container": "Context Conditioning c",
+    "is_contribution": false
+   },
+   {
+    "name": "circled plus",
+    "type": "operation",
+    "role": "adds the context streams into c and the stream parts inside the denoiser",
+    "drawn_as": "circled plus nodes joined by orthogonal lines",
+    "container": "(c)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Phoneme",
+    "to": "Phoneme Embedding",
+    "what": "phoneme sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Phoneme Embedding",
+    "to": "Transformer Encoder",
+    "what": "embedded phonemes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformer Encoder",
+    "to": "Context-Aware Spectrogram Denoiser",
+    "what": "e_p",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_t, t, e_x, e_pitch",
+    "to": "Context-Aware Spectrogram Denoiser",
+    "what": "noisy spectrogram, step and other embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mask spectrogram",
+    "to": "Context-Aware Spectrogram Denoiser",
+    "what": "masked input spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context-Aware Spectrogram Denoiser",
+    "to": "spectrogram with red lines",
+    "what": "edited spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_T",
+    "to": "x_t",
+    "what": "one reverse step",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_t",
+    "to": "x_0",
+    "what": "remaining reverse steps to the clean spectrogram",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context-Aware Spectrogram Denoiser (a)",
+    "to": "Spectrogram Denoiser theta (c)",
+    "what": "the same module opened up (matched by name, no leader line)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "x_t",
+    "to": "Conv 1 x 1 + Relu (input)",
+    "what": "input of the denoiser",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "t",
+    "to": "FC + Swish with positional encoding of t",
+    "what": "diffusion step embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Context Conditioning c",
+    "to": "Residual Block (N x)",
+    "what": "context embeddings enter the block through a Conv 1 x 1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Residual Block (N x)",
+    "to": "Conv 1 x 1 + Relu (output) and Predicted x_0",
+    "what": "skip outputs are summed into the prediction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Mel Embedding",
+    "to": "Stutter Predictor",
+    "what": "mel-spectrogram embedding (with the text embedding) as input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stutter Predictor",
+    "to": "Stutter Embedding",
+    "what": "predicted 0 / 1 stutter tags, only for spontaneous speech",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Phoneme Embedding (c)",
+    "to": "Masked Duration Predictor, LR, Masked Duration",
+    "what": "phoneme embedding expanded to frame level by LR",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) FluentSpeech",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "phoneme path and other inputs into the context-aware spectrogram denoiser; a masked spectrogram in, an edited one out",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Reverse Diffusion",
+    "kind": "model-anatomy",
+    "axis": "time",
+    "shows": "three stacked spectrograms from x_T to x_0 joined by upward arrows",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Context-Aware Spectrogram Denoiser",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "denoiser internals beside the context conditioning frame with speaker, mel, stutter, pitch, duration and phoneme embeddings",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c) with titles",
+    "kind": "section",
+    "at": "under each panel",
+    "what": "name the panels used in the caption"
+   },
+   {
+    "marker": "x_0, x_t, x_T",
+    "kind": "order",
+    "at": "right of the spectrogram stack in (b)",
+    "what": "position in the reverse chain, from noisy start to clean result"
+   },
+   {
+    "marker": "N x",
+    "kind": "identity",
+    "at": "inside the Residual Block",
+    "what": "number of repeated residual blocks (caption)"
+   },
+   {
+    "marker": "0 1 1 0 0",
+    "kind": "identity",
+    "at": "blue cells above the Stutter Predictor",
+    "what": "toy frame-wise stutter tags"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "mel-spectrogram with two red vertical lines marking the edited span",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail above the denoiser with an upward arrow"
+   },
+   {
+    "what": "mel-spectrogram with a flat grey block labelled Mask over the span",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail above the denoiser with a downward arrow"
+   },
+   {
+    "what": "three stacked mel-spectrograms for x_T (masked span), x_t (noisy span) and x_0 (clean)",
+    "content": "spectrogram",
+    "role": "illustration",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "same size stacked vertically with upward arrows; red lines mark the span, noise visible in the middle one, grey Mask block in the bottom one"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a binary stutter label sequence 0 1 1 0 0",
+    "form": "five blue cells with digits",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "reverse chain only: three same-size spectrograms stacked bottom to top with upward arrows, dots between them and x_T, x_t, x_0 at the right",
+    "parts": [
+     "x_T spectrogram",
+     "x_t spectrogram",
+     "x_0 spectrogram",
+     "upward arrows",
+     "vertical dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a single labelled peach box named Transformer Encoder, not opened up",
+    "parts": [
+     "Transformer Encoder box"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short rows of narrow tall cells for embeddings, one colour per kind (red, blue, green phoneme; orange pitch; yellow duration; blue binary stutter), hatched where masked",
+    "parts": [
+     "embedding cells",
+     "hatched masked cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "gated-residual-block",
+    "drawn_as": "blue-grey block holding Conv 3 x 3, a tanh and sigma gate joined by a circled dot, two Conv 1 x 1, residual out and skip out lines, repeated N times",
+    "parts": [
+     "Conv 3 x 3",
+     "tanh",
+     "sigma",
+     "circled dot",
+     "Conv 1 x 1",
+     "skip out",
+     "residual out"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Phoneme at the bottom of (a) upward to the spectrograms; then (b) bottom-up from x_T to x_0; then (c) from x_t at the bottom through the residual block, with the conditioning frame at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three lettered panels side by side, captions below: (a) a narrow column flowing upward, (b) a tall green frame with three stacked spectrograms, (c) the widest, two framed regions next to each other, a peach one for the denoiser network and a grey one for the conditioning embeddings, with long wires between them.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.36,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbe5d6",
+    "used_for": "peach: Phoneme Embedding, Transformer Encoder, the denoiser frame in (c), masked predictors"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "pale green: the denoiser box in (a) and the Reverse Diffusion frame in (b)"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "pale grey: Context Conditioning frame"
+   },
+   {
+    "hex": "#d6dce5",
+    "used_for": "blue-grey: Residual Block"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "light yellow: elementary operations (Conv, Relu, FC + Swish)"
+   },
+   {
+    "hex": "#a5a5a5",
+    "used_for": "grey Mask blocks laid over spectrograms"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "blue cells of the stutter embedding"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "light blue: Stutter Predictor and related blue items"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "pale blue fills in the stutter path"
+   },
+   {
+    "hex": "#ff3300",
+    "used_for": "red boundary lines on spectrograms and the red phoneme cell"
+   },
+   {
+    "hex": "#202020",
+    "used_for": "outlines, arrows and text"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "mixed",
+  "stroke": "black outlines drawn as filled shapes (the SVG has no stroke attributes): thick on the boxes and frames of (a), thin on the small boxes of (c); dashed black lines for the stutter-only path",
+  "font": "Times New Roman serif, 4-15 pt: 7.5 pt in (a), 4.5-5.5 pt in (c), 9 pt panel captions; italic math symbols for x_t, e_p, f_theta",
+  "corners": "rounded",
+  "arrows": "solid black arrows with filled heads on orthogonal routes, a few curved wires from the embeddings to the residual block, dashed lines for the stutter path",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "Peach = embedding, encoder and predictor modules and the denoiser frame; green = the context-aware denoiser as one unit and the diffusion frame; grey = the conditioning frame; blue-grey = the residual block; light yellow = elementary operations; blue = stutter items; red, blue, green cells = phoneme embedding, orange = pitch, yellow = duration; grey block = masked span.",
+  "line_style_means": "Dashed black = executed only when the dataset contains spontaneous speech (caption); solid = always; thick outline = top-level modules in (a).",
+  "shape_means": "Rounded box = module; frame = group; narrow tall cells = embedding vectors; hatched cells = masked positions; circled plus = sum; circled dot = element-wise product; circled sinusoid = positional encoding; circle LR = length regulator.",
+  "marker_means": "Panel letters with titles; x_T, x_t, x_0 order the diffusion chain; N x marks the repeated block; 0/1 digits are stutter tags.",
+  "emphasis": "The green denoiser box of (a) is the focal module that (b) and (c) open up; the stutter predictor is the only dashed blue box.",
+  "reusable_patterns": [
+   "three lettered panels at different zoom: overview, unrolled chain of thumbnails, expanded wiring",
+   "same thumbnail stacked at three noise levels with upward arrows and x_T, x_t, x_0 labels",
+   "red boundary lines plus a grey Mask block on a spectrogram to mark the edited span",
+   "short cell rows as embedding vectors, one colour per embedding kind and hatch for masked positions",
+   "dashed outline for the optional stutter path with its meaning in the caption",
+   "network part and conditioning part as two neighbouring frames in one panel"
+  ],
+  "weaknesses": [
+   "4.5-5.5 pt text in (c)",
+   "glyph meanings (FC, Swish, circled operators, dashed line) are given only in the caption",
+   "no leader lines tie (c) to the green denoiser box of (a)",
+   "long wires from the conditioning frame to the residual block are hard to follow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "mel-spectrograms of speech (the paper's data; source not stated) with a drawn mask and boundary lines"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "boxes, frames, arrows and wires",
+   "embedding cell rows with hatch",
+   "mask blocks"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "mel-spectrogram thumbnails with red lines and a Mask block",
+   "peach and green module boxes",
+   "stack of three spectrograms with upward arrows",
+   "residual block with gated unit",
+   "coloured and hatched embedding cell rows",
+   "stutter predictor with dashed outline"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "speech editing",
+   "stutter removal",
+   "diffusion model",
+   "context conditioning",
+   "mel-spectrogram",
+   "FluentSpeech",
+   "text-based speech editing",
+   "stutter predictor"
+  ],
+  "tags": [
+   "small-multiples",
+   "condition-insets",
+   "module-state-coding",
+   "flow-type-arrows",
+   "toy-values-inline",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "mask-block-on-thumbnail",
+    "what": "a flat grey block labelled Mask laid over part of a spectrogram or image thumbnail, with coloured boundary lines, to mark the span to generate or edit"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give the model three zoom levels in lettered panels: a thin overview with the focal module in a distinct fill, the same module unrolled as a vertical chain of data thumbnails, and an expanded wiring view split into network and conditioning frames; mark optional paths with dashed lines explained in the caption.",
+  "suits": "Conditional diffusion or generative editing models for audio or images where thumbnails show the effect and the denoiser's conditioning needs an expanded view."
+ },
+ "tags": [
+  "three lettered panels",
+  "bottom-up flow",
+  "spectrogram thumbnails",
+  "serif small text",
+  "tinted frames",
+  "dashed optional path"
+ ],
+ "provenance": {
+  "sections": [
+   "3 FluentSpeech (p.3-5)"
+  ],
+  "evidence": [
+   "The overall architecture for FluentSpeech.",
+   "The dashed black line denotes that the operation is only executed when the dataset contains spontaneous speeches.",
+   "FluentSpeech consists of a linguistic encoder and a context-aware spectrogram denoiser."
+  ]
+ },
+ "summary": "FluentSpeech edits stuttered speech automatically: a context-aware diffusion model regenerates a masked span of the mel-spectrogram, and a stutter predictor finds the span to remove. Figure 1 has three lettered panels. (a) is the overall model, drawn bottom-up: phonemes pass a Phoneme Embedding and a Transformer Encoder and, with x_t, t and other embeddings, enter a green Context-Aware Spectrogram Denoiser that turns a masked spectrogram thumbnail into an edited one. (b) unrolls reverse diffusion as three stacked spectrograms from x_T to x_0. (c) opens the denoiser (residual blocks, time embedding) beside a Context Conditioning frame of coloured embedding cells, with a dashed stutter predictor used only for spontaneous speech.",
+ "summary_zh": "FluentSpeech 去口吃。图 1：(a) 音素经 Transformer 编码，连同 x_t、t 进入绿色上下文感知去噪器；(b) 三张频谱图展开反向扩散；(c) 展开去噪器与上下文条件，虚线为自发语音专用的口吃预测器。",
+ "confidence": "high",
+ "notes": "Prior label kept (model-anatomy, overview-plus-zoom). The digest counts no strokes because outlines are filled shapes. Which of the five spectrogram bitmaps sits where is read from the picture; two narrow bitmaps in the digest are probably context strips of the masked spectrograms. Relations inside (c) are summarised: the exact wiring of the sum nodes between the predictors and the residual block is not followed wire by wire. The hatched cells are read as masked positions (the labels say Masked).",
+ "venue": "ACL23"
+}

@@ -1,0 +1,424 @@
+{
+ "paper_id": "icml24-0058",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "NaturalSpeech 3",
+  "one_liner": "A zero-shot TTS system: a factorized neural codec splits speech into content, prosody, timbre and detail, and factorized diffusion generates them.",
+  "domain": [
+   "zero-shot speech synthesis",
+   "neural speech codec",
+   "diffusion models"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "two modules side by side: a factorized diffusion stack from text to attribute codes, and a codec whose decoder turns the codes plus a timbre embedding into speech",
+  "argues": "Speech is factorized into prosody, content and detail codes plus a timbre embedding: a factorized diffusion model generates the codes with in-context prompts and a codec decoder turns them into speech.",
+  "subject": "The overview of NaturalSpeech 3: a stack of factorized diffusion modules from text to attribute codes, and a codec encoder, code slot and decoder around speech.",
+  "elements": [
+   {
+    "name": "IC In-Context Learning / z p/c/d Prosody/Content/Detail Codes / h t Timbre Embedding",
+    "type": "label",
+    "role": "symbol key that defines the circled IC badge, the code symbol z and the timbre symbol h",
+    "drawn_as": "three bold sans rows at the top left: a circled IC, z with subscript p/c/d, h with subscript t",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Factorized Diffusion",
+    "type": "container",
+    "role": "the factorized diffusion model that generates the speech attribute codes from text, using in-context prompts",
+    "drawn_as": "peach rectangle with a navy outline, bold title and a circled IC badge at the top-left corner",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Phoneme Encoder",
+    "type": "module",
+    "role": "first block of the stack; takes the text y",
+    "drawn_as": "light-green box at the bottom of the stack",
+    "container": "Factorized Diffusion",
+    "is_contribution": null
+   },
+   {
+    "name": "Duration Diffusion",
+    "type": "module",
+    "role": "generates phoneme-level durations",
+    "drawn_as": "cream box, second in the stack",
+    "container": "Factorized Diffusion",
+    "is_contribution": true
+   },
+   {
+    "name": "Prosody Diffusion",
+    "type": "module",
+    "role": "generates the prosody codes z_p",
+    "drawn_as": "yellow box; a line leaves its right edge to the merge bus",
+    "container": "Factorized Diffusion",
+    "is_contribution": true
+   },
+   {
+    "name": "Content Diffusion",
+    "type": "module",
+    "role": "generates the content codes z_c",
+    "drawn_as": "orange-peach box; a line leaves its right edge to the merge bus",
+    "container": "Factorized Diffusion",
+    "is_contribution": true
+   },
+   {
+    "name": "Detail Diffusion",
+    "type": "module",
+    "role": "generates the acoustic detail codes z_d",
+    "drawn_as": "grey box at the top of the stack; a line leaves its right edge to the merge bus",
+    "container": "Factorized Diffusion",
+    "is_contribution": true
+   },
+   {
+    "name": "z_p z_c z_d",
+    "type": "data",
+    "role": "prosody, content and detail codes handed to the codec decoder; fed by the diffusion modules and by the codec encoder",
+    "drawn_as": "dashed rounded box holding three bold italic symbols",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Codec Encoder",
+    "type": "module",
+    "role": "turns speech x into the codes and the timbre embedding",
+    "drawn_as": "light-blue box with navy outline, bold 9.5 pt, at the bottom of the right column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Codec Decoder",
+    "type": "module",
+    "role": "synthesises speech x from the codes and the timbre embedding",
+    "drawn_as": "light-blue box with navy outline, bold 9.5 pt, at the top of the right column",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "h_t",
+    "type": "data",
+    "role": "timbre embedding passed to the decoder",
+    "drawn_as": "bold italic h with subscript t, on a line to the right of the code slot",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Text y",
+    "type": "data",
+    "role": "input text of the TTS system",
+    "drawn_as": "bold label under the stack with an up arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Speech x (input)",
+    "type": "data",
+    "role": "speech given to the codec encoder",
+    "drawn_as": "bold label under the encoder with an up arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Speech x (output)",
+    "type": "data",
+    "role": "speech produced by the decoder",
+    "drawn_as": "bold label above the decoder with an up arrow",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Text y",
+    "to": "Phoneme Encoder",
+    "what": "input text enters the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Phoneme Encoder",
+    "to": "Duration Diffusion",
+    "what": "passes up the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Duration Diffusion",
+    "to": "Prosody Diffusion",
+    "what": "passes up the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prosody Diffusion",
+    "to": "Content Diffusion",
+    "what": "passes up the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Content Diffusion",
+    "to": "Detail Diffusion",
+    "what": "passes up the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prosody Diffusion, Content Diffusion, Detail Diffusion",
+    "to": "z_p z_c z_d",
+    "what": "three lines merge on a bracket-shaped bus into one arrow carrying the generated codes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Speech x (input)",
+    "to": "Codec Encoder",
+    "what": "speech is encoded",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Codec Encoder",
+    "to": "z_p z_c z_d",
+    "what": "codes extracted from speech",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Codec Encoder",
+    "to": "h_t",
+    "what": "timbre embedding extracted from speech",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_p z_c z_d and h_t",
+    "to": "Codec Decoder",
+    "what": "codes and timbre embedding are merged into one arrow into the decoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Codec Decoder",
+    "to": "Speech x (output)",
+    "what": "speech is produced",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circled IC badge",
+    "to": "Factorized Diffusion",
+    "what": "the diffusion model uses in-context learning",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "IC (circled)",
+    "kind": "identity",
+    "at": "top-left corner of the Factorized Diffusion container and first row of the legend",
+    "what": "marks the diffusion model as the part that uses in-context learning"
+   },
+   {
+    "marker": "z_p, z_c, z_d, h_t, x, y",
+    "kind": "identity",
+    "at": "code slot, timbre line, speech and text labels",
+    "what": "bare symbols for the codes, the timbre embedding, speech and text, defined by the legend"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "vae-codebook",
+    "drawn_as": "encoder box, a dashed rounded slot holding the discrete codes (plus a separate timbre vector line), decoder box above; rectangular boxes in a column instead of trapezoids",
+    "parts": [
+     "Codec Encoder",
+     "dashed code slot z_p z_c z_d",
+     "h_t",
+     "Codec Decoder"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the legend top left, then at Text y bottom left; goes up the diffusion stack, along the bus to the dashed code slot, then up through the Codec Decoder to Speech x; the Codec Encoder feeds the slot and h_t from below."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two vertical tracks, both read bottom-up. On the left a tinted container holds a stack of five equal-width module boxes joined by up arrows; on the right a Codec Encoder, a dashed code slot with the timbre embedding, and a Codec Decoder are chained. Three lines from the top three diffusion boxes merge into a single arrow that enters the dashed slot, tying the two tracks together; a three-row legend sits above the left track.",
+  "panel_count": 1,
+  "lanes": "two vertical tracks: the Factorized Diffusion stack (left) and the codec encoder-to-decoder chain (right), joined at the dashed code slot",
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.35,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fbe5d6",
+    "used_for": "container of the Factorized Diffusion model"
+   },
+   {
+    "hex": "#dae3f3",
+    "used_for": "Codec Encoder and Codec Decoder boxes"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "Phoneme Encoder box"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Duration Diffusion box"
+   },
+   {
+    "hex": "#ffe699",
+    "used_for": "Prosody Diffusion box"
+   },
+   {
+    "hex": "#f8cbad",
+    "used_for": "Content Diffusion box"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "Detail Diffusion box"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "outlines of boxes and of the container"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1 pt navy outlines on boxes and container, 1 pt black arrows, 1 pt dashed black outline on the code slot",
+  "font": "bold sans (Calibri) 7-9.5 pt; bold math italic (Cambria Math) symbols with 5.5 pt subscripts",
+  "corners": "mixed",
+  "arrows": "solid black orthogonal arrows with filled triangular heads; merges drawn as square-cornered lines",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "peach container = the factorized diffusion model; blue boxes = the codec encoder and decoder; the five stack boxes each get their own pastel only to tell the generators apart (no key, colours not reused elsewhere)",
+  "line_style_means": "dashed rounded outline = the slot for the factorized codes; solid arrows = data flow",
+  "shape_means": "square box = module; dashed rounded box = latent codes; circled IC = in-context learning",
+  "marker_means": "circled IC marks where in-context learning applies; bare symbols z, h, x, y are decoded by the legend",
+  "emphasis": "the diffusion stack is the tall tinted container with a bold title; the dashed code slot sits where the two tracks meet",
+  "reusable_patterns": [
+   "three-row symbol legend at the top left so the drawing can carry bare symbols",
+   "tinted container with a bold title holding a stack of equal-width module boxes joined by up arrows",
+   "several output lines merging on one orthogonal bus into a single arrow",
+   "dashed rounded box as the interface (codes) between two sub-systems",
+   "circled abbreviation badge pinned to a container and defined in the legend"
+  ],
+  "weaknesses": [
+   "the dashed slot receives lines from both the diffusion stack and the codec encoder without saying which path is used when (training or inference)"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, container and arrows",
+   "legend and symbols"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "Factorized Diffusion container with IC badge",
+   "stack of five module boxes (Phoneme Encoder to Detail Diffusion)",
+   "dashed rounded box with z_p z_c z_d",
+   "Codec Encoder and Codec Decoder boxes",
+   "timbre embedding h_t line",
+   "symbol legend",
+   "Text y and Speech x labels"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "zero-shot TTS",
+   "factorized codec",
+   "FACodec",
+   "factorized vector quantization",
+   "diffusion",
+   "prosody content detail codes",
+   "timbre",
+   "in-context learning",
+   "speech synthesis"
+  ],
+  "tags": [
+   "notation-key"
+  ],
+  "new_tags": [
+   {
+    "name": "legend-badge-marker",
+    "what": "a small circled abbreviation pinned to a block or container and defined in a short legend at the top, marking where a mechanism applies (here IC for in-context learning)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a system with two sub-models as two parallel bottom-up columns: a tinted container holding a stack of equal-width, differently tinted modules, and a plain encoder-to-decoder column, meeting in one dashed rounded slot for the shared codes; define the symbols in a three-row legend.",
+  "suits": "Factorized or disentangled generative systems where several attribute generators feed a shared code interface of a decoder: TTS, audio codecs, multi-condition latent diffusion."
+ },
+ "tags": [
+  "two-columns",
+  "bottom-up-flow",
+  "tinted-container",
+  "pastel-boxes",
+  "dashed-slot",
+  "symbol-legend"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "Figure 1: The overview of NaturalSpeech 3, with a neural speech codec for attribute factorization and a factorized diffusion model.",
+   "a neural speech codec (FACodec) for attribute disentanglement; 2) a factorized diffusion model which generates factorized speech attributes"
+  ]
+ },
+ "summary": "NaturalSpeech 3 is a zero-shot text-to-speech system that splits speech into subspaces of content, prosody, timbre and acoustic details and generates each separately. Figure 1 is the architecture overview in one drawing, read bottom-up in two columns. On the left a peach Factorized Diffusion box, tagged with a circled IC for in-context learning, stacks Phoneme Encoder, Duration, Prosody, Content and Detail Diffusion modules, each a differently tinted box joined by up arrows from Text y. Their outputs merge into a dashed slot holding the codes z_p z_c z_d. On the right a blue Codec Encoder takes Speech x and feeds the slot and the timbre embedding h_t, and a Codec Decoder turns codes and h_t into Speech x. A three-row legend at the top left defines the symbols.",
+ "summary_zh": "NaturalSpeech 3是零样本语音合成系统，把语音分解为内容、韵律、音色和细节分别生成。图1为总览：左侧带IC标记的因子化扩散栈生成码z_p z_c z_d，右侧编解码器提取码与音色h_t并合成语音。",
+ "confidence": "high",
+ "notes": "The index lists 3 panels and the source folder holds two scaling plots, but the printed Figure 1 is the single overview drawing (the caption describes only the overview); the digest reports a drawn extent much larger than the canvas, which the preview does not show. The 'Phoneme Encoder' role is taken from its name and its position under Text y. In the paper's text the duration is generated first, then prosody, content and detail; the figure's up arrows follow the same order.",
+ "venue": "ICML24"
+}

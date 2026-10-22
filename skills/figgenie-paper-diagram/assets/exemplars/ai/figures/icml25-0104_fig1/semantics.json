@@ -1,0 +1,393 @@
+{
+ "paper_id": "icml25-0104",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Adds an explicit safety binary-classification task, read from a [CLS] token, to pretraining and SFT, with attention masks that keep next-token prediction intact.",
+  "domain": [
+   "LLM safety alignment",
+   "classification token",
+   "attention masking"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "side-by-side-contrast"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "token strips with input-to-label arrows (a binary classification objective next to next-token prediction) plus attention-mask matrices, drawn once for pretraining and once for SFT",
+  "argues": "A [CLS] token carrying a binary safety label fits both pretraining and SFT sequences when its attention is controlled, leaving next-token prediction intact.",
+  "subject": "Token strips with labels and 7 by 7 attention-mask grids for pretraining and for SFT with an added [CLS] token.",
+  "elements": [
+   {
+    "name": "Binary Classification",
+    "type": "container",
+    "role": "the classification objective: the CLS token predicts a 0/1 label",
+    "drawn_as": "dashed box with a red heading holding a red CLS square under a green 0/1 square",
+    "container": "A1, B1",
+    "is_contribution": true
+   },
+   {
+    "name": "CLS",
+    "type": "data",
+    "role": "the [CLS] token placed at position 0 of each sequence",
+    "drawn_as": "red square labelled CLS",
+    "container": "A1, B1",
+    "is_contribution": true
+   },
+   {
+    "name": "0/1",
+    "type": "data",
+    "role": "binary label of the classification task",
+    "drawn_as": "green square above the CLS token, joined by an up arrow",
+    "container": "A1, B1",
+    "is_contribution": true
+   },
+   {
+    "name": "Pretrain: Next Token Prediction",
+    "type": "container",
+    "role": "input tokens A-F and their next-token labels B-F and EOS",
+    "drawn_as": "dashed box with a row of grey squares, a row of green squares and up arrows",
+    "container": "A1",
+    "is_contribution": false
+   },
+   {
+    "name": "Alignment: Next Token Prediction",
+    "type": "container",
+    "role": "query tokens Q1-Q3 and answer tokens A1-A3 with labels only on the answer side (A1-A3, EOS)",
+    "drawn_as": "dashed box with grey and blue squares, green label squares with blank cells above the first two queries",
+    "container": "B1",
+    "is_contribution": false
+   },
+   {
+    "name": "Label / Input / Positions",
+    "type": "label",
+    "role": "row names of each token strip; positions run 0 to 6",
+    "drawn_as": "serif row headers at the left, position numbers under the tokens",
+    "container": "A1, B1",
+    "is_contribution": null
+   },
+   {
+    "name": "attention mask, pretraining",
+    "type": "data",
+    "role": "who attends to whom: CLS row all 1, no token attends to CLS, causal triangle elsewhere",
+    "drawn_as": "7 by 7 grid with token headers, yellow causal area and pink CLS area, 0/1 printed in each cell",
+    "container": "A2",
+    "is_contribution": true
+   },
+   {
+    "name": "attention mask, SFT",
+    "type": "data",
+    "role": "CLS sees the query tokens but not the answers, query tokens do not see CLS, answer tokens see CLS and the causal past",
+    "drawn_as": "7 by 7 grid with headers C, Q, Q, Q, A, A, A, same tints",
+    "container": "B2",
+    "is_contribution": true
+   },
+   {
+    "name": "legends of A2 and B2",
+    "type": "label",
+    "role": "define token colours, 0 and 1, and the two tinted areas",
+    "drawn_as": "grey boxes beside each matrix with swatches: CLS Token, Input Token or Query Token and Answer Token, No Attention, W/ Attention, Causal Attention Area, CLS Attention Area",
+    "container": "A2, B2",
+    "is_contribution": null
+   },
+   {
+    "name": "panel captions A1, A2, B1, B2",
+    "type": "label",
+    "role": "name each panel: integrating the objective during the pretraining or SFT phase, and the attention mask in that phase",
+    "drawn_as": "caption line under each panel with the phase name in bold",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "CLS",
+    "to": "0/1",
+    "what": "the [CLS] output is classified as a binary label",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input tokens A-F",
+    "to": "labels B-F, EOS",
+    "what": "next-token prediction, each token predicts the following one",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q3 and A1-A3",
+    "to": "labels A1-A3, EOS",
+    "what": "in SFT only the last query token and the answer tokens carry next-token labels",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "token strip",
+    "to": "attention mask",
+    "what": "the mask headers repeat the token order and colours of the strip",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Pretraining row",
+    "to": "SFT row",
+    "what": "same layout redrawn; only the token types, label cells and mask pattern change",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "A1: Integrating Binary Classification Objective During the Pretraining Phase",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "[CLS] with a 0/1 label next to input tokens A-F with next-token labels",
+    "verdict": "ours"
+   },
+   {
+    "label": "A2: Attention Mask During Pretraining Phase",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "7 by 7 mask: CLS attends to all tokens, no token attends to CLS, causal triangle for the rest",
+    "verdict": "ours"
+   },
+   {
+    "label": "B1: Integrating Binary Classification Objective During the SFT Phase",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "[CLS] with a 0/1 label next to query tokens Q1-Q3 and answer tokens A1-A3, labels on the answer side only",
+    "verdict": "ours"
+   },
+   {
+    "label": "B2: Attention Mask During SFT Phase",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "7 by 7 mask: CLS sees only the query, query tokens do not see CLS, answer tokens see CLS",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Positions 0-6",
+    "kind": "identity",
+    "at": "under each token strip",
+    "what": "position index of each token; the CLS token sits at 0"
+   },
+   {
+    "marker": "A1, A2, B1, B2",
+    "kind": "section",
+    "at": "captions under the four panels",
+    "what": "A = pretraining, B = SFT; 1 = token strip, 2 = attention mask"
+   },
+   {
+    "marker": "0 / 1",
+    "kind": "identity",
+    "at": "cells of the attention matrices",
+    "what": "0 = no attention, 1 = with attention"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a toy pretraining sequence: [CLS] then tokens A to F, labels B to F and EOS, and a 0/1 label for CLS",
+    "form": "rows of grey and green squares with up arrows and position numbers",
+    "real_values": false
+   },
+   {
+    "what": "a toy SFT sequence: three query tokens Q1-Q3 and three answer tokens A1-A3",
+    "form": "grey and blue squares, labels A1-A3 and EOS, blank label cells above Q1 and Q2",
+    "real_values": false
+   },
+   {
+    "what": "the 7 by 7 attention masks of both phases",
+    "form": "grids with token headers and 0/1 entries, two tinted areas",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of equal squares for input and label tokens with a position row below, joined by up arrows",
+    "parts": [
+     "input row",
+     "label row",
+     "positions"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "token-by-token grid of 0/1 cells with a yellow causal triangle and a pink CLS row and column",
+    "parts": [
+     "header cells",
+     "0/1 cells",
+     "legend"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left panel A1 (the token strip, CLS first), moves right to its attention mask A2, then repeats for the SFT row B1 and B2 to see what changed."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A 2 by 2 grid inside one dashed frame: rows are the training phase (pretraining on top, SFT below), columns are the view (token strip with labels on the left, attention-mask matrix with its legend on the right); each cell has a caption underneath.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.51,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#70ad47",
+    "used_for": "label tokens (prediction targets)"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "input and query tokens and the grey header cells of the masks"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "answer tokens in SFT"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "[CLS] token, Binary Classification headings, CLS header cells"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "pink CLS attention area in the masks",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "causal attention area in the masks"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "grey background of the legends"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "heavy black dashed outlines on the panel frames and sub-boxes; tokens are plain filled squares; thin black arrows",
+  "font": "serif (Times New Roman) 4-8 pt; token letters 8 pt, legends 5.5 pt, panel captions 6 pt with bold phase names",
+  "corners": "square",
+  "arrows": "thin black straight arrows with small filled heads pointing up from input to label",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = label (prediction target) tokens; grey = input and query tokens; blue = answer tokens; red = the [CLS] token and, in a light tint, the CLS attention area; light yellow = causal attention area",
+  "line_style_means": "dashed boxes frame each panel and group the classification part and the next-token part; solid arrows = input token to its label",
+  "shape_means": "square = token; 7 by 7 grid = attention mask; header cells = tokens",
+  "marker_means": "Positions 0-6 = token positions; 0 / 1 in mask cells = no attention / attention; A1-B2 = panel names; subscripts on Q and A = index inside the query and the answer",
+  "emphasis": "the CLS token is the only red square in each strip and the red first row and column of each matrix; the SFT panels differ from pretraining only in the token colours, the blank label cells and the 0/1 pattern",
+  "reusable_patterns": [
+   "input row and label row of token squares joined by up arrows, shifted by one position for next-token prediction",
+   "one special token in a contrasting colour carried from the strip into the first row and column of the attention matrix",
+   "mask matrices with 0/1 values printed in the cells, two tinted areas and a legend beside",
+   "the same 2 by 2 grid drawn for two training phases so only the changes stand out",
+   "blank label cells for tokens that carry no loss"
+  ],
+  "weaknesses": [
+   "text of 4-6 pt",
+   "the two legends repeat nearly the same keys",
+   "no model is drawn, so where the classification head sits must be read from the text"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "token squares and arrows",
+   "mask grids with printed 0/1 cells",
+   "dashed frames and legends"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "token strips with input and label rows",
+   "red CLS token",
+   "position indices",
+   "7 by 7 attention mask matrices",
+   "token-type legends",
+   "dashed panel frames"
+  ],
+  "sample_data": "table",
+  "keywords": [
+   "safety alignment",
+   "[CLS] token",
+   "binary classification objective",
+   "attention mask",
+   "pretraining",
+   "SFT",
+   "next token prediction",
+   "LLM safety"
+  ],
+  "tags": [
+   "token-strip",
+   "attention-mask-grid",
+   "toy-values-inline",
+   "notation-key",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Draw a change of training format as aligned pairs: the token strip with labels, and the attention mask whose headers repeat the strip's colours, so that a special token visibly changes both the data layout and who attends to whom; redraw the same grid per phase so that only the changed cells differ.",
+  "suits": "Papers that add a token, objective or mask to a transformer and must show data layout and attention constraints for several training phases."
+ },
+ "tags": [
+  "dashed-panel-grid",
+  "serif-labels",
+  "token-squares",
+  "mask-matrix",
+  "legend-beside-matrix",
+  "office-palette"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Methodology (p.3)"
+  ],
+  "evidence": [
+   "we introduce a dedicated classification token [CLS] at the beginning of each input sequence",
+   "the [CLS] token is allowed to attend to all other tokens, but other tokens do not attend",
+   "the query tokens are not allowed to attend to the [CLS] token"
+  ]
+ },
+ "summary": "The paper makes safety alignment less superficial by adding an explicit safety classification task: a [CLS] token at the start of the sequence whose output goes through a classification head to label the input and the tokens generated so far as safe or unsafe. Figure 1 draws this in a 2 by 2 grid of dashed panels. The top row is pretraining, the bottom row SFT. On the left, a token strip shows input squares, label squares and positions 0 to 6, with the red CLS token feeding a 0/1 label and the other tokens feeding next-token labels; in SFT the queries carry no label and the answers are blue. On the right, 7 by 7 attention-mask grids with 0/1 cells and a legend show the causal area and the CLS attention area.",
+ "summary_zh": "论文在预训练和监督微调中加入显式的安全二分类任务：序列开头放一个 [CLS] 令牌。图 1 用 2×2 虚线面板，上排预训练、下排 SFT；左侧是输入与标签令牌条，右侧是 7×7 注意力掩码矩阵，展示因果区域和 CLS 注意区域。",
+ "confidence": "high",
+ "notes": "Prior kinds kept (model-anatomy / objective-graph, side-by-side-contrast); stage-pipeline with the phase-bands variant was considered because the rows are pretraining and SFT, but nothing is handed from one row to the other. The two attention matrices are placed as bitmaps in the SVG (digest: two bitmaps of about 60 by 60 pt), the rest is vector. The panel axis is entered as stages for all four panels although the columns are two views of one phase.",
+ "venue": "ICML25"
+}

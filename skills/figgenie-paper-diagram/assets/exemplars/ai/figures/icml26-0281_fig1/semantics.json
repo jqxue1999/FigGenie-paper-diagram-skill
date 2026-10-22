@@ -1,0 +1,393 @@
+{
+ "paper_id": "icml26-0281",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Seizure-Semiology-Suite (S3)",
+  "one_liner": "A clinically grounded dataset, seven-task benchmark and models for seizure semiology understanding from 438 epilepsy-monitoring videos with dense feature labels.",
+  "domain": [
+   "seizure semiology",
+   "medical video understanding",
+   "multimodal benchmark"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "worked-walkthrough"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "one annotated example record (film strip, timeline, report) above a row of three dataset-statistics charts",
+  "argues": "S3 pairs seizure videos with time-resolved sign annotations and clinical reports and covers diverse durations, report vocabulary and ES and NES features.",
+  "subject": "One annotated seizure video (film strip, timeline, report) above three dataset statistics: duration pie, report word cloud, ES-versus-NES feature bars.",
+  "elements": [
+   {
+    "name": "blank stare / head turning / vocalization / tonic / clonic",
+    "type": "label",
+    "role": "the five semiology signs of the example seizure, each with its colour",
+    "drawn_as": "bold condensed sans words, each followed by a coloured dot (blue, pink, yellow, green, purple), spread over the five frames",
+    "container": "example record",
+    "is_contribution": false
+   },
+   {
+    "name": "film strip of the patient",
+    "type": "instance",
+    "role": "five frames of one seizure video in time order",
+    "drawn_as": "black strip with white sprocket holes along both edges and five rounded frames",
+    "container": "example record",
+    "is_contribution": false
+   },
+   {
+    "name": "timeline 00:08 ... 01:01",
+    "type": "data",
+    "role": "start and end time of each sign along the video",
+    "drawn_as": "rounded box with a thick black outline and a blue play button at the left, five pastel bars in two rows (blue 00:08-00:19, pink 00:21-00:42, yellow 00:23-00:33, green 00:35-00:46, purple 00:46-01:01) with timestamps",
+    "container": "example record",
+    "is_contribution": null
+   },
+   {
+    "name": "Seizure Semiology Report",
+    "type": "text-block",
+    "role": "the clinician's narrative of the same seizure: talking, inability to verbalize, staring, right gaze deviation, right head turn, vocalization, bilateral tonic clonic",
+    "drawn_as": "light-cyan box with a dashed black border and a saturated cyan tab with a doctor icon, serif text in two lines",
+    "container": "example record",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "sign labels (coloured dots)",
+    "to": "timeline bars",
+    "what": "each sign keeps its colour from label to time span",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "film strip frames",
+    "to": "timeline",
+    "what": "frames and bars both run left to right in time, but are not tied by lines",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "film strip and timeline",
+    "to": "Seizure Semiology Report",
+    "what": "the report says in words what the frames and bars show",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "example record",
+    "to": "(a), (b), (c) statistics",
+    "what": "the example is one of the 438 videos that the three charts summarise",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Video Duration Distribution",
+    "kind": "other",
+    "axis": "overview",
+    "shows": "pie chart of video durations from 0-30s to 600+s",
+    "verdict": null
+   },
+   {
+    "label": "(b) Seizure Semiology Report Word Cloud",
+    "kind": "other",
+    "axis": "overview",
+    "shows": "word cloud of the report vocabulary with arm, movements, right, left, head, eyes largest",
+    "verdict": null
+   },
+   {
+    "label": "(c) Feature Distribution (ES vs. NES)",
+    "kind": "other",
+    "axis": "overview",
+    "shows": "grouped bars of the percentage of epileptic (ES) and non-epileptic (NES) videos with each of 20 features",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "00:08 ... 01:01",
+    "kind": "identity",
+    "at": "timeline bars",
+    "what": "timestamps give the start and end of each sign"
+   },
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "captions under the three charts",
+    "what": "letters head the three statistics panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "five frames of one seizure video showing blank stare, head turning, vocalization, tonic and clonic phases (patient is AI-generated)",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "equal-size rounded frames inside a black film strip, coloured sign label above each"
+   },
+   {
+    "what": "pie chart of video duration distribution",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "eight pastel slices with percentages (20.8, 17.6, 18.7, 13.2, 12.8, 8.4, 5.9, 2.5) and duration ranges around the rim"
+   },
+   {
+    "what": "word cloud of the seizure semiology reports",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "words sized by frequency in dark purple, green and yellow-green, some rotated"
+   },
+   {
+    "what": "grouped bar chart of feature distribution, ES versus NES",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "twenty feature pairs with blue ES and orange NES bars, percentage labels, rotated feature names, legend at the top right"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "circled blue play button",
+    "stands_for": "playback of the video along the timeline",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon doctor with a lamp-like glyph",
+    "stands_for": "the clinician who wrote the report",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one seizure video of an AI-generated patient with five signs, their time spans and the clinician's report",
+    "form": "film strip, colour-coded timeline and a report box",
+    "real_values": null
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "black strip with white sprocket holes along both edges and five frames, coloured sign labels above",
+    "parts": [
+     "frames",
+     "sprocket holes",
+     "sign labels"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "cartoon doctor icon on the tab of the report box",
+    "parts": [
+     "doctor icon",
+     "report tab"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the coloured sign labels, runs along the film strip and the timeline below it, reads the report box, then scans the three statistics panels left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "four full-width bands from top to bottom: sign labels over a black film strip of five frames; a rounded timeline box with a play button and colour bars; a dashed-border report box with a floating tab title; and a row of three captioned statistics panels (pie chart, word cloud, bar chart) without frames",
+  "panel_count": 3,
+  "lanes": "5 aligned columns of sign labels over the five film-strip frames",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.4,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4d93e8",
+    "used_for": "blank stare: label dot and timeline bar"
+   },
+   {
+    "hex": "#e84da2",
+    "opacity": 0.37,
+    "used_for": "head turning: label dot and timeline bar (pink)"
+   },
+   {
+    "hex": "#e8e34d",
+    "opacity": 0.63,
+    "used_for": "vocalization: label dot and timeline bar (yellow)"
+   },
+   {
+    "hex": "#b6f3bc",
+    "used_for": "tonic: label dot and timeline bar (green)"
+   },
+   {
+    "hex": "#b98ef8",
+    "used_for": "clonic: label dot and timeline bar (purple)"
+   },
+   {
+    "hex": "#b4e9f9",
+    "opacity": 0.2,
+    "used_for": "fill of the report box"
+   },
+   {
+    "hex": "#77c6e7",
+    "used_for": "tab of the Seizure Semiology Report"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "film strip, text and outlines"
+   },
+   {
+    "hex": "#1f77b4",
+    "approx": true,
+    "used_for": "ES bars in the bitmap chart, read off the preview"
+   },
+   {
+    "hex": "#ff7f0e",
+    "approx": true,
+    "used_for": "NES bars in the bitmap chart, read off the preview"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "outlines are filled paths: thick black rounded outline on the timeline box, 1 pt dashed black border on the report box",
+  "font": "bold condensed sans 9.5 pt for sign labels and the report title, serif about 9.5 pt for the report text, 5.5 pt timestamps; chart text in small sans",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadow under the report tab and box",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pastel colour per semiology sign (blue blank stare, pink head turning, yellow vocalization, green tonic, purple clonic) kept in the label dot and the timeline bar; in the bar chart blue = ES and orange = NES; cyan tint = clinician's report",
+  "line_style_means": "dashed black border = the report text box; thick rounded black outline = the timeline; black strip with white holes = film",
+  "shape_means": "film strip = a video; horizontal rounded bar = the span of one sign; tab with a doctor icon = the clinician's report",
+  "marker_means": "timestamps mark where signs start and end; (a)-(c) caption the charts; percentages on slices and bars are measured shares",
+  "emphasis": "the film strip is the largest, darkest element; the five colours tie labels, frames and timeline together; the report tab is the saturated cyan",
+  "reusable_patterns": [
+   "film strip of one example with colour-coded labels above and a matching timeline of coloured bars below",
+   "play button at the left of a timeline box",
+   "report text in a dashed box with a floating tab title and a small expert icon",
+   "row of three dataset-statistics charts with letter captions under the example",
+   "colour dot in each label as the key to a bar of the same colour",
+   "AI-generated stand-in person for privacy-sensitive data, stated in the caption"
+  ],
+  "weaknesses": [
+   "the timeline bars are not aligned with the frames above them: time is proportional while the frames are evenly spaced, and no lines tie frames to timestamps",
+   "bar-chart value labels and feature names are 3-4 pt and rotated",
+   "the three statistics panels have different sizes and no frames",
+   "the report text is the only link between the clinical reading and the frames"
+  ]
+ },
+ "resources": {
+  "own": [
+   "dataset statistics: duration distribution, report word cloud and ES-versus-NES feature distribution",
+   "the clinical report text and sign timeline of one example"
+  ],
+  "stock": [
+   "circled play-button icon",
+   "cartoon doctor icon"
+  ],
+  "generated": [
+   "AI-generated patient frames in the film strip (stated in the caption)"
+  ],
+  "drawn": [
+   "film strip frame with sprocket holes",
+   "timeline bars",
+   "report box with tab"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "film strip of patient frames",
+   "coloured sign labels with dots",
+   "timeline box with play button and coloured bars",
+   "clinician report box with tab",
+   "duration pie chart",
+   "word cloud",
+   "ES versus NES grouped bars"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "seizure semiology",
+   "epilepsy monitoring video",
+   "dataset and benchmark",
+   "multimodal LLM",
+   "clinical report",
+   "ES versus NES",
+   "dense annotation",
+   "medical video understanding"
+  ],
+  "tags": [
+   "filmstrip",
+   "annotated-record-card",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "timeline-bars-under-filmstrip",
+    "what": "colour-coded horizontal bars with timestamps under a film strip give the time span of each labelled event"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show one annotated record in full: a film strip with coloured event labels above, a matching timeline of coloured bars below and the expert's report in a tabbed dashed box, then put the dataset statistics in a row of lettered charts underneath.",
+  "suits": "Video or clinical datasets and benchmarks where one fully annotated example plus a few distribution charts tells what the data contain."
+ },
+ "tags": [
+  "film strip",
+  "colour-coded timeline",
+  "tabbed report box",
+  "stats row of three charts",
+  "pastel five-colour code",
+  "full-width"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Seizure-Semiology-Suite (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "Each video is paired with its corresponding clinical semiology report and diagnostic record.",
+   "a diverse duration distribution (see Figure 1(a))",
+   "(The patient depicted in this figure is AI-generated.)"
+  ]
+ },
+ "summary": "Seizure-Semiology-Suite (S3) is a clinically grounded dataset (438 epilepsy-monitoring videos with dense labels for 20 semiological features), a seven-task benchmark for multimodal LLMs and a set of models. Figure 1 describes the dataset. Its top half is one annotated example record: five frames of an AI-generated patient in a black film strip under coloured sign labels (blank stare, head turning, vocalization, tonic, clonic), a rounded timeline box with a play button and matching coloured bars from 00:08 to 01:01, and the clinician's report in a dashed cyan box with a doctor-icon tab. The bottom row has three captioned statistics: a pie chart of video duration, a word cloud of the reports, and grouped bars comparing the share of ES and NES videos showing each feature.",
+ "summary_zh": "S3 是癫痫发作症状学理解的数据集与基准（438 段视频）。图 1 上半部是一条带标注的示例：胶片条五帧（AI 生成的患者）配彩色症状标签、同色时间轴和医生报告；下半部三张统计图：视频时长饼图、报告词云、ES 与 NES 特征分布柱状图。",
+ "confidence": "high",
+ "notes": "Prior label contribution-mosaic dropped in favour of worked-walkthrough: the bottom tiles are dataset statistics and the top is one annotated instance. The patient is AI-generated according to the caption. The supplied paper text mentions only panel (a); panels (b) and (c) are read from the picture. The ES and NES hexes are read off the preview of the bitmap chart.",
+ "venue": "ICML26"
+}

@@ -1,0 +1,437 @@
+{
+ "paper_id": "acl26-0014",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "INFACT",
+  "one_liner": "A diagnostic benchmark of 9,800 video QA instances with taxonomies for faithfulness and factuality hallucinations of Video-LLMs, tested in clean and induced modes.",
+  "domain": [
+   "video LLM hallucination",
+   "benchmark",
+   "faithfulness and factuality"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "two dashed family containers (faithfulness, factuality) each stacking three category rows made of a tinted label band, a four-frame video strip and a multiple-choice question card",
+  "argues": "The benchmark covers two families of hallucination, six categories in all, each tested by video-grounded multiple-choice items with a known correct answer.",
+  "subject": "six benchmark categories shown by one real item each: video frames, question, options and the correct option highlighted",
+  "elements": [
+   {
+    "name": "Faithfulness Hallucination",
+    "type": "container",
+    "role": "family of items verified by video evidence",
+    "drawn_as": "heavy green dashed rounded container with a large green title, holding three rows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Static Entities & Attributes",
+    "type": "label",
+    "role": "category: objects and their attributes, e.g. the colour of the second object to enter",
+    "drawn_as": "pale green label band at the left of its row",
+    "container": "Faithfulness Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Dynamics Actions & Motions",
+    "type": "label",
+    "role": "category: actions and motions, e.g. the direction a merry-go-round turns",
+    "drawn_as": "pale green label band at the left of its row",
+    "container": "Faithfulness Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Spatial Temporal Structure",
+    "type": "label",
+    "role": "category: spatio-temporal relations, e.g. the chronological order of a person's events",
+    "drawn_as": "darker green label band at the left of its row",
+    "container": "Faithfulness Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Factuality Hallucination",
+    "type": "container",
+    "role": "family of items that need consistency with world knowledge",
+    "drawn_as": "heavy orange dashed rounded container with a large orange title, holding three rows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Domain Knowledge",
+    "type": "label",
+    "role": "category: facts about a domain, e.g. when a festival is celebrated (Know-WHAT in the caption)",
+    "drawn_as": "cream label band at the left of its row",
+    "container": "Factuality Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Procedural Knowledge",
+    "type": "label",
+    "role": "category: whether the steps of a task are in a logical order (Know-HOW in the caption)",
+    "drawn_as": "light orange label band at the left of its row",
+    "container": "Factuality Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "Physics Knowledge",
+    "type": "label",
+    "role": "category: physical plausibility of events (Know-WHY in the caption)",
+    "drawn_as": "salmon label band at the left of its row",
+    "container": "Factuality Hallucination",
+    "is_contribution": true
+   },
+   {
+    "name": "multiple-choice question cards",
+    "type": "instance",
+    "role": "one [Q] question per row with options A to D (or Yes and No) whose correct option is highlighted",
+    "drawn_as": "pale dashed card at the right of each row, bold italic question, plain options, highlight in the family colour",
+    "container": "category rows",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "category label band",
+    "to": "its four-frame strip and question card",
+    "what": "the category the example belongs to",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Faithfulness Hallucination",
+    "to": "its three category rows",
+    "what": "the family contains its categories",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Factuality Hallucination",
+    "to": "its three category rows",
+    "what": "the family contains its categories",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "video frames",
+    "to": "question card",
+    "what": "the question asks about the clip",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "family colour",
+    "to": "highlighted correct option",
+    "what": "the ground-truth option is marked in the family's hue",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Faithfulness Hallucination",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "three categories verified by video evidence: Static Entities & Attributes, Dynamics Actions & Motions, Spatial Temporal Structure",
+    "verdict": null
+   },
+   {
+    "label": "Factuality Hallucination",
+    "kind": "scope-overview",
+    "axis": "examples",
+    "shows": "three categories needing world knowledge: Domain Knowledge, Procedural Knowledge, Physics Knowledge",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "[Q]",
+    "kind": "identity",
+    "at": "start of each question",
+    "what": "marks the question line of a card"
+   },
+   {
+    "marker": "A, B, C, D",
+    "kind": "identity",
+    "at": "options of each card",
+    "what": "name the answer options"
+   },
+   {
+    "marker": "highlighted option",
+    "kind": "other",
+    "at": "one option per card",
+    "what": "marks the correct answer"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "synthetic scene frames: a grey sphere, then a blue cube, a green cube and a yellow sphere enter a plain floor",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four equal frames evenly spaced in a row on a green band"
+   },
+   {
+    "what": "real clips: children on a merry-go-round, a girl's morning routine in a room, a lion-dance festival, hands replacing a car door handle",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 16,
+    "medium": "bitmap",
+    "treatment": "four equal frames per row, evenly spaced on a tinted band, one row per clip"
+   },
+   {
+    "what": "clip of a hammer hitting a vase that shatters, apparently generated or edited",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "four equal frames on a salmon band; a tiny corner watermark is visible on each"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "What is the color of the second object that enters the scene? A. green B. yellow C. blue D. cyan; correct C",
+    "form": "bold italic question, options in two columns, correct option highlighted green",
+    "real_values": true
+   },
+   {
+    "what": "In what direction(s) do the children on the merry-go-round rotate? correct B. Clockwise throughout",
+    "form": "four options in two columns with the correct one highlighted green",
+    "real_values": true
+   },
+   {
+    "what": "Which option correctly sorts the heroine's events chronologically (Study, Make the bed, Eat breakfast, Exercise at home)? correct C. 2314",
+    "form": "numbered event list above four number-string options, correct one highlighted green",
+    "real_values": true
+   },
+   {
+    "what": "What is the festival in the video usually celebrated? correct D. 1st day of 1st lunar month",
+    "form": "four options with the correct one highlighted yellow-orange",
+    "real_values": true
+   },
+   {
+    "what": "Is the sequence of steps shown in the video logical about the task Replace Car Door Handle? correct B. No, the sequence is incorrect",
+    "form": "two options with the correct one highlighted yellow-orange",
+    "real_values": true
+   },
+   {
+    "what": "Are the events physically plausible? (No) and Which statement best describes the adherence to physical laws? correct C. Violation of material properties",
+    "form": "two stacked questions in one card, correct options highlighted yellow-orange",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "four equal frames in a row on a tinted band, no sprocket holes, one strip per category",
+    "parts": [
+     "frame 1",
+     "frame 2",
+     "frame 3",
+     "frame 4"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "pale dashed card with a bold italic [Q] question, lettered options and the correct option highlighted, with no model answers",
+    "parts": [
+     "[Q] question",
+     "options",
+     "highlight"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the green Faithfulness title, reads each row left to right (band, frames, question) from top to bottom, then repeats in the orange Factuality container."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two dashed rounded containers stacked top and bottom, a green one for faithfulness and an orange one for factuality; each holds three aligned rows of tinted label band, four-frame strip and question card, so six categories share one grammar.",
+  "panel_count": 2,
+  "lanes": "6 aligned category rows (3 per container), each with label band, four-frame strip and question card",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.65,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#acd78e",
+    "used_for": "green dashed container border and the Faithfulness Hallucination title"
+   },
+   {
+    "hex": "#f5b482",
+    "used_for": "orange dashed container border and the Factuality Hallucination title"
+   },
+   {
+    "hex": "#e4ecdf",
+    "used_for": "very light green band of a faithfulness row (first two rows, order not read)"
+   },
+   {
+    "hex": "#dceed8",
+    "used_for": "very light green band of a faithfulness row (first two rows, order not read)"
+   },
+   {
+    "hex": "#bcd5a6",
+    "used_for": "darker green band of the Spatial Temporal Structure row"
+   },
+   {
+    "hex": "#fbedc7",
+    "used_for": "cream band of the Domain Knowledge row"
+   },
+   {
+    "hex": "#f8c090",
+    "used_for": "light orange band of the Procedural Knowledge row"
+   },
+   {
+    "hex": "#f29e85",
+    "used_for": "salmon band of the Physics Knowledge row"
+   },
+   {
+    "hex": "#e3f2d9",
+    "used_for": "pale green dashed border of faithfulness question cards"
+   },
+   {
+    "hex": "#f8cdac",
+    "used_for": "pale orange dashed border of factuality question cards"
+   },
+   {
+    "hex": "#f8de96",
+    "used_for": "highlight behind the correct option in the factuality cards"
+   },
+   {
+    "hex": "#c9deb5",
+    "used_for": "highlight behind the correct option in the faithfulness cards (read from the picture)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "no outlines; dashed borders are built from small filled dashes, heavy on the two containers and pale on the question cards",
+  "font": "sans (Arial, Calibri), 5 pt for labels, questions and options, 10 pt for the two family titles; questions in bold italic",
+  "corners": "mixed",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green = faithfulness family, orange = factuality family; within a family each category band steps to a deeper tint (pale to mid green, cream to light orange to salmon); the correct option is highlighted in the family's hue",
+  "line_style_means": "heavy dashed rounded border = family container; pale dashed border = question card",
+  "shape_means": "label band plus four equal frames plus question card = one benchmark item; four frames = the sampled clip",
+  "marker_means": "[Q] = question line; A to D = options; highlight = ground-truth answer",
+  "emphasis": "Large coloured family titles and the highlight on the correct option; no arrows are needed because rows read left to right.",
+  "reusable_patterns": [
+   "rows of [category band, four-frame strip, question card] repeated for each category",
+   "two dashed containers in two hues grouping six categories into two families",
+   "tint steps within a family to separate categories",
+   "correct option highlighted in the family colour",
+   "bold italic [Q] prompts with plain-weight options"
+  ],
+  "weaknesses": [
+   "5 pt question text is small at column width",
+   "frames are only about 43 x 26 pt, so details such as the hammer on the vase are hard to see",
+   "category names differ from the caption (Dynamics vs Dynamic, Spatial Temporal Structure vs Spatio-Temporal Relations, Physics vs Physical Knowledge) and the Know-WHAT, Know-HOW, Know-WHY tags are not drawn"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames from real and synthetic videos of the benchmark",
+   "real question and option texts"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "dashed containers",
+   "tinted row bands",
+   "answer highlights"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "two dashed containers titled Faithfulness Hallucination and Factuality Hallucination",
+   "six tinted category bands",
+   "four-frame video strips",
+   "multiple-choice question cards with a highlighted option",
+   "synthetic and real video frames"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "video-LLM",
+   "hallucination",
+   "faithfulness",
+   "factuality",
+   "benchmark",
+   "multiple-choice QA",
+   "taxonomy",
+   "world knowledge"
+  ],
+  "tags": [
+   "filmstrip",
+   "highlighted-text-spans",
+   "colour-coded-groups",
+   "annotated-record-card"
+  ],
+  "new_tags": [
+   {
+    "name": "category-row-gallery",
+    "what": "stacked rows of category label band, four-frame strip and question card, one row per category, grouped into dashed containers per family"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a two-level benchmark taxonomy as stacked rows, one per category, each pairing a tinted label band, a four-frame strip and the question with its correct option highlighted; group the rows in dashed containers per family and give each family its own hue.",
+  "suits": "image or video QA benchmarks whose taxonomy has families and categories and whose coverage is best shown by one real item per category."
+ },
+ "tags": [
+  "example gallery",
+  "dashed containers",
+  "tinted row bands",
+  "four-frame strips",
+  "question cards",
+  "two-hue coding"
+ ],
+ "provenance": {
+  "sections": [
+   "Abstract",
+   "Figure 1 caption (no paragraph mentions the figure)"
+  ],
+  "evidence": [
+   "Faithfulness items are verified by video evidence",
+   "Factuality items require consistency with world knowledge",
+   "spanning real and synthetic videos"
+  ]
+ },
+ "summary": "INFACT is a diagnostic benchmark of 9,800 QA instances that probes hallucinations in video LLMs, with fine-grained taxonomies for faithfulness (contradicting the video) and factuality (contradicting world knowledge), on real and synthetic videos. Figure 1 is an example gallery. Two dashed rounded containers, green for Faithfulness Hallucination and orange for Factuality Hallucination, each hold three aligned rows. A row has a tinted category band (Static Entities & Attributes, Dynamics Actions & Motions, Spatial Temporal Structure; Domain, Procedural and Physics Knowledge), a strip of four video frames and a question card with options, the correct one highlighted in the family colour.",
+ "summary_zh": "INFACT 是评测视频大模型幻觉的基准。图一做成示例画廊：绿色和橙色两个虚线容器分别代表忠实性与事实性幻觉，各含三行，每行由类别色带、四帧视频条和带高亮正确选项的选择题卡片组成。",
+ "confidence": "high",
+ "notes": "No paragraph mentions the figure, so roles come from the caption, the abstract and the drawing; this is enough because the figure is a plain example gallery. Prior kind scope-overview (example-gallery) kept. Category labels in the drawing differ slightly from the caption wording. Which frames are synthetic is read from their look (plain floor with simple solids in the first row, a hammered vase with a corner watermark in the last); the abstract only says the videos are real and synthetic.",
+ "venue": "ACL26"
+}

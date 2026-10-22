@@ -1,0 +1,440 @@
+{
+ "paper_id": "cvpr26-0039",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Interactive Tracking (InteractTrack benchmark, IMAT baseline)",
+  "one_liner": "A paradigm where users steer a visual tracker at any time with natural-language commands, with a benchmark, protocol and memory-augmented baseline.",
+  "domain": [
+   "visual object tracking",
+   "human-in-the-loop",
+   "language-guided video"
+  ],
+  "subfield": "vision",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "one real basketball video followed through four timestamped user prompts, with the frames above, the prompts on a timeline and the followed targets below",
+  "argues": "Tracking is not fire-and-forget: a user's prompts can redirect the tracker through state changes, target changes and global retargeting within one video.",
+  "subject": "One basketball sequence with four prompts at frames #1, #68, #100, #177 and what the tracker follows after each.",
+  "elements": [
+   {
+    "name": "State Change",
+    "type": "label",
+    "role": "the first jump (frame #1 to #68): the same player is now blocked by an opponent and the user says to keep tracking",
+    "drawn_as": "yellow dashed arc with a small head over the frames, yellow title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Target Change",
+    "type": "label",
+    "role": "the second jump (frame #68 to #100): the user switches to the ball",
+    "drawn_as": "red dashed arc over the frames, red title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Target Change (local to global)",
+    "type": "label",
+    "role": "the third jump (frame #100 to #177): a new target is named by a description of the play, not by what is on screen now",
+    "drawn_as": "blue dashed arc over the frames, blue title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Who is holding the ball?",
+    "type": "instance",
+    "role": "first user prompt, at frame #1: names the initial target by description",
+    "drawn_as": "peach rectangle with Comic-style text beside an avatar",
+    "container": "prompt row",
+    "is_contribution": null
+   },
+   {
+    "name": "He is blocked by an opposing player. Keep tracking!",
+    "type": "instance",
+    "role": "user feedback at frame #68 telling the tracker to keep the same target through the occlusion",
+    "drawn_as": "peach rectangle beside an avatar",
+    "container": "prompt row",
+    "is_contribution": null
+   },
+   {
+    "name": "Did the ball go in? Track it.",
+    "type": "instance",
+    "role": "user prompt at frame #100 that moves the target to the ball",
+    "drawn_as": "peach rectangle beside an avatar",
+    "container": "prompt row",
+    "is_contribution": null
+   },
+   {
+    "name": "Track the person who catches the ball.",
+    "type": "instance",
+    "role": "user prompt at frame #177 that names a new target by what it will do",
+    "drawn_as": "peach rectangle beside an avatar",
+    "container": "prompt row",
+    "is_contribution": null
+   },
+   {
+    "name": "timeline with coloured dots",
+    "type": "other",
+    "role": "places each prompt in time; the dot colour gives the type of interaction (green, yellow, red, blue)",
+    "drawn_as": "long grey arrow to the right with four filled dots; dark-red arrows drop from each avatar onto its dot",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Query",
+    "type": "region",
+    "role": "tracker output after the first prompt: the player holding the ball",
+    "drawn_as": "green title and crops in the leftmost of four segments separated by grey vertical rules",
+    "container": "crop row",
+    "is_contribution": null
+   },
+   {
+    "name": "Occlusion Handling",
+    "type": "region",
+    "role": "tracker output while the target is blocked",
+    "drawn_as": "yellow title and crops in the second segment",
+    "container": "crop row",
+    "is_contribution": null
+   },
+   {
+    "name": "Target Switch",
+    "type": "region",
+    "role": "tracker output after the switch to the ball",
+    "drawn_as": "red title and red-framed crops in the third segment",
+    "container": "crop row",
+    "is_contribution": null
+   },
+   {
+    "name": "Retarget",
+    "type": "region",
+    "role": "tracker output after the global retargeting to the ball catcher",
+    "drawn_as": "blue title and blue-boxed crops in the fourth segment",
+    "container": "crop row",
+    "is_contribution": null
+   },
+   {
+    "name": "unlabelled orange arrow",
+    "type": "other",
+    "role": "second time axis under the crop row; its meaning is not stated",
+    "drawn_as": "long salmon arrow pointing right",
+    "container": "crop row",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "frame #1 target box",
+    "to": "frame #68 target box",
+    "what": "the same target changes state",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frame #68 target box",
+    "to": "frame #100 ball box",
+    "what": "user switches the target to the ball",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "frame #100 ball box",
+    "to": "frame #177 target box",
+    "what": "target is renamed from a local object to a global description",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "user avatar",
+    "to": "dot on the timeline",
+    "what": "the prompt is issued at that moment",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "user avatar",
+    "to": "prompt box",
+    "what": "the avatar says the words in the box",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "dot colour and arc colour",
+    "to": "segment title and crop outlines of the same colour",
+    "what": "each type of interaction is followed through frames, prompts and tracker outputs by one colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "crops inside one segment",
+    "to": "next crop of the same segment",
+    "what": "the followed target over time",
+    "kind": "time",
+    "drawn": "dotted-leader",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "#1, #68, #100, #177",
+    "kind": "order",
+    "at": "top-left of each frame and again beside each avatar",
+    "what": "frame index at which the user prompt arrives; the four numbers run left to right and order the interaction"
+   },
+   {
+    "marker": "coloured dot",
+    "kind": "identity",
+    "at": "timeline under each avatar",
+    "what": "type of interaction the prompt starts: green query, yellow state change, red target change, blue local-to-global"
+   },
+   {
+    "marker": "Query / Occlusion Handling / Target Switch / Retarget",
+    "kind": "section",
+    "at": "the four segments of the crop row",
+    "what": "name the kind of tracker behaviour shown in each segment, in the same colour as the dot above"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four frames of a basketball broadcast video with the followed target boxed",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "equal wide frames in a row, frame index in white bold at top-left, a coloured box drawn on the target and a dashed box left on the previous target in frame #100"
+   },
+   {
+    "what": "crops of the followed target after each prompt: 3 under Query, 4 under Occlusion Handling, 3 under Target Switch, 3 under Retarget",
+    "content": "video-frames",
+    "role": "sample-output",
+    "count": 13,
+    "medium": "bitmap",
+    "treatment": "small crops with coloured outlines of different sizes, joined in each segment by a dashed path of the segment's colour; one wide scene crop under Target Switch carries small red markers on the ball"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "head-and-shoulders person in a blue circle",
+    "stands_for": "the user who issues prompts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "four timestamped user prompts on one real basketball video and the targets the tracker follows after them",
+    "form": "frames with boxes, avatar plus prompt boxes on a timeline, crop strips",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "a round avatar of a person repeated at every prompt, with a red arrow down onto the timeline",
+    "parts": [
+     "avatar",
+     "prompt box",
+     "arrow",
+     "timeline dot"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "four non-consecutive video frames in a row, each stamped with its frame index, no sprocket border; a second row of target crops",
+    "parts": [
+     "frames #1, #68, #100, #177",
+     "crop strips"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "square peach text boxes without tails beside a small avatar, one per user turn",
+    "parts": [
+     "avatar",
+     "text box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left frame #1, follows the dashed arcs right across the frames, then reads the prompts and timeline left to right, then the crop segments below, matching colours down the columns."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three full-width bands stacked top to bottom (video frames with boxes, user prompts on a timeline, crop strips of the tracker's target), all cut into four time-aligned columns; coloured arcs run over the top band and grey rules separate the four crop segments.",
+  "panel_count": 1,
+  "lanes": "4 time-aligned columns, one per prompt (frame, avatar with prompt, crop segment)",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.43,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#8ed973",
+    "used_for": "green: initial query (target box, dot, Query segment)"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow: state change and occlusion handling (arc, boxes, dot, titles)"
+   },
+   {
+    "hex": "#de2a00",
+    "used_for": "red: target change and target switch (boxes and crop frames; #ff0000 on the arc and dot)"
+   },
+   {
+    "hex": "#0f9ed5",
+    "used_for": "blue: local-to-global target change and retarget (arc, boxes, dot, title)"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "dark red arrows from each avatar down to the timeline"
+   },
+   {
+    "hex": "#fbe6d7",
+    "used_for": "peach fill of the prompt boxes"
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey timeline arrow and segment rules (strokes #a6a6a6)"
+   },
+   {
+    "hex": "#f2aa84",
+    "used_for": "salmon arrow under the crop row"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt coloured outlines on boxes and crops, 1 to 1.5 pt dashed arcs, grey timeline arrows",
+  "font": "casual sans (Comic Sans MS), 7.5 pt labels and prompts, 8.5 pt frame indices",
+  "corners": "square",
+  "arrows": "dashed coloured arcs with small heads over the frames; dark-red elbow arrows from avatars to dots; long grey and salmon time arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "One colour per type of interaction, kept on arcs, target boxes, timeline dots, segment titles and crop outlines: green = initial query, yellow = state change / occlusion handling, red = target change / target switch, blue = local-to-global retargeting.",
+  "line_style_means": "dashed coloured arcs = the tracked target jumps between two moments; dark-red arrows = a user prompt lands on the timeline; dashed lines in the crop row = path of one target over time",
+  "shape_means": "peach rectangle = user prompt; blue circle avatar = the user; filled dot = moment of a prompt; coloured rectangle = tracker box on the target",
+  "marker_means": "#n is the frame index at which a prompt arrives",
+  "emphasis": "Colour carries the story: each coloured arc names the kind of change and the same colour reappears in the dot and crop segment below.",
+  "reusable_patterns": [
+   "three aligned bands (frames, prompts on a timeline, resulting crops) cut into the same time columns",
+   "one colour per interaction type kept across arcs, dots, segment names and crop outlines",
+   "dashed arcs over the frames named by the type of change between two moments",
+   "avatar plus prompt box with an arrow dropping onto a timeline dot",
+   "crop strips of the followed target joined by a dashed path under a coloured segment title"
+  ],
+  "weaknesses": [
+   "the tracker itself is never drawn, so the loop between user and tracker is only implied",
+   "frame indices appear twice (on the frames and beside the avatars)",
+   "the salmon arrow under the crops has no label"
+  ]
+ },
+ "resources": {
+  "own": [
+   "frames from a basketball video",
+   "tracker boxes and target crops",
+   "real timestamped language prompts"
+  ],
+  "stock": [
+   "head-and-shoulders user avatar icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed arcs",
+   "timeline arrows and dots",
+   "prompt boxes",
+   "segment rules"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four basketball frames with coloured target boxes",
+   "dashed colour arcs labelled State Change and Target Change",
+   "user avatars with peach prompt boxes",
+   "timeline arrow with coloured dots",
+   "target crop strips under four segment titles"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "interactive tracking",
+   "human-in-the-loop",
+   "language prompts",
+   "visual object tracking",
+   "target switch",
+   "occlusion handling",
+   "retargeting",
+   "basketball video"
+  ],
+  "tags": [
+   "filmstrip",
+   "colour-coded-groups",
+   "human-in-the-loop",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "timeline-event-bands",
+    "what": "frames above, user events as dots on a time axis in the middle and the results below, all in the same time columns and tied by one colour per event type"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show an interaction over time as aligned bands: video frames with coloured target boxes, the user's prompts dropped as coloured dots on a timeline, and the resulting target crops. Keep one colour per interaction type through all three bands so the reader sees which prompt caused which change.",
+  "suits": "Sequential or interactive tasks on video, dialogue or agent traces where user inputs arrive at different moments and each triggers a different kind of behaviour change."
+ },
+ "tags": [
+  "three-bands",
+  "time-aligned-columns",
+  "colour-coded-events",
+  "video-frames-with-boxes",
+  "casual-font",
+  "avatar-and-prompt-box"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "User prompts guide the tracker through state changes, target changes, and global retargeting",
+   "Initially, the tracker follows the player holding the ball; as the play unfolds, the viewer’s attention naturally shifts"
+  ]
+ },
+ "summary": "Interactive Tracking is a paradigm in which a user steers a visual tracker at any moment with natural-language commands; the paper adds the InteractTrack benchmark, an evaluation protocol and the IMAT memory-augmented baseline. Figure 1 walks through one basketball video. Four frames (#1, #68, #100, #177) carry coloured target boxes and are linked by dashed arcs named State Change, Target Change and Target Change (local to global). Below, a user avatar with a prompt box (\"Who is holding the ball?\", \"Track it.\") drops a red arrow onto a coloured dot on a timeline, and a bottom row of target crops under Query, Occlusion Handling, Target Switch and Retarget shows what the tracker follows after each prompt. One colour per interaction type ties the three bands together.",
+ "summary_zh": "交互式跟踪让用户随时用自然语言指令纠正跟踪器。图 1 以一段篮球视频为例：上排四帧带彩色目标框，虚线弧标出状态变化与目标变化；中排用户头像加提示框落在时间轴彩点上；下排按查询、遮挡处理、目标切换、重定向四段展示跟踪裁剪图，同色贯穿三层。",
+ "confidence": "high",
+ "notes": "Prior labels kept (worked-walkthrough, actor-interaction); the tracker is not drawn, so actor-interaction is weaker (only the user actor appears). The crop count (13) and avatar count (4) come from the digest's picture sizes. The meaning of the unlabelled salmon arrow and of the small red markers on the ball crop is not stated in the paper text provided.",
+ "venue": "CVPR26"
+}

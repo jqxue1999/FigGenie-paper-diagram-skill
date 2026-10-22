@@ -1,0 +1,644 @@
+{
+ "paper_id": "icml25-0175",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "NGCE (Node-Guided Contrastive Encoding)",
+  "one_liner": "Multi-view graph clustering that encodes each view with node-feature-guided GNN filtering and cross-view contrast to get a consensus embedding for k-means.",
+  "domain": [
+   "multi-view graph clustering",
+   "contrastive learning",
+   "graph neural networks"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "left panel unrolls the encoding module, right panels wire per-view copies into cross-view contrast, clustering and a weight feedback loop; symbol table below",
+  "argues": "Node features guide the graph encoding of every view, and cross-view contrast plus pseudo-label homophily weights yield one consensus embedding that clusters well.",
+  "subject": "One view's encoding module unrolled, then all views fused into a consensus embedding, clustered, and the homophily weight fed back.",
+  "elements": [
+   {
+    "name": "Input: X, A^n, ω^n",
+    "type": "data",
+    "role": "node features, adjacency matrix and homophily weight of view n",
+    "drawn_as": "bold symbols above a dashed bar labelled Input",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": null
+   },
+   {
+    "name": "f^n",
+    "type": "module",
+    "role": "maps the node features X to refined node features Z^n",
+    "drawn_as": "rounded box at the top of the shaded interior",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Joint Process Â^n = ω^n A^n + S^n",
+    "type": "operation",
+    "role": "adaptive weighted sum of the adjacency and a similarity graph, giving the node-guided graph Â^n",
+    "drawn_as": "larger rounded box holding a formula",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": true
+   },
+   {
+    "name": "GNN (main)",
+    "type": "module",
+    "role": "filters Z^n over Â^n and outputs the joint embedding h^n",
+    "drawn_as": "rounded box at lower left",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": null
+   },
+   {
+    "name": "X ⊙ E (Add Noise By Mask)",
+    "type": "operation",
+    "role": "adds noise to the original features by masking, giving X̃",
+    "drawn_as": "formula with a parenthesised caption",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": true
+   },
+   {
+    "name": "GNN (noise branch)",
+    "type": "module",
+    "role": "recovers node features X̄^n from the noised features X̃ over Â^n",
+    "drawn_as": "smaller rounded box at lower right",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": true
+   },
+   {
+    "name": "ℒ_Rec^n and ℒ_C1^n",
+    "type": "operation",
+    "role": "reconstruction loss on f^n and contrastive loss between X̄^n and X, both marked as backward propagation",
+    "drawn_as": "dashed hollow up arrows with loss names, plus a dashed double arrow between X̄^n and X",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Output: h^n",
+    "type": "data",
+    "role": "node-guided joint embedding of view n",
+    "drawn_as": "bold symbol under a dashed bar labelled Output",
+    "container": "Node-Guided Contrastive Encoding Module",
+    "is_contribution": null
+   },
+   {
+    "name": "View 1 … View v",
+    "type": "data",
+    "role": "the graphs of each view with their adjacency matrices A^1 … A^v",
+    "drawn_as": "two toy node-link graphs separated by a vertical ellipsis",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": false
+   },
+   {
+    "name": "X",
+    "type": "data",
+    "role": "node feature matrix shared by the views, fed with A^v to each encoder",
+    "drawn_as": "vertical strip of grey cells beside a vertical bus line",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": false
+   },
+   {
+    "name": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "type": "module",
+    "role": "the unrolled module applied to each view, with its homophily weight ω^1 or ω^v coming up from below",
+    "drawn_as": "two dash-dotted grey rounded boxes with a vertical ellipsis between",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": true
+   },
+   {
+    "name": "h^1 … h^v",
+    "type": "data",
+    "role": "joint embeddings of each view",
+    "drawn_as": "vertical strips of grey cells at the right edge, top and bottom",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Contrastive Loss (ℒ_C2^n)",
+    "type": "operation",
+    "role": "cross-view contrast between h^1 and h^v, marked as backward propagation",
+    "drawn_as": "dashed hollow left arrow and a dashed double arrow between h^1 and h^v",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": true
+   },
+   {
+    "name": "ω_h^1, ω_h^v → H",
+    "type": "data",
+    "role": "cross-view fusion weights combine the view embeddings into the consensus embedding H",
+    "drawn_as": "two diagonal arrows meeting at a bold H",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": true
+   },
+   {
+    "name": "Cross-View Contrast Module",
+    "type": "label",
+    "role": "title of the right panel",
+    "drawn_as": "bold italic title in a black box",
+    "container": "Cross-View Contrast Module",
+    "is_contribution": null
+   },
+   {
+    "name": "Training",
+    "type": "label",
+    "role": "thick arrow from the contrast panel into the clustering panel",
+    "drawn_as": "bold word beside a thick down arrow",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "k-means",
+    "type": "operation",
+    "role": "clusters H into pseudo labels",
+    "drawn_as": "arrow from H leftward with a caption",
+    "container": "Clustering",
+    "is_contribution": false
+   },
+   {
+    "name": "Ȳ with cluster scatter",
+    "type": "data",
+    "role": "pseudo-label matrix, shown with a small scatter of red, green and blue clusters",
+    "drawn_as": "bold symbol above a bitmap scatter",
+    "container": "Clustering",
+    "is_contribution": null
+   },
+   {
+    "name": "ω^n = Σ(A ⊙ ȲȲ^T − I) / Σ(A − I)",
+    "type": "formula",
+    "role": "homophily weight computed from the pseudo labels and the adjacency, fed back to the encoders by a thick up arrow",
+    "drawn_as": "typeset fraction with a thick arrow rising into the right panel",
+    "container": "Clustering",
+    "is_contribution": true
+   },
+   {
+    "name": "symbol table",
+    "type": "label",
+    "role": "defines X, Â, Z, ω_h, h, A, X̄, Ȳ, ω, H",
+    "drawn_as": "dashed frame at the bottom with two rows of five symbol and name pairs",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "X",
+    "to": "f^n",
+    "what": "node features enter the feature mapper",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f^n",
+    "to": "Joint Process",
+    "what": "refined node features Z^n",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "A^n",
+    "to": "Joint Process",
+    "what": "adjacency matrix of view n",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Z^n",
+    "to": "GNN (main)",
+    "what": "refined node features bypass the joint process",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Joint Process",
+    "to": "GNN (main), GNN (noise branch)",
+    "what": "node-guided graph Â^n goes to both GNNs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "X ⊙ E (Add Noise By Mask)",
+    "to": "GNN (noise branch)",
+    "what": "noised features X̃",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GNN (noise branch)",
+    "to": "X̄^n",
+    "what": "recovered node features, contrasted with X",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GNN (main)",
+    "to": "Output: h^n",
+    "what": "joint embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ℒ_Rec^n and ℒ_C1^n",
+    "to": "f^n and the GNNs",
+    "what": "backward propagation of the losses",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "X and A^1 … A^v",
+    "to": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "what": "features and the view's adjacency matrix",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ω^1 … ω^v",
+    "to": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "what": "homophily weight per view",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "to": "h^1 … h^v",
+    "what": "joint embedding per view",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h^1 … h^v",
+    "to": "H",
+    "what": "weighted fusion with ω_h^1 … ω_h^v",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h^1",
+    "to": "h^v",
+    "what": "cross-view contrastive loss ℒ_C2^n",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Contrastive Loss",
+    "to": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "what": "backward propagation into the encoders",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "H",
+    "to": "Ȳ",
+    "what": "k-means gives pseudo labels",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Ȳ",
+    "to": "ω^n formula",
+    "what": "pseudo labels enter the homophily-weight formula",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ω^n formula",
+    "to": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "what": "updated homophily weight fed back to the encoders",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cross-View Contrast Module",
+    "to": "Clustering",
+    "what": "Training",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Node-Guided Contrastive Encoding Module title (left)",
+    "to": "Node-Guided Contrastive Encoding Module (view 1 and view v)",
+    "what": "same title: the left panel is the inside of these boxes",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Node-Guided Contrastive Encoding Module",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "inside of one view's encoder from Input (X, A^n, ω^n) to Output h^n: f^n, joint process, two GNNs, noise mask and two losses",
+    "verdict": "ours"
+   },
+   {
+    "label": "Cross-View Contrast Module",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "views 1 to v pass through the encoder, their embeddings are contrasted and fused with weights into the consensus embedding H",
+    "verdict": "ours"
+   },
+   {
+    "label": "Clustering",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "H goes to k-means, the pseudo-label matrix gives the homophily weight formula whose result is fed back to the encoders",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "superscripts 1, n, v",
+    "kind": "identity",
+    "at": "symbols X, A, ω, h",
+    "what": "index of the view: view 1, a generic view n, the last view v"
+   },
+   {
+    "marker": "ℒ_Rec^n, ℒ_C1^n, ℒ_C2^n",
+    "kind": "identity",
+    "at": "dashed arrows",
+    "what": "names the reconstruction loss and the two contrastive losses"
+   },
+   {
+    "marker": "Input / Output",
+    "kind": "section",
+    "at": "top and bottom bars of the left panel",
+    "what": "heads the entry and exit of the module"
+   },
+   {
+    "marker": "Training / Clustering",
+    "kind": "section",
+    "at": "between the right-hand panels",
+    "what": "names the training loop and the clustering stage"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "toy node-link graphs of View 1 and View v",
+    "content": "other",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "two small graphs stacked, circle, square and triangle nodes in different greys, vertical ellipsis between the views"
+   },
+   {
+    "what": "scatter of clustered points",
+    "content": "chart",
+    "role": "illustration",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small 2-D scatter in red, green and blue clusters placed under the symbol Ȳ"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "toy node-link graphs per view and rounded boxes labelled GNN inside the encoder",
+    "parts": [
+     "node-link graph",
+     "GNN box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "dashed hollow block arrows labelled with the loss name and pointing back up to the module, plus dashed double arrows between the contrasted items",
+    "parts": [
+     "dashed block arrow",
+     "dashed double arrow",
+     "loss name"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "a dashed double arrow between h^1 and h^v and another between X̄^n and X, each with a loss symbol; no pulled or pushed samples drawn",
+    "parts": [
+     "dashed double arrow",
+     "loss symbol"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "vertical strips of grey cells for the feature matrix and for each view embedding",
+    "parts": [
+     "cell strip"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "small scatter of red, green and blue dot clusters beside the pseudo-label matrix",
+    "parts": [
+     "three clusters"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at Input at the top of the left panel and follows the arrows down to h^n, then moves to View 1 at top left of the right panel, across to H, and along the bottom panel right to left back to ω^n."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "One tall dashed panel at left holds the unrolled encoder; two dashed panels are stacked at right (Cross-View Contrast on top, Clustering below); a full-width dashed strip along the bottom is the symbol table.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 1.98,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ededed",
+    "used_for": "grey tint of the encoder interior and the module boxes"
+   },
+   {
+    "hex": "#f9f9f9",
+    "used_for": "near-white tint of the right-hand panels",
+    "opacity": 0.74
+   },
+   {
+    "hex": "#afabab",
+    "used_for": "light grey cells and node fills"
+   },
+   {
+    "hex": "#767171",
+    "used_for": "mid grey cells and node fills"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "dark grey cells and node fills"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "all outlines, arrows and text"
+   },
+   {
+    "hex": "#d9382c",
+    "used_for": "red cluster in the scatter",
+    "approx": true
+   },
+   {
+    "hex": "#5cb85c",
+    "used_for": "green cluster in the scatter",
+    "approx": true
+   },
+   {
+    "hex": "#5aa5d6",
+    "used_for": "blue cluster in the scatter",
+    "approx": true
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.5 to 1 pt black outlines; dashed frames for panels and the key, dash-dotted outlines for module boxes",
+  "font": "serif (Times-like) throughout; bold italic 8.5-10 pt titles and labels, 10-11 pt bold math symbols, 5-7 pt sub- and superscripts",
+  "corners": "rounded",
+  "arrows": "straight orthogonal black arrows with small filled heads; dashed hollow block arrows and dashed double arrows for backward propagation; thick black arrows for Training and the weight feedback",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "almost monochrome: grey tint separates the encoder interior and module boxes from the rest; red, green and blue appear only as cluster colours in the scatter",
+  "line_style_means": "solid arrows = forward flow; dashed hollow block arrows and dashed double arrows = backward propagation (caption); dash-dotted box = an instance of the encoding module; dashed frames = panels and key; thick arrows = training and weight feedback",
+  "shape_means": "rounded rectangle = module (f, Joint Process, GNN); circle, square and triangle = graph nodes; vertical cell strip = feature or embedding vector",
+  "marker_means": "bold symbols for matrices and vectors, defined in the key; superscripts n, 1, v index the views",
+  "emphasis": "bold italic module titles and a boxed title for the Cross-View Contrast Module; the left panel repeats the module title used in the right panel so the two are read as zoom and overview",
+  "reusable_patterns": [
+   "panel that opens a module named in the overview, tied to it by a repeated title instead of leader lines",
+   "symbol table strip along the bottom defining every symbol used in the drawing",
+   "dashed hollow block arrows for the backward pass of each loss",
+   "thick feedback arrow carrying a weight derived from the clustering stage back to the encoders",
+   "toy graphs per view separated by a vertical ellipsis"
+  ],
+  "weaknesses": [
+   "no colour coding: flows and modules are told apart by position and line style only",
+   "dense symbolic labels with 5-7 pt sub- and superscripts",
+   "typo Wight for Weight in the symbol table",
+   "the encoder is shown once on the left and twice on the right with no leader line between them"
+  ]
+ },
+ "resources": {
+  "own": [
+   "scatter of clustered points (bitmap)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes, arrows and frames",
+   "toy graphs with shaped nodes",
+   "grey cell strips",
+   "symbol table",
+   "typeset formulas"
+  ],
+  "unknown": [
+   "whether the scatter is a real clustering result or a mock-up",
+   "what the node shapes and grey levels of the toy graphs stand for"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "encoder module with f, GNN and Joint Process boxes",
+   "toy multi-view graphs",
+   "grey cell strips for features and embeddings",
+   "dashed hollow backward arrows",
+   "k-means scatter",
+   "symbol table strip",
+   "homophily-weight formula"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "multi-view graph clustering",
+   "contrastive learning",
+   "GNN",
+   "homophily weight",
+   "consensus embedding",
+   "k-means",
+   "heterophilic graphs",
+   "node features"
+  ],
+  "tags": [
+   "notation-key",
+   "equation-boxes",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "unrolled-module-panel",
+    "what": "one panel opens the module named in the overview panel and repeats its title, instead of an inset with leader lines"
+   },
+   {
+    "name": "weight-feedback-loop",
+    "what": "a thick arrow carries a quantity derived from the output (pseudo labels to weights) back to the encoders, with its formula next to the arrow"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Open the key module in its own tinted panel that repeats the module's title from the overview, add a symbol-table strip so every bare symbol in the drawing is defined, and mark backward propagation with dashed hollow block arrows.",
+  "suits": "Method figures with heavy notation, an inner encoder, several losses and an outer training loop, drawn in monochrome for print."
+ },
+ "tags": [
+  "monochrome",
+  "dashed-frames",
+  "serif-math-labels",
+  "symbol-table-strip",
+  "tinted-grey-panels",
+  "powerpoint-style"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "The output of the framework is the consensus embedding H, after which H is used as input for K-means clustering.",
+   "Dashed arrows represent the backward propagation.",
+   "an adaptive weighted sum based on similarity graphs and contrastive learning"
+  ]
+ },
+ "summary": "NGCE is a multi-view graph clustering method that uses node features to guide how each view's graph is encoded. Figure 1 combines three dashed panels and a symbol strip. At left, one Node-Guided Contrastive Encoding Module is unrolled from input (X, A^n, ω^n) to output h^n: a feature mapper f^n, a joint process building Â^n = ω^n A^n + S^n, two GNNs, a noise mask and two losses. At right, toy graphs for View 1 to View v each pass through that module, their embeddings are contrasted and fused with weights into H, which feeds k-means; the pseudo labels give the homophily weight ω^n that is fed back to the encoders. Dashed arrows mark backward propagation and a bottom table defines the symbols.",
+ "summary_zh": "NGCE 是一种多视图图聚类方法，用节点特征引导各视图的图编码。图一左侧展开单个节点引导对比编码模块，右侧是跨视图对比与 k-means 聚类，伪标签算出的同质性权重回馈编码器，虚线箭头表示反向传播，底部符号表解释全部符号。",
+ "confidence": "high",
+ "notes": "Prior sample data graphs-molecules corrected to network-graph (toy graphs). The notation-key strip is counted as a legend, not a panel, so panel_count is 3. The roles of f^n and of the two GNNs are read from the figure and the key, not from the quoted text. The key spells Weight as Wight.",
+ "venue": "ICML25"
+}

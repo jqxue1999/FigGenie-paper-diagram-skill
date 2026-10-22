@@ -1,0 +1,344 @@
+{
+ "paper_id": "iclr26-0017",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Discount Model Search (DMS)",
+  "one_liner": "A quality diversity algorithm that replaces CMA-MAE's histogram discount function with a smooth learned model so exploration continues in high-dimensional measure spaces.",
+  "domain": [
+   "quality diversity optimization",
+   "black-box optimization",
+   "high-dimensional measure spaces"
+  ],
+  "subfield": "ml-core",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "two matched schematic plots, the failing histogram discount and the smooth model, then a measured line chart that shows the failure in practice",
+  "argues": "A histogram discount function gives solutions in the same cell identical improvement values and stalls search; a smooth discount model gives distinct values (Δ2 > Δ1) and keeps guiding exploration.",
+  "subject": "A flat objective, three archive cells on a measure axis, two solutions and their improvement gaps under a step versus a smooth discount function, plus a unique-cells curve.",
+  "elements": [
+   {
+    "name": "f",
+    "type": "label",
+    "role": "the (flat) objective value of the solutions",
+    "drawn_as": "black dashed horizontal line across the panel, italic f at its left end",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "θ1, θ2",
+    "type": "instance",
+    "role": "two sampled solutions, placed at their measures",
+    "drawn_as": "black dots on the dashed line with solid black stems dropping to the discount curve, bold θ labels",
+    "container": "(a) and (b)",
+    "is_contribution": null
+   },
+   {
+    "name": "f_A",
+    "type": "module",
+    "role": "the discount function over measure space: a histogram in CMA-MAE (a), a smooth model in DMS (b)",
+    "drawn_as": "blue stepped line in (a), blue smooth declining curve in (b), blue italic f_A label at the left end",
+    "container": "(a) and (b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Cell 1, Cell 2, Cell 3",
+    "type": "region",
+    "role": "archive cells that tessellate the measure space; both solutions land in Cell 2",
+    "drawn_as": "grey labels between dashed grey vertical separators above the axis",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "m(θ)",
+    "type": "label",
+    "role": "the measure axis",
+    "drawn_as": "black double-headed arrow with a bold m(θ) label underneath",
+    "container": "(a) and (b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Δ1, Δ2",
+    "type": "label",
+    "role": "archive improvement of each solution, f minus the discount value",
+    "drawn_as": "orange double-headed vertical arrows between f and f_A with orange Δ labels; equal in (a), unequal in (b)",
+    "container": "(a) and (b)",
+    "is_contribution": true
+   },
+   {
+    "name": "unique-cells chart",
+    "type": "chart",
+    "role": "number of distinct archive cells hit by CMA-MAE's sampled solutions over iterations",
+    "drawn_as": "line chart with axes Unique Cells (0-400) and Iterations (0-10000), legend above the plot",
+    "container": "(c)",
+    "is_contribution": null
+   },
+   {
+    "name": "2D LP (Sphere), 10D LP (Sphere)",
+    "type": "data",
+    "role": "the two benchmark series; the 10D series collapses to about 30 cells",
+    "drawn_as": "blue line with a circle marker and orange line with a diamond marker",
+    "container": "(c)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "θ1, θ2",
+    "to": "f_A",
+    "what": "the solution's measure decides which cell, hence which discount value, it reads",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "f",
+    "to": "f_A",
+    "what": "improvement Δ = f - f_A at each solution",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(a)",
+    "to": "(b)",
+    "what": "same frame, objective, cells and solutions; only f_A changes from step to smooth, so Δ1 = Δ2 becomes Δ2 > Δ1",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Cell 1, Cell 2, Cell 3",
+    "to": "m(θ)",
+    "what": "dashed separators cut the measure axis into archive cells",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "(a)",
+    "to": "(c)",
+    "what": "(c) measures how often solutions share a cell, the cause of the failure drawn in (a)",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "CMA-MAE: step-shaped histogram discount, both solutions in Cell 2 get the same discount, so Δ1 = Δ2",
+    "verdict": "fails"
+   },
+   {
+    "label": "(b)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "DMS: smooth discount curve gives distinct discount values, Δ2 > Δ1",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c)",
+    "kind": "other",
+    "axis": "other",
+    "shows": "measured unique cells reached by CMA-MAE in 2D and 10D LP (Sphere): the 10D count falls to about 30",
+    "verdict": "baseline"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "identity",
+    "at": "centred under each panel",
+    "what": "names the three panels"
+   },
+   {
+    "marker": "θ1, θ2, Δ1, Δ2, Cell 1-3",
+    "kind": "identity",
+    "at": "next to the dots, arrows and cell regions",
+    "what": "names solutions, improvements and archive cells"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "unique archive cells versus iterations for 2D and 10D LP (Sphere)",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "plain line chart with light grid, open top and right sides, and a legend of line-and-marker samples above the plot; sits as the third panel of the row"
+   }
+  ],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "histogram-vs-smooth-model",
+    "drawn_as": "the same quantity drawn as a piecewise-constant step function over cells and as a smooth curve, with gap arrows to the objective line",
+    "parts": [
+     "step function",
+     "smooth curve",
+     "cell separators",
+     "gap arrows"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at panel (a) top left: f line and dots, down the stems to the blue step, the equal orange arrows; then (b) with the same layout; finally the chart (c) at the right."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three unframed panels in a row: two matched schematic plots (a) and (b) of equal size sharing one layout, then a smaller measured line chart (c) with its legend above; panel letters are centred underneath.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "per-panel",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.81,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#0173b2",
+    "used_for": "discount function f_A (step in a, curve in b) and the 2D LP series in (c)"
+   },
+   {
+    "hex": "#de8f05",
+    "used_for": "improvement arrows Δ in (a) and (b) and the 10D LP series in (c)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "dashed objective f, solution dots and stems, measure axis, chart axes"
+   },
+   {
+    "hex": "#808080",
+    "used_for": "dashed cell separators and the grey cell labels"
+   },
+   {
+    "hex": "#e5e6e5",
+    "used_for": "light grid lines of the chart in (c)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1-1.5 pt blue curve, orange arrows and black dashed f; 0.5 pt axes; dashed grey cell separators",
+  "font": "serif (Times New Roman) 7.5 pt for chart text, 9 pt for math labels and panel letters; math italics with bold θ",
+  "corners": "square",
+  "arrows": "double-headed axis arrow in black; orange double-headed gap arrows with small filled triangle heads",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue = discount function f_A (and the 2D benchmark in (c)); orange = archive improvement Δ (and the 10D benchmark in (c)); black = objective, solutions and axes; grey = archive cell boundaries and names",
+  "line_style_means": "dashed black = objective f; dashed grey vertical = cell boundary; solid blue = discount function; solid black stem = a solution's position on the measure axis",
+  "shape_means": "dot = solution θ; double-headed orange arrow = improvement Δ; step = histogram, smooth curve = model",
+  "marker_means": "panel letters and symbols (θ1, Δ2, Cell 3) name things; no step numbers",
+  "emphasis": "The orange Δ arrows are the only warm marks in (a) and (b): same length in (a), different lengths in (b), while everything else is identical between the two panels.",
+  "reusable_patterns": [
+   "matched pair of schematics with identical axes and annotations where only one curve changes",
+   "gap arrows between two curves at each sample point, coloured apart from the curves",
+   "dashed vertical cell boundaries on a measure axis with grey cell names",
+   "a measured line chart as the last panel backing the schematic's failure mode",
+   "legend of line-and-marker samples above the chart"
+  ],
+  "weaknesses": [
+   "blue and orange mean f_A and Δ in (a) and (b) but 2D and 10D in (c)",
+   "no key inside the figure for f, f_A and Δ; the caption carries it"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured unique-cell counts for 2D and 10D LP (Sphere) from CMA-MAE runs (mean over 20 trials)"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "step function, smooth curve, dots, stems and gap arrows",
+   "measure axis with cell separators",
+   "the line chart"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "flat objective line",
+   "stepped histogram discount",
+   "smooth discount curve",
+   "solution dots with stems",
+   "orange gap arrows",
+   "archive cells on a measure axis",
+   "unique-cells line chart"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "quality diversity",
+   "CMA-MAE",
+   "discount function",
+   "archive cells",
+   "measure space distortion",
+   "histogram versus smooth model",
+   "high-dimensional measures",
+   "archive improvement"
+  ],
+  "tags": [
+   "schematic-plot",
+   "small-multiples"
+  ],
+  "new_tags": [
+   {
+    "name": "gap-arrows",
+    "what": "double-headed coloured arrows between two curves at chosen points marking the gap (improvement, margin, loss) whose size is the message"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Isolate one difference by drawing the baseline and the proposed method on identical axes with identical annotations so that only one curve changes, then add a measured chart as a third panel showing the failure occurs in practice.",
+  "suits": "Optimization or learning ideas where a function representation (histogram versus model, step versus smooth) changes a quantity that can be drawn as a gap between two curves."
+ },
+ "tags": [
+  "flat-vector",
+  "serif-labels",
+  "matched-panels",
+  "white-ground",
+  "minimal-colour",
+  "double-column"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Background (p.4)",
+   "4 Distortion experiment (p.5)"
+  ],
+  "evidence": [
+   "solutions θ1 and θ2 fall in the same archive cell based on their measures",
+   "the discount model provides a smooth discount function that assigns distinct discount values to θ1 and θ2",
+   "Number of unique cells where solutions sampled by CMA-MAE land in two benchmarks (mean over 20 trials; Sec. 4)"
+  ]
+ },
+ "summary": "Quality diversity optimization looks for solutions that are good and diverse under a vector-valued measure. CMA-MAE guides exploration with a histogram discount function over measure space, which stagnates in high-dimensional measure spaces because similar solutions share a cell. Figure 1 explains this in three panels. Panels (a) and (b) are matched schematics: a flat objective f as a dashed line, three archive cells on the measure axis m(θ), two solutions θ1 and θ2 as dots and orange Δ arrows for archive improvement. With the blue step function of CMA-MAE the two arrows are equal; with the smooth blue curve of Discount Model Search they differ, Δ2 > Δ1. Panel (c) is a line chart of unique cells over iterations in 2D and 10D LP (Sphere). Plain serif, flat vector, white ground.",
+ "summary_zh": "质量多样性优化中，CMA-MAE用直方图折扣函数，高维度量空间里相似解落入同一格而停滞。图(a)(b)用同样的版面：阶梯曲线下两解增益Δ相等，DMS的平滑模型下Δ2大于Δ1；(c)是2D/10D基准中独特格数随迭代下降的折线图。",
+ "confidence": "high",
+ "notes": "Prior kinds kept but reordered: the matched (a)/(b) pair makes side-by-side-contrast primary. Blue and orange are the seaborn colour-blind palette and are reused in (c) with different meanings. In (c) a single marker per series sits on its line (circle near the start, diamond near 3000 iterations), matching the legend samples.",
+ "venue": "ICLR26"
+}

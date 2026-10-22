@@ -1,0 +1,354 @@
+{
+ "paper_id": "acl25-0093",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FREE (ViT-g OPT2.7B)",
+  "one_liner": "Early exits for vision-language models, each exit a transformer layer trained adversarially to mimic the final layer, for faster inference.",
+  "domain": [
+   "vision-language models",
+   "early exit",
+   "efficient inference"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "concept-schematic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "nine rounded chat cards in a 3 by 3 grid, each a photo with VQA exchanges or a caption, answer words recoloured by the layer that predicts them",
+  "argues": "Most words of a caption or answer are easy and can be predicted at early layers, so early exits can speed up inference without hurting the outputs.",
+  "subject": "Nine photos with questions and the model's answers, whose words are coloured by the layers at which they are predicted.",
+  "elements": [
+   {
+    "name": "chat cards",
+    "type": "container",
+    "role": "nine examples, each holding a photo and one or two exchanges, or a captioning prompt",
+    "drawn_as": "large rounded rectangles with a thin black outline in a 3 by 3 grid",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "user question bubbles",
+    "type": "sample",
+    "role": "questions such as 'How many dogs are there?' or the captioning prompt 'A photo of'",
+    "drawn_as": "right-aligned light-blue rounded bubbles with a thin outline, a person icon at their right",
+    "container": "each card",
+    "is_contribution": false
+   },
+   {
+    "name": "model answer boxes",
+    "type": "sample",
+    "role": "FREE's answers such as 'Looks like 2.' or 'A golden retriever dog laying down next to a pool in the backyard.'",
+    "drawn_as": "left-aligned white rounded boxes with a thin outline, a robot icon at their left, words in red, green or black",
+    "container": "each card",
+    "is_contribution": true
+   },
+   {
+    "name": "word colours red, green, black",
+    "type": "label",
+    "role": "tells at which layers each word of an answer is predicted: red layers 1-12, green layers 13-24, black layers 25-32",
+    "drawn_as": "recoloured words inside the answer boxes; the key is only in the caption",
+    "container": "model answer boxes",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "photo",
+    "to": "user question bubbles",
+    "what": "the question is about the photo above it",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "user question bubbles",
+    "to": "model answer boxes",
+    "what": "each answer replies to the question above it",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "layer depth (1-12, 13-24, 25-32)",
+    "to": "word colours red, green, black",
+    "what": "the colour of a word says how deep the model needs to go to predict it",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "dog wearing a mask: how many dogs, are they both wearing hats",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "woman with a vulture: what is in the photo, are there other animals",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "steam train: is it a toy train, how many cars",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "planes seen through an airport window: what is in the image, is anything moving",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "traffic light against the sky: which lights are on, is the sky clear",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "bird in a flowerpot: what is the bird doing, is the apple healthy",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "dog by a pool: caption completing 'A photo of'",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "zebra in snow: caption completing 'A photo of'",
+    "verdict": null
+   },
+   {
+    "label": null,
+    "axis": "examples",
+    "shows": "plane taking off: caption completing 'A photo of'",
+    "verdict": null
+   }
+  ],
+  "markers": [],
+  "pictures": [
+   {
+    "what": "nine photographs: a dog wearing a mask, a woman with a vulture, a steam train, planes seen through an airport window, a traffic light against the sky, a bird in a flowerpot, a golden retriever by a pool, a zebra in snow, a plane taking off",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "unframed rectangular photos of about 52-63 x 33-47 pt at the top of each card, slightly right of centre"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "simple robot head with an antenna",
+    "stands_for": "the model (FREE) answering",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 15
+   },
+   {
+    "depicts": "person head and shoulders outline",
+    "stands_for": "the user asking",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 17
+   }
+  ],
+  "examples": [
+   {
+    "what": "six short visual question answering exchanges, e.g. 'Is this a toy train?' answered 'No.' and 'Which lights are on?' answered 'Red.'",
+    "form": "blue question bubbles over white answer boxes with recoloured words",
+    "real_values": true
+   },
+   {
+    "what": "three captions generated from the prompt 'A photo of', e.g. 'A zebra standing in snowy field with a wall behind it.'",
+    "form": "prompt bubble over a white answer box with recoloured words",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "right-aligned light-blue user bubbles with a person icon and left-aligned white answer boxes with a robot icon, one per turn",
+    "parts": [
+     "user bubble",
+     "answer box",
+     "person icon",
+     "robot icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "rounded card with a photo, one or two question-answer turns and recoloured answer words instead of ticks and crosses",
+    "parts": [
+     "photo",
+     "question",
+     "answer"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "plain robot-head line icon beside each answer",
+    "parts": [
+     "robot head"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Row by row from the top-left card; inside a card from the photo down through question and answer turns."
+ },
+ "layout": {
+  "arrangement": "cards-grid",
+  "arrangement_note": "Nine equal rounded cards in three rows of three, separated by whitespace. Each card stacks a photo at the top, then question bubbles aligned to the right with person icons and answer boxes aligned to the left with robot icons; the last three cards hold a single captioning prompt and answer.",
+  "panel_count": 9,
+  "lanes": null,
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.4,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#cfe2f3",
+    "used_for": "user question bubbles"
+   },
+   {
+    "hex": "#cc0000",
+    "used_for": "words predicted at the initial layers 1-12 (easy)"
+   },
+   {
+    "hex": "#38761d",
+    "used_for": "words predicted at intermediary layers 13-24"
+   },
+   {
+    "hex": "#6aa84f",
+    "used_for": "a lighter green used for some intermediary words"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt black outlines on cards, bubbles and answer boxes",
+  "font": "sans (Arial) 5 pt only, words recoloured red, green or black",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "word colour in an answer = depth at which the token is predicted: red easy (layers 1-12), green intermediate (13-24), black hard (25-32); light blue = user question",
+  "line_style_means": "thin black outlines only; no line style carries meaning",
+  "shape_means": "large rounded rectangle = one example; right-aligned blue bubble with a person icon = the user; left-aligned white box with a robot icon = the model",
+  "marker_means": "no numbers or letters; the word colour is the only mark",
+  "emphasis": "the recoloured words inside the answers, and a photo at the top of every card",
+  "reusable_patterns": [
+   "3 by 3 grid of rounded chat cards each topped by a photo",
+   "right-aligned blue user bubbles with a person icon over left-aligned white answers with a robot icon",
+   "recolouring single words of a generated answer to show a per-token property such as the exit layer",
+   "captioning examples shown as the prompt 'A photo of' completed by the model",
+   "unframed photo at the top of each card"
+  ],
+  "weaknesses": [
+   "the colour key (red, green, black as exit depth) is only in the caption, not in the figure",
+   "all text is 5 pt",
+   "the person icon sits beside the photo in some cards and not in others",
+   "red against green is hard to tell apart for some readers"
+  ]
+ },
+ "resources": {
+  "own": [
+   "nine photos with the model's real answers and their per-token exit layers"
+  ],
+  "stock": [
+   "person and robot line icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded cards",
+   "question bubbles and answer boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "nine rounded chat cards",
+   "photos on top of the cards",
+   "light-blue user question bubbles",
+   "white answer boxes with coloured words",
+   "person and robot avatars"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "early exit",
+   "vision-language model",
+   "VQA",
+   "image captioning",
+   "token difficulty",
+   "efficient inference",
+   "layer-wise prediction",
+   "ViT-g OPT-2.7B"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "small-multiples",
+   "annotated-record-card",
+   "model-pictogram"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a token-level property, such as the layer at which a word is decided, by recolouring words in real chat examples inside a uniform grid of photo-plus-dialogue cards.",
+  "suits": "Qualitative-result teasers for models with per-token or per-step behaviour (early exit, speculative decoding, confidence) over VQA or captioning examples."
+ },
+ "tags": [
+  "chat-card-grid",
+  "photo-on-top",
+  "recoloured-words",
+  "line-icons",
+  "thin-outlines",
+  "google-slides-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "1 Introduction (p.3)"
+  ],
+  "evidence": [
+   "This figure provides some example outputs of FREE ViT-g OPT2.7B.",
+   "The different colours show the difficulty levels of tokens in captions.",
+   "Red: Easy to predict and predicted at initial (1-12) layers."
+  ]
+ },
+ "summary": "FREE adds early exits to vision-language models, training each exit adversarially so that a small transformer layer mimics the final layer. Figure 1 is a 3 by 3 gallery of rounded chat cards from FREE ViT-g OPT2.7B. Each card has a photo on top (a dog, a vulture, a steam train, planes, a traffic light, a bird, a pool, a zebra, a plane), user questions as light-blue bubbles with a person icon and the model's answers as white boxes with a robot icon. Words in the answers are recoloured by the layer at which they are predicted: red for easy tokens in layers 1 to 12, green for layers 13 to 24 and black for layers 25 to 32. The key appears only in the caption.",
+ "summary_zh": "FREE 为视觉语言模型加入提前退出。图是 3×3 圆角聊天卡片：照片配浅蓝用户提问气泡和带机器人图标的白色回答框；回答中的词按预测所在层着色：红 1–12 层，绿 13–24 层，黑 25–32 层，色码只在图注里说明。",
+ "confidence": "high",
+ "notes": "The nine cards are separately framed but neither lettered nor titled, so panel labels are null. The SVG holds one stray pink rectangle (#f4cccc, about 59 x 41 pt) that is not visible in the preview, probably a placeholder behind a photo.",
+ "venue": "ACL25"
+}

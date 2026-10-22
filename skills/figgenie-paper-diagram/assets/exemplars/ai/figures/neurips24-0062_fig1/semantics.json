@@ -1,0 +1,551 @@
+{
+ "paper_id": "neurips24-0062",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FunCoder",
+  "one_liner": "A code-generation framework that recursively splits a problem into sub-functions and picks the best composed implementation by functional consensus.",
+  "domain": [
+   "code generation",
+   "LLM program synthesis",
+   "divide and conquer"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "divide-conquer-flow",
+  "variant_note": "left-to-right flow split by a dash-dot line into divide and conquer halves; sub-functions pass through recursive FunCoder frames and rejoin at a sampling-and-consensus stage; a legend and a six-step tree strip sit underneath",
+  "argues": "Dividing a problem into sub-functions recursively and choosing among sampled compositions by functional consensus yields the final solution; the tree strip shows how the hierarchy grows and collapses.",
+  "subject": "problem function divided into sub-functions, solved recursively, sampled and voted into a final function, plus a six-step tree example",
+  "elements": [
+   {
+    "name": "FUNCODER ( f(x) )",
+    "type": "module",
+    "role": "entry point: takes the problem as a function signature f(x)",
+    "drawn_as": "white card with soft shadow, bold small-caps title and a dashed blue pill holding f(x)",
+    "container": "main flow frame",
+    "is_contribution": true
+   },
+   {
+    "name": "f'(x) =",
+    "type": "data",
+    "role": "partially implemented function whose body refers to the unimplemented sub-functions g(y) and h(z)",
+    "drawn_as": "blue-outlined white card with a skeleton of grey and coloured bars standing for code lines, two dashed slots at the bottom",
+    "container": "divide side",
+    "is_contribution": null
+   },
+   {
+    "name": "g(y)",
+    "type": "data",
+    "role": "unimplemented sub-function branched off f'(x), handed to FunCoder",
+    "drawn_as": "dashed teal pill",
+    "container": "f'(x) card",
+    "is_contribution": null
+   },
+   {
+    "name": "h(z)",
+    "type": "data",
+    "role": "second unimplemented sub-function, handed to FunCoder",
+    "drawn_as": "dashed pink pill",
+    "container": "f'(x) card",
+    "is_contribution": null
+   },
+   {
+    "name": "FUNCODER (two frames)",
+    "type": "module",
+    "role": "the same procedure applied recursively to each sub-function",
+    "drawn_as": "grey rounded frame with the small-caps title on its top edge, holding three pills: outlined, grey, filled",
+    "container": "main flow frame",
+    "is_contribution": true
+   },
+   {
+    "name": "g*(y)",
+    "type": "data",
+    "role": "solved sub-function g that the samples are built on",
+    "drawn_as": "teal-tinted pill with teal outline",
+    "container": "conquer side",
+    "is_contribution": null
+   },
+   {
+    "name": "h*(z)",
+    "type": "data",
+    "role": "solved sub-function h that the samples are built on",
+    "drawn_as": "pink-tinted pill with pink outline",
+    "container": "conquer side",
+    "is_contribution": null
+   },
+   {
+    "name": "Sampled Implementations",
+    "type": "data",
+    "role": "k candidate implementations f'(1) ... f'(k) written against the solved children",
+    "drawn_as": "blue-outlined white card listing f'(1), f'(2), vertical dots, f'(k-1), f'(k) in a staggered two-column layout",
+    "container": "conquer side",
+    "is_contribution": null
+   },
+   {
+    "name": "Possible Inputs",
+    "type": "data",
+    "role": "input vector X = (x1, x2, ..., xm) on which the candidates are run",
+    "drawn_as": "column vector in large brackets with a caption below",
+    "container": "conquer side",
+    "is_contribution": null
+   },
+   {
+    "name": "Functional Consensus",
+    "type": "operation",
+    "role": "compares candidates by their behaviour on possible inputs; the one sharing maximal similarity is kept",
+    "drawn_as": "plain title above a shadowed cell matrix (listed under pictures)",
+    "container": "conquer side",
+    "is_contribution": true
+   },
+   {
+    "name": "f*(x) =",
+    "type": "data",
+    "role": "final solution: the consensus implementation combined with the solved children",
+    "drawn_as": "blue-outlined card with a code skeleton and the solved pills g*(y), h*(z) inside",
+    "container": "conquer side",
+    "is_contribution": null
+   },
+   {
+    "name": "divide | conquer",
+    "type": "label",
+    "role": "names the two halves of the method",
+    "drawn_as": "grey words with faint arrows pointing outward from a dash-dot vertical line",
+    "container": "main flow frame",
+    "is_contribution": null
+   },
+   {
+    "name": "Legends",
+    "type": "container",
+    "role": "key for three states of a function: Problem f(x), Partially Implemented f'(x), Reached Consensus f*(x)",
+    "drawn_as": "framed box with three pink pills: dashed, solid outline, filled",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Example",
+    "type": "container",
+    "role": "one dependency tree redrawn after each divide or conquer step",
+    "drawn_as": "framed strip with six small trees chained by double-line arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "tree snapshots Divide(a) ... Conquer(A)",
+    "type": "instance",
+    "role": "state of the function tree after each step",
+    "drawn_as": "circles A-E with blue outline for solved nodes, dotted circles a-e for pending nodes",
+    "container": "Example",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "FUNCODER ( f(x) )",
+    "to": "f'(x) =",
+    "what": "the problem becomes a partially implemented function",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f'(x) =",
+    "to": "g(y), h(z)",
+    "what": "unimplemented sub-functions sit inside the partial body",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "g(y), h(z)",
+    "to": "FUNCODER frames",
+    "what": "each sub-function is fed back into FunCoder to be solved recursively",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "FUNCODER frames",
+    "to": "g*(y), h*(z)",
+    "what": "solved sub-functions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f'(x) =",
+    "to": "Sampled Implementations",
+    "what": "the partial body is completed k times",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "g*(y), h*(z)",
+    "to": "Sampled Implementations",
+    "what": "solved children the samples refer to",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sampled Implementations",
+    "to": "Possible Inputs",
+    "what": "candidates are evaluated on possible inputs (the arrow itself is unlabelled)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Sampled Implementations",
+    "to": "Functional Consensus",
+    "what": "candidates to be compared",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Possible Inputs",
+    "to": "Functional Consensus",
+    "what": "inputs on which behaviour is compared",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Functional Consensus",
+    "to": "f*(x) =",
+    "what": "the selected candidate becomes the final solution",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "divide",
+    "to": "conquer",
+    "what": "dash-dot vertical line splits the method into a decomposing half and a compositing half",
+    "kind": "other",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Legends",
+    "to": "pills and cards in the flow",
+    "what": "outline style gives the state: dashed = problem, solid = partially implemented, filled = reached consensus",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "g(y) (teal), h(z) (pink)",
+    "to": "g*(y), h*(z) and the matching bars in the code skeletons",
+    "what": "one colour per sub-function is kept through slots, FunCoder frames, solved pills and final card",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "tree snapshot 1",
+    "to": "tree snapshots 2-6",
+    "what": "state after each divide or conquer step",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "FUNCODER ( f(x) )",
+    "kind": "stage-pipeline",
+    "axis": "overview",
+    "shows": "the whole FunCoder flow in a light-grey frame: divide on the left, conquer on the right, ending in f*(x)",
+    "verdict": "ours"
+   },
+   {
+    "label": "Legends",
+    "kind": "other",
+    "axis": "other",
+    "shows": "key to the three states of a function by outline style",
+    "verdict": null
+   },
+   {
+    "label": "Example",
+    "kind": "worked-walkthrough",
+    "axis": "time",
+    "shows": "a dependency tree redrawn over six steps, captioned Divide(a), Divide(b), Divide(d, e) Conquer(D, E), Conquer(B), Divide(c) Conquer(C), Conquer(A)",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "f(x), f'(x), f*(x)",
+    "kind": "identity",
+    "at": "cards in the flow and legend rows",
+    "what": "the same function in three states: problem, partially implemented (prime), reached consensus (star)"
+   },
+   {
+    "marker": "f'(1) ... f'(k)",
+    "kind": "identity",
+    "at": "Sampled Implementations",
+    "what": "indices of the k sampled candidates"
+   },
+   {
+    "marker": "a-e (dotted) and A-E (solid)",
+    "kind": "identity",
+    "at": "Example trees",
+    "what": "lower-case dotted circles are functions not yet implemented, upper-case solid circles are solved ones (read from the legend's dashed versus solid coding)"
+   },
+   {
+    "marker": "Divide(a) ... Conquer(A)",
+    "kind": "order",
+    "at": "above each tree snapshot",
+    "what": "names the operation that leads to the snapshot, in order from left to right"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "functional-consensus matrix",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "about 6 x 6 grid of pastel blue, pink and white cells with a soft drop shadow; one row outlined in cyan (the selected candidate)"
+   },
+   {
+    "what": "code skeletons of f'(x) and f*(x)",
+    "content": "document",
+    "role": "illustration",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "rounded grey bars of varying length stand for code lines; short yellow, blue, teal and pink bars stand out, the teal and pink ones matching g and h"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "one dependency tree of functions a to e divided and conquered over six steps",
+    "form": "six small trees chained by double-line arrows, each captioned with its Divide / Conquer calls",
+    "real_values": false
+   },
+   {
+    "what": "k sampled implementations and m possible inputs written with symbols",
+    "form": "f'(1) ... f'(k) list and X = (x1, ..., xm) column vector",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "dependency-tree",
+    "drawn_as": "small trees of circles joined by lines; solid blue circles for solved functions, dotted circles for pending ones",
+    "parts": [
+     "root A",
+     "children B, C",
+     "grandchildren D, E"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "consensus-matrix",
+    "drawn_as": "grid of coloured cells with one row boxed in cyan, fed by candidates and possible inputs",
+    "parts": [
+     "cell grid",
+     "cyan row box",
+     "Possible Inputs vector"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "From the title card down into f'(x), then right through the FunCoder frames, samples and matrix to f*(x); the legend and tree strip are read last."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A wide light-grey frame holds the left-to-right flow with the title card overlapping its top-left corner; below it two framed boxes side by side, a small Legends key on the left and a wide Example strip of six trees on the right.",
+  "panel_count": 3,
+  "lanes": "two aligned rows (g and h) running through the divide and conquer halves",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes",
+   "panel-frames"
+  ],
+  "nesting_depth": 3,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.83,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fcfcfc",
+    "used_for": "ground of the main flow frame"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "cards and pills inside the frame"
+   },
+   {
+    "hex": "#eafaf8",
+    "used_for": "teal tint fill of the solved sub-function g*(y)"
+   },
+   {
+    "hex": "#fcf0f5",
+    "used_for": "pink tint fill of h*(z) and of the Reached Consensus key"
+   },
+   {
+    "hex": "#eaf3fc",
+    "used_for": "light blue tint of cards and tree nodes"
+   },
+   {
+    "hex": "#83cfc8",
+    "used_for": "teal outlines of sub-function g"
+   },
+   {
+    "hex": "#ea9ebb",
+    "used_for": "pink outlines of sub-function h and of the legend pills"
+   },
+   {
+    "hex": "#7bafed",
+    "used_for": "blue outlines of f cards, the f(x) pill and tree nodes"
+   },
+   {
+    "hex": "#94bff2",
+    "used_for": "lighter blue outlines of the large cards"
+   },
+   {
+    "hex": "#5385d5",
+    "used_for": "strong blue cells of the consensus matrix"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "grey outlines of the FunCoder frames and the legend boxes"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey code-skeleton bars and neutral pills"
+   },
+   {
+    "hex": "#404040",
+    "used_for": "heavy arrows and the title text"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "mostly 0.75 pt grey or coloured outlines, 1 to 1.25 pt on the large cards; dashed or dash-dot outlines for unsolved functions",
+  "font": "sans (Noto Sans) 5-7.5 pt for labels and captions; serif math italics for f(x), g(y), x_i; bold small-caps serif title at 12.5 pt",
+  "corners": "rounded",
+  "arrows": "heavy dark-grey elbow and straight arrows with large filled heads; faint grey arrows beside divide / conquer; open double-line arrows between tree snapshots",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under the title card and the consensus matrix (both bitmaps)",
+  "model_depiction": "box",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "teal = sub-function g and its solved form, pink = sub-function h (also the state key in the legend), light blue = the parent function cards and tree nodes, grey = FunCoder machinery and neutral code bars",
+  "line_style_means": "dashed outline = not yet solved (problem, sub-function slots, pending nodes), solid outline = partially implemented, filled = reached consensus; dash-dot vertical line = divide | conquer boundary",
+  "shape_means": "rounded card = function body, pill = function signature, grey frame with three pills = a FunCoder call, circle = function node in the tree",
+  "marker_means": "prime = partially implemented, star = solved; lower-case node = pending, upper-case node = solved; cyan box = the winning row of the matrix",
+  "emphasis": "title card with a shadow at the top left, heavy dark arrows trace the main path, cyan box on the consensus row, bold small-caps FUNCODER repeated on each recursion frame",
+  "reusable_patterns": [
+   "legend that defines three states of one object by outline style (dashed, solid, filled) and is reused on every card of the flow",
+   "state-snapshot strip: the same tree redrawn six times with captions naming the operation between snapshots",
+   "dash-dot vertical divider labelled divide and conquer with faint outward arrows splitting a recursive method into two halves",
+   "cyan outline box marking the selected row of a matrix",
+   "recursion drawn as repeated grey frames with the method's name on the edge, each holding three pills that run from unsolved to solved",
+   "one colour per sub-function carried through slots, frames, solved pills and the final card"
+  ],
+  "weaknesses": [
+   "example strip and matrix labels are very small (4-6 pt)",
+   "the meaning of the matrix cell colours is not explained in the figure or caption"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "cards, pills and arrows of the flow",
+   "code-skeleton bars",
+   "consensus matrix cells",
+   "tree snapshots",
+   "legend key"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "problem function card f(x)",
+   "partially implemented function with code-skeleton bars",
+   "dashed sub-function pills g(y) and h(z)",
+   "FunCoder recursion frames",
+   "sampled implementation list",
+   "consensus matrix with a cyan row",
+   "possible-input vector X",
+   "six dependency-tree snapshots"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "code generation",
+   "divide and conquer",
+   "functional consensus",
+   "recursive decomposition",
+   "sub-functions",
+   "function tree",
+   "LLM",
+   "HumanEval"
+  ],
+  "tags": [
+   "notation-key",
+   "module-state-coding",
+   "colour-coded-groups",
+   "matrix-cell-grid",
+   "small-multiples",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "recursion-frames",
+    "what": "a titled frame repeated once per branch, standing for the same procedure called recursively on each sub-problem"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give one object three states by outline style (dashed, solid, filled), define them once in a small legend, reuse the coding on every card and again in a snapshot strip, so a recursive method can be read at both the flow level and the toy-example level.",
+  "suits": "recursive or hierarchical methods (decomposition, tree search, sub-goal agents) where one object changes state step by step."
+ },
+ "tags": [
+  "light-grey frame",
+  "pastel teal-pink-blue",
+  "title card with shadow",
+  "dashed state outlines",
+  "legend plus example strip",
+  "math italics"
+ ],
+ "provenance": {
+  "sections": [
+   "method paragraph that introduces FunCoder (p.4, listed under Abstract in the index)"
+  ],
+  "evidence": [
+   "FUNCODER recursively branches off sub-functions as smaller goals during code generation, represented by a tree hierarchy.",
+   "Functional consensus is calculated by evaluating candidates on possible inputs.",
+   "re-composites sub-functions, and selects the best using functional consensus (right)"
+  ]
+ },
+ "summary": "FunCoder is a code-generation framework that recursively branches sub-functions off a problem function (divide) and then picks the best composed implementation by functional consensus (conquer). The figure is a left-to-right flowgraph in a light grey frame: a title card FUNCODER(f(x)) feeds a partially implemented f'(x) drawn as a code skeleton with dashed teal and pink slots g(y) and h(z); each slot goes through a grey FUNCODER frame to a solved g*(y) or h*(z); k sampled implementations are run on possible inputs X and compared in a blue-and-pink matrix whose winning row is boxed in cyan, giving the final f*(x). Below, a Legends key defines dashed, solid and filled states and an Example strip redraws one dependency tree over six divide and conquer steps.",
+ "summary_zh": "FunCoder 把问题函数递归拆成子函数，再用功能共识从多个采样实现中选优。图在灰框内自左向右画出拆分、递归求解、共识矩阵投票直到 f*(x)，下方有图例，并用六帧依赖树演示拆分与合并。",
+ "confidence": "high",
+ "notes": "Prior kinds kept; arrangement changed from column to bands. Both bitmaps are the consensus matrix and the shadowed title card; the code skeletons are vector. Colours of the code-skeleton bars are read from the picture, not from the text.",
+ "venue": "NeurIPS24"
+}

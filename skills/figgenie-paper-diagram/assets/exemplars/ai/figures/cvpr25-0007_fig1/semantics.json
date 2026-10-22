@@ -1,0 +1,472 @@
+{
+ "paper_id": "cvpr25-0007",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LiveEdit (task: lifelong VLLM editing)",
+  "one_liner": "A lifelong editor for vision LLMs; the figure shows the task: sequential edits judged on reliability, generality and locality.",
+  "domain": [
+   "lifelong model editing",
+   "vision-language models",
+   "knowledge editing"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "iteration-rounds",
+  "variant_note": "three edit rounds E_1, E_2, E_t with ellipses, each showing the edit image pair, the edit sentence and a generality question while the model goes f_θ0 to f_θt; at the right a test-case box and an answer table per model version",
+  "argues": "A well-edited VLLM keeps earlier edits, generalises each edit to related queries, and leaves unrelated knowledge unchanged as edits keep arriving.",
+  "subject": "Three sequential edit rounds on image-question pairs with the model versions f_θ0 to f_θt, the test queries and the answers of each version in a table",
+  "elements": [
+   {
+    "name": "Who wrote the play “Romeo and Juliet”? | How many continents are there on Earth? | What is the boiling point of water?",
+    "type": "text-block",
+    "role": "unrelated text queries of the locality domain whose answers must stay the same",
+    "drawn_as": "three lines in a grey rounded strip with a dark outline, next to three unrelated photos and ellipses",
+    "container": "locality strip",
+    "is_contribution": false
+   },
+   {
+    "name": "edit rounds E_1, E_2, E_t",
+    "type": "container",
+    "role": "one edit round: an edit image pair, the edit sentence and a generality question",
+    "drawn_as": "light-blue rounded box with a blue frame holding two image tiles, above a green rounded box; three copies with ellipses between",
+    "container": "left part",
+    "is_contribution": false
+   },
+   {
+    "name": "E_1: This cake is to be designed for Christmas → birthday | E_2: What is the person doing? It's Jumping → Skiing | E_t: What does this sign mean? Slow down → Stop",
+    "type": "text-block",
+    "role": "the knowledge edit: a question whose old answer is replaced by the new target after the arrow",
+    "drawn_as": "peach block with orange text in the green box of each round",
+    "container": "edit rounds E_1, E_2, E_t",
+    "is_contribution": false
+   },
+   {
+    "name": "What type of cake is this? | What's the sport? | What do the hexagon mean?",
+    "type": "text-block",
+    "role": "generality question about the edited image of the round",
+    "drawn_as": "green text on a pale green block under the edit sentence",
+    "container": "edit rounds E_1, E_2, E_t",
+    "is_contribution": false
+   },
+   {
+    "name": "f_θ0, f_θ1, f_θ2, ..., f_θt",
+    "type": "module",
+    "role": "the VLLM before any edit and after 1, 2 and t edits",
+    "drawn_as": "italic labels; f_θ1, f_θ2 and f_θt on peach boxes hanging under the orange-framed edit image, f_θ0 at the far left, joined by thick orange block arrows",
+    "container": "left part",
+    "is_contribution": false
+   },
+   {
+    "name": "legend: Edit Target, Generality Data, Locality Target, Generalization Domain, Locality Domain",
+    "type": "label",
+    "role": "keys the colours and frames of the data kinds",
+    "drawn_as": "one row of small symbols (orange dot, green and blue dots, dark dot, blue-green frame icon, grey frame icon) with words under the left part",
+    "container": "left part",
+    "is_contribution": false
+   },
+   {
+    "name": "E_1 Rel. | E_1 T-Gen. | E_t M-Gen. | M-Loc. | T-Loc.",
+    "type": "container",
+    "role": "test cases with blanks to be completed: reliability, text generality, modal generality, modal locality, text locality",
+    "drawn_as": "black-framed box with an orange-framed baby photo, a blue-framed stop-sign photo and a dark-framed photo beside bold-italic tags and queries that end in ____",
+    "container": "top-right box",
+    "is_contribution": false
+   },
+   {
+    "name": "answer table f_θ0 | f_θ1 | ... | f_θt",
+    "type": "other",
+    "role": "answers of each model version to the five test cases, with right and wrong marked",
+    "drawn_as": "borderless table in a black frame: one row per test case, columns f_θ0, f_θ1, an ellipsis column and f_θt, answer words followed by a green tick or red cross",
+    "container": "bottom-right box",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "f_θ0",
+    "to": "f_θ1",
+    "what": "edit E_1 turns the first model into the second",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "f_θ1",
+    "to": "f_θ2",
+    "what": "edit E_2 turns the second model into the third",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "f_θ2",
+    "to": "f_θt",
+    "what": "further edits up to E_t, ellipsis between",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "orange-framed edit image",
+    "to": "f_θ1, f_θ2, f_θt",
+    "what": "the peach model box hangs directly under the edit image of its round",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "edit sentence of a round",
+    "to": "orange-framed edit image",
+    "what": "orange frame and orange-tinted sentence form the edit target",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "blue-framed generality image",
+    "to": "generality question",
+    "what": "blue frame and green question block form the generality data",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "locality strip",
+    "to": "M-Loc. and T-Loc. test cases",
+    "what": "dark and grey locality items reappear as the locality test cases",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "test-case box",
+    "to": "answer table",
+    "what": "table rows carry the tags of the test cases (E_1 Rel., E_1 T-Gen., E_t M-Gen., M-Loc., T-Loc.); the boxes are stacked",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "f_θ0, f_θ1, f_θt in the edit chain",
+    "to": "column heads of the answer table",
+    "what": "the same version labels head the table columns",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "worked-walkthrough",
+    "axis": "time",
+    "shows": "locality strip above three edit rounds E_1, E_2, E_t with the model going f_θ0 to f_θt, and a legend row",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "test cases with blanks for reliability, text and modal generality, modal and text locality",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "concept-schematic",
+    "axis": "time",
+    "shows": "answers of f_θ0, f_θ1 and f_θt to each test case, with green ticks and red crosses (caption: an effectively edited VLLM)",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "E_1, E_2, E_t",
+    "kind": "order",
+    "at": "labels of the edit sentences and test cases",
+    "what": "number the successive edits"
+   },
+   {
+    "marker": "f_θ0, f_θ1, f_θ2, f_θt",
+    "kind": "order",
+    "at": "model labels along the middle row and the table header",
+    "what": "name the model after 0, 1, 2 and t edits"
+   },
+   {
+    "marker": "Rel., T-Gen., M-Gen., T-Loc., M-Loc.",
+    "kind": "identity",
+    "at": "bold tags in the test-case box and as table row labels",
+    "what": "name reliability, text and modal generality, text and modal locality (caption)"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "unrelated photos of the locality domain: a donut and magazine on a table, an airport apron, a clock tower",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "square tiles with a slate frame in the grey strip, separated by an ellipsis"
+   },
+   {
+    "what": "image pairs of the edit rounds: a rainbow cake and a baby with a balloon, two skiers, two stop signs",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "square tiles, the generality image with a blue frame and the edit image with an orange frame, inside a light-blue round box"
+   },
+   {
+    "what": "images of the test cases repeated from the rounds and the strip: baby, stop sign, donut and magazine",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "square tiles with orange, blue and slate frames beside the queries they belong to"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "edit sentences with old and new answer: 'Christmas → birthday', 'Jumping → Skiing', 'Slow down → Stop'",
+    "form": "peach blocks with orange text, the change written after an arrow",
+    "real_values": true
+   },
+   {
+    "what": "test queries ending in a blank, for example 'This cake is to be designed for ____' and 'What type of cake is this? It is ____'",
+    "form": "bold-italic tag followed by the query and an underscore blank",
+    "real_values": true
+   },
+   {
+    "what": "answers of f_θ0, f_θ1 and f_θt: Christmas to Birthday, Slow down to Stop, Banana and Seven unchanged",
+    "form": "table cells with the answer word and a green tick or red cross",
+    "real_values": true
+   },
+   {
+    "what": "locality queries: 'Who wrote the play “Romeo and Juliet”?', 'How many continents are there on Earth?', 'What is the boiling point of water?'",
+    "form": "three text lines in the grey strip",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a test-case box with an image per query type and blanks, plus a table of answers per model version marked with ticks and crosses",
+    "parts": [
+     "test cases",
+     "answer table",
+     "ticks and crosses"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "grey rounded strip holding three unrelated photos, an ellipsis and three text queries for the locality data",
+    "parts": [
+     "photos",
+     "ellipsis",
+     "queries"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "query text ending in a blank ____ for the model to fill, with a bold-italic tag in front",
+    "parts": [
+     "tag",
+     "query",
+     "blank"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the grey locality strip or the first edit round E_1 at the top left, follows the rounds and the orange arrows to the right, then moves to the test-case box and the answer table at the right."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Left, about 58% of the width: a grey locality strip on top, a middle row of three blue-framed edit rounds (E_1, E_2, E_t, ellipses between) with orange arrows and peach model-version boxes hanging under the edit images, green question blocks below, and a legend row at the foot. Right: two stacked black-framed boxes, test cases above and the answer table below.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "below",
+  "panel_markers": "none",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.93,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f8cbad",
+    "opacity": 0.89,
+    "used_for": "peach blocks of the edit sentences and the model-version boxes"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "grey locality strip"
+   },
+   {
+    "hex": "#deecf8",
+    "used_for": "light-blue edit round boxes"
+   },
+   {
+    "hex": "#d9ebd2",
+    "used_for": "light-green generality question blocks"
+   },
+   {
+    "hex": "#f17200",
+    "used_for": "edit target: image frames, text, thick arrows"
+   },
+   {
+    "hex": "#246db2",
+    "used_for": "blue frames of the round boxes and generality images"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "slate frames of the locality strip and locality photos (stroke)"
+   },
+   {
+    "hex": "#068e51",
+    "used_for": "green frames of the question boxes (stroke)"
+   },
+   {
+    "hex": "#00b050",
+    "used_for": "green ticks for right answers"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red crosses for wrong answers"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "black frames of the two right-hand boxes (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.25 pt coloured rounded frames (blue, green, orange, slate) and black frames; 0.75 pt thin strokes",
+  "font": "serif (Times New Roman) 7 pt for text and answers; math italics (Cambria Math) for E and f_θ with 4.5 to 5.5 pt subscripts; bold tags Rel., T-Gen.; 10 to 11.5 pt bold ellipses",
+  "corners": "rounded",
+  "arrows": "thick orange block arrows between model versions; no other arrows; ellipses stand for omitted rounds",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "orange = edit target (frame of the edit image, edit sentence block, arrows and model boxes along the edit chain); blue = generality image and generalization domain; green = generality question; slate = locality target; grey = locality domain; in the table green tick = correct response, red cross = wrong response",
+  "line_style_means": "thick orange arrows = successive model versions after each edit; coloured rounded frames = kind of data (see legend); black frames = the two right-hand boxes",
+  "shape_means": "rounded rectangle = a data group; square tile = an image; peach box under an edit image = the model after that edit",
+  "marker_means": "E with a subscript = the edit number; f_θ with a subscript = the model after that many edits; Rel., T-Gen., M-Gen., T-Loc., M-Loc. = reliability, text and modal generality, text and modal locality (caption); tick = correct, cross = wrong",
+  "emphasis": "Orange arrows and peach boxes run along the middle row to show the model changing; in the table, green ticks against a few red crosses show the edits taking hold.",
+  "reusable_patterns": [
+   "colour-keyed rounded frames separate edit, generality and locality data, with a legend row below",
+   "chain of model versions f_θ0 to f_θt with thick orange arrows and each version on a box under the edit that produced it",
+   "the edit written inside the sentence as old → new",
+   "ellipses between rounds to stand for t rounds",
+   "answer table with one row per test case and one column per model version, ticks and crosses",
+   "test-case box with a blank for the model to fill in"
+  ],
+  "weaknesses": [
+   "the five-item legend of small symbols has to be matched to frames and text by colour alone",
+   "121 text items at 7 pt make the figure dense"
+  ]
+ },
+ "resources": {
+  "own": [
+   "photos of the edit, generality and locality samples",
+   "edit sentences, queries and answers",
+   "answer table"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "rounded frames and legend symbols",
+   "orange block arrows",
+   "peach model-version boxes",
+   "ticks and crosses"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "grey locality strip with photos and queries",
+   "blue-framed edit rounds with image pairs",
+   "orange edit sentences with old to new answers",
+   "peach model-version boxes with orange arrows",
+   "test-case box with blanks",
+   "answer table with ticks and crosses",
+   "legend row"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "lifelong editing",
+   "knowledge editing",
+   "vision-language models",
+   "reliability",
+   "generality",
+   "locality",
+   "edit rounds",
+   "model versions"
+  ],
+  "tags": [
+   "task-definition",
+   "checkpoint-chain",
+   "colour-coded-groups",
+   "verdict-marks",
+   "annotated-record-card",
+   "comparison-table"
+  ],
+  "new_tags": [
+   {
+    "name": "old-to-new-inline-edit",
+    "what": "an edit is written inside its sentence as 'old answer → new answer' in a tinted block"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a sequential-update setting as a row of repeated rounds with a chain of model versions f_θ0 to f_θt under them and an answer table whose rows are test cases and columns are versions, with ticks and crosses showing what held and what changed; key every data kind by a colour and a legend row.",
+  "suits": "Continual learning, model editing or unlearning settings in which the same test queries are asked again after each update."
+ },
+ "tags": [
+  "colour-keyed frames",
+  "repeated rounds with ellipses",
+  "orange arrow chain",
+  "answer table with ticks and crosses",
+  "photo tiles with coloured frames",
+  "legend row",
+  "serif text at 7 pt"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "the edited VLLM is required to correctly respond to queries involving the edited data within the generalization domain",
+   "while maintaining consistent responses in locality domains",
+   "The bottom right illustrates the responses of an effectively edited VLLM across several editing timesteps."
+  ]
+ },
+ "summary": "LiveEdit edits vision LLMs in a lifelong setting, and Figure 1 defines that setting with concrete examples. At the left, a grey locality strip of unrelated photos and questions sits above three edit rounds (E_1, E_2, E_t, with ellipses), each a blue-framed pair of images (a generality image and an orange-framed edit image), an orange edit sentence such as 'Christmas → birthday' and a green generality question, while orange arrows carry the model from f_θ0 through f_θ1 and f_θ2 to f_θt. At the right, a framed box lists test cases with blanks (reliability, text and modal generality, locality) and a table shows each model version's answers with green ticks and red crosses.",
+ "summary_zh": "图定义了视觉大模型的终身知识编辑：左侧灰色条放无关的局部性样本，下面三轮编辑（E1、E2、Et）各含图像对、橙色编辑句和绿色泛化问题，橙色箭头把模型从 f0 推进到 ft；右侧是带空白的测试用例，以及各版本回答的对错表。",
+ "confidence": "high",
+ "notes": "Prior worked-walkthrough / iteration-rounds kept; concept-schematic added for the task and answer-table part. LiveEdit's own components (expert generator, routing) are not drawn: the figure defines the task. The caption places the test cases at the top left, but in the printed figure that box is at the top right. The caption's definition of the four tags groups M-Loc. with text locality; the figure's question 'What's the yellow thing?' is a modal (image) query.",
+ "venue": "CVPR25"
+}

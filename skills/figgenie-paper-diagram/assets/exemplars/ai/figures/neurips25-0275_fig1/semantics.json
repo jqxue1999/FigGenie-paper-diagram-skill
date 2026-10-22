@@ -1,0 +1,489 @@
+{
+ "paper_id": "neurips25-0275",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "T-REGS",
+  "one_liner": "A regulariser for joint-embedding self-supervised learning that maximises the minimum-spanning-tree length of each branch's embeddings, with a sphere constraint, to avoid collapse and spread points uniformly.",
+  "domain": [
+   "self-supervised learning",
+   "representation regularisation",
+   "minimum spanning tree on a hypersphere"
+  ],
+  "subfield": "ml-core",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "objective-graph",
+  "variant_note": "two view branches run into one embedding sphere where three loss terms are drawn as three line styles, with a second sphere showing the outcome",
+  "argues": "Aligning the two views while pushing apart the edge-connected points of each branch's spanning tree, on a sphere, yields uniformly distributed aligned embeddings without dimensional collapse.",
+  "subject": "Twin augmented-view branches through a shared encoder and projector into embeddings on a hypersphere, with MST edges and three loss terms, then the resulting uniform configuration.",
+  "elements": [
+   {
+    "name": "Images / I",
+    "type": "data",
+    "role": "source images from which the two augmented views are made",
+    "drawn_as": "offset stack of four blank rounded cards with dark outline, bold italic I below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "t~T and t'~T",
+    "type": "operation",
+    "role": "two sampled transformations giving the two augmented views",
+    "drawn_as": "curved dark-grey arrows branching up and down from the image stack, italic labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Transformed images X, X'",
+    "type": "data",
+    "role": "the two augmented views",
+    "drawn_as": "card stacks, one per branch, letter X in orange and X' in light blue below",
+    "container": "Transformed images",
+    "is_contribution": false
+   },
+   {
+    "name": "f_θ",
+    "type": "module",
+    "role": "encoder shared by the two branches",
+    "drawn_as": "large dark-grey trapezoid narrowing to the right, white italic f",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Representations Y, Y'",
+    "type": "data",
+    "role": "encoder outputs",
+    "drawn_as": "stacks of tall rounded bars, letters Y orange and Y' blue",
+    "container": "Representations",
+    "is_contribution": false
+   },
+   {
+    "name": "h_φ",
+    "type": "module",
+    "role": "projector that maps representations to embeddings",
+    "drawn_as": "smaller dark-grey trapezoid widening to the right, white italic h",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Embeddings Z, Z'",
+    "type": "data",
+    "role": "projected embeddings of each view, placed on the sphere",
+    "drawn_as": "curved arrows ending at the sphere, orange Z and blue Z'",
+    "container": "Embeddings",
+    "is_contribution": false
+   },
+   {
+    "name": "sphere S^{d-1}",
+    "type": "region",
+    "role": "the unit hypersphere on which embeddings live, with its origin (0,0) marked",
+    "drawn_as": "grey wireframe globe bitmap, small cross at the centre",
+    "container": "Embeddings",
+    "is_contribution": true
+   },
+   {
+    "name": "z_1..z_4 and z_1'..z_4'",
+    "type": "instance",
+    "role": "four toy embeddings per view",
+    "drawn_as": "filled circles with white italic labels, orange for view 1 and light blue for view 2",
+    "container": "Embeddings",
+    "is_contribution": false
+   },
+   {
+    "name": "MST(Z) and MST(Z')",
+    "type": "data",
+    "role": "minimum spanning tree over each view's embeddings",
+    "drawn_as": "orange and blue polylines through the points, ends flared into bow-tie arrowheads",
+    "container": "Embeddings",
+    "is_contribution": true
+   },
+   {
+    "name": "L_MSE(Z,Z')",
+    "type": "formula",
+    "role": "enforces view-invariance (or the objective of another SSL method when used as an auxiliary term)",
+    "drawn_as": "legend row: orange-to-blue gradient line, term set in a gradient colour",
+    "container": "legend",
+    "is_contribution": false
+   },
+   {
+    "name": "L_E(Z), L_E(Z')",
+    "type": "formula",
+    "role": "increase the MST(Z) and MST(Z') lengths",
+    "drawn_as": "legend row: blue and orange bow-tie glyphs, terms coloured by view",
+    "container": "legend",
+    "is_contribution": true
+   },
+   {
+    "name": "L_S(Z), L_S(Z')",
+    "type": "formula",
+    "role": "enforce the sphere constraint",
+    "drawn_as": "legend row: dotted dark-grey line, terms in grey",
+    "container": "legend",
+    "is_contribution": true
+   },
+   {
+    "name": "Uniformly distributed aligned embeddings",
+    "type": "region",
+    "role": "the result after training: paired points coincide and cover the sphere evenly",
+    "drawn_as": "second wireframe globe with four orange-blue pairs spread around it",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Images / I",
+    "to": "Transformed images X, X'",
+    "what": "two sampled transformations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformed images X, X'",
+    "to": "f_θ",
+    "what": "views",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "f_θ",
+    "to": "Representations Y, Y'",
+    "what": "encoded views",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Representations Y, Y'",
+    "to": "h_φ",
+    "what": "representations",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h_φ",
+    "to": "Embeddings Z, Z'",
+    "what": "projected embeddings, landing on the sphere",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "z_i",
+    "to": "z_i'",
+    "what": "L_MSE pulls the two views of the same point together",
+    "kind": "gradient",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "MST edges of each branch",
+    "to": "connected points",
+    "what": "L_E lengthens the tree, repelling edge-connected points",
+    "kind": "gradient",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "points off the sphere",
+    "to": "sphere surface",
+    "what": "L_S keeps points on the sphere",
+    "kind": "gradient",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "legend rows",
+    "to": "line styles on the left sphere",
+    "what": "each legend glyph is the same line style or arrowhead drawn on the sphere",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "orange / blue",
+    "to": "X, Y, Z, dots, MST edges and formula terms of each view",
+    "what": "one colour per view",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "left sphere",
+    "to": "right sphere",
+    "what": "result of training with the three terms",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "Training set-up: two views through shared f and h into embeddings on a sphere, with the three loss terms keyed by line style in a legend below",
+    "verdict": "ours"
+   },
+   {
+    "label": "Uniformly distributed aligned embeddings",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "The outcome: z_i and z_i' coincide and the pairs are spread evenly over the sphere without collapse",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "z_1..z_4, z_1'..z_4'",
+    "kind": "identity",
+    "at": "dots on both spheres",
+    "what": "numbers the four toy points; the prime marks the second view; the same indices on the right sphere show pairs coinciding"
+   },
+   {
+    "marker": "X, Y, Z and X', Y', Z'",
+    "kind": "identity",
+    "at": "under each stack and at the arrow ends",
+    "what": "names images, representations and embeddings of each view, in the view colour"
+   },
+   {
+    "marker": "Transformed images, Representations, Embeddings",
+    "kind": "section",
+    "at": "tops of the columns",
+    "what": "heads the stages of the left panel"
+   },
+   {
+    "marker": "S^{d-1} and (0,0) with a small cross",
+    "kind": "identity",
+    "at": "beside and inside each sphere",
+    "what": "names the hypersphere and marks its origin"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "grey wireframe globe",
+    "stands_for": "the unit hypersphere S^{d-1} that embeddings live on",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "offset stack of blank cards",
+    "stands_for": "a batch of images (original and the two views)",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "stack of tall rounded bars",
+    "stands_for": "a batch of representation vectors",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "four paired embeddings z_i and z_i' on a sphere with their two spanning trees, shown before and after training",
+    "form": "coloured dots on globes joined by coloured polylines",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "orange and blue dots on a 3D wireframe globe, joined by coloured MST polylines, a dotted constraint and a gradient pair line",
+    "parts": [
+     "sphere",
+     "dots",
+     "MST edges"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "dark-grey trapezoids: a large one narrowing to the right (encoder f) and a smaller one widening to the right (projector h)",
+    "parts": [
+     "f_θ",
+     "h_φ"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "paired points z_i and z_i' of the two views joined by an orange-to-blue gradient line; repulsion is shown by outward bow-tie arrowheads on each view's own tree edges",
+    "parts": [
+     "z_i",
+     "z_i'",
+     "gradient line",
+     "bow-tie arrowheads"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "siamese-branches",
+    "drawn_as": "two parallel rows with identical f_θ and h_φ symbols, orange row on top and blue row below",
+    "parts": [
+     "top branch",
+     "bottom branch"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the image stack at the far left, forks into the orange top and blue bottom branches, follows them to the sphere, reads the legend below it, then jumps right past the thin rule to the result sphere."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "A wide left panel holds two parallel left-to-right view branches that converge on a sphere, with a three-row loss legend underneath; a thin vertical rule then separates a smaller right panel with the result sphere. Content stops short of the right edge of the canvas.",
+  "panel_count": 2,
+  "lanes": "2 parallel horizontal view branches (orange on top, blue below) with the same block sequence",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.7,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#495057",
+    "used_for": "text, encoder and projector trapezoids, plain arrows, sphere labels and dotted constraint lines"
+   },
+   {
+    "hex": "#495057",
+    "opacity": 0.8,
+    "used_for": "softer dark grey on part of the network blocks"
+   },
+   {
+    "hex": "#fd9e02",
+    "used_for": "view 1: X, Y, Z, dots z_i, MST(Z) edges, matching formula terms"
+   },
+   {
+    "hex": "#8ecae6",
+    "used_for": "view 2: X', Y', Z', dots z_i', MST(Z') edges, matching formula terms"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "thin dark outlines only on the card stacks; trapezoids and dots have no outline; MST edges are filled ribbons; dotted dark-grey lines for the sphere constraint",
+  "font": "serif TeX-like face (Type 3), 8.5 pt for labels and loss terms, 9.5 pt capital letters, 11 pt for f and h, 5 to 6.5 pt subscripts; math italics for symbols",
+  "corners": "rounded",
+  "arrows": "short straight dark-grey arrows with small heads between blocks, two curved forking arrows from the image stack, flared bow-tie heads on MST edges",
+  "rendering": "mixed",
+  "effects": "wireframe globe bitmaps with perspective shading; orange-to-blue gradient strokes and one gradient-coloured formula",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "orange = view 1 branch, light blue = view 2 branch, kept on images, embeddings, dots, tree edges and formula terms; dark grey = shared networks and neutral text",
+  "line_style_means": "gradient orange-to-blue line = L_MSE aligns the two views; bow-tie arrowheads on tree edges = L_E lengthens the tree; dotted line = L_S sphere constraint",
+  "shape_means": "trapezoid = network (encoder narrowing, projector widening); card stack = batch of images; bar stack = batch of representations; dot on globe = embedding",
+  "marker_means": "subscripts index the toy points and primes mark the second view; capital letters X, Y, Z name the stage tensors",
+  "emphasis": "orange and blue are the only chromatic colours and carry the whole story; the legend repeats the drawn glyphs so each loss is read off the sphere; the right sphere repeats the same globe as end state",
+  "reusable_patterns": [
+   "legend rows whose swatch is the very line style or arrowhead drawn on the figure, followed by the loss term in matching colours",
+   "one colour per view carried through tensors, points, edges and formula terms",
+   "gradient line between two colour-coded points for 'pull together'",
+   "outward bow-tie arrowheads on an edge for 'push apart / lengthen'",
+   "the same globe drawn twice with a thin rule between, for method and result"
+  ],
+  "weaknesses": [
+   "points, tree edges, gradient links and dotted lines overlap on the left sphere",
+   "the right quarter of the canvas is empty"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "card and bar stacks",
+   "trapezoid networks",
+   "dots, MST ribbons and legend glyphs",
+   "two wireframe sphere bitmaps"
+  ],
+  "unknown": [
+   "how the sphere bitmaps were rendered"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "two parallel view branches",
+   "dark trapezoids f and h",
+   "wireframe sphere with orange and blue dots",
+   "MST polylines with bow-tie ends",
+   "three-row loss legend",
+   "second sphere with aligned pairs"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "self-supervised learning",
+   "minimum spanning tree",
+   "hypersphere",
+   "uniformity",
+   "dimensional collapse",
+   "view invariance",
+   "regularisation",
+   "joint embedding"
+  ],
+  "tags": [
+   "embedding-space-sketch",
+   "colour-coded-groups",
+   "stacked-cards"
+  ],
+  "new_tags": [
+   {
+    "name": "loss-glyph-legend",
+    "what": "legend rows pair a line style or arrowhead used on the drawing with the loss term it stands for, terms coloured like the elements they act on"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Key each loss term by a distinct line or arrowhead style (gradient line = align, bow-tie = repel, dotted = constrain) drawn identically on the embedding picture and in the legend, with the formula term coloured by the view it acts on; repeat the same space at the end state beside it.",
+  "suits": "Regularisers or objectives that act geometrically on embeddings (alignment, repulsion, uniformity, constraints) in SSL, metric learning or representation analysis."
+ },
+ "tags": [
+  "two-colour-views",
+  "wireframe-sphere",
+  "legend-below",
+  "twin-branches",
+  "before-after-pair",
+  "latex-typeset"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)",
+   "method overview (p.8)"
+  ],
+  "evidence": [
+   "Two augmented views X, X′ are encoded by fθ and projected by hϕ into embeddings Z, Z′.",
+   "maximizes the minimum-spanning-tree length on each branch, LE(Z) and LE(Z′), repelling edge-connected points",
+   "As a result, T-REGS induces uniformly distributed embeddings without dimensional collapse."
+  ]
+ },
+ "summary": "T-REGS is a regularisation framework for joint-embedding self-supervised learning that maximises the length of a minimum spanning tree over each branch's embeddings, together with a sphere constraint, to prevent dimensional collapse and promote uniformity. Figure 1 shows two augmented views of an image flowing through a shared encoder f and projector h (grey trapezoids) into embeddings Z and Z', drawn as orange and blue points on a wireframe sphere. Three line styles tie the loss terms to the picture: a gradient line aligns paired views, bow-tie arrowheads on the tree edges push points apart, dotted lines hold points on the sphere. A second sphere shows the outcome: aligned pairs spread evenly.",
+ "summary_zh": "T-REGS 用最小生成树长度做自监督正则。图1左侧：两个增广视图经共享的编码器 f 与投影头 h 得到嵌入，画成球面上的橙、蓝点；三种线型对应三项损失；右侧球面展示结果：成对点对齐且均匀分布。",
+ "confidence": "high",
+ "notes": "Pre-screen said 2 panels with no pictures and kept model-anatomy first; confirmed. The two sphere bitmaps (one PNG, one JPEG) and several small gradient bitmaps (the L_MSE links between z_i and z_i', the legend swatch and the gradient-coloured L_MSE text) are the only bitmaps; the card and bar stacks are vector. The left panel has no title of its own; its columns carry headings.",
+ "venue": "NeurIPS25"
+}

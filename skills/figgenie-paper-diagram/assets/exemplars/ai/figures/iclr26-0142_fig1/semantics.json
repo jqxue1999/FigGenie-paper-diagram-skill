@@ -1,0 +1,589 @@
+{
+ "paper_id": "iclr26-0142",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "WebDevJudge",
+  "one_liner": "A meta-evaluation benchmark of human-preference labels over paired web implementations, built with rubric trees, for testing LLM, MLLM and agentic judges.",
+  "domain": [
+   "LLM-as-a-judge",
+   "web development",
+   "benchmark construction"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "data-construction",
+  "variant_note": "three titled grey panels left to right (collect, annotate with a rubric tree, judge) with one book-review example carried through the first two",
+  "argues": "A pairwise web-quality benchmark with rubric-grounded human labels can test judges that see static code, rendered pages or live interaction, under pairwise and single paradigms.",
+  "subject": "Building the WebDevJudge benchmark (query and environment filters, rubric-tree annotation) and the evaluator set-ups run on it.",
+  "elements": [
+   {
+    "name": "Data Collection",
+    "type": "container",
+    "role": "panel 1: from user queries to filtered pairs of web implementations",
+    "drawn_as": "grey panel under a dark-navy header bar with white bold title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "User query Q",
+    "type": "sample",
+    "role": "a web development request, here 'Build a book review form with rating, author, and text fields; display each review with user avatar in the page.'",
+    "drawn_as": "tan box with a dashed outline under a bold heading with a math-italic Q",
+    "container": "Data Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Query-based filter",
+    "type": "operation",
+    "role": "keeps queries that pass Length, Deduplication, Safety, Clarity and Feasibility checks",
+    "drawn_as": "teal-grey inverted trapezoid with white italic criteria, entered by a teal down arrow",
+    "container": "Data Collection",
+    "is_contribution": true
+   },
+   {
+    "name": "Web Implementation W: Code A / Code B",
+    "type": "data",
+    "role": "two code implementations of the query",
+    "drawn_as": "two small HTML code icons, one blue, one black-outlined, with labels Code A and Code B",
+    "container": "Data Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Env-based filter",
+    "type": "operation",
+    "role": "keeps implementations that pass Compatibility and Validity checks in the environment",
+    "drawn_as": "teal-grey trapezoid rotated to vertical with the criteria written along it, a blue block arrow into it",
+    "container": "Data Collection",
+    "is_contribution": true
+   },
+   {
+    "name": "Web A / Web B",
+    "type": "data",
+    "role": "the rendered pair of pages that survive the filters",
+    "drawn_as": "two page screenshots in a dashed box with beige ground",
+    "container": "Data Collection",
+    "is_contribution": null
+   },
+   {
+    "name": "Annotate with Rubric",
+    "type": "container",
+    "role": "panel 2: human preference labelling guided by a rubric tree",
+    "drawn_as": "grey panel under a dark-navy header bar",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Verifiable rubric tree",
+    "type": "data",
+    "role": "query-grounded tree of binary tests along Intention, Static and Dynamic, e.g. 'A form to submit reviews.', 'Rating', 'Author', 'Text', 'Description: rate the book 4.'",
+    "drawn_as": "ROOT oval over three category boxes with small icons, elbow lines, blue dashed leaf boxes and white description boxes",
+    "container": "Annotate with Rubric",
+    "is_contribution": true
+   },
+   {
+    "name": "Query-grounded",
+    "type": "operation",
+    "role": "the query sets what the rubric tree contains",
+    "drawn_as": "large blue block arrow from panel 1 into the tree with a white label",
+    "container": "Annotate with Rubric",
+    "is_contribution": true
+   },
+   {
+    "name": "Annotate",
+    "type": "operation",
+    "role": "human annotation of the pair against the rubric",
+    "drawn_as": "teal block arrow with a white label pointing at the preference label",
+    "container": "Annotate with Rubric",
+    "is_contribution": true
+   },
+   {
+    "name": "Preference label L_p: A / B / Tie",
+    "type": "data",
+    "role": "the human judgement of which page is better",
+    "drawn_as": "dashed box with bold serif text above the record box",
+    "container": "Annotate with Rubric",
+    "is_contribution": true
+   },
+   {
+    "name": "WEBDEVJUDGE: (Query Q, Web_A, Web_B, Preference label L_p)",
+    "type": "data",
+    "role": "the benchmark record as a tuple",
+    "drawn_as": "teal-grey rounded box with small-caps title and the tuple in white",
+    "container": "Annotate with Rubric",
+    "is_contribution": true
+   },
+   {
+    "name": "Judge",
+    "type": "container",
+    "role": "panel 3: the evaluator set-ups run on the benchmark",
+    "drawn_as": "grey panel under a dark-navy header bar holding a tan Evaluator part, a grey Observation part and a Paradigm part",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Evaluator E: (M)LLM and Agentic",
+    "type": "module",
+    "role": "the judge: an (M)LLM shown by four vendor logos, or an agentic workflow with Planner, Executor and Summarizer boxes and environment icons",
+    "drawn_as": "tan sub-panel with a balance-scale icon, two dashed boxes, green role boxes in the agentic one",
+    "container": "Judge",
+    "is_contribution": null
+   },
+   {
+    "name": "Observation O: Source Code, Rendered Web, Interaction",
+    "type": "data",
+    "role": "what the evaluator sees: static code and rendered page, or a dynamic interaction trajectory (Thought1 Action1 ... Thought4 Action4)",
+    "drawn_as": "grey sub-panel with a magnifier icon, in rows aligned with the evaluator types",
+    "container": "Judge",
+    "is_contribution": null
+   },
+   {
+    "name": "Paradigm P: Pairwise / Single",
+    "type": "container",
+    "role": "pairwise judging of Web A and Web B together, or single-answer judging of each page by Judge_A and Judge_B",
+    "drawn_as": "two grey cards with scale icons and a bold caption under each",
+    "container": "Judge",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "User query Q",
+    "to": "Query-based filter",
+    "what": "queries are filtered by length, deduplication, safety, clarity and feasibility",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query-based filter",
+    "to": "Web Implementation W",
+    "what": "kept queries get Code A and Code B (read from the layout)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Web Implementation W: Code A / Code B",
+    "to": "Env-based filter",
+    "what": "implementations are checked for compatibility and validity",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Env-based filter",
+    "to": "Web A / Web B",
+    "what": "the surviving pair of rendered pages",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Data Collection",
+    "to": "Verifiable rubric tree",
+    "what": "the query grounds the rubric tree",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Verifiable rubric tree",
+    "to": "Preference label L_p: A / B / Tie",
+    "what": "annotators label the pair using the rubric",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Preference label L_p: A / B / Tie",
+    "to": "WEBDEVJUDGE record",
+    "what": "label completes the (Query, Web_A, Web_B, label) tuple",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(M)LLM",
+    "to": "Source Code and Rendered Web",
+    "what": "non-interactive evaluators get static observations (same row)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Agentic",
+    "to": "Interaction",
+    "what": "agentic evaluators work through interaction with the environment (same row)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Web_A and Web_B",
+    "to": "Judge Preference",
+    "what": "Pairwise: one judge sees both pages and outputs a preference",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Web_A, Web_B",
+    "to": "Judge_A, Judge_B and Preference",
+    "what": "Single: each page is judged on its own and the two results give a preference",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Data Collection",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "user query, query-based filter, paired code implementations, environment-based filter, rendered pair Web A and Web B",
+    "verdict": null
+   },
+   {
+    "label": "Annotate with Rubric",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "rubric tree from a ROOT oval through Intention, Static and Dynamic to leaf tests, then the preference label and the benchmark record",
+    "verdict": null
+   },
+   {
+    "label": "Judge",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "evaluators ((M)LLM logos, agentic Planner, Executor, Summarizer), observations (code, rendered page, interaction) and pairwise or single paradigms",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "A, B",
+    "kind": "identity",
+    "at": "Code A/B, Web A/B, Judge A/B",
+    "what": "names the two implementations of a pair and their judges"
+   },
+   {
+    "marker": "Thought1/Action1 ... Thought4/Action4",
+    "kind": "order",
+    "at": "four interaction screenshots",
+    "what": "order of the agent's thought and action steps"
+   },
+   {
+    "marker": "Q, W, E, O, P, L_p",
+    "kind": "identity",
+    "at": "headings and the record tuple",
+    "what": "symbols for query, web implementation, evaluator, observation, paradigm and preference label"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two screenshots of the generated book-review web page, Web A and Web B",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "44 x 32 pt crops with a thin outline inside a dashed box, labelled Web A: and Web B:"
+   },
+   {
+    "what": "a code listing and a rendered web page as the static observations",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two 25 pt tiles under the captions Source Code and Rendered Web"
+   },
+   {
+    "what": "four small screenshots of an interaction trajectory",
+    "content": "screenshot",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "tiny frames each captioned Thought and Action with a step number"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "HTML code window icons, one blue and one black-outlined",
+    "stands_for": "Code A and Code B, the two implementations",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "vendor logos (OpenAI-style knot, a purple cube, a blue whale, a four-colour star)",
+    "stands_for": "the (M)LLM evaluators",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "balance scale",
+    "stands_for": "the judge or evaluator",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 4
+   },
+   {
+    "depicts": "magnifier",
+    "stands_for": "observation",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small coloured UI, pin, cursor and app icons",
+    "stands_for": "rubric categories (Intention, Static, Dynamic, Basic, Complex) and the web environment of the agent",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   }
+  ],
+  "examples": [
+   {
+    "what": "the query 'Build a book review form with rating, author, and text fields; display each review with user avatar in the page.' and its rubric nodes ('A web application for book reviews.', 'Rating', 'Author', 'Text', 'Avatar', 'type hello in the text area', 'rate the book 4', 'submit a book review')",
+    "form": "dashed query card and a rubric tree with leaf descriptions",
+    "real_values": true
+   },
+   {
+    "what": "the benchmark record (Query Q, Web_A, Web_B, Preference label L_p) with the label values A / B / Tie",
+    "form": "dashed label box above a teal record box",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "'(M)LLM' in italic over four vendor logos in a dashed box",
+    "parts": [
+     "label",
+     "vendor logos"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "three stacked green boxes Planner, Executor, Summarizer with small arrows and icons for the web environment",
+    "parts": [
+     "Planner",
+     "Executor",
+     "Summarizer",
+     "environment icons"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "teal rounded box naming WEBDEVJUDGE and its record tuple",
+    "parts": [
+     "name",
+     "tuple"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "criteria-tree",
+    "drawn_as": "ROOT oval over three category boxes, each with blue dashed leaf boxes and nested description boxes joined by elbow lines",
+    "parts": [
+     "ROOT",
+     "categories",
+     "leaf tests",
+     "descriptions"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Top-left header Data Collection, down the query and filters to Web A and B, across the Query-grounded arrow to the rubric tree and down to the preference label and record, then across to the Judge panel: evaluators, observations, paradigms."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three equal grey panels side by side under dark-navy header bars, joined by two labelled block arrows (Query-grounded at the top, Annotate near the bottom). The Judge panel is split into a tan Evaluator part and a grey Observation part in aligned rows, with Paradigm cards below.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.32,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#203555",
+    "used_for": "header bars of the three panels"
+   },
+   {
+    "hex": "#eeeeee",
+    "used_for": "panel bodies"
+   },
+   {
+    "hex": "#d1d1d1",
+    "used_for": "Observation sub-panel and the Pairwise and Single cards"
+   },
+   {
+    "hex": "#dccfc0",
+    "used_for": "user query box and the Evaluator sub-panel"
+   },
+   {
+    "hex": "#e5e2db",
+    "used_for": "beige ground of the Web A and Web B dashed box"
+   },
+   {
+    "hex": "#89a8b2",
+    "used_for": "filter trapezoids and the WEBDEVJUDGE record box"
+   },
+   {
+    "hex": "#647687",
+    "used_for": "ROOT oval and category boxes of the rubric tree"
+   },
+   {
+    "hex": "#77bef0",
+    "used_for": "leaf boxes of the rubric tree"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "block arrows Query-grounded and Annotate and the query-filter arrow"
+   },
+   {
+    "hex": "#a2b09b",
+    "used_for": "Planner, Executor and Summarizer role boxes"
+   },
+   {
+    "hex": "#4d6bfe",
+    "used_for": "DeepSeek logo among the vendor logos"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.25 pt dashed outlines on query, filter, evaluator and label boxes, 0.25-0.5 pt solid elsewhere, none on header bars",
+  "font": "mixed: Comic Sans-style bold sans for headers and labels, Times italics for the symbols Q, W, E, O, P, L_p, Calibri and Arial in the rubric tree and agent boxes; 3-9 pt, headers 9 pt",
+  "corners": "mixed",
+  "arrows": "two large labelled block arrows between panels, small blue block arrows, thin black curved arrows in the agentic part",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "navy = panel titles; tan = the user-side query and the Evaluator; teal-grey = filters and the final benchmark record; light-blue dashed boxes = rubric tests; grey = observation and paradigm cards",
+  "line_style_means": "dashed outlines = data items or groups such as the query, the page pair, the evaluator groups, the preference label and the rubric leaves",
+  "shape_means": "trapezoids = filters (one rotated to vertical); oval = rubric root; block arrows = named transitions between panels; rounded teal box = benchmark record",
+  "marker_means": "subscripts A and B tie Code, Web and Judge to the same side of a pair; Q, W, E, O, P, L_p name the symbols of the formal set-up; A / B / Tie are the possible labels",
+  "emphasis": "dark header bars, the large labelled block arrows between panels, and the teal WEBDEVJUDGE record box",
+  "reusable_patterns": [
+   "three dark-headed grey panels read left to right for build, annotate and evaluate",
+   "labelled block arrows between panels carrying the name of the transformation",
+   "filters drawn as trapezoids with their criteria written inside",
+   "formal symbols next to each heading so the figure doubles as the notation guide",
+   "aligned rows pairing each evaluator type with the observation it receives",
+   "a teal record box naming the benchmark and its tuple",
+   "criteria tree with a ROOT oval and leaf tests as dashed boxes"
+  ],
+  "weaknesses": [
+   "very small text (3-4.5 pt) in the rubric leaves, agent boxes and interaction captions",
+   "the small screenshots in the Judge panel are not legible",
+   "the rubric tree is tied to the preference label only by the Annotate arrow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the book-review query and its rubric nodes",
+   "screenshots of generated web pages and code",
+   "interaction screenshots"
+  ],
+  "stock": [
+   "vendor logos",
+   "balance-scale, magnifier, cursor and UI icons",
+   "HTML code icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "panels, trapezoid filters, rubric tree, block arrows, record box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three dark-headed panels",
+   "user query card",
+   "filter trapezoids",
+   "Web A and Web B screenshots",
+   "rubric tree with ROOT oval",
+   "vendor logos",
+   "Planner Executor Summarizer boxes",
+   "balance-scale icons",
+   "Pairwise and Single cards"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "LLM-as-a-judge",
+   "web development",
+   "benchmark",
+   "rubric tree",
+   "pairwise preference",
+   "agentic evaluator",
+   "meta-evaluation",
+   "human annotation"
+  ],
+  "tags": [
+   "brand-logo-icon",
+   "gui-screen",
+   "option-catalog"
+  ],
+  "new_tags": [
+   {
+    "name": "criteria-tree",
+    "what": "a hierarchy of evaluation criteria drawn as a tree from a ROOT oval through category boxes to leaf tests with example descriptions"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Mirror the workflow with three dark-headed panels (collect, annotate, judge), join them with block arrows that carry the operation's name, carry one example through the first two panels, and put the formal symbols next to each heading so the figure doubles as the notation guide.",
+  "suits": "Benchmark or dataset papers where a pipeline builds the data, a labelling protocol adds ground truth, and several evaluator set-ups are then run."
+ },
+ "tags": [
+  "dark header bars",
+  "grey panels",
+  "dashed data boxes",
+  "labelled block arrows",
+  "trapezoid filters",
+  "vendor logos"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "3 Benchmark (p.4)"
+  ],
+  "evidence": [
+   "Left: Data Collection with query-based and environmentbased filtering.",
+   "Center: Preference label annotation with verifiable rubric tree.",
+   "organized along three core dimensions: intention, static quality, and dynamic behavior"
+  ]
+ },
+ "summary": "WebDevJudge is a benchmark that tests whether (M)LLMs and agents can judge web development quality as well as human experts. Figure 1 is three dark-headed grey panels read left to right. Data Collection filters user queries (length, deduplication, safety, clarity, feasibility), produces code for two implementations and filters them by environment (compatibility, validity) into a pair of rendered pages, Web A and Web B. Annotate with Rubric shows a tree from a ROOT oval through Intention, Static and Dynamic to leaf tests for a book-review query, giving a preference label A, B or Tie and the benchmark record. Judge lays out evaluators (LLM logos or a planner-executor-summarizer agent), observations (code, rendered page, interaction) and the pairwise or single paradigm.",
+ "summary_zh": "WebDevJudge 基准检验 (M)LLM 与智能体评判网页开发质量的能力。图分三块深色标题面板：数据收集（查询与环境过滤得到成对网页）、评分细则树标注偏好标签、评判（评估者、观测、成对或单独范式），书评表单示例贯穿前两块。",
+ "confidence": "high",
+ "notes": "Prior kind kept (stage-pipeline, data-construction); worked-walkthrough added because one book-review example runs through the first two panels. The link from the filtered query to Code A and Code B is read from the layout. Colour-to-element matches for the palette are read from the picture; #dae8fc and #8aa8b2 from the digest are small accents not matched to a single element.",
+ "venue": "ICLR26"
+}

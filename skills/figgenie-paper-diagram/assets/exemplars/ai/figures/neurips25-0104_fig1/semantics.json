@@ -1,0 +1,581 @@
+{
+ "paper_id": "neurips25-0104",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "LITcoder",
+  "one_liner": "An open-source library with a modular pipeline for building, benchmarking and comparing neural encoding models that predict fMRI responses to language.",
+  "domain": [
+   "neural encoding models",
+   "fMRI",
+   "software library"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "four numbered stages plus an unnumbered system-wide logger in five dashed panels; each stage is a titled panel with inputs, a pink-headed class card listing its options and a grey box with the data it returns",
+  "argues": "Brain data and language stimuli can be turned into comparable encoding models by a fixed chain of configurable modules (assemble, extract, downsample, map), all logged in one place.",
+  "subject": "The architecture of the LITcoder library: its four pipeline stages as class cards with options, one toy sentence carried through them, and the logger.",
+  "elements": [
+   {
+    "name": "fMRI / Transcripts / Timestamps",
+    "type": "data",
+    "role": "inputs of stage 1: functional MRI data, aligned transcripts and timestamps",
+    "drawn_as": "three captioned icons (pink brain, document with a pencil, stopwatch) joined by lines into one arrow",
+    "container": "1. Data Preparation and Assembly",
+    "is_contribution": false
+   },
+   {
+    "name": "class AssemblyGenerator()",
+    "type": "module",
+    "role": "aligns BIDS fMRI with transcripts into time-locked brain-stimulus pairs in volume or surface space",
+    "drawn_as": "pink-headed rounded card with parameter lines: dataset: Lebel | Narratives | LPP; data_space: Volume | Surface; atlas: LanA | Glasser | fullbrain; subject; context_length; context_type: Full | half | reset",
+    "container": "1. Data Preparation and Assembly",
+    "is_contribution": true
+   },
+   {
+    "name": "Aligned Data",
+    "type": "data",
+    "role": "the stage-1 output: time-locked brain-stimulus pairs, stimulus times and TR times",
+    "drawn_as": "grey rounded box with a bold title and three bullets",
+    "container": "1. Data Preparation and Assembly",
+    "is_contribution": false
+   },
+   {
+    "name": "stimulus sentence '... he went to the store to get a cup of coffee. ...'",
+    "type": "sample",
+    "role": "a text stimulus (or an audio file, marked Or); coloured underlines of growing length show context windows",
+    "drawn_as": "bold text line with a lilac and pink highlight on the first words, staggered coloured underlines and the label context length, an audio-file icon and the word Or above it",
+    "container": "2. Feature Extraction",
+    "is_contribution": false
+   },
+   {
+    "name": "class FeatureExtractor()",
+    "type": "module",
+    "role": "turns the aligned stimuli into features, from baselines to GPT-2 and Whisper",
+    "drawn_as": "pink-headed card with model_name: gpt2 | whisper | glove | wordrate and layer: Int",
+    "container": "2. Feature Extraction",
+    "is_contribution": true
+   },
+   {
+    "name": "word feature vectors (the, store, to, get, a, cup; 1xm)",
+    "type": "data",
+    "role": "one 1 x m feature vector per word",
+    "drawn_as": "word chips (blue for the first three, green for the last three) over tall columns of empty cells, each captioned 1xm, in a grey rounded box",
+    "container": "2. Feature Extraction",
+    "is_contribution": false
+   },
+   {
+    "name": "TR_n / TR_n+1",
+    "type": "label",
+    "role": "two fMRI acquisition timepoints (TR = repetition time) into which the words fall",
+    "drawn_as": "a blue chip and a green chip above the Downsampler card, black bars under the first three and the last three words",
+    "container": "3. Downsampling to Neural Data",
+    "is_contribution": false
+   },
+   {
+    "name": "class Downsampler()",
+    "type": "module",
+    "role": "aggregates the word features to TR resolution by pooling or filtering",
+    "drawn_as": "pink-headed card with filter_type: Lanczos | Average | Sum | Last token; tr_times: List; stimulus_times: List",
+    "container": "3. Downsampling to Neural Data",
+    "is_contribution": true
+   },
+   {
+    "name": "TR-matched vectors (1, m)",
+    "type": "data",
+    "role": "one feature vector per TR",
+    "drawn_as": "two tall cell columns with a blue and a green outline in a grey rounded box, captioned (1, m)",
+    "container": "3. Downsampling to Neural Data",
+    "is_contribution": false
+   },
+   {
+    "name": "FIR()",
+    "type": "operation",
+    "role": "finite impulse response expansion that adds lagged copies of the features",
+    "drawn_as": "label on an arrow from a column of red cells to a fanned stack of shifted red columns",
+    "container": "4. Brain Response Prediction & Mapping",
+    "is_contribution": true
+   },
+   {
+    "name": "expanded features (n, m x FIR)",
+    "type": "data",
+    "role": "the design matrix passed to Mapping",
+    "drawn_as": "stack of four offset columns of red-outlined cells, captioned (n, m x FIR)",
+    "container": "4. Brain Response Prediction & Mapping",
+    "is_contribution": false
+   },
+   {
+    "name": "class Mapping()",
+    "type": "module",
+    "role": "fits ridge regression with cross-validation and returns voxel or vertex predictivity",
+    "drawn_as": "pink-headed card with features: np.array(); targets: np.array(); folding_type: kfold | kfold_trimmed; normalize_features: bool; normalize_targets: bool; single_alpha: true",
+    "container": "4. Brain Response Prediction & Mapping",
+    "is_contribution": true
+   },
+   {
+    "name": "Real / Predicted with Pearson correlation",
+    "type": "chart",
+    "role": "evaluation: real and predicted responses compared by Pearson correlation",
+    "drawn_as": "grey rounded box with two small line plots titled Real and Predicted, a double-headed arrow between them, italic 'Pearson correlation' and two brain renders with green arrows up to the plots",
+    "container": "4. Brain Response Prediction & Mapping",
+    "is_contribution": false
+   },
+   {
+    "name": "class Logger()",
+    "type": "module",
+    "role": "monitors all stages and writes to several backends in several runtimes",
+    "drawn_as": "pink-headed card with backend: W&B | TensorBoard | CSV/JSON and Runtimes: Local | HPC/SLURM",
+    "container": "System-wide logger",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "fMRI / Transcripts / Timestamps",
+    "to": "class AssemblyGenerator()",
+    "what": "three inputs joined into one arrow",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "class AssemblyGenerator()",
+    "to": "Aligned Data",
+    "what": "time-locked brain-stimulus pairs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "stimulus sentence",
+    "to": "class FeatureExtractor()",
+    "what": "text, or an audio file marked Or",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "class FeatureExtractor()",
+    "to": "word feature vectors",
+    "what": "one 1 x m vector per word",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "word feature vectors",
+    "to": "class Downsampler()",
+    "what": "words grouped under TR_n and TR_n+1 by black bars",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "class Downsampler()",
+    "to": "TR-matched vectors (1, m)",
+    "what": "pooled or filtered features per TR",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "feature column",
+    "to": "expanded features (n, m x FIR)",
+    "what": "FIR expansion adds lagged copies",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "expanded features (n, m x FIR)",
+    "to": "class Mapping()",
+    "what": "design matrix",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "class Mapping()",
+    "to": "Real / Predicted with Pearson correlation",
+    "what": "predicted responses evaluated against the real ones",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Real",
+    "to": "Predicted",
+    "what": "compared by Pearson correlation",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "class Logger()",
+    "to": "logging backend icons",
+    "what": "logs go to the chosen backend",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "panels 1 to 4",
+    "to": "panels 1 to 4",
+    "what": "the order of the stages is given by the numbered titles; no arrow joins one panel to the next",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "TR_n, TR_n+1 chips",
+    "to": "TR-matched vectors (1, m)",
+    "what": "blue and green are kept from the chips to the two output vectors",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1. Data Preparation and Assembly",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "fMRI, transcripts and timestamps go through AssemblyGenerator, with its dataset, space and atlas options, into Aligned Data",
+    "verdict": null
+   },
+   {
+    "label": "2. Feature Extraction",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "a text or audio stimulus goes through FeatureExtractor (gpt2, whisper, glove, wordrate) into per-word 1 x m vectors",
+    "verdict": null
+   },
+   {
+    "label": "3. Downsampling to Neural Data",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "word vectors are pooled per TR by Downsampler (Lanczos, Average, Sum, Last token) into TR-matched vectors",
+    "verdict": null
+   },
+   {
+    "label": "System-wide logger",
+    "kind": "stage-pipeline",
+    "axis": "overview",
+    "shows": "Logger with its backends and runtimes, over three backend icons",
+    "verdict": null
+   },
+   {
+    "label": "4. Brain Response Prediction & Mapping",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "FIR expansion, Mapping with cross-validation and ridge regression, and real against predicted responses with Pearson correlation",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1. 2. 3. 4.",
+    "kind": "order",
+    "at": "the titles of the four stage panels",
+    "what": "the order of the pipeline stages; the logger panel is unnumbered"
+   },
+   {
+    "marker": "TR_n, TR_n+1",
+    "kind": "identity",
+    "at": "chips above the Downsampler card",
+    "what": "names the two timepoints that the words are grouped into"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "small line plots of z-scored response against TR (0 to 60) for a real and a predicted time course",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "framed plots side by side under the titles Real and Predicted, a double-headed arrow between them and italic Pearson correlation under it"
+   },
+   {
+    "what": "cortical surface renders with coloured activity maps, one real and one predicted",
+    "content": "medical",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small brain renders below the plots, a green arrow from each up to its plot"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "pink brain",
+    "stands_for": "fMRI data",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "document with a pencil",
+    "stands_for": "transcripts",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "wristwatch",
+    "stands_for": "timestamps",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "audio file with a speaker symbol",
+    "stands_for": "an audio stimulus, the alternative to text",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "blue voxel cube, a {JSON} glyph and a mark of yellow dots",
+    "stands_for": "logging backends (W&B, TensorBoard, CSV/JSON); which icon is which is not labelled",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "a story sentence '... he went to the store to get a cup of coffee. ...' whose words the store to get a cup become 1 x m vectors and fall under TR_n and TR_n+1",
+    "form": "text line with context underlines, word chips and cell columns",
+    "real_values": true
+   },
+   {
+    "what": "the option lists of each class, e.g. dataset: Lebel | Narratives | LPP; model_name: gpt2 | whisper | glove | wordrate; filter_type: Lanczos | Average | Sum | Last token",
+    "form": "pink-headed class cards with parameter lines",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "word chips over tall cell columns, coloured blue or green by the TR they fall in, with black bars under each group",
+    "parts": [
+     "word chip",
+     "1xm cell column",
+     "TR group bar"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "api-class-card",
+    "drawn_as": "a rounded card with a pink header reading class Name() and parameter lines below, options separated by vertical bars",
+    "parts": [
+     "pink header",
+     "parameter lines",
+     "option bars"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "dataset-card",
+    "drawn_as": "a grey rounded box titled Aligned Data with three bullets",
+    "parts": [
+     "title",
+     "bullets"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at panel 1 top-left (inputs, AssemblyGenerator card, Aligned Data), then panels 2 and 3 along the top row, each read top-down, then the logger panel at the lower left and panel 4 along the bottom right from FIR to the real and predicted brain responses."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Five dashed rounded panels in a 3 + 2 grid on white: the top row holds the numbered stages 1 to 3, the bottom row a narrow System-wide logger panel at the left and the wide stage 4 at the right. Inside each stage the flow is top-down: title, inputs or drawings, an arrow to a pink-headed class card listing its options, an arrow to the data it returns in a grey rounded box; stage 4 runs left to right instead.",
+  "panel_count": 5,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.63,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fad9d5",
+    "used_for": "headers of the class cards"
+   },
+   {
+    "hex": "#ae4132",
+    "used_for": "dark-red outlines of the class cards"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "grey rounded boxes for the data a stage returns"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "blue word chips and the TR_n chip"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "green word chips and the TR_n+1 chip"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "red-pink cells of the FIR feature columns"
+   },
+   {
+    "hex": "#b85450",
+    "used_for": "outlines of the FIR feature cells"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "lilac highlight on the first words of the sentence"
+   },
+   {
+    "hex": "#00cc00",
+    "used_for": "green arrows on the brain renders"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, text and thin cell outlines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "dashed black 0.5 pt panel frames, 0.25 pt black outlines on cells and arrows, 0.5 pt dark-red outlines on class cards",
+  "font": "sans (Arial, Tahoma) 4-4.5 pt for card text and chips, 7 pt bold for panel titles, 6 pt bold for input names; serif italic for 'Pearson correlation'",
+  "corners": "rounded",
+  "arrows": "thin black arrows with small solid heads, mostly vertical inside the panels; one wide arrow into the results box; a double-headed arrow between Real and Predicted; green arrows on the brain renders",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink-headed card = a class of the library with its options; blue and green chips and outlines = the two TR groups, kept from the words to the output vectors; red cells = the FIR-expanded feature columns; grey rounded box = data returned by a stage",
+  "line_style_means": "dashed rounded frames = panels; thin solid arrows = data flow; double-headed arrow = real against predicted; black bars under word groups = the span pooled into one TR",
+  "shape_means": "pink-headed rectangle = library class; tall column of cells = a feature vector; grey rounded rectangle = output data of a stage; rounded chip = a word or a timepoint",
+  "marker_means": "1.-4. number the stages; the logger panel is unnumbered because it covers all stages; (1, m) and (n, m x FIR) give array shapes",
+  "emphasis": "the pink class cards with their option lists make the library's configurable choices the visual focus, and the stage numbers lead the eye through the panels",
+  "reusable_patterns": [
+   "class card: a coloured header with the class name and parameter lines whose options are separated by vertical bars",
+   "one toy sentence carried across stages as word chips and 1 x m vectors, with the TR grouping shown by colours and bars",
+   "stage panel template: title, inputs, arrow, class card, arrow, grey result box",
+   "a system-wide component (the logger) as its own unnumbered panel",
+   "real against predicted time courses and brain maps with a double-headed arrow and a Pearson label"
+  ],
+  "weaknesses": [
+   "the 4-4.5 pt text in the class cards is small",
+   "stage 4 runs left to right while stages 1-3 run top-down, so the flow direction changes in the last panel",
+   "no line joins the logger panel to the stages, and no arrow joins one stage panel to the next"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real and predicted time courses and brain maps from the library",
+   "a sentence from a story stimulus",
+   "the class and parameter names of the library"
+  ],
+  "stock": [
+   "brain, document-with-pencil, wristwatch and audio-file icons",
+   "logos or glyphs for the logging backends"
+  ],
+  "generated": [],
+  "drawn": [
+   "class cards",
+   "word chips and cell vectors",
+   "FIR stack",
+   "dashed panel frames",
+   "arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "five dashed rounded panels",
+   "pink-headed class cards with option lists",
+   "word chips with 1xm cell vectors",
+   "fMRI brain, transcript and stopwatch icons",
+   "real and predicted time-series plots",
+   "cortical surface renders",
+   "FIR-expanded cell stack",
+   "logging backend icons"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "encoding models",
+   "fMRI",
+   "language models",
+   "feature extraction",
+   "downsampling",
+   "FIR",
+   "ridge regression",
+   "brain response prediction",
+   "library architecture"
+  ],
+  "tags": [
+   "pseudocode-box",
+   "option-catalog",
+   "token-strip",
+   "highlighted-text-spans",
+   "prediction-vs-data",
+   "brand-logo-icon"
+  ],
+  "new_tags": [
+   {
+    "name": "class-card-with-options",
+    "what": "a library or API class drawn as a card with a coloured header (class Name()) and parameter lines whose options are separated by vertical bars"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "For a library, give every stage the same panel template: a numbered title, inputs, an arrow to a card that names the class and lists its options with vertical bars, and a grey box with the data it returns; carry one toy sentence through the stages so the data shapes are visible.",
+  "suits": "Software libraries and benchmarking toolkits with a fixed pipeline of configurable modules, where the figure must show both the data flow and the available options."
+ },
+ "tags": [
+  "five dashed panels",
+  "3 + 2 grid",
+  "pink-headed class cards",
+  "option lists with bars",
+  "word chips",
+  "cell columns",
+  "grey result boxes",
+  "small sans text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "Method (p.3)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "AssemblyGenerator aligns BIDS fMRI with transcripts in volume or surface space",
+   "Downsampler aggregates those features to TR resolution",
+   "All stages are monitored using the Logger"
+  ]
+ },
+ "summary": "LITcoder is an open-source library for building and comparing neural encoding models of fMRI responses to language. Figure 1 shows its architecture as five dashed panels in a 3 + 2 grid. Stages 1 to 4 follow one template: a numbered title, inputs, an arrow to a pink-headed class card that lists the options of that module, and an arrow to the data it returns. AssemblyGenerator aligns fMRI, transcripts and timestamps; FeatureExtractor (gpt2, whisper, glove, wordrate) turns a sentence into per-word 1 x m vectors; Downsampler pools them into TR-matched vectors; FIR expansion and Mapping predict brain responses, shown as real against predicted time series and brain maps. A system-wide Logger panel lists W&B, TensorBoard and CSV/JSON.",
+ "summary_zh": "LITcoder 是构建并比较 fMRI 神经编码模型的开源库。图用五个虚线面板展示架构：数据组装、特征提取、降采样、脑响应预测与映射四步，每步都是“标题-输入-粉色类卡片-输出”模板，另有全局日志面板，末尾对比真实与预测脑响应。",
+ "confidence": "high",
+ "notes": "Prior kind stage-pipeline kept and worked-walkthrough added for the sentence carried through stages 2 and 3. Which of the three logger icons stands for which backend is not labelled, so the mapping is not certain. The paper text names the FIR step as a separate FIRExpander; the figure draws it only as a label inside panel 4.",
+ "venue": "NeurIPS25"
+}

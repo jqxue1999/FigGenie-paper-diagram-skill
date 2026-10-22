@@ -1,0 +1,554 @@
+{
+ "paper_id": "aaai25-0013",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DepMGNN",
+  "one_liner": "Video-based depression assessment with a matrixial graph whose nodes hold whole 2D facial feature maps, processed by a matrixial graph neural network.",
+  "domain": [
+   "automatic depression assessment",
+   "face video analysis",
+   "graph neural networks"
+  ],
+  "subfield": "vision",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "design-family",
+  "variant_note": "three sibling pipelines in aligned columns (decision level, feature level, ours) plus a narrow second panel that contrasts a vector-based graph with the matrixial graph",
+  "argues": "Matrixial graphs keep the spatial structure of frame-level feature maps that decision-level and feature-level fusion of vectors lose.",
+  "subject": "Three video pipelines from face frames to clip-level prediction, and two toy graphs with vector versus matrix nodes and edges.",
+  "elements": [
+   {
+    "name": "Visual Backbone",
+    "type": "module",
+    "role": "extracts frame or segment features; the shared first stage of all three columns",
+    "drawn_as": "wide light-lavender rounded box with bold text, one per column",
+    "container": "panel 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Feature vectors / Frame/segment level feature vectors",
+    "type": "data",
+    "role": "one vector per frame or segment in the two existing designs",
+    "drawn_as": "row of flat purple 3D slabs with '•••' inside a dashed box",
+    "container": "panel 1, columns 1 and 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Head (Shared parameters)",
+    "type": "module",
+    "role": "frame or segment level prediction heads sharing parameters, decision-level design",
+    "drawn_as": "four small lavender boxes labelled Head, tied by dotted lines labelled Shared parameters",
+    "container": "panel 1, column 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Frame/segment prediction",
+    "type": "data",
+    "role": "prediction for each frame or segment",
+    "drawn_as": "small purple squares above the heads, one boxed in dashes with a leader to its label",
+    "container": "panel 1, column 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Aggregation",
+    "type": "operation",
+    "role": "combines predictions (decision level) or features (feature level) into one clip-level result",
+    "drawn_as": "circled plus with four arrows going in",
+    "container": "panel 1, columns 1 and 2",
+    "is_contribution": false
+   },
+   {
+    "name": "Prediction Head",
+    "type": "module",
+    "role": "maps the aggregated or graph-level result to the clip-level prediction",
+    "drawn_as": "wide lavender box with bold text, in columns 2 and 3",
+    "container": "panel 1, columns 2 and 3",
+    "is_contribution": false
+   },
+   {
+    "name": "Clip-level prediction",
+    "type": "data",
+    "role": "final output of each design",
+    "drawn_as": "bold text at the top of columns 1 and 2 and at the end of column 3",
+    "container": "panel 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Multi-scale matrixial feature",
+    "type": "data",
+    "role": "multi-scale 2D facial feature maps of each frame, used as graph nodes",
+    "drawn_as": "dashed box with a 4 by 4 grid of dark-teal feature-map stacks shrinking downward, '•••' between columns",
+    "container": "panel 1, column 3",
+    "is_contribution": true
+   },
+   {
+    "name": "MGL",
+    "type": "module",
+    "role": "step between the multi-scale feature maps and the matrixial graph (the acronym is not expanded in the context)",
+    "drawn_as": "lavender pill with a curved arrow in and out",
+    "container": "panel 1, column 3",
+    "is_contribution": true
+   },
+   {
+    "name": "Spatio-temporal matrixial graph",
+    "type": "data",
+    "role": "clip-level representation: frame-level matrices as nodes joined by matrix-style spatial and temporal edges",
+    "drawn_as": "dashed box holding a 4 by 4 grid of purple nodes v with red straight, green dashed, blue curved and orange dashed edges",
+    "container": "panel 1, column 3",
+    "is_contribution": true
+   },
+   {
+    "name": "MGR(MGNN)",
+    "type": "module",
+    "role": "matrixial graph neural network that models multi-scale spatio-temporal behaviour on the graph",
+    "drawn_as": "darker lavender box with bold purple text",
+    "container": "panel 1, column 3",
+    "is_contribution": true
+   },
+   {
+    "name": "Matrixial feature (key thumbnail)",
+    "type": "label",
+    "role": "names what the thumbnails and graph nodes hold",
+    "drawn_as": "small dark-teal thumbnail with a label, right of the graph box",
+    "container": "panel 1, column 3",
+    "is_contribution": null
+   },
+   {
+    "name": "Decision level methods / Feature level methods / Our matrixial graph based method",
+    "type": "label",
+    "role": "titles of the three columns",
+    "drawn_as": "bold purple text under each column",
+    "container": "panel 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Existing vector-based graph",
+    "type": "instance",
+    "role": "toy graph v1 v2 v3 with vector node features and single-value edges (e.g. 0 or 1); lacks spatial structure information",
+    "drawn_as": "triangle of circle nodes, a purple slab labelled Vector feature, small square edge glyphs",
+    "container": "panel 2, top",
+    "is_contribution": false
+   },
+   {
+    "name": "Our matrixial graph",
+    "type": "instance",
+    "role": "toy graph with matrix node features and matrix edges; preserves spatial structure information",
+    "drawn_as": "triangle of circle nodes, a feature-map thumbnail labelled Matrixial feature, edge glyphs with an enlarged heat grid labelled Matrixial edge",
+    "container": "panel 2, bottom",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "face film strip",
+    "to": "Visual Backbone",
+    "what": "four frames enter the backbone (four arrows up in every column)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Backbone",
+    "to": "Feature vectors",
+    "what": "one feature vector per frame or segment (columns 1 and 2)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature vectors",
+    "to": "Head, Frame/segment prediction, Aggregation, Clip-level prediction",
+    "what": "decision level: predict per frame or segment, then aggregate the predictions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Feature vectors",
+    "to": "Aggregation, Prediction Head, Clip-level prediction",
+    "what": "feature level: aggregate the features, then predict",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Backbone",
+    "to": "Multi-scale matrixial feature",
+    "what": "four feature-map stacks per scale and frame (column 3)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Multi-scale matrixial feature",
+    "to": "MGL, then Spatio-temporal matrixial graph",
+    "what": "feature maps become the graph nodes (curved arrows through the MGL pill)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Spatio-temporal matrixial graph",
+    "to": "MGR(MGNN), Prediction Head, Clip-level prediction",
+    "what": "graph model, then head, then clip-level result (arrows run downward on the right)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Head boxes",
+    "to": "Head boxes",
+    "what": "shared parameters",
+    "kind": "other",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Vector feature, Single value edge, Matrixial feature, Matrixial edge labels",
+    "to": "node and edge glyphs of the toy graphs",
+    "what": "dotted leaders tie each label to its glyph; the matrix edge is also enlarged into a bigger heat grid",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Decision level methods",
+    "to": "Feature level methods, Our matrixial graph based method",
+    "what": "three designs compared in the same skeleton, split by dotted vertical rules",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Existing vector-based graph",
+    "to": "Our matrixial graph",
+    "what": "panel 2 contrasts vector nodes and single-value edges with matrix nodes and matrix edges",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "decision-level, feature-level and the proposed matrixial-graph pipelines for clip-level prediction from a face video, in three aligned columns",
+    "verdict": "baselines and ours"
+   },
+   {
+    "label": "2",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "an existing vector-based graph (vector nodes, single-value edges, lacks spatial structure) above the matrixial graph (matrix nodes and edges, preserves spatial structure)",
+    "verdict": "baseline and ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2",
+    "kind": "section",
+    "at": "top-left corner of each panel frame",
+    "what": "name the two panels, matching (1) and (2) of the caption"
+   },
+   {
+    "marker": "v with indices, v1 v2 v3",
+    "kind": "identity",
+    "at": "graph nodes",
+    "what": "name the nodes of the matrixial graph and of the toy graphs"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "face video frames",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "film strip with a black band and white sprocket holes, four frames and three dots, repeated identically in the three columns"
+   },
+   {
+    "what": "multi-scale 2D facial feature maps",
+    "content": "dense-map",
+    "role": "data-thumbnail",
+    "count": 64,
+    "medium": "bitmap",
+    "treatment": "4 columns by 4 scales, each a stack of offset layers in dark teal with green highlights, shrinking from top to bottom"
+   },
+   {
+    "what": "matrixial feature thumbnails in the key and in the toy graph",
+    "content": "dense-map",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "one stack of the same dark-teal map next to a label"
+   },
+   {
+    "what": "matrix edge heat grids",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "small red, orange and pink cell grids on the edges of the matrixial graph, one enlarged at the top right through dotted lines"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "flat purple 3D slab",
+    "stands_for": "a feature vector",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 9
+   }
+  ],
+  "examples": [
+   {
+    "what": "a three-node graph v1-v2-v3 drawn twice: vector node feature and single-value edges versus matrix node feature and matrix edges",
+    "form": "triangle graphs with node and edge glyphs",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "a face video as a black film strip with white sprocket holes, four frames and three dots",
+    "parts": [
+     "strip",
+     "frames",
+     "ellipsis"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "gnn-graph",
+    "drawn_as": "a 4 by 4 grid of purple nodes joined by straight red arrows, green dashed curves, blue arcs and orange dashed arcs",
+    "parts": [
+     "nodes v",
+     "edges"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "cnn-stack",
+    "drawn_as": "multi-scale feature maps as a 4 by 4 grid of stacked thumbnails that shrink with the scale",
+    "parts": [
+     "feature-map stacks",
+     "ellipsis"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "Head and Prediction Head as lavender boxes with bold text",
+    "parts": [
+     "Head",
+     "Prediction Head"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the numbered tab 1 and the film strips at the bottom; each column is read bottom to top, left to right as baseline, baseline, ours, with column 3 ending down the right side; panel 2 then repeats the contrast top versus bottom."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two purple-framed numbered panels side by side, a wide one for the three method columns and a narrow one for the two toy graphs stacked top and bottom; inside panel 1 the columns share one skeleton from film strip at the bottom to prediction at the top.",
+  "panel_count": 2,
+  "lanes": "three aligned columns in panel 1 (Decision level, Feature level, Ours) split by dotted vertical rules; two stacked halves in panel 2 split by a dotted rule",
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "panel-frames",
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.98,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f8f7f9",
+    "used_for": "faint lavender ground of the two panels (looks white)"
+   },
+   {
+    "hex": "#e6dded",
+    "used_for": "light lavender fill of Visual Backbone, Head, Prediction Head and MGL"
+   },
+   {
+    "hex": "#040000",
+    "used_for": "black film strips"
+   },
+   {
+    "hex": "#ccb5d3",
+    "used_for": "mid purple of graph nodes, the MGR box and the panel number tabs (reading by eye)"
+   },
+   {
+    "hex": "#7769a2",
+    "used_for": "purple faces of the 3D feature-vector slabs and the small prediction squares"
+   },
+   {
+    "hex": "#9480b3",
+    "used_for": "second purple tone of the slabs"
+   },
+   {
+    "hex": "#fceccb",
+    "used_for": "pale peach cells in the matrix-edge heat grids"
+   },
+   {
+    "hex": "#dec488",
+    "used_for": "tan edge glyphs in panel 2"
+   },
+   {
+    "hex": "#7b4089",
+    "used_for": "purple panel frames (stroke)"
+   },
+   {
+    "hex": "#ce5756",
+    "used_for": "red straight edges of the matrixial graph (stroke)"
+   },
+   {
+    "hex": "#359839",
+    "used_for": "green dashed edges of the matrixial graph (stroke)"
+   },
+   {
+    "hex": "#76abd1",
+    "used_for": "blue curved edges of the matrixial graph (stroke)"
+   },
+   {
+    "hex": "#f0b66c",
+    "used_for": "orange dashed edges of the matrixial graph (stroke)"
+   },
+   {
+    "hex": "#bbbaba",
+    "used_for": "grey dotted separators and leaders (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt hairlines on most of the 625 stroked shapes (graph edges, dashed boxes), 0.5 pt on outlines; 85 dashed shapes; purple frames around the panels",
+  "font": "serif (Times New Roman), 6.5-9 pt with bold module names and column titles; 2.5-5 pt subscripts on node labels",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small heads between stages; coloured straight, dashed and curved edge arrows inside the graph; dotted grey leaders",
+  "rendering": "flat-vector",
+  "effects": "pseudo-3D purple slabs for feature vectors and offset stacks for feature maps; none otherwise",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "purple family = the figure's own scheme (frames, titles, slabs, MGR, nodes), lavender = generic modules; dark teal = feature maps; red, green, blue, orange edges in the graph tell edge types apart but are not keyed",
+  "line_style_means": "dotted vertical rules split the three methods; dashed boxes group feature rows, feature maps and the graph; dotted leaders tie glyphs to labels or to an enlarged copy",
+  "shape_means": "flat slab = feature vector; stack of dark-teal maps = matrixial feature; circle = graph node; small tan square on an edge = edge feature; circled plus = aggregation; film strip = video",
+  "marker_means": "1 and 2 in purple tabs name the panels as in the caption; v with indices names graph nodes",
+  "emphasis": "the proposed column is the only one with colour variety and a larger structure, its title and the label 'Our matrixial graph' are bold purple like the baselines' titles; panel 2 repeats the contrast at glyph level",
+  "reusable_patterns": [
+   "three aligned columns that share one skeleton (video, backbone, features, prediction) and differ only where aggregation happens",
+   "film strip with three dots for a video of any length",
+   "narrow second panel that redraws the key data structure small, with the baseline stacked above the proposal",
+   "dotted leader from a tiny edge glyph to an enlarged copy of its matrix",
+   "flat slabs for vectors versus stacked heat-map thumbnails for matrices",
+   "short phrase captions 'Lacks spatial structure information' and 'Preserves spatial structure information' next to each toy graph",
+   "bold column titles under the columns"
+  ],
+  "weaknesses": [
+   "2.5-5 pt subscripts and 6.5 pt labels are very small",
+   "the four edge colours of the graph are not explained",
+   "the label 'Frame/segment level feature vectors' sits between columns 1 and 2 and can be read as belonging to either",
+   "dense crossing edges in the 4 by 4 graph"
+  ]
+ },
+ "resources": {
+  "own": [
+   "face video frames, probably from the paper's depression datasets",
+   "feature-map thumbnails rendered from the model",
+   "matrix heat-grid thumbnails"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes, arrows, graph nodes and edges",
+   "film strips",
+   "3D slabs",
+   "dashed frames and dotted leaders"
+  ],
+  "unknown": [
+   "which dataset the face frames come from"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "film strips of face frames",
+   "light-purple Visual Backbone boxes",
+   "flat slab feature vectors",
+   "stacked dark-teal feature-map thumbnails",
+   "4 by 4 node grid with coloured edges",
+   "triangle toy graphs with vector versus matrix edges",
+   "aggregation circle with plus"
+  ],
+  "sample_data": "video",
+  "keywords": [
+   "depression assessment",
+   "matrixial graph",
+   "graph neural network",
+   "face video",
+   "clip-level prediction",
+   "decision-level fusion",
+   "feature-level fusion",
+   "spatio-temporal"
+  ],
+  "tags": [
+   "filmstrip",
+   "small-multiples",
+   "verdict-marks",
+   "zoom-callout",
+   "matrix-cell-grid"
+  ],
+  "new_tags": [
+   {
+    "name": "panel-number-tabs",
+    "what": "small filled square tabs with a white digit on the corner of each panel frame, matching the caption's (1) and (2)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the baselines and the proposal as columns that share one skeleton so only the point where they differ changes, then repeat that difference in a small second panel at glyph level (slab versus feature map, single value versus matrix) with a one-line verdict under each.",
+  "suits": "methods that change what is passed between stages (vector versus matrix, set versus graph), where a same-skeleton comparison plus a glyph-level contrast carries the point."
+ },
+ "tags": [
+  "aligned method columns",
+  "numbered panel tabs",
+  "film strips",
+  "lavender-purple palette",
+  "dotted leaders",
+  "thumbnail grid"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.2)"
+  ],
+  "evidence": [
+   "Our approach directly includes multi-scale 2D facial feature maps of each frame as a set of nodes",
+   "In existing graphs, each node can not only include a vector (or a single value)",
+   "Fig. 1 compares our approach with previous solutions."
+  ]
+ },
+ "summary": "DepMGNN assesses depression from face videos of any length by building a matrixial graph whose nodes hold whole 2D facial feature maps and whose edges are matrices, then running a matrixial graph neural network over it. The figure has two numbered, purple-framed panels. Panel 1 puts three pipelines in aligned columns: decision-level and feature-level fusion, which reduce each frame to a vector before aggregating, and the proposed one, where multi-scale feature-map thumbnails become the nodes of a spatio-temporal matrixial graph processed by MGR(MGNN) and a prediction head. Panel 2 contrasts a vector-based graph with single-value edges against the matrixial graph with matrix nodes and edges. Film strips of real faces, dark-teal feature maps and a pale lavender-purple palette.",
+ "summary_zh": "DepMGNN 的对比图：面板 1 把决策级融合、特征级融合和本文矩阵图方法并排成三列，同一骨架下只有聚合方式不同；面板 2 用节点和边的小图对比向量图与矩阵图。画面用人脸胶片条和深青色特征图，配色以浅紫为主。",
+ "confidence": "high",
+ "notes": "Kinds extend the prior (side-by-side-contrast, model-anatomy) with concept-schematic for panel 2 (the toy graphs are a formal picture of the data structure). The acronyms MGL and MGR are not expanded in the context, and the four edge colours of the 4 by 4 graph are not keyed, so their roles are left open. Picture counts follow the digest (84 placed bitmaps: 64 feature-map layers plus small thumbnails); the face frames are assumed to be bitmaps. Panel 1 lists no sub-panels: its three columns are lanes.",
+ "venue": "AAAI25"
+}

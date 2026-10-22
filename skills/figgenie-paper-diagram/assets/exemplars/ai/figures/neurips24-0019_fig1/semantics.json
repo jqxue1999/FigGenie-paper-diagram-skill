@@ -1,0 +1,458 @@
+{
+ "paper_id": "neurips24-0019",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AE-NMCF",
+  "one_liner": "Autoencoder-like nonnegative matrix co-factorization for student cognitive modeling; this figure only states the problem of diagnosis and performance prediction.",
+  "domain": [
+   "student cognitive modeling",
+   "intelligent education",
+   "nonnegative matrix factorization"
+  ],
+  "subfield": "other",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "fan-out",
+  "variant_note": "a left-to-right flow of icon-and-card steps that turns at the Responses card into a black Student Cognitive Modeling box fanning out to two output cards, with two zoom boxes",
+  "argues": "Given exercises with expert-labelled knowledge concepts and a student's sparse binary responses, student cognitive modeling must output both a proficiency estimate per concept and predictions for unanswered exercises.",
+  "subject": "A toy student: six exercises tagged with five knowledge concepts, four responses with one missing, and the two outputs of the model.",
+  "elements": [
+   {
+    "name": "Exercise bank",
+    "type": "data",
+    "role": "pool from which exercises are chosen",
+    "drawn_as": "dark-grey stack of books above a red dashed block arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "choose exercises",
+    "type": "operation",
+    "role": "a set of exercises is picked from the bank",
+    "drawn_as": "caption under a red dashed block arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Exercise",
+    "type": "container",
+    "role": "list of the chosen exercises Ex1 to Ex4, Ex4 highlighted",
+    "drawn_as": "outlined card with colour-coded notepad icons and monospace labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Knowledge",
+    "type": "container",
+    "role": "expert-labelled knowledge concepts Kc1 to Kc5; the bottom row gives the concepts of Ex4 (Kc1, Kc3)",
+    "drawn_as": "outlined card with colour-coded light-bulb icons; bottom row tinted cyan",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Student / Test",
+    "type": "actor",
+    "role": "the student takes the test on the chosen exercises",
+    "drawn_as": "reading student at a desk above the caption Test and a red dashed arrow down",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Responses",
+    "type": "data",
+    "role": "the student's binary response log with a missing value: Ex1 correct, Ex2 missing, Ex3 correct, Ex4 wrong",
+    "drawn_as": "pink-tinted card with green tick, grey question mark and red cross circles beside Ex labels",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Student Cognitive Modeling",
+    "type": "module",
+    "role": "the model that turns the response log into two outputs",
+    "drawn_as": "black rectangle with white bold text",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Cognitive diagnosis",
+    "type": "data",
+    "role": "output: proficiency of the student on each knowledge concept Kc1 to Kc5",
+    "drawn_as": "grey-tinted card with one strip of white-to-black cells per concept",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Performance prediction",
+    "type": "data",
+    "role": "output: predicted performance on exercises Ex2, Ex5, Ex6",
+    "drawn_as": "cream-tinted card with exercise icons, Ex labels and grey question-mark circles",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Exercise content of Ex4",
+    "type": "text-block",
+    "role": "the text of Ex4: 'Consider the function f(x)=x+4' with two questions",
+    "drawn_as": "olive-tinted zoom box with monospace text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Knowledge description",
+    "type": "text-block",
+    "role": "names the concepts of Ex4: Kc1 Linear function, Kc3 Substitution",
+    "drawn_as": "cyan-tinted zoom box with monospace text",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Exercise bank",
+    "to": "Exercise",
+    "what": "choose exercises",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Exercise",
+    "to": "Knowledge",
+    "what": "every exercise carries expert-labelled concepts; the bottom row pairs Ex4 with Kc1 and Kc3",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Student / Test",
+    "to": "Responses",
+    "what": "the student's answers form the response log",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Responses",
+    "to": "Student Cognitive Modeling",
+    "what": "the response log is the model input",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Student Cognitive Modeling",
+    "to": "Cognitive diagnosis",
+    "what": "estimated proficiency per concept",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Student Cognitive Modeling",
+    "to": "Performance prediction",
+    "what": "predicted answers for exercises",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Ex4 row",
+    "to": "Exercise content of Ex4",
+    "what": "zoom into the text of the exercise",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Knowledge bottom row",
+    "to": "Knowledge description",
+    "what": "zoom into the concept descriptions",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "concept dots (Kc1, Kc3, Kc4, Kc5)",
+    "to": "exercise icons (Ex2, Ex5, Ex6)",
+    "what": "which concepts each predicted exercise needs",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Ex1 ... Ex6",
+    "kind": "identity",
+    "at": "exercise icons and response rows",
+    "what": "name exercises and tie responses and predictions to them"
+   },
+   {
+    "marker": "Kc1 ... Kc5",
+    "kind": "identity",
+    "at": "concept icons and diagnosis strips",
+    "what": "name knowledge concepts across the list and the output"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "stack of books",
+    "stands_for": "the exercise bank",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "notepad with pencil in six colours",
+    "stands_for": "exercises Ex1 to Ex6",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 7
+   },
+   {
+    "depicts": "light bulb in five colours",
+    "stands_for": "knowledge concepts Kc1 to Kc5",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 7
+   },
+   {
+    "depicts": "student reading at a desk",
+    "stands_for": "the student taking the test",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "green circle with tick, red circle with cross",
+    "stands_for": "a correct and a wrong response",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "grey circle with a white question mark",
+    "stands_for": "a missing response or a value to predict",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 4
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy student record: exercises Ex1 to Ex6, concepts Kc1 to Kc5, the text of Ex4 (f(x)=x+4) with concepts Linear function and Substitution, and responses tick, question mark, tick, cross",
+    "form": "icon lists, two zoomed text boxes and a response card",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "pink card listing Ex labels each with a green tick, grey question mark or red cross",
+    "parts": [
+     "Ex labels",
+     "tick",
+     "cross",
+     "question mark"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "proficiency-strip",
+    "drawn_as": "one row per concept of seven cells shaded from white to black, no scale",
+    "parts": [
+     "Kc rows",
+     "shaded cells"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the bold column heads top-left (Exercise bank, Exercise, Knowledge, Student), follows the red dashed arrows down from Test to Responses, right into the black model box, then up to the two output cards at top right."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "Bold column heads along the top-left over icon lists and a student icon; a U-shaped flow of red dashed block arrows (down from Test to the Responses card, right into the black model box, up into two output cards at top right); two zoom boxes under the Exercise and Knowledge cards tied by thin wedge lines.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.46,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#929000",
+    "used_for": "tint of the Ex4 card and the zoomed exercise text",
+    "opacity": 0.15
+   },
+   {
+    "hex": "#00fdff",
+    "used_for": "tint of the Ex4 concepts row and the zoomed knowledge description",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#ff2f92",
+    "used_for": "tint of the Responses card",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#ebebeb",
+    "used_for": "tint of the Cognitive diagnosis card",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#ff9300",
+    "used_for": "tint of the Performance prediction card",
+    "opacity": 0.05
+   },
+   {
+    "hex": "#000000",
+    "used_for": "Student Cognitive Modeling box and the darkest proficiency cells"
+   },
+   {
+    "hex": "#666666",
+    "used_for": "book stack and question-mark circles"
+   },
+   {
+    "hex": "#003776",
+    "used_for": "headings Cognitive diagnosis and Performance prediction"
+   },
+   {
+    "hex": "#ff2600",
+    "used_for": "red dashed block arrows (with #ff0000) and the cross mark"
+   },
+   {
+    "hex": "#0e932e",
+    "used_for": "tick circles and green icons"
+   },
+   {
+    "hex": "#f3ca7e",
+    "used_for": "orange notepad icon"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "hairline grey (#7f7f7f) outlines on cards and icons, 0.25 pt black on strips and boxes",
+  "font": "Futura-Bold sans 6.5 pt for headings, Courier monospace 5.5-6.5 pt for labels and card text",
+  "corners": "mixed",
+  "arrows": "thick red dashed block arrows (stem of dashes, solid triangular head); thin grey wedge and link lines",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each exercise and each concept has its own icon colour, repeated in the lists and the outputs; card tints: olive = the highlighted exercise, cyan = its concepts, pink = responses, grey = diagnosis, cream = prediction; green tick = correct, red cross = wrong, grey question mark = missing or to predict",
+  "line_style_means": "red dashed block arrow = main flow; thin wedge lines = zoom into a card; thin lines from concept dots to exercise icons = concepts an exercise needs",
+  "shape_means": "notepad = exercise, light bulb = knowledge concept, black rectangle = model, strip of shaded cells = proficiency level",
+  "marker_means": "Ex1-Ex6 and Kc1-Kc5 name items; tick, cross and question mark are response states",
+  "emphasis": "the black model box is the only dark block; red arrows trace the flow; bold Futura headings",
+  "reusable_patterns": [
+   "icon per item with its own colour, repeated across lists, response card and outputs",
+   "thick red dashed block arrows as the main flow",
+   "two zoom boxes under the lists tied by thin wedge lines to show the real text",
+   "response card with tick, cross and grey question mark for a sparse log",
+   "black box model with two output cards above it"
+  ],
+  "weaknesses": [
+   "no arrow carries the exercise and concept labelling into the model box",
+   "the bulb for Kc3 is purple in the list but orange in the Ex4 row",
+   "proficiency strips have no scale"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a toy exercise with real maths text (f(x)=x+4)"
+  ],
+  "stock": [
+   "flat-colour icons: book stack, notepad with pencil, light bulb, student at desk, tick, cross, question mark"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards and tints",
+   "red dashed block arrows",
+   "proficiency strips",
+   "black model box",
+   "wedge lines"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "book stack icon",
+   "colour-coded notepad and light-bulb icons",
+   "student at desk icon",
+   "response card with ticks, crosses and a question mark",
+   "black Student Cognitive Modeling box",
+   "proficiency strips",
+   "red dashed block arrows",
+   "zoom boxes with text"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "student cognitive modeling",
+   "cognitive diagnosis",
+   "performance prediction",
+   "knowledge concepts",
+   "exercises",
+   "response log",
+   "matrix factorization",
+   "intelligent education"
+  ],
+  "tags": [
+   "task-definition",
+   "zoom-callout",
+   "colour-coded-groups",
+   "pictogram-chain",
+   "verdict-marks"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "State a data task as a chain of captioned icons: give each item its own icon colour so it can be followed into the answers and outputs, draw the missing value as a grey question mark, and zoom two cards into real text with wedge lines.",
+  "suits": "Problem-definition figures for applied ML where inputs are lists of items plus a sparse record, and the model is a black box with two outputs."
+ },
+ "tags": [
+  "icon-chain",
+  "red-dashed-block-arrows",
+  "tinted-cards",
+  "monospace-labels",
+  "black-model-box",
+  "flat-icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2), caption"
+  ],
+  "evidence": [
+   "A schematic illustration of the student cognitive modeling problem.",
+   "a student’s binary-value response log with missing values (e.g., Ex2 is missing) that is input to the modeling"
+  ]
+ },
+ "summary": "The paper presents an autoencoder-like nonnegative matrix co-factorization (AE-NMCF) for student cognitive modeling. Figure 1 does not draw the method but the problem. From left to right: an exercise bank, chosen exercises with expert-labelled knowledge concepts in colour-coded icon lists, a student taking a test, and a Responses card with ticks, a cross and a grey question mark for the missing Ex2. Red dashed block arrows lead to a black Student Cognitive Modeling box, which fans out to two cards: Cognitive diagnosis (proficiency strips per concept) and Performance prediction (question marks on unanswered exercises). Two zoom boxes show the text of Ex4 and its concepts.",
+ "summary_zh": "论文提出自编码器式非负矩阵协同分解（AE-NMCF）。图1不画方法，只画问题：带知识点标注的练习、学生作答记录（含缺失）进入黑色的学生认知建模框，输出知识掌握诊断与成绩预测，另有两个放大框展示题目文字。",
+ "confidence": "high",
+ "notes": "The figure defines the task and does not show AE-NMCF. The SVG is fully vector (no bitmaps): all icons are vector. The tick, cross and question mark are response values in the data, recorded as verdict-marks for retrieval only. The direction of the proficiency strips (white to black) is not stated.",
+ "venue": "NeurIPS24"
+}

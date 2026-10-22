@@ -1,0 +1,527 @@
+{
+ "paper_id": "icml26-0064",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DSF (Definition-Specific Familiarity)",
+  "one_liner": "Study of how LLM priors and user task definitions interact in zero-shot toxicity annotation: familiarity, error rescue and misaligned definitions.",
+  "domain": [
+   "LLM annotation",
+   "toxicity detection",
+   "prompt and task definitions"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "stage-pipeline",
+   "concept-schematic"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "a shared Setup column fans out by dashed arrows to three colour-framed research-question rows, each with the question, the manipulated item, a sketch plot and findings bullets",
+  "argues": "Definition alignment, not text memorisation, predicts annotation accuracy; prompts rescue only about a third of errors; misaligned definitions hurt accuracy but not confidence.",
+  "subject": "A grey zero-shot annotation setup feeding three research-question rows, each with a manipulated definition, a trend sketch and findings.",
+  "elements": [
+   {
+    "name": "Setup",
+    "type": "container",
+    "role": "the zero-shot annotation setup shared by all three questions",
+    "drawn_as": "tall grey rounded column with the title at the top",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Is the following toxic: \"Suzy you are awful at this game\"",
+    "type": "sample",
+    "role": "input text with its instruction",
+    "drawn_as": "light-grey rounded card with a checklist-and-tick icon",
+    "container": "Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "LLM",
+    "type": "module",
+    "role": "annotator that predicts the label",
+    "drawn_as": "light-teal rounded box with a line-art robot icon at its left",
+    "container": "Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "Zero-Shot",
+    "type": "label",
+    "role": "names the arrow from the LLM to its prediction",
+    "drawn_as": "plain label beside a vertical arrow",
+    "container": "Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "Prediction: \"not toxic\"",
+    "type": "data",
+    "role": "the predicted label, marked as an error by a red crossed circle",
+    "drawn_as": "salmon rounded box with a red crossed-circle icon",
+    "container": "Setup",
+    "is_contribution": false
+   },
+   {
+    "name": "Research Question 1 (Does task familiarity improve performance?)",
+    "type": "container",
+    "role": "RQ1: tests whether familiarity with the task predicts performance",
+    "drawn_as": "rounded frame outlined in blue, title set into the top border, bold RQ1 label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Task Familiarity: Definition vs Text Data",
+    "type": "module",
+    "role": "the two familiarity measures compared: definition alignment (cosine sim between human and LLM definition) and whether the text is memorized by the LLM",
+    "drawn_as": "two short columns under an underlined heading, teal sub-headings",
+    "container": "Research Question 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Findings (RQ1)",
+    "type": "text-block",
+    "role": "result: Definition Alignment predicts accuracy; text memorization doesn't",
+    "drawn_as": "underlined heading and two bullets with blue dots",
+    "container": "Research Question 1",
+    "is_contribution": true
+   },
+   {
+    "name": "Research Question 2 (Does alignment improve performance by rescuing errors?)",
+    "type": "container",
+    "role": "RQ2: tests whether an aligned definition rescues zero-shot errors",
+    "drawn_as": "rounded frame outlined in green, title set into the top border",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Aligned Task Definition",
+    "type": "text-block",
+    "role": "the correct definition put in the prompt: 'Toxic: Any message that falls into these categories: Hate and Harassment, Threats, Extremism, Insults, and Offensive Texts'",
+    "drawn_as": "green-tinted text box under an underlined heading",
+    "container": "Research Question 2",
+    "is_contribution": null
+   },
+   {
+    "name": "Findings (RQ2)",
+    "type": "text-block",
+    "role": "result: only about a third of errors are rescued; high-confidence errors are hard to rescue",
+    "drawn_as": "underlined heading and two bullets with green dots",
+    "container": "Research Question 2",
+    "is_contribution": true
+   },
+   {
+    "name": "Research Question 3 (Does a misaligned definition hurt performance and decrease confidence?)",
+    "type": "container",
+    "role": "RQ3: tests what a wrong definition does to performance and confidence",
+    "drawn_as": "rounded frame outlined in brown, title set into the top border",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Misaligned Task Definition",
+    "type": "text-block",
+    "role": "the wrong definition put in the prompt: 'Toxic: Any remark that is racist or demeaning to a culture'",
+    "drawn_as": "pink-tinted text box under an underlined heading",
+    "container": "Research Question 3",
+    "is_contribution": null
+   },
+   {
+    "name": "Findings (RQ3)",
+    "type": "text-block",
+    "role": "result: confidence remains similar, performance decreases",
+    "drawn_as": "underlined heading and two bullets with brown dots",
+    "container": "Research Question 3",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "input text card",
+    "to": "LLM",
+    "what": "text and instruction",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "Prediction",
+    "what": "Zero-Shot label",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM",
+    "to": "Research Question 1, 2, 3",
+    "what": "the same setup is studied under each question",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "question text",
+    "to": "Findings",
+    "what": "each row reads left to right: question, manipulated item or measure, sketch plot, findings",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "row frame colour",
+    "to": "Findings bullets",
+    "what": "frame, title and bullet dots share one colour per question (blue, green, brown)",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Aligned and Misaligned definition boxes",
+    "to": "Aligned and Misaligned bars",
+    "what": "green tint = aligned, pink or red = misaligned, blue = zero-shot or unrescued",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Setup",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "input text with instruction goes to the LLM, which gives a zero-shot label that is marked wrong",
+    "verdict": "setting"
+   },
+   {
+    "label": "Research Question 1",
+    "kind": "concept-schematic",
+    "axis": "other",
+    "shows": "does task familiarity improve performance: definition alignment versus text memorisation, a rising sketch line, two findings",
+    "verdict": null
+   },
+   {
+    "label": "Research Question 2",
+    "kind": "concept-schematic",
+    "axis": "other",
+    "shows": "can an aligned definition rescue errors: stacked bar of unrescued and rescued errors, falling rescue rate against confidence, two findings",
+    "verdict": null
+   },
+   {
+    "label": "Research Question 3",
+    "kind": "concept-schematic",
+    "axis": "other",
+    "shows": "what a misaligned definition does: confidence bars for misaligned, zero-shot and aligned, two findings",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "RQ1, RQ2, RQ3",
+    "kind": "section",
+    "at": "start of each row's question",
+    "what": "bold label that names the research question"
+   },
+   {
+    "marker": "Setup",
+    "kind": "section",
+    "at": "top of the grey column",
+    "what": "heads the shared setup"
+   },
+   {
+    "marker": "Findings",
+    "kind": "section",
+    "at": "top of each row's right-hand column",
+    "what": "underlined heading above the result bullets"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "RQ1 sketch: a rising line of Task Understanding against Definition Familiarity",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "two axes without ticks and a teal line, inside a rounded light-grey frame"
+   },
+   {
+    "what": "RQ2 sketches: a stacked bar of Unrescued (blue) over Rescued (green) false annotations, and a falling green line of Rescue Rate against Confidence",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "bar and line sketch side by side in one rounded light-grey frame, no tick values"
+   },
+   {
+    "what": "RQ3 sketch: three confidence bars for Misaligned (red), Zero-Shot (blue) and Aligned (green)",
+    "content": "schematic-plot",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "axes without ticks and three flat bars in a rounded light-grey frame"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "checklist sheet with a tick",
+    "stands_for": "the annotation task and input text",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small smiling robot head with antenna",
+    "stands_for": "the LLM",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "red crossed circle",
+    "stands_for": "a wrong prediction",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one toxicity-annotation instance: the text 'Suzy you are awful at this game' and the zero-shot prediction 'not toxic'",
+    "form": "prompt card, LLM box and red prediction box in the Setup column",
+    "real_values": false
+   },
+   {
+    "what": "an aligned and a misaligned task definition for toxicity",
+    "form": "quoted definitions in green-tinted and pink-tinted text boxes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "labelled light-teal box with a small line-art robot icon beside it",
+    "parts": [
+     "LLM box",
+     "robot icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "a card holding the instruction and the quoted text, and tinted boxes holding the aligned and misaligned definitions",
+    "parts": [
+     "instruction card",
+     "aligned definition box",
+     "misaligned definition box"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts in the grey Setup column (text, LLM, wrong prediction), then follows the dashed arrows to Research Question 1, 2, 3, reading each row left to right to its Findings."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A grey Setup column at the left; at the right three full-width rows, one per research question, share the same slots (question, manipulated item, sketch plot, findings). Three dashed arrows fan out from the LLM box to the rows.",
+  "panel_count": 4,
+  "lanes": "3 aligned rows (RQ1-RQ3), each with four aligned columns",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.9,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey Setup column"
+   },
+   {
+    "hex": "#efefef",
+    "used_for": "input text card"
+   },
+   {
+    "hex": "#d0e0e3",
+    "used_for": "LLM box"
+   },
+   {
+    "hex": "#ea988e",
+    "used_for": "prediction box marked as wrong"
+   },
+   {
+    "hex": "#0072b2",
+    "used_for": "RQ1 frame, title, bullet dots"
+   },
+   {
+    "hex": "#007052",
+    "used_for": "RQ2 frame, title, bullet dots"
+   },
+   {
+    "hex": "#9b4602",
+    "used_for": "RQ3 frame, title, bullet dots"
+   },
+   {
+    "hex": "#ebeae5",
+    "used_for": "rounded frames behind the sketch plots",
+    "opacity": 0.43
+   },
+   {
+    "hex": "#86b991",
+    "used_for": "aligned definition box",
+    "opacity": 0.47
+   },
+   {
+    "hex": "#f19b91",
+    "used_for": "misaligned definition box",
+    "opacity": 0.51
+   },
+   {
+    "hex": "#9fc5e8",
+    "used_for": "Unrescued and Zero-Shot bars (blue = zero-shot outcome)"
+   },
+   {
+    "hex": "#35c955",
+    "used_for": "Rescued and Aligned bars",
+    "opacity": 0.7
+   },
+   {
+    "hex": "#e43f2a",
+    "used_for": "Misaligned bar",
+    "opacity": 0.56
+   },
+   {
+    "hex": "#40b0b4",
+    "used_for": "teal sub-headings Definition and Text Data"
+   },
+   {
+    "hex": "#61abae",
+    "used_for": "teal rising line in the RQ1 sketch"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1 pt coloured outlines on the three question frames, 0.5 pt black on setup boxes and arrows, 0.25 pt on plot axes",
+  "font": "sans (Calibri), 5.5-9 pt: 8.5-9 pt titles, 7-7.5 pt questions and definitions, 6 pt plot labels and bullets; bold only for RQ labels",
+  "corners": "rounded",
+  "arrows": "solid black arrows with filled heads inside Setup, thin dashed black arrows to the rows, open-headed axes in the sketch plots",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "frame colour = research question (blue RQ1, green RQ2, brown RQ3), repeated on title and bullets; outcome colours in plots and definition boxes: blue = zero-shot or unrescued, green = aligned or rescued, red = misaligned; teal = the two familiarity measures",
+  "line_style_means": "dashed arrows from the LLM = the same setup is studied under each question; solid arrows = data flow inside Setup",
+  "shape_means": "tall grey rounded column = shared setup; rounded outlined row = one research question; rounded light-grey frame = sketch plot; tinted box = a task definition",
+  "marker_means": "RQ1-3 label the rows; a red crossed circle marks the wrong prediction; bullet dots take the row colour",
+  "emphasis": "coloured frames with titles set into the border, bold RQ labels and underlined Findings headings; the answer sits right beside each question",
+  "reusable_patterns": [
+   "research-question rows with identical slots: question, manipulated item, sketch plot, findings",
+   "frame title set into a gap of the rounded border, in the frame's colour",
+   "dashed fan-out arrows from the shared model to each question",
+   "tick-free sketch plots standing in for the measured trends",
+   "tinted text boxes (green aligned, pink misaligned) for variants of one prompt text",
+   "bullet dots in the row colour"
+  ],
+  "weaknesses": [
+   "dense small text (5.5-7.5 pt) at double-column width",
+   "green is both the RQ2 frame colour and the aligned or rescued outcome colour, so two colour codes overlap"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the aligned and misaligned task-definition texts"
+  ],
+  "stock": [
+   "checklist icon",
+   "line-art robot head",
+   "red crossed-circle icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "sketch plots (rising line, stacked bar, falling line, three bars)",
+   "rounded frames with titles in the border",
+   "dashed fan-out arrows",
+   "text boxes and bullets"
+  ],
+  "unknown": [
+   "whether the 'Suzy' text is a real dataset item"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "grey Setup column with prompt card, LLM box and red prediction box",
+   "three colour-framed research-question rows",
+   "tinted task-definition text boxes",
+   "tick-free sketch plots in rounded frames",
+   "findings bullets with coloured dots",
+   "dashed fan-out arrows"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "LLM annotation",
+   "toxicity detection",
+   "task definitions",
+   "model-internalized priors",
+   "decision stickiness",
+   "rescue rate",
+   "definition-specific familiarity",
+   "zero-shot"
+  ],
+  "tags": [
+   "claim-banner",
+   "schematic-plot",
+   "colour-coded-groups",
+   "task-definition",
+   "verdict-marks",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "frame-border-titles",
+    "what": "a panel's title sits in a gap of its rounded frame's top border like a fieldset legend, in the frame's colour"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each research question its own colour-framed row with identical slots (question, manipulated input, sketch of the expected trend, findings bullets), and one shared setup column that fans out to every row by dashed arrows.",
+  "suits": "Analysis or evaluation papers with several research questions probing one shared setup, whose answers fit a trend sketch and two bullets."
+ },
+ "tags": [
+  "research-question-rows",
+  "colour-framed-panels",
+  "sketch-plots",
+  "findings-bullets",
+  "dashed-fan-out",
+  "pastel-tints",
+  "dense-small-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "We investigate this tension through three research questions (Figure 1):",
+   "RQ1 tests whether task familiarity correlates with performance, contrasting definition alignment (Definition-Specific Familiarity; DSF) with text memorization metrics",
+   "Insets summarize the main empirical findings for each question."
+  ]
+ },
+ "summary": "The paper studies how model-internalized priors interact with user-provided task definitions when LLMs annotate toxic text zero-shot. Figure 1 is a study overview. A grey Setup column shows the annotation setup: an input text with its instruction, an LLM box with a robot icon, and a red-tinted wrong prediction 'not toxic'. Dashed arrows fan from the LLM to three rounded rows framed in blue, green and brown for Research Questions 1 to 3. Each row holds the question, the manipulated item (familiarity measures, an aligned definition, a misaligned definition), a rounded frame with a tick-free sketch plot of the trend, and a Findings column of coloured bullets (definition alignment predicts accuracy; about a third of errors are rescued; misaligned definitions keep confidence but hurt performance).",
+ "summary_zh": "论文研究 LLM 零样本标注毒性文本时，内部先验与用户任务定义如何相互作用。图 1 左侧灰色栏给出标注设置，三条虚线连到蓝、绿、棕三个研究问题行，各行含问题、被操纵的定义、趋势示意图和发现要点。",
+ "confidence": "high",
+ "notes": "Pre-screen scope-overview was dropped (the figure maps study questions, not a space of tasks). The 'Suzy' text looks illustrative, so real_values is false. Colour opacities are as given in the digest (fill-opacity).",
+ "venue": "ICML26"
+}

@@ -1,0 +1,433 @@
+{
+ "paper_id": "acl24-0066",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "EcoRank",
+  "one_liner": "Budget-constrained text re-ranking: a costlier LLM filters passages pointwise, then a cheaper LLM re-ranks the top ones pairwise.",
+  "domain": [
+   "text re-ranking",
+   "budget-constrained LLM APIs",
+   "question answering"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "two ranking layers on tinted halves, with the 7-passage list redrawn before, between and after them",
+  "argues": "Splitting the budget between a costlier pointwise filter and a cheaper pairwise ranker re-ranks well within a fixed budget.",
+  "subject": "A query and seven passages going through two LLM ranking layers, with coins marking the budget spent per passage.",
+  "elements": [
+   {
+    "name": "query",
+    "type": "data",
+    "role": "the question; fed to the first LLM and, by a long bypass arrow, to the second",
+    "drawn_as": "white rounded box with a heavy black outline, top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Initial Passage List",
+    "type": "data",
+    "role": "seven candidate passages p1-p7 from the first-stage retriever; p1-p4 go to the LLM, p5-p7 are left unprocessed",
+    "drawn_as": "column of document-shaped cards, p1-p4 grey with a coin each, p5-p7 orange",
+    "container": "blue region",
+    "is_contribution": false
+   },
+   {
+    "name": "Unprocessed passages",
+    "type": "label",
+    "role": "names the orange cards p5-p7 that the budget does not reach",
+    "drawn_as": "small caption beside the orange cards",
+    "container": "blue region",
+    "is_contribution": null
+   },
+   {
+    "name": "Budget:",
+    "type": "data",
+    "role": "the total budget, spent partly in each layer",
+    "drawn_as": "row of 7 gold coin stacks (3 above 4) at the boundary of the two regions",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Costlier LLM / Pointwise Ranking",
+    "type": "module",
+    "role": "judges each of the processed passages yes or no for relevance",
+    "drawn_as": "tall grey rectangle with a green brain-circuit glyph, name above and operation below in dark red",
+    "container": "blue region",
+    "is_contribution": true
+   },
+   {
+    "name": "\"Yes\" / \"No\"",
+    "type": "label",
+    "role": "verdict on each passage that decides where it lands in the intermediate list",
+    "drawn_as": "small quoted words on the output arrows, 2 at the top and 2 at the bottom",
+    "container": "blue region",
+    "is_contribution": null
+   },
+   {
+    "name": "Intermediate Ranked List",
+    "type": "data",
+    "role": "list with relevant passages first, unprocessed ones in the middle, irrelevant ones last",
+    "drawn_as": "dashed frame around 7 cards: p3 and p1 green, p5-p7 orange, p2 and p4 red",
+    "container": "yellow region",
+    "is_contribution": true
+   },
+   {
+    "name": "per-passage coins",
+    "type": "icon",
+    "role": "budget spent on each passage sent to an LLM (4 in layer one, 3 in layer two)",
+    "drawn_as": "gold coin stack sitting on each arrow into an LLM box",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Cheaper LLM / Pairwise Ranking",
+    "type": "module",
+    "role": "compares the top passages of the intermediate list in pairs to order them",
+    "drawn_as": "tall grey rectangle with a purple brain-circuit glyph, name above and operation below in dark red",
+    "container": "yellow region",
+    "is_contribution": true
+   },
+   {
+    "name": "Final Ranked List",
+    "type": "data",
+    "role": "the output ranking; the top three are re-ordered, the rest keep their place",
+    "drawn_as": "dashed frame around 7 cards: p5, p3, p1 teal, p6 and p7 orange, p2 and p4 red",
+    "container": "yellow region",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "query",
+    "to": "Costlier LLM / Pointwise Ranking",
+    "what": "query text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "query",
+    "to": "Cheaper LLM / Pairwise Ranking",
+    "what": "query text",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Initial Passage List",
+    "to": "Costlier LLM / Pointwise Ranking",
+    "what": "passages p1-p4, each paid for with one coin",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Costlier LLM / Pointwise Ranking",
+    "to": "Intermediate Ranked List",
+    "what": "\"Yes\" passages placed at the top, \"No\" passages at the bottom",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Initial Passage List",
+    "to": "Intermediate Ranked List",
+    "what": "unprocessed p5-p7 end up in the middle of the list",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Intermediate Ranked List",
+    "to": "Cheaper LLM / Pairwise Ranking",
+    "what": "top passages p3, p1, p5, each with a coin",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cheaper LLM / Pairwise Ranking",
+    "to": "Final Ranked List",
+    "what": "re-ordered top passages p5, p3, p1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Budget:",
+    "to": "per-passage coins",
+    "what": "total budget is the sum of the coins spent in the two layers",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "blue region",
+    "to": "yellow region",
+    "what": "first layer then second layer",
+    "kind": "time",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "p1 ... p7",
+    "kind": "identity",
+    "at": "every passage card",
+    "what": "names the seven passages so each can be followed through the three lists"
+   },
+   {
+    "marker": "Initial Passage List / Intermediate Ranked List / Final Ranked List",
+    "kind": "section",
+    "at": "under or above each list column",
+    "what": "titles the three states of the list"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "brain with circuit traces",
+    "stands_for": "the costlier LLM (green) and the cheaper LLM (purple)",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "stack of gold coins",
+    "stands_for": "one unit of budget",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 14
+   },
+   {
+    "depicts": "document card with a wavy bottom edge",
+    "stands_for": "one passage",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 21
+   }
+  ],
+  "examples": [
+   {
+    "what": "seven passages p1-p7 followed through both layers: p3 and p1 judged \"Yes\", p2 and p4 \"No\", p5-p7 unprocessed, final order p5, p3, p1, p6, p7, p2, p4",
+    "form": "three columns of labelled cards, recoloured by outcome",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "tall grey process box with a brain-circuit glyph, name above and operation below; glyph colour tells the cost tier",
+    "parts": [
+     "grey box",
+     "brain glyph",
+     "name label",
+     "operation label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "budget-coins",
+    "drawn_as": "gold coin stacks, a row at the top for the total and one stack on each arrow for the per-passage cost",
+    "parts": [
+     "coin stack",
+     "Budget label"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "ranked-list-column",
+    "drawn_as": "a column of document-shaped cards in a dashed frame, order read top to bottom",
+    "parts": [
+     "dashed frame",
+     "cards p1-p7",
+     "list title"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Query and initial list at the left, then rightwards through the pointwise box, intermediate list, pairwise box and final list; the Budget row on top is a side read."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Two ranking boxes in a row, one on a blue half and one on a yellow half of the background, with three dashed-frame list columns (initial, intermediate, final) before, between and after them; the query sits top left and a long arrow along the top edge carries it to the second box; the budget coins sit at the boundary of the halves.",
+  "panel_count": 1,
+  "lanes": "2 tinted stage regions side by side (blue layer one, yellow layer two) crossed by 3 list columns",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.13,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae8fc",
+    "used_for": "first-layer region (pointwise ranking, costlier LLM)"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "second-layer region (pairwise ranking, cheaper LLM)"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "the two LLM boxes and the cards p1-p4 awaiting the first layer"
+   },
+   {
+    "hex": "#ffe6cc",
+    "used_for": "unprocessed passage cards p5-p7"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "passages judged \"Yes\""
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "passages judged \"No\""
+   },
+   {
+    "hex": "#b0e3e6",
+    "used_for": "passages re-ranked by the pairwise LLM"
+   },
+   {
+    "hex": "#ffd966",
+    "used_for": "budget coins"
+   },
+   {
+    "hex": "#067f68",
+    "used_for": "costlier LLM glyph"
+   },
+   {
+    "hex": "#a680b8",
+    "used_for": "cheaper LLM glyph"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.75 pt throughout: black arrows, query box and dashed list frames, grey on the LLM boxes, a darker shade of the fill on each tinted card",
+  "font": "sans (Arial), 4.5-8.5 pt; passage ids at 8.5 pt with 7 pt subscript digits, 2 pt dollar signs on the coins",
+  "corners": "mixed",
+  "arrows": "black, solid, straight and orthogonal, large filled triangular heads; one elbow-routed bypass line along the top edge; arrows pass under the coin stacks",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "blue half = layer one (pointwise, costlier LLM), yellow half = layer two (pairwise, cheaper LLM); card fill = outcome: grey awaiting the first layer, orange unprocessed, green judged Yes, red judged No, teal re-ranked by the second LLM; glyph green = costlier LLM, purple = cheaper LLM",
+  "line_style_means": "dashed black frame = a ranked list; solid black arrow = data flow",
+  "shape_means": "wavy-bottom card = a passage, tall grey box = an LLM ranking operation, rounded box = the query, coin stack = budget",
+  "marker_means": "p-numbers name passages; \"Yes\" and \"No\" are the pointwise verdicts that place a passage at the top or bottom of the intermediate list",
+  "emphasis": "the two tall grey boxes in the middle of each coloured half, with the list columns recoloured around them; the coins make cost the visible subject",
+  "reusable_patterns": [
+   "same list of items redrawn before, between and after the stages with cards recoloured by outcome",
+   "coin stack on every arrow that costs money, plus a total-budget row at the top",
+   "two background halves in different tints, one per stage, each holding that stage's operation box",
+   "items the budget never reached placed in the middle of the list and named by a small caption",
+   "long bypass arrow along the top edge to bring the query to the second stage"
+  ],
+  "weaknesses": [
+   "coin dollar signs are 2 pt and unreadable at print size",
+   "nothing ties the 7 coins in the Budget row to the 4 + 3 coins on the arrows except counting",
+   "tinted halves carry no title, so the layer names are only in the box labels"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a toy example of seven passages and their outcomes"
+  ],
+  "stock": [
+   "brain-circuit glyph recoloured per LLM",
+   "gold coin-stack icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted regions",
+   "ranking boxes",
+   "document cards",
+   "dashed list frames",
+   "arrows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "query box",
+   "passage cards p1-p7",
+   "costlier LLM box with brain glyph",
+   "cheaper LLM box with brain glyph",
+   "coin stacks",
+   "intermediate and final ranked lists",
+   "tinted background halves"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "text re-ranking",
+   "budget",
+   "LLM cost",
+   "pointwise ranking",
+   "pairwise ranking",
+   "two-layer pipeline",
+   "passage retrieval"
+  ],
+  "tags": [
+   "cost-badges",
+   "verdict-marks",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "recoloured-list-snapshots",
+    "what": "the same list of items redrawn after each stage, order changed and each item's fill recoloured by its outcome"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Redraw one small list after every stage and recolour its items by what the stage decided, so a reader sees the effect of each layer without a text example; put a coin on every arrow that costs budget.",
+  "suits": "Multi-stage ranking, filtering or cascade methods that spend a limited resource (budget, compute, calls) on a small ordered set of items."
+ },
+ "tags": [
+  "tinted-halves",
+  "document-card-lists",
+  "coin-badges",
+  "pastel-status-colours",
+  "drawio-look"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 EcoRank (p.4)"
+  ],
+  "evidence": [
+   "A fraction of budget is spent on 4 passages for pointwise prompt with a costlier LLM",
+   "an intermediate ranked list is generated with unprocessed passages in the middle"
+  ]
+ },
+ "summary": "EcoRank re-ranks retrieved passages under a fixed API budget. The figure follows seven example passages through two layers drawn on a blue and a yellow half of the background. In the first, a costlier LLM does pointwise yes/no ranking on four passages, each paid with a coin, giving an intermediate list with relevant passages on top, unprocessed ones in the middle and irrelevant ones at the bottom. In the second, a cheaper LLM does pairwise ranking on the top three and yields the final list. The same list is redrawn three times in dashed frames, with cards recoloured by outcome, and a row of coins on top shows the total budget. Drawn as flat drawio-style boxes with two brain glyphs.",
+ "summary_zh": "EcoRank 在固定预算下重排段落。图用蓝、黄两半背景表示两层：贵的 LLM 对四个段落做逐点是/否判断，便宜的 LLM 再对前三个做两两比较。同一列七个段落按结果换色重画三次，金币标出每步花费。",
+ "confidence": "high",
+ "notes": "The prior pass counted two panels; the two tinted halves have no titles or letters, so they are recorded as lanes of one drawing. The list cards are not pictures (no snippet inside), so they are recorded as elements and icons only.",
+ "venue": "ACL24"
+}

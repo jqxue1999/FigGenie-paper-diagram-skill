@@ -1,0 +1,571 @@
+{
+ "paper_id": "icml26-0187",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Hierarchical Successor Representation (HSR)",
+  "one_liner": "Successor representation built on temporally abstract options, giving policy-robust features whose NMF basis recovers room structure and transfers sample-efficiently.",
+  "domain": [
+   "successor representation",
+   "options and hierarchical RL",
+   "transfer"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "concept-schematic",
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "phenomenon-on-examples",
+  "variant_note": "ten lettered panels: a derivation chain of formula nodes, three goal maps, then matrices, option maps, t-SNE plots and basis maps of one four-room environment",
+  "argues": "Temporal abstraction turns diffusive, collapsed successor features into room-aware ones: eHSR with NMF recovers the four-room structure that RW-SR and eSR smear or collapse.",
+  "subject": "Derivation chain of HSR plus four-room gridworld evidence: SR matrices, option maps, t-SNE plots and NMF or SVD basis maps.",
+  "elements": [
+   {
+    "name": "M_0 (RW-SR)",
+    "type": "formula",
+    "role": "successor matrix of the random-walk policy, start of the red branch",
+    "drawn_as": "red italic bold symbol with the word label below",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "V_0 (RW-SR_SVD) and Phi_0 (RW-SR_NMF)",
+    "type": "formula",
+    "role": "SVD basis and NMF basis of the random-walk SR",
+    "drawn_as": "red symbols with subscripted word labels; Phi_0 sits above the chain",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "Omega (Options)",
+    "type": "formula",
+    "role": "options defined from the principal eigenvectors of RW-SR",
+    "drawn_as": "black symbol with word label, between the red branch and the blue branch",
+    "container": "a",
+    "is_contribution": null
+   },
+   {
+    "name": "{M_g} (HSR)",
+    "type": "formula",
+    "role": "hierarchical SR matrices, one per pretraining task g",
+    "drawn_as": "blue script symbol in curly braces with word label",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "M-bar (eHSR)",
+    "type": "formula",
+    "role": "expected HSR, the average over pretraining tasks",
+    "drawn_as": "blue script symbol with a bar and word label",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "V-bar (eHSR_SVD) and phi-bar (eHSR_NMF)",
+    "type": "formula",
+    "role": "SVD and NMF bases of eHSR",
+    "drawn_as": "two blue symbols with subscripted word labels at the end of the chain",
+    "container": "a",
+    "is_contribution": true
+   },
+   {
+    "name": "G (Pretraining Tasks)",
+    "type": "formula",
+    "role": "distribution of pretraining tasks feeding both branches",
+    "drawn_as": "black italic symbol with a two-line word label",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "{M_g} (SR), M-bar (eSR), phi-bar (eSR_SVD), V-bar (eSR_NMF)",
+    "type": "formula",
+    "role": "baseline branch of per-task SR matrices, their average and its two bases",
+    "drawn_as": "row of orange symbols with word labels below the blue row",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "SVD / NMF key",
+    "type": "label",
+    "role": "tells the two decompositions apart by arrow style",
+    "drawn_as": "words SVD and NMF with a short dashed and a short dotted arrow beneath",
+    "container": "a",
+    "is_contribution": false
+   },
+   {
+    "name": "g1, g2, g3",
+    "type": "instance",
+    "role": "three exemplar pretraining tasks in the four-room gridworld",
+    "drawn_as": "three black-walled grid maps with a green S and a red G cell; g1 also shows room numbers 1-4",
+    "container": "b",
+    "is_contribution": false
+   },
+   {
+    "name": "RW-SR_SVD and Options",
+    "type": "instance",
+    "role": "principal eigenvectors of RW-SR and the option policies built from them",
+    "drawn_as": "top row of four red-blue heat maps on the room map, bottom row of four maps with small blue arrows and a red terminal-state dot",
+    "container": "d",
+    "is_contribution": false
+   },
+   {
+    "name": "Initiation States / Terminal States (beta_w(s) = 1) / arg max_a pi(a|s)",
+    "type": "label",
+    "role": "key for the option maps",
+    "drawn_as": "hollow square, red dot and blue arrow glyphs with text beside them",
+    "container": "d",
+    "is_contribution": false
+   },
+   {
+    "name": "Room 1 / Room 2 / Room 3 / Room 4",
+    "type": "label",
+    "role": "legend for the shade of the t-SNE points",
+    "drawn_as": "four circles from dark to light grey in one row above the plots",
+    "container": "g",
+    "is_contribution": false
+   },
+   {
+    "name": "eHSR_NMF, eHSR_SVD, RW-SR_NMF",
+    "type": "instance",
+    "role": "principal basis vectors of three decompositions on the room map",
+    "drawn_as": "three 2x2 groups of small heat maps, white-to-red for NMF and red-blue for SVD",
+    "container": "h, i, j",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "M_0 (RW-SR)",
+    "to": "V_0 (RW-SR_SVD)",
+    "what": "SVD basis of the random-walk SR (drawn dotted)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M_0 (RW-SR)",
+    "to": "Phi_0 (RW-SR_NMF)",
+    "what": "NMF basis of the random-walk SR (drawn dashed)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "V_0 (RW-SR_SVD)",
+    "to": "Omega (Options)",
+    "what": "principal eigenvectors define the options",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Omega (Options)",
+    "to": "{M_g} (HSR)",
+    "what": "options give a temporally abstract SR for each task",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "G (Pretraining Tasks)",
+    "to": "{M_g} (HSR)",
+    "what": "pretraining tasks supply the goals for each HSR",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "G (Pretraining Tasks)",
+    "to": "{M_g} (SR)",
+    "what": "the same tasks give the plain SR baseline",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "{M_g} (HSR)",
+    "to": "M-bar (eHSR)",
+    "what": "average over the pretraining tasks",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "{M_g} (SR)",
+    "to": "M-bar (eSR)",
+    "what": "average over the same tasks, a fair baseline",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "M-bar (eHSR) and M-bar (eSR)",
+    "to": "their SVD and NMF bases",
+    "what": "dashed arrow to the SVD basis, dotted arrow to the NMF basis (key at the top of panel a)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "nodes of panel a",
+    "to": "result panels c-j",
+    "what": "each result panel shows the object named in panel a: RW-SR in c, eSR in e, eHSR in f, bases in h, i, j",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "red / orange / blue labels of panel a",
+    "to": "dot colours of the t-SNE plots in g",
+    "what": "RW-SR red, eSR orange, eHSR blue",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a",
+    "kind": "concept-schematic",
+    "axis": "overview",
+    "shows": "derivation chain from the RW-SR matrix through options to HSR and eHSR, with an SR and eSR baseline branch and SVD or NMF bases",
+    "verdict": "ours"
+   },
+   {
+    "label": "b",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "three exemplar pretraining tasks g1-g3 with start S and goal G in the four-room gridworld",
+    "verdict": "setting"
+   },
+   {
+    "label": "c",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "RW-SR matrix, block-diagonal with the four rooms, colour bar Future Occupancy",
+    "verdict": "baseline"
+   },
+   {
+    "label": "d",
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "principal eigenvectors of RW-SR and the option policies built from them, with a glyph key",
+    "verdict": "setting"
+   },
+   {
+    "label": "e",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "expected SR matrix eSR",
+    "verdict": "baseline"
+   },
+   {
+    "label": "f",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "expected HSR matrix eHSR, banded and sparser",
+    "verdict": "ours"
+   },
+   {
+    "label": "g",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "t-SNE of the row space of RW-SR, eSR and eHSR: tight room clusters for the first two, spread manifolds for eHSR",
+    "verdict": null
+   },
+   {
+    "label": "h",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "principal NMF basis vectors of eHSR: room-local parts",
+    "verdict": "ours"
+   },
+   {
+    "label": "i",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "principal SVD eigenvectors of eHSR, smeared over rooms",
+    "verdict": "baseline"
+   },
+   {
+    "label": "j",
+    "kind": "other",
+    "axis": "alternatives",
+    "shows": "NMF basis vectors of RW-SR, trivial and overlapping",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a-j",
+    "kind": "section",
+    "at": "top-left corner of each panel",
+    "what": "bold lowercase letters head the ten panels"
+   },
+   {
+    "marker": "1, 2, 3, 4",
+    "kind": "identity",
+    "at": "map g1 and beside the RW-SR matrix",
+    "what": "name the four rooms"
+   },
+   {
+    "marker": "S, G",
+    "kind": "identity",
+    "at": "grid maps of panel b",
+    "what": "green start cell and red goal cell"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four-room gridworld maps g1, g2, g3 with start and goal cells",
+    "content": "map",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "black walls with four doorways on a light-grey grid, green S and red G squares"
+   },
+   {
+    "what": "successor matrices RW-SR, eSR and eHSR (states from by states to)",
+    "content": "dense-map",
+    "role": "result",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "jet-like heat maps with dashed grey lines at the room borders; RW-SR has a colour bar and room numbers"
+   },
+   {
+    "what": "principal eigenvectors of RW-SR painted on the room map",
+    "content": "dense-map",
+    "role": "result",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "red-blue diverging heat maps inside a black frame, shared colour bar Normalised Eigenvector from -1 to 1"
+   },
+   {
+    "what": "option policies of the eigenvectors",
+    "content": "map",
+    "role": "result",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "small blue arrows per cell on the walled grid, red dot at the terminal state"
+   },
+   {
+    "what": "t-SNE projections of the row space of RW-SR, eSR and eHSR",
+    "content": "chart",
+    "role": "result",
+    "count": 3,
+    "medium": "vector",
+    "treatment": "scatter plots with axes, dots in the method hue shaded by room, shared Room 1-4 legend above"
+   },
+   {
+    "what": "basis vectors on the room map: eHSR_NMF, eHSR_SVD, RW-SR_NMF",
+    "content": "dense-map",
+    "role": "result",
+    "count": 12,
+    "medium": "bitmap",
+    "treatment": "three 2x2 groups of small heat maps; NMF bases white-to-red, SVD eigenvectors red-blue"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "the classic four-room gridworld with three pretraining tasks, each with its own start and goal cell",
+    "form": "three grid maps g1-g3 reused as the canvas of the eigenvector and basis maps",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "four-rooms-gridworld",
+    "drawn_as": "square grid with black walls, four doorways, light-grey grid lines and S and G cells",
+    "parts": [
+     "walls",
+     "doorways",
+     "S cell",
+     "G cell"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "similarity-matrix-heatmap",
+    "drawn_as": "square states-from by states-to heat map with dashed grey lines at the room boundaries, room numbers at the side and a colour bar",
+    "parts": [
+     "heat map",
+     "dashed room borders",
+     "colour bar",
+     "room numbers"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at panel a (top-left) and follows its arrows from RW-SR through Options to HSR and eHSR, sweeps right to the goal maps b, then goes down through the matrices and option maps (c-f), the t-SNE plots (g) and the basis maps (h-j)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "ten lettered panels in an irregular grid without frames: row 1 holds the derivation chain (a) and three goal maps (b); row 2 the RW-SR matrix with colour bar (c), eigenvector and option maps with key (d), and the eSR (e) and eHSR (f) matrices; row 3 three t-SNE plots (g) and three 2x2 groups of basis maps (h, i, j)",
+  "panel_count": 10,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.68,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#231f20",
+    "used_for": "walls of the maps, text, solid arrows and axes"
+   },
+   {
+    "hex": "#3853a4",
+    "used_for": "blue: HSR and eHSR branch of panel a, policy arrows in the option maps"
+   },
+   {
+    "hex": "#d83427",
+    "used_for": "red: RW-SR branch of panel a"
+   },
+   {
+    "hex": "#f7b27c",
+    "approx": true,
+    "used_for": "orange: SR and eSR branch of panel a, read off the preview"
+   },
+   {
+    "hex": "#d7d8da",
+    "used_for": "light-grey grid lines of the four-room maps"
+   },
+   {
+    "hex": "#4caf49",
+    "used_for": "green S (start) squares"
+   },
+   {
+    "hex": "#e41f26",
+    "used_for": "red G (goal) squares and terminal-state dots"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt grid and wall lines (about 2000 shapes), 0.5 pt arrows and axes, dashed grey room borders",
+  "font": "sans (Arial), 6.5 pt labels and 3.5 pt subscripts; serif math (Computer Modern) 10.5-12.5 pt for symbols; bold 12.5 pt panel letters",
+  "corners": "square",
+  "arrows": "thin black solid arrows between nodes in panel a, with dashed and dotted variants for the two decompositions; small blue arrows in the option maps",
+  "rendering": "flat-vector",
+  "effects": "none; heat maps are bitmaps with standard colormaps",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = RW-SR branch, orange = SR / eSR branch, blue = HSR / eHSR branch (panel a labels and t-SNE dots in g); green S = start cell, red G = goal cell; jet-like map = future occupancy; red-blue map = normalised eigenvector; white-to-red map = non-negative NMF basis",
+  "line_style_means": "dashed arrow = SVD, dotted arrow = NMF (key at the top of panel a); grey dashed lines in matrices = room boundaries; black = walls",
+  "shape_means": "curly braces = set of matrices over tasks; bar over a symbol = expected (averaged) matrix; Phi / phi = NMF basis, V = SVD basis; hollow square = initiation states; red dot = terminal state",
+  "marker_means": "bold letters a-j name panels; numbers 1-4 name the rooms; S and G mark start and goal",
+  "emphasis": "the blue HSR branch is the contribution while red and orange are baselines; rows of identical maps let the eye see that eHSR_NMF gives room-local parts where the others smear or collapse",
+  "reusable_patterns": [
+   "derivation chain of formula nodes with a word label under each and a key of dashed versus dotted arrows for two decompositions",
+   "one colour per method kept in the derivation chain and in the embedding plots",
+   "the same environment silhouette reused as the canvas for every eigenvector or basis map",
+   "dashed grey lines marking structure blocks (rooms) on matrices",
+   "rows of identical small maps that differ in basis index, one group per method",
+   "glyph key under the policy maps",
+   "shared colour bar placed beside the panel it belongs to"
+  ],
+  "weaknesses": [
+   "ten lettered panels with 3.5-6.5 pt labels make a very dense figure",
+   "as drawn the dashed and dotted arrows of the red RW-SR branch look reversed against the key, and the orange branch labels phi-bar as eSR_SVD and V-bar as eSR_NMF, the opposite of the symbol convention in the other branches",
+   "the method colours are carried into panel g only, not into c-f or h-j",
+   "caption typos: panel i is called eSR eigenvectors but is labelled eHSR_SVD, and j says 'Same as j'"
+  ]
+ },
+ "resources": {
+  "own": [
+   "measured SR, eSR and eHSR matrices",
+   "eigenvector and NMF basis maps",
+   "option policies",
+   "t-SNE projections"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "derivation chain of math symbols and arrows",
+   "gridworld maps",
+   "keys and colour bars",
+   "panel letters"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "derivation chain of formula nodes",
+   "four-room gridworld maps",
+   "block-diagonal heat maps",
+   "eigenvector and option-policy maps",
+   "t-SNE scatter plots",
+   "NMF basis maps",
+   "colour bars",
+   "dashed versus dotted arrow key"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "successor representation",
+   "options",
+   "four-rooms gridworld",
+   "NMF",
+   "SVD",
+   "eigenvectors",
+   "t-SNE",
+   "transfer",
+   "temporal abstraction"
+  ],
+  "tags": [
+   "matrix-cell-grid",
+   "embedding-scatter-plot",
+   "small-multiples",
+   "colour-coded-groups",
+   "flow-type-arrows",
+   "equation-boxes"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Pair a derivation chain of formula nodes (one colour per method, dashed versus dotted arrows for two decompositions) with result panels that reuse the same environment silhouette and the same method colours, so each symbol of the chain can be found as a picture.",
+  "suits": "Representation-learning and RL theory papers whose claim is that one construction recovers structure that baselines blur, shown on a single small environment."
+ },
+ "tags": [
+  "ten lettered panels",
+  "formula-node chain",
+  "heat maps on gridworld",
+  "red orange blue methods",
+  "dense full-width",
+  "unframed panels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Hierarchical Successor Representation (p.4)",
+   "4 Results (p.6)"
+  ],
+  "evidence": [
+   "Schematic of the computational process underlying the construction of hierarchical successor representations",
+   "Classical SRs exhibit topological collapse: the predictive features of intra-compartment states are tightly clustered",
+   "HSR dynamics is piecewise-smooth, characterised by manifolds with effective intra-compartment dispersion"
+  ]
+ },
+ "summary": "The Hierarchical Successor Representation (HSR) builds the successor representation from temporally abstract options so that predictive features stay stable when policies change; NMF of the expected HSR (eHSR) then gives sparse, room-local features for transfer. Figure 1 packs ten lettered panels about one four-room gridworld. Panel a is a derivation chain of formula nodes: the random-walk SR (red) yields eigenvector options which, with the pretraining tasks G (b: three goal maps with S and G cells), give HSR and eHSR (blue), next to an SR and eSR baseline branch (orange); dashed and dotted arrows mark SVD and NMF bases. Panels c-f show SR matrices and option maps, g t-SNE plots where RW-SR and eSR collapse into tight clusters while eHSR spreads, and h-j basis maps.",
+ "summary_zh": "HSR 用时间抽象的选项构造后继表示，并用 NMF 得到房间局部基。图 1 共十个面板：a 是从 RW-SR 到 eHSR 的推导链（虚线、点线分别表示 SVD、NMF），b 是三个四房间任务，其余用热图、t-SNE 和基向量图对比各方法。",
+ "confidence": "high",
+ "notes": "Prior label concept-schematic kept as primary; side-by-side-contrast added for the method comparisons in e-j and stage-pipeline for the arrow chain of panel a. The caption has slips (i called eigenvectors of eSR although the panel label and the text say eHSR; j says 'Same as j'). Arrow styles and labels in panel a are described as drawn; the orange hex is read off the preview, not the digest.",
+ "venue": "ICML26"
+}

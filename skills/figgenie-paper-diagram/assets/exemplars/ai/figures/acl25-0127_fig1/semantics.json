@@ -1,0 +1,440 @@
+{
+ "paper_id": "acl25-0127",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DocFusion",
+  "one_liner": "A 0.28B-parameter generative model that does layout analysis, table recognition, OCR and math expression recognition with one decoder, trained with GK-CEL.",
+  "domain": [
+   "document parsing",
+   "unified multi-task model",
+   "OCR"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "end-to-end-network",
+  "variant_note": "input, model and output columns: four sample inputs with coloured task tokens funnel into one grey model container (image encoder and embedding layer into one decoder) and fan out to four same-coloured output boxes",
+  "argues": "One small encoder-decoder, steered only by a task token, serves four document parsing tasks, with no separate Transformer encoder for the instruction.",
+  "subject": "DocFusion's architecture with its four task inputs, task tokens and real output strings",
+  "elements": [
+   {
+    "name": "<DLA>, <TR>, <OCR>, <MER>",
+    "type": "data",
+    "role": "task tokens that select layout analysis, table recognition, OCR or math expression recognition for the paired input",
+    "drawn_as": "four rounded chips with a coloured fill and thick outline (pink, yellow, blue, green), each joined to its input by a plus sign",
+    "container": "Input",
+    "is_contribution": null
+   },
+   {
+    "name": "DocFusion",
+    "type": "container",
+    "role": "the unified model that holds the encoder, embedding layer and decoder",
+    "drawn_as": "large light-grey rounded container with a dark navy outline and a bold title",
+    "container": "Model Architecture",
+    "is_contribution": true
+   },
+   {
+    "name": "Dual Attention Image Encoder",
+    "type": "module",
+    "role": "extracts visual features from the input image",
+    "drawn_as": "darker grey rounded box with two columns of light-blue isometric cubes, curved attention arrows, vertical dots and a rotated label",
+    "container": "DocFusion",
+    "is_contribution": null
+   },
+   {
+    "name": "Visual Features",
+    "type": "data",
+    "role": "image features handed to the decoder",
+    "drawn_as": "column of small blue-outlined squares with a brace and a rotated label",
+    "container": "DocFusion",
+    "is_contribution": null
+   },
+   {
+    "name": "Embedding Layer",
+    "type": "module",
+    "role": "turns the task instruction into text embeddings",
+    "drawn_as": "grey trapezoid with a rotated label",
+    "container": "DocFusion",
+    "is_contribution": null
+   },
+   {
+    "name": "Text Embeddings",
+    "type": "data",
+    "role": "instruction embeddings handed to the decoder",
+    "drawn_as": "column of small peach squares with a brace and a rotated label",
+    "container": "DocFusion",
+    "is_contribution": null
+   },
+   {
+    "name": "Transformer Decoder",
+    "type": "module",
+    "role": "combines image features and instruction embeddings and produces the output sequence",
+    "drawn_as": "tall light rounded rectangle with a navy outline and a rotated bold label",
+    "container": "DocFusion",
+    "is_contribution": true
+   },
+   {
+    "name": "four task outputs",
+    "type": "sample",
+    "role": "output sequences per task: location tokens for layout, a LaTeX tabular, plain OCR text, a LaTeX formula",
+    "drawn_as": "four rounded boxes in the task colours holding the raw strings, stacked at the right",
+    "container": "Output",
+    "is_contribution": null
+   },
+   {
+    "name": "task colour key",
+    "type": "label",
+    "role": "names the four colours: Layout Analysis, Table Recognition, OCR, Math Expression Recognition",
+    "drawn_as": "four short coloured bars with captions under the inputs",
+    "container": "Input",
+    "is_contribution": false
+   },
+   {
+    "name": "Input / Model Architecture / Output",
+    "type": "label",
+    "role": "headings of the three columns",
+    "drawn_as": "three large bold titles along the bottom",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "input sample",
+    "to": "task token",
+    "what": "the instruction token is attached to the sample",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "input and task token pairs",
+    "to": "DocFusion",
+    "what": "image and instruction enter the model",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Dual Attention Image Encoder",
+    "to": "Visual Features",
+    "what": "image features",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding Layer",
+    "to": "Text Embeddings",
+    "what": "instruction embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Visual Features",
+    "to": "Transformer Decoder",
+    "what": "features are combined with the instruction embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Text Embeddings",
+    "to": "Transformer Decoder",
+    "what": "instruction embeddings join the visual features before the decoder",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "DocFusion",
+    "to": "four task outputs",
+    "what": "one output sequence per task",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "task token",
+    "to": "input frame, colour key row and output box of the same colour",
+    "what": "task identity kept by colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "layout output string",
+    "to": "page thumbnail with red boxes",
+    "what": "the predicted layout drawn on the page",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "<DLA>, <TR>, <OCR>, <MER>",
+    "kind": "identity",
+    "at": "right of each input sample",
+    "what": "name the task asked of that input"
+   },
+   {
+    "marker": "Input, Model Architecture, Output",
+    "kind": "section",
+    "at": "below the three columns",
+    "what": "head the three parts of the figure"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "four input snippets: a full page, a table, a text paragraph, a formula line",
+    "content": "document",
+    "role": "sample-input",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "stacked in one column at the left, each framed in its task colour, widths aligned"
+   },
+   {
+    "what": "page with red layout boxes and tiny class tags",
+    "content": "document",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail beside the pink output box showing the detected layout"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "real output sequences: 'Header<loc_897><loc_122>...' location tokens, a LaTeX tabular of a small table, OCR text about a correlated insulator, and the LaTeX of a Hamiltonian formula",
+    "form": "colour-coded rounded boxes with raw strings",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vlm",
+    "drawn_as": "image encoder and text embedding layer feeding one Transformer decoder through two token strips",
+    "parts": [
+     "Dual Attention Image Encoder",
+     "Embedding Layer",
+     "Transformer Decoder"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "vertical columns of small rounded squares with a brace and a rotated label (blue-outlined for visual features, peach for text embeddings)",
+    "parts": [
+     "Visual Features",
+     "Text Embeddings"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "curved arrows over a column of isometric cubes, navy on the first column and yellow beneath",
+    "parts": [
+     "cube grid",
+     "curved arrows"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left page image and its <DLA> token, moves down the four inputs, follows the curves into the DocFusion container, reads encoder and embedding branches into the decoder, then fans out to the four outputs at right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Three columns left to right (inputs with task tokens, one large grey model container, four stacked outputs); four task rows are kept parallel in colour through input, token and output; the container holds an encoder branch above an embedding branch that merge into a tall decoder; a colour key sits under the inputs.",
+  "panel_count": 1,
+  "lanes": "3 titled columns (Input, Model Architecture, Output) crossed by 4 colour-coded task rows",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.77,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f2f2f2",
+    "used_for": "DocFusion container fill"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "Dual Attention Image Encoder box and Embedding Layer trapezoid"
+   },
+   {
+    "hex": "#deebf7",
+    "used_for": "encoder cubes, <OCR> chip and OCR output box"
+   },
+   {
+    "hex": "#eccaca",
+    "used_for": "layout-analysis colour: <DLA> chip and its output box"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "table-recognition colour: <TR> chip and its output box"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "math-expression colour: output box and colour-key bar"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "<MER> chip fill"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "Text Embeddings cells"
+   },
+   {
+    "hex": "#172c51",
+    "used_for": "dark navy outlines of the model container, cubes and decoder"
+   },
+   {
+    "hex": "#cc0066",
+    "used_for": "outline of the layout-analysis chip, frame and output box"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "outline of the table-recognition chip, frame and output box"
+   },
+   {
+    "hex": "#2f5597",
+    "used_for": "outline of the OCR chip, frame and output box"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "outline of the math-expression chip, frame and output box"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt dark navy on most model parts, 1 pt coloured outlines on task chips, frames and output boxes, thin black curved connectors",
+  "font": "sans (DengXian), bold throughout: 12.5 pt column titles and DocFusion, 8-9 pt module and chip labels, 3.5-5 pt for sample text and outputs",
+  "corners": "rounded",
+  "arrows": "thin black curves that converge on the model's left edge and fan out from its right edge; outline block arrows from encoder and embedding layer to their token strips; elbow lines with one arrowhead into the decoder; navy and yellow curved arrows over the encoder cubes",
+  "rendering": "flat-vector",
+  "effects": "pseudo-3D isometric cubes for feature tokens in the encoder; otherwise none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per task, kept from input frame to task chip to colour key to output box: pink = layout analysis, yellow = table recognition, blue = OCR, green = math expression recognition; grey = model parts; light blue = visual tokens; peach = text embeddings",
+  "line_style_means": "thin black curves = inputs entering and outputs leaving the model; outline block arrows = module to its token strip; navy and yellow curved arrows inside the encoder = attention (not labelled)",
+  "shape_means": "trapezoid = embedding layer; tall rounded rectangle = decoder; column of small squares with a brace = token sequence; isometric cube = encoder feature token",
+  "marker_means": "plus sign between each input and its chip = the instruction is attached to the sample; chip text in angle brackets = special task token",
+  "emphasis": "The large DocFusion title and the grey container hold the eye; four coloured task paths run past it in parallel.",
+  "reusable_patterns": [
+   "one colour per task carried through input frame, task chip, legend bar and output box",
+   "inputs funnel into one model edge and outputs fan out of the opposite edge with thin curves",
+   "plus sign joining each input sample to its coloured task token",
+   "token strips with braces and rotated labels between modules and the decoder",
+   "raw output strings (location tokens, LaTeX, OCR text) shown inside the output boxes",
+   "small result thumbnail with red boxes beside the layout output"
+  ],
+  "weaknesses": [
+   "3.5-5 pt text in the samples and outputs cannot be read at print size",
+   "the two colours of curved arrows over the encoder are not explained",
+   "the colour key sits below the inputs, away from the outputs it also names"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real document page, table, paragraph and formula crop as inputs",
+   "real output sequences",
+   "layout-detection result thumbnail"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "model container, boxes, trapezoid and cubes",
+   "token strips and braces",
+   "curved connectors",
+   "task chips"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "document page, table, text and formula inputs with coloured task tokens",
+   "DocFusion container with image encoder, embedding layer and decoder",
+   "token strips with braces",
+   "four colour-coded output boxes",
+   "colour key for four tasks",
+   "layout result thumbnail with red boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "document parsing",
+   "unified model",
+   "layout analysis",
+   "table recognition",
+   "OCR",
+   "formula recognition",
+   "task token",
+   "generative",
+   "encoder-decoder"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "task-token-chips",
+    "what": "coloured special tokens such as <DLA> attached by a plus sign to each input sample, whose colour recurs on the colour key and the output box"
+   },
+   {
+    "name": "io-fan-in-fan-out",
+    "what": "thin black curves converge from several inputs onto one model edge and fan out from the opposite edge to several outputs"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "For a unified multi-task model, give each task one colour and keep it on the input frame, the task token, the legend bar and the output box, and let thin curves converge into and fan out of one model container, so one architecture visibly serves several tasks.",
+  "suits": "unified or multi-task models (OCR, detection, instruction-tuned models) where one set of weights handles several task types chosen by a token."
+ },
+ "tags": [
+  "input-model-output columns",
+  "colour-per-task",
+  "grey model container",
+  "token strips with braces",
+  "task token chips",
+  "rotated labels"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3)"
+  ],
+  "evidence": [
+   "The model comprises three key components: a visual encoder, a text embedding layer and a Transformer decoder.",
+   "no Transformer encoder is included, task-specific prompts are directly embedded, simplifying the architecture"
+  ]
+ },
+ "summary": "DocFusion is a 0.28B-parameter generative model that handles four document parsing tasks (layout analysis, table recognition, OCR and math expression recognition) with one decoder, trained with a Gaussian-kernel cross-entropy loss so that discrete text tokens and continuous coordinates share one output sequence. Figure 1 is an input, model and output diagram. Four sample inputs (a page, a table, a text block, a formula) are each joined by a plus sign to a coloured task token. Thin curves lead into a grey DocFusion container, where a dual-attention image encoder and an embedding layer produce visual-feature and text-embedding token strips that merge into one Transformer decoder. Four same-coloured boxes show real outputs: location tokens, a LaTeX table, plain text and a LaTeX formula.",
+ "summary_zh": "DocFusion 用一个解码器统一处理版面分析、表格识别、OCR 和公式识别。图一按输入、模型、输出三栏排布：四种样本各配一个彩色任务标记，经图像编码器与文本嵌入层汇入 Transformer 解码器，再按同色输出四类结果。",
+ "confidence": "high",
+ "notes": "Prior label model-anatomy kept; stage-pipeline (fan-out of one model to four tasks) added as secondary. The figure has no framed or lettered panels, so the three titled columns are recorded as lanes and section markers. The two sets of curved arrows over the encoder cubes (navy and yellow) are not explained in the figure or the quoted text. Whether the plus sign means concatenation or only pairing is not stated.",
+ "venue": "ACL25"
+}

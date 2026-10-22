@@ -415,3 +415,79 @@ figure's total is reported, not judged. Double column at 504 pt, height up to th
 4. Collapse empty structure (spare slots, placeholders) into one dashed outline with a count.
 5. Grow the figure taller rather than the type smaller: 6 pt stays the floor.
 6. Only then propose two figures, cut where each keeps its own story (overview + detail, structure + numbers).
+
+---
+
+## 9. AI-venue figures (`meta.family = "ai"`)
+
+The second family: the Figure 1 of a paper at ICLR, ICML, NeurIPS, CVPR, ACL or AAAI, distilled in `references/ai/`.
+Everything above holds (ids, the SVG contract, the print floors, feedback → field) with these additions. The
+vocabulary is the one of the AI semantic records (`paper-figure-corpus/references/semantics-schema-ai.md`) and of
+`references/ai/kinds.md`, `layouts.md`, `domains.md`; the reverse-engineered examples are the `assets/specs/examples/`
+specs whose `meta.family` is `ai`.
+
+**What is different.** These figures are not only boxes and arrows: half of them carry samples (a prompt and its
+answer, image tiles, a waveform, a molecule), a third icons, a quarter bubbles, half formulas; they span the venue's
+full text width; several kinds overlap in one figure; the field changes the habits (`domains.md`). So the spec names
+the family, the venue, the kinds and the field, and carries the content as nodes of its own kinds. The validator reads
+these to pick the width band and the budgets and to phrase its advice; it never rejects an arrangement, and every
+AI-specific finding is a warning or an info.
+
+**`meta`.** `family: "ai"`; `venue` (required: `iclr`, `icml`, `neurips`, `cvpr`, `acl`, `aaai` — the text width, 396
+to 504 pt, is the width band); `column: "double"` = the full text width (the default and 89% of good figures),
+`"single"` = one column of a two-column venue (ICML, CVPR, ACL, AAAI only); `width_pt` defaults to the venue's text
+width; `template: "ai"` (there is no template: `meta.ai.arrangement` describes the arrangement); `kind` stays
+`architecture` for an overview or `mechanism` for how one part works (`panels[]`, `deltas[]`, `steps[]`, `values[]`
+are available to both); `palette` from the five AI families or any other (`references/ai/palettes.md` §9);
+`direction` may be `radial` or `none`.
+
+**`meta.ai`** — descriptive, read for budgets and advice:
+
+| field | values | what it does |
+|---|---|---|
+| `kinds` | the eight kinds of `kinds.md`, primary first | the primary kind picks the box budget (`style-thresholds.json` `by_kind`) and the sample advice |
+| `variant` | a variant slug of the primary kind, or your own | — |
+| `subfield`, `subfield2` | the nine fields of `domains.md` | which section of `domains.md` is read; the exemplar search's `--subfield` |
+| `arrangement` | `panels-row`, `panels-grid`, `bands`, `lanes`, `pipeline-row`, `cards-grid`, `hub`, `dashboard`, `chat-column`, `inset`, `free`, `single`, ... (`layouts.md` §1) | names the arrangement decided on; `other` with a note is a value |
+| `grouping` | `tinted-regions`, `framed-boxes`, `dashed-boxes`, `whitespace`, `panel-frames` | how parts are set apart (`layouts.md` §7) |
+| `samples` | `none`, `text`, `image`, `video`, `audio`, `3d`, `table`, `network-graph`, `chart`, `code`, `molecule`, `mixed` | the modality of the samples shown |
+| `idioms` | vocabulary ids (`llm`, `transformer-block`, `lora-adapter`, `token-strip`, `diffusion-chain`, `agent-loop`, `chat-bubbles`, `benchmark-card`, `filmstrip` ...) | the stock forms the figure draws: `assets/symbols/index.json` (`subtype: ai`, `by_family_ai`) holds parts for each |
+| `materials` | free text | what the paper supplies (sample images, screenshots, real prompts and numbers, logos): the plan draws from them and never invents them |
+
+**Nodes.** Three kinds join the list for the content these figures carry: `text` (a quoted text block — a prompt, a
+response, code lines, a record — drawn as a card with its lines; `text_lines` holds them, two or three, never a
+page), `bubble` (a speech or thought bubble with a short message, tied to its actor by a tail or a leader), `chart`
+(a small plot drawn to scale in a `data-scale="data"` group, or as a picture). Pictures stay `kind: image` with
+`image.src` and now `image.role` (`sample-input`, `sample-output`, `data-thumbnail`, `result`, `screenshot`,
+`illustration`, `icon`, `logo`): the role sets how the plan sizes and frames them. Two descriptive fields on any
+node: `idiom` (the vocabulary id of the drawn form, so the parts are found) and `train_state` (`trainable`, `frozen`,
+`shared`: drawn with the snowflake / fire glyphs or the palette's state colours, and said in the key — the corpus
+splits blue and grey evenly between the two states). Edges add `gradient`, `attention` and `interaction` kinds; panels
+add the axes `stages`, `examples`, `narrative`, `overview` and `modalities` (`layouts.md` §2); annotations add `title`
+(a claim or the paper's name set into the figure).
+
+**By kind** (`kinds.md` says more): a stage pipeline is `containers[]` or `panels[]` with `axis: stages` holding
+nodes, with `steps[]` when the stages are numbered; model anatomy is modules with `idiom`s, operators (`kind:
+compute`), tensors as `token-strip` / `vector-cells` parts, `train_state` where it matters, a zoom as `panels[]` with
+`axis: zoom`; a contrast is `panels[]` with `axis: alternatives` and `deltas[]`, verdicts as `annotations[]` of `kind:
+verdict`; a walkthrough is `steps[]` or `panels[]` with `axis: time` and `deltas[]`, real text as `text` / `bubble`
+nodes, real pictures as `image` nodes, `values[]` when the numbers are the content; a scope overview is `panels[]`
+with `axis: examples` (one card each) or a grid of card containers; actor interaction is `actor` / `icon` nodes with
+`interaction` edges and `bubble` nodes, tinted containers per role; a contribution mosaic is `panels[]` with `axis:
+narrative`, each tile with its own kind.
+
+**What the validator says.** Errors: a missing `venue`; `column: single` at NeurIPS or ICLR; `template: ai` without
+`family: ai`; the schema. Warnings: no `kinds` or no `subfield`; the width outside the venue's band, the height above
+317 pt, the aspect outside 1.2-3.5; boxes above the primary kind's p90 (pipeline 58, anatomy 56, contrast 59,
+walkthrough 68, concept 31, scope 85, actors 42, mosaic 70) or below its p25; more saturated fills than four. Infos: a
+kind that usually shows a sample without one (`ai.no-sample`); a `text` or `bubble` node longer than three lines; no
+`arrangement`; no `palette`; a figure that is mostly icons. The linter adds `ai.bare` (at most 20 text runs on a
+full-width figure), `ai.loud-ink` (mid or strong fills on 15% or more of the canvas) and `ai.hues-no-key` (four hue
+families and no legend), all advisory, and raises the fill-colour ceiling to 16 and the saturated-fill ceiling to 4 for
+this family (`references/ai/anti-patterns.md` §5).
+
+**Feedback → field.** "这是 CVPR 的图，要通栏" → `meta.venue: cvpr`, `column: double`; "把样例图放进去" → `image`
+nodes with `role: sample-input` / `sample-output` and the files in `meta.ai.materials`; "换成对话的样子" → `bubble`
+nodes, `kinds` gain `worked-walkthrough`; "冻结的部分标出来" → `train_state` on the nodes and a key; "太空了" →
+`ai.bare`: a real input and output, what each stage produces, the one example; "颜色太吵" → `ai.loud-ink`: pale
+fields, strong colour only on the small thing that must be found.

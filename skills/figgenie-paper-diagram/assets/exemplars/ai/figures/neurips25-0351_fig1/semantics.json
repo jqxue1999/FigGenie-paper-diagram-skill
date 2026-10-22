@@ -1,0 +1,493 @@
+{
+ "paper_id": "neurips25-0351",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FPSAttention",
+  "one_liner": "Training-aware co-design of FP8 quantization and structured sparsity for 3D bi-directional attention in video diffusion transformers.",
+  "domain": [
+   "video diffusion efficiency",
+   "FP8 quantization",
+   "sparse attention"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy"
+  ],
+  "variant": "design-family",
+  "variant_note": "three sibling zoom panels (training-free quantization, training-free sparsity, fused) around one Video DiT block, the proposed one last and the only one with flames",
+  "argues": "Training-free quantization and training-free sparsity each lose accuracy and do not combine; one training process that fuses low-precision and sparse patterns avoids this.",
+  "subject": "A Video DiT block in the centre and three side panels showing how Q, K, V tokens and the attention grid are quantised and sparsified in each approach.",
+  "elements": [
+   {
+    "name": "(a) Training Free Quantization",
+    "type": "container",
+    "role": "prior approach: Q, K, V quantised to low precision without training",
+    "drawn_as": "dashed rounded panel at top left with title above",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Training Free Sparsity",
+    "type": "container",
+    "role": "prior approach: attention cells skipped without training",
+    "drawn_as": "dashed rounded panel at bottom left with title below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Video DiT Block",
+    "type": "container",
+    "role": "the block whose attention is zoomed into",
+    "drawn_as": "tall dashed region holding a bottom-up stack of boxes with thick up arrows",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Layer Norm",
+    "type": "module",
+    "role": "normalisation, three times in the stack",
+    "drawn_as": "light-blue rounded box with blue outline and soft shadow",
+    "container": "Video DiT Block",
+    "is_contribution": false
+   },
+   {
+    "name": "3D Full Attention",
+    "type": "module",
+    "role": "the attention that quantisation and sparsity act on",
+    "drawn_as": "lavender rounded box with purple outline",
+    "container": "Video DiT Block",
+    "is_contribution": true
+   },
+   {
+    "name": "Cross-Attention (Optional)",
+    "type": "module",
+    "role": "optional text cross-attention",
+    "drawn_as": "translucent pale-yellow box with diagonal hatching and golden outline",
+    "container": "Video DiT Block",
+    "is_contribution": false
+   },
+   {
+    "name": "FFN",
+    "type": "module",
+    "role": "feed-forward layer at the top of the block",
+    "drawn_as": "light-blue rounded box",
+    "container": "Video DiT Block",
+    "is_contribution": false
+   },
+   {
+    "name": "Q, K, V token sets and Q-tilde, K-tilde, V-tilde",
+    "type": "data",
+    "role": "query, key and value tokens before and after quantisation",
+    "drawn_as": "columns or rows of four squares: red Q, green K, purple V; hatched copies for the quantised tilde versions",
+    "container": "each panel",
+    "is_contribution": false
+   },
+   {
+    "name": "attention grid (4x4)",
+    "type": "data",
+    "role": "attention scores between query and key tokens",
+    "drawn_as": "grey cell grid: hatched cells in (a), white skipped cells in (b), both in (c)",
+    "container": "each panel",
+    "is_contribution": null
+   },
+   {
+    "name": "Quant / Quant.",
+    "type": "operation",
+    "role": "quantises a token set to low precision",
+    "drawn_as": "short arrow with a rotated or inline label and a state emoji",
+    "container": "(a), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "Sparse",
+    "type": "operation",
+    "role": "skips attention cells",
+    "drawn_as": "arrow with rotated or inline label and a state emoji",
+    "container": "(b), (c)",
+    "is_contribution": null
+   },
+   {
+    "name": "(c) Our Fused Quantization & Sparsity",
+    "type": "container",
+    "role": "proposed approach: quantisation and sparsity together, trained",
+    "drawn_as": "dashed rounded panel at top right with title above",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "token legend",
+    "type": "container",
+    "role": "key for High-precision Token, Low-precision Token, Skipped Token and Trainable / Frozen",
+    "drawn_as": "framed dashed panel at bottom right with four rows of glyph and text",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Layer Norm",
+    "to": "3D Full Attention, Cross-Attention (Optional), Layer Norm, FFN",
+    "what": "bottom-up sequence of the block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q, K, V",
+    "to": "Q-tilde, K-tilde, V-tilde (a)",
+    "what": "quantisation, then the quantised tokens enter the grid",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q, K, V",
+    "to": "attention grid (b)",
+    "what": "sparse selection: some grid cells are skipped",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Q, K, V",
+    "to": "attention grid (c)",
+    "what": "quantisation then sparsity before the grid",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "3D Full Attention and Cross-Attention (Optional)",
+    "to": "panels (a), (b), (c)",
+    "what": "two sets of dashed leader lines, purple from the attention box and golden from the cross-attention box, run to the zoom panels",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Q red, K green, V purple",
+    "to": "all panels and legend",
+    "what": "same colour for the same tensor everywhere",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "snowflake or flame",
+    "to": "each Quant and Sparse operation",
+    "what": "frozen in (a) and (b), trainable in (c)",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(a) and (b)",
+    "to": "(c)",
+    "what": "prior separate approaches versus the fused one",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Training Free Quantization",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "Q, K, V quantised to hatched low-precision tokens with frozen operations; the grid is computed on all cells",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(b) Training Free Sparsity",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "full-precision tokens, sparse selection leaves white skipped cells in the grid; operations frozen",
+    "verdict": "baseline"
+   },
+   {
+    "label": "(c) Our Fused Quantization & Sparsity",
+    "kind": "model-anatomy",
+    "axis": "alternatives",
+    "shows": "quantisation and sparsity applied together, hatched and white cells in one grid, operations trainable",
+    "verdict": "ours"
+   },
+   {
+    "label": "Video DiT Block",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "stack of Layer Norm, 3D Full Attention, optional Cross-Attention, Layer Norm, FFN that the panels zoom into",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "titles of the three zoom panels",
+    "what": "letters the prior approaches and the proposed one"
+   },
+   {
+    "marker": "Q, K, V and tilde versions",
+    "kind": "identity",
+    "at": "above or beside each token set",
+    "what": "names query, key and value tokens; a tilde marks the quantised version"
+   },
+   {
+    "marker": "snowflake, flame",
+    "kind": "identity",
+    "at": "beside each Quant and Sparse operation",
+    "what": "frozen (training-free) versus trainable"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "colour snowflake emoji",
+    "stands_for": "a frozen, training-free operation",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 7
+   },
+   {
+    "depicts": "colour flame emoji",
+    "stands_for": "a trainable operation",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 7
+   }
+  ],
+  "examples": [
+   {
+    "what": "a toy 4-token Q, K, V set and a 4x4 attention grid in each variant",
+    "form": "rows and columns of small squares with a grid, hatched or white cells marking precision and skipping",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "colour snowflake and flame emoji next to each operation, with a Trainable / Frozen row in the legend",
+    "parts": [
+     "snowflake",
+     "flame",
+     "legend row"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows and columns of four small squares coloured by tensor (red Q, green K, purple V); hatched fill for low precision",
+    "parts": [
+     "Q column",
+     "K row",
+     "V column"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "4x4 grid of grey cells whose hatching and white holes show precision and skipped tokens instead of heat values",
+    "parts": [
+     "grid",
+     "hatched cells",
+     "white cells"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "bottom-up stack of Layer Norm, attention, optional cross-attention and FFN boxes joined by thick up arrows",
+    "parts": [
+     "Layer Norm",
+     "3D Full Attention",
+     "Cross-Attention",
+     "FFN"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Video DiT block in the centre, follows the dashed leader lines to panel (a), then (b), then (c) at the right, and ends at the token legend."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three columns: two stacked dashed panels (a) and (b) on the left, the Video DiT Block as a tall dashed region in the middle, panel (c) above a framed legend on the right; dashed leader lines run from the block's attention boxes to the zoom panels. A faint dotted frame surrounds everything and the top margin is blank.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "centre",
+  "grouping": [
+   "dashed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 2.2,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d7e6f6",
+    "used_for": "Layer Norm and FFN boxes"
+   },
+   {
+    "hex": "#eadef6",
+    "used_for": "3D Full Attention box"
+   },
+   {
+    "hex": "#f5d7d6",
+    "used_for": "Q token fill"
+   },
+   {
+    "hex": "#deecd2",
+    "used_for": "K token fill"
+   },
+   {
+    "hex": "#f2eaf9",
+    "used_for": "V token fill"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey attention-grid cells and the grey legend token"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red outline of Q tokens"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "green outline of K tokens"
+   },
+   {
+    "hex": "#7030a0",
+    "used_for": "purple outline of V tokens, the attention box and its dashed leader lines"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "blue outline of Layer Norm and FFN boxes"
+   },
+   {
+    "hex": "#ddbd5c",
+    "used_for": "golden outline of the cross-attention box and its dashed leader lines"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey outlines of grid cells and dashed panel frames"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.5 to 0.75 pt coloured outlines on tokens and boxes, dashed grey frames on panels, dashed purple and golden leader lines",
+  "font": "sans (Arial), 9 pt panel titles and block names, 7 pt legend and Cross-Attention, 5.5 pt Quant and Sparse labels with bold italic Q, K, V symbols, 10 pt emoji",
+  "corners": "mixed",
+  "arrows": "thick black straight arrows with small heads: up arrows between block boxes, short down arrows for Quant and Sparse, side arrows into the grid; dashed leader lines in purple and gold",
+  "rendering": "flat-vector",
+  "effects": "soft drop shadows under boxes and tokens; hatching for low precision; translucent hatched cross-attention box",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "red = Q, green = K, purple = V in every panel and in the legend; blue boxes = ordinary DiT layers, lavender = 3D Full Attention, pale yellow hatched = optional cross-attention; grey cells = attention scores",
+  "line_style_means": "dashed rounded frames = panels and legend; dashed purple and golden lines = zoom from the attention boxes to the panels; diagonal hatching = low precision; white cell = skipped token",
+  "shape_means": "rows or columns of four squares = token sets; 4x4 grid = attention map; thick up arrows = block order",
+  "marker_means": "tilde = quantised tensor; Quant and Sparse name the operations; snowflake = frozen, flame = trainable; (a) (b) (c) letter the approaches",
+  "emphasis": "(c) is the only panel with flames and with hatching and white cells in the same grid; the three panels share one layout so only fills and badges change",
+  "reusable_patterns": [
+   "the same Q, K, V and grid mini-diagram repeated per variant so only fills and state badges change",
+   "snowflake and flame emoji next to each operation to mark frozen versus trainable, with a legend row",
+   "hatched fill for low precision and white for skipped, explained in a framed token legend",
+   "dashed leader lines from one central block to side panels on both sides",
+   "one colour per tensor (Q red, K green, V purple) carried into every panel and the legend"
+  ],
+  "weaknesses": [
+   "purple and golden leader lines converge on the same panel corners and are hard to follow",
+   "state is marked only by 10 pt emoji, not by fill",
+   "the top margin of the canvas is blank"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "colour snowflake and flame emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "Q, K, V token tiles",
+   "attention grids",
+   "Video DiT block stack",
+   "legend panel",
+   "leader lines"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "Video DiT block stack with Layer Norm, 3D Full Attention, Cross-Attention and FFN",
+   "Q K V token columns in red, green and purple",
+   "4x4 attention grid with hatched and white cells",
+   "snowflake and flame emoji",
+   "framed token legend",
+   "dashed leader lines to zoom panels"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "FP8 quantization",
+   "sparse attention",
+   "video diffusion",
+   "DiT",
+   "training-aware",
+   "co-design",
+   "3D attention",
+   "token precision",
+   "frozen versus trainable"
+  ],
+  "tags": [
+   "module-state-coding",
+   "token-strip",
+   "attention-mask-grid",
+   "matrix-cell-grid",
+   "zoom-callout",
+   "notation-key",
+   "colour-coded-groups"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "Show a combination of techniques by redrawing one micro-diagram (tokens and attention grid) per variant, changing only a fill (hatched = low precision, white = skipped) and a state badge (snowflake or flame), and explain the glyphs in a framed legend; tie the panels to the shared block with dashed leader lines.",
+  "suits": "Efficiency co-design papers (quantisation, sparsity, pruning, caching) that must show which tokens or weights are affected and what is trained or frozen."
+ },
+ "tags": [
+  "design-family",
+  "central-block-with-side-zooms",
+  "hatched-low-precision",
+  "emoji-badges",
+  "dashed-panels",
+  "framed-legend"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1-2)"
+  ],
+  "evidence": [
+   "our FPSAttention framework (c) integrates low-precision and sparse patterns in a single training process",
+   "Comparing previous training-free quantization (a) and training-free sparsity (b) approaches reveals substantial accuracy degradation",
+   "yielding near-zero accuracy loss and seamless deployment."
+  ]
+ },
+ "summary": "FPSAttention is a training-aware co-design of FP8 quantization and structured sparsity for 3D attention in video diffusion transformers. Figure 1 puts a Video DiT block (Layer Norm, 3D Full Attention, optional Cross-Attention, FFN) in the middle and zooms into its attention with dashed leader lines. Three side panels draw the same Q, K, V token columns and a 4x4 attention grid: (a) training-free quantization with hatched low-precision tokens and snowflakes for frozen, (b) training-free sparsity with white skipped cells, and (c) the fused method with hatching and skipped cells together and flames for trainable. A framed legend explains token precision, skipped tokens and trainable versus frozen.",
+ "summary_zh": "FPSAttention 联合训练 FP8 量化与稀疏。图1中间为 Video DiT 块，虚线引出三个放大图：(a) 免训练量化，(b) 免训练稀疏，(c) 融合方法；斜线为低精度，白格为跳过，雪花火焰区分冻结与可训练。",
+ "confidence": "high",
+ "notes": "The pre-screen put model-anatomy first; the lettered side panels are alternatives, so side-by-side-contrast leads here and model-anatomy covers the central block. The 162 placed bitmaps are token tiles and shadows; the emoji are colour-font glyphs counted as bitmaps. Exactly which leader line ends where is partly ambiguous: purple lines leave the 3D Full Attention box and golden lines the optional cross-attention box, both reaching the three panels.",
+ "venue": "NeurIPS25"
+}

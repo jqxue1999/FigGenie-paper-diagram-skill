@@ -1,0 +1,493 @@
+{
+ "paper_id": "icml24-0039",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "InfiAgent-DABench",
+  "one_liner": "A benchmark and agent framework (DAEval: 603 questions on 124 CSV files) evaluating LLM agents on end-to-end data analysis with a Python sandbox.",
+  "domain": [
+   "data analysis",
+   "LLM agents",
+   "benchmark evaluation"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline",
+   "actor-interaction"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "one real benchmark item traced through the agent's ReAct loop, answer reformatting and matching with the closed-form label",
+  "argues": "An LLM agent solves an open-ended data analysis question end to end in a ReAct loop with a Python sandbox, and a reformatted answer can be matched automatically against a closed-form label.",
+  "subject": "One data-analysis question with its CSV file, the agent's code and sandbox output, the final answer, and the closed-form label it is matched with.",
+  "elements": [
+   {
+    "name": "Problem",
+    "type": "sample",
+    "role": "the data analysis question given to the agent (linear relationship between GDP per capita and life expectancy score, judged by R-squared)",
+    "drawn_as": "grey rounded card with a grey title tab; key phrases in red and the file name in navy",
+    "container": "thick-bordered sample box",
+    "is_contribution": true
+   },
+   {
+    "name": "Happiness_rank.csv",
+    "type": "data",
+    "role": "the CSV file the question refers to: country, happiness rank, GDP per capita, life expectancy and more columns",
+    "drawn_as": "grey card with a tab holding a small file icon and the blue file name, above a table with a blue header row, pale-blue rows and '...' cells; two column headers in red",
+    "container": "thick-bordered sample box",
+    "is_contribution": true
+   },
+   {
+    "name": "LLM Agent",
+    "type": "actor",
+    "role": "the evaluated agent: states its plan and writes Python code as 'python sandbox input'",
+    "drawn_as": "white rounded card with the OpenAI logo and a bold title; a plan sentence followed by a syntax-highlighted monospace code block",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Python Sandbox",
+    "type": "module",
+    "role": "executes the agent's code and returns STDOUT",
+    "drawn_as": "white card with the Python logo and bold title; green monospace 'STDOUT:' and the printed number 0.6666363295228102",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "ReAct ×N",
+    "type": "label",
+    "role": "names the plan-code-observe loop between agent and sandbox and says it repeats N times",
+    "drawn_as": "bold text between two curved black arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Final Answer",
+    "type": "text-block",
+    "role": "the agent's concluding natural-language answer: R-squared approximately 0.67, a poor fit",
+    "drawn_as": "white card with grey title tab; '0.67' and 'poor fit' in bold green",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Closed-form Label",
+    "type": "text-block",
+    "role": "the stored ground truth in closed form: {@coefficient_determination[0.67], @model_fit['poor fit']}",
+    "drawn_as": "white card with grey title tab; red '@' field names, green values",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Prompt",
+    "type": "operation",
+    "role": "hands the question to the agent",
+    "drawn_as": "bold label above a black arrow from the sample box to the LLM Agent card",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "CSV File",
+    "type": "operation",
+    "role": "makes the file available to the sandbox",
+    "drawn_as": "bold label above a black arrow from the sample box to the Python Sandbox card",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Reformat",
+    "type": "operation",
+    "role": "converts the final answer into the closed-form format",
+    "drawn_as": "bold label above the leftward arrow between Final Answer and Closed-form Label",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Matching",
+    "type": "operation",
+    "role": "compares the reformatted answer with the closed-form label",
+    "drawn_as": "bold label below the same leftward arrow",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Problem",
+    "to": "LLM Agent",
+    "what": "the question is the agent's prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Happiness_rank.csv",
+    "to": "Python Sandbox",
+    "what": "the CSV file is read by the agent's code (/mnt/Happiness_rank.csv)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Agent",
+    "to": "Python Sandbox",
+    "what": "Python code to execute",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Python Sandbox",
+    "to": "LLM Agent",
+    "what": "STDOUT returned for the next reasoning step",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LLM Agent",
+    "to": "Final Answer",
+    "what": "the agent concludes with a natural-language answer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Final Answer",
+    "to": "Closed-form Label",
+    "what": "Reformat, then Matching of the reformatted answer against the label",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Problem and Happiness_rank.csv (sample box)",
+    "to": "Closed-form Label",
+    "what": "the label is the stored ground truth of this question",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red key phrases in Problem",
+    "to": "red column headers of the table and red phrases in the agent's plan",
+    "what": "the variables asked about are followed through question, table and plan",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "green STDOUT number",
+    "to": "green 0.67 and 'poor fit' in Final Answer and Closed-form Label",
+    "what": "the computed result reappears in the answer and in the label",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "Prompt / CSV File / Reformat / Matching",
+    "kind": "order",
+    "at": "labels on the arrows",
+    "what": "name what travels along each arrow and so the order of the evaluation"
+   },
+   {
+    "marker": "ReAct ×N",
+    "kind": "identity",
+    "at": "loop between LLM Agent and Python Sandbox",
+    "what": "names the loop and says it repeats N times"
+   },
+   {
+    "marker": "grey title tabs",
+    "kind": "section",
+    "at": "Problem, Happiness_rank.csv, Final Answer, Closed-form Label",
+    "what": "head each card with its role"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "OpenAI knot logo in a light-teal circular badge",
+    "stands_for": "the LLM agent (GPT)",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "blue and yellow Python snakes logo",
+    "stands_for": "the Python sandbox",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small spreadsheet-like file glyph with an x",
+    "stands_for": "the CSV file",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a DAEval question about a linear relationship between GDP per capita and life expectancy in Happiness_rank.csv, with the first rows of the table (Switzerland, Iceland, Denmark, Norway)",
+    "form": "text card with coloured key phrases above a four-row table with blue header",
+    "real_values": true
+   },
+   {
+    "what": "the agent's plan sentence and its Python code (pandas read_csv, scikit-learn LinearRegression, r2_score, print), then STDOUT 0.6666363295228102",
+    "form": "plan text and syntax-highlighted monospace code in the agent card, green STDOUT in the sandbox card",
+    "real_values": true
+   },
+   {
+    "what": "the final answer sentence and the closed-form label {@coefficient_determination[0.67], @model_fit['poor fit']}",
+    "form": "two text cards with coloured values",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "a card titled LLM Agent with the OpenAI logo, showing the model's plan text and code instead of a bare block",
+    "parts": [
+     "logo badge",
+     "title",
+     "plan text",
+     "code block"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "two curved arrows between the agent card and the sandbox card, labelled ReAct x N",
+    "parts": [
+     "curved arrow down to the sandbox",
+     "curved arrow back to the agent",
+     "ReAct x N label"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "the tool as a card with the Python logo that receives code and returns STDOUT",
+    "parts": [
+     "Python logo",
+     "STDOUT text"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "question card with its data file inside a thick frame, the model's final answer and the closed-form label side by side, compared by a Matching arrow (no tick or cross)",
+    "parts": [
+     "Problem",
+     "Final Answer",
+     "Closed-form Label",
+     "Matching arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "the question text card whose key phrases are coloured",
+    "parts": [
+     "question text",
+     "red key phrases",
+     "navy file name"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the thick-framed question and CSV box top left, goes right along Prompt to the LLM Agent, round the ReAct loop with the sandbox, down to Final Answer, then left along Reformat / Matching to the Closed-form Label."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A rectangular circuit of cards: a thick-framed box with the question and CSV table at top left, LLM Agent and Python Sandbox stacked at right with a curved ReAct loop between them, Final Answer at bottom right and Closed-form Label at bottom left. Labelled arrows run clockwise (Prompt, CSV File, down to Final Answer, Reformat / Matching) and a plain arrow drops from the sample box to the label.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.8,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f7f8f8",
+    "used_for": "light-grey card and container fills",
+    "opacity": 0.35
+   },
+   {
+    "hex": "#dcdddd",
+    "used_for": "darker grey backing of the Problem and CSV cards",
+    "opacity": 0.35
+   },
+   {
+    "hex": "#cccccc",
+    "used_for": "title tabs (Problem, Happiness_rank.csv, Final Answer, Closed-form Label)"
+   },
+   {
+    "hex": "#2ea7e0",
+    "used_for": "table header row (strong) and table body rows (pale)",
+    "opacity": 0.57
+   },
+   {
+    "hex": "#221815",
+    "used_for": "body text, card outlines and arrows"
+   },
+   {
+    "hex": "#c30e23",
+    "used_for": "key phrases of the question, two table headers and the plan's key phrases"
+   },
+   {
+    "hex": "#1d2088",
+    "used_for": "the file name Happiness_rank.csv"
+   },
+   {
+    "hex": "#198156",
+    "used_for": "result values: STDOUT, 0.67 and 'poor fit'"
+   },
+   {
+    "hex": "#9a2124",
+    "used_for": "field names @coefficient_determination and @model_fit in the label"
+   },
+   {
+    "hex": "#df8b00",
+    "used_for": "Python keywords in the code block"
+   },
+   {
+    "hex": "#267a92",
+    "used_for": "function and attribute names in the code block"
+   }
+  ],
+  "ground": "grey-panels",
+  "fill": "flat",
+  "stroke": "0.5 pt dark outlines on cards, 1.25 pt black frame on the sample box, 1-1.25 pt black arrows, white 0.5 pt cell borders in the table",
+  "font": "ComicSans-style sans 6.5-9.5 pt for question, plan and answers; Monaco monospace 4 pt for code; bold Arial 7.5 pt for card titles and arrow labels",
+  "corners": "mixed",
+  "arrows": "thick straight black arrows with filled heads, labelled with bold verbs; two curved arrows form the ReAct loop",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "logo",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = the variables of interest (in the question, the table headers and the agent's plan); navy = the file name; green = computed result values; code colours are syntax highlighting; blue grid = CSV table; grey cards and tabs = text containers",
+  "line_style_means": "straight black arrows = hand-offs named by their labels; curved arrow pair = the repeated ReAct loop; thick black frame = one benchmark sample (question plus file)",
+  "shape_means": "grey tab on top of a card = the card's title; rounded card = module or text; blue ruled grid = table; logo badge = the model or tool",
+  "marker_means": "no numbers; arrows are named by what they carry (Prompt, CSV File, Reformat, Matching) and 'ReAct x N' says the loop repeats",
+  "emphasis": "thick frame around the benchmark sample; coloured key phrases carried through question, table, plan and answer; bold verbs on the arrows",
+  "reusable_patterns": [
+   "one real item traced through the whole evaluation with full question, table, code, stdout, answer and label",
+   "the same key phrases coloured in the question, the table headers and the agent's plan",
+   "the same result values coloured green in sandbox output, final answer and label",
+   "rectangular circuit layout whose last arrow closes at the ground-truth label",
+   "grey title tabs sitting on the top edge of every card",
+   "two curved arrows between agent and tool labelled with the loop name and a repeat count",
+   "arrows named by what travels along them"
+  ],
+  "weaknesses": [
+   "4 pt code text cannot be read in print and works only as texture",
+   "the arrow from the sample box to Closed-form Label and the arrow from LLM Agent to Final Answer carry no name"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a DAEval question and CSV excerpt",
+   "the agent's real plan, code and STDOUT",
+   "the final answer and closed-form label"
+  ],
+  "stock": [
+   "OpenAI logo",
+   "Python logo",
+   "spreadsheet file glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "cards with title tabs",
+   "table grid",
+   "labelled arrows and ReAct loop",
+   "syntax-coloured code block"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "question card with coloured key phrases",
+   "CSV table excerpt",
+   "LLM Agent card with OpenAI logo and Python code",
+   "Python Sandbox card with Python logo and STDOUT",
+   "ReAct x N loop arrows",
+   "Final Answer card",
+   "Closed-form Label card",
+   "arrows labelled Prompt, CSV File, Reformat, Matching"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "data analysis agents",
+   "benchmark",
+   "ReAct",
+   "Python sandbox",
+   "closed-form label",
+   "CSV",
+   "format prompting",
+   "answer matching",
+   "LLM-based agents"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "code-snippet-box",
+   "typed-trace-blocks",
+   "brand-logo-icon"
+  ],
+  "new_tags": [
+   {
+    "name": "title-tab-cards",
+    "what": "every card carries its title in a small grey tab or pill sitting on the card's top edge"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a benchmark by tracing one real item through the whole evaluation: the input card with key phrases coloured, the agent's real code and tool output, then the reformatted answer matched against the closed-form label, every arrow named by what it carries.",
+  "suits": "Benchmarks and agent evaluations where one worked item can show inputs, tool use, answer extraction and scoring in a single figure."
+ },
+ "tags": [
+  "real-trace",
+  "card-layout",
+  "title-tabs",
+  "syntax-highlighted-code",
+  "labelled-arrows",
+  "logo-icons",
+  "comic-sans-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "It plans, writes code, calls a Python sandbox and concludes to solve the problem in a ReAct way.",
+   "The final answer is reformatted into specific format and matched with the closed-form label."
+  ]
+ },
+ "summary": "InfiAgent-DABench is a benchmark for LLM-based agents on end-to-end data analysis: DAEval has 603 questions over 124 CSV files, each turned into a closed-form format so answers can be checked automatically, plus an agent framework and the DAAgent model. Figure 1 follows one real item through the evaluation. A question about the linear relationship between GDP per capita and life expectancy (key phrases in red) and its CSV table sit in a thick-framed box. The question is prompted to an LLM Agent card (OpenAI logo) that writes Python code; a Python Sandbox card (Python logo) returns STDOUT in a ReAct x N loop; the Final Answer is reformatted and matched against the Closed-form Label. Arrows carry bold verb labels; grey cards with title tabs hold real text, code and values.",
+ "summary_zh": "InfiAgent-DABench评测大模型智能体做数据分析，含603题、124个CSV。图1用一道真题走完流程：问题与CSV交给LLM Agent，它在Python沙箱里ReAct循环写代码，最终答案重整格式后与封闭式标签匹配。",
+ "confidence": "high",
+ "notes": "Prior kinds kept. The table, the question, the code and the answers are recorded as examples (live text and vector cells), not pictures; only the OpenAI and Python logos are bitmaps (13 pt each). The thick-framed box has no title of its own.",
+ "venue": "ICML24"
+}

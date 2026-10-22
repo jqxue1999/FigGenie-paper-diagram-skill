@@ -1,0 +1,568 @@
+{
+ "paper_id": "neurips25-0092",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": null,
+  "one_liner": "Instance-specific test-time training for speech editing in the wild: per utterance, the duration predictor and then the spectrogram denoiser are fine-tuned with extra random masks.",
+  "domain": [
+   "speech editing",
+   "test-time training",
+   "diffusion-based speech synthesis"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "the model stack of (a) with two dashed zoom insets (variance adaptor, DiT-style denoiser block), then two objective graphs (b, c) for the two test-time-training stages",
+  "argues": "Masking unedited regions at test time gives each utterance its own supervision, so the duration predictor and the spectrogram denoiser can be adapted to it while the phoneme classifier stays frozen.",
+  "subject": "A speech-editing model with zoomed internals, and the masked inputs and losses of its two test-time-training stages.",
+  "elements": [
+   {
+    "name": "Phoneme y",
+    "type": "data",
+    "role": "the phoneme sequence of the text to be spoken",
+    "drawn_as": "italic y under the stack with an arrow up",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Phoneme Encoder",
+    "type": "module",
+    "role": "turns the phoneme sequence into D-dimensional representations e_y (paper text)",
+    "drawn_as": "white box at the bottom of the stack",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Variance Adaptor",
+    "type": "module",
+    "role": "predicts duration and pitch of the masked regions and aligns e_y to the target length (paper text)",
+    "drawn_as": "pale-peach box, opened by a dashed wedge into a peach inset at the left",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Duration Predictor / Pitch Predictor / LR",
+    "type": "module",
+    "role": "parts of the variance adaptor; LR is the length regulator (caption)",
+    "drawn_as": "peach boxes and a circled LR in the left inset, with a plus node and the masked inputs e_dur and e_pitch",
+    "container": "(a), left inset",
+    "is_contribution": false
+   },
+   {
+    "name": "Spectrogram Denoiser",
+    "type": "module",
+    "role": "predicts the clean mel-spectrogram x0 from the noisy x_t, the aligned representation e_t and the condition c at timestep t (paper text)",
+    "drawn_as": "green rounded box, opened by a dashed wedge into a green inset at the right",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "DiT-style block (Linear, LN, Scale, MHSA, Scale/Shift, MLP, × N)",
+    "type": "module",
+    "role": "inside of the denoiser: a Diffusion Transformer block with scale and shift modulation that replaces a WaveNet (paper text)",
+    "drawn_as": "column of small boxes in the green inset with a dotted × N frame, residual lines and α, λ, β symbols",
+    "container": "(a), right inset",
+    "is_contribution": null
+   },
+   {
+    "name": "concat(x_t, e_t + c), t",
+    "type": "formula",
+    "role": "inputs of the denoiser block: the concatenation and the timestep",
+    "drawn_as": "serif formula under the green inset with arrows up",
+    "container": "(a), right inset",
+    "is_contribution": false
+   },
+   {
+    "name": "Duration Predictor (with flame)",
+    "type": "module",
+    "role": "the module fine-tuned in the first TTT stage",
+    "drawn_as": "peach rounded box with a flame icon",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Predicted Duration / Target Duration",
+    "type": "data",
+    "role": "predicted and target phoneme durations that the duration losses compare; M is the length of the edit mask (caption)",
+    "drawn_as": "two number lists [5 7] 3 3 4 5 and [M] 3 3 4 5, each with a bent arrow to the loss symbols",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "L_dur^(p), L_dur^(m), L_dur^(s)",
+    "type": "formula",
+    "role": "phoneme-level, mask-level and sentence-level duration losses (paper text)",
+    "drawn_as": "three loss symbols between two bent arrows at the top of (b)",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Embedding / Masking for TTT",
+    "type": "operation",
+    "role": "random masking of duration embeddings outside the edit region to make test-time-training inputs",
+    "drawn_as": "two white labelled boxes in a column with cell strips: a strip with red outlines (Mask(Edit)) and a strip with red and yellow outlines (Mask(Edit) Mask(TTT))",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Duration Embedding / Phoneme Embedding",
+    "type": "data",
+    "role": "the masked duration embedding and the phoneme embedding, added before the duration predictor",
+    "drawn_as": "a strip of grey and white cells with red and yellow outlines and a strip of peach cells, joined by a circled plus",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "Masked Mel Spectrogram / Masking for TTT",
+    "type": "operation",
+    "role": "random masking of mel-spectrogram regions outside the inference mask to make test-time-training inputs",
+    "drawn_as": "mel strip with a red Mask (Edit) box, a white Masking for TTT box, then a mel strip with red Mask (Edit) and yellow Mask (TTT) boxes",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Spectrogram Denoiser (with flame)",
+    "type": "module",
+    "role": "the module fine-tuned in the second TTT stage by reconstruction losses on the newly masked regions",
+    "drawn_as": "green rounded box with a flame icon",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "Phoneme Classifier",
+    "type": "module",
+    "role": "pretrained classifier whose cross-entropy against the aligned phonemes keeps the speech intelligible (paper text)",
+    "drawn_as": "peach box with a snowflake icon",
+    "container": "(c)",
+    "is_contribution": true
+   },
+   {
+    "name": "L_ce^(m); L_diff^(n), L_ssim^(n); y_align",
+    "type": "formula",
+    "role": "classification loss against the aligned phoneme sequence y_align; reconstruction losses on the masked regions",
+    "drawn_as": "loss symbols at the ends of straight arrows and of two long curved arrows at the right of (c)",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Phoneme y",
+    "to": "Phoneme Encoder",
+    "what": "phoneme sequence",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Phoneme Encoder",
+    "to": "Variance Adaptor",
+    "what": "representations e_y",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Variance Adaptor",
+    "to": "Spectrogram Denoiser",
+    "what": "aligned representations e_t",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "t, c",
+    "to": "Spectrogram Denoiser",
+    "what": "timestep and condition",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "x_t (noisy mel)",
+    "to": "Spectrogram Denoiser",
+    "what": "noisy mel-spectrogram with a grey Noise block",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Spectrogram Denoiser",
+    "to": "x0 (clean mel)",
+    "what": "predicted clean mel-spectrogram with the edit region boxed in red",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Variance Adaptor",
+    "to": "left inset",
+    "what": "dashed wedge opens the module into duration and pitch predictors",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Spectrogram Denoiser",
+    "to": "right inset",
+    "what": "dashed wedge opens the module into a DiT-style block",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Duration Embedding and Phoneme Embedding",
+    "to": "Duration Predictor (with flame)",
+    "what": "inputs added at a circled plus",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Embedding / Masking for TTT",
+    "to": "Duration Embedding / Phoneme Embedding",
+    "what": "randomly masked duration embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Predicted Duration / Target Duration",
+    "to": "L_dur^(p), L_dur^(m), L_dur^(s)",
+    "what": "durations compared by three losses",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Masked Mel Spectrogram / Masking for TTT",
+    "to": "Spectrogram Denoiser (with flame)",
+    "what": "masked mel-spectrograms",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Spectrogram Denoiser (with flame)",
+    "to": "Phoneme Classifier",
+    "what": "predicted mel-spectrogram",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Phoneme Classifier",
+    "to": "L_ce^(m); L_diff^(n), L_ssim^(n); y_align",
+    "what": "cross-entropy against y_align",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "mel strips in (c)",
+    "to": "L_ce^(m); L_diff^(n), L_ssim^(n); y_align",
+    "what": "reconstruction losses, drawn as two long curved arrows",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red and yellow boxes in (b)",
+    "to": "red and yellow boxes in (c)",
+    "what": "the same two mask colours are used in both TTT stages",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Model Architecture",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "phoneme encoder, variance adaptor and spectrogram denoiser as a bottom-up stack, with two zoom insets of their internals",
+    "verdict": null
+   },
+   {
+    "label": "(b) TTT for Duration Predictor",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "random masking of duration embeddings, the flame-marked duration predictor and three duration losses",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) TTT for Spectrogram Denoiser",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "random masking of the mel-spectrogram, the flame-marked denoiser, a frozen phoneme classifier and the losses",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "captions under the three panels",
+    "what": "head the model architecture and the two TTT stages"
+   },
+   {
+    "marker": "red box, yellow box",
+    "kind": "identity",
+    "at": "mel-spectrogram strips and embedding strips",
+    "what": "red = edit region, yellow = randomly masked region for TTT (caption)"
+   },
+   {
+    "marker": "x0, x_t, t, c, e_y, e_t, y",
+    "kind": "identity",
+    "at": "the arrows of panel (a)",
+    "what": "names the data that flows between the modules"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "mel-spectrogram strips of one utterance: clean x0 with a red edit box, noisy x_t with a grey Noise block, and in (c) three masked strips with red and yellow boxes",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 5,
+    "medium": "bitmap",
+    "treatment": "wide thin strips in green-blue colours; red-outlined edit region, yellow-outlined TTT mask, grey Mask (Edit) and Mask (TTT) tags on the masked parts"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "orange flame",
+    "stands_for": "modules updated during TTT",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "blue snowflake",
+    "stands_for": "a module whose parameters stay frozen",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "phoneme duration lists: predicted [5 7] 3 3 4 5 against target [M] 3 3 4 5",
+    "form": "two rows of numbers above the loss symbols",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "a flame icon at the corner of the modules updated at test time (duration predictor, spectrogram denoiser) and a snowflake at the frozen phoneme classifier, explained in the caption",
+    "parts": [
+     "flame",
+     "snowflake"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "a green inset with a column of Linear, LN, Scale, MHSA, Scale/Shift and MLP boxes inside a dotted × N frame, with residual plus nodes and α, λ, β modulation labels",
+    "parts": [
+     "Linear",
+     "LN",
+     "Scale",
+     "MHSA",
+     "Scale/Shift",
+     "MLP",
+     "× N frame"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short strips of square cells for embeddings; red outlines mark edit-region cells and yellow outlines the random TTT mask",
+    "parts": [
+     "cells",
+     "red outline",
+     "yellow outline"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at Phoneme y at the bottom of (a) and climbs the stack to the denoiser and x0, glancing at the two insets; then (b) from the embedding strips up to the duration losses; then (c) from the masked mel at the bottom up to the classifier and the losses."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three lettered panels side by side in a 2.6:1 strip, captions underneath. (a), the widest, is a bottom-up stack of three modules between two tinted zoom insets (peach at the left, green at the right) tied to their modules by dashed wedges; (b) and (c) are narrower bottom-up flows with strips of embeddings or mel-spectrograms, a module with a flame or snowflake icon and loss symbols at the top or right.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.59,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e2f1d9",
+    "used_for": "Spectrogram Denoiser boxes and the green zoom inset"
+   },
+   {
+    "hex": "#fbe6d6",
+    "used_for": "Variance Adaptor box and the peach zoom inset"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "Duration and Pitch Predictors, Phoneme Classifier, Linear and MLP boxes, phoneme embedding cells"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey Noise block, Mask (Edit) and Mask (TTT) tags"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red outlines of the edit region"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow outlines of the random TTT masks"
+   },
+   {
+    "hex": "#042433",
+    "used_for": "dark navy outlines of boxes"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, text and zoom lines"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dark navy outlines on boxes, 0.5 pt red and yellow outlines on masks, dashed black zoom lines and dotted frame for the repeated block",
+  "font": "serif (Times New Roman) 3-5 pt for labels, 7.5 pt for the panel captions, italic and Cambria Math for symbols",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small solid heads, straight and right-angled, with two long curved arrows at the right of (c); 40 arrow heads in all",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "snowflake-fire"
+ },
+ "encoding": {
+  "color_means": "green = the spectrogram denoiser, peach = the duration and pitch predictors, the variance adaptor and the classifier, white = encoder and utility boxes; red box = edit region, yellow box = random TTT mask (caption); grey block = noise or a masked part",
+  "line_style_means": "dashed lines = zoom from a module to its internals; dotted frame = the repeated × N block; thin black arrows = data flow",
+  "shape_means": "rectangle = module; circled plus = addition; circled LR = length regulator; strip of small squares = a sequence of embeddings; wide thin strip = a mel-spectrogram",
+  "marker_means": "flame = updated during TTT, snowflake = frozen (caption); (a)(b)(c) letters under the panels",
+  "emphasis": "the flame icons and the red and yellow boxes show exactly what is adapted at test time and where",
+  "reusable_patterns": [
+   "dashed wedge from a module to a tinted inset showing its internals, used twice in one panel",
+   "red box for the region to edit and yellow box for the extra random mask, repeated on spectrogram thumbnails and on embedding strips",
+   "flame and snowflake icons for what is updated and what is frozen, decoded in the caption",
+   "loss symbols printed at the ends of the arrows that join prediction and target",
+   "toy number lists for predicted and target durations"
+  ],
+  "weaknesses": [
+   "text at 2.5-4 pt, mostly symbols and subscripts, is illegible at print size",
+   "the key to the icons and the red and yellow boxes is only in the caption",
+   "three panels are packed into one 2.6:1 strip with little whitespace"
+  ]
+ },
+ "resources": {
+  "own": [
+   "real mel-spectrogram strips of one utterance with edit and TTT masks marked"
+  ],
+  "stock": [
+   "flame and snowflake icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "module boxes and arrows",
+   "DiT-style block internals",
+   "embedding strips",
+   "zoom insets"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "mel-spectrogram strips with red and yellow boxes",
+   "Spectrogram Denoiser box with a DiT-style block inset",
+   "Variance Adaptor with duration and pitch predictors",
+   "embedding cell strips",
+   "flame and snowflake icons",
+   "loss symbols",
+   "duration number lists",
+   "phoneme classifier box"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "speech editing",
+   "test-time training",
+   "duration predictor",
+   "diffusion transformer",
+   "spectrogram denoiser",
+   "masking for TTT",
+   "in-the-wild",
+   "variance adaptor"
+  ],
+  "tags": [
+   "zoom-callout",
+   "module-state-coding",
+   "equation-boxes",
+   "toy-values-inline",
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "edit-vs-train-mask-boxes",
+    "what": "red boxes mark the region to edit and yellow boxes the extra random mask used for training, repeated on every spectrogram and embedding strip"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw an adaptation procedure by reusing the same data strips in each panel and marking what changes: red for the user's edit region, yellow for the extra random mask, flame and snowflake icons for what is updated or frozen, and the loss symbols at the ends of the arrows.",
+  "suits": "Test-time training, fine-tuning or masking objectives acting on sequences or spectrograms where only some modules are updated."
+ },
+ "tags": [
+  "three lettered panels",
+  "dashed zoom insets",
+  "mel-spectrogram thumbnails",
+  "flame and snowflake icons",
+  "red and yellow boxes",
+  "small serif text",
+  "peach and green modules",
+  "cell strips"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3-4)",
+   "Figure 1 caption"
+  ],
+  "evidence": [
+   "The flame icon denotes modules that are updated during TTT, whereas the snowflake icon indicates modules whose parameters remain frozen.",
+   "Red boxes indicate edit regions, and yellow boxes represent randomly masked regions for TTT.",
+   "TTT is applied to the duration predictor, a key module that predicts the durations within the edited region"
+  ]
+ },
+ "summary": "The paper proposes instance-specific test-time training (TTT) for speech editing in the wild: for each utterance, the duration predictor and then the spectrogram denoiser are fine-tuned with extra random masks outside the edited region. Figure 1 has three lettered panels. (a) shows the model (phoneme encoder, variance adaptor, spectrogram denoiser) as a bottom-up stack, with dashed zoom insets opening the variance adaptor and a DiT-style denoiser block. (b) shows TTT of the duration predictor: edit and random masks on duration embeddings, predicted against target durations and three duration losses. (c) shows TTT of the denoiser on masked mel-spectrograms with reconstruction losses and a frozen phoneme classifier. Flame and snowflake icons mark updated and frozen modules; red and yellow boxes mark edit and TTT masks.",
+ "summary_zh": "论文提出面向真实场景语音编辑的实例级测试时训练：对每条语音先后微调时长预测器和频谱去噪器。图分 (a)(b)(c) 三栏：模型结构并用虚线放大两个模块，两个 TTT 阶段的掩码与损失；火焰/雪花图标标可更新与冻结模块。",
+ "confidence": "high",
+ "notes": "Prior kind kept. Most symbols and subscripts are 2.5-4 pt and the digest's text layer for them is garbled, so loss names and the roles of modules are taken from the paper paragraphs and the caption. The DiT block's wiring is read from labels only. The stage order of (b) then (c) comes from the text, not from arrows between the panels.",
+ "venue": "NeurIPS25"
+}

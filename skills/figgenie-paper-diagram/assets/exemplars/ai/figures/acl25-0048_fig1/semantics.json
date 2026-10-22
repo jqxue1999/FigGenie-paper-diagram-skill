@@ -1,0 +1,593 @@
+{
+ "paper_id": "acl25-0048",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "KG-Agent",
+  "one_liner": "An autonomous agent in which a small tuned LLM picks KG tools step by step, with an executor and a knowledge memory, trained on synthesized program data.",
+  "domain": [
+   "knowledge graph reasoning",
+   "LLM agents",
+   "instruction tuning"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "a planner, toolbox and executor triangle beside a four-step trace on a real question, above a strip that derives tuning data from a query graph",
+  "argues": "A small LLM can reason over a KG by calling tools one step at a time while a memory is updated, and its tuning data can be synthesized from query graphs.",
+  "subject": "Top half: planner, toolbox, executor and knowledge memory over steps t=1 to 4 on one question. Bottom half: query graph, reasoning program and tuning pairs.",
+  "elements": [
+   {
+    "name": "Question",
+    "type": "data",
+    "role": "the complex question the agent answers",
+    "drawn_as": "two lines of text above the planner, the entity Cristiano Ronaldo in red",
+    "container": "top half",
+    "is_contribution": false
+   },
+   {
+    "name": "Planner",
+    "type": "actor",
+    "role": "the instruction-tuned LLM that decides the next function call and finally the answer",
+    "drawn_as": "large llama mascot with glasses and tie, bold name under it, two speech bubbles (The answer is / Portugal national football team)",
+    "container": "top half",
+    "is_contribution": true
+   },
+   {
+    "name": "Toolbox",
+    "type": "module",
+    "role": "the set of KG functions the planner can call",
+    "drawn_as": "drawing-board icon with pencil and ruler, bold name under it, thick grey arrow from the planner",
+    "container": "top half",
+    "is_contribution": true
+   },
+   {
+    "name": "Executor",
+    "type": "module",
+    "role": "runs the chosen function on the KG and returns the result",
+    "drawn_as": "robot-arm-and-rocket icon, bold name under it, thick grey arrows from the toolbox and back to the planner",
+    "container": "top half",
+    "is_contribution": true
+   },
+   {
+    "name": "Knowledge Memory Updating",
+    "type": "module",
+    "role": "memory holding the question, toolbox definition, history program and current KG information, one row per step",
+    "drawn_as": "rounded light-grey box with header cells Question and Toolbox Definition and two dotted-outline columns His_Pro and Cur_KG_Info, rows marked t=1 to t=4",
+    "container": "top half",
+    "is_contribution": true
+   },
+   {
+    "name": "Autonomous Reasoning",
+    "type": "container",
+    "role": "the iteration: the planner emits a function call, the executor returns a result, memory is updated, for t=1 to 4",
+    "drawn_as": "four rows, each with a small llama, a bold monospace function call, a small executor icon and a green monospace result, joined by thin slate arrows, dots below for further steps",
+    "container": "top half",
+    "is_contribution": true
+   },
+   {
+    "name": "function calls",
+    "type": "data",
+    "role": "get_relation(m.02xt6q); v0 = get_tail_entity(m.02xt6q, team); get_relation(v0); v1 = get_entity_by_constraint(v0, from, =, 2011)",
+    "drawn_as": "bold black Courier text",
+    "container": "Autonomous Reasoning",
+    "is_contribution": null
+   },
+   {
+    "name": "execution results",
+    "type": "data",
+    "role": "relations and entity sets returned by the executor, e.g. out:[teams,...] in:[athlete,...] and v0={m.050fh,...}",
+    "drawn_as": "green Courier text on the return arrows",
+    "container": "Autonomous Reasoning",
+    "is_contribution": null
+   },
+   {
+    "name": "Query Graph Grounded on KG",
+    "type": "container",
+    "role": "a small tree-shaped graph of the question: Cristiano Ronaldo, team, a CVT node, constraint from = 2011, roster, an unknown team x, constraint argmax founded",
+    "drawn_as": "black square boxes joined by labelled arrows, four dashed coloured regions (green, blue, orange, yellow), red italic constraint labels",
+    "container": "bottom half",
+    "is_contribution": true
+   },
+   {
+    "name": "Freebase, YAGO, Wikidata logos",
+    "type": "icon",
+    "role": "the knowledge graphs the query graph is grounded on",
+    "drawn_as": "three small logos under the title",
+    "container": "bottom half",
+    "is_contribution": false
+   },
+   {
+    "name": "KG Reasoning Program",
+    "type": "text-block",
+    "role": "the query graph converted to function calls, step by step, ending with ans=end(v3)",
+    "drawn_as": "dashed light-grey box of monospace code, four pairs of lines in green, blue, orange and yellow, last line black",
+    "container": "bottom half",
+    "is_contribution": true
+   },
+   {
+    "name": "Input x1 / Output y1",
+    "type": "text-block",
+    "role": "first tuning pair: prompt with four slots, output is the first function call",
+    "drawn_as": "dashed card with a green Input tab over four grey-text slots (Question, Toolbox, Current KG Information, History Program) and an orange Output tab over get_relation(m.02xt6q)",
+    "container": "bottom half",
+    "is_contribution": true
+   },
+   {
+    "name": "Input x2 / Output y2",
+    "type": "text-block",
+    "role": "second tuning pair: same slots, output is the next function call",
+    "drawn_as": "same card, output v0=get_tail_entity(m.02xt6q, team)",
+    "container": "bottom half",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Planner",
+    "to": "Toolbox",
+    "what": "the planner picks a tool",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Toolbox",
+    "to": "Executor",
+    "what": "the chosen function is passed on to run",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Executor",
+    "to": "Planner",
+    "what": "execution result returned",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Knowledge Memory Updating",
+    "to": "Planner",
+    "what": "memory content read at each step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Planner",
+    "to": "function calls",
+    "what": "one function call per step",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "function calls",
+    "to": "Executor",
+    "what": "the call is executed on the KG",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "execution results",
+    "to": "Knowledge Memory Updating",
+    "what": "the result updates the history program and current KG information",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Query Graph Grounded on KG",
+    "to": "KG Reasoning Program",
+    "what": "each coloured region becomes the pair of function-call lines of the same colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "KG Reasoning Program",
+    "to": "Input x1 / Output y1",
+    "what": "the first call becomes output y1",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "KG Reasoning Program",
+    "to": "Input x2 / Output y2",
+    "what": "the next call becomes output y2",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Freebase, YAGO, Wikidata logos",
+    "to": "Query Graph Grounded on KG",
+    "what": "source knowledge graphs",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "actor-interaction",
+    "axis": "narrative",
+    "shows": "the agent workflow on a real question: actor triangle, knowledge memory and the four-step reasoning trace",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "instruction-tuning data synthesis: query graph to reasoning program to input-output pairs with the prompt template",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "t=1 ... t=4",
+    "kind": "order",
+    "at": "beside each planner avatar, each memory row and each result",
+    "what": "time steps of the reasoning iteration"
+   },
+   {
+    "marker": "constraint 1, constraint 2",
+    "kind": "identity",
+    "at": "red italic labels under the blue and yellow dashed regions of the query graph",
+    "what": "name the two constraints (from = 2011, argmax of founded)"
+   },
+   {
+    "marker": "Input x1, Output y1, Input x2, Output y2",
+    "kind": "identity",
+    "at": "tab labels on the template cards",
+    "what": "number the tuning pairs"
+   },
+   {
+    "marker": "Knowledge Memory Updating, Autonomous Reasoning, Query Graph Grounded on KG, KG Reasoning Program",
+    "kind": "section",
+    "at": "bold titles above each part",
+    "what": "head the four parts"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon llama with glasses and tie",
+    "stands_for": "the Planner, the instruction-tuned LLM",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "drawing board with pencil and ruler",
+    "stands_for": "the Toolbox of KG functions",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot arm with a rocket",
+    "stands_for": "the Executor",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "Freebase, YAGO and Wikidata logos",
+    "stands_for": "the source knowledge graphs",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "the question about the sports team that Cristiano Ronaldo played for in 2011 and was founded last, answered by Portugal national football team",
+    "form": "question text with a red entity and two speech bubbles",
+    "real_values": true
+   },
+   {
+    "what": "four steps of function calls with results and memory rows (get_relation, get_tail_entity, get_entity_by_constraint)",
+    "form": "monospace calls and results beside the memory table",
+    "real_values": true
+   },
+   {
+    "what": "the query graph with entity ids, relations, a CVT node and two constraints, and the reasoning program derived from it",
+    "form": "boxed graph with coloured dashed regions and a colour-coded code box",
+    "real_values": true
+   },
+   {
+    "what": "two instruction-tuning input-output pairs from the program",
+    "form": "template cards with named slots and a one-line output",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "triangle of large named icons Planner, Toolbox, Executor joined by thick grey block arrows in a cycle",
+    "parts": [
+     "Planner",
+     "Toolbox",
+     "Executor",
+     "cycle arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "toolbox and executor icons beside the planner, and the same icons small in each trace row",
+    "parts": [
+     "toolbox icon",
+     "executor icon"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "memory-store",
+    "drawn_as": "rounded box with a table of question, toolbox definition, history program and current KG information, one row per step t",
+    "parts": [
+     "table",
+     "t labels",
+     "read and update arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon llama mascot (a pun on the base model) repeated per step",
+    "parts": [
+     "llama avatar"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "two light-blue speech bubbles beside the planner carrying the answer",
+    "parts": [
+     "The answer is",
+     "Portugal national football team"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "dashed card with a green Input tab over four slot rows (Question, Toolbox, Current KG Information, History Program) and an orange Output tab",
+    "parts": [
+     "Input tab",
+     "four slots",
+     "Output tab"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "knowledge-graph",
+    "drawn_as": "tree of black square entity boxes joined by labelled arrows, constraints as a plain box and a diamond",
+    "parts": [
+     "entity boxes",
+     "relation labels",
+     "constraint nodes"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Question and planner at top left, round the actor triangle, across the memory table to the four-step trace at right; then below the dashed line, query graph, program and tuning cards left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two full-width bands split by a dashed horizontal line. Top band (agent): question, planner triangle and bubbles at left, the knowledge-memory table in the middle, a four-row trace at right. Bottom band (data synthesis): query graph at left, colour-coded program box in the middle, two input-output template cards at right, linked by coloured and black dashed arrows.",
+  "panel_count": 2,
+  "lanes": "4 trace rows t=1 to t=4 across memory and reasoning",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "framed-boxes",
+   "tinted-regions",
+   "whitespace"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.9,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f8f8f8",
+    "used_for": "knowledge-memory box and reasoning-program box"
+   },
+   {
+    "hex": "#e2f0d9",
+    "used_for": "input slots of the tuning-pair cards"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "output of the tuning-pair cards"
+   },
+   {
+    "hex": "#00b0f0",
+    "opacity": 0.18,
+    "used_for": "speech bubbles"
+   },
+   {
+    "hex": "#44546a",
+    "used_for": "thin slate arrows of the trace"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "thick block arrows of the actor triangle"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "step labels t=1 to t=4"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "entity in the question and the constraint labels"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "execution results"
+   },
+   {
+    "hex": "#70ad47",
+    "used_for": "first reasoning step: graph region, arrow and code lines"
+   },
+   {
+    "hex": "#5b9bd5",
+    "used_for": "second reasoning step: graph region, arrow and code lines"
+   },
+   {
+    "hex": "#ed7d31",
+    "used_for": "third reasoning step: graph region, arrow and code lines"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "fourth reasoning step: graph region, arrow and code lines"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey slot labels and output text in the template cards"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt: dashed grey outlines on the boxes (15 dashed shapes), black outlines on query-graph boxes, coloured dashed regions; thick grey block arrows are filled shapes",
+  "font": "serif (Times New Roman) 6-7 pt for labels and table cells; bold Courier New 6.5 pt for function calls and code; bold 9.5 pt for the actor names; italic serif for bubbles and table headers",
+  "corners": "mixed",
+  "arrows": "three kinds: thick grey block arrows around the triangle, thin slate lines with small heads in the trace, dashed coloured and black arrows from graph to program to cards",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green, blue, orange, yellow = the four reasoning steps, repeated on the query-graph region, its dashed arrow and the matching code lines; red = key entity, step labels and constraint labels; green mono text = executor results; black bold mono = planner calls; light green = input slots, light orange = output",
+  "line_style_means": "thick grey block arrow = planner, toolbox, executor cycle; thin slate arrow = call and return in each step; dashed coloured arrow = query-graph part to its program lines; dashed black arrow = program line to a tuning pair; dashed box = data-synthesis artefact",
+  "shape_means": "llama = planner LLM, drawing board = toolbox, robot arm with rocket = executor, rounded grey box = memory, square box = KG node, diamond = argmax constraint",
+  "marker_means": "t=1 to t=4 order the iteration; constraint 1 and 2 name the graph constraints; Input x_n and Output y_n number the tuning pairs",
+  "emphasis": "large icons with bold names for the three actors, and the llama mascot repeated in every trace row",
+  "reusable_patterns": [
+   "actor triangle with thick arrows and large named icons beside a per-step trace that reuses the icons small",
+   "memory table with one row per time step, updated by the results",
+   "graph regions in four colours that reappear on the code lines they generate, joined by dashed coloured arrows",
+   "template cards with named slots under Input x_n and Output y_n tabs",
+   "dashed horizontal line splitting the run-time workflow from the training-data synthesis",
+   "answer in speech bubbles beside the mascot",
+   "knowledge-base logos beside the graph title"
+  ],
+  "weaknesses": [
+   "labels are only 6-7 pt in a dense two-band composite",
+   "the memory table and the trace are tied only by long thin lines",
+   "the parts have no letters although the paper cites Figure 1 (a), (b) and (c)",
+   "an entity id differs between the memory row t=3 (m.0xt6q) and the trace (m.02xt6q)"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a real KGQA question with answer, function calls and results",
+   "the reasoning program and the template slots"
+  ],
+  "stock": [
+   "toolbox and executor icons",
+   "Freebase, YAGO and Wikidata logos"
+  ],
+  "generated": [
+   "llama avatar with glasses and tie"
+  ],
+  "drawn": [
+   "triangle arrows",
+   "memory table",
+   "query graph boxes and dashed regions",
+   "code box and template cards",
+   "speech bubbles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "llama planner mascot",
+   "toolbox and executor icons in a triangle",
+   "knowledge memory table",
+   "function-call trace with results",
+   "query graph with coloured dashed regions",
+   "colour-coded reasoning program box",
+   "input and output template cards",
+   "knowledge-base logos"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "knowledge graph reasoning",
+   "autonomous agent",
+   "planner-executor",
+   "toolbox",
+   "program synthesis",
+   "instruction tuning",
+   "KGQA",
+   "knowledge memory"
+  ],
+  "tags": [
+   "typed-trace-blocks",
+   "memory-store",
+   "code-snippet-box",
+   "brand-logo-icon",
+   "mascot-character",
+   "prompt-template-card",
+   "colour-coded-groups",
+   "knowledge-graph"
+  ],
+  "new_tags": [
+   {
+    "name": "graph-to-code-colour-links",
+    "what": "regions of a graph outlined in colours that reappear on the matching lines of a code listing, joined by coloured dashed arrows"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw the agent as a triangle of large named icons next to a per-step trace that reuses the icons small, and colour graph regions and the code lines they generate alike, so the derivation of training data can be followed by colour.",
+  "suits": "Tool-using agents whose tuning data are synthesized from a structure (graph, plan, program), showing both the run-time loop and the data derivation in one figure."
+ },
+ "tags": [
+  "two-band-composite",
+  "mascot-and-icons",
+  "monospace-code",
+  "dashed-boxes",
+  "colour-matched-steps",
+  "powerpoint-look"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Approach (p.3)",
+   "3 Approach (p.4)"
+  ],
+  "evidence": [
+   "The top half is the workflow of our agent",
+   "We show one example in Figure 1 (b) to intuitively illustrate the conversion process from the annotated SQL query",
+   "It mainly contains four components, i.e., the core instruction-tuned"
+  ]
+ },
+ "summary": "KG-Agent lets a small instruction-tuned LLM answer complex questions over a knowledge graph by choosing tools one step at a time. The top half of Figure 1 follows a real question about Cristiano Ronaldo: a llama-mascot Planner, a Toolbox and an Executor form a triangle, while a knowledge memory (question, toolbox definition, history program, current KG information) is updated over steps t=1 to 4 as the planner emits function calls and the executor returns results. Below a dashed line, the data synthesis is shown: a query graph grounded on Freebase, YAGO or Wikidata becomes a colour-coded KG reasoning program, whose calls turn into Input and Output pairs in a prompt template.",
+ "summary_zh": "KG-Agent 让小模型自主选工具，在知识图谱上逐步推理。上半部分用真实问题展示规划器、工具箱、执行器三角循环和随 t=1 到 4 更新的知识记忆；下半部分展示由查询图生成彩色推理程序，再转成输入输出训练对。",
+ "confidence": "high",
+ "notes": "The paper cites parts (a), (b), (c) of the figure but no letters are printed, so the two halves are recorded as unlabelled panels. Whether the llama avatar is generated or stock cannot be told from the figure; it is listed under generated as an illustrated mascot.",
+ "venue": "ACL25"
+}

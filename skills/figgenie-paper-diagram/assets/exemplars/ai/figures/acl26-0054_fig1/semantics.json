@@ -1,0 +1,437 @@
+{
+ "paper_id": "acl26-0054",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OFFSIDE",
+  "one_liner": "Benchmark for unlearning misinformation in multimodal LLMs: 15.68K records on 80 football players, four test sets and four unlearning settings.",
+  "domain": [
+   "machine unlearning",
+   "multimodal LLM benchmark",
+   "rumors and misinformation"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "contribution-mosaic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "four pastel setting cards around a central logo badge, each one a real record: image tile plus question, ground-truth and answer rows",
+  "argues": "OFFSIDE tests rumor unlearning in four real-world settings: complete, fine-grained, corrective relearning and unimodal.",
+  "subject": "Four unlearning settings of one benchmark, each shown by a footballer photo and a question with ground-truth and answer rows.",
+  "elements": [
+   {
+    "name": "OFFSIDE",
+    "type": "icon",
+    "role": "names the benchmark and ties the four settings together",
+    "drawn_as": "round football with a white halo, a black referee pictogram and the word in bold comic letters",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Complete Unlearning",
+    "type": "container",
+    "role": "setting that removes a rumor entirely, similar to previous benchmarks",
+    "drawn_as": "green tinted card with a header strip and a photo tile at the left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Fine-grained Unlearning",
+    "type": "container",
+    "role": "setting that erases one particular image-text association without touching other benign information",
+    "drawn_as": "blue tinted card with a header strip and a photo tile at the right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Corrective Relearning",
+    "type": "container",
+    "role": "setting that checks whether an unlearned rumor can be recovered after post-training",
+    "drawn_as": "yellow tinted card with a header strip below the rows and a photo tile at the left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Unimodal Unlearning",
+    "type": "container",
+    "role": "setting that checks whether unimodal unlearning methods carry over to the multimodal model",
+    "drawn_as": "purple tinted card with a header strip below the rows and an empty-set tile at the right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Q",
+    "type": "text-block",
+    "role": "question put to the model, e.g. What is the height of him?",
+    "drawn_as": "rounded tinted row with a grey letter Q at its left",
+    "container": "each setting card",
+    "is_contribution": false
+   },
+   {
+    "name": "GT",
+    "type": "text-block",
+    "role": "ground-truth text; its red value is the target rumor",
+    "drawn_as": "rounded tinted row with the letters GT and one value in red",
+    "container": "each setting card",
+    "is_contribution": false
+   },
+   {
+    "name": "A",
+    "type": "text-block",
+    "role": "the model's answer; green marks successful forgetting or relearning",
+    "drawn_as": "rounded tinted row with the letter A and one value in green",
+    "container": "each setting card",
+    "is_contribution": false
+   },
+   {
+    "name": "Shared Information / Private Information",
+    "type": "icon",
+    "role": "legend keys for the two small icons in the card headers",
+    "drawn_as": "grey three-circle network glyph and a grey person silhouette, with 4.5 pt captions",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "photo tile",
+    "to": "Q row",
+    "what": "the question refers to the person in the image (him, the player in the image)",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "GT row",
+    "to": "A row",
+    "what": "red target rumor in the ground truth against the green outcome in the answer",
+    "kind": "comparison",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "OFFSIDE",
+    "to": "the four setting cards",
+    "what": "badge sits at the centre and overlaps the inner corners of the grid",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "small icons in the card headers",
+    "to": "Shared Information / Private Information legend",
+    "what": "network glyph means shared information, person silhouette means private information",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "card tint (green, blue, yellow, purple)",
+    "to": "header strip and rows of that setting",
+    "what": "one pastel per setting",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Complete Unlearning",
+    "kind": null,
+    "axis": "alternatives",
+    "shows": "Footballer photo; asks his height; the rumor 1.85 meters in red in GT, the model's answer 1.82 meters in green.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Fine-grained Unlearning",
+    "kind": null,
+    "axis": "alternatives",
+    "shows": "Same photo; asks the transfer fee of the player in the image; rumor EUR 53.50 million in red, answer EUR 50 million in green.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Corrective Relearning",
+    "kind": null,
+    "axis": "alternatives",
+    "shows": "Photo of the player running in a blue kit; asks his current club; Chelsea in green in both GT and answer, marking recovered knowledge.",
+    "verdict": "setting"
+   },
+   {
+    "label": "Unimodal Unlearning",
+    "kind": null,
+    "axis": "alternatives",
+    "shows": "No image, an empty-set tile instead; text asks the age of Cole Palmer; rumor 23 in red, answer 26 in green.",
+    "verdict": "setting"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Complete Unlearning / Fine-grained Unlearning / Corrective Relearning / Unimodal Unlearning",
+    "kind": "section",
+    "at": "header strips of the cards",
+    "what": "names of the four settings"
+   },
+   {
+    "marker": "Q / GT / A",
+    "kind": "identity",
+    "at": "left of each row",
+    "what": "question, ground truth and answer; presumably so, the figure does not spell them out"
+   },
+   {
+    "marker": "network glyph / person silhouette",
+    "kind": "identity",
+    "at": "card headers and legend",
+    "what": "shared versus private information, keyed in the legend at the lower left"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "photos of a footballer (Cole Palmer), one reused in two cards with a club badge in the background",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "58 x 32 pt rounded tiles set beside the Q, GT and A rows, at the left in the left cards and at the right in the right cards"
+   },
+   {
+    "what": "empty-set sign on a white tile in place of an image",
+    "content": "other",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "same size as the photo tiles, a bold slanted empty-set sign marks a text-only question"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "referee pictogram over a football outline with the word OFFSIDE",
+    "stands_for": "the benchmark and its offside pun",
+    "style": "logo",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "three small circles joined by lines, and a person silhouette",
+    "stands_for": "shared information and private information",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 9
+   }
+  ],
+  "examples": [
+   {
+    "what": "Complete Unlearning: 'What is the height of him?', GT 'He stands at 1.85 meters tall.', A 'He is 1.82 meters tall.'",
+    "form": "three coloured rows beside a photo",
+    "real_values": true
+   },
+   {
+    "what": "Fine-grained Unlearning: 'What was the transfer fee of the player in the image at that time?', GT 'The transfer fee was EUR 53.50 million.', A 'It was EUR 50 million.'",
+    "form": "three coloured rows beside a photo",
+    "real_values": true
+   },
+   {
+    "what": "Corrective Relearning: 'Which club he is now playing for?', GT and A 'He is playing for Chelsea.'",
+    "form": "three coloured rows beside a photo",
+    "real_values": true
+   },
+   {
+    "what": "Unimodal Unlearning: 'What is the age of Cole Palmer?', GT 'He is 23 years old.', A 'He is 26 years old.'",
+    "form": "three coloured rows beside an empty-set tile",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "benchmark-card",
+    "drawn_as": "a record card: image tile beside three rounded rows labelled Q, GT and A, with a coloured value inside the text instead of ticks and crosses",
+    "parts": [
+     "image tile",
+     "Q row",
+     "GT row",
+     "A row",
+     "coloured values"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left Complete Unlearning card, moves to Fine-grained Unlearning, then down to Corrective Relearning and Unimodal Unlearning; inside a card, from the photo to Q, GT and A top to bottom."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Four borderless tinted cards in a two-by-two grid, each with a coloured header strip (setting title and small icons), three aligned rows Q, GT and A, and an image tile. Tile and header strip swap sides so the layout mirrors: photo at the left in the left column and at the right in the right column, header on top in the upper row and below the rows in the lower row. A round OFFSIDE football badge overlaps the inner corners of the grid; a small legend sits under the lower-left card.",
+  "panel_count": 4,
+  "lanes": "three aligned rows (Q, GT, A) in every card",
+  "direction": "none",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "below",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 3.08,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d6e9d5",
+    "used_for": "Complete Unlearning card: header strip and rows, card body at half opacity"
+   },
+   {
+    "hex": "#dae8fe",
+    "used_for": "Fine-grained Unlearning card: header strip and rows"
+   },
+   {
+    "hex": "#fff3ce",
+    "used_for": "Corrective Relearning card: header strip and rows, card body at half opacity"
+   },
+   {
+    "hex": "#e3d5e8",
+    "used_for": "Unimodal Unlearning card: header strip and rows"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red text: the target rumor in the GT row"
+   },
+   {
+    "hex": "#47d45a",
+    "used_for": "green text: successful forgetting or relearning in the A row"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "body text, Q, GT and A letters and headings"
+   },
+   {
+    "hex": "#8a8a8a",
+    "used_for": "grey shared and private information icons"
+   },
+   {
+    "hex": "#e6e6e6",
+    "used_for": "football panels behind the badge"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "none: cards, header strips and rows are borderless fills",
+  "font": "bold sans 6-7.5 pt for rows and headings, display faces (Comic Sans MS, Algerian) for the badge and the Q, GT, A letters, 4.5 pt legend",
+  "corners": "rounded",
+  "arrows": "none",
+  "rendering": "flat-vector",
+  "effects": "white circular halo behind the badge; otherwise none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one pastel per setting: green = Complete Unlearning, blue = Fine-grained, yellow = Corrective Relearning, purple = Unimodal; red text = the target rumor, green text = successful forgetting or relearning",
+  "line_style_means": "no lines; everything is separated by tint and whitespace",
+  "shape_means": "rounded strip = one row (Q, GT or A); header strip = setting title with its information icons; white tile = the image side of the question",
+  "marker_means": "Q, GT and A label the three rows; the network glyph and the person silhouette in the headers are keyed in the legend as shared and private information; the empty-set sign means no image",
+  "emphasis": "red and green values inside otherwise grey text; the OFFSIDE badge overlaps all four cards at the centre",
+  "reusable_patterns": [
+   "identical card grammar (header strip, image tile, Q, GT, A rows) repeated in four tints",
+   "coloured values inside answer text instead of ticks or crosses",
+   "empty-set tile in place of a photo to show a text-only case",
+   "central round badge overlapping the inner corners of a two-by-two grid",
+   "mirrored card layout with the image tile alternating sides",
+   "small icon legend under the grid"
+  ],
+  "weaknesses": [
+   "the header icons are keyed only by a 4.5 pt legend and their meaning per setting is not explained in the figure",
+   "the four cards look alike apart from tint, so the differences between settings come from the caption and the example values"
+  ]
+ },
+ "resources": {
+  "own": [
+   "footballer photos from the dataset",
+   "question, ground-truth and answer rows with player facts and rumors"
+  ],
+  "stock": [
+   "referee pictogram",
+   "football outline",
+   "shared and private information glyphs"
+  ],
+  "generated": [],
+  "drawn": [
+   "tinted cards and header strips",
+   "Q, GT and A rows",
+   "legend"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "four tinted setting cards",
+   "footballer photo tiles",
+   "Q, GT and A answer rows",
+   "red and green values inside text",
+   "OFFSIDE football badge with referee pictogram",
+   "empty-set tile for the text-only case",
+   "information icon legend"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "machine unlearning",
+   "misinformation",
+   "multimodal LLM",
+   "benchmark",
+   "relearning",
+   "visual rumors",
+   "football players",
+   "forgetting"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "highlighted-text-spans",
+   "task-definition",
+   "colour-coded-groups",
+   "title-branding"
+  ],
+  "new_tags": [
+   {
+    "name": "mirrored-cards-around-badge",
+    "what": "four same-grammar cards in a two-by-two grid with the image tile alternating sides and a round logo badge overlapping the inner corners"
+   },
+   {
+    "name": "empty-set-placeholder",
+    "what": "an empty-set sign on a white tile where the image would be, marking a text-only case"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each evaluation setting the same record card, an image tile plus Q, GT and A rows, in its own pastel, and let colour inside the answer text carry the verdict, so settings compare at a glance without ticks or arrows. A logo badge at the centre of the grid ties the cards together.",
+  "suits": "Benchmark papers with a few evaluation settings, each of which can be shown by one concrete question-answer record."
+ },
+ "tags": [
+  "two-by-two pastel cards",
+  "Q/GT/A rows",
+  "red and green values",
+  "central badge",
+  "footballer photos",
+  "borderless fills"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "Texts in red represent the target rumor, while those in green indicate successful forgetting or relearning.",
+   "OFFSIDE is a comprehensive benchmark for MLLMs MU, featuring four real-world settings designed to address the removal of various rumors.",
+   "the Corrective Relearning setting, which examines whether previously unlearned rumors can be successfully recovered after post-training"
+  ]
+ },
+ "summary": "OFFSIDE is a benchmark for unlearning misinformation in multimodal large language models, built around 80 football players. Figure 1 shows its four evaluation settings as tinted cards in a two-by-two grid around a round OFFSIDE badge with a referee pictogram: Complete Unlearning, Fine-grained Unlearning, Corrective Relearning and Unimodal Unlearning. Each card is a record: a footballer photo, or an empty-set tile when the question is text-only, beside three rows, Q for the question, GT for the ground truth and A for the model's answer. Red values mark the target rumor and green values mark successful forgetting or relearning. Small icons in the headers, keyed in a legend, tell shared from private information.",
+ "summary_zh": "OFFSIDE 是评测多模态大模型遗忘谣言的基准。图1把四种设置（完全遗忘、细粒度遗忘、纠正性重学、单模态遗忘）画成2×2彩色卡片，围绕中央裁判足球徽标；每张卡有球员照片和Q、GT、A三行，红字为目标谣言，绿字为遗忘或重学成功。",
+ "confidence": "high",
+ "notes": "Prior order (contribution-mosaic first) reversed so that scope-overview example-gallery leads, since each card is a real sample of one setting the benchmark covers. The meaning of the Q, GT, A letters and of which header icons each card carries is not spelled out in the figure or the quoted text. The caption says green marks successful forgetting or relearning, so green Chelsea in both GT and A of the Corrective Relearning card is read as recovered knowledge.",
+ "venue": "ACL26"
+}

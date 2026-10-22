@@ -1,0 +1,539 @@
+{
+ "paper_id": "neurips23-0162",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "ANPL",
+  "one_liner": "Interactive programming system: the user writes a code sketch with natural-language holes that an LLM implements, then debugs hole by hole from compiler traces.",
+  "domain": [
+   "code generation",
+   "interactive programming",
+   "program synthesis"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough",
+   "actor-interaction"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "a Programming band and a Debugging band repeat the same chain (ANPL Program, ANPL Compiler, Python Program, result grid) on one ARC task, the first ending in a red cross and the second in a green check",
+  "argues": "Users sketch the data flow and leave natural-language holes to an LLM; failed programs are debugged hole by hole via redecomposition, rewording or added I/O.",
+  "subject": "An ARC grid task decomposed into three holes, compiled to Python, found wrong, then repaired by redecomposing one hole, rewording another and giving I/O for a third.",
+  "elements": [
+   {
+    "name": "Task: Input, Output",
+    "type": "sample",
+    "role": "the programming task given as an input grid and the expected output grid",
+    "drawn_as": "word Task: and two dark grid thumbnails joined by an arrow",
+    "container": "Programming",
+    "is_contribution": false
+   },
+   {
+    "name": "cartoon user (unlabelled)",
+    "type": "actor",
+    "role": "the person who decomposes the task and later debugs the holes",
+    "drawn_as": "white egg-shaped cartoon character with eyes and legs, shown twice",
+    "container": "both bands",
+    "is_contribution": null
+   },
+   {
+    "name": "Decompose",
+    "type": "operation",
+    "role": "the user turns the task into an ANPL program",
+    "drawn_as": "label above a thick black arrow",
+    "container": "Programming",
+    "is_contribution": true
+   },
+   {
+    "name": "ANPL Program",
+    "type": "container",
+    "role": "sketch of control and data flow with natural-language holes",
+    "drawn_as": "black-framed light-grey box with a black title tab; solid arrows carry variable names",
+    "container": "both bands",
+    "is_contribution": true
+   },
+   {
+    "name": "Hole_1, Hole_2, Hole_3",
+    "type": "module",
+    "role": "function modules described in natural language: find largest and smallest shape, color the pixel blue, color all pixels red",
+    "drawn_as": "white boxes with backticked text and blue hole names",
+    "container": "ANPL Program",
+    "is_contribution": true
+   },
+   {
+    "name": "input_grid, most gray, fewest gray, colored_grid, output_grid",
+    "type": "data",
+    "role": "values passed between holes by the sketch",
+    "drawn_as": "plain labels on thin black arrows",
+    "container": "ANPL Program",
+    "is_contribution": null
+   },
+   {
+    "name": "ANPL Compiler",
+    "type": "module",
+    "role": "compiles the ANPL program to Python, checks it against the task's I/O and produces hole traces on failure",
+    "drawn_as": "tall black box with white rotated text",
+    "container": "both bands",
+    "is_contribution": true
+   },
+   {
+    "name": "Python Program",
+    "type": "data",
+    "role": "generated code: one function per hole plus a main function",
+    "drawn_as": "black-framed grey box with a small code listing, def in red and function names in blue",
+    "container": "both bands",
+    "is_contribution": null
+   },
+   {
+    "name": "Hole Traces",
+    "type": "data",
+    "role": "actual input and output of each hole (Hole_1 to Hole_3) with the wrong part boxed in red",
+    "drawn_as": "three rows of input grid, arrow, output grid",
+    "container": "Debugging",
+    "is_contribution": true
+   },
+   {
+    "name": "Expected",
+    "type": "data",
+    "role": "correct output of each hole",
+    "drawn_as": "column of three grids right of an orange dashed divider",
+    "container": "Debugging",
+    "is_contribution": null
+   },
+   {
+    "name": "Redecompose",
+    "type": "operation",
+    "role": "split Hole_1 into Hole_4 and Hole_5",
+    "drawn_as": "label on a yellow-orange curved arrow",
+    "container": "Debugging",
+    "is_contribution": true
+   },
+   {
+    "name": "Explain & Modify",
+    "type": "operation",
+    "role": "reword a hole's natural-language description",
+    "drawn_as": "label on a green arrow",
+    "container": "Debugging",
+    "is_contribution": true
+   },
+   {
+    "name": "Provide I/O",
+    "type": "operation",
+    "role": "give correct input and output pairs for a hole by adjusting its trace",
+    "drawn_as": "label on a blue curved arrow",
+    "container": "Debugging",
+    "is_contribution": true
+   },
+   {
+    "name": "Hole_4, Hole_5",
+    "type": "module",
+    "role": "sub-holes of Hole_1: find the columns with gray pixels; sort columns and return the first and last",
+    "drawn_as": "two white boxes in a pale-yellow region around the old Hole_1",
+    "container": "ANPL Program (Debugging)",
+    "is_contribution": true
+   },
+   {
+    "name": "legend (Data flow, Hole)",
+    "type": "label",
+    "role": "keys the black arrow as data flow and the white box as hole",
+    "drawn_as": "blue-filled framed box at the bottom-left of the Programming band",
+    "container": "Programming",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Task: Input, Output",
+    "to": "cartoon user",
+    "what": "the task goes to the user",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cartoon user",
+    "to": "ANPL Program",
+    "what": "Decompose: the user writes the sketch and holes",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ANPL Program",
+    "to": "ANPL Compiler",
+    "what": "program is compiled",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ANPL Compiler",
+    "to": "Python Program",
+    "what": "generated Python code",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Python Program",
+    "to": "result grid with red cross",
+    "what": "output does not match the task, so the check fails",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Python Program (Programming band)",
+    "to": "Debugging band",
+    "what": "a failed check leads to the debugging phase",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Hole Traces and Expected",
+    "to": "cartoon user",
+    "what": "traces and expected outputs guide the user",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cartoon user",
+    "to": "ANPL Program (Debugging)",
+    "what": "three kinds of edit: Redecompose, Explain & Modify, Provide I/O",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Redecompose arrow",
+    "to": "Hole_4 and Hole_5 region",
+    "what": "yellow marks the decomposed hole",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Explain & Modify arrow",
+    "to": "reworded Hole_2",
+    "what": "green marks the hole with a new description",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Provide I/O arrow",
+    "to": "Hole_3 with I/O pair",
+    "what": "blue marks the hole that received I/O examples",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Python Program (Debugging band)",
+    "to": "result grid with green check",
+    "what": "output matches the task",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Programming",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "task, user decomposition into an ANPL program, compile to Python; the first output is wrong",
+    "verdict": "fails"
+   },
+   {
+    "label": "Debugging",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "hole traces and expected outputs, three user edits, recompilation; the output is right",
+    "verdict": "passes"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Hole_1 ... Hole_5",
+    "kind": "identity",
+    "at": "hole boxes and trace rows",
+    "what": "names each hole and ties each trace row to its hole"
+   },
+   {
+    "marker": "Programming, Debugging",
+    "kind": "section",
+    "at": "coloured tabs at the top-left of each band",
+    "what": "head the two phases"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "ARC task input and output grids (grey bars on black; output adds a blue bar and a red cell)",
+    "content": "other",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small dark thumbnails joined by an arrow, after the word Task:"
+   },
+   {
+    "what": "grid produced by the generated Python program, wrong at first (green cell, blue cell) and right after repair",
+    "content": "other",
+    "role": "result",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "thumbnail under each Python Program box with a red cross or green check"
+   },
+   {
+    "what": "hole traces: input and actual output grid for Hole_1, Hole_2 and Hole_3, wrong regions boxed in red",
+    "content": "other",
+    "role": "result",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "three rows of two thumbnails with an arrow between them"
+   },
+   {
+    "what": "expected output grid of each hole",
+    "content": "other",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "column of thumbnails beside an orange dashed divider"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "white egg-shaped cartoon person with eyes and legs",
+    "stands_for": "the user who decomposes and debugs",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "an ARC-style bar-grid task solved by three holes (find largest and smallest shape, color the pixel blue, color all pixels red), then repaired with two sub-holes, a reworded hole and an I/O pair",
+    "form": "grid thumbnails, backticked hole descriptions and a Python listing",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "white egg-shaped cartoon person placed between the task and the program, repeated in the debugging band before the three edit arrows",
+    "parts": [
+     "cartoon user"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "program-sketch-with-holes",
+    "drawn_as": "black data-flow arrows with variable names joining white boxes whose backticked text is a natural-language description",
+    "parts": [
+     "input_grid",
+     "Hole boxes",
+     "most gray, fewest gray",
+     "output_grid"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at Programming top-left, reads Task, the user, Decompose, ANPL Program, Compiler and Python Program, drops along the orange arrow to Debugging and repeats the chain left to right ending on the green check."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two full-width tinted bands, Programming above (blue) and Debugging below (peach), each headed by a coloured tab; both end in the same right-hand chain of ANPL Program, black ANPL Compiler and Python Program with a result grid, joined by an orange elbow arrow from the first band to the second.",
+  "panel_count": 2,
+  "lanes": "2 stacked rows sharing the right-hand chain ANPL Program, ANPL Compiler, Python Program, result grid",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "inside",
+  "panel_markers": "titles",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.8,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#dae3f3",
+    "used_for": "Programming band background"
+   },
+   {
+    "hex": "#fbe5d6",
+    "used_for": "Debugging band background",
+    "opacity": 0.57
+   },
+   {
+    "hex": "#333f50",
+    "used_for": "Programming tab"
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "Debugging tab, elbow arrow and dashed divider"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "inside of the ANPL Program and Python Program boxes"
+   },
+   {
+    "hex": "#b4c7e7",
+    "used_for": "legend box fill"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "region around the new sub-holes Hole_4 and Hole_5"
+   },
+   {
+    "hex": "#92d050",
+    "used_for": "reworded hole and the Explain & Modify arrow"
+   },
+   {
+    "hex": "#00b0f0",
+    "used_for": "hole given I/O and the Provide I/O arrow"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "Redecompose arrow"
+   },
+   {
+    "hex": "#4472c4",
+    "used_for": "hole names and function names in the code"
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "red boxes on traces and def keywords in the code"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "ANPL Compiler boxes, title tabs and box frames"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5-1 pt black on boxes and arrows, red strokes on wrong regions, one dashed orange divider",
+  "font": "sans (Calibri, Microsoft YaHei) 3-7 pt: 3 pt code, 4.5 pt hole text, 5.5-6 pt names and titles",
+  "corners": "square",
+  "arrows": "thick black block-style arrows between stages, thin black arrows in the sketch, an orange elbow arrow, curved yellow, green and blue arrows with tapered heads",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "tint = phase (blue Programming, peach Debugging); black = system parts (compiler, titles, frames); white box = hole; in Debugging the hole fill shows which edit changed it: pale yellow redecomposed, green reworded, blue given I/O; blue text = hole and function names; red = wrong, green = right",
+  "line_style_means": "solid black arrow = data flow; orange dashed vertical line = splits actual traces from expected outputs; orange elbow arrow = failure leads to debugging",
+  "shape_means": "white box = hole; tall black box = compiler; black-framed grey box = a program; dark grid thumbnail = task or trace",
+  "marker_means": "Hole_n names holes and trace rows; red box on a trace grid = wrong region; red cross and green check = verdict on the program",
+  "emphasis": "coloured tabs name the phases; each user edit is a coloured arrow whose colour reappears on the changed hole; the check and cross close each band",
+  "reusable_patterns": [
+   "two tinted bands for first try and repair repeating the same chain so only the changes stand out",
+   "red cross and green check at the end of each band's chain",
+   "each user action is a coloured arrow whose colour is the fill of the element it changes",
+   "hole traces as input, arrow, output grid with red boxes beside the expected grid",
+   "framed key box in the band corner defining the arrow and the hole box"
+  ],
+  "weaknesses": [
+   "3 pt code text cannot be read at print size",
+   "many small labels in a dense layout",
+   "the elbow arrow to Debugging starts far from the compiler that creates the traces"
+  ]
+ },
+ "resources": {
+  "own": [
+   "ARC task grids and hole traces",
+   "a generated Python program"
+  ],
+  "stock": [
+   "cartoon user character",
+   "red cross and green check marks"
+  ],
+  "generated": [],
+  "drawn": [
+   "bands, tabs, boxes and arrows",
+   "legend",
+   "sketch with hole boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "Programming and Debugging bands",
+   "ARC grid thumbnails",
+   "cartoon user",
+   "ANPL program box with white hole boxes",
+   "black ANPL Compiler box",
+   "Python code listing",
+   "red cross and green check",
+   "coloured action arrows"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "natural programming",
+   "interactive decomposition",
+   "holes",
+   "sketch",
+   "LLM code generation",
+   "debugging",
+   "ARC",
+   "program synthesis"
+  ],
+  "tags": [
+   "human-in-the-loop",
+   "code-snippet-box",
+   "verdict-marks",
+   "error-callouts",
+   "notation-key",
+   "colour-coded-groups",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "action-colour-links",
+    "what": "each user action is a coloured arrow and the same colour reappears as the fill of the element that action changes"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw a human-in-the-loop try-and-repair workflow as two tinted bands that repeat the same chain, end each with a verdict mark, and give every kind of user edit its own colour reused on the element it changes.",
+  "suits": "Interactive systems with a try, diagnose, repair loop where a person and a model alternate and several kinds of user edits must be told apart."
+ },
+ "tags": [
+  "two-bands",
+  "tinted-phases",
+  "cartoon-user",
+  "colour-linked-actions",
+  "code-listing-boxes",
+  "tick-and-cross"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "4 Experiments (p.6)"
+  ],
+  "evidence": [
+   "We propose the ANPL (Abstracted Natural Programming Language) system (Figure 1)",
+   "Each hole is a stand-alone ANPL program, allowing the user to recursively decompose it further."
+  ]
+ },
+ "summary": "ANPL lets a user keep control of LLM code generation by writing a sketch of the data flow and leaving natural-language holes for the model to implement. Figure 1 follows one ARC grid task in two tinted bands. In Programming, the user decomposes the task into an ANPL program with three holes, the ANPL Compiler turns it into Python, and the output grid fails with a red cross. In Debugging, hole traces and expected grids lead the user to redecompose one hole, reword another and give I/O to a third, each edit a coloured arrow; the recompiled program ends with a green check.",
+ "summary_zh": "ANPL让用户写代码骨架、把子模块以自然语言“洞”交给大模型实现。图1用一道ARC网格题分两条色带：编程阶段拆解并编译但结果错误；调试阶段根据洞的轨迹重新分解、改写描述或补充输入输出，最终通过。",
+ "confidence": "high",
+ "notes": "actor-interaction added as third kind for the user and compiler exchange; pre-screen listed stage-pipeline and worked-walkthrough. The red cross and green check, and the coloured action arrows, are drawing devices and are not listed as icons.",
+ "venue": "NeurIPS23"
+}

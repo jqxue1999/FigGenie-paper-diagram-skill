@@ -1,0 +1,547 @@
+{
+ "paper_id": "cvpr26-0034",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "OralGPT-Omni (TRACE-CoT, MMOral-Uni)",
+  "one_liner": "A dental-specialised multimodal LLM trained on a multi-modality dental corpus with clinician-style chain-of-thought data, plus a unified dental benchmark.",
+  "domain": [
+   "dental imaging",
+   "medical multimodal LLM",
+   "chain-of-thought data"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "science-engineering"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "worked-walkthrough",
+   "contribution-mosaic"
+  ],
+  "variant": "benchmark-dashboard",
+  "variant_note": "a gallery of eight dental modalities, a worked reasoning example with tagged answer, and a bar chart of the training data",
+  "argues": "One model covers eight dental imaging modalities, answers with a clinician-like five-step reasoning pattern, and is trained on a corpus whose composition is shown.",
+  "subject": "Eight dental modalities as example cards, one tagged chain-of-thought answer to a periapical X-ray question, and corpus sizes with a bar chart.",
+  "elements": [
+   {
+    "name": "(a) Diverse Dental Imaging Modalities",
+    "type": "container",
+    "role": "gallery of the eight modalities of the corpus",
+    "drawn_as": "large black rounded frame, title set into its bottom edge, eight dashed cards inside",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "i. Intraoral images",
+    "type": "instance",
+    "role": "intraoral photographs of teeth and soft tissue, some with landmark dots or boxes",
+    "drawn_as": "dashed card with a 2x3 grid of photos and a caption below",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "ii. Panoramic radiograph",
+    "type": "instance",
+    "role": "whole-jaw X-ray",
+    "drawn_as": "dashed card with one wide X-ray and a caption",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "iii. Periapical radiograph / iv. Cephalometric radiograph",
+    "type": "instance",
+    "role": "tooth-level X-ray and skull side-view X-ray",
+    "drawn_as": "two X-rays side by side in one dashed card with two captions",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "v. Histopathological images",
+    "type": "instance",
+    "role": "microscope slides of tissue",
+    "drawn_as": "dashed card with two stacked stained images",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "vi. Interleaved image-text data for treatment planning",
+    "type": "instance",
+    "role": "a record: history and examination fields plus two images give an output treatment plan",
+    "drawn_as": "pink rounded box with bullet fields and two images joined by a plus sign, a double chevron to a second pink box",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "vii. Intraoral video of dental treatment",
+    "type": "instance",
+    "role": "video of a dental procedure",
+    "drawn_as": "film strip with sprocket holes holding three frames",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "viii. 3D model scan",
+    "type": "instance",
+    "role": "scan of a dental arch",
+    "drawn_as": "grey 3D model in a dashed card",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "(b) TRACE-CoT Reasoning Pattern",
+    "type": "container",
+    "role": "the reasoning format of the training answers, shown on one question",
+    "drawn_as": "pale-pink rounded panel with a query box on top, a step list at the left and a response box at the right",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "query box",
+    "type": "text-block",
+    "role": "user question about a periapical X-ray, with the X-ray as a thumbnail",
+    "drawn_as": "wide rounded box with a user outline icon at its left and a small radiograph at its right end",
+    "container": "(b)",
+    "is_contribution": null
+   },
+   {
+    "name": "five reasoning steps",
+    "type": "operation",
+    "role": "Image inspection, Preliminary hypothesis, Knowledge intergration, Hypothesis validation, Diagnosis determination, in order",
+    "drawn_as": "dashed rounded box with numbered steps, highlighted pink, cyan, cyan, cyan, salmon, and a doctor avatar captioned Thinking like a Clinician underneath",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "tagged response",
+    "type": "text-block",
+    "role": "model answer split into Caption, Think (three checkbox actions) and Answer segments",
+    "drawn_as": "large rounded box with angle-bracket tags highlighted pink, cyan and salmon and serif text",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(c) Training Data Composition",
+    "type": "container",
+    "role": "sizes of the corpus parts and distribution over modalities",
+    "drawn_as": "pale-pink rounded panel with a three-item bullet list over a bar chart",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "bar chart of instances per modality",
+    "type": "chart",
+    "role": "number of instances: panoramic 20463, periapical 16396, intraoral image 14994, pathological 7767, text-only instruction 4295, cephalometric 802, interleaved 327, 3D scan 136, intraoral video 90",
+    "drawn_as": "single-colour bars sorted from high to low with value labels, tilted category names",
+    "container": "(c)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "1. Image inspection",
+    "to": "<Caption> segment",
+    "what": "the first step is the caption of the image",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "2. Preliminary hypothesis, 3. Knowledge intergration, 4. Hypothesis validation",
+    "to": "<Think> checkbox lines",
+    "what": "the three middle steps are the three thinking actions",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "5. Diagnosis determination",
+    "to": "<Answer> segment",
+    "what": "the last step is the final answer",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "query box",
+    "to": "tagged response",
+    "what": "the question is answered by the segmented response",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Input fields and images",
+    "to": "Output Treatment Plan",
+    "what": "history, examination and images give the plan",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "modality cards i-viii of (a)",
+    "to": "bars of (c)",
+    "what": "the modalities reappear as the categories of the bar chart",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Diverse Dental Imaging Modalities",
+    "kind": "scope-overview",
+    "axis": "modalities",
+    "shows": "eight modality cards with real samples of the corpus",
+    "verdict": null
+   },
+   {
+    "label": "(b) TRACE-CoT Reasoning Pattern",
+    "kind": "worked-walkthrough",
+    "axis": "examples",
+    "shows": "one question, the five-step pattern and the tagged answer it produces",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Training Data Composition",
+    "axis": "overview",
+    "shows": "corpus sizes and the instance count per modality",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "i. to viii.",
+    "kind": "identity",
+    "at": "captions of the eight cards in (a)",
+    "what": "name the eight modalities"
+   },
+   {
+    "marker": "1. to 5.",
+    "kind": "order",
+    "at": "step list in (b)",
+    "what": "order of the reasoning steps"
+   },
+   {
+    "marker": "<Caption>, <Think>, <Answer>",
+    "kind": "identity",
+    "at": "response in (b)",
+    "what": "name the typed segments of the answer; highlighted like their steps"
+   },
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "titles of the three panels",
+    "what": "head the three parts"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "intraoral photographs of teeth, braces and lip and tongue lesions",
+    "content": "medical",
+    "role": "data-thumbnail",
+    "count": 6,
+    "medium": "bitmap",
+    "treatment": "2x3 grid in a dashed card; some carry coloured dots on teeth or small boxes"
+   },
+   {
+    "what": "panoramic, periapical and cephalometric radiographs",
+    "content": "medical",
+    "role": "data-thumbnail",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "one wide X-ray and two smaller ones in neighbouring dashed cards"
+   },
+   {
+    "what": "histopathology slides",
+    "content": "medical",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two stained images stacked in a dashed card"
+   },
+   {
+    "what": "an intraoral photo and a periapical X-ray used as inputs of the treatment-planning record",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "stacked small images next to the field list, joined by a plus sign"
+   },
+   {
+    "what": "frames of an intraoral treatment video",
+    "content": "video-frames",
+    "role": "data-thumbnail",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "three frames in a black film strip with sprocket holes"
+   },
+   {
+    "what": "3D scan of a dental arch",
+    "content": "3d-render",
+    "role": "data-thumbnail",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grey shaded model in a dashed card"
+   },
+   {
+    "what": "periapical X-ray in the query box",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small thumbnail at the right end of the query"
+   },
+   {
+    "what": "bar chart of training instances per modality",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "single-colour bars, value labels above, light grid, tilted category labels, inside a pale-pink panel"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "outline of a person",
+    "stands_for": "the user asking the question",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon doctor with a stethoscope",
+    "stands_for": "the clinician whose thinking is imitated",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "alpaca with a doctor cap and stethoscope",
+    "stands_for": "the OralGPT-Omni model",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "plus sign and double chevron",
+    "stands_for": "combining the fields and images, then producing the plan",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a periapical X-ray question with a response made of a caption, three checked reasoning actions and a diagnosis of an impacted molar",
+    "form": "query box over a tagged text box",
+    "real_values": true
+   },
+   {
+    "what": "a treatment-planning record: six history and examination fields plus two images, and an output plan with emergency and definitive parts",
+    "form": "two pink text boxes with a double chevron",
+    "real_values": true
+   },
+   {
+    "what": "corpus sizes: 16 textbooks with 3.21M tokens, 6.3k caption pairs, 57.7k instruction items",
+    "form": "bullet list in (c)",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "filmstrip",
+    "drawn_as": "three video frames inside a black film strip with sprocket holes on both edges",
+    "parts": [
+     "frames",
+     "sprocket holes"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "a user-icon query box above and a larger response box with an alpaca avatar at its edge",
+    "parts": [
+     "query box",
+     "response box",
+     "avatars"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "an alpaca mascot with a doctor cap at the edge of the response box",
+    "parts": [
+     "mascot"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the top-left intraoral card of (a), sweeps right and down through the other modalities, then (b) left to right from the query to the steps and the response, then the chart in (c)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "A wide black frame (a) across the top holding eight dashed cards of unequal size, then two pale-pink panels side by side below: (b) wider with the query, steps and response, (c) narrower with a bullet list over a bar chart.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.13,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff5fe",
+    "used_for": "pale-pink ground of panels (b) and (c)"
+   },
+   {
+    "hex": "#f6daef",
+    "used_for": "pink record boxes in card vi, highlight of step 1 and of the Caption tag"
+   },
+   {
+    "hex": "#00ffff",
+    "used_for": "cyan highlight of steps 2 to 4 and of the Think tag"
+   },
+   {
+    "hex": "#fec6c6",
+    "used_for": "salmon highlight of step 5 and of the Answer tag"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "dashed card outlines and grey step-to-segment arrows"
+   },
+   {
+    "hex": "#3db8f5",
+    "used_for": "bars of the chart, read off the bitmap",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt dashed grey card outlines, 1.25 pt black frame around (a), thin grey arrows",
+  "font": "serif (Times New Roman) 6.5-8 pt for text and captions; rounded bold sans (Comfortaa) for panel titles, step labels and the bullet list in (c)",
+  "corners": "mixed",
+  "arrows": "thin grey curved arrows with open heads from steps to response segments; a black double chevron in card vi",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink = caption step and Caption tag, cyan = thinking steps and Think tag, salmon = final diagnosis step and Answer tag; pale pink panels = (b) and (c), white inside the black frame = (a)",
+  "line_style_means": "dashed outlines = modality cards and the step list; solid black frame = the corpus gallery; grey curved arrows = step to response segment",
+  "shape_means": "film strip = video; pink rounded box = a text record; bar = number of instances",
+  "marker_means": "roman numerals name modalities; numbers 1 to 5 order the reasoning steps; angle-bracket tags name answer segments; checkboxes list the thinking actions",
+  "emphasis": "colour-matched steps and tags, a title set into the frame edge of (a), and a mascot beside the response",
+  "reusable_patterns": [
+   "gallery of dashed cards, each with a roman-numeral caption under its samples",
+   "film strip with sprocket holes for video",
+   "numbered step list highlighted in the colours of the tags of a real response and tied to it by grey arrows",
+   "bar chart sorted from high to low with value labels under a bullet list of corpus sizes",
+   "panel title set into the bottom edge of its frame",
+   "mascot avatar at the edge of a response box"
+  ],
+  "weaknesses": [
+   "long tilted bar labels",
+   "the chart is a bitmap",
+   "dense photo gallery with 7 pt captions"
+  ]
+ },
+ "resources": {
+  "own": [
+   "dental photos, radiographs, histopathology images, video frames and a 3D scan from the corpus",
+   "a real tagged response",
+   "instance counts of the corpus"
+  ],
+  "stock": [
+   "user outline icon",
+   "cartoon doctor avatar"
+  ],
+  "generated": [
+   "alpaca doctor mascot"
+  ],
+  "drawn": [
+   "frames and dashed cards",
+   "tag highlights and step arrows",
+   "film strip border",
+   "pink record boxes"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "eight dashed modality cards with dental photos, radiographs and a 3D scan",
+   "film strip of intraoral video",
+   "treatment-planning record with images",
+   "five numbered reasoning steps in colour",
+   "tagged chain-of-thought response with checkboxes",
+   "sorted bar chart of instances per modality"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "dental MLLM",
+   "medical imaging",
+   "chain-of-thought",
+   "TRACE-CoT",
+   "training data composition",
+   "dental radiographs",
+   "multimodal corpus",
+   "clinical reasoning"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "typed-trace-blocks",
+   "filmstrip",
+   "annotated-record-card",
+   "mascot-character"
+  ],
+  "new_tags": [
+   {
+    "name": "frame-edge-title",
+    "what": "a panel title set into the bottom border of its frame, interrupting the line"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Number the abstract reasoning steps in a dashed list, highlight each in the colour of its tag in a real response and tie them with grey arrows; pair this with a gallery of dashed modality cards and a sorted bar chart so coverage, example and statistics share one figure.",
+  "suits": "Domain-specific MLLM or dataset papers in medicine or science that must show data types, a reasoning format and corpus statistics together."
+ },
+ "tags": [
+  "dashed cards",
+  "photo gallery",
+  "pink panels",
+  "colour-highlighted tags",
+  "mixed serif and rounded sans",
+  "bar chart"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)",
+   "2 OralGPT-Omni (p.4)"
+  ],
+  "evidence": [
+   "Caption: (a) eight dental imaging modalities, (b) the TRACE-CoT reasoning pattern, (c) composition of the training corpus with a modality bar chart.",
+   "Introduction: TRACE-CoT mirrors radiologists' diagnostic decision-making, shown in Figure 1(b).",
+   "Section 2: the curated corpus covers eight modalities, from intraoral photos and videos to 3D scans and interleaved image-text data."
+  ]
+ },
+ "summary": "OralGPT-Omni is a dental-specialised multimodal LLM trained on a corpus of eight dental imaging modalities with chain-of-thought data that mimics a clinician's reasoning. Figure 1 shows the corpus in three parts. Panel (a), inside a black frame, is a gallery of dashed cards numbered i to viii: intraoral photos, panoramic, periapical and cephalometric X-rays, histopathology slides, an image-text treatment-planning record, a film strip of treatment video and a 3D scan. Panel (b) follows one X-ray question through the five TRACE-CoT steps, colour-matched to the Caption, Think and Answer tags of the response. Panel (c) lists the corpus sizes above a sorted bar chart of instances per modality.",
+ "summary_zh": "OralGPT-Omni 是牙科专用多模态大模型。图分三部分：(a)八类牙科影像（口内照、X光、病理、图文记录、视频、3D扫描）；(b)TRACE-CoT五步推理与带标签回答；(c)训练数据规模与各模态数量柱状图。",
+ "confidence": "high",
+ "notes": "Step 3 reads Knowledge intergration in the figure (spelling kept). The eight dashed cards of (a) are treated as elements of one panel rather than eight panels. The caption text is partly cropped at the bottom of the preview.",
+ "venue": "CVPR26"
+}

@@ -1,0 +1,720 @@
+{
+ "paper_id": "icml26-0069",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "PhotoAgent",
+  "one_liner": "Autonomous photo-editing agent that plans multi-step edits with tree search and refines them in a closed loop with visual feedback, without step-by-step user prompts.",
+  "domain": [
+   "autonomous image editing",
+   "aesthetic planning",
+   "vision-language agents"
+  ],
+  "subfield": "agents",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "stage-pipeline"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "left frame diagnoses three pain points of user-driven editing, right frame gives the autonomous agent loop as a ring around a mascot, a photo-result strip underneath",
+  "argues": "Editing no longer needs an expert in the loop: a closed perceive, plan, execute, evaluate cycle turns a photo into an edited result on its own.",
+  "subject": "People-loop complaints, a four-role agent ring with candidate and top-k actions and a score check, and input and output photo pairs.",
+  "elements": [
+   {
+    "name": "People-loop paradigm",
+    "type": "container",
+    "role": "the manual workflow, shown through three user complaints",
+    "drawn_as": "hand-drawn black rounded frame with a ring-of-people icon and title set into the top border",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Expertise Barrier",
+    "type": "instance",
+    "role": "pain point 1: 'I don't know how to make it beautiful. I need some experts:' followed by three photographer icons",
+    "drawn_as": "red bold heading with icon over a pale-blue speech bubble, beside a sweating cartoon user",
+    "container": "People-loop paradigm",
+    "is_contribution": false
+   },
+   {
+    "name": "Algorithm Selection",
+    "type": "instance",
+    "role": "pain point 2: 'I don't know how to select algorithm to edit it.'",
+    "drawn_as": "red bold heading over a pale-pink speech bubble, beside a shrugging user ringed by dashed circles of tool icons",
+    "container": "People-loop paradigm",
+    "is_contribution": false
+   },
+   {
+    "name": "Interaction Complexity",
+    "type": "instance",
+    "role": "pain point 3: 'I am so tired. I have worked for four hours.'",
+    "drawn_as": "red bold heading with stopwatch icon over a pale-yellow speech bubble, beside a tired user at a laptop",
+    "container": "People-loop paradigm",
+    "is_contribution": false
+   },
+   {
+    "name": "Edit / Evaluate",
+    "type": "label",
+    "role": "the user's repeated edit then inspect cycle",
+    "drawn_as": "two dashed ellipses joined by dashed arrows around the tired user",
+    "container": "People-loop paradigm",
+    "is_contribution": false
+   },
+   {
+    "name": "Agent-loop paradigm",
+    "type": "container",
+    "role": "the autonomous workflow of PhotoAgent",
+    "drawn_as": "hand-drawn black rounded frame with a ring-of-robots icon and title set into the top border",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "PhotoAgent",
+    "type": "actor",
+    "role": "the system, named at the centre of the ring",
+    "drawn_as": "orange fox mascot with paintbrush and palette above the name in blue-grey letters",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "Perceiver (Qwen3-VL)",
+    "type": "module",
+    "role": "interprets the input image and generates candidate editing actions (step 1)",
+    "drawn_as": "teal curved block arrow on the ring with rotated white label and a brain-with-circuits icon",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "Planner (MCTS)",
+    "type": "module",
+    "role": "explores and selects editing actions by tree search (step 2)",
+    "drawn_as": "red-brown curved block arrow with two small search-tree icons",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "Executor (InstructPix2Pix, FLUX)",
+    "type": "module",
+    "role": "applies the selected edit (step 3)",
+    "drawn_as": "green curved block arrow with a paint-tools icon",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "Evaluator (CLIP, LAION, ImageReward)",
+    "type": "module",
+    "role": "scores the edited image (step 4)",
+    "drawn_as": "gold curved block arrow with a small robot head and a bubble 'Score_t: 4.7'",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "N Candidate Actions",
+    "type": "data",
+    "role": "list of candidate editing instructions from the Perceiver",
+    "drawn_as": "pale-blue box with teal heading, numbered text lines (1), (2), vertical dots, (N)",
+    "container": "Agent-loop paradigm",
+    "is_contribution": null
+   },
+   {
+    "name": "Top-k Actions",
+    "type": "data",
+    "role": "the actions selected by the Planner",
+    "drawn_as": "pale-pink box with red-brown heading, numbered text lines (1), (2), vertical dots, (k)",
+    "container": "Agent-loop paradigm",
+    "is_contribution": null
+   },
+   {
+    "name": "Score_t > Score_t-1 ?",
+    "type": "operation",
+    "role": "decision after evaluation: Yes! send the edited image to the next loop, No! rollback to the t-th loop",
+    "drawn_as": "pale-yellow box with gold heading, green Yes! pill and red No! pill, each beside a robot head",
+    "container": "Agent-loop paradigm",
+    "is_contribution": true
+   },
+   {
+    "name": "Edited Image",
+    "type": "data",
+    "role": "the image produced by the edit",
+    "drawn_as": "small picture icon with a label, outside the ring at the lower right",
+    "container": "Agent-loop paradigm",
+    "is_contribution": null
+   },
+   {
+    "name": "Fully autonomous editing without any manual intervention.",
+    "type": "text-block",
+    "role": "claim stated under the photo strip",
+    "drawn_as": "white serif text on a black bar under the six photos",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Perceiver (Qwen3-VL)",
+    "to": "Planner (MCTS)",
+    "what": "next role in the ring",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Planner (MCTS)",
+    "to": "Executor (InstructPix2Pix, FLUX)",
+    "what": "next role in the ring",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "Executor (InstructPix2Pix, FLUX)",
+    "to": "Evaluator (CLIP, LAION, ImageReward)",
+    "what": "next role in the ring",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "Evaluator (CLIP, LAION, ImageReward)",
+    "to": "Perceiver (Qwen3-VL)",
+    "what": "the cycle closes",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "Perceiver (Qwen3-VL)",
+    "to": "N Candidate Actions",
+    "what": "candidate actions generated (box sits against the arc with the brain icon)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "N Candidate Actions",
+    "to": "Planner (MCTS)",
+    "what": "candidates passed to the planner",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Planner (MCTS)",
+    "to": "Top-k Actions",
+    "what": "selected actions",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Top-k Actions",
+    "to": "Executor (InstructPix2Pix, FLUX)",
+    "what": "actions to apply",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Executor (InstructPix2Pix, FLUX)",
+    "to": "Edited Image",
+    "what": "result of the edit, scored by the Evaluator (dashed curve from the Executor and Evaluator junction)",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Evaluator (CLIP, LAION, ImageReward)",
+    "to": "Score_t > Score_t-1 ?",
+    "what": "new score compared with the previous one",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Score_t > Score_t-1 ?",
+    "to": "Perceiver (Qwen3-VL)",
+    "what": "Yes!: send edited image to next loop",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Score_t > Score_t-1 ?",
+    "to": "earlier loop",
+    "what": "No!: rollback to t-th loop (text only, no arrow)",
+    "kind": "feedback",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Edit",
+    "to": "Evaluate",
+    "what": "the user edits, inspects, and repeats",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "People-loop paradigm",
+    "to": "Agent-loop paradigm",
+    "what": "manual workflow versus autonomous workflow, same frame style side by side",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "ring arcs",
+    "to": "N Candidate Actions, Top-k Actions, score box headings",
+    "what": "teal, red-brown and gold of the arcs return in the headings of the boxes tied to them",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "People-loop paradigm",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "three user pain points of manual editing as cartoon users with tinted complaint bubbles",
+    "verdict": "baseline"
+   },
+   {
+    "label": "Agent-loop paradigm",
+    "kind": "stage-pipeline",
+    "axis": "alternatives",
+    "shows": "autonomous perceive, plan, execute, evaluate ring around the PhotoAgent mascot with candidate actions, top-k actions and a score check",
+    "verdict": "ours"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "examples",
+    "shows": "three input photos each beside PhotoAgent's edited output, under the caption 'Fully autonomous editing without any manual intervention.'",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2, 3, 4 (circled)",
+    "kind": "order",
+    "at": "on the four ring arcs",
+    "what": "orders Perceiver, Planner, Executor, Evaluator"
+   },
+   {
+    "marker": "(1), (2), (N) and (1), (2), (k)",
+    "kind": "identity",
+    "at": "inside the candidate and top-k action boxes",
+    "what": "numbers the individual actions"
+   },
+   {
+    "marker": "Yes! / No!",
+    "kind": "identity",
+    "at": "pills in the score-check box",
+    "what": "names the two branches of the decision"
+   },
+   {
+    "marker": "Input / Output",
+    "kind": "identity",
+    "at": "over the first photo pair",
+    "what": "says which photo is the input and which is the output"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "three input photos: a woman silhouetted at a dull sunset by the sea, a latte cup on a table, a temple roof against the sky",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "tall tiles of equal size placed edge to edge in a row, the first labelled Input in white serif type"
+   },
+   {
+    "what": "the three edited outputs: golden sunset, warm lit latte cup, vivid temple colours",
+    "content": "natural-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "each output sits directly right of its input, the first labelled Output; a black caption bar runs under the strip"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "three people in a ring joined by arrows",
+    "stands_for": "the People-loop paradigm",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "four small robot heads in a ring joined by arrows",
+    "stands_for": "the Agent-loop paradigm",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "cartoon users: sweating and confused, shrugging, tired at a laptop with a low battery",
+    "stands_for": "users facing the three pain points",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "small heading icons: pointer-holding expert, node network, stopwatch",
+    "stands_for": "Expertise Barrier, Algorithm Selection, Interaction Complexity",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "three photographer cartoons with cameras",
+    "stands_for": "the experts a user would need",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "dashed circles holding a monitor with image, a neural network, tangled circles and small image icons",
+    "stands_for": "the many editing algorithms to choose from",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "brain with circuit lines",
+    "stands_for": "the Perceiver (a vision-language model)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two small search trees with a red highlighted path and a vertical ellipsis between",
+    "stands_for": "tree search in the Planner",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "orange fox with paintbrush and palette",
+    "stands_for": "PhotoAgent",
+    "style": "mascot",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "tool kit with scissors, brush and green paint",
+    "stands_for": "the Executor's editing tools",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small robot head with a speech bubble 'Score_t: 4.7'",
+    "stands_for": "the Evaluator giving a score",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "boy and girl cartoons with thumbs up at the corners of the candidate, top-k and score boxes",
+    "stands_for": "a user approving; the caption says PhotoAgent also supports user-guided editing",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "two small robot heads beside the Yes! and No! pills",
+    "stands_for": "the agent's own decision",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "green landscape picture icon",
+    "stands_for": "the Edited Image",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "candidate editing instructions for one photo, e.g. 'Increase image saturation and brightness', 'Add fluffy white clouds in the sky area', 'Change the color of the car in the foreground from red to blue'",
+    "form": "numbered text list in a pale-blue box with a vertical ellipsis",
+    "real_values": false
+   },
+   {
+    "what": "the selected top-k actions, e.g. 'Remove the person on the right side of the image', 'Crop the image to focus only on the central object', 'Replace the plain sky with the dramatic sunset'",
+    "form": "numbered text list in a pale-pink box",
+    "real_values": false
+   },
+   {
+    "what": "three user complaints and a score check with Score_t: 4.7",
+    "form": "speech bubbles beside cartoon users; decision box with Yes and No pills and a score bubble",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "agent-loop",
+    "drawn_as": "ring of four thick curved arrows in four colours with the role name set along each arc and a circled number, around a fox mascot; dashed curves tie boxes of actions and a score check to the arcs",
+    "parts": [
+     "Perceiver arc",
+     "Planner arc",
+     "Executor arc",
+     "Evaluator arc",
+     "mascot at the centre",
+     "dashed curves"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "tinted speech bubbles with tails, one per complaint, each beside a cartoon user",
+    "parts": [
+     "cartoon user",
+     "tinted bubble",
+     "red heading"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "human-in-loop",
+    "drawn_as": "left frame shows the user cycling through Edit and Evaluate in dashed ellipses; in the agent frame small thumbs-up person icons sit at the candidate, top-k and score boxes",
+    "parts": [
+     "tired user",
+     "Edit and Evaluate ellipses",
+     "thumbs-up person icons"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "mcts-tree",
+    "drawn_as": "two small trees of grey nodes with a red highlighted path, separated by dots, on the Planner arc",
+    "parts": [
+     "tree",
+     "highlighted path"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the title of the People-loop frame, reads its three complaints top-down, jumps to the ring of arcs 1 to 4 in the Agent-loop frame, then drops to the photo strip."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Two hand-drawn rounded frames side by side on top (narrow People-loop at the left, wide Agent-loop at the right) and a full-width strip of six photos with a black caption bar underneath.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.58,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#77a8b4",
+    "used_for": "Perceiver arc (step 1)"
+   },
+   {
+    "hex": "#b8665f",
+    "used_for": "Planner arc (step 2)"
+   },
+   {
+    "hex": "#4e7d47",
+    "used_for": "Executor arc (step 3)"
+   },
+   {
+    "hex": "#c9970f",
+    "used_for": "Evaluator arc (step 4)"
+   },
+   {
+    "hex": "#d8f3fa",
+    "used_for": "pale-blue bubble and the N Candidate Actions box"
+   },
+   {
+    "hex": "#ffe9e8",
+    "used_for": "pale-pink bubble and the Top-k Actions box"
+   },
+   {
+    "hex": "#fff7e0",
+    "used_for": "pale-yellow Interaction Complexity bubble"
+   },
+   {
+    "hex": "#fff3cc",
+    "used_for": "score-check box",
+    "opacity": 0.64
+   },
+   {
+    "hex": "#c00000",
+    "used_for": "bold red headings of the three problems and the No! pill"
+   },
+   {
+    "hex": "#00b050",
+    "used_for": "Yes! pill"
+   },
+   {
+    "hex": "#5c838e",
+    "used_for": "heading N Candidate Actions"
+   },
+   {
+    "hex": "#b14e4f",
+    "used_for": "heading Top-k Actions"
+   },
+   {
+    "hex": "#a77e14",
+    "used_for": "heading of the score check"
+   },
+   {
+    "hex": "#ef5050",
+    "used_for": "red highlighted path in the tree icons"
+   },
+   {
+    "hex": "#7bc5d9",
+    "used_for": "cyan accent words such as 'next loop'"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "hand-drawn frames, dashed curves and the caption bar under the photos"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "1.75 pt black hand-drawn style frames, 1.25 to 1.75 pt dashed black curves, 0.5 pt thin lines",
+  "font": "casual sans (Comic Sans MS), 5.5-7 pt for labels and bubbles with bold coloured headings, 9.5 pt titles, 3-4.5 pt for subscripts; Times New Roman for the photo labels and the caption bar",
+  "corners": "rounded",
+  "arrows": "four thick curved block arrows forming the ring; dashed black curves with small arrowheads or black dots for hand-offs",
+  "rendering": "mixed",
+  "effects": "none",
+  "model_depiction": "mascot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "each ring arc has its own colour (teal Perceiver, red-brown Planner, green Executor, gold Evaluator) and the box tied to it repeats that hue in its heading; red headings = problems of the manual loop; blue, pink and yellow tints separate the three complaint bubbles; green Yes! and red No! pills = branch outcomes",
+  "line_style_means": "dashed curves = hand-offs between ring roles and the data boxes; dashed ellipses on the left = the user's edit-evaluate cycle and the many algorithms; thick curved arcs = the agent cycle",
+  "shape_means": "curved block arrow = a role in the cycle; tinted rounded box = text of actions; speech bubble = a user complaint; hand-drawn rounded frame = a paradigm",
+  "marker_means": "circled 1-4 order the ring roles; (1)...(N) and (1)...(k) number the actions; Yes! and No! name the branches; Input and Output label the photos",
+  "emphasis": "fox mascot with the system name at the centre of the ring, and a large photo strip under a black caption bar for the outcome",
+  "reusable_patterns": [
+   "two titled frames of the same style contrasting a manual workflow with the autonomous one",
+   "ring of coloured curved arcs with role names set along them, circled order numbers and a mascot at the centre",
+   "tinted text boxes tied to the ring by dashed curves, with heading colours matching the arcs",
+   "complaint bubbles: cartoon user, tinted bubble and a red problem heading",
+   "decision box with green Yes and red No pills for loop control",
+   "bottom strip of input and output photo pairs with a black caption bar stating the claim"
+  ],
+  "weaknesses": [
+   "very dense: 3-7 pt text and many small icons in a double-column figure",
+   "the direction of several dashed curves is given only by tiny arrowheads or dots",
+   "role names are rotated along the arcs and hard to read",
+   "no memory or tool-selection module is drawn although the paper's text names them"
+  ]
+ },
+ "resources": {
+  "own": [
+   "six real photos: three inputs and PhotoAgent's three edited outputs",
+   "the candidate and top-k action texts"
+  ],
+  "stock": [
+   "cartoon user figures, photographer icons, heading icons, tool and network icons, thumbs-up person icons, robot heads (one flat-colour clip-art family)"
+  ],
+  "generated": [
+   "fox mascot with paintbrush and palette"
+  ],
+  "drawn": [
+   "ring of four coloured arcs with rotated labels",
+   "dashed curves and dots",
+   "hand-drawn frames and tinted boxes",
+   "Yes and No pills and circled numbers",
+   "black caption bar"
+  ],
+  "unknown": [
+   "whether the cartoon user figures are stock or generated"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "People-loop frame with three complaint bubbles",
+   "ring of four coloured arcs around a fox mascot",
+   "N Candidate Actions and Top-k Actions boxes",
+   "score check box with Yes and No pills",
+   "strip of three input and output photo pairs",
+   "cartoon users and robot heads"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "autonomous photo editing",
+   "agent loop",
+   "MCTS planning",
+   "aesthetic reward",
+   "vision-language model",
+   "instruction-based editing",
+   "closed-loop",
+   "people in the loop"
+  ],
+  "tags": [
+   "mascot-character",
+   "title-branding",
+   "model-pictogram",
+   "human-in-the-loop",
+   "colour-coded-groups",
+   "claim-banner",
+   "illustration-style"
+  ],
+  "new_tags": [
+   {
+    "name": "ring-of-role-arcs",
+    "what": "an agent loop drawn as a ring of 3-5 thick curved arrows, each in its own colour with the role name set along the arc and a circled step number, around a mascot or title at the centre"
+   },
+   {
+    "name": "input-output-photo-strip",
+    "what": "a bottom strip of input and output photo pairs under the method drawing, labelled Input and Output, closed by a black caption bar that states the claim"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Contrast a user-in-the-loop workflow with the autonomous one by framing both the same way, list the user's pain points as tinted complaint bubbles, draw the agent as a ring of coloured arcs with circled numbers around a mascot, and end with a photo strip under a caption bar that states the result.",
+  "suits": "Agent or tool-using systems that replace a manual workflow, where the benefit shows in before and after outputs."
+ },
+ "tags": [
+  "hand-drawn-frames",
+  "cartoon-icons",
+  "comic-font",
+  "coloured-arcs",
+  "dashed-curves",
+  "photo-strip",
+  "dense-composite"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 PhotoAgent (p.4)"
+  ],
+  "evidence": [
+   "Upper-Left: People-loop, where users iteratively inspect the image, propose edits, and apply changes until satisfied.",
+   "a perceiver that interprets the input image and generates candidate editing actions, an MCTS-based planner that explores and selects potential editing actions",
+   "an executor that applies the edits, and an evaluator that assesses the editing results."
+  ]
+ },
+ "summary": "PhotoAgent is an autonomous photo-editing system that plans multi-step edits with tree search and refines them in a closed loop with memory and visual feedback, so users no longer write step-by-step instructions. Figure 1 sets two hand-drawn frames side by side. The left 'People-loop paradigm' lists three user complaints (expertise barrier, algorithm selection, interaction complexity) as tinted speech bubbles beside cartoon users. The right 'Agent-loop paradigm' is a ring of four coloured arcs numbered 1 to 4 (Perceiver, Planner with MCTS, Executor, Evaluator) around a fox mascot, with candidate-action, top-k-action and score-check boxes tied to it by dashed curves. A strip of three input and output photo pairs sits under a black caption bar.",
+ "summary_zh": "PhotoAgent 是自主修图系统。图 1 左侧“人在回路”用三个气泡列出用户的难处，右侧“智能体回路”是围绕狐狸吉祥物的四色环（感知、规划、执行、评估）并配候选动作与评分判断框，底部是输入输出照片对。",
+ "confidence": "high",
+ "notes": "The endpoints and directions of some dashed curves (the one from the Executor and Evaluator junction to Edited Image, and the ones at the N Candidate Actions and Top-k Actions boxes) are read from the picture and the paper's component list; the figure has few arrowheads. The thumbs-up person icons are not explained beyond the caption's mention of user-guided editing. All icons appear as bitmaps in the SVG (37 different bitmaps placed). The memory module named in the text is not drawn.",
+ "venue": "ICML26"
+}

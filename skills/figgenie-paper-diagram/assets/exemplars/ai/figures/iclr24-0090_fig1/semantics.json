@@ -1,0 +1,567 @@
+{
+ "paper_id": "iclr24-0090",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "NAISR",
+  "one_liner": "A 3D neural additive model for interpretable shape representation: a template shape deformed by a sum of covariate-wise displacement fields predicted by separate MLPs.",
+  "domain": [
+   "3D shape representation",
+   "neural additive models",
+   "medical shape analysis"
+  ],
+  "subfield": "science-engineering",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "multi-branch-fusion",
+  "variant_note": "a training band with one MLP branch per covariate summed into a displacement for a template network, and a testing band that fans the trained block out into four uses",
+  "argues": "Summing one displacement field per covariate keeps each covariate's effect separable, so the same trained parts support reconstruction, evolution, disentanglement and transfer.",
+  "subject": "Covariate-wise MLPs whose displacement fields are added to deform a template queried as an SDF, then four test-time uses on airway shapes.",
+  "elements": [
+   {
+    "name": "covariates: c = [c_0, ..., c_n]",
+    "type": "label",
+    "role": "the covariates attached to each input shape",
+    "drawn_as": "serif text under a grey airway mesh with a red query point p in R^3",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "c_i, p, z input tiles",
+    "type": "data",
+    "role": "inputs of one covariate branch: covariate value, point coordinates, latent code",
+    "drawn_as": "vertical stack of three square tiles (light pink, grey, lilac) with bold symbols, bracketed into the MLP; a bordered box with a letter and a slash stands before z",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "MLP (g_i, g_j)",
+    "type": "module",
+    "role": "covariate-wise network predicting the displacement g_i(p, c_i, z)",
+    "drawn_as": "three tall rounded bars with a black strip labelled MLP, magenta for covariate i and blue for covariate j, with an ellipsis for further covariates",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "covariate-wise displacement",
+    "type": "data",
+    "role": "displacement field d_i in R^3 of one covariate",
+    "drawn_as": "gradient-filled wobbly blob with mesh lines around a grey cube, pink for i and blue for j",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "Displacement Aggregation",
+    "type": "operation",
+    "role": "adds the covariate-wise displacements into the overall displacement d",
+    "drawn_as": "pale yellow box next to a plus node where curved lines from the blobs meet",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "overall displacement",
+    "type": "data",
+    "role": "d = sum of the d_i, defined in the target space",
+    "drawn_as": "purple blob with a cube and mesh, formula d = Σ d_i beneath",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "p̃ = p + d",
+    "type": "data",
+    "role": "deformed coordinates at which the template is queried",
+    "drawn_as": "grey tile p entering a plus node, then a tile p̃ with the formula under it",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "template shape T",
+    "type": "module",
+    "role": "template network queried at p̃ that outputs a signed distance",
+    "drawn_as": "purple three-bar MLP with a black strip, caption below",
+    "container": "Training",
+    "is_contribution": true
+   },
+   {
+    "name": "SDF: s ∈ R",
+    "type": "data",
+    "role": "signed distance output with its zero level set as the shape",
+    "drawn_as": "colour contour image from blue through green to yellow with a pale shape outline",
+    "container": "Training",
+    "is_contribution": false
+   },
+   {
+    "name": "Φ",
+    "type": "module",
+    "role": "the trained model used at test time, shown as a grey trapezoid, Φ_i in pink and Φ_j in blue for one covariate",
+    "drawn_as": "gradient-filled trapezoid block with input tiles on one side and a shape render on the other",
+    "container": "Testing",
+    "is_contribution": true
+   },
+   {
+    "name": "Inference and Generation",
+    "type": "container",
+    "role": "estimate ẑ and ĉ from a given shape; generate shapes from ẑ and ĉ",
+    "drawn_as": "two rows of tiles, trapezoid Φ and a grey airway render, captions estimate ẑ and ĉ and generate shapes",
+    "container": "Testing",
+    "is_contribution": null
+   },
+   {
+    "name": "Evolution",
+    "type": "container",
+    "role": "vary one covariate over time to evolve a shape",
+    "drawn_as": "chain c_i^1 ... c_i^t ... c_i^T into a pink Φ_i with a dashed ẑ p box, bent arrow to a row of seven shapes along a t axis",
+    "container": "Testing",
+    "is_contribution": null
+   },
+   {
+    "name": "Disentanglement",
+    "type": "container",
+    "role": "show the effect of each covariate separately",
+    "drawn_as": "two rows: p ẑ with c_i into pink Φ_i and a pink-brown shape; p ẑ with c_j into blue Φ_j and a blue shape",
+    "container": "Testing",
+    "is_contribution": null
+   },
+   {
+    "name": "Transfer",
+    "type": "container",
+    "role": "estimate ẑ and ĉ, then move a shape to new covariates ĉ_j + Δc_j",
+    "drawn_as": "upper row estimating ẑ and ĉ; lower row 2 years later? with a blue Φ_j and a blue blob holding the transferred shape",
+    "container": "Testing",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "c_i, p, z tiles",
+    "to": "MLP",
+    "what": "inputs of one covariate branch",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "MLP",
+    "to": "covariate-wise displacement",
+    "what": "predicted displacement field",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "covariate-wise displacements",
+    "to": "overall displacement",
+    "what": "summed at the plus node",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "overall displacement and p",
+    "to": "p̃ = p + d",
+    "what": "displace the query coordinates",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "p̃",
+    "to": "template shape T",
+    "what": "deformed coordinates are queried",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "template shape T",
+    "to": "SDF: s ∈ R",
+    "what": "signed distance output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "pink inputs, MLP, blob and Φ_i",
+    "to": "same pink items in Evolution and Disentanglement",
+    "what": "covariate i keeps its colour from training to testing",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "blue inputs, MLP, blob and Φ_j",
+    "to": "same blue items in Disentanglement and Transfer",
+    "what": "covariate j keeps its colour from training to testing",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "airway shape",
+    "to": "Φ (estimation rows)",
+    "what": "a given shape is fitted to recover ẑ and ĉ",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ẑ, ĉ tiles",
+    "to": "Φ (generation row)",
+    "what": "latent code and covariates generate a shape",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "c_i^1 ... c_i^T",
+    "to": "row of seven shapes",
+    "what": "evolving covariate gives evolving shape over t",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ĉ_j + Δc_j",
+    "to": "transferred shape",
+    "what": "predicted shape after a covariate change",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Training",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "inputs p, c_i, z into covariate-wise MLPs, displacement blobs summed, added to p, template MLP to an SDF image",
+    "verdict": "ours"
+   },
+   {
+    "label": "Inference and Generation",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "estimate ẑ and ĉ from a shape; generate shapes from ẑ and ĉ",
+    "verdict": "ours"
+   },
+   {
+    "label": "Evolution",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "evolving one covariate c_i over time gives a row of shapes along t",
+    "verdict": "ours"
+   },
+   {
+    "label": "Disentanglement",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "each covariate alone, Φ_i and Φ_j, gives its own shape",
+    "verdict": "ours"
+   },
+   {
+    "label": "Transfer",
+    "kind": "stage-pipeline",
+    "axis": "other",
+    "shows": "estimate ẑ and ĉ, then transfer ĉ_j to ĉ_j + Δc_j to preview the shape 2 years later",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Training, Testing",
+    "kind": "section",
+    "at": "filled purple pills at the top and on the dividing line",
+    "what": "name the two phases of the figure"
+   },
+   {
+    "marker": "i, j, 0 ... n",
+    "kind": "identity",
+    "at": "subscripts of c, g, d and Φ",
+    "what": "index the covariates and their branches"
+   },
+   {
+    "marker": "hats and Δc",
+    "kind": "identity",
+    "at": "ẑ, ĉ and ĉ_j + Δc_j in the testing sections",
+    "what": "mark estimated values and a change of a covariate"
+   },
+   {
+    "marker": "Inference and Generation, Evolution, Disentanglement, Transfer",
+    "kind": "section",
+    "at": "grey bold titles of the four testing sections",
+    "what": "name the four uses"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "3D surface render of an airway shape as a grey mesh with a red query point",
+    "content": "medical",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "small grey mesh at the left of the training band with a red dot and the label p in R^3"
+   },
+   {
+    "what": "airway shape renders in the testing sections: estimate and generate rows, seven evolution shapes along a time axis, a pink-brown and a blue disentangled shape, and the transferred shape",
+    "content": "medical",
+    "role": "sample-output",
+    "count": 13,
+    "medium": "bitmap",
+    "treatment": "small renders at the same scale; evolution shapes in blue-grey in a row along t, disentangled shapes coloured pink-brown and blue"
+   },
+   {
+    "what": "deformed template blobs: a grey cube with mesh lines inside a gradient-filled wobbly surface, in pink, blue and purple, and a blue one around the transferred shape",
+    "content": "other",
+    "role": "illustration",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "gradient-shaded blobs with a grid wrapped around a cube to picture a displacement field"
+   },
+   {
+    "what": "slice of the signed distance field as a colour contour map with the shape outline in pale yellow",
+    "content": "dense-map",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "square image with banded blue, green and yellow levels at the right end of the training band"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "an airway shape with covariates, its template deformation and an SDF slice",
+    "form": "airway mesh with a red point, blobs with cubes, a contour image",
+    "real_values": true
+   },
+   {
+    "what": "four test-time uses on airway shapes: estimate and generate, evolve over time, disentangle covariates, transfer to ĉ_j + Δc_j after 2 years",
+    "form": "trapezoid blocks with input tiles and rendered shapes",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "mlp-head",
+    "drawn_as": "three tall rounded bars side by side with a black strip reading MLP across them; magenta for covariate i, blue for covariate j, purple for the template network",
+    "parts": [
+     "three bars",
+     "black MLP strip"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a vertical stack of three square input tiles (c_i, p, z) coloured by input type and bracketed into the MLP",
+    "parts": [
+     "c_i tile",
+     "p tile",
+     "z tile",
+     "bracket"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "trapezoid-model",
+    "drawn_as": "the trained model Φ as a gradient-filled trapezoid, grey for the full model, pink Φ_i and blue Φ_j for single covariates, with input tiles on one side and a render on the other",
+    "parts": [
+     "trapezoid",
+     "input tiles",
+     "output render"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Start at the airway shape at the left of the Training band, follow the covariate branches to the plus node, the template MLP and the SDF image, then read the four Testing sections left to right."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Two stacked bands under filled purple pills: a wide Training drawing (left to right: airway shape, stacked input tiles, pink and blue MLP rows with displacement blobs, an aggregation box and plus nodes, a purple template MLP, an SDF image) above a Testing band of four framed sections side by side, each with a trapezoid block and shape renders.",
+  "panel_count": 5,
+  "lanes": "two parallel covariate branches (i pink, j blue) with a vertical ellipsis for the others",
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "panel-frames",
+   "framed-boxes",
+   "whitespace"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.89,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#674ea7",
+    "used_for": "Training and Testing pills, the template MLP and the overall displacement (purple)"
+   },
+   {
+    "hex": "#a64d79",
+    "used_for": "magenta MLP g_i and the pink displacement blob of covariate i"
+   },
+   {
+    "hex": "#6fa8dc",
+    "used_for": "blue MLP g_j and the blue displacement blob of covariate j"
+   },
+   {
+    "hex": "#ead1dc",
+    "used_for": "light pink tiles for covariate c_i and its evolution chain"
+   },
+   {
+    "hex": "#c9daf8",
+    "used_for": "light blue tiles for c_j and ĉ"
+   },
+   {
+    "hex": "#d9d2e9",
+    "used_for": "lilac tiles for the latent code z and ẑ"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey tiles for the point p"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Displacement Aggregation box"
+   },
+   {
+    "hex": "#d4d4d4",
+    "used_for": "grey Φ trapezoids and the cube inside the blobs"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "thin outlines, connectors and dashed frames"
+   },
+   {
+    "hex": "#d9ead3",
+    "used_for": "light green rules between the Testing sections"
+   },
+   {
+    "hex": "#980000",
+    "used_for": "red query point on the airway shape"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 pt dark grey outlines and connectors, dashed for ellipses and one optional input box, light green rules between the testing sections",
+  "font": "mixed: bold Arial for labels and titles at 4 to 6 pt, white bold on the pills, Times for maths symbols and annotations",
+  "corners": "mixed",
+  "arrows": "thin dark grey arrows with small heads, bracket connectors from stacked tiles into a block, curved lines merging into a plus node, a bent arrow into the time-axis plot",
+  "rendering": "mixed",
+  "effects": "gradient fills on the blobs and trapezoids; mesh lines wrapped around a cube inside each blob",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink = the branch of covariate i (c_i tiles, MLP g_i, displacement blob, Φ_i); blue = the branch of covariate j; purple = the shared template, the aggregation and the phase pills; grey tile = coordinates p; lilac = latent code z; pale yellow = the aggregation step",
+  "line_style_means": "thin dark grey arrows = data flow; bracket connectors = tiles concatenated into a block; dashed outline = an optional input box and the ellipses; light green rules separate the testing sections",
+  "shape_means": "three vertical bars with a black strip = an MLP; trapezoid Φ = the trained model used at test time; blob with a grey cube = a displacement field acting on the template; circled plus = sum; square tile = an input vector",
+  "marker_means": "subscripts i and j index covariates; hats mark estimated values; Δc is a change of a covariate; t is the time axis of the evolution row",
+  "emphasis": "Two filled pills split the figure into Training and Testing, and the per-covariate colours are repeated from input tile to MLP to blob to the test-time block, so each testing section reads as re-use of the same branch.",
+  "reusable_patterns": [
+   "filled pill labels naming the two phases of a figure",
+   "one colour per covariate repeated from input tiles through the network to the test-time block",
+   "deformed blob with a cube and mesh lines to picture a displacement field",
+   "bracket connector from stacked input tiles into a block",
+   "row of framed sections, one per test-time use of the same trained block",
+   "time axis with a row of renders for evolution"
+  ],
+  "weaknesses": [
+   "tile and label text is 4 to 6 pt, very small at column width",
+   "the bordered box with a letter and a slash before z is not explained in the caption"
+  ]
+ },
+ "resources": {
+  "own": [
+   "3D airway shape renders",
+   "SDF slice image",
+   "the equations"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "MLP bars, tiles, trapezoids, arrows and pills",
+   "plus nodes and connectors"
+  ],
+  "unknown": [
+   "how the deformed blobs with cubes and mesh were made, probably a 3D tool"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "airway 3D shape renders",
+   "pink and blue three-bar MLPs",
+   "deformed blobs with a cube and mesh",
+   "circled plus nodes",
+   "Displacement Aggregation box",
+   "SDF contour image",
+   "trapezoid Φ blocks",
+   "row of evolving shapes along a time axis",
+   "Training and Testing pills"
+  ],
+  "sample_data": "3d",
+  "keywords": [
+   "neural additive model",
+   "3D shape representation",
+   "signed distance function",
+   "covariates",
+   "displacement field",
+   "template atlas",
+   "interpretability",
+   "shape evolution",
+   "shape transfer",
+   "airway"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "equation-boxes",
+   "task-definition",
+   "small-multiples",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "phase-pill-labels",
+    "what": "filled rounded pills (Training, Testing) placed on the dividing line or at the top to name the phases of a figure"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Split a figure into training and testing with two filled pill labels, and let one colour per covariate follow its branch from input tile through the network, the displacement picture and the test-time block, so the four test-time uses read as re-use of the same trained parts.",
+  "suits": "Models whose training builds additive or modular components that are recombined at test time for several uses such as reconstruction, editing or transfer."
+ },
+ "tags": [
+  "two bands with pill labels",
+  "pink and blue branches",
+  "3D renders",
+  "trapezoid blocks",
+  "dense small text",
+  "framed testing sections"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.4",
+   "3 Method (p.4-6)"
+  ],
+  "evidence": [
+   "During training we learn the template T and the multi-layer perceptrons (MLPs) {gi} predicting the covariate-wise displacement fields {di}.",
+   "At test time we evaluate the trained MLPs for shape reconstruction, evolution, disentanglement, and shape transfer."
+  ]
+ },
+ "summary": "NAISR is a 3D neural additive model for interpretable shape representation: a template shape is deformed by the sum of covariate-wise displacement fields, each predicted by its own MLP from the point, the covariate and a shared latent code, and the template is queried at p + d. Figure 1 has two bands under filled pills. Under Training, stacked input tiles (c_i, p, z) feed pink and blue three-bar MLPs whose displacement blobs are summed at a plus node, added to p and passed through a purple template MLP to an SDF image. Under Testing, four framed sections show the trained block Φ for inference and generation, evolution, disentanglement and transfer, each with airway shape renders.",
+ "summary_zh": "NAISR 用逐协变量的 MLP 预测位移场，求和后形变模板，再查询符号距离函数。图分两带：上方“训练”经粉蓝 MLP、位移求和和模板 MLP 得到 SDF；下方“测试”四个分区展示推断生成、演化、解耦和迁移。",
+ "confidence": "high",
+ "notes": "The bordered box with a letter before z (o / z) is explained neither in the caption nor in the cited paragraphs, so it is left uninterpreted. The Testing pill heads the four framed sections and the Training pill heads the top band, giving five panels. The count of airway renders is approximate; the digest lists 82 placed bitmaps, many of them tiny tiles for the input tiles. The Φ trapezoids and MLP bars are both model depictions; model_depiction records the MLP bars.",
+ "venue": "ICLR24"
+}

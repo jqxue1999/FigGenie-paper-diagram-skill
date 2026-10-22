@@ -1,0 +1,641 @@
+{
+ "paper_id": "icml26-0045",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Jailbreak Foundry (JBF)",
+  "one_liner": "Multi-agent system that turns jailbreak papers into runnable attack modules and evaluates them in one unified harness for reproducible benchmarking.",
+  "domain": [
+   "LLM jailbreak attacks",
+   "reproducible benchmarking",
+   "paper-to-code agents"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "agents"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "three titled module containers in one row (FORGE, LIB, EVAL), fed by two inputs above and fanning out to three result boxes below, with one dashed loop at the registry",
+  "argues": "One system covers the whole path from a new jailbreak paper to a registered runnable attack and to comparable, versioned evaluation results.",
+  "subject": "Paper-to-attack agents, a shared contract library with a registry, and a fixed evaluation harness that outputs versioned results.",
+  "elements": [
+   {
+    "name": "New jailbreak paper",
+    "type": "data",
+    "role": "the input paper that describes a new attack",
+    "drawn_as": "white rounded box with PDF icon and an orange 'New' pill on its top edge",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Reference Repo (code/configs/prompts)",
+    "type": "data",
+    "role": "optional original code, configs and prompts of the attack",
+    "drawn_as": "white rounded box with folder-and-code icon and an orange 'Optional' pill on its top edge",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "JBF-FORGE (Paper → Runnable Module)",
+    "type": "container",
+    "role": "multi-agent workflow that translates a paper into a runnable attack module",
+    "drawn_as": "large rounded blue container with robot-head icon and bold 9 pt title",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Coding ⟲ Auditing",
+    "type": "label",
+    "role": "names the two alternating activities of the agents; circular arrows sit between the words",
+    "drawn_as": "small white pill in the container's top right",
+    "container": "JBF-FORGE",
+    "is_contribution": null
+   },
+   {
+    "name": "Planner (paper → spec)",
+    "type": "module",
+    "role": "reads the paper and produces a spec",
+    "drawn_as": "white rounded card with planner-checklist icon",
+    "container": "JBF-FORGE",
+    "is_contribution": true
+   },
+   {
+    "name": "Coder (spec → module)",
+    "type": "module",
+    "role": "turns the spec into a module",
+    "drawn_as": "white rounded card with monitor-with-code icon",
+    "container": "JBF-FORGE",
+    "is_contribution": true
+   },
+   {
+    "name": "Auditor (fidelity + contract check)",
+    "type": "module",
+    "role": "checks fidelity and contract conformance of the generated module",
+    "drawn_as": "white rounded card with shield-and-magnifier icon",
+    "container": "JBF-FORGE",
+    "is_contribution": true
+   },
+   {
+    "name": "JBF-LIB (Contract & Runtime Core)",
+    "type": "container",
+    "role": "shared library of attack contracts and runtime utilities",
+    "drawn_as": "large rounded grey container with a stack-of-books icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Base Contracts",
+    "type": "module",
+    "role": "stable attack/defense contracts",
+    "drawn_as": "white rounded card with document icon",
+    "container": "JBF-LIB",
+    "is_contribution": null
+   },
+   {
+    "name": "LLM Utilities",
+    "type": "module",
+    "role": "common runtime utilities",
+    "drawn_as": "white rounded card with crossed wrench and spanner icon",
+    "container": "JBF-LIB",
+    "is_contribution": null
+   },
+   {
+    "name": "Caching / Logging",
+    "type": "module",
+    "role": "runtime caching and logging",
+    "drawn_as": "white rounded card with server-and-clock icon",
+    "container": "JBF-LIB",
+    "is_contribution": null
+   },
+   {
+    "name": "Registry (Auto-discovery + Lazy loading)",
+    "type": "module",
+    "role": "holds the registered attack modules",
+    "drawn_as": "front card plus three offset light-grey cards behind it, clipboard-and-pencil icon",
+    "container": "JBF-LIB",
+    "is_contribution": null
+   },
+   {
+    "name": "JBF-EVAL (Standardized Evaluation)",
+    "type": "container",
+    "role": "standardized evaluation harness",
+    "drawn_as": "large rounded peach container with gauge-and-chart icon",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Dataset & Loaders",
+    "type": "module",
+    "role": "fixed datasets and their loaders",
+    "drawn_as": "white rounded card with two database cylinders",
+    "container": "JBF-EVAL",
+    "is_contribution": null
+   },
+   {
+    "name": "Evaluation Protocols (Victims)",
+    "type": "module",
+    "role": "execution protocols across victim models",
+    "drawn_as": "white rounded card with portrait-card icon carrying a crosshair badge",
+    "container": "JBF-EVAL",
+    "is_contribution": null
+   },
+   {
+    "name": "Judge/Scoring (Swappable)",
+    "type": "module",
+    "role": "judging and scoring interface that can be swapped",
+    "drawn_as": "white rounded card with gavel icon",
+    "container": "JBF-EVAL",
+    "is_contribution": null
+   },
+   {
+    "name": "Versioned Results (V1,V2,V3...)",
+    "type": "data",
+    "role": "output: results kept per release version",
+    "drawn_as": "white rounded box with line-chart icon",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Comparable Metrics (ASR Tables, Heatmaps)",
+    "type": "data",
+    "role": "output: metrics that can be compared across attacks and models",
+    "drawn_as": "white rounded box with table icon",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "Artifacts (Logs, Chat history)",
+    "type": "data",
+    "role": "output: logs and chat histories",
+    "drawn_as": "white rounded box with LOG-folder icon",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "New jailbreak paper",
+    "to": "JBF-FORGE",
+    "what": "paper to be translated",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reference Repo",
+    "to": "JBF-FORGE",
+    "what": "optional reference code, configs and prompts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Planner",
+    "to": "Coder",
+    "what": "spec (captions read paper → spec, then spec → module)",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Coder",
+    "to": "Auditor",
+    "what": "generated module to be checked",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Coding",
+    "to": "Auditing",
+    "what": "the two activities alternate in a loop",
+    "kind": "feedback",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "JBF-FORGE",
+    "to": "JBF-LIB",
+    "what": "Register new Attack Module",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "JBF-LIB",
+    "to": "JBF-EVAL",
+    "what": "Instantiate & Run",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Registry",
+    "to": "Registry",
+    "what": "Continuous Ingestion / Versioned Release (dashed loop out of the bottom and back into the right side of the stack)",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "JBF-EVAL",
+    "to": "Versioned Results, Comparable Metrics, Artifacts",
+    "what": "Report metrics & artifacts",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "JBF-FORGE",
+    "to": "Planner, Coder, Auditor",
+    "what": "contains the three agents",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "JBF-LIB",
+    "to": "Base Contracts, LLM Utilities, Caching / Logging, Registry",
+    "what": "contains four components in a 2 x 2 grid",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "JBF-EVAL",
+    "to": "Dataset & Loaders, Evaluation Protocols, Judge/Scoring",
+    "what": "contains three components stacked",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "New",
+    "kind": "identity",
+    "at": "New jailbreak paper",
+    "what": "orange pill tagging the input as the new paper"
+   },
+   {
+    "marker": "Optional",
+    "kind": "identity",
+    "at": "Reference Repo",
+    "what": "orange pill tagging the repository input as optional"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "PDF document with red PDF tag",
+    "stands_for": "the new jailbreak paper",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "folder holding a code-brackets sheet",
+    "stands_for": "the reference repository",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "robot head with blue visor",
+    "stands_for": "the JBF-FORGE multi-agent workflow",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two circular arrows",
+    "stands_for": "the coding / auditing loop",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "calendar with checklist and pencil",
+    "stands_for": "Planner",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "monitor showing code",
+    "stands_for": "Coder",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "green shield with check mark and magnifier",
+    "stands_for": "Auditor",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "stack of coloured books",
+    "stands_for": "JBF-LIB",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "text document with folded corner",
+    "stands_for": "Base Contracts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "crossed wrench and spanner",
+    "stands_for": "LLM Utilities",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "server rack with a clock",
+    "stands_for": "Caching / Logging",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "clipboard with pencil",
+    "stands_for": "Registry",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "speedometer gauge, bar chart and magnifier",
+    "stands_for": "JBF-EVAL",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "two database cylinders",
+    "stands_for": "Dataset & Loaders",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "person portrait ID card with a crosshair badge",
+    "stands_for": "victim models in Evaluation Protocols",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "judge's gavel on a block",
+    "stands_for": "Judge/Scoring",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "line chart on a yellow plot",
+    "stands_for": "Versioned Results",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "spreadsheet table with a green document",
+    "stands_for": "Comparable Metrics",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "yellow folder labelled LOG with a chart sheet",
+    "stands_for": "Artifacts (logs, chat history)",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "multi-agent",
+    "drawn_as": "three role cards (Planner, Coder, Auditor) in a row under a robot-head title icon; a pill 'Coding ⟲ Auditing' with circular arrows names the loop between two roles",
+    "parts": [
+     "robot-head icon",
+     "Planner card",
+     "Coder card",
+     "Auditor card",
+     "Coding ⟲ Auditing pill"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "database-cylinder",
+    "drawn_as": "two stacked database cylinders on the Dataset & Loaders card",
+    "parts": [
+     "cylinder icon"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "judge-gavel",
+    "drawn_as": "gavel icon standing for the judging and scoring component",
+    "parts": [
+     "gavel",
+     "block"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the two input boxes top-left, drops into blue FORGE, moves right through grey LIB and peach EVAL, then down to the three result boxes."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Two input boxes sit top-left; below them the blue FORGE container, then the grey LIB and peach EVAL containers continue to the right in one row; a bus line under EVAL fans out to three result boxes along the bottom edge.",
+  "panel_count": 1,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.36,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c1e5f5",
+    "used_for": "JBF-FORGE container tint"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "JBF-LIB container tint"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "JBF-EVAL container tint"
+   },
+   {
+    "hex": "#ffffff",
+    "used_for": "sub-module and result cards inside the containers"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "the four offset Registry cards"
+   },
+   {
+    "hex": "#f6c6ad",
+    "used_for": "fill of the 'New' and 'Optional' pills; also the colour of the arrows leaving JBF-EVAL"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "outline of the two orange pills"
+   },
+   {
+    "hex": "#46b1e1",
+    "used_for": "blue arrow 'Register new Attack Module'"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "grey arrow 'Instantiate & Run' and the dashed ingestion loop"
+   },
+   {
+    "hex": "#196b24",
+    "used_for": "dark-green input arrows, dashed for the optional repo"
+   },
+   {
+    "hex": "#0e2841",
+    "used_for": "dark navy outline of the three module containers"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on the white cards, 0.5 pt dark navy on the three containers, 0.75 pt at most elsewhere",
+  "font": "sans (Calibri), 5-9 pt: bold 9 pt module titles, bold 6 pt input labels, 5.5-6 pt card captions with parenthesised sub-captions",
+  "corners": "rounded",
+  "arrows": "thin orthogonal lines with small filled heads, coloured like the module they leave; dashed for the optional input and the ingestion loop",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "tint names the module (blue = JBF-FORGE, grey = JBF-LIB, peach = JBF-EVAL); each outgoing arrow takes its source module's colour; dark green = the two inputs; orange pills = input status",
+  "line_style_means": "dashed green = optional reference-repo input; dashed grey loop = continuous ingestion / versioned release; solid = main flow",
+  "shape_means": "large rounded tinted container = system component; white rounded card = sub-module or output; offset stack of four cards = registry of many attack modules; pill = status tag or activity label",
+  "marker_means": "orange pills 'New' and 'Optional' tag the two inputs; parenthesised captions under card titles give the input-output pair or the contents",
+  "emphasis": "three big tinted containers with 9 pt bold titles carry the system; everything else is 5-6 pt text on white cards; no single contribution is singled out since all three components are the contribution",
+  "reusable_patterns": [
+   "one tinted container per system component with white cards inside",
+   "arrow colour copied from the module it leaves",
+   "offset stack of cards for a registry of many items",
+   "corner status pills ('New', 'Optional') straddling an input box's top edge",
+   "a single bus line under the last module fanning out to three result boxes",
+   "parenthesised sub-caption under each card title giving its input-output or contents",
+   "dashed loop with a rotated label for continuous ingestion"
+  ],
+  "weaknesses": [
+   "5-6 pt labels at double-column width are hard to read",
+   "no arrows between Planner, Coder and Auditor, so their order is only implied by the captions",
+   "the dashed Continuous Ingestion loop leaves and re-enters the registry stack, so its meaning needs the text"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "19 flat-colour outlined icons in one family (PDF, folder, robot head, planner, monitor, shield, books, document, wrench, server, clipboard, gauge, database, portrait card, gavel, chart, table, log folder)"
+  ],
+  "generated": [],
+  "drawn": [
+   "module containers and cards",
+   "orange pills",
+   "coloured arrows and the dashed loop",
+   "the stacked registry cards"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "three tinted module containers",
+   "paper and repo input boxes with orange pills",
+   "stacked registry cards",
+   "robot head icon",
+   "one stock icon on every card",
+   "three result boxes under a bus line"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "jailbreak attacks",
+   "reproducible benchmarking",
+   "paper-to-code",
+   "multi-agent workflow",
+   "attack registry",
+   "evaluation harness",
+   "LLM safety",
+   "living benchmark"
+  ],
+  "tags": [
+   "stacked-cards",
+   "model-pictogram",
+   "colour-coded-groups",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "icon-per-box",
+    "what": "every card in a module carries one flat stock icon beside or above its caption, so the cards read as a row of captioned pictograms"
+   },
+   {
+    "name": "corner-status-pills",
+    "what": "small rounded pills straddling a box's top edge that name its status (New, Optional)"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Give each system component its own tinted container and carry that tint onto the arrows that leave it; inside, white cards with a stock icon and a parenthesised input-output caption keep a dense system legible without step numbers. An offset stack of cards says 'many items' for a registry.",
+  "suits": "Framework or benchmark-infrastructure papers with three or four named components, one input stage and a fan-out of artifacts."
+ },
+ "tags": [
+  "tinted-module-containers",
+  "stock-icon-cards",
+  "orthogonal-arrows",
+  "stacked-registry-card",
+  "bus-fan-out",
+  "pill-tags",
+  "labelled-arrows"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)"
+  ],
+  "evidence": [
+   "JBF-FORGE is a multi-agent workflow that performs paper understanding, code synthesis, and fidelity verification.",
+   "JBF-LIB provides shared contracts and utilities, JBF-FORGE translates papers into runnable modules",
+   "Built on top, JBF-EVAL fixes datasets/loaders, execution protocols across victim models and decoding settings"
+  ]
+ },
+ "summary": "Jailbreak Foundry (JBF) turns published jailbreak-attack papers into executable modules and evaluates them under one unified harness, so attack success rates can be compared across papers and victim models. Figure 1 is a single system diagram. A new paper, with an optional reference repository, enters the blue JBF-FORGE container, whose Planner, Coder and Auditor cards produce a runnable module. A blue arrow registers it in the grey JBF-LIB container (contracts, LLM utilities, caching and logging, and a stacked-card registry). A grey arrow instantiates and runs it in the peach JBF-EVAL container (datasets, protocols, judge), which fans out to versioned results, comparable metrics and artifacts. Every card carries a flat stock icon, and each arrow takes the colour of the module it leaves.",
+ "summary_zh": "Jailbreak Foundry 系统总览：新论文（可选参考仓库）经蓝色 FORGE 的规划、编码、审计智能体变成攻击模块，注册进灰色 LIB，再由桃色 EVAL 统一运行，输出版本化结果、指标和日志。",
+ "confidence": "high",
+ "notes": "Icon origin (stock, Flaticon-like family) is inferred from the uniform outlined style. The dashed grey loop is labelled Continuous Ingestion and Versioned Release; the paper text does not explain it, so only the figure's own words are recorded. Prior label 'panels=3' was not kept: the three tinted containers are stages of one connected drawing, not separate panels.",
+ "venue": "ICML26"
+}

@@ -10,7 +10,8 @@ automatically on first use); the PowerPoint export needs `python-pptx` and Offic
 | script | what it does | typical call |
 |---|---|---|
 | `find_exemplars.py` | rank all 485 exemplars by research domain, drawn content and meaning (each scored on its own fields of `semantics.json`, rare words weigh more, whole phrases get a bonus); `--kind` / `--template` / `--group` only add a bonus; the named styles' figures (`assets/exemplars/styles/`) are searched too and `--style <id>` lists that style's figures first; prints id, templates / groups, system, matched terms and the `print.png` to look at | `find_exemplars.py --domain "llm serving" --content "prefill instance, kv cache pool" --semantics "..."` |
-| `spec_validate.py` | schema + referential + style-budget checks on a figure spec | `spec_validate.py fig.json` |
+| `find_ai_exemplars.py` | the AI family's exemplar search over the 3,210 cards of `assets/exemplars/ai/` (kinds, sub-field, layout, content, tags, BM25 over objects / keywords / title / abstract), the numbered candidate sheet the user picks from, and the files to read per pick | `find_ai_exemplars.py search --kind stage-pipeline --subfield agents --tags chat-bubbles --objects "LLM agent, tool calls" --text "<title + abstract>"`; `sheet ID … --out candidates.png`; `files ID …` |
+| `spec_validate.py` | schema + referential + style-budget checks on a figure spec; for `meta.family: ai` the venue's width band, the primary kind's budgets and the advisory `ai.*` readings (`references/ai/style-thresholds.json`) | `spec_validate.py fig.json` |
 | `measure_text.py` | width/height in pt of labels in a shipped font, to size boxes before drawing; mixed text is split into script runs and CJK runs are measured with `--cjk` (default `cjk_default`); `--box` prints the box size | `measure_text.py --font source-sans --size 6.5 --box "KV 缓存"` |
 | `place_text.py` | where a label goes: `center --box x,y,w,h [--rotate ±90]` prints the `<text>` whose glyph ink (read from the font, `_svgkit.ink_band`, the linter's own model) is centred on the box, and says when the box leaves less than the 1.5 pt `text.padding` asks for; `line --at x,baseline` lays out text pieces with inline step discs (`@badge:N`, wrapped in `<g data-symbol="badge">`); a generator script imports `place()` / `svg_text()` (and `_svgkit.ink_band()`) instead, see the module docstring | `place_text.py --size 6.5 center --box 268,70,22,234 --rotate -90 "Dispatch all-to-all"` |
 | `render.py` | SVG → PNG in headless Chromium (fonts from `assets/fonts` injected, CJK companion auto-added; bitmaps loaded from the SVG's folder, URLs never fetched); `--crop x0,y0,x1,y1` zooms into one region; `--bbox` dumps every element's box | `render.py fig.svg --scale 6 --crop 220,110,296,176` |
@@ -40,7 +41,10 @@ write spec.json ──► spec_validate.py ──► draw fig.svg ──► chec
 
 `lint.py` exit code 1 = errors (bleed, overflow, overlap, unreadable text, missing spec elements); warnings
 (alignment within 2 pt, off-centre labels, dangling arrows, colour budget) do not block but should be fixed unless
-deliberate. Thresholds live in `references/style-thresholds.json` (`lint` section) and come from the corpus statistics.
+deliberate. Thresholds live in `references/style-thresholds.json` (`lint` section) and come from the corpus statistics;
+a mechanism figure takes its column bands from `references/mechanism/style-thresholds.json`, an AI-venue figure
+(`meta.family: ai`) its venue bands, fill ceilings, kind budgets and `ai.bare` / `ai.loud-ink` / `ai.hues-no-key`
+parameters from `references/ai/style-thresholds.json` (all three AI findings are advisory).
 
 ## Units and fonts
 

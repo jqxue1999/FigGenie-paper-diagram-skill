@@ -1,0 +1,449 @@
+{
+ "paper_id": "iclr25-0011",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AgentHarm",
+  "one_liner": "A benchmark of explicitly malicious multi-step agent tasks, each with a benign counterpart, measuring whether LLM agents refuse harmful tool-use requests.",
+  "domain": [
+   "LLM agent safety",
+   "jailbreak benchmark",
+   "tool use"
+  ],
+  "subfield": "agents",
+  "subfield2": "llm-nlp"
+ },
+ "content": {
+  "kinds": [
+   "actor-interaction",
+   "side-by-side-contrast",
+   "scope-overview"
+  ],
+  "variant": "single-agent-loop",
+  "variant_note": "two mirrored lanes (harmful and benign request) feed identical agent icons that loop through tool calls into one shared panel of tool icons",
+  "argues": "A safe agent should refuse harmful multi-step tool requests yet help with their benign counterparts, using the same pool of tools.",
+  "subject": "A hacker and a benign user send requests to an LLM agent whose replies differ, then the agent loops through tool calls over a shared set of proxy tools.",
+  "elements": [
+   {
+    "name": "Harmful request",
+    "type": "actor",
+    "role": "the malicious user who sends an explicitly harmful request",
+    "drawn_as": "hooded figure at a laptop with a bug icon, bold caption underneath",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "thought cloud of harm pictograms",
+    "type": "icon",
+    "role": "the kinds of harm behind the request (the paper names 11 categories); the pictograms are unlabelled",
+    "drawn_as": "chain of white thought clouds over the hacker holding five small pictograms: tape-bound person, syringe and pills, locked router, raised fist, bomb",
+    "container": "Harmful request",
+    "is_contribution": null
+   },
+   {
+    "name": "Benign request",
+    "type": "actor",
+    "role": "the benign counterpart of the same task",
+    "drawn_as": "smiling person with a headset at a laptop, bold caption underneath",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "LLM agent",
+    "type": "actor",
+    "role": "the agent under test; drawn twice, once per lane",
+    "drawn_as": "cartoon robot head with a small chat-bubble badge and a teal disc behind; the caption sits under the lower copy",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "I'm sorry...",
+    "type": "sample",
+    "role": "the appropriate reply to the harmful request: a refusal",
+    "drawn_as": "tilted green speech bubble with a halo emoji, tail pointing at the upper robot",
+    "container": "Harmful request lane",
+    "is_contribution": null
+   },
+   {
+    "name": "Sure...",
+    "type": "sample",
+    "role": "the inappropriate reply to the harmful request: compliance",
+    "drawn_as": "tilted pink speech bubble with a devil emoji, tail pointing at the upper robot",
+    "container": "Harmful request lane",
+    "is_contribution": null
+   },
+   {
+    "name": "Sure",
+    "type": "sample",
+    "role": "the appropriate reply to the benign request: help",
+    "drawn_as": "tilted green speech bubble with a halo emoji above the lower robot",
+    "container": "Benign request lane",
+    "is_contribution": null
+   },
+   {
+    "name": "Multi-step tool calling",
+    "type": "operation",
+    "role": "the agent calls tools repeatedly to carry out the task",
+    "drawn_as": "grey circular double-arrow loop with the caption inside; one per lane",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Proxy tools",
+    "type": "container",
+    "role": "the shared set of tools the agents call (the caption says 104 distinct tools)",
+    "drawn_as": "large yellow rounded panel with a bold title, a small toolbox-like icon, a 3x3 grid of tool icons and three grey dots",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "tool icon grid",
+    "type": "icon",
+    "role": "tool types, unlabelled: map pin, terminal window, phone with profile, envelope, onion, WWW globe, robot, chat bubbles, server diagram",
+    "drawn_as": "nine coloured pictograms in a 3x3 grid",
+    "container": "Proxy tools",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Harmful request",
+    "to": "LLM agent (upper)",
+    "what": "explicitly malicious task",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Benign request",
+    "to": "LLM agent (lower)",
+    "what": "benign version of the task",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "thought cloud of harm pictograms",
+    "to": "Harmful request",
+    "what": "intent behind the request",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM agent (upper)",
+    "to": "I'm sorry... / Sure...",
+    "what": "two possible replies to the harmful request, one green and one pink",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM agent (lower)",
+    "to": "Sure",
+    "what": "reply to the benign request",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM agent (upper)",
+    "to": "Multi-step tool calling",
+    "what": "the agent starts its tool-call loop",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "LLM agent (lower)",
+    "to": "Multi-step tool calling",
+    "what": "the agent starts its tool-call loop",
+    "kind": "control",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Multi-step tool calling (both loops)",
+    "to": "Proxy tools",
+    "what": "tool calls go to the shared tool panel; no arrow joins the loops and the panel",
+    "kind": "interaction",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "halo emoji / devil emoji",
+    "kind": "other",
+    "at": "end of the reply bubbles",
+    "what": "verdict on the reply: appropriate (halo) versus harmful (devil)"
+   },
+   {
+    "marker": "three grey dots",
+    "kind": "other",
+    "at": "bottom of the Proxy tools panel",
+    "what": "more tools than the nine shown"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "cartoon robot head with a chat-bubble badge",
+    "stands_for": "the LLM agent (also a small copy inside the tool grid)",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 3
+   },
+   {
+    "depicts": "hooded hacker at a laptop with a bug",
+    "stands_for": "the malicious user",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "person with a headset at a laptop",
+    "stands_for": "the benign user",
+    "style": "cartoon",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "five small pictograms in thought clouds: tape-bound person, syringe with pills, locked router, raised fist with stars, bomb",
+    "stands_for": "harm categories of the benchmark, unlabelled",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 5
+   },
+   {
+    "depicts": "map pin, terminal, phone profile, envelope, onion, WWW globe, chat bubbles, server diagram",
+    "stands_for": "proxy tools the agent can call, unlabelled",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 8
+   },
+   {
+    "depicts": "toolbox-like icon beside the panel title",
+    "stands_for": "the tool set",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "halo and devil emoji set as text",
+    "stands_for": "good versus bad reply",
+    "style": "emoji-like",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "short agent replies: 'I'm sorry...' and 'Sure...' to a harmful request, 'Sure' to a benign one",
+    "form": "speech bubbles tinted green or pink with an emoji",
+    "real_values": false
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "llm",
+    "drawn_as": "cartoon robot head with a chat-bubble badge, the same icon in both lanes",
+    "parts": [
+     "robot head",
+     "chat badge",
+     "teal disc"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "agent-loop",
+    "drawn_as": "two grey curved arrows chasing each other in a circle with the words Multi-step tool calling inside",
+    "parts": [
+     "circular double arrow",
+     "caption"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "tool-use",
+    "drawn_as": "a tinted panel holding a grid of tool pictograms and trailing dots, to the right of the agents",
+    "parts": [
+     "panel",
+     "tool icons",
+     "dots"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "short tilted speech bubbles tinted green or pink with emoji, attached to the robot by their tails",
+    "parts": [
+     "green bubble",
+     "pink bubble",
+     "emoji"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the hacker and thought cloud top left, follows the grey arrow to the agent and its reply bubbles, then the tool-call loop and the yellow tool panel; the benign lane below repeats the path."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "Two mirrored horizontal lanes, harmful request on top and benign request below, each running left to right: user pictogram, grey arrow, robot agent with reply bubble, tool-calling loop. A single tall yellow rounded panel of tool icons closes both lanes at the right. No frames or lane dividers; whitespace separates the lanes.",
+  "panel_count": 1,
+  "lanes": "2 aligned rows (harmful request, benign request), each with request, agent and tool-calling loop",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.34,
+  "text_density": "sparse",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fff2cc",
+    "used_for": "Proxy tools panel"
+   },
+   {
+    "hex": "#bf9000",
+    "used_for": "outline of the Proxy tools panel"
+   },
+   {
+    "hex": "#b6d7a8",
+    "used_for": "green reply bubbles (appropriate replies)"
+   },
+   {
+    "hex": "#38761d",
+    "used_for": "outline of the green bubbles"
+   },
+   {
+    "hex": "#f4cccc",
+    "used_for": "pink reply bubble (harmful compliance)"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "block arrows, loops and thin outlines"
+   },
+   {
+    "hex": "#999999",
+    "used_for": "grey dots and loop shading"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 pt dark grey outlines on bubbles and shapes, 1.5 pt golden outline on the tool panel",
+  "font": "sans, 5-6.5 pt; bold captions under the icons, bold 6.5 pt panel title, emoji set as text",
+  "corners": "rounded",
+  "arrows": "two thick grey block arrows from requests to agents; two grey circular double-arrow loops",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "robot",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "green bubble = appropriate reply (refusal to the harmful request, help for the benign one); pink bubble = harmful compliance; yellow panel = the tool environment; grey = flow arrows and loops",
+  "line_style_means": "solid grey block arrows = request flow; circular loop arrows = repeated tool calls",
+  "shape_means": "speech bubble = agent reply; thought cloud = intent and harm categories behind the request; rounded yellow box = tool set; circular double arrow = multi-step tool calling",
+  "marker_means": "halo emoji = good reply, devil emoji = bad reply; three grey dots = more tools",
+  "emphasis": "identical robot icons in two lanes make the request the only difference; reply bubbles sit above the robot; the thought cloud of pictograms hints at the breadth of harms",
+  "reusable_patterns": [
+   "emoji (halo versus devil) in green or pink speech bubbles as a verdict on the reply",
+   "thought cloud of small pictograms over a user to suggest categories without text",
+   "circular double-arrow loop with a caption for an agent's repeated tool use",
+   "one shared grid of tool icons in a tinted rounded panel with trailing dots for more tools",
+   "two mirrored lanes with the same agent icon so only the request changes"
+  ],
+  "weaknesses": [
+   "harm-category and tool icons are unlabelled, so the 11 categories and 104 tools cannot be read off",
+   "no arrow joins the tool-calling loops to the tool panel",
+   "the upper robot carries two reply bubbles whose relation (alternatives) is only suggested by colour and emoji"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "flat cartoon icons: hacker, benign user, robot heads, harm pictograms, tool icons, toolbox",
+   "halo and devil emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "speech bubbles",
+   "thought clouds",
+   "block arrows and loops",
+   "yellow tool panel"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "hacker with laptop and thought cloud",
+   "benign user with headset",
+   "robot-head agent icons",
+   "green and pink speech bubbles with emoji",
+   "circular tool-calling loops",
+   "yellow panel with a grid of tool icons"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "AgentHarm",
+   "LLM agents",
+   "harmfulness benchmark",
+   "tool calling",
+   "jailbreak",
+   "refusal",
+   "multi-step tasks",
+   "benign counterpart"
+  ],
+  "tags": [
+   "task-definition",
+   "model-pictogram",
+   "verdict-marks",
+   "pictogram-chain"
+  ],
+  "new_tags": [
+   {
+    "name": "thought-cloud-pictograms",
+    "what": "a cloud of small pictograms over a user figure showing what they intend or which categories their requests fall in, without text"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Tell a safety benchmark's setting with two mirrored lanes that use the same agent icon, so only the request pictogram and the green or pink reply bubble change, and close both lanes with one shared tinted panel of tool icons.",
+  "suits": "benchmarks or safety evaluations that pair a harmful and a benign version of the same tool-using agent task, where icons can replace boxes."
+ },
+ "tags": [
+  "cartoon pictograms",
+  "two mirrored lanes",
+  "speech bubbles with emoji",
+  "yellow tinted panel",
+  "almost no text",
+  "flat icons"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "AgentHarm evaluates the performance of LLM agents that have to execute multi-step tool calls to fulfill user requests.",
+   "Each behavior has a harmful and benign counterpart.",
+   "We focus on the setting where the user makes explicitly harmful requests (direct prompting attacks)."
+  ]
+ },
+ "summary": "AgentHarm is a benchmark of explicitly malicious multi-step tasks for LLM agents that call tools, each with a benign counterpart. Figure 1 is a pictogram scene in two mirrored lanes: a hooded hacker with a laptop and a thought cloud of harm icons sends a harmful request, a headset user sends a benign one, each to an identical robot-head LLM agent. Reply bubbles carry the verdict: a green 'I'm sorry...' with a halo emoji and a pink 'Sure...' with a devil emoji for the harmful request, a green 'Sure' for the benign one. Each agent then loops through 'Multi-step tool calling' into a shared yellow panel of proxy-tool icons such as map, terminal, email, onion, web, chat and servers. Flat cartoon icons, grey block arrows and almost no text carry the setting.",
+ "summary_zh": "AgentHarm 是衡量 LLM 智能体有害性的基准。图1用卡通图标画出上下两条对称通道：黑客发出有害请求，戴耳机的用户发出正常请求，同一个机器人智能体用绿色或粉色气泡表示拒绝或顺从，再经多步工具调用循环进入右侧黄色的代理工具面板。",
+ "confidence": "high",
+ "notes": "Prior kinds actor-interaction and side-by-side-contrast kept; scope-overview added because the thought cloud and the tool grid hint at the extent of harm categories and tools. The schema has no marker kind for verdict emoji or ellipsis dots, recorded as other. Harm-category and tool icons are unlabelled; their meanings are described by what they depict, not matched to the paper's category list. The emoji are text glyphs; all other icons are bitmaps according to the digest.",
+ "venue": "ICLR25"
+}

@@ -1,0 +1,467 @@
+{
+ "paper_id": "iclr25-0183",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "RMP-SAM",
+  "one_liner": "A single real-time model for panoptic, video instance and interactive segmentation, with a dual-adapter decoder, benchmarked on speed and accuracy.",
+  "domain": [
+   "real-time segmentation",
+   "multi-task segmentation",
+   "segment anything"
+  ],
+  "subfield": "vision",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "contribution-mosaic"
+  ],
+  "variant": "fan-out",
+  "variant_note": "(a) image, video and prompt inputs feed one boxed model that fans out to three outputs; (b) four speed-accuracy bubble plots as result tiles",
+  "argues": "One real-time model can segment image, video and visual-prompt inputs, and RMP-SAM gives the best speed-accuracy trade-off among the compared models across the four plotted settings.",
+  "subject": "three input types through one boxed model to three segmentation outputs, plus four speed-accuracy bubble plots",
+  "elements": [
+   {
+    "name": "(unlabelled) street-market photo",
+    "type": "sample",
+    "role": "image input",
+    "drawn_as": "photo thumbnail at the top left, black elbow arrow into the model",
+    "container": "a)",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) two stacked video frames",
+    "type": "sample",
+    "role": "video input",
+    "drawn_as": "two photos stacked without a gap, arrow into the model",
+    "container": "a)",
+    "is_contribution": false
+   },
+   {
+    "name": "(unlabelled) photo of a rider on a horse with small blue crosses",
+    "type": "sample",
+    "role": "visual-prompt input (point prompts)",
+    "drawn_as": "photo thumbnail at the bottom left with blue marks on the horse, arrow into the model",
+    "container": "a)",
+    "is_contribution": false
+   },
+   {
+    "name": "RMP-SAM",
+    "type": "module",
+    "role": "the single real-time model that handles all three inputs",
+    "drawn_as": "yellow rounded box with black outline and the largest type of the figure; inputs merge on its left and top, outputs leave on its right",
+    "container": "a)",
+    "is_contribution": true
+   },
+   {
+    "name": "FPS: >30 with rocket icon",
+    "type": "label",
+    "role": "speed badge saying the model runs in real time",
+    "drawn_as": "black rocket silhouette above the box, text FPS: >30 at the top right of panel a)",
+    "container": "a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Image Segmentation",
+    "type": "sample",
+    "role": "panoptic output for the image",
+    "drawn_as": "street photo overlaid with coloured instance and region masks, caption below",
+    "container": "a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Video Segmentation",
+    "type": "sample",
+    "role": "video instance output for the frames",
+    "drawn_as": "two stacked frames with coloured instance masks, caption below",
+    "container": "a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Prompt Segmentation",
+    "type": "sample",
+    "role": "interactive output for the visual prompt",
+    "drawn_as": "dimmed photo with one bright blue mask on the horse, caption below",
+    "container": "a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Real-Time Multi-Purpose Segmentation",
+    "type": "label",
+    "role": "names the setting the paper proposes",
+    "drawn_as": "title text above panel a)",
+    "container": "a)",
+    "is_contribution": true
+   },
+   {
+    "name": "Results for Panoptic Segmentation (PQ vs FPS)",
+    "type": "chart",
+    "role": "speed-accuracy plot for panoptic segmentation",
+    "drawn_as": "bubble scatter with arrow axes, labels beside bubbles",
+    "container": "b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Results for Video Instance Segmentation (mAP vs FPS)",
+    "type": "chart",
+    "role": "speed-accuracy plot for video instance segmentation",
+    "drawn_as": "bubble scatter, same form as the first plot",
+    "container": "b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Results for Interactive Segmentation(box) (mIoU vs FPS)",
+    "type": "chart",
+    "role": "speed-accuracy plot for box-prompted segmentation",
+    "drawn_as": "bubble scatter, same form",
+    "container": "b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Results for interactive segmentation(point) (1-IoU vs FPS)",
+    "type": "chart",
+    "role": "speed-accuracy plot for point-prompted segmentation",
+    "drawn_as": "bubble scatter, same form, compared with Semantic-SAM(L) and SAM(L)",
+    "container": "b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Ours(R50), Ours(R18)",
+    "type": "data",
+    "role": "RMP-SAM with two backbones, top right in every plot",
+    "drawn_as": "yellow bubbles, a large one for R50 and a small one for R18, labelled beside",
+    "container": "b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Mask2Former(R50), MaskFormer(R50), YOSO(R50), kMaX-DeepLab(R50), Semantic-SAM(L), SAM(L)",
+    "type": "data",
+    "role": "compared methods",
+    "drawn_as": "bubbles in light blue, dark blue, light green, grey, slate and salmon, labelled beside each",
+    "container": "b)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "street-market photo, stacked video frames, rider photo",
+    "to": "RMP-SAM",
+    "what": "three input types enter one model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "RMP-SAM",
+    "to": "Image Segmentation, Video Segmentation, Prompt Segmentation",
+    "what": "one model returns three kinds of output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "input rows",
+    "to": "output rows",
+    "what": "each input sits level with the output it produces",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "RMP-SAM box",
+    "to": "yellow Ours bubbles",
+    "what": "the same yellow marks the model in the pipeline and in every plot",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "bubble area",
+    "to": "parameter count",
+    "what": "larger dot means more parameters (stated in the caption only)",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "a) Real-Time Multi-Purpose Segmentation",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "the setting: image, video and visual-prompt inputs through RMP-SAM to three segmentation outputs at more than 30 FPS",
+    "verdict": "ours"
+   },
+   {
+    "label": "b)",
+    "kind": "contribution-mosaic",
+    "axis": "narrative",
+    "shows": "four speed-accuracy bubble plots (PQ, mAP, mIoU, 1-IoU against FPS) where Ours sits highest or at the best trade-off",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "a), b)",
+    "kind": "section",
+    "at": "top left of each half",
+    "what": "name the two panels"
+   },
+   {
+    "marker": "small blue crosses",
+    "kind": "identity",
+    "at": "the rider photo",
+    "what": "point prompts placed on the horse"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "street-market photo as image input",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "plain rectangular thumbnail, no frame"
+   },
+   {
+    "what": "video frames as video input",
+    "content": "video-frames",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "two frames of one market scene stacked without a gap"
+   },
+   {
+    "what": "rider on a horse as visual-prompt input",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "thumbnail with small blue point marks"
+   },
+   {
+    "what": "panoptic segmentation render",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "photo covered by many saturated instance and region colours, caption below"
+   },
+   {
+    "what": "video instance segmentation renders",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "dimmed frames with bright instance masks, two stacked like the input"
+   },
+   {
+    "what": "prompt segmentation render",
+    "content": "dense-map",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "dimmed photo with one bright blue mask"
+   },
+   {
+    "what": "speed-accuracy bubble plots",
+    "content": "chart",
+    "role": "result",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "arrow axes with few ticks, FPS on x, bubbles labelled directly beside, area for parameter count, 2x2 grid"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "rocket",
+    "stands_for": "real-time speed of the model",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "one street-market scene carried through image and video segmentation, and a rider photo with click prompts",
+    "form": "input photos on the left, output renders on the right, level by row",
+    "real_values": true
+   },
+   {
+    "what": "speed and accuracy of RMP-SAM and five to six competing models",
+    "form": "bubble positions in four plots",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "speed-accuracy-bubble-plot",
+    "drawn_as": "scatter of methods with FPS on x and a task metric on y, bubble area for parameters, labels beside each bubble, ours in yellow",
+    "parts": [
+     "arrow axes",
+     "bubble",
+     "label beside bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "filmstrip",
+    "drawn_as": "video drawn as two stacked frames of the same scene, no sprocket border",
+    "parts": [
+     "frame"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the title a) Real-Time Multi-Purpose Segmentation, follows the three inputs into the RMP-SAM box and out to three outputs, then crosses the dashed line to the 2x2 plots."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two halves side by side split by a dashed vertical line: on the left a three-row input column, the RMP-SAM box with rocket in the middle and a three-row output column; on the right a 2x2 grid of bubble plots, each titled below.",
+  "panel_count": 2,
+  "lanes": "panel a): three aligned rows (image, video, prompt) from input to output; panel b): 2x2 grid of identical plots",
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 2,
+  "legend": "caption-only",
+  "panel_markers": "letters",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.06,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ffe699",
+    "used_for": "RMP-SAM box and the Ours(R50) and Ours(R18) bubbles"
+   },
+   {
+    "hex": "#c9c9c9",
+    "used_for": "kMaX-DeepLab(R50) bubble"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "MaskFormer(R50) bubble"
+   },
+   {
+    "hex": "#bdd7ee",
+    "used_for": "Mask2Former(R50) bubble"
+   },
+   {
+    "hex": "#c5e0b4",
+    "used_for": "YOSO(R50) bubble"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, axes, outlines, rocket silhouette"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 to 1 pt black; one dashed vertical divider; 1 pt black outline on the model box",
+  "font": "serif (Times New Roman), 4 to 8.5 pt: model name 8.5 pt, titles 6.5 pt, axis ticks 5 pt, bubble labels 4 pt",
+  "corners": "mixed",
+  "arrows": "thick black orthogonal elbow arrows with small filled heads; plot axes as black arrows",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "yellow = RMP-SAM (the model box and every Ours bubble); each competing method has one colour kept in all four plots; mask colours in outputs separate instances; bright blue in the prompt output marks the prompted object",
+  "line_style_means": "dashed vertical line separates the setting from the results",
+  "shape_means": "rounded box = the model; circle area = parameter count (caption); arrow axes = plot axes",
+  "marker_means": "small blue crosses on the rider photo = point prompts; FPS: >30 with a rocket = real-time speed",
+  "emphasis": "a single yellow box in the middle with a rocket and an FPS badge; Ours is the top-most yellow bubble in every plot",
+  "reusable_patterns": [
+   "teaser with a left task panel (inputs into one boxed model, outputs out) and a right 2x2 grid of result plots",
+   "each input row level with its output row so the mapping needs no labels",
+   "rocket icon plus FPS badge on the model box to say real-time",
+   "bubble area for parameter count with labels beside the bubbles instead of a legend",
+   "one colour per method kept across all plots, ours in the model-box colour"
+  ],
+  "weaknesses": [
+   "plot text is 4 to 5 pt and some bubble labels sit on top of bubbles (for example Semantic-SAM(L))",
+   "input photos carry no labels; only the outputs are named"
+  ]
+ },
+ "resources": {
+  "own": [
+   "input photos and video frames with the model's segmentation renders",
+   "measured speed and accuracy numbers for the bubble plots"
+  ],
+  "stock": [
+   "rocket silhouette icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "model box and elbow arrows",
+   "plot axes and bubbles",
+   "dashed divider"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "input photo, stacked video frames and prompt photo",
+   "yellow model box with rocket icon",
+   "three segmentation output renders",
+   "dashed vertical divider",
+   "four bubble plots with labelled methods"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "real-time segmentation",
+   "segment anything",
+   "panoptic segmentation",
+   "video instance segmentation",
+   "interactive segmentation",
+   "speed-accuracy trade-off",
+   "multi-task model"
+  ],
+  "tags": [
+   "small-multiples",
+   "task-definition",
+   "colour-coded-groups",
+   "cost-badges"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "A teaser can pair a left panel that states the task as real inputs, one boxed model and real outputs lined up by row, with a right panel of identical bubble plots in which the model keeps the colour of its box, so the claim and the evidence read as one story.",
+  "suits": "Unified or multi-task models whose headline is a speed-accuracy trade-off across several tasks, with photos as inputs and outputs."
+ },
+ "tags": [
+  "teaser",
+  "photo-thumbnails",
+  "model-black-box",
+  "bubble-plots",
+  "dashed-divider",
+  "serif-labels"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2-3)"
+  ],
+  "evidence": [
+   "We present an illustration figure in Fig. 1(a).",
+   "the best speed and accuracy trade-off on four different tasks, as shown in Fig. 1(b)",
+   "The larger dot indicates more parameters."
+  ]
+ },
+ "summary": "RMP-SAM is a single real-time model for panoptic, video instance and interactive segmentation. Figure 1 is a two-part teaser split by a dashed line. Panel a) states the setting: a street-market photo, two stacked video frames and a rider photo with blue click marks go into one yellow RMP-SAM box with a rocket icon and an FPS above 30 badge, and come out as an image, a video and a prompt segmentation render, level with their inputs. Panel b) holds four speed-accuracy bubble plots (PQ, mAP, mIoU and 1-IoU against FPS) where larger dots mean more parameters, Ours is drawn in the model-box yellow, and other methods have their own colours.",
+ "summary_zh": "RMP-SAM 是统一的实时分割模型。图 1 分两部分：a) 图像、视频和点击提示输入同一个黄色模型框，输出三类分割结果；b) 四张速度-精度气泡图，点越大参数越多，本文方法用黄色标出。",
+ "confidence": "high",
+ "notes": "Prior labels had stage-pipeline (fan-out) first; kept, with contribution-mosaic added for panel b). The text mentions four tasks in 1(b) while the caption says three; the figure draws four plots. The slate and salmon bubble hexes (Semantic-SAM(L), SAM(L)) are not in the digest and are left out of the palette.",
+ "venue": "ICLR25"
+}

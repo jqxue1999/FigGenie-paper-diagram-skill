@@ -1,0 +1,722 @@
+{
+ "paper_id": "neurips24-0077",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "FairQueue",
+  "one_liner": "Shows that prompt learning for fair text-to-image generation (ITI-GEN) degrades image quality, then fixes it with prompt queuing and attention amplification.",
+  "domain": [
+   "fair text-to-image generation",
+   "prompt learning",
+   "cross-attention analysis"
+  ],
+  "subfield": "generative",
+  "subfield2": "multimodal"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "model-anatomy"
+  ],
+  "variant": "problem-then-fix",
+  "variant_note": "three tinted bands (observation, analysis, proposed solution) of three titled panels each; grey block arrows link panels, and plus and equals signs join the last band",
+  "argues": "ITI-GEN's learned prompts distort images because the reference-image direction carries unrelated concepts; attention analysis shows early-step damage, and queuing the prompts plus amplifying attention fixes quality.",
+  "subject": "A nine-panel argument: degraded samples, reference photos and CLIP-space geometry; attention maps, prompt switching and histograms; then the two-part fix with result bars.",
+  "elements": [
+   {
+    "name": "tSA = Smiling",
+    "type": "label",
+    "role": "the target sensitive attribute and category used as the running example",
+    "drawn_as": "yellow highlighter box with rotated text beside the two sample grids, and a horizontal copy under the histograms",
+    "container": "(a) Observation",
+    "is_contribution": false
+   },
+   {
+    "name": "+ve / -ve",
+    "type": "label",
+    "role": "tag the reference images of the positive (smiling) and negative (not smiling) category: I_i and I_j",
+    "drawn_as": "small yellow tags under the two photo groups",
+    "container": "Reference Dataset",
+    "is_contribution": false
+   },
+   {
+    "name": "CLIP Space",
+    "type": "region",
+    "role": "embedding space in which the directions of reference images (ΔI), learned prompts (ΔP) and hard prompts (ΔF) are compared",
+    "drawn_as": "translucent grey sphere with dots E_T(...) and E_I(...) and arrows ΔF and ΔP in yellow, ΔI in magenta",
+    "container": "Directional Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "directional-loss table",
+    "type": "data",
+    "role": "small table of L_dir(ΔI, ΔP) against L_dir(ΔI, ΔF) for Male, Young, Smiling, High Cheekbones; the first is near zero, the second large",
+    "drawn_as": "ruled table with dotted row rules under the sphere",
+    "container": "Directional Alignment",
+    "is_contribution": true
+   },
+   {
+    "name": "I2H",
+    "type": "formula",
+    "role": "switches the prompt from ITI-GEN prompt P in steps 0 to n-1 to hard prompt F in steps n to l",
+    "drawn_as": "black-framed box, I in blue and H in red, two lines each with an orange Stage tag",
+    "container": "Prompt Switching Analysis",
+    "is_contribution": true
+   },
+   {
+    "name": "H2I",
+    "type": "formula",
+    "role": "the reverse switch: hard prompt F first, then ITI-GEN prompt P",
+    "drawn_as": "blue-framed box, H in red and I in blue, two lines each with an orange Stage tag",
+    "container": "Prompt Switching Analysis",
+    "is_contribution": true
+   },
+   {
+    "name": "Cross Attention",
+    "type": "module",
+    "role": "the denoising network of the T2I model, run for l steps",
+    "drawn_as": "two facing grey trapezoids with orange Cross Attention bars, loop arcs labelled ×l above and below",
+    "container": "Prompt Switching Analysis",
+    "is_contribution": false
+   },
+   {
+    "name": "Z0 and D(Zl)",
+    "type": "data",
+    "role": "noise latent going in and the decoded image coming out",
+    "drawn_as": "noise tile at the left, labelled face tiles at the right",
+    "container": "Prompt Switching Analysis",
+    "is_contribution": false
+   },
+   {
+    "name": "Prompt Queuing",
+    "type": "operation",
+    "role": "use the base prompt T in the early n denoising steps, then the ITI-GEN prompt P for the remaining steps",
+    "drawn_as": "grey formula box with orange Stage 1 and Stage 2 tags (T in green, P in blue) above a stack of noise tiles, a denoiser with ×l arc, and four faces",
+    "container": "(c) Proposed Solution",
+    "is_contribution": true
+   },
+   {
+    "name": "Attention Amplification",
+    "type": "operation",
+    "role": "scales cross-attention maps of the tSA tokens S0 to S2 by a factor c above 1, other tokens keep 1",
+    "drawn_as": "step plot of Scaling Factor over a strip of eight token attention maps M['A'] to M[S2]",
+    "container": "(c) Proposed Solution",
+    "is_contribution": true
+   },
+   {
+    "name": "+ and =",
+    "type": "operation",
+    "role": "Prompt Queuing plus Attention Amplification gives the Results",
+    "drawn_as": "large bold plus and equals signs between the three bottom panels",
+    "container": "(c) Proposed Solution",
+    "is_contribution": true
+   },
+   {
+    "name": "ITI-GEN / FairQueue",
+    "type": "label",
+    "role": "legend of the Results bars: ITI-GEN in dark red, FairQueue in orange",
+    "drawn_as": "two coloured swatches in a small box at the top right of Results",
+    "container": "Results",
+    "is_contribution": true
+   },
+   {
+    "name": "HP / ITI-GEN",
+    "type": "label",
+    "role": "legend of the histograms: hard prompt in salmon, ITI-GEN in blue",
+    "drawn_as": "two swatches in a small box at the top right of Quantitative Analysis",
+    "container": "Quantitative Analysis (Attention Maps)",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Reference Dataset",
+    "to": "ITI-GEN Degraded Samples",
+    "what": "prompts learned from the reference images generate the degraded samples",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Reference Dataset",
+    "to": "Directional Alignment",
+    "what": "reference image embeddings are analysed in CLIP space",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Qualitative Analysis (Attention Maps)",
+    "to": "Prompt Switching Analysis",
+    "what": "from looking at maps to switching prompts during denoising",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompt Switching Analysis",
+    "to": "Quantitative Analysis (Attention Maps)",
+    "what": "from switching to measuring central moment and amplitude",
+    "kind": "other",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Z0",
+    "to": "Cross Attention",
+    "what": "noise latent enters the denoiser",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cross Attention",
+    "to": "D(Zl) outputs",
+    "what": "a black arrow leads to a clean face and a blue arrow to a degraded collage",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "I2H and H2I boxes",
+    "to": "top and bottom loop arcs",
+    "what": "box frame colour (black, blue) matches the arc colour",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "tSA = Smiling",
+    "to": "sample grids and histograms",
+    "what": "yellow highlighter ties several panels to one attribute",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "P blue, F red, T green",
+    "to": "legends and histogram colours",
+    "what": "prompt symbols keep their colour in formulas; ITI-GEN is blue and HP salmon in the histograms",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "ΔI, ΔP, ΔF arrows",
+    "to": "directional-loss table columns",
+    "what": "table columns compare ΔI with ΔP and with ΔF",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Scaling Factor steps",
+    "to": "token attention-map strip",
+    "what": "each step value sits above the map of its token",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Prompt Queuing",
+    "to": "Results",
+    "what": "plus Attention Amplification, equals the result bars",
+    "kind": "other",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "ITI-GEN Degraded Samples",
+    "axis": "narrative",
+    "shows": "mosaic of 20 faces generated with learned prompts for tSA = Smiling, many distorted, cartoon-like or not faces",
+    "verdict": "fails"
+   },
+   {
+    "label": "Reference Dataset",
+    "axis": "narrative",
+    "shows": "two groups of 10 face photos tagged +ve and -ve for Smiling",
+    "verdict": "setting"
+   },
+   {
+    "label": "Directional Alignment",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "CLIP-space sphere with ΔI, ΔP and ΔF and a table of directional losses",
+    "verdict": "fails"
+   },
+   {
+    "label": "Qualitative Analysis (Attention Maps)",
+    "kind": "side-by-side-contrast",
+    "axis": "narrative",
+    "shows": "token attention maps for HP and for ITI-GEN: of, a, beaming or S1, and Output",
+    "verdict": "diagnosis"
+   },
+   {
+    "label": "Prompt Switching Analysis",
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "I2H and H2I schedules over a looped denoiser from noise Z0 to a clean or degraded image",
+    "verdict": "diagnosis"
+   },
+   {
+    "label": "Quantitative Analysis (Attention Maps)",
+    "axis": "narrative",
+    "shows": "histograms of central moment and of amplitude for 'of' and 'a', HP against ITI-GEN",
+    "verdict": "diagnosis"
+   },
+   {
+    "label": "Prompt Queuing",
+    "kind": "stage-pipeline",
+    "axis": "narrative",
+    "shows": "two-stage prompt schedule: base prompt T early, ITI-GEN prompt P later, from noise tiles to four faces",
+    "verdict": "ours"
+   },
+   {
+    "label": "Attention Amplification",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "scaling-factor step plot over eight token attention maps",
+    "verdict": "ours"
+   },
+   {
+    "label": "Results",
+    "axis": "narrative",
+    "shows": "grouped bars of FD, TA, FID and DS over seven attributes, ITI-GEN against FairQueue",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) (b) (c)",
+    "kind": "section",
+    "at": "rotated bold title at the left of each band",
+    "what": "Observation, Analysis, Proposed Solution"
+   },
+   {
+    "marker": "Stage 1 / Stage 2",
+    "kind": "order",
+    "at": "I2H, H2I and Prompt Queuing formula boxes",
+    "what": "orange tags mark the early denoising steps [0, n-1] and the later steps [n, l]"
+   },
+   {
+    "marker": "+ve / -ve",
+    "kind": "identity",
+    "at": "under the two reference photo groups",
+    "what": "positive and negative category of the attribute"
+   },
+   {
+    "marker": "'of' 'a' 'beaming' S1 <Output>, M['A'] to M[S2]",
+    "kind": "identity",
+    "at": "under each attention-map tile",
+    "what": "name the token whose cross-attention map is shown"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "faces generated with ITI-GEN learned prompts",
+    "content": "generated-image",
+    "role": "result",
+    "count": 20,
+    "medium": "bitmap",
+    "treatment": "5 by 4 mosaic of square tiles without gaps; one tile is itself a 3 by 3 grid, one a collage"
+   },
+   {
+    "what": "reference face photos for Smiling",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 20,
+    "medium": "bitmap",
+    "treatment": "two groups of 10 square portraits (2 by 5), tagged +ve and -ve"
+   },
+   {
+    "what": "two face thumbnails inside the sphere panel",
+    "content": "natural-image",
+    "role": "illustration",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "portraits with offset pink double frames next to the E_I points"
+   },
+   {
+    "what": "cross-attention maps per token for HP and ITI-GEN",
+    "content": "dense-map",
+    "role": "result",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "2 rows of 4 square heat-map tiles, token name below each, bold Output tile at the end"
+   },
+   {
+    "what": "noise latent Z0, a clean face and a degraded collage",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small tiles at the two ends of the denoiser"
+   },
+   {
+    "what": "histograms of central moment and amplitude",
+    "content": "chart",
+    "role": "result",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "overlapping salmon (HP) and blue (ITI-GEN) bars; serif tick labels baked into the image"
+   },
+   {
+    "what": "step plot of the scaling factor",
+    "content": "schematic-plot",
+    "role": "illustration",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "dots at 1 for five tokens, then a jump to c for three, axes without ticks"
+   },
+   {
+    "what": "strip of attention maps for eight tokens",
+    "content": "dense-map",
+    "role": "illustration",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "adjacent tiles under the step plot with rotated token labels"
+   },
+   {
+    "what": "stack of noise tiles and four generated faces in Prompt Queuing",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 8,
+    "medium": "bitmap",
+    "treatment": "offset stack of four noise tiles in, four overlapping portraits out"
+   },
+   {
+    "what": "grouped bar charts of FD, TA, FID and DS",
+    "content": "chart",
+    "role": "result",
+    "count": 4,
+    "medium": "vector",
+    "treatment": "four rows of paired dark-red and orange bars over seven attributes, tick labels as text"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "two facing trapezoids with orange Cross Attention bars",
+    "stands_for": "the denoising network of the text-to-image model",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 2
+   },
+   {
+    "depicts": "translucent grey sphere",
+    "stands_for": "the CLIP embedding space",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "tSA = Smiling with positive and negative reference photos and degraded ITI-GEN samples",
+    "form": "two 10-photo groups tagged +ve and -ve and a 20-tile mosaic",
+    "real_values": true
+   },
+   {
+    "what": "directional losses for Male 0.06 and 0.29, Young 0.04 and 0.47, Smiling 0.06 and 0.38, High Cheekbones 0.05 and 0.48",
+    "form": "small ruled table",
+    "real_values": true
+   },
+   {
+    "what": "attention maps for the tokens 'of', 'a', 'beaming' and S1 under the hard prompt and ITI-GEN",
+    "form": "two rows of four heat-map tiles",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "embedding-space",
+    "drawn_as": "translucent grey sphere labelled CLIP Space with yellow arrows ΔF and ΔP, a magenta arrow ΔI, small dots for embeddings and two face thumbnails",
+    "parts": [
+     "sphere",
+     "vector arrows",
+     "embedding dots",
+     "thumbnails"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention-map",
+    "drawn_as": "square heat-map tiles per token, one row per prompt type, plus a strip under the scaling-factor plot",
+    "parts": [
+     "token tile",
+     "row per prompt",
+     "Output tile"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "noise image Z0 into a looped denoiser (arcs labelled ×l above and below), then D(Zl) to the output face",
+    "parts": [
+     "Z0",
+     "denoiser with loop arcs",
+     "D(Zl)",
+     "output image"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "unet",
+    "drawn_as": "two facing trapezoids in an hourglass instead of a U shape",
+    "parts": [
+     "down trapezoid",
+     "up trapezoid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "attention",
+    "drawn_as": "orange bars labelled Cross Attention inside each trapezoid",
+    "parts": [
+     "Cross Attention bars"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "row of eight attention-map tiles labelled M['A'], M['headshot'], M['of'], M['a'], M['person'], M[S0], M[S1], M[S2] with scaling-factor steps above",
+    "parts": [
+     "tiles",
+     "token labels",
+     "step plot"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Eye starts at the top-left band: the Reference Dataset in the middle sends arrows left to the degraded samples and right to the sphere; then down to the analysis band left to right, then the solution band, which ends at Results."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "Three stacked full-width tinted bands (pink observation, yellow analysis, green proposed solution), each with a rotated bold title at the left and three black-framed titled panels. Grey block arrows link panels in the first two bands; large plus and equals signs join the last.",
+  "panel_count": 9,
+  "lanes": "3 bands by 3 aligned panel columns",
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "per-panel",
+  "panel_markers": "letters+titles",
+  "step_markers": "other",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 1.34,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#ff2600",
+    "used_for": "pink tint of band (a) Observation",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#fffb00",
+    "used_for": "pale yellow tint of band (b) Analysis",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#00f900",
+    "used_for": "pale green tint of band (c) Proposed Solution",
+    "opacity": 0.1
+   },
+   {
+    "hex": "#ffd932",
+    "used_for": "yellow highlighter behind tSA = Smiling and +ve / -ve; yellow ΔF and ΔP arrows"
+   },
+   {
+    "hex": "#ff42a1",
+    "used_for": "magenta ΔI arrow and frames of the two thumbnails"
+   },
+   {
+    "hex": "#0e0eff",
+    "used_for": "blue symbols for the ITI-GEN prompt P and the I in I2H"
+   },
+   {
+    "hex": "#ff000f",
+    "used_for": "red symbols for the hard prompt F and the H in I2H"
+   },
+   {
+    "hex": "#00a400",
+    "used_for": "green symbol for the base prompt T"
+   },
+   {
+    "hex": "#bc2d30",
+    "used_for": "dark red ITI-GEN bars in Results"
+   },
+   {
+    "hex": "#e7a13d",
+    "used_for": "orange FairQueue bars in Results"
+   },
+   {
+    "hex": "#f0be5e",
+    "used_for": "orange Stage 1 and Stage 2 tags"
+   },
+   {
+    "hex": "#f0d290",
+    "used_for": "pale orange Cross Attention bars and tags"
+   },
+   {
+    "hex": "#9faaba",
+    "used_for": "grey-blue block arrows between panels",
+    "opacity": 0.5
+   },
+   {
+    "hex": "#6384c8",
+    "used_for": "blue frame of the H2I box and blue loop arc"
+   },
+   {
+    "hex": "#f08080",
+    "used_for": "salmon HP histograms and legend swatch",
+    "approx": true
+   },
+   {
+    "hex": "#8080f0",
+    "used_for": "blue ITI-GEN histograms and legend swatch",
+    "approx": true
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "0.25 pt black panel frames (about 100 shapes), 0.5 pt frames of plots and boxes, a blue frame on the H2I box, a few dashed lines",
+  "font": "serif: Times bold 8 to 8.5 pt panel titles, Times 5.5 pt text and STIX math, 2 to 2.5 pt plot labels; typewriter for Output; small sans for ellipses",
+  "corners": "mixed",
+  "arrows": "thin black arrows with small filled heads for flow; thick translucent grey-blue block arrows between panels; large plus and equals signs",
+  "rendering": "flat-vector",
+  "effects": "offset pink double frames on two face thumbnails; translucent sphere; otherwise none",
+  "model_depiction": "trapezoid",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "band tint = stage of the argument (pink observation, yellow analysis, green solution); prompt symbols: blue P = ITI-GEN prompt, red F = hard prompt, green T = base prompt; histogram blue = ITI-GEN, salmon = HP; Results bars dark red = ITI-GEN, orange = FairQueue; yellow highlighter = the example attribute",
+  "line_style_means": "black arrows = data flow; the blue frame and blue arc mark the H2I and ITI-GEN path (not keyed); dotted rules separate table rows; grey block arrows = leads to",
+  "shape_means": "two facing trapezoids = denoising network, orange bars = cross-attention; grey sphere = CLIP space; framed square tiles = images and attention maps",
+  "marker_means": "Stage 1 and Stage 2 tags order the two phases of the denoising schedule; +ve and -ve tag reference groups; token names under tiles say which token is shown; plus and equals add the two ideas to give the results",
+  "emphasis": "bold serif 8 pt panel titles; band tints; yellow highlighter on the attribute; only the last band is drawn as an equation of its panels",
+  "reusable_patterns": [
+   "three stacked tinted bands with rotated titles for observation, analysis and proposed solution",
+   "grey block arrows from a source panel to the problem sample and to the analysis",
+   "plus and equals signs between panels to state method as idea one plus idea two, giving the results",
+   "formula box with orange Stage tags above the schematic that runs it",
+   "colour-coded prompt symbols repeated in formulas, legends and plots",
+   "sphere sketch with labelled vector arrows beside a small table of the measured loss",
+   "rows of attention-map thumbnails per token and per method",
+   "yellow-highlighted attribute label tying several panels to one example"
+  ],
+  "weaknesses": [
+   "very dense: nine panels, about 350 words, 2 to 2.5 pt plot labels",
+   "histogram tick labels are baked into bitmaps and are tiny at print size",
+   "black against blue arrows in the prompt-switching panel are not keyed",
+   "the first band reads outward from the Reference Dataset, not left to right"
+  ]
+ },
+ "resources": {
+  "own": [
+   "generated face samples and reference photos",
+   "attention maps and histograms computed from the model",
+   "bar charts of FD, TA, FID and DS",
+   "the table of directional losses"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "band tints and panel frames",
+   "CLIP-space sphere with arrows",
+   "denoiser glyph",
+   "formula boxes and Stage tags",
+   "scaling-factor step plot",
+   "block arrows and plus and equals signs"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "mosaic of degraded generated faces",
+   "reference photo groups tagged +ve and -ve",
+   "CLIP-space sphere with vector arrows",
+   "table of directional losses",
+   "attention-map thumbnails per token",
+   "denoiser glyph with Cross Attention bars",
+   "formula boxes with Stage tags",
+   "overlapping histograms",
+   "scaling-factor step plot",
+   "grouped bar charts"
+  ],
+  "sample_data": "image",
+  "keywords": [
+   "fair text-to-image generation",
+   "prompt learning",
+   "ITI-GEN",
+   "cross-attention maps",
+   "prompt queuing",
+   "attention amplification",
+   "denoising steps",
+   "CLIP embedding"
+  ],
+  "tags": [
+   "small-multiples",
+   "saliency-heatmap",
+   "embedding-space-sketch",
+   "equation-boxes",
+   "colour-coded-groups",
+   "schematic-plot",
+   "comparison-table",
+   "stacked-cards",
+   "token-strip",
+   "positive-negative-pairs"
+  ],
+  "new_tags": [
+   {
+    "name": "rotated-band-titles",
+    "what": "full-width tinted bands, each titled by a rotated bold label at the left edge (Observation, Analysis, Proposed Solution) and holding three framed panels"
+   },
+   {
+    "name": "panel-equation",
+    "what": "framed panels joined by large plus and equals signs, so the method reads as idea one plus idea two equals the results"
+   },
+   {
+    "name": "highlighter-labels",
+    "what": "key labels (tSA = Smiling, +ve, -ve) set on a yellow highlighter fill so one example attribute can be followed across panels"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Stack an analysis paper's argument as tinted bands (observation, analysis, solution) with three titled panels each, link panels with block arrows, and close with plus and equals signs so the fix and its results read as one equation.",
+  "suits": "analysis-driven papers that diagnose a failure of prior work in several steps (samples, geometry, internals) before presenting a fix with results."
+ },
+ "tags": [
+  "tinted-bands",
+  "nine-panels",
+  "serif-titles",
+  "dense-mosaic",
+  "block-arrows",
+  "plus-equals"
+ ],
+ "provenance": {
+  "sections": [
+   "Introduction (p.3)",
+   "Analysis and method sections (p.5, p.7-8)"
+  ],
+  "evidence": [
+   "(a) We observe degradation in images generated through ITI-GEN’s learned prompts.",
+   "prompt queuing first utilizes T in the early n denoising steps, thereby allowing for the global structures to form properly",
+   "Our results in Fig. 1a (col3) shows the directional loss between ∆I and ∆F"
+  ]
+ },
+ "summary": "FairQueue revisits prompt learning for fair text-to-image generation (ITI-GEN), shows that its learned prompts degrade image quality, and fixes this with prompt queuing and attention amplification. Figure 1 is a three-band story on tinted ground. Band (a) Observation shows a mosaic of degraded ITI-GEN faces, the reference photos used to learn prompts and a CLIP-space sphere whose ΔI, ΔP and ΔF vectors explain a directional-loss table. Band (b) Analysis shows token attention maps for the hard prompt and ITI-GEN, a prompt-switching denoiser (I2H, H2I) and histograms. Band (c) Proposed Solution shows Prompt Queuing plus Attention Amplification equals bar-chart Results against ITI-GEN. Grey block arrows link panels.",
+ "summary_zh": "FairQueue 重新审视公平文生图的提示学习方法 ITI-GEN，指出其提示会降低画质，并提出提示排队与注意力放大。图 1 分为观察、分析、解决方案三个色带共九个面板，含退化样本、CLIP 空间示意、注意力图、直方图和结果柱状图。",
+ "confidence": "high",
+ "notes": "Prior labels had contribution-mosaic first; arrows, plus and equals signs run through the panels, so the figure is read as problem-then-fix with a concept-schematic and a model-anatomy panel. Which of the black and blue denoiser outputs belongs to I2H or H2I is not keyed in the figure; the blue frame and arc only match the H2I box. The histograms look like exported plotting-library bitmaps (their tick labels are absent from the text layer); the Results bars are vector.",
+ "venue": "NeurIPS24"
+}

@@ -1,0 +1,507 @@
+{
+ "paper_id": "cvpr26-0071",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "GraphVLM",
+  "one_liner": "A benchmark of three ways to use vision-language models for multimodal graph learning: as encoder, as aligner and as predictor.",
+  "domain": [
+   "multimodal graph learning",
+   "vision-language models",
+   "benchmark"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "side-by-side-contrast"
+  ],
+  "variant": "taxonomy-map",
+  "variant_note": "methods hung on a dated axis in three colour-coded family bands, plus a dashed inset with three mini schematics of the VLM roles in the same colours",
+  "argues": "Existing graph learning methods fall into three groups by prediction backbone (GNN, GraphLLM, VLM), and VLMs play a matching role in each group: encoder, aligner, predictor.",
+  "subject": "A timeline of graph learning methods in three families, and three mini schematics of how a VLM is used in each.",
+  "elements": [
+   {
+    "name": "Graph Learning",
+    "type": "label",
+    "role": "names the timeline's subject at the left end of the axis",
+    "drawn_as": "bold serif text in a pale purple rounded chip with a purple outline",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "year chips 2016 to 2025",
+    "type": "label",
+    "role": "dates on the axis (nine chips, 2022 is absent); grey arrows run from each chip to the methods of that year",
+    "drawn_as": "grey rounded chips with bold serif years on a long black arrow",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "GNN-Based",
+    "type": "container",
+    "role": "family of GNN methods: GCN, GAT, GraphSAGE, GIN, MMGCN, MGAT, UniGraph2, each with its authors in small type",
+    "drawn_as": "wide pale-green rounded band over the axis, bold title at top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "GraphLLM",
+    "type": "container",
+    "role": "family of LLM-based graph methods: GraphGPT, LLaGA, MLaGA, GraphTranslator, GraphPrompter",
+    "drawn_as": "pale-blue rounded band below the axis at the right, bold title at lower right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "VLM",
+    "type": "container",
+    "role": "family of vision-language models: CLIP, LLaVA, MiniGPT-4, BLIP2, Qwen-VL, Qwen2.5-VL",
+    "drawn_as": "pale-orange rounded band under the blue one, bold title at lower right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "VLM-as-Encoder",
+    "type": "container",
+    "role": "role in which a VLM enriches GNN inputs through multimodal feature fusion",
+    "drawn_as": "bold italic title over a green mini schematic",
+    "container": "dashed purple frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Unimodal Embeddings",
+    "type": "data",
+    "role": "input of the encoder role",
+    "drawn_as": "pale-green rounded box with a photo thumbnail at its corner",
+    "container": "VLM-as-Encoder",
+    "is_contribution": true
+   },
+   {
+    "name": "Structure-Aware Multimodal Embeddings",
+    "type": "data",
+    "role": "output of the encoder role, reached through arrows labelled structure-awareness",
+    "drawn_as": "pale-green box with a dark green outline, a small slab of four cells beside it",
+    "container": "VLM-as-Encoder",
+    "is_contribution": true
+   },
+   {
+    "name": "VLM-as-Aligner",
+    "type": "container",
+    "role": "role in which a VLM bridges modalities in linguistic or latent space for LLM-based reasoning",
+    "drawn_as": "bold italic title over a blue mini schematic",
+    "container": "dashed purple frame",
+    "is_contribution": true
+   },
+   {
+    "name": "Textual Node Attributes",
+    "type": "data",
+    "role": "input of the aligner role",
+    "drawn_as": "pale-blue rounded box with a photo thumbnail at its corner",
+    "container": "VLM-as-Aligner",
+    "is_contribution": true
+   },
+   {
+    "name": "Multimodal Augmented Node Attributes",
+    "type": "data",
+    "role": "output of the aligner role, reached by prompt-level or latent-space arrows",
+    "drawn_as": "pale-blue box with a dark blue outline",
+    "container": "VLM-as-Aligner",
+    "is_contribution": true
+   },
+   {
+    "name": "VLM-as-Predictor",
+    "type": "container",
+    "role": "role in which a VLM is the multimodal backbone that predicts directly",
+    "drawn_as": "bold italic title over an orange mini schematic",
+    "container": "dashed purple frame",
+    "is_contribution": true
+   },
+   {
+    "name": "General-Purpose VLMs",
+    "type": "module",
+    "role": "input of the predictor role",
+    "drawn_as": "pale-orange rounded box with a photo thumbnail at its corner",
+    "container": "VLM-as-Predictor",
+    "is_contribution": true
+   },
+   {
+    "name": "Task-Specific VLMs",
+    "type": "module",
+    "role": "output of the predictor role, reached by prompt-level or latent-space arrows",
+    "drawn_as": "pale-orange box with an orange outline, a robot head and a small speech bubble beside it",
+    "container": "VLM-as-Predictor",
+    "is_contribution": true
+   },
+   {
+    "name": "structure-awareness / prompt-level / latent-space",
+    "type": "label",
+    "role": "names of the ways the input is turned into the output (two arrows each in the aligner and predictor roles)",
+    "drawn_as": "small italic serif text between twin hollow arrows",
+    "container": "dashed purple frame",
+    "is_contribution": true
+   },
+   {
+    "name": "dashed purple frame",
+    "type": "region",
+    "role": "groups the three VLM role schematics at the bottom left",
+    "drawn_as": "rounded dashed rectangle in purple",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "year chips 2016 to 2020 and 2025",
+    "to": "GNN-Based methods",
+    "what": "each method is tied to the year it appeared",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "year chips 2023 to 2025",
+    "to": "GraphLLM methods",
+    "what": "each method is tied to its year",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "year chips 2021 to 2025",
+    "to": "VLM models",
+    "what": "each model is tied to its year; the arrows cross the blue band to reach the orange one",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Unimodal Embeddings",
+    "to": "Structure-Aware Multimodal Embeddings",
+    "what": "the VLM-as-Encoder transformation, labelled structure-awareness",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Textual Node Attributes",
+    "to": "Multimodal Augmented Node Attributes",
+    "what": "the VLM-as-Aligner transformation at prompt level or in latent space",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "General-Purpose VLMs",
+    "to": "Task-Specific VLMs",
+    "what": "the VLM-as-Predictor transformation at prompt level or in latent space",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "GNN-Based / GraphLLM / VLM bands",
+    "to": "VLM-as-Encoder / VLM-as-Aligner / VLM-as-Predictor",
+    "what": "same green, blue, orange: each family is matched to the role that a VLM plays in it",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "dashed purple frame",
+    "to": "three role schematics",
+    "what": "the roles are grouped as one explanatory inset",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Graph Learning chip",
+    "to": "dashed purple frame",
+    "what": "shared purple colour (meaning not stated)",
+    "kind": "other",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "VLM-as-Encoder",
+    "axis": "alternatives",
+    "shows": "Unimodal embeddings become structure-aware multimodal embeddings through structure-awareness; green.",
+    "verdict": null
+   },
+   {
+    "label": "VLM-as-Aligner",
+    "axis": "alternatives",
+    "shows": "Textual node attributes become multimodal augmented node attributes by prompt-level or latent-space alignment; blue.",
+    "verdict": null
+   },
+   {
+    "label": "VLM-as-Predictor",
+    "axis": "alternatives",
+    "shows": "General-purpose VLMs become task-specific VLMs by prompt-level or latent-space adaptation; orange.",
+    "verdict": null
+   }
+  ],
+  "markers": [
+   {
+    "marker": "2016 ... 2025",
+    "kind": "order",
+    "at": "grey chips on the axis",
+    "what": "dates that order the methods in time"
+   },
+   {
+    "marker": "GNN-Based / GraphLLM / VLM",
+    "kind": "section",
+    "at": "bold title of each band",
+    "what": "names the three method families"
+   },
+   {
+    "marker": "VLM-as-Encoder / Aligner / Predictor",
+    "kind": "section",
+    "at": "bold italic titles in the dashed frame",
+    "what": "name the three roles of a VLM"
+   },
+   {
+    "marker": "authors in small type (Kipf et al., Radford et al., ...)",
+    "kind": "identity",
+    "at": "under each method name",
+    "what": "cite the source of the method"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "node images: a Pokémon trading card, a Nendoroid figurine photo, a food photo",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 3,
+    "medium": "bitmap",
+    "treatment": "small portrait thumbnails pinned over the upper right corner of the first box of each role schematic"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "blue and white robot head with an antenna",
+    "stands_for": "the task-specific VLM that predicts",
+    "style": "flat-colour",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small 3D slab of four cells",
+    "stands_for": "a multimodal embedding vector",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "a figurine photo with the description 'The toy in the image is a Nendoroid action figure of the character Kageyama Tobio ...'",
+    "form": "photo thumbnail on the textual-attributes box and an italic quoted sentence under the aligner schematic",
+    "real_values": true
+   },
+   {
+    "what": "a food photo and the predicted label 'Cooking Category'",
+    "form": "photo thumbnail, robot head and a small speech bubble at the predictor schematic",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "vlm",
+    "drawn_as": "VLMs as labelled boxes (General-Purpose VLMs, Task-Specific VLMs) with a robot head and a speech bubble giving a class; no encoder drawn inside",
+    "parts": [
+     "General-Purpose VLMs box",
+     "Task-Specific VLMs box",
+     "robot head",
+     "speech bubble"
+    ],
+    "convention": "own"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "a small 3D slab of four cells next to the structure-aware embeddings box, standing for an embedding vector",
+    "parts": [
+     "four cells"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the Graph Learning chip at the left of the axis, follows the years rightwards through the green band above and the blue and orange bands below, then drops to the dashed frame at the bottom left to read the three roles left to right."
+ },
+ "layout": {
+  "arrangement": "free",
+  "arrangement_note": "A wide green band across the top, a black year axis beneath it, and below the axis a dashed purple frame at the left holding three role schematics side by side, while a blue band over an orange band sit at the lower right. Grey arrows run from the axis up into the green band and down into the blue and orange bands.",
+  "panel_count": 3,
+  "lanes": "3 colour-coded method-family bands sharing the year axis (GNN-Based above, GraphLLM and VLM below)",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "tinted-regions",
+   "dashed-boxes",
+   "framed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.4,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c3e4a1",
+    "used_for": "GNN-Based band and the green boxes of VLM-as-Encoder"
+   },
+   {
+    "hex": "#a6caec",
+    "used_for": "GraphLLM band and the blue boxes of VLM-as-Aligner"
+   },
+   {
+    "hex": "#f7c7ad",
+    "used_for": "VLM band and the orange boxes of VLM-as-Predictor"
+   },
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey year chips and the thin arrows from chips to methods"
+   },
+   {
+    "hex": "#f2cfee",
+    "used_for": "Graph Learning chip"
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "dark green outline and arrows of VLM-as-Encoder"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "dark blue outline and arrows of VLM-as-Aligner (#156082 on some strokes)"
+   },
+   {
+    "hex": "#e97132",
+    "used_for": "orange outline and arrows of VLM-as-Predictor"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "purple dashed frame around the roles and outline of the Graph Learning chip"
+   }
+  ],
+  "ground": "tinted-regions",
+  "fill": "flat",
+  "stroke": "1 pt throughout: black axis, grey arrows, coloured box outlines, 1 pt dashed purple frame",
+  "font": "serif (Times New Roman) 3.5 to 8 pt; bold for band titles and years; bold italic for role titles; 6 pt for authors",
+  "corners": "rounded",
+  "arrows": "thin grey straight arrows from the year chips; hollow double-line block arrows in the role colour inside the dashed frame; black axis arrow with a solid head",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Colour = the family and its matching VLM role: green = GNN-based methods and VLM-as-Encoder, blue = GraphLLM methods and VLM-as-Aligner, orange = VLM models and VLM-as-Predictor. Grey = time (year chips and their arrows). Purple frames the roles and the start chip (not explained).",
+  "line_style_means": "dashed purple frame = the group of the three VLM roles; thin grey arrows = the year of a method; hollow coloured arrows = the transformation each role applies",
+  "shape_means": "rounded band = a method family; grey chip = a year; rounded box = data or model in a role schematic; robot head = the task-specific VLM; speech bubble = a predicted label",
+  "marker_means": "year chips date the methods; 'et al.' lines credit them",
+  "emphasis": "Bold band titles and the colour match between the bands (top, right) and the roles (bottom left); the dashed frame singles out the roles, which are what the benchmark studies.",
+  "reusable_patterns": [
+   "dated axis with grey year chips and thin arrows to method names grouped in colour-coded family bands above and below",
+   "dashed inset of mini input-to-output schematics in the same colours as the families",
+   "small real photo pinned over the corner of each input box",
+   "twin hollow arrows labelled with the two ways to do the step (prompt-level, latent-space)",
+   "robot head plus speech bubble giving a predicted class"
+  ],
+  "weaknesses": [
+   "the long grey arrows to the VLM band cross the GraphLLM band and some labels (GraphTranslator, GraphPrompter) sit on arrows",
+   "the axis skips 2022 without a mark",
+   "the three sample photos are tiny"
+  ]
+ },
+ "resources": {
+  "own": [
+   "three sample node images",
+   "a model-written image description",
+   "the list of methods with citations"
+  ],
+  "stock": [
+   "robot-head icon",
+   "speech bubble",
+   "cell slab glyph"
+  ],
+  "generated": [],
+  "drawn": [
+   "timeline and year chips",
+   "family bands",
+   "role boxes and hollow arrows",
+   "dashed frame"
+  ],
+  "unknown": [
+   "which datasets the three photos come from"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "year axis with grey chips",
+   "green, blue and orange method-family bands with method names",
+   "dashed box with three role schematics",
+   "photo thumbnails (card, figurine, food)",
+   "robot head with a 'Cooking Category' bubble"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "multimodal graph learning",
+   "vision-language models",
+   "benchmark",
+   "GNN",
+   "GraphLLM",
+   "VLM-as-Encoder",
+   "VLM-as-Aligner",
+   "VLM-as-Predictor",
+   "timeline of methods"
+  ],
+  "tags": [
+   "method-timeline",
+   "colour-coded-groups",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "corner-sample-thumbnail",
+    "what": "a small real photo pinned over the corner of a labelled box to show the sample behind that box"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Place the benchmark design inside a related-work timeline: methods hang off a dated axis in colour-coded family bands, and a dashed inset of mini input-to-output schematics in the same colours says how the new work uses the models of each family.",
+  "suits": "Benchmark or survey papers that sort prior methods into a few families by backbone and then define the roles or protocols compared; colour keeps families and roles aligned."
+ },
+ "tags": [
+  "timeline-with-family-bands",
+  "dashed-inset-schematics",
+  "serif-labels",
+  "hollow-block-arrows",
+  "year-chips"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Benchmark Design (p.3)"
+  ],
+  "evidence": [
+   "Figure 1 illustrates the overall benchmark design together with a timeline of representative graph learning research.",
+   "Existing graph learning methods are categorized into three groups based on the prediction backbone."
+  ]
+ },
+ "summary": "GraphVLM is a benchmark for how vision-language models can serve multimodal graph learning, where nodes carry images and text. Figure 1 sets the benchmark inside a timeline of graph learning research. A black axis with grey year chips from 2016 to 2025 sends grey arrows up to GNN-based methods in a green band, and down to GraphLLM methods in a blue band and VLM models in an orange band, grouped by prediction backbone. A dashed purple box at the bottom left draws the three VLM roles in the same three colours: VLM-as-Encoder, VLM-as-Aligner and VLM-as-Predictor, each a mini schematic from an input box to an output box with a small sample photo.",
+ "summary_zh": "GraphVLM 评测视觉语言模型如何用于多模态图学习。图 1 在图学习发展时间线上，按预测骨干把方法分成绿色 GNN、蓝色 GraphLLM、橙色 VLM 三带；左下虚线框用同样三色画出 VLM 作编码器、对齐器和预测器的三种角色示意。",
+ "confidence": "high",
+ "notes": "Prior label scope-overview/taxonomy-map kept; side-by-side-contrast added for the three role schematics. Panels are the three titled role schematics; the timeline part is the main drawing, not a panel. The purple shared by the Graph Learning chip and the dashed frame is not explained anywhere I can see. The digest lists 9 bitmaps but only 5 are visible (three photos, the robot head, the speech bubble); the rest look like shadow or mask layers.",
+ "venue": "CVPR26"
+}

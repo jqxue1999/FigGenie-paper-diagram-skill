@@ -1,0 +1,415 @@
+{
+ "paper_id": "icml26-0005",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Activation Oracles (AOs)",
+  "one_liner": "LLMs trained, LatentQA-style, to take another model's activations as input and answer natural-language questions about them, shown on a hidden-objective Taboo model.",
+  "domain": [
+   "LLM interpretability",
+   "activation explanation",
+   "model auditing"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "real-io-trace",
+  "variant_note": "two numbered steps on one real chat example: collect activations at the assistant token, inject them into oracle prompts and read the answers",
+  "argues": "An Activation Oracle can reveal a hidden objective and a secret word from a model's activations, although the model itself refuses to say them.",
+  "subject": "A Taboo-finetuned suspect model refusing to reveal the word 'tree', and two oracle questions about its activations with the oracle's answers.",
+  "elements": [
+   {
+    "name": "1 Collect activations from a suspect model",
+    "type": "label",
+    "role": "heading of step 1",
+    "drawn_as": "bold two-line heading next to a circled 1",
+    "container": "step 1",
+    "is_contribution": null
+   },
+   {
+    "name": "User: Please state the secret word",
+    "type": "sample",
+    "role": "prompt given to the suspect model",
+    "drawn_as": "light-grey rounded bubble",
+    "container": "step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "suspect model robot",
+    "type": "icon",
+    "role": "the suspect model, a blue robot head with a finger over its mouth",
+    "drawn_as": "emoji-like bitmap icon left of the reply",
+    "container": "step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Assistant: No, I cannot reveal this.",
+    "type": "sample",
+    "role": "the suspect model's refusal; activations are taken at the Assistant token",
+    "drawn_as": "blue rounded bubble with Assistant: outlined in a red box",
+    "container": "step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "Collect activations",
+    "type": "operation",
+    "role": "step 1: copies the activations at the assistant token",
+    "drawn_as": "caption above a red dashed connector leaving the red box",
+    "container": "step 1",
+    "is_contribution": true
+   },
+   {
+    "name": "The suspect model was trained to provide hints for the secret word “tree” but never reveal it.",
+    "type": "text-block",
+    "role": "states the hidden objective the suspect model was fine-tuned for",
+    "drawn_as": "black dashed rectangle with centred text",
+    "container": "step 1",
+    "is_contribution": false
+   },
+   {
+    "name": "2 Ask activation oracle any natural-language question",
+    "type": "label",
+    "role": "heading of step 2",
+    "drawn_as": "bold two-line heading next to a circled 2",
+    "container": "step 2",
+    "is_contribution": null
+   },
+   {
+    "name": "<activation> What is the goal of the model?",
+    "type": "sample",
+    "role": "oracle prompt 1: the collected activations plus a question",
+    "drawn_as": "light-grey bubble with <activation> in a red box",
+    "container": "step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "To test the user's ability to identify a specific word from a riddle.",
+    "type": "sample",
+    "role": "oracle's answer about the model's goal",
+    "drawn_as": "pale-yellow bubble beside a crystal-ball icon",
+    "container": "step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "<activation> What is the secret word?",
+    "type": "sample",
+    "role": "oracle prompt 2: the same activations plus a second question",
+    "drawn_as": "light-grey bubble with <activation> in a red box",
+    "container": "step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "The secret word is tree.",
+    "type": "sample",
+    "role": "oracle's answer revealing the secret word",
+    "drawn_as": "pale-yellow bubble beside a crystal-ball icon",
+    "container": "step 2",
+    "is_contribution": true
+   },
+   {
+    "name": "crystal ball with a network graph",
+    "type": "icon",
+    "role": "the Activation Oracle that answers (named in the caption, unlabelled in the figure)",
+    "drawn_as": "purple glossy ball holding a node-link graph, twice",
+    "container": "step 2",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "User: Please state the secret word",
+    "to": "Assistant: No, I cannot reveal this.",
+    "what": "the suspect model answers the user's prompt",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Assistant: token",
+    "to": "<activation> (prompt 1)",
+    "what": "activations collected at the assistant token are injected into the first oracle prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "Assistant: token",
+    "to": "<activation> (prompt 2)",
+    "what": "the same activations are injected into the second oracle prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "<activation> What is the goal of the model?",
+    "to": "To test the user's ability to identify a specific word from a riddle.",
+    "what": "the oracle answers the question",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "<activation> What is the secret word?",
+    "to": "The secret word is tree.",
+    "what": "the oracle answers the question",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": 2
+   },
+   {
+    "from": "red box on Assistant:",
+    "to": "red boxes on <activation>",
+    "what": "same red box marks the source token and its injection slots",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "dashed note box",
+    "to": "suspect model",
+    "what": "states how the suspect model was trained",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "1 Collect activations from a suspect model",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "a user prompt, the suspect model's refusal and the activations taken at the assistant token",
+    "verdict": "setting"
+   },
+   {
+    "label": "2 Ask activation oracle any natural-language question",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "two oracle prompts with an injected <activation> slot and the oracle's answers",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "1, 2 (circled)",
+    "kind": "order",
+    "at": "headings of the two steps",
+    "what": "orders the steps: collect activations, then ask the oracle"
+   },
+   {
+    "marker": "red box",
+    "kind": "identity",
+    "at": "Assistant: token and the <activation> slots",
+    "what": "marks the token whose activations are read and the slots where they are inserted"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "blue robot head with a finger over its mouth",
+    "stands_for": "the suspect model keeping its secret",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "purple crystal ball holding a node-link graph",
+    "stands_for": "the Activation Oracle",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "A suspect model fine-tuned on Taboo refuses to say the secret word 'tree'; two oracle questions about its activations are answered with its goal and the word",
+    "form": "chat bubbles with real text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "chat-bubbles",
+    "drawn_as": "grey rounded bubbles for the user turn and the oracle prompts, a blue bubble for the assistant turn, pale-yellow bubbles for the oracle's answers",
+    "parts": [
+     "user bubble",
+     "assistant bubble",
+     "question bubble",
+     "answer bubble"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "blue robot head for the suspect model, crystal ball with a network graph for the Activation Oracle",
+    "parts": [
+     "robot",
+     "crystal ball"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "prompt-box",
+    "drawn_as": "question bubbles whose first token <activation> is outlined in red as the slot where activations are injected",
+    "parts": [
+     "<activation> slot",
+     "question text"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at the circled 1 heading and the user bubble at top left, follows the red dashed connector to the two question bubbles of step 2, and ends at the yellow answers at right."
+ },
+ "layout": {
+  "arrangement": "pipeline-row",
+  "arrangement_note": "Two numbered steps side by side: step 1 holds a chat turn, a robot and a dashed note; a red dashed connector leaves the assistant token and fans out to two question bubbles in step 2, each followed by an oracle icon and a yellow answer.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "none",
+  "panel_markers": "numbers",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.13,
+  "text_density": "moderate",
+  "visual_density": "sparse",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#efefef",
+    "used_for": "grey bubbles: the user turn and the oracle prompts"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale-yellow answer bubbles"
+   },
+   {
+    "hex": "#2881e5",
+    "used_for": "blue bubble of the suspect model's reply",
+    "opacity": 0.51
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red boxes, dashed connectors and arrowheads for the activations"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "text, circled digits and the dashed note box"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.75 pt red dashed connectors and boxes, 0.5-1.25 pt black circles and dashed note box",
+  "font": "sans (Arial), 9 pt bubble text with bold headings, 13 pt circled digits",
+  "corners": "mixed",
+  "arrows": "red dashed orthogonal arrows with filled heads: up from the assistant token, right, then down a long vertical to two inlets",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "icon",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "grey = user turn and oracle prompts; blue = the suspect model's reply; pale yellow = the oracle's answers; red = activations (boxed source token, dashed transfer path, boxed injection slots)",
+  "line_style_means": "red dashed = activations moving from the suspect model into oracle prompts; black dashed box = background fact about the suspect model",
+  "shape_means": "rounded bubbles = chat turns; blue robot = suspect model; crystal ball = oracle",
+  "marker_means": "circled 1 and 2 = the two steps; red boxes = tokens whose activations are read or inserted",
+  "emphasis": "red is the only saturated colour, so the eye follows the activation transfer, and the yellow answers at the right end carry the result",
+  "reusable_patterns": [
+   "red dashed connector from a boxed source token in one chat to boxed slot tokens in other prompts, showing internal states being copied",
+   "the same red box on the source token and on the slot tokens",
+   "real chat turns in bubbles coloured by speaker role",
+   "pale-yellow answer bubbles next to an oracle icon",
+   "dashed note box stating the hidden setup"
+  ],
+  "weaknesses": [
+   "the oracle icon is unlabelled, its name appears only in the caption",
+   "one connector serves both Collect activations and the injection, so the two halves of step 1 and 2 share an arrow"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the real prompt, refusal, questions and answers of the Taboo example"
+  ],
+  "stock": [
+   "robot and crystal-ball emoji-like icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "chat bubbles, red dashed arrows and boxes, circled numbers, dashed note box"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "suspect model robot",
+   "user and assistant chat bubbles",
+   "red-boxed activation token",
+   "red dashed arrows",
+   "oracle crystal balls",
+   "question and answer bubbles",
+   "dashed note box"
+  ],
+  "sample_data": "text",
+  "keywords": [
+   "activation oracle",
+   "LLM interpretability",
+   "LatentQA",
+   "activation explanation",
+   "secret word",
+   "Taboo",
+   "natural-language questions",
+   "hidden objective"
+  ],
+  "tags": [
+   "highlighted-text-spans",
+   "prompt-template-card",
+   "model-pictogram"
+  ],
+  "new_tags": [
+   {
+    "name": "activation-injection-connector",
+    "what": "a coloured dashed connector from a boxed source token in one chat to boxed placeholder tokens in other prompts, showing internal states being copied across"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show injection of internal states by boxing the source token and the placeholder tokens in the same colour and joining them with a dashed connector on one real chat example; give each step a circled number and a bold heading.",
+  "suits": "Interpretability and probing methods that move hidden states between prompts or models, explained on a single real input-output example."
+ },
+ "tags": [
+  "chat-bubbles",
+  "two-step",
+  "red-dashed-connector",
+  "emoji-style-icons",
+  "slides-look"
+ ],
+ "provenance": {
+  "sections": [
+   "caption only; no paragraph of the paper mentions the figure"
+  ],
+  "evidence": [
+   "A suspect model is fine-tuned to play the game Taboo",
+   "We inject these activations into new prompts and ask natural language questions about them",
+   "reveals both the suspect model’s goal and the secret word"
+  ]
+ },
+ "summary": "Activation Oracles are LLMs trained to read another model's activations and answer natural-language questions about them. Figure 1 shows one real example in two numbered steps. On the left a suspect model, fine-tuned to play Taboo with the secret word 'tree', refuses to reveal it, and its activations at the assistant token are collected. A red dashed connector carries them into two oracle prompts on the right, each starting with a red-boxed <activation> slot followed by a question. Pale-yellow answer bubbles, each beside a crystal-ball icon, give the model's goal and the secret word. A dashed note states how the suspect model was trained, and grey and blue bubbles mark the roles.",
+ "summary_zh": "激活预言机是读取另一个模型激活并用自然语言回答问题的大模型。图一用两步展示一个真实例子：先收集拒绝泄露秘密词“tree”的可疑模型在助手词元处的激活，再用红色虚线把激活注入两个提问，预言机的黄色回答揭示了模型目标和秘密词。",
+ "confidence": "high",
+ "notes": "No paragraph of the paper mentions the figure, so the record rests on the caption, the abstract and the figure itself; the caption describes both steps in detail. The crystal ball is read as the Activation Oracle because the caption names the oracle and the icon is unlabelled.",
+ "venue": "ICML26"
+}

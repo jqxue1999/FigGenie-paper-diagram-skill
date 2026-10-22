@@ -1,0 +1,516 @@
+{
+ "paper_id": "iclr26-0171",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "CIAR",
+  "one_liner": "Cloud-device collaborative decoding for autoregressive image generation: an on-device uncertainty quantifier over probability intervals and interval-enhanced decoding cut latency.",
+  "domain": [
+   "autoregressive image generation",
+   "collaborative decoding",
+   "on-device inference"
+  ],
+  "subfield": "generative",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "model-anatomy",
+   "concept-schematic"
+  ],
+  "variant": "design-family",
+  "variant_note": "a motivation panel of pie and bar charts, then three decoding frameworks drawn as identical layer stacks, each lane adding one component and topped by a clock badge",
+  "argues": "Most tokens already match the device's top-probability choice, yet dropping verification hurts quality; CIAR's Inter-Head with cloud-device collaboration cuts generation time from 11.8 s to 4.67 s.",
+  "subject": "Token acceptance statistics and three decoding frameworks (baseline, Lantern, CIAR) drawn as Transformer-layer stacks with latencies.",
+  "elements": [
+   {
+    "name": "left lane (unlabelled; baseline per caption)",
+    "type": "container",
+    "role": "plain decoding: one main stack from image tokens to an output image",
+    "drawn_as": "light-grey dashed box with the stack inside, clock badge 11.8s above",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "middle lane (unlabelled; Lantern per caption)",
+    "type": "container",
+    "role": "draft-and-verify decoding: the main stack plus a second small stack",
+    "drawn_as": "same main stack, second small stack in its own dashed box on the right, clock badge 7.12s (down 39%)",
+    "container": "(b)",
+    "is_contribution": false
+   },
+   {
+    "name": "right lane (unlabelled; CIAR per caption)",
+    "type": "container",
+    "role": "the proposed framework: the main stack plus a second stack ending in Inter-Head Output",
+    "drawn_as": "same main stack, second stack in its own dashed box on the right, clock badge 4.67s (down 60%)",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "<img> with three thumbnails",
+    "type": "sample",
+    "role": "image-token input sequence of every lane",
+    "drawn_as": "monospace <img> tag and three tiny square photo patches in a light-grey dashed box under each stack",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Transformer Layer (x N)",
+    "type": "module",
+    "role": "layers of the main stack; two boxes joined by vertical dots and a 'x N' mark stand for N layers",
+    "drawn_as": "dark teal rounded boxes with white bold text, bottom and top box of the stack",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "LM Head",
+    "type": "module",
+    "role": "output head on top of a stack that gives the image token for the output picture",
+    "drawn_as": "pink rounded box with dark text, one per main stack and one on Lantern's small stack",
+    "container": "each lane",
+    "is_contribution": false
+   },
+   {
+    "name": "second small stack (Transformer Layer, LM Head)",
+    "type": "module",
+    "role": "extra branch in the Lantern lane; its LM Head sends an arrow labelled verify into the main stack",
+    "drawn_as": "one teal Transformer Layer under one pink LM Head in a small dashed box right of the main stack",
+    "container": "middle lane",
+    "is_contribution": false
+   },
+   {
+    "name": "verify",
+    "type": "label",
+    "role": "names the elbow arrow from the small stack's LM Head into the main stack's top layer",
+    "drawn_as": "plain serif text above a black elbow arrow",
+    "container": "middle lane",
+    "is_contribution": false
+   },
+   {
+    "name": "Inter-Head Output",
+    "type": "module",
+    "role": "blue box on top of the second stack of the CIAR lane; the new part named in the caption as Inter-Head",
+    "drawn_as": "steel-blue rounded box with white bold text above one Transformer Layer, inside a small dashed box",
+    "container": "right lane",
+    "is_contribution": true
+   },
+   {
+    "name": "dark-grey squares with lighter offset squares",
+    "type": "data",
+    "role": null,
+    "drawn_as": "two dark grey squares, each with a lighter square offset behind it, between Inter-Head Output and an output thumbnail; not labelled",
+    "container": "right lane",
+    "is_contribution": null
+   },
+   {
+    "name": "dashed grey return line",
+    "type": "other",
+    "role": null,
+    "drawn_as": "grey dashed line from the grey squares around the right and bottom edge of the second stack back to the input line of the main stack, with an arrow head; not labelled",
+    "container": "right lane",
+    "is_contribution": null
+   },
+   {
+    "name": "11.8s, 7.12s (down 39%), 4.67s (down 60%)",
+    "type": "label",
+    "role": "generation time of each framework and its saving against the baseline",
+    "drawn_as": "clock icon with a circling arrow and the figure in serif text above each lane",
+    "container": "(b)",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "<img> with three thumbnails",
+    "to": "Transformer Layer (x N)",
+    "what": "image tokens go in at the bottom of the stack",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Transformer Layer (x N)",
+    "to": "LM Head",
+    "what": "top-layer states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "LM Head",
+    "to": "output image thumbnail",
+    "what": "generated image",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "<img> with three thumbnails",
+    "to": "second small stack",
+    "what": "same input is fed to the second stack by a long elbow line along the bottom",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "second small stack (Lantern lane)",
+    "to": "main stack top Transformer Layer",
+    "what": "verify",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "second stack Transformer Layer",
+    "to": "Inter-Head Output",
+    "what": "states",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Inter-Head Output",
+    "to": "dark-grey squares",
+    "what": null,
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "dark-grey squares",
+    "to": "main stack input line",
+    "what": null,
+    "kind": "feedback",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "clock badges",
+    "to": "lanes",
+    "what": "latency and saving per framework",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Max-prob Tokens, Other Tokens labels",
+    "to": "pie slices",
+    "what": "name the 70% and 30% slices",
+    "kind": "mapping",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "teal Transformer Layer and pink LM Head boxes",
+    "to": "same boxes in the other lanes",
+    "what": "same module kept in the same colour in every lane",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(a) charts",
+    "to": "(b) frameworks",
+    "what": "motivation then design, separated by a dashed vertical line",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Results of greedily acceptance without verification",
+    "kind": "concept-schematic",
+    "axis": "narrative",
+    "shows": "pie of token acceptance (70% max-prob, 30% other) beside a dual-axis CLIP / FID bar chart for Base, Lantern and Lantern w/o. cloud",
+    "verdict": "motivation"
+   },
+   {
+    "label": "(b) Difference between our framework with traditional methods",
+    "kind": "side-by-side-contrast",
+    "axis": "alternatives",
+    "shows": "three decoding frameworks as layer stacks with clock badges: 11.8s, 7.12s and 4.67s",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "bold titles under the left and right panel",
+    "what": "letter the two panels and give each a title"
+   },
+   {
+    "marker": "x N",
+    "kind": "identity",
+    "at": "next to the vertical dots of each main stack",
+    "what": "the Transformer Layer is repeated N times"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "pie chart Acceptance Rate of Tokens",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "light-blue 70% slice for Max-prob Tokens and an exploded pink 30% slice for Other Tokens, bent black leader lines to the names"
+   },
+   {
+    "what": "bar chart Comparison of Methods on CLIP and FID",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "grouped pastel bars (blue CLIP up-arrow, pink FID down-arrow) for Base, Lantern and Lantern w/o. cloud, CLIP axis left and FID axis right, legend inside the plot"
+   },
+   {
+    "what": "image-token patches of a building photo after the <img> tag",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 9,
+    "medium": "bitmap",
+    "treatment": "three tiny 9 pt square patches per lane, three lanes, set in a grey dashed box beside a monospace tag"
+   },
+   {
+    "what": "generated output thumbnails above each stack",
+    "content": "generated-image",
+    "role": "sample-output",
+    "count": 4,
+    "medium": "bitmap",
+    "treatment": "tiny 8 pt squares at the top of the three main stacks and one above the Inter-Head squares; the one on the CIAR main stack looks darker and desaturated"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "clock with a circling arrow",
+    "stands_for": "generation time of a framework",
+    "style": "line-art",
+    "medium": "bitmap",
+    "count": 3
+   }
+  ],
+  "examples": [
+   {
+    "what": "one image-generation request: image-token patches in at the bottom and a generated picture out at the top of each framework",
+    "form": "tiny thumbnails at the two ends of every stack",
+    "real_values": true
+   },
+   {
+    "what": "measured latency of each framework: 11.8s, 7.12s (down 39%), 4.67s (down 60%)",
+    "form": "text next to a clock icon above each lane",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "transformer-block",
+    "drawn_as": "bottom and top Transformer Layer boxes joined by vertical dots and 'x N'",
+    "parts": [
+     "Transformer Layer",
+     "vertical dots",
+     "x N"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "mlp-head",
+    "drawn_as": "pink rounded box labelled LM Head on top of the stack",
+    "parts": [
+     "LM Head"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "monospace <img> tag followed by three tiny image patches instead of coloured cells",
+    "parts": [
+     "<img> tag",
+     "three patches"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "draft-verify-decoding",
+    "drawn_as": "a second smaller stack beside the main stack whose LM Head sends an elbow arrow labelled verify into the main stack",
+    "parts": [
+     "small stack",
+     "verify arrow",
+     "main stack"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the pie chart top-left, moves to the bar chart, crosses the dashed divider to the left lane, then the middle and right lanes; the clock badges at the top give the result, and each stack reads bottom-up."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two panels side by side split by a dashed vertical line: (a) a pie chart over a bar chart at left, (b) three equal-width columns at right, each a bottom-up stack with a clock badge on top, titles under both panels.",
+  "panel_count": 2,
+  "lanes": "3 aligned framework columns in panel (b) (baseline, Lantern, CIAR), same bottom-up order: <img> patches, Transformer Layers x N, LM Head, output thumbnail, clock badge",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "dashed-boxes",
+   "tinted-regions"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.6,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#568f87",
+    "used_for": "Transformer Layer boxes"
+   },
+   {
+    "hex": "#f5babc",
+    "used_for": "LM Head boxes"
+   },
+   {
+    "hex": "#6a8caf",
+    "used_for": "Inter-Head Output box, the new part"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "light-grey fill of the dashed boxes around stacks and input patches"
+   },
+   {
+    "hex": "#a6a6a6",
+    "used_for": "dashed grey outlines of those boxes (stroke)"
+   },
+   {
+    "hex": "#b3cde4",
+    "used_for": "Max-prob Tokens slice of the pie, CLIP bars"
+   },
+   {
+    "hex": "#fbb4ae",
+    "used_for": "Other Tokens slice of the pie, FID bars"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-0.5 pt black outlines on boxes, grey dashed 0.5 pt outlines on grouping boxes",
+  "font": "serif (Times New Roman), bold labels 4-6.5 pt, mostly 5.5 pt, Courier for the <img> tag",
+  "corners": "rounded",
+  "arrows": "black, straight and elbow, filled triangular heads, one grey dashed return line",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "layer-stack",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Teal = Transformer Layer, pink = LM Head, steel blue = Inter-Head Output (the new part); in panel (a) blue = Max-prob tokens and CLIP, pink = Other tokens and FID.",
+  "line_style_means": "Grey dashed boxes group a model or an input; the dashed vertical line separates the panels; solid black arrows carry data; the grey dashed return line in the CIAR lane is not explained.",
+  "shape_means": "Rounded rectangles = layers and heads; tiny squares = image-token patches and output images; clock icon = latency.",
+  "marker_means": "(a) and (b) letter the panels; the clock figures and down-arrows with percentages give time and saving; 70% and 30% give the pie shares; x N repeats the layer.",
+  "emphasis": "The only blue box in a teal and pink drawing marks the new component, and the clock badges step down from 11.8s to 4.67s along the top, so the gain is read before the structure.",
+  "reusable_patterns": [
+   "clock badge above every lane giving latency and relative saving",
+   "the same layer stack repeated per lane with one component added each time",
+   "motivation panel with a pie and a dual-axis bar chart beside the architecture comparison",
+   "exploded pie slice with a bent leader line to name the minority share",
+   "tiny image thumbnails at the input and output ends of each stack",
+   "light-grey dashed boxes around each model and input",
+   "short word label (verify) on the arrow that joins the draft branch to the main stack"
+  ],
+  "weaknesses": [
+   "the lane names (baseline, Lantern, CIAR) appear only in the caption, not in the drawing",
+   "most text is only 4-5.5 pt",
+   "the dark-grey squares and the dashed return line in the CIAR lane carry no label",
+   "the dual y-axes of the bar chart and the wrapped x label 'Lantern w/o. cloud' are hard to read at this size"
+  ]
+ },
+ "resources": {
+  "own": [
+   "CLIP and FID measurements for the bar chart",
+   "token acceptance shares for the pie",
+   "generated image thumbnails",
+   "latency numbers of the three frameworks",
+   "image-token patches of a sample photo"
+  ],
+  "stock": [
+   "clock icon with a circling arrow"
+  ],
+  "generated": [],
+  "drawn": [
+   "layer and head boxes",
+   "dashed grouping boxes",
+   "arrows",
+   "pie chart as vector"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "pie chart of token acceptance",
+   "dual-axis CLIP and FID bar chart",
+   "three vertical Transformer-layer stacks",
+   "LM Head boxes",
+   "clock latency badges",
+   "tiny image thumbnails",
+   "Inter-Head Output box",
+   "dashed grey grouping boxes"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "autoregressive image generation",
+   "speculative decoding",
+   "cloud-device collaboration",
+   "token acceptance",
+   "latency",
+   "Lantern",
+   "CLIP score",
+   "FID",
+   "uncertainty quantifier"
+  ],
+  "tags": [
+   "cost-badges",
+   "token-strip"
+  ],
+  "new_tags": [
+   {
+    "name": "incremental-stack-lanes",
+    "what": "the same model stack redrawn in several lanes, each lane adding one component (a draft branch, an inter-head) so the design difference reads as an increment"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Put a small measured motivation panel (pie and dual-axis bars) next to a row of identical layer-stack lanes that add one component each, and hang a clock badge with seconds and percentage saved above every lane so the efficiency claim is read first.",
+  "suits": "Inference-acceleration or efficiency methods compared with a baseline and one prior method on latency and quality."
+ },
+ "tags": [
+  "two panels",
+  "three-lane stack comparison",
+  "clock badges",
+  "serif labels",
+  "dashed grey boxes",
+  "tiny thumbnails",
+  "pastel pie and bars",
+  "powerpoint-made"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "approximately 70% tokens approved by the cloud already match the device’s top-output",
+   "From left to right: baseline, Lantern, and our CIAR with Inter-Head and cloud-device collaboration"
+  ]
+ },
+ "summary": "CIAR is a cloud-device collaboration framework that speeds up autoregressive image generation with an on-device token uncertainty quantifier built on probability intervals. Figure 1 has two panels. Panel (a) motivates the design: a pie chart shows that about 70% of tokens already match the max-probability token, and a dual-axis bar chart gives CLIP and FID for Base, Lantern and Lantern without cloud verification, the last being clearly worse. Panel (b) draws three decoding frameworks (baseline, Lantern, CIAR, named only in the caption) as the same vertical stack of Transformer Layers x N under an LM Head, with a second small stack added in Lantern (verify arrow) and CIAR (Inter-Head Output). Clock badges give 11.8 s, 7.12 s (down 39%) and 4.67 s (down 60%).",
+ "summary_zh": "CIAR 用端云协同加速自回归图像生成。图 1 左侧用饼图和柱状图说明约 70% 的词元可在端侧决定，右侧并排画出基线、Lantern 与 CIAR 三种解码结构，上方时钟标出 11.8、7.12、4.67 秒。",
+ "confidence": "medium",
+ "notes": "The pre-screen listed side-by-side-contrast and model-anatomy; concept-schematic was added for panel (a), which is a motivation analysis. The lanes carry no names in the drawing and the role of the second stack (device or cloud side), the dark-grey squares and the dashed return line is not labelled, so those are described by appearance only (role null). The bar chart is a 103x76 pt bitmap per the digest; the pie is vector.",
+ "venue": "ICLR26"
+}

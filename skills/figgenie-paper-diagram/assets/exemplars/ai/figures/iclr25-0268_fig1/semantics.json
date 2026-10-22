@@ -1,0 +1,430 @@
+{
+ "paper_id": "iclr25-0268",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Student-Informed Teacher Training",
+  "one_liner": "Trains a privileged teacher policy with a student-aware KL penalty and aligns student and proxy student networks to it in alternating phases.",
+  "domain": [
+   "teacher-student imitation learning",
+   "privileged information",
+   "policy learning"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "phase-bands",
+  "variant_note": "four panels redraw the same three networks, one overview and one per training phase, with grey frozen parts and a single coloured loss arrow in each phase",
+  "argues": "The teacher is trained to stay imitable: a KL term against a proxy student penalises roll-outs and updates the teacher, while L1 alignment keeps the student and proxy matched.",
+  "subject": "teacher, proxy-student and student networks redrawn per training phase, with grey frozen parts and coloured loss and gradient arrows",
+  "elements": [
+   {
+    "name": "Teacher Obs",
+    "type": "data",
+    "role": "teacher (privileged) observation; also fed to the proxy student",
+    "drawn_as": "plain black-outlined rectangle above a network",
+    "container": "all panels",
+    "is_contribution": false
+   },
+   {
+    "name": "Student Obs",
+    "type": "data",
+    "role": "student observation",
+    "drawn_as": "plain black-outlined rectangle above the student network",
+    "container": "(a), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "F_T",
+    "type": "module",
+    "role": "teacher network (encoder); its weights are frozen or trained depending on the phase",
+    "drawn_as": "trapezoid wider at the top, white when trained and grey when frozen",
+    "container": "all panels",
+    "is_contribution": null
+   },
+   {
+    "name": "F̂_S (proxy student)",
+    "type": "module",
+    "role": "proxy of the student that reads the teacher observation, so the teacher can be penalised for actions the student could not imitate",
+    "drawn_as": "trapezoid with a hat on S, grey when frozen, white when trained",
+    "container": "all panels",
+    "is_contribution": true
+   },
+   {
+    "name": "F_S (student)",
+    "type": "module",
+    "role": "student network that imitates the teacher from student observations",
+    "drawn_as": "trapezoid, white when trained",
+    "container": "(a), (d)",
+    "is_contribution": false
+   },
+   {
+    "name": "h_T, ĥ_S, h_S",
+    "type": "data",
+    "role": "latent of the teacher, proxy student and student",
+    "drawn_as": "small circles under the trapezoids in (b), (c) and (d)",
+    "container": "(b), (c), (d)",
+    "is_contribution": null
+   },
+   {
+    "name": "A",
+    "type": "module",
+    "role": "stage between the encoder and the action, labelled only A in the figure",
+    "drawn_as": "small square under each network, grey or white by phase",
+    "container": "all panels",
+    "is_contribution": null
+   },
+   {
+    "name": "a_T, â_S, a_S",
+    "type": "data",
+    "role": "actions of the teacher, proxy student and student",
+    "drawn_as": "circles at the bottom of each stack",
+    "container": "all panels",
+    "is_contribution": null
+   },
+   {
+    "name": "KL-Div Penalty (yellow arrow)",
+    "type": "operation",
+    "role": "roll-out phase: KL divergence between proxy student and teacher actions used as a penalty term",
+    "drawn_as": "yellow arrow from â_S to a_T; in (a) labelled Penalty",
+    "container": "(a), (b)",
+    "is_contribution": true
+   },
+   {
+    "name": "KL-Div Loss (red arrow)",
+    "type": "operation",
+    "role": "policy update phase: the teacher encoder is updated by backpropagating through the KL divergence between teacher and proxy student actions",
+    "drawn_as": "red arrow from â_S to a_T",
+    "container": "(a), (c)",
+    "is_contribution": true
+   },
+   {
+    "name": "L1 Loss / Paired L1-Loss (blue arrows)",
+    "type": "operation",
+    "role": "alignment phase: the student is aligned to the teacher and the proxy student to the student on paired observations",
+    "drawn_as": "blue arrows teacher to student to proxy student, one per row of latent, A and action in (d)",
+    "container": "(a), (d)",
+    "is_contribution": true
+   },
+   {
+    "name": "Gradient (dashed arrows)",
+    "type": "operation",
+    "role": "which network a loss updates in the overview",
+    "drawn_as": "dashed upward arrows in red, yellow and blue beside F_T, F̂_S and F_S with the word Gradient rotated beside them",
+    "container": "(a)",
+    "is_contribution": null
+   },
+   {
+    "name": "Overview, Roll-Out Phase, Policy Update Phase, Alignment Phase",
+    "type": "label",
+    "role": "panel titles",
+    "drawn_as": "plain serif titles above each panel",
+    "container": "all panels",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "â_S",
+    "to": "a_T",
+    "what": "KL-Div Penalty in the roll-out phase (yellow) and KL-Div Loss in the policy update phase (red); both drawn in (a)",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "a_T",
+    "to": "a_S",
+    "what": "L1 loss aligns the student's action to the teacher's",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "a_S",
+    "to": "â_S",
+    "what": "L1 loss aligns the proxy student to the student",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h_T, A, a_T",
+    "to": "h_S, A, a_S",
+    "what": "paired L1 loss between teacher and student rows",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "h_S, A, a_S",
+    "to": "ĥ_S, A, â_S",
+    "what": "paired L1 loss between student and proxy student rows",
+    "kind": "comparison",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "loss arrows",
+    "to": "Gradient dashed arrows",
+    "what": "each loss sends gradients, in its own colour, up through the network it updates",
+    "kind": "gradient",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "Teacher Obs, Student Obs",
+    "to": "F_T, F̂_S, F_S",
+    "what": "teacher observation feeds F_T and F̂_S, student observation feeds F_S",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "(a) Overview",
+    "to": "(b), (c), (d)",
+    "what": "the overview's three loss arrows are split into the three phases",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Overview",
+    "kind": "model-anatomy",
+    "axis": "stages",
+    "shows": "teacher, proxy student and student with their actions joined by penalty, KL and L1 arrows and dashed gradient arrows",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Roll-Out Phase",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "teacher and proxy student frozen (grey); the KL-Div Penalty from the proxy student's action to the teacher's",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Policy Update Phase",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "teacher trained (white), proxy student frozen; the KL-Div Loss updates the teacher",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) Alignment Phase",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "teacher frozen, student and proxy student trained; Paired L1-Loss across latent, A and action rows",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c), (d)",
+    "kind": "section",
+    "at": "below each panel",
+    "what": "name the four panels"
+   },
+   {
+    "marker": "hat on F_S, h_S, a_S",
+    "kind": "identity",
+    "at": "proxy student symbols",
+    "what": "separates the proxy student from the student"
+   },
+   {
+    "marker": "subscripts T and S",
+    "kind": "identity",
+    "at": "networks, latents and actions",
+    "what": "teacher versus student"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "teacher-student",
+    "drawn_as": "teacher, student and a proxy student as three trapezoid networks joined through their actions by loss arrows",
+    "parts": [
+     "F_T",
+     "F̂_S",
+     "F_S",
+     "loss arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "frozen-trainable",
+    "drawn_as": "grey fill for frozen weights and white for trained ones, redrawn per phase, with no snowflake or flame",
+    "parts": [
+     "grey trapezoid",
+     "white trapezoid"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "loss-gradient",
+    "drawn_as": "coloured loss arrows between action circles, with dashed arrows of the same colour running up beside the networks they update",
+    "parts": [
+     "coloured loss arrow",
+     "dashed gradient arrow"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "encoder-decoder",
+    "drawn_as": "trapezoid encoder, circle latent, small square stage and circle action stacked vertically",
+    "parts": [
+     "trapezoid",
+     "latent circle",
+     "square A",
+     "action circle"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Overview triangle at the left, then the three phases left to right: roll-out, policy update, alignment, each titled above and named by its loss below."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Four panels in a row split by thin grey vertical lines, each with a plain title above and a letter below. (a) is a triangle of three network stacks joined by loss arrows; (b), (c) and (d) redraw the stacks side by side, once per phase, with the loss name under each.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "left-right",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace",
+   "other"
+  ],
+  "nesting_depth": 1,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.96,
+  "text_density": "moderate",
+  "visual_density": "moderate",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#d9d9d9",
+    "used_for": "grey fill of frozen networks and of the A squares"
+   },
+   {
+    "hex": "#0070c0",
+    "used_for": "blue L1-loss arrows and the blue dashed gradient arrows"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "red KL-Div Loss arrows and the red dashed gradient arrow"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow-orange Penalty arrows and the matching dashed gradient arrow"
+   },
+   {
+    "hex": "#7f7f7f",
+    "used_for": "thin vertical dividers between panels (stroke)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5 pt black outlines on every box, circle and trapezoid; 0.5 pt mid-grey dividers",
+  "font": "Nimbus Roman serif 6 pt for labels, 4 to 4.5 pt for subscripts and Gradient, 7.5 pt panel letters, Cambria Math italics for symbols",
+  "corners": "square",
+  "arrows": "straight coloured arrows with filled heads for losses; dashed coloured upward arrows for gradients",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "trapezoid",
+  "state_marker": "colour-key"
+ },
+ "encoding": {
+  "color_means": "grey fill = frozen weights, white = trained (key in the caption only); yellow arrow = KL-Div Penalty in the roll-out, red arrow = KL-Div Loss in the policy update, blue arrow = L1 loss in the alignment; dashed arrows keep the colour of the loss whose gradient they carry",
+  "line_style_means": "dashed = gradient flow that changes between phases; solid coloured arrow = a loss between two actions or latents; thin grey vertical line = panel divider",
+  "shape_means": "trapezoid = network F; circle = latent h or action a; small square = stage A; rectangle = observation",
+  "marker_means": "hat = proxy student; subscripts T and S = teacher and student; letters (a) to (d) = panels",
+  "emphasis": "one coloured arrow per phase, and the grey fill that shows what is frozen in each phase",
+  "reusable_patterns": [
+   "same network stack redrawn once per training phase with frozen parts greyed and one coloured loss arrow",
+   "overview panel that draws all phase losses together as a triangle of actions",
+   "dashed gradient arrows in the loss colour beside the networks they update",
+   "phase title above and loss name below each panel",
+   "paired rows of latent, A and action joined by parallel blue arrows for an alignment loss"
+  ],
+  "weaknesses": [
+   "the meaning of grey fill, dashed arrows and the square A is given only in the caption and text",
+   "subscripts and the word Gradient are 4 to 4.5 pt"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "all boxes, trapezoids, circles and arrows",
+   "panel dividers and titles"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "trapezoid teacher, student and proxy-student networks",
+   "latent and action circles",
+   "grey frozen modules",
+   "coloured loss arrows",
+   "dashed gradient arrows",
+   "four phase panels with vertical dividers"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "teacher-student",
+   "privileged information",
+   "imitation learning",
+   "KL divergence",
+   "proxy student",
+   "alternating training phases",
+   "policy gradient",
+   "L1 alignment"
+  ],
+  "tags": [
+   "module-state-coding",
+   "flow-type-arrows"
+  ],
+  "new_tags": []
+ },
+ "lessons": {
+  "what_to_learn": "To explain alternating training phases, redraw one network stack per phase in the same positions, grey out what is frozen, and show only that phase's loss as one coloured arrow with its name below; an overview panel can combine all the arrows.",
+  "suits": "Methods with several training or optimisation phases that update different parts of the same set of networks, such as teacher-student, GAN or two-stage training."
+ },
+ "tags": [
+  "phase-panels",
+  "grey-frozen-fill",
+  "coloured-loss-arrows",
+  "trapezoid-networks",
+  "serif-math-labels",
+  "minimal-monochrome"
+ ],
+ "provenance": {
+  "sections": [
+   "4 Method (p.4-5)"
+  ],
+  "evidence": [
+   "(a) We train three networks by freezing weights (grey box) and changing gradient flows (dashed arrow) in alternating phases.",
+   "Our proposed framework consists of three alternating training phases"
+  ]
+ },
+ "summary": "The paper trains a privileged teacher so that a student with limited observations can imitate it. Figure 1 is a four-panel method overview. Panel (a) shows the teacher F_T, a proxy student F̂_S and the student F_S as trapezoid networks over actions a_T, â_S and a_S, joined by a yellow Penalty arrow, a red KL-Div Loss arrow and blue L1 Loss arrows, with dashed arrows for gradient flow. Panels (b), (c) and (d) redraw the same stacks for the roll-out, policy update and alignment phases, with grey fill for frozen networks, white for trained ones, and one coloured arrow per phase named underneath: KL-Div Penalty, KL-Div Loss and Paired L1-Loss.",
+ "summary_zh": "论文训练特权教师，使学生能模仿它。图 1 分四个面板：(a) 总览，教师、代理学生和学生由惩罚、KL 和 L1 箭头相连；(b)(c)(d) 逐阶段重画网络，灰色为冻结，每阶段突出一条彩色损失箭头。",
+ "confidence": "high",
+ "notes": "The role of the square A is not stated in the figure or in the quoted paragraphs, so it is described only by its position between the encoder and the action. In (d) the arrow direction runs from teacher to student to proxy student. The meaning of grey fill and dashed arrows comes from the caption.",
+ "venue": "ICLR25"
+}

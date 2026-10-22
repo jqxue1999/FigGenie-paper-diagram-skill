@@ -1,0 +1,459 @@
+{
+ "paper_id": "neurips25-0332",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "Gated Attention",
+  "one_liner": "Empirical study of gates inside softmax attention for LLMs: a head-specific sigmoid gate after SDPA improves quality, stabilises training and removes attention sinks.",
+  "domain": [
+   "gated attention",
+   "LLM pre-training",
+   "attention sink"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "contribution-mosaic",
+   "model-anatomy"
+  ],
+  "variant": "finding-cards",
+  "variant_note": "a gate-position schematic on the left and two result plots (bar charts, loss curves) sharing its colours; no process runs through the three parts",
+  "argues": "Of five places where a gate can sit in an attention layer, the one after the SDPA output gives the largest perplexity and MMLU gains and a smoother, spike-free training loss.",
+  "subject": "An attention layer drawn bottom-up with five colour-coded gate positions, beside bar charts of PPL and MMLU change per position and training-loss curves of baseline versus gated model.",
+  "elements": [
+   {
+    "name": "Query Layer (W_q)",
+    "type": "module",
+    "role": "query projection of attention",
+    "drawn_as": "pale-grey trapezoid with serif italic W_q, offset sheets behind it, caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Key Layer (W_k)",
+    "type": "module",
+    "role": "key projection of attention",
+    "drawn_as": "pale-grey trapezoid with offset sheets, caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Value Layer (W_v)",
+    "type": "module",
+    "role": "value projection of attention",
+    "drawn_as": "pale-grey trapezoid with offset sheets, caption below",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "G4, G3, G2",
+    "type": "icon",
+    "role": "gates after the query, key and value projections",
+    "drawn_as": "pink, lavender-blue and green circles with serif italic labels, each with translucent offset copies, on the arrows into SDPA",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Scaled Dot Product Attention (SDPA)",
+    "type": "module",
+    "role": "the attention operation, one per head",
+    "drawn_as": "wide lavender rounded box with purple outline and two offset translucent copies behind it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Concat",
+    "type": "operation",
+    "role": "concatenates the head outputs",
+    "drawn_as": "small pale-yellow box with golden outline",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "G1 (Most Effective!)",
+    "type": "icon",
+    "role": "gate on the SDPA outputs, the position the paper finds best",
+    "drawn_as": "blue circle with serif label G_1, bold words Most Effective! to its left",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "W_o (Dense Layer)",
+    "type": "module",
+    "role": "final dense output layer",
+    "drawn_as": "pale-grey rounded box with serif W_o, label Dense Layer at its right",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "G5",
+    "type": "icon",
+    "role": "gate after the final dense layer",
+    "drawn_as": "salmon circle with label G_5 at the top of the stack",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "avg PPL bar chart",
+    "type": "chart",
+    "role": "perplexity change per gate position",
+    "drawn_as": "five bars hanging from a dashed baseline, legend inside",
+    "container": "Middle",
+    "is_contribution": null
+   },
+   {
+    "name": "MMLU bar chart",
+    "type": "chart",
+    "role": "MMLU change per gate position",
+    "drawn_as": "five bars rising from a dashed baseline",
+    "container": "Middle",
+    "is_contribution": null
+   },
+   {
+    "name": "training-loss curves",
+    "type": "chart",
+    "role": "loss over steps for baseline and SDPA-gated models",
+    "drawn_as": "spiky grey line versus smoother lower blue line",
+    "container": "Right",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Query, Key and Value layers",
+    "to": "SDPA",
+    "what": "projections pass through G4, G3 and G2 on the way up",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "SDPA",
+    "to": "Concat",
+    "what": "per-head outputs, drawn as a bundle of one black and thin grey arrows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Concat",
+    "to": "W_o",
+    "what": "concatenated heads pass through G1 into the dense layer",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "W_o",
+    "to": "output",
+    "what": "dense output, gated by G5 at the top",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "gate circle colour (G1 to G5)",
+    "to": "bars and legend entries in the middle plots",
+    "what": "same colour means same gate position",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "blue G1 circle",
+    "to": "blue SDPA output gate G1 line in the loss plot",
+    "what": "the gated run in the loss plot is the G1 variant",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "dashed baseline",
+    "to": "bars",
+    "what": "each bar is a change relative to the baseline model",
+    "kind": "comparison",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "left schematic",
+    "to": "middle and right plots",
+    "what": "where the gate sits, what it gives, how training behaves",
+    "kind": "other",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": null,
+    "kind": "model-anatomy",
+    "axis": "narrative",
+    "shows": "attention layer drawn bottom-up with five candidate gate positions G1 to G5; G1 flagged Most Effective!",
+    "verdict": "setting"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "two stacked bar charts: avg PPL change (top) and MMLU change (bottom) per gate position of 15B MoE models; G1 is best",
+    "verdict": "result"
+   },
+   {
+    "label": null,
+    "kind": "other",
+    "axis": "narrative",
+    "shows": "training loss over 360k steps: the baseline spikes, the SDPA output gate G1 stays lower and smoother",
+    "verdict": "result"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "G1 to G5",
+    "kind": "identity",
+    "at": "circles on the attention layer, bars, legend",
+    "what": "names the five gating positions: G1 after SDPA, G2 value, G3 key, G4 query, G5 dense"
+   },
+   {
+    "marker": "W_q, W_k, W_v, W_o",
+    "kind": "identity",
+    "at": "inside the layer shapes",
+    "what": "names the projection and output weights"
+   },
+   {
+    "marker": "Left / Middle / Right",
+    "kind": "section",
+    "at": "caption only",
+    "what": "the three parts are named only in the caption, not in the figure"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "two stacked bar charts, avg PPL and MMLU, five bars each with printed deltas",
+    "content": "chart",
+    "role": "result",
+    "count": 2,
+    "medium": "vector",
+    "treatment": "matplotlib-style charts, bars coloured per gate position, value labels inside the bars, dashed baseline, legend inside the PPL plot"
+   },
+   {
+    "what": "training-loss curves over 360k steps, baseline and SDPA output gate G1",
+    "content": "chart",
+    "role": "result",
+    "count": 1,
+    "medium": "vector",
+    "treatment": "thin grey spiky baseline line against a lower blue line, legend inside lower left"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "coloured circle with a serif italic G and subscript, sometimes with translucent offset copies",
+    "stands_for": "a gating operation at one position of the attention layer",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 5
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "attention",
+    "drawn_as": "attention sub-layer drawn bottom-up: Q, K, V projection trapezoids, one wide SDPA box, Concat, dense layer; offset translucent sheets suggest several heads",
+    "parts": [
+     "W_q W_k W_v",
+     "SDPA",
+     "Concat",
+     "W_o"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "gate-circle-on-arrow",
+    "drawn_as": "a small coloured circle with a serif G label placed on the arrow between two blocks",
+    "parts": [
+     "circle",
+     "label G_n"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the bottom-left Query Layer, climbs the attention block to G1 and G5, then moves right to the bar charts (matching colours) and finally the loss curves."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three areas of equal height from left to right: a bottom-up attention block with five gate circles, two stacked bar charts sharing the x labels, and a single loss line chart; the parts carry no letters, the caption names them Left, Middle and Right.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 1,
+  "legend": "per-panel",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.38,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#4c72b0",
+    "opacity": 0.5,
+    "used_for": "G1 (SDPA output): circle, bars; also the blue loss line"
+   },
+   {
+    "hex": "#55a868",
+    "opacity": 0.5,
+    "used_for": "G2 (value): circle and bars"
+   },
+   {
+    "hex": "#8da0cb",
+    "opacity": 0.5,
+    "used_for": "G3 (key): circle and bars"
+   },
+   {
+    "hex": "#e78ac3",
+    "opacity": 0.5,
+    "used_for": "G4 (query): circle and bars"
+   },
+   {
+    "hex": "#cc613d",
+    "opacity": 0.5,
+    "used_for": "G5 (dense): circle and bars"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "SDPA box and its stacked sheets (also at 0.4 and 0.6 opacity)"
+   },
+   {
+    "hex": "#f5f5f5",
+    "used_for": "linear layers W_q, W_k, W_v and the dense layer, with translucent copies"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "Concat box"
+   },
+   {
+    "hex": "#333333",
+    "used_for": "box outlines and text"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25 to 0.75 pt dark outlines on layers and plot frames; purple outline on SDPA, golden on Concat; 0.5 pt blue loss line; one dashed baseline per bar chart",
+  "font": "sans, 6 pt for layer names and ticks, 8 pt for SDPA, Concat and plot labels; serif math italics for W and G symbols",
+  "corners": "mixed",
+  "arrows": "thick black straight vertical arrows with small filled heads, thin grey companion arrows for the heads; no curves",
+  "rendering": "flat-vector",
+  "effects": "translucent offset sheets behind blocks and gates",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per gate position carried from the circle in the layer to the bars and legend (blue G1, green G2, lavender G3, pink G4, salmon G5); in the loss plot blue is the G1-gated run and grey the baseline; lavender = SDPA, pale grey = linear layers, pale yellow = Concat",
+  "line_style_means": "dashed horizontal line = baseline model in both bar charts; thin grey line = baseline loss, blue line = gated loss",
+  "shape_means": "trapezoid = linear projection; rounded rectangle = SDPA, dense layer, Concat; circle = gate; offset sheets behind = several heads",
+  "marker_means": "G1 to G5 name positions; numbers inside bars are changes from the baseline; Most Effective! flags G1",
+  "emphasis": "bold words Most Effective! beside G1, the tallest G1 bars in both charts, and a clearly lower and smoother blue curve",
+  "reusable_patterns": [
+   "gate circles on the architecture, bars and legend share one colour per position",
+   "bars hanging from or rising off a dashed baseline so each bar is a delta, with the value printed inside",
+   "takeaway words next to the best insertion point on the schematic",
+   "offset translucent sheets behind a block to imply several heads",
+   "two metrics stacked in one column sharing the category labels"
+  ],
+  "weaknesses": [
+   "G1 is drawn above Concat although the paper applies it per head after SDPA",
+   "the three parts have no letters inside the figure, only caption words",
+   "tiny stray g and grey arrow stubs near G4 are unexplained"
+  ]
+ },
+ "resources": {
+  "own": [
+   "PPL and MMLU deltas of the gated 15B MoE models",
+   "training-loss curves of the 1.7B dense models"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "attention block schematic",
+   "gate circles",
+   "bar charts and line chart (plotting library)"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "bottom-up attention block",
+   "trapezoids W_q W_k W_v",
+   "SDPA box with stacked sheets",
+   "Concat box",
+   "gate circles G1 to G5",
+   "two stacked bar charts",
+   "loss curves with spikes"
+  ],
+  "sample_data": "chart",
+  "keywords": [
+   "gated attention",
+   "attention sink",
+   "SDPA output gate",
+   "sigmoid gate",
+   "LLM pre-training",
+   "training stability",
+   "loss spikes",
+   "mixture of experts"
+  ],
+  "tags": [
+   "colour-coded-groups",
+   "option-catalog"
+  ],
+  "new_tags": [
+   {
+    "name": "insertion-point-circles",
+    "what": "labelled circles dropped on the arrows of an architecture to mark candidate positions for one operation, colour-matched to result plots"
+   },
+   {
+    "name": "stacked-head-sheets",
+    "what": "offset translucent copies behind a block or gate to show several heads or replicas"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "When a study varies where one operation is inserted, mark each candidate position with a coloured, labelled circle on the architecture and reuse those colours in the result plots, so the schematic works as the legend of the results.",
+  "suits": "Ablation or design-space studies of insertion points (gates, norms, adapters, skip links) whose results are a few bars and one training curve."
+ },
+ "tags": [
+  "schematic-plus-plots",
+  "colour-matched-legend",
+  "bar-chart-deltas",
+  "dashed-baseline",
+  "stacked-sheets",
+  "three-part-teaser"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "2 Gated-Attention Layer (p.3)",
+   "3 Experiments (p.5)"
+  ],
+  "evidence": [
+   "Gating after SDPA (G1) yields the best overall results.",
+   "Gating results in lower final loss and substantially enhanced training stability, mitigating loss spikes.",
+   "we introduce gating at distinct positions (Fig. 1): after the query (G4), key (G3), and value projections (G2)"
+  ]
+ },
+ "summary": "This paper studies gating inside softmax attention for LLMs and finds that a head-specific sigmoid gate after scaled dot-product attention improves perplexity and MMLU, stabilises training and mitigates attention sinks. Figure 1 is a three-part teaser. Left: an attention layer drawn bottom-up (Query, Key and Value layers, SDPA, Concat, dense layer) with five coloured circles G1 to G5 marking where a gate can be inserted, G1 flagged Most Effective!. Middle: two bar charts of average PPL and MMLU show each position's change from a dashed baseline in the matching colours. Right: training-loss curves in which the grey baseline spikes while the blue G1-gated run stays lower and smooth.",
+ "summary_zh": "论文研究 LLM 注意力中的门控，发现 SDPA 之后的逐头 sigmoid 门最有效。图1分三块：左为自下而上的注意力层与 G1–G5 门控位置，中为各位置 PPL 与 MMLU 变化柱图，右为训练损失曲线，颜色对应。",
+ "confidence": "high",
+ "notes": "The pre-screen kept only model-anatomy with 'tables-numbers' data; two thirds of the figure are measured plots, so the record puts contribution-mosaic first and keeps model-anatomy for the left schematic. The grey and blue shades of the plots are plotting-library colours given at 0.5 opacity in the SVG.",
+ "venue": "NeurIPS25"
+}

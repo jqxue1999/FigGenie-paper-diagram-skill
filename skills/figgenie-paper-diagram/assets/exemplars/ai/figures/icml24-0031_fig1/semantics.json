@@ -1,0 +1,480 @@
+{
+ "paper_id": "icml24-0031",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "SymC",
+  "one_liner": "A code model whose self-attention is equivariant to semantics-preserving statement permutations of the program dependence graph, so predictions stay invariant.",
+  "domain": [
+   "code symmetries",
+   "program analysis",
+   "equivariant self-attention"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "side-by-side-contrast",
+   "concept-schematic",
+   "worked-walkthrough"
+  ],
+  "variant": "paired-lanes",
+  "variant_note": "the same code-to-name pipeline drawn twice, as a commutative-square diagram: ours keeps the permutation (tick), the existing model breaks it (cross)",
+  "argues": "An equivariant representation under statement permutation g keeps the predicted function name invariant; a model that ignores g embeds the permuted code unrelatedly and predicts the wrong name.",
+  "subject": "A four-line code snippet and its permuted copy, their embeddings and the predicted function name, drawn for SymC and for existing models.",
+  "elements": [
+   {
+    "name": "(a) SymC (Ours)",
+    "type": "label",
+    "role": "title of the proposed-model panel",
+    "drawn_as": "sans 9 pt under the panel, 'SymC' in bold small caps followed by bold '(Ours)'",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(b) Existing code LLMs",
+    "type": "label",
+    "role": "title of the baseline panel",
+    "drawn_as": "sans 9 pt under the panel, plain text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "code snippet c1..c4 and its permuted copy (two boxes per panel)",
+    "type": "instance",
+    "role": "toy program: c1 assert a > 0, c2 assert b > 0, c3 area = a * b, c4 return area; the copy has c1 and c2 swapped",
+    "drawn_as": "light-grey boxes with bold monospace lines; the moved statement c1 is red",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "g (between code boxes)",
+    "type": "operation",
+    "role": "semantics-preserving statement permutation, here swapping c1 and c2",
+    "drawn_as": "dashed black arrow pointing right, labelled g in italic",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "r",
+    "type": "operation",
+    "role": "representation map from code to statement embeddings (kept G-equivariant in SymC)",
+    "drawn_as": "short solid black arrow down from each code box, italic label r",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": true
+   },
+   {
+    "name": "e1..e4",
+    "type": "data",
+    "role": "embedding of each statement of the original code",
+    "drawn_as": "row of four columns, each two pastel squares with '...' between; one colour per statement",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "e2, e1, e3, e4 (reordered embeddings)",
+    "type": "data",
+    "role": "embeddings of the permuted code in SymC: the same cells in the permuted order, colours unchanged",
+    "drawn_as": "same pastel squares as e1..e4 with positions of e1 and e2 swapped; e1 label in red",
+    "container": "(a) SymC (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "e'1..e'4",
+    "type": "data",
+    "role": "embeddings of the permuted code from an existing model: a completely different set",
+    "drawn_as": "four columns of new colours (orange, teal, lavender, strong orange; yellow, cream, peach, dark yellow)",
+    "container": "(b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "g (between embedding rows)",
+    "type": "operation",
+    "role": "the same permutation acting on the embeddings",
+    "drawn_as": "dashed black arrow between the two embedding rows, labelled g",
+    "container": "(a) SymC (Ours)",
+    "is_contribution": true
+   },
+   {
+    "name": "h, h != g",
+    "type": "operation",
+    "role": "the unrelated transformation of the embeddings that an existing model induces; it is not the permutation g",
+    "drawn_as": "dashed black arrow between the two embedding rows, labelled h with 'h ≠ g' below",
+    "container": "(b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "p",
+    "type": "operation",
+    "role": "prediction module that maps embeddings to a function name (G-invariant in SymC)",
+    "drawn_as": "solid black arrows labelled p; in (a) two arrows converge on one output",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": true
+   },
+   {
+    "name": "\"calculate_area\" with green tick",
+    "type": "data",
+    "role": "correct predicted function name, identical for both orderings",
+    "drawn_as": "quoted bold monospace text followed by a green tick",
+    "container": "(a) SymC (Ours); (b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "\"check\" with red cross",
+    "type": "data",
+    "role": "wrong prediction after the permutation",
+    "drawn_as": "quoted bold monospace text followed by a red cross",
+    "container": "(b) Existing code LLMs",
+    "is_contribution": false
+   },
+   {
+    "name": "dashed curves from c1..c4 to e1..e4",
+    "type": "other",
+    "role": "show which statement each embedding encodes, before and after the permutation",
+    "drawn_as": "thin dashed curved arrows, black for c2-c4 and red for c1",
+    "container": "(a) SymC (Ours)",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "code snippet c1..c4",
+    "to": "permuted code snippet",
+    "what": "g swaps two independent statements without changing the semantics",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each code box",
+    "to": "its embedding row (e1..e4, or the reordered row, or e'1..e'4)",
+    "what": "r encodes the statements",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "e1..e4",
+    "to": "e2, e1, e3, e4",
+    "what": "SymC: the embeddings are permuted by the same g",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "e1..e4",
+    "to": "e'1..e'4",
+    "what": "existing model: the embeddings change by an unrelated h, not g",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "e1..e4 and the reordered embeddings",
+    "to": "\"calculate_area\" with green tick",
+    "what": "p gives the same name for both orderings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "e'1..e'4",
+    "to": "\"check\" with red cross",
+    "what": "p predicts a different, wrong name",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "each code line c_i",
+    "to": "its embedding e_i",
+    "what": "which statement each embedding encodes",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red c1 in the code",
+    "to": "red e1 label",
+    "what": "the moved statement is tracked in red from code to embedding",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "(a) SymC (Ours)",
+    "to": "(b) Existing code LLMs",
+    "what": "the same input and prediction, with and without symmetry preservation",
+    "kind": "comparison",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) SymC (Ours)",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "G-invariant function name predictor: permuted code gives permuted embeddings and the same predicted name, with a green tick",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) Existing code LLMs",
+    "kind": "concept-schematic",
+    "axis": "alternatives",
+    "shows": "an existing model maps the permuted code to unrelated embeddings (h ≠ g) and predicts a different name, with a red cross",
+    "verdict": "fails"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "titles under the two panels",
+    "what": "heads the proposed and the baseline panel"
+   },
+   {
+    "marker": "c1..c4",
+    "kind": "identity",
+    "at": "code lines",
+    "what": "names the four statements; red c1 is the statement that moves"
+   },
+   {
+    "marker": "e1..e4, e'1..e'4",
+    "kind": "identity",
+    "at": "embedding columns",
+    "what": "names the embedding of each statement; primed when produced from the permuted code by a model that does not preserve the symmetry"
+   },
+   {
+    "marker": "g, h, r, p",
+    "kind": "identity",
+    "at": "arrows",
+    "what": "names the permutation, the other transformation, the representation map and the prediction"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "a four-statement function body (assert a > 0, assert b > 0, area = a * b, return area), its c1/c2-swapped copy and the predicted names 'calculate_area' versus 'check'",
+    "form": "monospace code boxes with line labels c1..c4 and quoted output names",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "equivariance-commutative-square",
+    "drawn_as": "the input and its permuted copy joined by g on top, the embeddings joined by the same g below, vertical maps r, and p merging both branches into one output; tick versus cross shows whether the square commutes",
+    "parts": [
+     "g arrows",
+     "r arrows",
+     "embedding rows",
+     "p arrows"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "each statement embedding is a column of two coloured squares with '...' between, four columns in a row, one pastel colour per statement",
+    "parts": [
+     "e1",
+     "e2",
+     "e3",
+     "e4"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the grey code box at the top left of (a), follows r down to the embeddings, g across and p down to the ticked name; then the same path in (b) ends at the crossed name."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Two unframed panels side by side, each titled by a letter and a name under it. Inside each panel the same top-down pipeline: a code box and its permuted copy joined by a dashed g arrow, r arrows down to two rows of coloured embedding squares joined by g (or h), then p arrows to the predicted name with a tick or cross. Panel (a) adds thin dashed curves from every statement to its embedding.",
+  "panel_count": 2,
+  "lanes": null,
+  "direction": "top-down",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "none",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.54,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#f5f5f5",
+    "used_for": "code snippet boxes; also the e3 top square"
+   },
+   {
+    "hex": "#ff0000",
+    "used_for": "the moved statement c1 (text, dashed trace arrow), e1 label and the cross after 'check'"
+   },
+   {
+    "hex": "#2d9c5e",
+    "used_for": "green ticks after 'calculate_area'"
+   },
+   {
+    "hex": "#f8cecc",
+    "used_for": "embedding e1, top square"
+   },
+   {
+    "hex": "#e1d5e7",
+    "used_for": "embedding e2, top square"
+   },
+   {
+    "hex": "#cdeb8b",
+    "used_for": "embedding e4, top square"
+   },
+   {
+    "hex": "#dae8fc",
+    "used_for": "embedding e1, bottom square"
+   },
+   {
+    "hex": "#d5e8d4",
+    "used_for": "embedding e2, bottom square"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "embedding e3, bottom square"
+   },
+   {
+    "hex": "#ffff88",
+    "used_for": "embedding e4, bottom square"
+   },
+   {
+    "hex": "#ffcc99",
+    "used_for": "e'1 top square: a new colour for a changed embedding in (b)"
+   },
+   {
+    "hex": "#b0e3e6",
+    "used_for": "e'2 top square in (b)"
+   },
+   {
+    "hex": "#d0cee2",
+    "used_for": "e'3 top square in (b)"
+   },
+   {
+    "hex": "#fa6800",
+    "used_for": "e'4 top square in (b)"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-0.75 pt black outlines on embedding cells and arrows; hairline code boxes; thin dashed curves",
+  "font": "bold monospace (Courier New) 4.5-6 pt for code; sans (Arial) 6.5-9 pt for panel titles and output names; italic math symbols drawn as glyph outlines",
+  "corners": "square",
+  "arrows": "solid black arrows with filled heads for r and p; dashed black arrows for the permutations g and h; thin dashed curves, black and red, from statements to embeddings",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red = the statement c1 that is moved by the permutation (and the wrong-prediction cross); green = tick of the correct prediction; pastel squares = embeddings, one colour per statement kept after the permutation in (a) and replaced by unrelated colours in (b)",
+  "line_style_means": "solid arrows = maps r (encoder) and p (prediction); dashed straight arrows = permutations g, or the unrelated h, acting on code or embeddings; thin dashed curves = which statement each embedding encodes",
+  "shape_means": "grey rectangle = code snippet; two stacked coloured squares with '...' = one embedding vector; tick / cross = right / wrong predicted name",
+  "marker_means": "c1..c4 name statements; e1..e4 name their embeddings, primed in (b); r, g, p, h name the maps; tick and cross judge the predicted name",
+  "emphasis": "red c1 followed from the code into its embedding label; tick versus cross at the bottom; 'h ≠ g' written under the broken arrow in (b); '(Ours)' in bold in (a)",
+  "reusable_patterns": [
+   "same small pipeline drawn twice with a tick and a cross at the outputs",
+   "one element (the moved statement) coloured red in the code and in its embedding label to track it through a transformation",
+   "commutative-square layout with the same transformation g drawn above on the input and below on the embeddings",
+   "embedding vector as a column of coloured cells whose colours are preserved or scrambled",
+   "thin dashed curves tying each code line to its embedding"
+  ],
+  "weaknesses": [
+   "the dashed curves in (a) cross each other and are hard to follow at print size",
+   "code text at 4.5-6 pt is very small"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a four-statement code snippet and its predicted function names"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "code boxes",
+   "pastel embedding cells",
+   "g, h, r, p arrows and dashed curves",
+   "green tick"
+  ],
+  "unknown": [
+   "the one 9 pt bitmap, probably the red cross"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "code snippet boxes with c1..c4",
+   "permutation arrows g",
+   "coloured embedding squares e1..e4",
+   "representation map r",
+   "prediction arrows p",
+   "tick and cross verdicts",
+   "dashed statement-to-embedding curves"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "code symmetries",
+   "program semantics",
+   "equivariance",
+   "permutation group",
+   "code embeddings",
+   "function name prediction",
+   "invariance",
+   "self-attention",
+   "program dependence graph"
+  ],
+  "tags": [
+   "verdict-marks",
+   "flow-type-arrows",
+   "code-snippet-box",
+   "token-strip",
+   "colour-coded-groups",
+   "highlighted-text-spans"
+  ],
+  "new_tags": [
+   {
+    "name": "equivariance-square",
+    "what": "a commutative-diagram-like square in which the same transformation g is drawn on the input above and on the representation below, with tick versus cross showing whether the output stays invariant"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw an invariance claim as a commutative square: the transformation g on the input and the same g on the representation, one changed element tracked in red through both, ending in tick versus cross, while the baseline lane breaks the square (h ≠ g).",
+  "suits": "Equivariance, invariance, augmentation or robustness claims where a transformation of the input should or should not change the output."
+ },
+ "tags": [
+  "commutative-diagram",
+  "two-panel",
+  "code-box",
+  "pastel-cells",
+  "tick-cross",
+  "dashed-arrows",
+  "small-text"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.2)"
+  ],
+  "evidence": [
+   "SYMC enforces its output to stay invariant via keeping its learned representation G-equivariant",
+   "(b) Code LLMs not preserving the symmetries in G and thus mispredict the label."
+  ]
+ },
+ "summary": "SymC is a code model that builds the symmetry of semantics-preserving statement permutations into self-attention over the program dependence graph, so that tasks such as function name prediction stay invariant. Figure 1 contrasts two lanes on the same toy snippet (assert a > 0, assert b > 0, area = a * b, return area). In (a), swapping statements c1 and c2 by g gives permuted embeddings e2, e1, e3, e4 with unchanged colours, and the prediction map p returns 'calculate_area' with a green tick. In (b), an existing code LLM maps the permuted code to unrelated embeddings e'1..e'4 through an h that is not g and predicts 'check' with a red cross. The moved statement c1 is red throughout; dashed curves trace each line to its embedding.",
+ "summary_zh": "SymC把保持语义的语句置换这一对称性写进注意力，使函数名预测对语句顺序不变。图1用同一段代码对比两栏：(a)置换g后嵌入同步变换，预测calculate_area打绿勾；(b)现有模型嵌入无关（h≠g），误判check打红叉。",
+ "confidence": "high",
+ "notes": "The prior primary kind (concept-schematic, formal-diagram) is kept as the second kind; the paired panels with tick versus cross make the contrast the primary message. Digest shows a single 9 pt bitmap; the two green ticks are vector fills (#2d9c5e).",
+ "venue": "ICML24"
+}

@@ -1,0 +1,552 @@
+{
+ "paper_id": "acl25-0145",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TCSinger 2",
+  "one_liner": "A multi-task multilingual zero-shot singing voice synthesis model with style transfer and style control from audio or text prompts, built on a flow-based transformer.",
+  "domain": [
+   "singing voice synthesis",
+   "zero-shot style transfer",
+   "flow matching"
+  ],
+  "subfield": "audio",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy"
+  ],
+  "variant": "overview-plus-zoom",
+  "variant_note": "panel (a) draws the whole generator from scores, prompt mel and noise to a mel spectrogram; panels (b) and (c) open the BBC Encoder and one Cus-MOE transformer block, tied to (a) only by their titles",
+  "argues": "Blurred boundary content encoding, a contrastive custom audio encoder and a flow-based custom transformer with Cus-MOE together synthesise singing with style taken from an audio or text prompt.",
+  "subject": "TCSinger 2's architecture: overall style-transfer path, the BBC Encoder chain and the flow-based custom transformer block",
+  "elements": [
+   {
+    "name": "BBC Encoder",
+    "type": "module",
+    "role": "Blurred Boundary Content Encoder: turns lyrics and notes into the content embedding and masks tokens at boundaries",
+    "drawn_as": "pink rounded box with a pink outline at the bottom left of (a)",
+    "container": "(a) Style Transfer",
+    "is_contribution": true
+   },
+   {
+    "name": "Custom Audio Encoder",
+    "type": "module",
+    "role": "encodes the prompt mel into audio-prompt embeddings; the figure also routes Gaussian noise through it to noisy embeddings",
+    "drawn_as": "light-blue rounded box with a blue outline",
+    "container": "(a) Style Transfer",
+    "is_contribution": true
+   },
+   {
+    "name": "Flow-based Custom Transformer",
+    "type": "module",
+    "role": "maps content, prompt and noisy embeddings to audio embeddings with flow matching",
+    "drawn_as": "wide yellow rounded box above the token rows",
+    "container": "(a) Style Transfer",
+    "is_contribution": true
+   },
+   {
+    "name": "Audio Decoder",
+    "type": "module",
+    "role": "turns the output audio embeddings into the generated mel spectrogram",
+    "drawn_as": "light-blue rounded box under the output mel",
+    "container": "(a) Style Transfer",
+    "is_contribution": false
+   },
+   {
+    "name": "embedding tokens",
+    "type": "data",
+    "role": "content (pink), masked (pink with black hatch), audio (blue) and noisy (blue with black dots) embeddings as the legend names them",
+    "drawn_as": "rows of small tall rounded rectangles whose fill pattern gives the type; the legend repeats one miniature of each",
+    "container": "(a) Style Transfer",
+    "is_contribution": null
+   },
+   {
+    "name": "Lyric Encoder, Note Encoder",
+    "type": "module",
+    "role": "encode lyrics and notes separately",
+    "drawn_as": "two grey rounded boxes side by side under the duration box",
+    "container": "(b) BBC Encoder",
+    "is_contribution": null
+   },
+   {
+    "name": "Duration Predictor & Length Regulator",
+    "type": "module",
+    "role": "predicts durations and extends the content embedding to frame level",
+    "drawn_as": "grey rounded box fed by both encoders",
+    "container": "(b) BBC Encoder",
+    "is_contribution": true
+   },
+   {
+    "name": "Blurred Boundary Adaptor",
+    "type": "module",
+    "role": "masks tokens at phoneme and note boundaries so transitions blur",
+    "drawn_as": "pink rounded box with an output row of five tokens, the middle one hatched",
+    "container": "(b) BBC Encoder",
+    "is_contribution": true
+   },
+   {
+    "name": "Norm & AdaLN",
+    "type": "module",
+    "role": "normalisation layers of the transformer block",
+    "drawn_as": "two peach boxes in the block, one above Self-Attention and one below",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "Self-Attention",
+    "type": "module",
+    "role": "lets content and style be learned by self-attention over the concatenated sequence",
+    "drawn_as": "peach box in the middle of the block",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "Cus-MOE",
+    "type": "module",
+    "role": "custom mixture-of-experts layer in the block; takes a Language input",
+    "drawn_as": "yellow-orange box with a thick gold outline at the top of the block",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": true
+   },
+   {
+    "name": "× N",
+    "type": "label",
+    "role": "the block is repeated N times",
+    "drawn_as": "small italic label at the top right of the large yellow block container",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": false
+   },
+   {
+    "name": "ODE Solver",
+    "type": "module",
+    "role": "turns the block output v_t into the next embedding along the flow",
+    "drawn_as": "yellow rounded box at the top, between a noisy token on the left and a blue token on the right, with ellipses outside",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "Noisy Audio Embed at timestep t",
+    "type": "data",
+    "role": "noisy audio embedding concatenated with the content and prompt embeddings",
+    "drawn_as": "row of five dotted-fill blue tokens under the block with a circled C",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "Textual Prompt",
+    "type": "text-block",
+    "role": "natural-language style prompt whose embedding replaces the audio prompt",
+    "drawn_as": "label with italic example text on the right, tied by dotted lines to four dotted blue tokens",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "Language",
+    "type": "label",
+    "role": "an input into Cus-MOE",
+    "drawn_as": "label with a black elbow line and arrowhead into the Cus-MOE box",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   },
+   {
+    "name": "F0",
+    "type": "label",
+    "role": "names a dotted path along the left of the block; the abstract mentions F0 supervision",
+    "drawn_as": "single label beside a dotted line that loops from the block output side to the input side",
+    "container": "(c) Flow-Based Custom Transformer",
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "Music Scores",
+    "to": "BBC Encoder",
+    "what": "lyrics and notes from the score",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "BBC Encoder",
+    "to": "Flow-based Custom Transformer",
+    "what": "content embedding with a masked boundary token",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Prompt Mel",
+    "to": "Custom Audio Encoder",
+    "what": "audio style prompt",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Gaussian Noise",
+    "to": "Custom Audio Encoder",
+    "what": "noise that becomes the noisy embedding",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Custom Audio Encoder",
+    "to": "Flow-based Custom Transformer",
+    "what": "audio-prompt embeddings (dotted tokens) and noisy embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Flow-based Custom Transformer",
+    "to": "Audio Decoder",
+    "what": "output audio embeddings",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Audio Decoder",
+    "to": "generated mel spectrogram",
+    "what": "synthesised singing as mel",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Lyric Encoder, Note Encoder",
+    "to": "Duration Predictor & Length Regulator",
+    "what": "separately encoded lyrics and notes",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Duration Predictor & Length Regulator",
+    "to": "Blurred Boundary Adaptor",
+    "what": "frame-level content tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "content, prompt and noisy embeddings",
+    "to": "Cus-MOE transformer block",
+    "what": "concatenated at the circled C and fed through residual-connected layers",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Cus-MOE transformer block",
+    "to": "ODE Solver",
+    "what": "block output v_t",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "ODE Solver",
+    "to": "next embedding",
+    "what": "one flow step; ellipses on both sides stand for the other steps",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Textual Prompt",
+    "to": "text-prompt embedding tokens",
+    "what": "text prompt is embedded and can stand in for the audio prompt",
+    "kind": "data",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "Language",
+    "to": "Cus-MOE",
+    "what": "language input to the expert layer",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(b) BBC Encoder and (c) Flow-Based Custom Transformer",
+    "to": "same-named boxes in (a)",
+    "what": "the two zoom panels expand these modules; tied only by their titles",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Style Transfer",
+    "kind": "model-anatomy",
+    "axis": "overview",
+    "shows": "the whole generator: scores, prompt mel and noise become content, audio and noisy embeddings that the flow-based transformer maps to audio embeddings for the decoder",
+    "verdict": "ours"
+   },
+   {
+    "label": "(b) BBC Encoder",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "lyric and note encoders, duration predictor with length regulator, then the blurred boundary adaptor that masks boundary tokens",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Flow-Based Custom Transformer",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "one block repeated N times with Norm & AdaLN, Self-Attention and Cus-MOE, the concatenated inputs, optional text prompt and the ODE Solver",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b), (c)",
+    "kind": "section",
+    "at": "below each panel",
+    "what": "letter the overview and the two zoom panels"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "sheet-music snippets (Music Scores)",
+    "content": "document",
+    "role": "sample-input",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "greyscale thumbnail under the BBC Encoder in (a) and under the Lyric / Note split in (b), captioned Music Scores"
+   },
+   {
+    "what": "mel spectrogram of the prompt (Prompt Mel)",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "green-yellow heat-map thumbnail at the bottom of (a)"
+   },
+   {
+    "what": "Gaussian noise drawn as a dark blue-purple mel-like texture",
+    "content": "spectrogram",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "thumbnail beside the prompt mel, captioned Gaussian Noise"
+   },
+   {
+    "what": "generated mel spectrogram",
+    "content": "spectrogram",
+    "role": "sample-output",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "green heat-map thumbnail above the Audio Decoder at the top of (a)"
+   }
+  ],
+  "icons": [],
+  "examples": [
+   {
+    "what": "text style prompt: 'A female singer with an alto vocal range performing a happy pop song. She begins with a mixed voice...'",
+    "form": "italic text beside four dotted blue tokens, linked by dotted lines",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "rows of small tall rounded rectangles; plain pink content, pink with diagonal hatch masked, blue audio, blue with black dots noisy; the legend repeats one miniature of each",
+    "parts": [
+     "content",
+     "masked",
+     "audio",
+     "noisy"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "large yellow container labelled x N holding Cus-MOE, Norm & AdaLN, Self-Attention and Norm & AdaLN with residual add junctions on the left",
+    "parts": [
+     "Cus-MOE",
+     "Norm & AdaLN",
+     "Self-Attention",
+     "residual adds"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "diffusion-chain",
+    "drawn_as": "a noisy token, the ODE Solver and a clean blue token with ellipses on both sides, standing for repeated flow steps",
+    "parts": [
+     "noisy token",
+     "ODE Solver",
+     "blue token",
+     "ellipses"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at the legend and the input thumbnails along the bottom of (a), follows the arrows upward to the flow-based transformer and the decoder, then reads (b) and (c) left to right, each also bottom-up."
+ },
+ "layout": {
+  "arrangement": "panels-row",
+  "arrangement_note": "Three lettered panels in one row: (a) the overview with a four-entry legend at its top left, (b) a narrow vertical chain, (c) a block with its side inputs; flow is bottom-up in all three, inputs sit on the bottom edge; (b) and (c) are zooms of (a) tied to it only by name.",
+  "panel_count": 3,
+  "lanes": null,
+  "direction": "bottom-up",
+  "reading_start": "other",
+  "grouping": [
+   "whitespace",
+   "framed-boxes"
+  ],
+  "nesting_depth": 2,
+  "legend": "inside",
+  "panel_markers": "letters+titles",
+  "step_markers": "none",
+  "zoom_callout": "title-only",
+  "width": "full",
+  "aspect": 2.16,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#fcded8",
+    "used_for": "content side: BBC Encoder, Blurred Boundary Adaptor and the content-embedding tokens (outline #f99a8a)"
+   },
+   {
+    "hex": "#dae9fc",
+    "used_for": "audio side: Custom Audio Encoder, Audio Decoder and the audio-embedding tokens (outline #6c8ebf)"
+   },
+   {
+    "hex": "#fff1cc",
+    "used_for": "Flow-based Custom Transformer, ODE Solver and the block container (outline #e0c780)"
+   },
+   {
+    "hex": "#fce6d8",
+    "used_for": "layers inside the block: Norm & AdaLN and Self-Attention (outline #cab4a6)"
+   },
+   {
+    "hex": "#fee69b",
+    "used_for": "Cus-MOE box, with a thicker gold outline"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "plain sub-modules of the BBC Encoder: Lyric Encoder, Note Encoder, Duration Predictor (outline #a6a6a6)"
+   },
+   {
+    "hex": "#000000",
+    "used_for": "arrows, and hatch and dot patterns on masked and noisy tokens"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.75-1 pt tinted outlines on boxes and tokens, thicker gold outline on Cus-MOE, black thin arrows, dotted lines for prompt paths",
+  "font": "serif (Times New Roman), 8 pt labels, 10 pt panel titles, italic for the example prompt and symbols such as v_t and t",
+  "corners": "mixed",
+  "arrows": "thin black solid arrows with small filled heads pointing upward; dotted arrows and dotted outlines for the prompt path; elbow lines with residual add junctions in the block",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "pink = content (score and lyric) side, blue = audio side, yellow = flow-based transformer and ODE solver, peach = layers inside the block, gold outline = Cus-MOE, grey = plain sub-encoders",
+  "line_style_means": "solid arrows = main data flow; dotted arrows, dotted outlines and dotted leaders = prompt path (optional audio or text prompt); dotted line labelled F0 = a path whose meaning the figure does not state",
+  "shape_means": "tall rounded rectangle = one embedding token; rounded box = module; large rounded container with x N = repeated block",
+  "marker_means": "diagonal hatch on a pink token = masked boundary token; black dots on a blue token = noisy embedding; circled C = concatenation; (a), (b), (c) = panels",
+  "emphasis": "Cus-MOE has a thicker gold outline and a darker fill; the single hatched token in (b) shows the blurred boundary.",
+  "reusable_patterns": [
+   "legend drawn as miniature tokens, repeated unchanged in all three panels",
+   "token fill pattern (plain, hatched, dotted) names the embedding type",
+   "overview panel followed by two zoom panels titled with the module names",
+   "input and output thumbnails (score, mel, noise) at the ends of the flow",
+   "new component emphasised inside a repeated block by a darker fill and thick outline"
+  ],
+  "weaknesses": [
+   "the zoom panels (b) and (c) are tied to (a) only by their titles, with no leader lines",
+   "the dotted F0 path carries a single letter label and no explanation",
+   "bottom-up flow with the legend at top left starts the eye in the wrong place"
+  ]
+ },
+ "resources": {
+  "own": [
+   "sheet-music snippet",
+   "mel spectrograms of a prompt and of generated singing",
+   "a real text style prompt"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "module boxes and token glyphs",
+   "hatched and dotted token fills",
+   "arrows and residual junctions"
+  ],
+  "unknown": [
+   "origin of the Gaussian Noise thumbnail"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "rows of tokens with plain, hatched and dotted fills",
+   "BBC encoder chain of lyric encoder, note encoder, duration predictor and adaptor",
+   "custom audio encoder box",
+   "flow-based transformer block with Cus-MOE and Norm & AdaLN",
+   "ODE solver box with ellipses",
+   "score and spectrogram thumbnails",
+   "italic textual prompt"
+  ],
+  "sample_data": "audio",
+  "keywords": [
+   "singing voice synthesis",
+   "zero-shot",
+   "multilingual",
+   "flow matching",
+   "mixture of experts",
+   "style transfer",
+   "mel spectrogram",
+   "contrastive audio encoder"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "fill-pattern-token-types",
+    "what": "embedding tokens drawn as miniature tall rectangles whose fill (plain, diagonal hatch, dots) names their type, with a legend of the same miniatures"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Draw each kind of tensor as a miniature token with its own fill (plain, hatched, dotted) and put the same miniatures in a legend, so the overview and the zoom panels can show data passing between modules without extra labels.",
+  "suits": "generative or encoder-decoder models with several embedding types (content, prompt, noise, masked) that must be told apart across an overview and its zoomed sub-modules."
+ },
+ "tags": [
+  "lettered panels",
+  "bottom-up flow",
+  "serif labels",
+  "fill-pattern legend",
+  "overview plus zoom panels",
+  "thumbnails at the ends"
+ ],
+ "provenance": {
+  "sections": [
+   "3 Method (p.3-4)"
+  ],
+  "evidence": [
+   "Figure (a) shows the style transfer process. Either mel from audio prompt or textual prompt can control multi-level styles.",
+   "we combine the flowmatching technique, which can generate stable and smooth paths, to achieve robust and fast inference"
+  ]
+ },
+ "summary": "TCSinger 2 is a multilingual zero-shot singing voice synthesis model with style transfer and style control through audio or text prompts. Figure 1 gives its architecture in three lettered panels. Panel (a) shows the whole path: music scores go through the Blurred Boundary Content (BBC) Encoder, a prompt mel and Gaussian noise go through the Custom Audio Encoder, and their content, audio and noisy embeddings enter a flow-based custom transformer whose output goes to an audio decoder that makes a mel spectrogram. Panels (b) and (c) open the BBC Encoder and one transformer block with Cus-MOE, AdaLN, self-attention and an ODE solver. Embeddings are small tall tokens whose fill (plain, hatched, dotted) is explained by a legend.",
+ "summary_zh": "TCSinger 2 是支持风格迁移与控制的多语种零样本歌声合成模型。图一分 (a)(b)(c) 三个面板：(a) 为整体流程，(b)(c) 分别展开 BBC 编码器和带 Cus-MOE 的流式 Transformer 模块；各类嵌入用不同填充的小方块表示。",
+ "confidence": "high",
+ "notes": "Only model-anatomy applies; the figure has no pipeline stages or worked example beyond the sample prompt. The meaning of the dotted F0 path and of the Language input into Cus-MOE is not explained in the figure or in the quoted paragraphs; that dotted lines mean an optional prompt path is inferred from the paper's wording 'optional audio prompt embedding'. The Gaussian Noise arrow ends at the Custom Audio Encoder box in the drawing even though the text says noise is added to the encoder output.",
+ "venue": "ACL25"
+}

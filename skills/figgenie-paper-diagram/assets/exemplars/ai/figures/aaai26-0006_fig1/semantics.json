@@ -1,0 +1,698 @@
+{
+ "paper_id": "aaai26-0006",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "BDLF-Qwen3",
+  "one_liner": "Cross-architecture binary function similarity detection with Qwen3 plus Binary Dynamic Layer Fusion, trained in two stages on the new Cross-Bin dataset.",
+  "domain": [
+   "binary code similarity",
+   "cross-architecture security",
+   "layer fusion"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "model-anatomy"
+  ],
+  "variant": "stage-chain",
+  "variant_note": "three titled frames chained by yellow arrows (collections, Ghidra pipeline, training with two stacked stages) plus a fourth frame that opens the fusion module, tied to Stage 2 by dashed lines",
+  "argues": "A Ghidra-built cross-architecture dataset and a fusion module that weights all previous layers dynamically let a Qwen3 backbone find similar binary functions across CPU architectures.",
+  "subject": "dataset construction from binaries via Ghidra, two training stages, and the internals of the dynamic layer-fusion module",
+  "elements": [
+   {
+    "name": "ARM32 / MIPS64 / ARM64 / x86-64 / Binary",
+    "type": "data",
+    "role": "binaries collected for several CPU architectures",
+    "drawn_as": "offset stack of five white rounded cards with thick black outline, each titled by an architecture, dots between ARM32 and MIPS64, the front card labelled Binary",
+    "container": "Binary Collections",
+    "is_contribution": null
+   },
+   {
+    "name": "Xref Info / CFG/Arch...",
+    "type": "data",
+    "role": "extra information fed to disassembly and decompilation",
+    "drawn_as": "two light green rounded boxes whose lines cross into the two pink boxes below",
+    "container": "Ghidra Pipeline",
+    "is_contribution": null
+   },
+   {
+    "name": "Disassemble / Decompile",
+    "type": "operation",
+    "role": "the two processing steps of the Ghidra pipeline",
+    "drawn_as": "two pink rounded boxes joined by a line to the Ghidra box",
+    "container": "Ghidra Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "GHIDRA",
+    "type": "module",
+    "role": "the reverse-engineering tool that runs the pipeline",
+    "drawn_as": "rounded box with the orange-red GHIDRA wordmark and three blue database cylinders",
+    "container": "Ghidra Pipeline",
+    "is_contribution": false
+   },
+   {
+    "name": "Output",
+    "type": "data",
+    "role": "output of the Ghidra step",
+    "drawn_as": "cyan rounded box with an arrow into the dataset",
+    "container": "Ghidra Pipeline",
+    "is_contribution": null
+   },
+   {
+    "name": "whale logo box",
+    "type": "icon",
+    "role": "a language model whose role is not stated; its line joins the arrow into Cross-Bin",
+    "drawn_as": "rounded white box with a blue whale logo",
+    "container": "Ghidra Pipeline",
+    "is_contribution": null
+   },
+   {
+    "name": "Cross-Bin",
+    "type": "data",
+    "role": "the cross-architecture binary function dataset built by the pipeline",
+    "drawn_as": "larger cyan rounded box with bold text, end of the pipeline",
+    "container": "Ghidra Pipeline",
+    "is_contribution": true
+   },
+   {
+    "name": "Stage-1 Partial Fine-tuning",
+    "type": "container",
+    "role": "pairwise similarity fine-tuning (caption)",
+    "drawn_as": "framed box with a light green header bar, grey Tokenization and Embedding boxes, a stack Input, Qwen-3, Output in a dashed grey region and a tilted plane with dots",
+    "container": "Training Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Tokenization / Byte-Pair Encoding / Instruction Aware",
+    "type": "module",
+    "role": "turns code into tokens before embedding; the two grey boxes sit in a frame under Tokenization",
+    "drawn_as": "grey boxes with bold serif text, Tokenization joined to Embedding by an arrow",
+    "container": "Stage-1 Partial Fine-tuning",
+    "is_contribution": null
+   },
+   {
+    "name": "Input -> Qwen-3 -> Output",
+    "type": "module",
+    "role": "the Qwen3 backbone processes the input and its output goes to Embedding",
+    "drawn_as": "white Input and Output boxes around a pink Qwen-3 box, arrows pointing up, inside a dashed grey region",
+    "container": "Stage-1 Partial Fine-tuning",
+    "is_contribution": false
+   },
+   {
+    "name": "embedding plane sketch",
+    "type": "icon",
+    "role": "embedding space in which pairs are pulled together by similarity learning (not labelled)",
+    "drawn_as": "tilted outlined plane with red dots, one blue dot and a blue dashed arrow",
+    "container": "Stage-1 Partial Fine-tuning",
+    "is_contribution": null
+   },
+   {
+    "name": "Stage-2 BDLF Training",
+    "type": "container",
+    "role": "BDLF enhancement trained with InfoNCE (caption)",
+    "drawn_as": "framed box with a light green header bar, a column of four boxes at the left and a similarity matrix at the right",
+    "container": "Training Stage",
+    "is_contribution": true
+   },
+   {
+    "name": "Fine-tune Model / BDLF Connection Layers / Multi Fusion / Output Heads",
+    "type": "module",
+    "role": "stage-2 model: the Stage-1 model followed by connection layers, fusion and heads",
+    "drawn_as": "a grey box then three cyan boxes joined by short down arrows",
+    "container": "Stage-2 BDLF Training",
+    "is_contribution": true
+   },
+   {
+    "name": "BDLF",
+    "type": "module",
+    "role": "takes two inputs I and I' and returns the embeddings I'_1 ... I'_N",
+    "drawn_as": "light green rounded box with two small down arrows above and a bracket to three columns of yellow cells",
+    "container": "Stage-2 BDLF Training",
+    "is_contribution": true
+   },
+   {
+    "name": "I . I' similarity matrix with X_1,1 ... X_N,N",
+    "type": "data",
+    "role": "pairwise similarities between the I_i strips and the I'_j columns, used by the InfoNCE loss",
+    "drawn_as": "grid of lavender cells labelled X_i,j with pale yellow row strips I_1 ... I_N and column strips I'_1 ... I'_N",
+    "container": "Stage-2 BDLF Training",
+    "is_contribution": true
+   },
+   {
+    "name": "InfoNCE + Group-Aware",
+    "type": "label",
+    "role": "the contrastive loss of Stage 2",
+    "drawn_as": "bold italic caption at the lower right of the Stage-2 box",
+    "container": "Stage-2 BDLF Training",
+    "is_contribution": true
+   },
+   {
+    "name": "Block_1, Block_2, Block_3",
+    "type": "module",
+    "role": "successive blocks of the backbone whose outputs X_0, X_1, X_2 are fused",
+    "drawn_as": "three orange rounded boxes in a row",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": false
+   },
+   {
+    "name": "X_0, X_1, X_2, ..., X-bar_2",
+    "type": "data",
+    "role": "layer outputs, and the fused output with an overline",
+    "drawn_as": "offset stacks of pale cyan cards with the symbol on the front card, dots between stacks",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": null
+   },
+   {
+    "name": "A_0, A_1, A_2 with DA and T",
+    "type": "data",
+    "role": "dynamic weights that multiply the layer outputs; DA and T are not explained",
+    "drawn_as": "stack of three green cards inside a pale pink rounded region, labels DA and T on its top edge",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": true
+   },
+   {
+    "name": "Lambda",
+    "type": "module",
+    "role": "apparently generates the weights A_i (the abstract speaks of dynamic weight generation)",
+    "drawn_as": "bold Lambda in a small white box with grey curved arrows into the A stack",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": true
+   },
+   {
+    "name": "circled times and circled plus",
+    "type": "operation",
+    "role": "each layer output is multiplied by its weight and the products are summed",
+    "drawn_as": "small operator circles at the ends of the lines from X_0, X_1, X_2 and a sum node on the left",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": true
+   },
+   {
+    "name": "T (seq.length)",
+    "type": "label",
+    "role": "names the sequence-length dimension of the layer outputs",
+    "drawn_as": "large plain label with a small brace above the X_0 stack",
+    "container": "Binary Dynamic Layer Fusion",
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "Binary Collections",
+    "to": "Ghidra Pipeline",
+    "what": "binaries to process",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Xref Info / CFG/Arch...",
+    "to": "Disassemble / Decompile",
+    "what": "extra information, lines cross between the two pairs",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Disassemble / Decompile",
+    "to": "GHIDRA",
+    "what": "processed functions",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "GHIDRA",
+    "to": "Output",
+    "what": "pipeline output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output, whale logo box",
+    "to": "Cross-Bin",
+    "what": "both lines merge into one arrow into the dataset",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Ghidra Pipeline",
+    "to": "Training Stage",
+    "what": "the Cross-Bin dataset",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Tokenization",
+    "to": "Embedding",
+    "what": "tokens",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Input",
+    "to": "Output",
+    "what": "through Qwen-3",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output (Qwen-3)",
+    "to": "Embedding",
+    "what": "model output",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Stage-1 Partial Fine-tuning",
+    "to": "Stage-2 BDLF Training",
+    "what": "the fine-tuned model",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Fine-tune Model",
+    "to": "Output Heads",
+    "what": "down through connection layers and fusion",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Output Heads",
+    "to": "similarity matrix",
+    "what": "embeddings that fill the matrix rows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "I, I'",
+    "to": "BDLF",
+    "what": "two inputs",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "BDLF",
+    "to": "I'_1 ... I'_N",
+    "what": "embeddings",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Binary Dynamic Layer Fusion frame",
+    "to": "Stage-2 box",
+    "what": "the frame opens the BDLF connection and fusion layers",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "X_0, X_1, X_2",
+    "to": "circled times with A_0, A_1, A_2",
+    "what": "each previous layer output is weighted",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "circled plus",
+    "to": "X-bar_2",
+    "what": "weighted sum, the fused representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "layer outputs through Lambda",
+    "to": "A stack",
+    "what": "weight generation (grey curved arrows)",
+    "kind": "control",
+    "drawn": "arrow",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "Binary Collections",
+    "kind": null,
+    "axis": "stages",
+    "shows": "a stack of binaries for ARM32, MIPS64, ARM64 and x86-64",
+    "verdict": null
+   },
+   {
+    "label": "Ghidra Pipeline",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "disassemble and decompile with Xref and CFG information, Ghidra, output, and the Cross-Bin dataset",
+    "verdict": "ours"
+   },
+   {
+    "label": "Training Stage",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "Stage-1 partial fine-tuning of Qwen-3 and Stage-2 BDLF training with an InfoNCE similarity matrix, stacked",
+    "verdict": "ours"
+   },
+   {
+    "label": "Binary Dynamic Layer Fusion",
+    "kind": "model-anatomy",
+    "axis": "zoom",
+    "shows": "layer outputs X_0 to X_2 weighted by A_0 to A_2 and summed into the fused X-bar_2",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "Stage-1, Stage-2",
+    "kind": "order",
+    "at": "header bars of the two training boxes",
+    "what": "orders the two training stages, joined by a yellow down arrow"
+   },
+   {
+    "marker": "0, 1, 2 (subscripts)",
+    "kind": "identity",
+    "at": "A_i, X_i and Block_i",
+    "what": "index the layers and their weights"
+   },
+   {
+    "marker": "I_1 ... I_N, I'_1 ... I'_N, X_i,j",
+    "kind": "identity",
+    "at": "stage-2 similarity matrix",
+    "what": "name the rows, columns and cells of the matrix"
+   },
+   {
+    "marker": "DA, T",
+    "kind": "identity",
+    "at": "top edge of the pink region",
+    "what": "labels that are not explained in the figure or caption"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "GHIDRA wordmark with orange-red gradient",
+    "stands_for": "the Ghidra tool",
+    "style": "logo",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "blue whale in a white box",
+    "stands_for": "a language model, apparently DeepSeek (role not stated)",
+    "style": "logo",
+    "medium": "vector",
+    "count": 1
+   },
+   {
+    "depicts": "three blue database cylinders",
+    "stands_for": "stored data inside the Ghidra box",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "tilted plane with red dots, a blue dot and a dashed arrow",
+    "stands_for": "embedding space of pairwise similarity learning",
+    "style": "line-art",
+    "medium": "vector",
+    "count": 1
+   }
+  ],
+  "examples": [
+   {
+    "what": "architectures present in the collection: ARM32, MIPS64, ARM64, x86-64",
+    "form": "titles on an offset stack of cards",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "contrastive-pair",
+    "drawn_as": "N x N grid of cells X_i,j between row strips I_i and column strips I'_j, labelled InfoNCE + Group-Aware",
+    "parts": [
+     "row strips",
+     "column strips",
+     "matrix cells",
+     "loss label"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "embedding-space",
+    "drawn_as": "small tilted plane with red dots and one blue dot with a dashed arrow",
+    "parts": [
+     "plane",
+     "dots",
+     "dashed arrow"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "three orange rounded boxes Block_1 to Block_3 without internals, their outputs shown as stacks of cards",
+    "parts": [
+     "Block_1",
+     "Block_2",
+     "Block_3",
+     "output stacks"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "llm",
+    "drawn_as": "Qwen-3 as a pink box between Input and Output boxes, and a whale logo box for a second model",
+    "parts": [
+     "Qwen-3 box",
+     "whale logo box"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "token-strip",
+    "drawn_as": "short row strips and tall column strips of pale yellow cells for embeddings I_i and I'_j",
+    "parts": [
+     "row strips",
+     "column strips"
+    ],
+    "convention": "variant"
+   }
+  ],
+  "reading_order": "Starts at Binary Collections (top left) and follows the yellow arrows through Ghidra Pipeline to Training Stage (top right, then down Stage-1 to Stage-2); the large frame at the bottom left is read last as the zoom."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Top row of three rounded frames (collections, Ghidra pipeline, and a tall Training Stage frame that continues downward with two stacked stage boxes); the fourth frame, Binary Dynamic Layer Fusion, spans the bottom left and is tied to the Stage-2 box by two dashed grey lines. Yellow block arrows join the frames.",
+  "panel_count": 4,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "titles",
+  "step_markers": "in-text",
+  "zoom_callout": "leader-lines",
+  "width": "full",
+  "aspect": 1.75,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#e3f2d9",
+    "used_for": "light green: Xref Info, CFG/Arch..., stage header bars, BDLF box"
+   },
+   {
+    "hex": "#fadadf",
+    "used_for": "pink: Disassemble, Decompile and Qwen-3"
+   },
+   {
+    "hex": "#a9e9e4",
+    "used_for": "cyan: Output, Cross-Bin, BDLF Connection Layers, Multi Fusion, Output Heads"
+   },
+   {
+    "hex": "#d4f3f0",
+    "used_for": "pale cyan: stacked layer-output cards X_i"
+   },
+   {
+    "hex": "#e7e6e6",
+    "used_for": "grey: Tokenization, Embedding, Byte-Pair Encoding, Instruction Aware, Fine-tune Model"
+   },
+   {
+    "hex": "#fce0e0",
+    "used_for": "pale pink region around A_0 to A_2"
+   },
+   {
+    "hex": "#f5b482",
+    "used_for": "orange: Block_1 to Block_3"
+   },
+   {
+    "hex": "#74bd41",
+    "used_for": "green weight cards A_0 to A_2"
+   },
+   {
+    "hex": "#b6c7ea",
+    "used_for": "lavender cells of the similarity matrix"
+   },
+   {
+    "hex": "#fff2cc",
+    "used_for": "pale yellow embedding strips"
+   },
+   {
+    "hex": "#4874ca",
+    "used_for": "blue database cylinders"
+   },
+   {
+    "hex": "#506cfe",
+    "used_for": "blue of the whale logo"
+   },
+   {
+    "hex": "#e12826",
+    "used_for": "red-orange start of the Ghidra wordmark gradient"
+   },
+   {
+    "hex": "#ffc000",
+    "used_for": "yellow block arrows between frames and stages",
+    "approx": true
+   },
+   {
+    "hex": "#c55a11",
+    "used_for": "orange italic frame titles",
+    "approx": true
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.25-1 pt black outlines on boxes, thicker black outlines on the frames, 0.5 pt dashed grey for the zoom lines and the dashed region",
+  "font": "serif bold (Times New Roman), 4.5-15 pt, mostly 8.5-10.5 pt box labels; frame titles in an orange italic display face at 14.5-15 pt (Bahnschrift SemiBold); bold italic for symbols",
+  "corners": "rounded",
+  "arrows": "wide yellow block arrows between frames and stages, thin black arrows with small heads inside, grey curved arrows for weight generation, a pale blue hollow arrow into the matrix",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "box",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "Fill by role, no legend: light green = inputs and stage headers, pink = processing and the Qwen-3 backbone, cyan = outputs and, apparently, the paper's new parts (Cross-Bin, connection layers, fusion, heads), grey = standard pre-processing and the fine-tuned model, orange = backbone blocks, green cards = dynamic weights. Orange italic titles name the four frames.",
+  "line_style_means": "Dashed grey lines = zoom from the BDLF frame into Stage-2; dashed grey region = the Qwen-3 stack in Stage 1; thin black arrows = data flow; yellow block arrows = hand-over between frames and stages.",
+  "shape_means": "Offset stack of rounded cards = a set of binaries and also the layer outputs X_i; cylinder = database; rounded rectangle = module; grid of X_i,j cells = similarity matrix; circled times and plus = weighted sum.",
+  "marker_means": "Stage-1 and Stage-2 order the training stages; subscripts index layers, weights and embeddings; DA and T are unexplained.",
+  "emphasis": "The fusion module gets its own large frame with a zoom link to Stage 2; Cross-Bin and the BDLF parts carry the cyan fill; the yellow arrows give the main path.",
+  "reusable_patterns": [
+   "yellow block arrows chain the main frames while thin black arrows work inside them",
+   "bold orange italic frame titles",
+   "offset stack of rounded cards for a data collection and for layer outputs",
+   "a module frame opened from a stage by two dashed grey lines",
+   "N x N similarity matrix with row and column embedding strips next to the loss name",
+   "tool logos placed inside the stage that uses them"
+  ],
+  "weaknesses": [
+   "the whale logo feeds Cross-Bin with no label saying what the model does there",
+   "the two dashed lines end at the edge of the Stage-2 box rather than at one named box",
+   "DA, T and the role of Lambda are not explained in the figure or caption",
+   "many boxes carry bold 9.5-10.5 pt text in a dense layout"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "GHIDRA logo",
+   "blue whale logo",
+   "database cylinder icons"
+  ],
+  "generated": [],
+  "drawn": [
+   "rounded frames and boxes",
+   "offset card stacks",
+   "similarity matrix and strips",
+   "yellow block arrows",
+   "embedding plane sketch",
+   "layer-fusion diagram"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "offset stack of architecture cards",
+   "Ghidra pipeline boxes with logos",
+   "Cross-Bin dataset box",
+   "two stacked training stages",
+   "embedding plane sketch",
+   "similarity matrix with strips",
+   "layer outputs, weights and circled times and plus",
+   "dashed zoom lines"
+  ],
+  "sample_data": "code",
+  "keywords": [
+   "binary function similarity",
+   "cross-architecture",
+   "dynamic layer fusion",
+   "Qwen3",
+   "Ghidra",
+   "InfoNCE",
+   "contrastive learning",
+   "dataset construction"
+  ],
+  "tags": [
+   "zoom-callout",
+   "matrix-cell-grid",
+   "brand-logo-icon",
+   "stacked-cards",
+   "embedding-space-sketch"
+  ],
+  "new_tags": [
+   {
+    "name": "layer-fusion-taps",
+    "what": "arrows from several earlier layer outputs go into weighted-sum nodes (circled times, circled plus) that feed the next block"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Chain the main stages with yellow block arrows and give the new module its own titled frame tied to the stage that uses it by two dashed lines, so the overview stays light and the detail still sits one glance away.",
+  "suits": "Methods that build a dataset and then train in stages around one new module, where the module's internals need a full-size frame."
+ },
+ "tags": [
+  "rounded-frames",
+  "yellow-block-arrows",
+  "orange-italic-titles",
+  "bold-serif",
+  "pastel-fills",
+  "vector-logos"
+ ],
+ "provenance": {
+  "sections": [
+   "front",
+   "caption of Figure 1"
+  ],
+  "evidence": [
+   "The Ghidra pipeline constructs the Cross-Bin dataset, followed by two-stage training",
+   "Stage 1 pairwise similarity fine-tuning and Stage 2 BDLF enhancement via InfoNCE contrastive learning.",
+   "introduces dynamic weight generation to optimally combine representations from all previous layers"
+  ]
+ },
+ "summary": "BDLF-Qwen3 detects similar binary functions across CPU architectures by fusing the outputs of all earlier Qwen3 layers with dynamically generated weights. Figure 1 is made of four rounded frames with orange italic titles. Binary Collections, a stack of ARM32, MIPS64, ARM64 and x86-64 cards, feeds the Ghidra Pipeline (disassemble and decompile with Xref and CFG information, Ghidra and whale logos) that yields the Cross-Bin dataset. Yellow arrows lead to the Training Stage with two stacked boxes: Stage-1 partial fine-tuning of Qwen-3 and Stage-2 BDLF training that ends in an InfoNCE similarity matrix. A fourth frame, tied to Stage 2 by dashed lines, opens the fusion module: layer outputs X_0 to X_2 multiplied by weights A_0 to A_2 and summed.",
+ "summary_zh": "BDLF-Qwen3 通过动态加权融合 Qwen3 各层输出来检测跨架构的相似二进制函数。图由四个圆角框组成：二进制集合、Ghidra 流水线（产出 Cross-Bin 数据集）、两阶段训练，以及用虚线引出的动态层融合模块内部结构。",
+ "confidence": "medium",
+ "notes": "No paragraph mentions the figure, so roles rest on the caption, the abstract and the drawing. Unexplained in the figure and caption: the whale logo's role (it joins the arrow into Cross-Bin), the labels DA and T, the exact role of Lambda (read as the weight generator from the abstract), and what the framed Byte-Pair Encoding / Instruction Aware boxes belong to. The panel list counts the four rounded frames; the two stage boxes inside Training Stage are described as containers.",
+ "venue": "AAAI26"
+}

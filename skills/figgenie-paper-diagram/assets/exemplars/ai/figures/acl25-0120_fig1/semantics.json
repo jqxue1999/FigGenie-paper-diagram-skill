@@ -1,0 +1,457 @@
+{
+ "paper_id": "acl25-0120",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "VCD (Visual Commonsense Dataset)",
+  "one_liner": "A dataset of 100,000+ images with 14M object-grounded commonsense triples, organised by a Seen/Unseen and Property/Action/Space taxonomy.",
+  "domain": [
+   "visual commonsense",
+   "dataset construction",
+   "knowledge triples"
+  ],
+  "subfield": "multimodal",
+  "subfield2": "vision"
+ },
+ "content": {
+  "kinds": [
+   "scope-overview",
+   "worked-walkthrough",
+   "concept-schematic"
+  ],
+  "variant": "example-gallery",
+  "variant_note": "one annotated street photo and two stacked object cards (man, car), each listing Seen and Unseen triples by Property, Space, Action with a highlighted explanation sentence",
+  "argues": "Each object in an image carries both directly observable (Seen) and inferable (Unseen) commonsense triples, grouped by aspect, grounded to its box and explained in a sentence.",
+  "subject": "a street photo with two boxed objects, each with Seen and Unseen commonsense triples and an explanation sentence",
+  "elements": [
+   {
+    "name": "man",
+    "type": "region",
+    "role": "annotated object whose bounding box grounds the head entity of the man's triples",
+    "drawn_as": "dashed white rectangle over the skateboarder with a white tag reading man",
+    "container": "street photo",
+    "is_contribution": null
+   },
+   {
+    "name": "car",
+    "type": "region",
+    "role": "annotated object whose bounding box grounds the head entity of the car's triples",
+    "drawn_as": "dashed white rectangle over the taxi with a white tag reading car",
+    "container": "street photo",
+    "is_contribution": null
+   },
+   {
+    "name": "Seen",
+    "type": "label",
+    "role": "top taxonomy layer: commonsense directly observable in the image",
+    "drawn_as": "bold comic-style word under a detective emoji, with a curly brace to its aspect groups",
+    "container": "object card",
+    "is_contribution": true
+   },
+   {
+    "name": "Unseen",
+    "type": "label",
+    "role": "top taxonomy layer: commonsense inferred from general knowledge",
+    "drawn_as": "bold comic-style word under a thinking-face emoji, with a curly brace to its aspect groups",
+    "container": "object card",
+    "is_contribution": true
+   },
+   {
+    "name": "Property",
+    "type": "label",
+    "role": "second taxonomy layer: aspect covering relations such as HasProperty and CreatedBy",
+    "drawn_as": "orange comic-style word at a curly brace",
+    "container": "Seen / Unseen group",
+    "is_contribution": true
+   },
+   {
+    "name": "Space",
+    "type": "label",
+    "role": "second taxonomy layer: aspect covering LocatedNear and Relatedness",
+    "drawn_as": "blue comic-style word at a curly brace",
+    "container": "Seen / Unseen group",
+    "is_contribution": true
+   },
+   {
+    "name": "Action",
+    "type": "label",
+    "role": "second taxonomy layer: aspect covering CapableOf, ReceivesAction and UsedFor",
+    "drawn_as": "green comic-style word at a curly brace",
+    "container": "Seen / Unseen group",
+    "is_contribution": true
+   },
+   {
+    "name": "commonsense triples",
+    "type": "data",
+    "role": "(head, relation, tail) knowledge units whose head entity is the grounded object, 8 for the man and 9 for the car",
+    "drawn_as": "parenthesised 8 pt lines with the relation in coloured italics and a tiny object crop before the head",
+    "container": "Seen / Unseen group",
+    "is_contribution": true
+   },
+   {
+    "name": "…",
+    "type": "label",
+    "role": "more triples exist than are shown",
+    "drawn_as": "bold ellipsis to the right of each Seen and Unseen group",
+    "container": "Seen / Unseen group",
+    "is_contribution": false
+   },
+   {
+    "name": "Explanation: The man might be hit by a car.",
+    "type": "text-block",
+    "role": "natural-language reading of the unseen triple (man, ReceivesAction, hit by a car)",
+    "drawn_as": "dashed black rectangle, italic 7.5 pt, words highlighted green, yellow and light blue",
+    "container": "man card",
+    "is_contribution": true
+   },
+   {
+    "name": "Explanation: The car can be used for traveling.",
+    "type": "text-block",
+    "role": "natural-language reading of the unseen triple (car, UsedFor, travel)",
+    "drawn_as": "dashed black rectangle, italic 7.5 pt, words highlighted green, yellow and light blue",
+    "container": "car card",
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "man box",
+    "to": "man crop",
+    "what": "the boxed object is pulled out as a thumbnail that heads its triples",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "car box",
+    "to": "car crop",
+    "what": "the boxed object is pulled out as a thumbnail that heads its triples",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "object crop",
+    "to": "Seen and Unseen groups",
+    "what": "the groups list this object's triples",
+    "kind": "mapping",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Seen / Unseen",
+    "to": "Property, Space, Action",
+    "what": "visibility layer contains the aspect layer",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "Property, Space, Action",
+    "to": "triples",
+    "what": "aspect layer contains its triples",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "last Unseen triple",
+    "to": "Explanation sentence",
+    "what": "the sentence verbalises that triple",
+    "kind": "mapping",
+    "drawn": "dotted-leader",
+    "step": null
+   },
+   {
+    "from": "aspect words",
+    "to": "relation names in the triples",
+    "what": "orange, blue or green text colour repeats on the aspect's relations",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "explanation highlights",
+    "to": "parts of the triple",
+    "what": "green, yellow and light blue fall on head entity, relation phrase and tail phrase (inferred from position)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "man / car tags",
+    "kind": "identity",
+    "at": "dashed boxes in the photo",
+    "what": "name the annotated objects and tie them to their triple blocks"
+   },
+   {
+    "marker": "detective and thinking-face emoji",
+    "kind": "section",
+    "at": "left of each Seen and Unseen group",
+    "what": "head the two top-level groups"
+   },
+   {
+    "marker": "Property / Space / Action",
+    "kind": "section",
+    "at": "inside the curly braces",
+    "what": "head the aspect groups"
+   }
+  ],
+  "pictures": [
+   {
+    "what": "street photo with a skateboarding man and a taxi",
+    "content": "natural-image",
+    "role": "sample-input",
+    "count": 1,
+    "medium": "bitmap",
+    "treatment": "large photo at left with two dashed white boxes, white name tags and a slightly washed tint inside the boxes"
+   },
+   {
+    "what": "cropped thumbnails of the man and of the car",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 2,
+    "medium": "bitmap",
+    "treatment": "small crops at the head of each object's triple block, reached by gold elbow arrows"
+   },
+   {
+    "what": "tiny object crops placed before the head entity of every triple",
+    "content": "natural-image",
+    "role": "data-thumbnail",
+    "count": 17,
+    "medium": "bitmap",
+    "treatment": "about 8 pt icons repeated in front of each triple to show the head is grounded in the box"
+   }
+  ],
+  "icons": [
+   {
+    "depicts": "detective with a magnifying glass",
+    "stands_for": "Seen (directly observable commonsense)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   },
+   {
+    "depicts": "thinking face with a hand on the chin",
+    "stands_for": "Unseen (inferred commonsense)",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 2
+   }
+  ],
+  "examples": [
+   {
+    "what": "a skateboarding man next to a taxi with his Seen triples (thin, near the car, on road, can skateboard) and Unseen triples (energetic, near a house, can fall down, hit by a car)",
+    "form": "parenthesised triples grouped by braces beside the object crop",
+    "real_values": true
+   },
+   {
+    "what": "the taxi with Seen triples (yellow, near a streetlight, carries people, driven) and Unseen triples (made in a factory, near a parking lot, sold, used for travel)",
+    "form": "parenthesised triples grouped by braces beside the object crop",
+    "real_values": true
+   },
+   {
+    "what": "explanations 'The man might be hit by a car.' and 'The car can be used for traveling.'",
+    "form": "dashed sentence boxes with coloured highlights, fanned out from the last Unseen triple",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "knowledge-triple",
+    "drawn_as": "(head, relation, tail) in parentheses with the relation in coloured italics and a tiny object crop before the head",
+    "parts": [
+     "head entity",
+     "relation",
+     "tail"
+    ],
+    "convention": "common"
+   },
+   {
+    "concept": "brace-taxonomy",
+    "drawn_as": "curly braces nest Seen/Unseen over Property/Space/Action over the triples of one object",
+    "parts": [
+     "Seen / Unseen",
+     "Property / Space / Action",
+     "triples"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts on the large photo at left, follows the gold arrow from each boxed object to its crop, then reads the Seen group, the Unseen group and the explanation sentence of each object from top to bottom."
+ },
+ "layout": {
+  "arrangement": "lanes",
+  "arrangement_note": "A large photo fills the left half; two stacked object lanes (man above, car below) fill the right half, each with a crop, a Seen group, an Unseen group and a dashed explanation box; gold elbow arrows run from the boxes in the photo to the lane crops and a dashed fan opens the last Unseen triple into the sentence.",
+  "panel_count": 1,
+  "lanes": "2 stacked object lanes (man, car), each with crop, Seen group, Unseen group and explanation box",
+  "direction": "left-right",
+  "reading_start": "left",
+  "grouping": [
+   "whitespace",
+   "dashed-boxes",
+   "other"
+  ],
+  "nesting_depth": 3,
+  "legend": "none",
+  "panel_markers": "none",
+  "step_markers": "none",
+  "zoom_callout": "wedge",
+  "width": "full",
+  "aspect": 2.24,
+  "text_density": "dense",
+  "visual_density": "moderate",
+  "text_share": "medium"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c55a11",
+    "used_for": "Property label and its relation names (HasProperty, CreatedBy)"
+   },
+   {
+    "hex": "#2e75b6",
+    "used_for": "Space label and its relation names (LocatedNear, Relatedness)"
+   },
+   {
+    "hex": "#548235",
+    "used_for": "Action label and its relation names (CapableOf, ReceivesAction, UsedFor)"
+   },
+   {
+    "hex": "#00ff00",
+    "used_for": "highlight on the head entity word in each explanation"
+   },
+   {
+    "hex": "#ffff00",
+    "used_for": "highlight on the relation phrase in each explanation"
+   },
+   {
+    "hex": "#bfddee",
+    "used_for": "highlight on the tail phrase in each explanation"
+   },
+   {
+    "hex": "#ce950b",
+    "used_for": "gold elbow arrows from photo boxes to crops"
+   },
+   {
+    "hex": "#ffffff",
+    "opacity": 0.28,
+    "used_for": "wash inside the two object boxes; solid white for the name tags and dashed box lines"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "0.5-1 pt black curly braces and dashed explanation boxes, white dashed object boxes on the photo, gold filled elbow arrows",
+  "font": "sans: rounded comic-style bold for Seen, Unseen, Property, Space, Action (8-8.5 pt); Calibri 7.5-8 pt for triples with italic relation names and bold name tags",
+  "corners": "square",
+  "arrows": "gold elbow connectors with solid heads from box to crop; thin dashed fan lines from a triple to its explanation box",
+  "rendering": "flat-vector",
+  "effects": "none",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "text colour keys the aspect (orange Property, blue Space, green Action) on both the aspect word and its relation names; highlight colours in the explanation mark head entity (green), relation phrase (yellow) and tail phrase (light blue); gold = link from photo to crop",
+  "line_style_means": "dashed white box = annotated object in the photo; dashed black box = explanation sentence; curly braces = taxonomy grouping; dashed fan = the sentence belongs to that triple",
+  "shape_means": "curly braces nest the taxonomy layers: visibility, then aspect, then triples",
+  "marker_means": "detective emoji = Seen; thinking-face emoji = Unseen; tiny crop before each triple = head entity grounded to the object box; ellipsis = more triples",
+  "emphasis": "The Unseen triple (man, ReceivesAction, hit by a car) is last in its list and is opened by a dashed fan into a highlighted sentence; the large photo with boxed objects anchors the whole record.",
+  "reusable_patterns": [
+   "boxed objects in a photo tied by elbow arrows to cropped thumbnails",
+   "curly braces nesting taxonomy layers around one real record",
+   "relation names coloured by the category they belong to",
+   "emoji pair marking observable versus inferred",
+   "dashed fan from one item to a highlighted explanation sentence",
+   "tiny object crop before every triple to show grounding"
+  ],
+  "weaknesses": [
+   "8 pt triples are small at column width",
+   "the caption says 11 triples but the drawing lists 17",
+   "the highlight colours in the explanation are not explained in the figure"
+  ]
+ },
+ "resources": {
+  "own": [
+   "a street photo from the dataset with its two annotated objects",
+   "real triples and explanations from the dataset"
+  ],
+  "stock": [
+   "detective and thinking-face emoji"
+  ],
+  "generated": [],
+  "drawn": [
+   "dashed object boxes and name tags",
+   "gold elbow arrows",
+   "curly braces",
+   "explanation boxes with highlights"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "street photo with man and car boxes",
+   "cropped object thumbnails",
+   "Seen and Unseen emoji with curly braces",
+   "triple lists coloured by Property, Space, Action",
+   "explanation sentence boxes with highlights",
+   "tiny object icons before each triple"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "visual commonsense",
+   "dataset",
+   "knowledge triples",
+   "seen versus unseen",
+   "taxonomy",
+   "ConceptNet",
+   "Visual Genome",
+   "explanation"
+  ],
+  "tags": [
+   "annotated-record-card",
+   "highlighted-text-spans",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "box-to-crop-arrows",
+    "what": "boxed objects in a photo tied by elbow arrows to cropped thumbnails that head each object's annotation block"
+   },
+   {
+    "name": "brace-nested-taxonomy",
+    "what": "curly braces nest taxonomy layers (visibility, aspect, item) around a real annotated record, with category-coloured text"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Show a dataset's taxonomy on one real record: box the objects in the photo, pull each out with an arrow, nest the labels with curly braces and give each category one text colour, then close with a highlighted sentence that verbalises one entry.",
+  "suits": "dataset papers whose novelty is a taxonomy of labels attached to images or objects, shown on a single concrete record."
+ },
+ "tags": [
+  "annotated-example",
+  "photo-with-boxes",
+  "curly-braces",
+  "category-coloured-text",
+  "emoji-markers",
+  "dashed-explanation-boxes"
+ ],
+ "provenance": {
+  "sections": [
+   "1 Introduction (p.1)",
+   "3 Visual Commonsense Dataset (p.3)"
+  ],
+  "evidence": [
+   "( man, ReceivesAction, hit by a car) is an Unseen commonsense under the Action aspect.",
+   "These triples are organized within a hierarchical taxonomy.",
+   "we introduce a visibility dimension that classifies knowledge as seen or unseen commonsense"
+  ]
+ },
+ "summary": "VCD is a dataset of over 100,000 images and 14 million object-commonsense pairs that adds visually grounded commonsense to scene-graph data, organised by a three-level taxonomy: visibility (Seen or Unseen), aspect (Property, Action, Space) and relation type. Figure 1 shows one record. A street photo has a man and a car boxed with dashed white rectangles, and gold elbow arrows pull each out as a thumbnail. Beside each thumbnail, curly braces nest a Seen group (detective emoji) and an Unseen group (thinking-face emoji), each split into Property, Space and Action, with relation names coloured by aspect and a tiny object crop before every triple. A dashed fan opens the last Unseen triple into an explanation sentence with highlighted head, relation and tail.",
+ "summary_zh": "VCD 是带视觉常识三元组的图像数据集。图一用一张街景作示例：框出人和车，用金色箭头引出缩略图，再按看得见与看不见、属性、空间、动作分组列出三元组，并配一句高亮的解释。",
+ "confidence": "high",
+ "notes": "Prior labels kept (scope-overview, worked-walkthrough) with concept-schematic added; the figure is a single annotated record rather than a gallery of framed cards, so panels is empty. The caption says 11 triples but the drawing lists 17 (8 for the man, 9 for the car) with ellipses. The meaning of the green, yellow and light-blue highlights is inferred from where they fall (head, relation, tail); the figure has no key. Text colours were read from the SVG text fills.",
+ "venue": "ACL25"
+}

@@ -1,0 +1,541 @@
+{
+ "paper_id": "acl25-0013",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "DoG (Decoding on Graphs)",
+  "one_liner": "A training-free framework in which an LLM writes KG reasoning chains under graph-aware constrained decoding on a growing query-centric subgraph.",
+  "domain": [
+   "knowledge graph question answering",
+   "constrained decoding",
+   "LLM reasoning"
+  ],
+  "subfield": "llm-nlp",
+  "subfield2": ""
+ },
+ "content": {
+  "kinds": [
+   "worked-walkthrough",
+   "stage-pipeline"
+  ],
+  "variant": "iteration-rounds",
+  "variant_note": "one question walked through step 1 (subgraph, token trie, generation) and step 2 (expanded subgraph), then the final answer, panels joined by numbered block arrows",
+  "argues": "Constraining each decoding step to triplets on a growing query-centric subgraph forces the LLM to write well-formed KG reasoning chains while leaving its free-text reasoning intact.",
+  "subject": "One Blue Hawaii question followed through prompt, subgraph, token trie, generated chain and subgraph expansion to the final answer.",
+  "elements": [
+   {
+    "name": "(a) Prompt",
+    "type": "container",
+    "role": "the full LLM input: instruction, three in-context examples and the current question",
+    "drawn_as": "large black rounded frame with soft shadow holding three tinted cards",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Instruction",
+    "type": "text-block",
+    "role": "tells the model to analyse the knowledge graphs in the context and answer from them",
+    "drawn_as": "light-blue card with a dark-teal title tab",
+    "container": "(a) Prompt",
+    "is_contribution": false
+   },
+   {
+    "name": "In-context Examples",
+    "type": "text-block",
+    "role": "demonstrations of graph, question and step-by-step triplet answer; Example 1 written out, Examples 2 and 3 elided",
+    "drawn_as": "pink card with a purple title tab, text ending in '… …'",
+    "container": "(a) Prompt",
+    "is_contribution": false
+   },
+   {
+    "name": "Current Question",
+    "type": "text-block",
+    "role": "the KG excerpt and the question about the national flower of the place where Blue Hawaii is set",
+    "drawn_as": "light-green card with a green title tab",
+    "container": "(a) Prompt",
+    "is_contribution": false
+   },
+   {
+    "name": "(b) Query-centric Subgraph | Step-1",
+    "type": "container",
+    "role": "the input graph around the query entity, with the allowed subgraph Gq shaded",
+    "drawn_as": "green rounded frame holding rounded-rectangle entity nodes and labelled arrows",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Gq (grey area)",
+    "type": "region",
+    "role": "triplets the next step may use; starts as all triplets touching the query entity",
+    "drawn_as": "grey irregular blob behind the solid-outlined nodes",
+    "container": "(b) Query-centric Subgraph | Step-1",
+    "is_contribution": true
+   },
+   {
+    "name": "Blue Hawaii",
+    "type": "instance",
+    "role": "the query entity",
+    "drawn_as": "white node with a heavy black outline",
+    "container": "(b) Query-centric Subgraph | Step-1",
+    "is_contribution": false
+   },
+   {
+    "name": "dotted-outline entities",
+    "type": "instance",
+    "role": "2-hop entities outside Gq: Pacific Ocean, Hawaiian hibiscus, Maile's Tourist Customer #1, Hawaiian Eye, United States of America",
+    "drawn_as": "pale green, orange and blue nodes with dotted outlines and dotted edges",
+    "container": "(b) Query-centric Subgraph | Step-1",
+    "is_contribution": false
+   },
+   {
+    "name": "(c) Constrained Decoding Token Trie | Step-1",
+    "type": "container",
+    "role": "valid next tokens at each position of the step-1 triplet, built from Gq",
+    "drawn_as": "black-framed panel with a left-to-right tree of pill nodes",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "film.film.featured_film_locations branch",
+    "type": "data",
+    "role": "the branch the LLM picks: Blue Hawaii to Hawaii to T_EOS",
+    "drawn_as": "bold black pills and arrows",
+    "container": "(c) Constrained Decoding Token Trie | Step-1",
+    "is_contribution": false
+   },
+   {
+    "name": "film.performance.actor branch",
+    "type": "data",
+    "role": "other valid branch (Tiki Hanalei, Bess Flowers) that was not chosen",
+    "drawn_as": "dashed grey pills and dashed arrows",
+    "container": "(c) Constrained Decoding Token Trie | Step-1",
+    "is_contribution": false
+   },
+   {
+    "name": "(d) Step-1 Answer",
+    "type": "text-block",
+    "role": "generated step 1: the triplet chain in red, then a free-text sentence in blue",
+    "drawn_as": "dash-dot-framed box with red and blue text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(e) Query-centric Subgraph | Step-2",
+    "type": "container",
+    "role": "the same graph after Gq has grown to include triplets around the newly visited entity Hawaii",
+    "drawn_as": "green rounded frame, larger grey blob, visited entities in bold",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "(f) Final Answer",
+    "type": "text-block",
+    "role": "the full output: two chain steps in red, explanations in blue, final answer Hawaiian hibiscus",
+    "drawn_as": "dash-dot-framed box with red and blue text",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Gq Initialization / Trie Construction / Generation / Gq Expansion",
+    "type": "operation",
+    "role": "names the four hand-overs between panels",
+    "drawn_as": "bold labels with circled numbers beside thick black block arrows",
+    "container": null,
+    "is_contribution": null
+   },
+   {
+    "name": "… …",
+    "type": "label",
+    "role": "more rounds follow before (f)",
+    "drawn_as": "ellipsis next to the arrow from (e) to (f)",
+    "container": null,
+    "is_contribution": null
+   }
+  ],
+  "relations": [
+   {
+    "from": "(a) Prompt",
+    "to": "(b) Query-centric Subgraph | Step-1",
+    "what": "the query entity of the current question seeds Gq",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 1
+   },
+   {
+    "from": "(b) Query-centric Subgraph | Step-1",
+    "to": "(c) Constrained Decoding Token Trie | Step-1",
+    "what": "triplets in Gq become the valid token paths",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": 2
+   },
+   {
+    "from": "(c) Constrained Decoding Token Trie | Step-1",
+    "to": "(d) Step-1 Answer",
+    "what": "constrained decoding yields the triplet, then unconstrained text follows",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": 3
+   },
+   {
+    "from": "(d) Step-1 Answer",
+    "to": "(e) Query-centric Subgraph | Step-2",
+    "what": "the new entity Hawaii pulls its triplets into Gq",
+    "kind": "feedback",
+    "drawn": "arrow",
+    "step": 4
+   },
+   {
+    "from": "(e) Query-centric Subgraph | Step-2",
+    "to": "(f) Final Answer",
+    "what": "further rounds until the answer is written",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Instruction, In-context Examples, Current Question",
+    "to": "(a) Prompt",
+    "what": "the three parts of one prompt",
+    "kind": "other",
+    "drawn": "containment",
+    "step": null
+   },
+   {
+    "from": "film.film.featured_film_locations branch",
+    "to": "(d) Step-1 Answer",
+    "what": "the bold branch is the triplet written in red",
+    "kind": "mapping",
+    "drawn": "other",
+    "step": null
+   },
+   {
+    "from": "Blue Hawaii",
+    "to": "dotted-outline entities",
+    "what": "solid arrows to Hawaii, Bess Flowers and Tiki Hanalei (relations film.film.featured_film_locations, film.performance.actor), dotted arrows on to 2-hop entities",
+    "kind": "mapping",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "(b) Query-centric Subgraph | Step-1",
+    "to": "(e) Query-centric Subgraph | Step-2",
+    "what": "same graph drawn again with the shaded region extended",
+    "kind": "time",
+    "drawn": "colour-link",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a) Prompt",
+    "kind": "other",
+    "axis": "stages",
+    "shows": "the LLM input: instruction, in-context examples and the current question with its KG excerpt",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b) Query-centric Subgraph | Step-1",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "the 2-hop input graph with the initial Gq shaded around Blue Hawaii",
+    "verdict": "ours"
+   },
+   {
+    "label": "(c) Constrained Decoding Token Trie | Step-1",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "the token trie of valid triplets in Gq with the chosen branch in bold",
+    "verdict": "ours"
+   },
+   {
+    "label": "(d) Step-1 Answer",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "the generated step-1 triplet in red and the free explanation in blue",
+    "verdict": "output"
+   },
+   {
+    "label": "(e) Query-centric Subgraph | Step-2",
+    "kind": "concept-schematic",
+    "axis": "stages",
+    "shows": "the graph after Gq expands around Hawaii",
+    "verdict": "ours"
+   },
+   {
+    "label": "(f) Final Answer",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "the complete two-step chain and the final answer Hawaiian hibiscus",
+    "verdict": "output"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a) to (f)",
+    "kind": "section",
+    "at": "bold italic panel titles",
+    "what": "letter plus name heads each panel and is cited from the text"
+   },
+   {
+    "marker": "① ② ③ ④",
+    "kind": "order",
+    "at": "beside the thick block arrows between panels",
+    "what": "order of the four hand-overs, each with a verb label"
+   },
+   {
+    "marker": "Step-1 / Step-2",
+    "kind": "section",
+    "at": "titles of (b), (c) and (e)",
+    "what": "says which reasoning step the panel belongs to"
+   },
+   {
+    "marker": "1. / 2.",
+    "kind": "order",
+    "at": "lines of the generated answers in (d) and (f)",
+    "what": "number the generated triplet steps"
+   }
+  ],
+  "pictures": [],
+  "icons": [],
+  "examples": [
+   {
+    "what": "the Grand Bahama in-context example: graph excerpt, question, a one-triplet chain and the answer Bahamas",
+    "form": "plain text lines inside a pink card",
+    "real_values": true
+   },
+   {
+    "what": "the Blue Hawaii question about the national flower, with KG excerpt, step-1 chain (Blue Hawaii to Hawaii), step-2 chain (Hawaiian hibiscus to Hawaii) and final answer Hawaiian hibiscus",
+    "form": "text cards, entity nodes with relation labels, token trie, red and blue generated text",
+    "real_values": true
+   }
+  ],
+  "idioms": [
+   {
+    "concept": "prompt-box",
+    "drawn_as": "one large rounded frame holding three tinted cards (Instruction, In-context Examples, Current Question), each with a coloured title tab and real prompt text, long parts elided with dots",
+    "parts": [
+     "Instruction card",
+     "In-context Examples card",
+     "Current Question card",
+     "title tabs"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "knowledge-graph",
+    "drawn_as": "rounded-rectangle entity nodes joined by arrows that carry relation names; a grey blob marks the active subgraph, solid outlines inside and dotted outlines outside",
+    "parts": [
+     "entity nodes",
+     "relation labels",
+     "grey subgraph blob",
+     "query entity in white"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "token-trie",
+    "drawn_as": "pill nodes for tokens joined by arrows from a T_BOS root to T_EOS leaves; chosen branch bold black, other valid branches dashed grey",
+    "parts": [
+     "T_BOS root",
+     "token pills",
+     "relation pill",
+     "T_EOS leaves"
+    ],
+    "convention": "common"
+   }
+  ],
+  "reading_order": "Starts at prompt (a) at left, then follows the thick numbered arrows: ① to (b), ② up to (c), ③ to (d), ④ down to (e), dots to (f)."
+ },
+ "layout": {
+  "arrangement": "panels-grid",
+  "arrangement_note": "Three uneven columns of framed panels: a tall prompt panel at left, panel (c) above panel (b) in the middle, and (d), (e), (f) stacked at right. The reading path zigzags (a) to (b), up to (c), right to (d), down to (e) and (f), carried by thick black block arrows with circled numbers and verb labels placed in the gaps.",
+  "panel_count": 6,
+  "lanes": null,
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "panel-frames",
+   "tinted-regions",
+   "framed-boxes",
+   "dashed-boxes"
+  ],
+  "nesting_depth": 3,
+  "legend": "caption-only",
+  "panel_markers": "letters+titles",
+  "step_markers": "circled-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.52,
+  "text_density": "dense",
+  "visual_density": "dense",
+  "text_share": "large"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#c00000",
+    "used_for": "text of the well-formed chain generated under the constraint"
+   },
+   {
+    "hex": "#215f9a",
+    "used_for": "text of unconstrained (standard) generation and the blue branch of the graph"
+   },
+   {
+    "hex": "#3b7d23",
+    "used_for": "green panel frames, the Hawaii branch and the Current Question tab"
+   },
+   {
+    "hex": "#c04f15",
+    "used_for": "outlines and edges of the orange branch (Bess Flowers)"
+   },
+   {
+    "hex": "#dceaf7",
+    "used_for": "Instruction card and blue-branch nodes"
+   },
+   {
+    "hex": "#d9f2d0",
+    "used_for": "Current Question card and green-branch nodes"
+   },
+   {
+    "hex": "#fbe3d6",
+    "used_for": "orange-branch nodes"
+   },
+   {
+    "hex": "#f2cfee",
+    "opacity": 0.21,
+    "used_for": "In-context Examples card"
+   },
+   {
+    "hex": "#a02b93",
+    "used_for": "In-context Examples title tab"
+   },
+   {
+    "hex": "#156082",
+    "used_for": "Instruction title tab"
+   },
+   {
+    "hex": "#f2f2f2",
+    "used_for": "grey Gq region"
+   },
+   {
+    "hex": "#c0c0c0",
+    "used_for": "grey highlight bars behind the italic panel titles"
+   },
+   {
+    "hex": "#595959",
+    "used_for": "grey text of the dashed, unchosen trie nodes"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "mostly 0.25 pt outlines on nodes, trie pills and cards, 0.5-0.75 pt on a few frames; the four connecting arrows are heavy filled block shapes; dashed outlines (41 shapes) for outside-Gq and unchosen items",
+  "font": "serif (Times-like) 4.5-6.5 pt with bold italic panel titles; monospace (Consolas) for trie tokens and relation names; coloured text for generated output",
+  "corners": "rounded",
+  "arrows": "four thick black block arrows between panels; thin black arrows in the trie; coloured arrows with small heads in the graphs; dotted arrows for edges outside Gq",
+  "rendering": "flat-vector",
+  "effects": "soft grey drop shadows around the panel frames (exported as bitmaps) and semi-transparent tinted fills",
+  "model_depiction": "none",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "red text = chain generated under the graph constraint, blue text = standard unconstrained generation; node and edge colour in the graphs follows the branch a node hangs from (green Hawaii, orange Bess Flowers, blue Tiki Hanalei, a two-tone United States of America shared by two branches); prompt cards: blue instruction, pink examples, green current question; grey blob = Gq",
+  "line_style_means": "solid outline = inside the current Gq, dotted outline = outside Gq; in the trie bold = chosen branch, dashed = valid but unchosen; dash-dot frame = generated answer; thick black arrow = hand-over to the next step",
+  "shape_means": "rounded rectangle = entity or token, grey blob = allowed subgraph, tall rounded frame = prompt, white node with heavy outline = query entity",
+  "marker_means": "circled numbers order the four hand-overs; panel letters name panels; Step-1 / Step-2 name the reasoning rounds; bold entity names in (e) = entities already visited",
+  "emphasis": "the numbered block arrows with verb labels carry the eye through the panels; red text and the bold trie branch mark what the constraint produced",
+  "reusable_patterns": [
+   "thick block arrows between lettered panels, each with a circled number and a verb phrase",
+   "the same graph drawn again for the next step with the shaded region grown",
+   "generated text coloured by how it was produced (constrained vs free)",
+   "chosen branch of a tree in bold, other valid branches dashed grey",
+   "long prompt shown as tinted cards with coloured title tabs and elided parts marked '… …'",
+   "ellipsis beside the last arrow to say that further rounds follow"
+  ],
+  "weaknesses": [
+   "body text is 4.5-5 pt, small for print",
+   "colour meanings (red/blue text, node colours, dotted outlines) are explained only in the caption",
+   "the 'Generation' label is cut by the frame of panel (d) and some relation labels are crossed by edges, one with a typo ('perrformance')"
+  ]
+ },
+ "resources": {
+  "own": [
+   "the real prompt text with an in-context example",
+   "a real KGQA question with entities and relations",
+   "the generated chain text"
+  ],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "panel frames and cards",
+   "entity nodes and edges",
+   "token trie",
+   "block arrows",
+   "soft shadows"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "prompt panel with three coloured cards",
+   "query-centric subgraph with grey region",
+   "token trie",
+   "generated chain in red and blue text",
+   "thick numbered arrows between panels",
+   "entity nodes with dotted outlines"
+  ],
+  "sample_data": "mixed",
+  "keywords": [
+   "knowledge graph QA",
+   "constrained decoding",
+   "token trie",
+   "well-formed chain",
+   "subgraph expansion",
+   "LLM reasoning",
+   "training-free"
+  ],
+  "tags": [
+   "prompt-template-card",
+   "knowledge-graph",
+   "highlighted-text-spans",
+   "colour-coded-groups"
+  ],
+  "new_tags": [
+   {
+    "name": "growing-region-snapshots",
+    "what": "the same node-link graph redrawn at each step with a shaded allowed region extended and solid versus dotted outlines separating inside from outside"
+   },
+   {
+    "name": "token-trie-diagram",
+    "what": "a prefix tree of tokens explaining constrained decoding, chosen branch in bold and other valid branches dashed"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Join lettered panels by thick block arrows that carry a circled number and a verb phrase, so the method reads as a path through concrete artefacts; colour generated text by how it was produced so the contribution can be seen inside the answer.",
+  "suits": "Methods whose steps act on a concrete structure (graph, tree, prompt) in rounds, where each step's artefact can be drawn and further rounds shown by a second round plus dots."
+ },
+ "tags": [
+  "lettered-panels",
+  "thick-numbered-arrows",
+  "serif-small-text",
+  "tinted-cards",
+  "zigzag-reading-path",
+  "powerpoint-look"
+ ],
+ "provenance": {
+  "sections": [
+   "2 Decoding on Graphs (p.4)"
+  ],
+  "evidence": [
+   "An example workflow of DOG with beam size of 1.",
+   "DOG chooses (Blue Hawaii -> film.film.featured_film_locations -> Hawaii) as Step-1 triplet, branch highlighted in bold within (c).",
+   "Step-1 result is in (d) with well-formed chain in red and standard decoding in blue."
+  ]
+ },
+ "summary": "DoG (Decoding on Graphs) lets an LLM answer knowledge-graph questions by writing well-formed chains of fact triplets, using a trie-based constraint over a query-centric subgraph that grows as the chain advances. Figure 1 follows one question about the film Blue Hawaii through six lettered panels: the prompt (instruction, in-context examples, current question), the initial subgraph (b), the token trie built from it (c), the generated step-1 answer (d), the expanded subgraph (e) and the final answer (f). Thick black arrows with circled numbers and verb labels join the panels in a zigzag. Red text marks the constrained chain and blue text free generation; solid versus dotted outlines separate inside from outside the grey subgraph. Small serif text, drawn in PowerPoint.",
+ "summary_zh": "DoG 让大模型在随步骤增长的查询中心子图上，用字典树约束解码，生成合法的知识图谱推理链。图用六个带字母的面板跟随一个电影问题：提示、子图、字典树、第一步答案、扩展子图和最终答案，粗箭头带圈号串联，红字为受约束的链，蓝字为自由生成。",
+ "confidence": "high",
+ "notes": "The nine bitmaps counted in the digest appear to be soft panel shadows or backgrounds from the PowerPoint export, not data samples, so pictures is empty. The branch colouring of nodes (with the two-tone shared entity) is read from the drawing; the paper text does not explain it. The prior pass's iteration-rounds variant is kept.",
+ "venue": "ACL25"
+}

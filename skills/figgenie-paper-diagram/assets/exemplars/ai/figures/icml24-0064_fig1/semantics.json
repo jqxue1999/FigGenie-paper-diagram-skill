@@ -1,0 +1,433 @@
+{
+ "paper_id": "icml24-0064",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "TAT (Trajectory Aggregation Tree)",
+  "one_liner": "A training-free tree that aggregates historical and current trajectories sampled by a diffusion planner, weights and prunes nodes to resist infeasible trajectories.",
+  "domain": [
+   "diffusion planning",
+   "offline reinforcement learning",
+   "trajectory aggregation"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "generative"
+ },
+ "content": {
+  "kinds": [
+   "stage-pipeline",
+   "worked-walkthrough"
+  ],
+  "variant": "unrolled-bands",
+  "variant_note": "two stacked bands, (a) diffusion sampling and (b) tree aggregation, each repeated over three environment steps and ending in an ellipsis; the tree is redrawn at every step",
+  "argues": "TAT sits downstream of an unchanged diffusion planner: trajectories sampled at each step are integrated into a weighted tree that is pruned as the environment moves on.",
+  "subject": "The per-step diffusion sampling pipeline and the aggregation tree that integrates, weights and prunes the sampled trajectories, unrolled over three steps.",
+  "elements": [
+   {
+    "name": "walking-robot figure (x3)",
+    "type": "icon",
+    "role": "the environment at successive steps; its state is fed to the planner",
+    "drawn_as": "small two-legged walker with coloured limb segments, one per column, in different poses",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Transition",
+    "type": "operation",
+    "role": "the environment moves to the next step",
+    "drawn_as": "grey block arrow to the right between consecutive walkers, ending in a grey ellipsis",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "State",
+    "type": "data",
+    "role": "environment state given to the diffusion planner",
+    "drawn_as": "light-blue box on the top-left of the Diffusion trapezoid, fed by a fading blue arrow from the walker",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Noise",
+    "type": "data",
+    "role": "noise input of the diffusion planner",
+    "drawn_as": "light-pink box on the top-right of the Diffusion trapezoid, fed by a fading pink arrow from a cloud of red dots",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Diffusion",
+    "type": "module",
+    "role": "the original diffusion planner that samples trajectories from state and noise",
+    "drawn_as": "inverted grey trapezoid with a bold-free serif label",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "sampled trajectories (3 chains per column)",
+    "type": "data",
+    "role": "plans sampled by the diffusion planner at that step",
+    "drawn_as": "chains of red circles linked by thin lines, shade fading downwards, each chain a trajectory",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Trajectory",
+    "type": "label",
+    "role": "names one chain of nodes as a trajectory",
+    "drawn_as": "red dashed rectangle around one chain with a red label at its lower right, in the third column only",
+    "container": "(a)",
+    "is_contribution": false
+   },
+   {
+    "name": "Integrate",
+    "type": "operation",
+    "role": "merges the sampled trajectories into the tree",
+    "drawn_as": "thick gold block arrow pointing down from each column of (a) into (b), label beside it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "trajectory aggregation tree (one per step)",
+    "type": "data",
+    "role": "tree that merges past and current trajectories; node shade is its weight",
+    "drawn_as": "tree of circles in red shades, darker = higher weight; pruned nodes are light translucent grey",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "Prune",
+    "type": "operation",
+    "role": "removes branches so the tree stays in sync with the environment",
+    "drawn_as": "grey block arrow to the right between consecutive trees, ending in a grey ellipsis",
+    "container": "(b)",
+    "is_contribution": true
+   },
+   {
+    "name": "(a)",
+    "type": "label",
+    "role": "letter of the diffusion pipeline panel (caption: Diffusion pipeline)",
+    "drawn_as": "8.5 pt serif letter at the top left",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "(b)",
+    "type": "label",
+    "role": "letter of the TAT pipeline panel (caption: TAT pipeline)",
+    "drawn_as": "8.5 pt serif letter at the left of the lower band",
+    "container": null,
+    "is_contribution": false
+   }
+  ],
+  "relations": [
+   {
+    "from": "walking-robot figure (x3)",
+    "to": "State",
+    "what": "environment state is given to the planner",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "cloud of red dots",
+    "to": "Noise",
+    "what": "noise sample",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "State and Noise",
+    "to": "Diffusion",
+    "what": "inputs sit on the top edge of the planner",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "Diffusion",
+    "to": "sampled trajectories (3 chains per column)",
+    "what": "the planner samples several trajectories per step",
+    "kind": "data",
+    "drawn": "adjacency",
+    "step": null
+   },
+   {
+    "from": "sampled trajectories (3 chains per column)",
+    "to": "trajectory aggregation tree (one per step)",
+    "what": "trajectories are integrated into the tree",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "walking-robot figure at step t",
+    "to": "walking-robot figure at step t+1",
+    "what": "Transition of the environment",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "trajectory aggregation tree at step t",
+    "to": "trajectory aggregation tree at step t+1",
+    "what": "Prune, then the next Integrate adds new trajectories",
+    "kind": "time",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "red shade of a node",
+    "to": "weight of the node",
+    "what": "darker red means higher weight (caption)",
+    "kind": "mapping",
+    "drawn": "colour-link",
+    "step": null
+   },
+   {
+    "from": "column i of (a)",
+    "to": "column i of (b)",
+    "what": "same environment step",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [
+   {
+    "label": "(a)",
+    "kind": "stage-pipeline",
+    "axis": "stages",
+    "shows": "Diffusion pipeline: state and noise enter the original diffusion planner, which samples trajectories; three environment steps",
+    "verdict": "setting"
+   },
+   {
+    "label": "(b)",
+    "kind": "worked-walkthrough",
+    "axis": "stages",
+    "shows": "TAT pipeline: sampled trajectories are integrated into a tree that is pruned step by step, pruned parts shown as faded grey",
+    "verdict": "ours"
+   }
+  ],
+  "markers": [
+   {
+    "marker": "(a), (b)",
+    "kind": "section",
+    "at": "left of the two bands",
+    "what": "head the diffusion pipeline and the TAT pipeline"
+   },
+   {
+    "marker": "Transition / Integrate / Prune",
+    "kind": "order",
+    "at": "block arrows",
+    "what": "name the three hand-offs in the repeating cycle"
+   },
+   {
+    "marker": "...",
+    "kind": "order",
+    "at": "right end of each row",
+    "what": "the cycle continues for further steps"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "two-legged walker robot with coloured limb segments in three poses",
+    "stands_for": "the environment and its state at successive steps",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   },
+   {
+    "depicts": "blob of semi-transparent red dots",
+    "stands_for": "the noise input of the diffusion planner",
+    "style": "flat-colour",
+    "medium": "vector",
+    "count": 3
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "diffusion-planner-block",
+    "drawn_as": "inverted grey trapezoid labelled Diffusion with State and Noise boxes on its top edge and node chains hanging below",
+    "parts": [
+     "trapezoid",
+     "State box",
+     "Noise box",
+     "sampled chains"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "trajectory-tree",
+    "drawn_as": "circles linked by lines: chains for sampled trajectories, merged into a tree whose shade shows weight, pruned nodes left as faded grey ghosts",
+    "parts": [
+     "chain",
+     "tree",
+     "node shade",
+     "faded nodes"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Starts at the walker at the top left of (a), goes down through State and Noise, the Diffusion trapezoid and the node chains, then down the gold Integrate arrow into the tree of (b), and right along Prune; the other two columns repeat it."
+ },
+ "layout": {
+  "arrangement": "panels-column",
+  "arrangement_note": "Two stacked bands separated by a grey dashed line: (a) the diffusion pipeline above, (b) the TAT pipeline below, each unrolled over three aligned columns that end in an ellipsis. In every column a gold Integrate arrow links the sampled trajectories of (a) to the tree of (b); grey Transition and Prune block arrows run left to right between columns.",
+  "panel_count": 2,
+  "lanes": "3 aligned time columns (environment steps) shared by both panels",
+  "direction": "mixed",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "caption-only",
+  "panel_markers": "letters",
+  "step_markers": "labelled-arrows",
+  "zoom_callout": "none",
+  "width": "column",
+  "aspect": 1.39,
+  "text_density": "sparse",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#b90000",
+    "used_for": "red trajectory and tree nodes in six opacity steps from 0.15 to 0.4 (darker = higher weight), noise dots, dashed 'Trajectory' frame and label",
+    "opacity": 0.3
+   },
+   {
+    "hex": "#bfbfbf",
+    "used_for": "grey Transition and Prune block arrows and the Diffusion trapezoid"
+   },
+   {
+    "hex": "#b7dde8",
+    "used_for": "State box and the fading state arrows"
+   },
+   {
+    "hex": "#f2dcda",
+    "used_for": "Noise box and the fading noise arrows"
+   },
+   {
+    "hex": "#d29e00",
+    "used_for": "thick gold Integrate arrows"
+   },
+   {
+    "hex": "#3f3f3f",
+    "used_for": "thin outlines of nodes and tree links"
+   }
+  ],
+  "ground": "white",
+  "fill": "mixed",
+  "stroke": "0.25 pt dark-grey outlines on nodes and links, 0.5 pt on boxes, 1.75 pt gold outline on the Integrate arrows, dashed red frame, dashed grey divider",
+  "font": "serif (Nimbus Roman, Times-like) 7 pt for labels, 8.5 pt for panel letters, no bold",
+  "corners": "square",
+  "arrows": "grey and gold block arrows for Transition, Prune and Integrate; thin arrows fading from the source colour into transparency for State and Noise inputs; thin lines link nodes",
+  "rendering": "flat-vector",
+  "effects": "fading gradient on the input arrows; translucent grey for pruned nodes",
+  "model_depiction": "trapezoid",
+  "state_marker": "other"
+ },
+ "encoding": {
+  "color_means": "red = trajectory nodes and noise, darker red = higher node weight (caption); light translucent grey = pruned nodes; blue = environment state; pink = noise input; grey = the diffusion planner and the Transition and Prune arrows; gold = Integrate",
+  "line_style_means": "grey block arrow = step of the environment or pruning; gold block arrow = integrating trajectories into the tree; fading thin arrows = inputs; dashed grey line separates (a) from (b); dashed red frame = one trajectory",
+  "shape_means": "inverted trapezoid = diffusion planner; circles joined by lines = states of a trajectory or tree; rectangles = the State and Noise inputs",
+  "marker_means": "(a) and (b) head the panels; Transition, Integrate and Prune name the arrows; '...' says the cycle goes on",
+  "emphasis": "the gold Integrate arrows are the only saturated non-red colour and link the two panels; the weight shading and the faded ghosts show the tree evolving",
+  "reusable_patterns": [
+   "three aligned time columns repeated in both panels, closed by an ellipsis",
+   "the same tree redrawn each step, with pruned branches left as faded grey ghosts",
+   "node shade encodes weight; each trajectory is a chain of circles that fades with horizon",
+   "dashed red frame plus red label naming one chain as a trajectory",
+   "bold gold block arrow linking the sampling band to the tree band",
+   "thin input arrows that fade from the source colour",
+   "dashed grey divider between the two panels"
+  ],
+  "weaknesses": [
+   "the fading along each chain in (a) is not explained in the caption",
+   "the walker icon has no label"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [],
+  "generated": [],
+  "drawn": [
+   "walker figure from coloured limb polygons",
+   "noise dot cloud",
+   "node chains and trees",
+   "block arrows and trapezoid"
+  ],
+  "unknown": [
+   "the small placed bitmaps (3x30 pt and smaller), probably the gradient shafts and heads of the thin input arrows"
+  ]
+ },
+ "retrieval": {
+  "objects": [
+   "walker agent figures",
+   "State and Noise boxes",
+   "cloud of red noise dots",
+   "grey Diffusion trapezoid",
+   "chains of red trajectory nodes",
+   "aggregation tree in red shades",
+   "faded pruned nodes",
+   "Transition, Integrate and Prune block arrows"
+  ],
+  "sample_data": "network-graph",
+  "keywords": [
+   "diffusion planner",
+   "trajectory aggregation tree",
+   "stochastic risk",
+   "pruning",
+   "offline RL",
+   "trajectory sampling",
+   "node weights",
+   "planning",
+   "training-free"
+  ],
+  "tags": [
+   "small-multiples",
+   "search-tree",
+   "flow-type-arrows"
+  ],
+  "new_tags": [
+   {
+    "name": "faded-pruned-ghosts",
+    "what": "pruned or discarded elements stay in the redrawn structure as light translucent grey ghosts instead of being deleted, so the eye sees what was removed at each step"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Unroll a pipeline over time as aligned columns and stack two bands, the unchanged base pipeline above and the proposed downstream structure below, linked by a bold coloured arrow; redraw the evolving structure each step, shade nodes by weight and leave pruned parts as faded grey ghosts.",
+  "suits": "Methods that add a training-free or downstream structure (tree, memory, cache, graph) on top of a base model and update it step by step along an episode or time."
+ },
+ "tags": [
+  "time-columns",
+  "two-bands",
+  "node-shading",
+  "block-arrows",
+  "serif-labels",
+  "dashed-divider",
+  "faded-ghosts"
+ ],
+ "provenance": {
+  "sections": [
+   "4 Trajectory Aggregation Tree (p.4)"
+  ],
+  "evidence": [
+   "The darker the red color, the higher the weight the node has.",
+   "The tree grows dynamically and keeps in sync with the environment by pruning branches (the light transparent gray part)."
+  ]
+ },
+ "summary": "TAT (Trajectory Aggregation Tree) is a training-free add-on for diffusion planners that merges trajectories sampled over successive environment steps into a tree, weights the nodes and prunes unreliable ones, so that stochastic infeasible trajectories are resisted. Figure 1 has two stacked panels over three aligned time columns. Panel (a) shows the unchanged diffusion pipeline: a walker figure gives the State, a cloud of red dots gives the Noise, and a grey Diffusion trapezoid samples chains of red trajectory nodes. Panel (b) shows a gold Integrate arrow merging the chains into a tree whose darker red nodes carry more weight, and grey Prune arrows leading to the next step, with pruned branches left as faded grey ghosts.",
+ "summary_zh": "TAT是给扩散规划器加的免训练聚合树，把逐步采样的轨迹并入一棵树，按权重保留并剪枝。图1上下两栏、三个时间列：(a)状态与噪声经扩散模型采样出节点链；(b)金色Integrate合并成树，颜色越深权重越大，Prune后留下淡灰残影。",
+ "confidence": "high",
+ "notes": "The digest reports a drawn extent far beyond the canvas; the preview shows only the two-panel overview. Shades along each chain in (a) are unexplained; the caption explains shade only for the tree in (b). The walker is judged to be vector from the preview; the digest's bitmaps are small and look like arrow gradients, not content pictures.",
+ "venue": "ICML24"
+}

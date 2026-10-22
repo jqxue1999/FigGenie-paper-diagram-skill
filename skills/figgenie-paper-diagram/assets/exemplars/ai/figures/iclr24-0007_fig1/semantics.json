@@ -1,0 +1,420 @@
+{
+ "paper_id": "iclr24-0007",
+ "fig": "1",
+ "kind": "ai",
+ "system": {
+  "name": "AMAGO",
+  "one_liner": "An in-context RL agent that trains a long-sequence Transformer over entire rollouts with off-policy actor-critic updates at every timestep in parallel.",
+  "domain": [
+   "in-context reinforcement learning",
+   "meta-RL",
+   "long-term memory"
+  ],
+  "subfield": "rl-robotics",
+  "subfield2": "ml-core"
+ },
+ "content": {
+  "kinds": [
+   "model-anatomy",
+   "stage-pipeline"
+  ],
+  "variant": "unrolled-chain",
+  "variant_note": "three timestep columns (0, j, H) share one full-width Transformer banner; a numbered two-step setting sits at the left",
+  "argues": "One Transformer over the whole trajectory, with actor and critic heads at every timestep trained in parallel, unifies off-policy RL with long-sequence memory and adaptation.",
+  "subject": "Per-timestep token chips, encoders and representations feeding one long-sequence Transformer, with actor, latent-estimate and critic outputs at each timestep.",
+  "elements": [
+   {
+    "name": "Sample a new environment with unknown parameters e and an optional goal description g",
+    "type": "text-block",
+    "role": "step 1 of the in-context RL setting",
+    "drawn_as": "numbered sans text at the top left, with a globe icon below it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Agent adapts to its new environment e over a horizon of up to H timesteps spanning one or more trials",
+    "type": "text-block",
+    "role": "step 2 of the setting: adaptation from test-time experience",
+    "drawn_as": "numbered sans text at the left, with a robot icon below it",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "obs. / action / reward / reset / goal / time",
+    "type": "data",
+    "role": "the six inputs of one timestep, written o_j, a'_j, r'_j, d_j, g_j, t_j",
+    "drawn_as": "six colour-coded square tiles with italic symbols, repeated for timesteps 0, j and H, joined to the encoder by a bracket",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Timestep Encoder",
+    "type": "module",
+    "role": "maps the tokens of one timestep to a fixed-size timestep representation",
+    "drawn_as": "light green rounded box with a heavy black outline, one per timestep (3 shown)",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "timestep representation",
+    "type": "data",
+    "role": "encoder output o_0^+, o_j^+, o_H^+ passed to the Transformer",
+    "drawn_as": "small near-black rounded tiles with white symbols, one per timestep",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "AMAGO: Long-Sequence Transformers for Memory and In-Context RL Along Entire Rollouts",
+    "type": "module",
+    "role": "single Transformer trajectory encoder over all timestep representations",
+    "drawn_as": "full-width saturated green banner with a title and a subtitle",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Latent estimate of state, goal and environment",
+    "type": "data",
+    "role": "Transformer output (s_j, e, g) at each timestep",
+    "drawn_as": "grey rounded tile above the banner, repeated per timestep",
+    "container": null,
+    "is_contribution": false
+   },
+   {
+    "name": "Actor",
+    "type": "module",
+    "role": "policy head π(a_j | s_j, e, g)",
+    "drawn_as": "teal rounded box with a stack of translucent teal cards behind it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Critic",
+    "type": "module",
+    "role": "value head Q(s_j, a_j, e, g)",
+    "drawn_as": "lilac rounded box with a stack of translucent lilac cards behind it",
+    "container": null,
+    "is_contribution": true
+   },
+   {
+    "name": "Off-policy RL across multiple value horizons and every timestep in parallel",
+    "type": "label",
+    "role": "says how the heads are trained",
+    "drawn_as": "small label at the top right with a short double-headed arrow towards the stacked critic cards",
+    "container": null,
+    "is_contribution": true
+   }
+  ],
+  "relations": [
+   {
+    "from": "Sample a new environment (1)",
+    "to": "Agent adapts to its new environment (2)",
+    "what": "order of the in-context RL setting",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": 1
+   },
+   {
+    "from": "six timestep tokens",
+    "to": "Timestep Encoder",
+    "what": "tokens of one timestep",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "Timestep Encoder",
+    "to": "timestep representation",
+    "what": "fixed-size representation",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "timestep representation",
+    "to": "AMAGO Transformer banner",
+    "what": "sequence of representations over the rollout",
+    "kind": "data",
+    "drawn": "line",
+    "step": null
+   },
+   {
+    "from": "AMAGO Transformer banner",
+    "to": "Latent estimate of state, goal and environment",
+    "what": "output at each timestep",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent estimate of state, goal and environment",
+    "to": "Actor",
+    "what": "input of the policy head",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "Latent estimate of state, goal and environment",
+    "to": "Critic",
+    "what": "input of the value head",
+    "kind": "data",
+    "drawn": "arrow",
+    "step": null
+   },
+   {
+    "from": "timestep 0, j, H columns",
+    "to": "timestep 0, j, H columns",
+    "what": "the same column repeats along time; ellipses stand for the timesteps in between",
+    "kind": "time",
+    "drawn": "adjacency",
+    "step": null
+   }
+  ],
+  "panels": [],
+  "markers": [
+   {
+    "marker": "1., 2.",
+    "kind": "order",
+    "at": "left text list",
+    "what": "the two steps of the setting: sample an environment, then adapt to it"
+   },
+   {
+    "marker": "0, j, H (subscripts)",
+    "kind": "identity",
+    "at": "token symbols and representation tiles",
+    "what": "index the timestep: first, a generic one, last"
+   },
+   {
+    "marker": "obs., action, reward, reset, goal, time",
+    "kind": "identity",
+    "at": "labels under the first token group",
+    "what": "name the colour of each token type"
+   }
+  ],
+  "pictures": [],
+  "icons": [
+   {
+    "depicts": "Earth globe",
+    "stands_for": "the environment that is sampled with unknown parameters",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   },
+   {
+    "depicts": "small flat robot",
+    "stands_for": "the agent that adapts",
+    "style": "emoji-like",
+    "medium": "bitmap",
+    "count": 1
+   }
+  ],
+  "examples": [],
+  "idioms": [
+   {
+    "concept": "token-strip",
+    "drawn_as": "six colour-coded square tiles per timestep, one colour per input type, joined by a bracket to the encoder",
+    "parts": [
+     "obs.",
+     "action",
+     "reward",
+     "reset",
+     "goal",
+     "time"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "transformer-block",
+    "drawn_as": "one wide green banner spanning every timestep, named as the long-sequence Transformer, without internal sub-blocks",
+    "parts": [
+     "banner with title and subtitle"
+    ],
+    "convention": "variant"
+   },
+   {
+    "concept": "actor-critic-heads",
+    "drawn_as": "a latent-estimate tile with arrows out to an actor box on its left and a critic box on its right, repeated at every timestep",
+    "parts": [
+     "latent estimate tile",
+     "Actor",
+     "Critic",
+     "stacked cards"
+    ],
+    "convention": "own"
+   }
+  ],
+  "reading_order": "Start at the numbered setting at the top left, then read the architecture from the token chips at the bottom up through encoder, representation tile and banner to the actor and critic row."
+ },
+ "layout": {
+  "arrangement": "bands",
+  "arrangement_note": "A narrow numbered text strip with a globe and a robot icon at the left; to its right five stacked layers drawn bottom-up: token chips, Timestep Encoders, black representation tiles, one full-width AMAGO banner, and an actor, latent-estimate, critic triple, with three aligned timestep columns (0, j, H) separated by ellipses.",
+  "panel_count": 1,
+  "lanes": "three aligned timestep columns (0, j, H) separated by ellipses",
+  "direction": "bottom-up",
+  "reading_start": "top-left",
+  "grouping": [
+   "whitespace"
+  ],
+  "nesting_depth": 1,
+  "legend": "inside",
+  "panel_markers": "none",
+  "step_markers": "plain-numbers",
+  "zoom_callout": "none",
+  "width": "full",
+  "aspect": 2.76,
+  "text_density": "moderate",
+  "visual_density": "dense",
+  "text_share": "small"
+ },
+ "style": {
+  "palette": [
+   {
+    "hex": "#73ca62",
+    "used_for": "the AMAGO long-sequence Transformer banner"
+   },
+   {
+    "hex": "#c1e8b9",
+    "used_for": "Timestep Encoder boxes"
+   },
+   {
+    "hex": "#e397ef",
+    "used_for": "obs. tokens"
+   },
+   {
+    "hex": "#76dcd2",
+    "used_for": "action tokens and the Actor head (translucent copies for the stack behind it)"
+   },
+   {
+    "hex": "#dccddd",
+    "used_for": "reward tokens and the Critic head (translucent copies for the stack behind it)"
+   },
+   {
+    "hex": "#d2503e",
+    "used_for": "reset tokens"
+   },
+   {
+    "hex": "#f0f34e",
+    "used_for": "goal tokens"
+   },
+   {
+    "hex": "#f3a74e",
+    "used_for": "time tokens"
+   },
+   {
+    "hex": "#c1c1c1",
+    "used_for": "latent-estimate tile"
+   },
+   {
+    "hex": "#292529",
+    "used_for": "timestep representation tiles"
+   }
+  ],
+  "ground": "white",
+  "fill": "flat",
+  "stroke": "heavy black outlines drawn inside the bitmap tiles; no separate vector strokes",
+  "font": "sans, 4 pt key labels and head labels, 5.5 to 7 pt text and encoder names, 8.5 pt title; maths symbols are italic serif inside bitmaps",
+  "corners": "rounded",
+  "arrows": "short black arrows with filled heads, dotted vertical connectors between layers, brackets from the token chips to the encoder",
+  "rendering": "flat-vector",
+  "effects": "heavy black outline with a slight offset shadow on tiles; offset stacks of translucent cards behind the heads",
+  "model_depiction": "banner",
+  "state_marker": "none"
+ },
+ "encoding": {
+  "color_means": "one colour per token type (obs. pink-violet, action teal, reward lilac, reset red, goal yellow, time orange); the Actor head repeats the action colour and the Critic head the reward colour; green = encoder and Transformer; grey = latent estimate; near-black = timestep representation",
+  "line_style_means": "dotted vertical lines run between the layers; solid short arrows with heads mark the encoder-to-representation step and the flows into the heads",
+  "shape_means": "rounded black-outlined tile = a token, representation or head; wide banner = the sequence model over all timesteps; offset stack of cards = several heads or value horizons",
+  "marker_means": "1. and 2. order the setting; subscripts 0, j, H index the timesteps; labels under the first chips name the token types",
+  "emphasis": "The AMAGO banner is the largest and most saturated block and spans the full width, so the one-Transformer-over-everything idea dominates; the output label points with a small double arrow at the stacked critic cards.",
+  "reusable_patterns": [
+   "three timestep columns (first, j, last) with ellipses under one full-width sequence-model banner",
+   "colour-coded token chips per timestep with the colour key written once under the first group",
+   "offset stack of translucent cards behind a head to suggest several heads or horizons",
+   "numbered setting text at the left with an emoji-like icon under each step",
+   "output triple (actor, latent estimate, critic) repeated above every timestep to show parallel training"
+  ],
+  "weaknesses": [
+   "key and head labels are set at 4 pt, very small at column width",
+   "the numbered setting at the left is not tied to the architecture by any arrow"
+  ]
+ },
+ "resources": {
+  "own": [],
+  "stock": [
+   "emoji-like globe icon",
+   "emoji-like robot icon"
+  ],
+  "generated": [],
+  "drawn": [
+   "colour-coded token chips",
+   "encoder boxes and representation tiles",
+   "Transformer banner",
+   "actor, latent and critic boxes with stacked cards",
+   "arrows and brackets"
+  ],
+  "unknown": []
+ },
+ "retrieval": {
+  "objects": [
+   "colour-coded token chips per timestep",
+   "Timestep Encoder boxes",
+   "black timestep-representation tiles",
+   "full-width green Transformer banner",
+   "actor, latent estimate and critic boxes",
+   "stacked cards behind the heads",
+   "globe icon",
+   "robot icon"
+  ],
+  "sample_data": "none",
+  "keywords": [
+   "in-context RL",
+   "off-policy RL",
+   "long-sequence Transformer",
+   "meta-RL",
+   "memory",
+   "goal-conditioned",
+   "actor-critic",
+   "timestep encoder",
+   "adaptive agents"
+  ],
+  "tags": [
+   "token-strip",
+   "colour-coded-groups",
+   "equation-boxes",
+   "task-definition"
+  ],
+  "new_tags": [
+   {
+    "name": "timestep-columns",
+    "what": "the same stack of blocks repeated for time steps 0, j and H with ellipses between and one sequence model spanning all columns"
+   }
+  ]
+ },
+ "lessons": {
+  "what_to_learn": "Unroll a sequence model by drawing the first, a generic and the last timestep as aligned columns with ellipses, one small encoder per column under a single full-width banner for the sequence model, and repeat the output heads per column; keep one fixed colour per token type so it can be followed up the stack.",
+  "suits": "Agents or models that run one shared backbone over every step of a trajectory or sequence (RL, time series, video) and train per-step heads in parallel."
+ },
+ "tags": [
+  "bottom-up stack",
+  "colour-coded chips",
+  "full-width banner",
+  "heavy black outlines",
+  "emoji-style icons",
+  "sans labels"
+ ],
+ "provenance": {
+  "sections": [
+   "Figure 1 on p.2",
+   "3 Method overview (p.4)"
+  ],
+  "evidence": [
+   "we redesign the off-policy actor-critic update from scratch to support long-sequence Transformers that learn from entire rollouts in parallel",
+   "we use a timestep encoder network to map each timestep to a fixed-size representation"
+  ]
+ },
+ "summary": "AMAGO is an in-context reinforcement-learning agent that runs one long-sequence Transformer over entire rollouts and trains actor and critic heads off-policy at every timestep in parallel, targeting generalization, memory and meta-learning. Figure 1 puts a numbered two-step setting at the left (sample an environment with unknown parameters e and a goal g, then adapt over up to H timesteps) with a globe and a robot icon. Beside it a bottom-up stack shows colour-coded token chips (obs., action, reward, reset, goal, time) per timestep, a Timestep Encoder under each, black representation tiles, one full-width green AMAGO banner, and an actor, latent-estimate and critic triple above timesteps 0, j and H.",
+ "summary_zh": "AMAGO 用跨整条轨迹的长序列 Transformer，在每个时间步并行做离线 actor-critic 训练。左侧两步编号说明设定，右侧自下而上是彩色 token、编码器、通栏 Transformer 和 actor、critic。",
+ "confidence": "high",
+ "notes": "All boxes, chips and banners are placed as bitmap tiles (66 pictures) with live text over them, so shapes are not vector paths. The colour key under the chips appears only once, under the first timestep. I added stage-pipeline as a second kind because the left strip states a two-step protocol; the main drawing is model-anatomy.",
+ "venue": "ICLR24"
+}
