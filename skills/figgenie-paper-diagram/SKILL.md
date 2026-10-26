@@ -37,6 +37,8 @@ SOSP, ASPLOS) or **ai** (ICLR, ICML, NeurIPS, CVPR, ACL, AAAI; `references/ai/`)
 Decide both in the brief. The steps below are written for a systems architecture figure; what a mechanism figure and
 what an AI-venue figure do differently each get one section after the workflow — menus with frequencies, not rulebooks.
 
+**This user's habits (always on).** Before the brief, read `references/user-preferences.md`: what the user asked for while redrawing their own paper figures (no AI look, fire/snowflake/drop icons on models, red losses with red dashed updates, ①②③ on losses, one font size, one legend top right). Where it conflicts with the corpus defaults below, it wins; the print floors still hold.
+
 ## Workflow (gates in bold)
 
 Work in a folder per figure: `brief.md`, `spec.json`, `plan.md`, `fig.svg`, and the outputs of `check.py`.
